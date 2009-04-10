@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionScriptProperties mainApplicationPath="Kerneos.mxml" version="3">
+<compiler additionalCompilerArguments="-locale en_US -default-background-color #ebf6ff -services /home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/flex/services-config.xml -context-root /kerneos" copyDependentFiles="true" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="9.0.28" htmlPlayerVersionCheck="true" outputFolderPath="output-flex" sourceFolderPath="modules/core/client/src/main/flex" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
+<compilerSourcePath>
+<compilerSourcePathEntry kind="1" linkType="1" path="modules/cairngorm/src/main/flex"/>
+<compilerSourcePathEntry kind="1" linkType="1" path="modules/core/api/src/main/flex"/>
+<compilerSourcePathEntry kind="1" linkType="1" path="modules/core/client/src/main/flex"/>
+<compilerSourcePathEntry kind="1" linkType="1" path="modules/libs/common/client/src/main/flex"/>
+<compilerSourcePathEntry kind="1" linkType="1" path="modules/libs/login/client/src/main/flex"/>
+</compilerSourcePath>
+<libraryPath defaultLinkType="1">
+<libraryPathEntry kind="4" path=""/>
+<libraryPathEntry kind="1" linkType="1" path="libs"/>
+</libraryPath>
+<sourceAttachmentPath/>
+</compiler>
+<applications>
+<application path="Kerneos.mxml"/>
+</applications>
+<modules/>
+<buildCSSFiles/>
+</actionScriptProperties>

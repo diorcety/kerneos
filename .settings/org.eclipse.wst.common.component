@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+<wb-module deploy-name="jasmine-eos">
+<wb-resource deploy-path="/" source-path="/wtp/content"/>
+<wb-resource deploy-path="/" source-path="/output-flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/target/classes"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/server/src/main/java"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/quickvisu/server/src/main/java"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/monitoring/client/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/confeditor/client/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/mbeancmdManager/client/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/mbeancmdManager/server/src/main/java"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/monitoring/server/src/main/java"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/login/server/src/main/java"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/common/server/src/main/java"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/login/client/src/main/resources"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/client/src/main/resources"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/server/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/module/server/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/api/src/main"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/api/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/client/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/chartszoom/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/common/client/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/login/client/src/main/flex"/>
+<property name="java-output-path" value="target/classes"/>
+<property name="context-root" value="jasmine-eos-core"/>
+</wb-module>
+</project-modules>
