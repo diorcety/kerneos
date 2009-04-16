@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
-<wb-module deploy-name="jasmine-eos">
+<wb-module deploy-name="kerneos">
 <wb-resource deploy-path="/" source-path="/wtp/content"/>
 <wb-resource deploy-path="/" source-path="/output-flex"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/classes"/>
@@ -24,6 +24,6 @@
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/common/client/src/main/flex"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/login/client/src/main/flex"/>
 <property name="java-output-path" value="target/classes"/>
-<property name="context-root" value="jasmine-eos-core"/>
+        <property name="context-root" value="kerneos"/>
 </wb-module>
 </project-modules>
