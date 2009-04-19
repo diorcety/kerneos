@@ -66,37 +66,42 @@
 		<link>
 			<name>wtp/content/WEB-INF/flex</name>
 			<type>2</type>
-			<location>/home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/flex</location>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/flex</locationURI>
+		</link>
+		<link>
+			<name>wtp/content/WEB-INF/web.xml</name>
+			<type>1</type>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/web.xml</locationURI>
 		</link>
 		<link>
 			<name>wtp/content/WEB-INF/classes/log4j.xml</name>
 			<type>1</type>
-			<location>/home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/classes/log4j.xml</location>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/classes/log4j.xml</locationURI>
 		</link>
 		<link>
 			<name>wtp/content/WEB-INF/granite/granite-config.xml</name>
 			<type>1</type>
-			<location>/home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/granite/granite-config.xml</location>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/granite/granite-config.xml</locationURI>
 		</link>
 		<link>
 			<name>wtp/content/WEB-INF/lib/commons-beanutils.jar</name>
 			<type>1</type>
-			<location>/home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/commons-beanutils.jar</location>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/commons-beanutils.jar</locationURI>
 		</link>
 		<link>
 			<name>wtp/content/WEB-INF/lib/granite.jar</name>
 			<type>1</type>
-			<location>/home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/granite.jar</location>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/granite.jar</locationURI>
 		</link>
 		<link>
 			<name>wtp/content/WEB-INF/lib/jdom.jar</name>
 			<type>1</type>
-			<location>/home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/jdom.jar</location>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/jdom.jar</locationURI>
 		</link>
 		<link>
 			<name>wtp/content/WEB-INF/lib/log4j.jar</name>
 			<type>1</type>
-			<location>/home/guillaume/workspaces/jasmine_workspace/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/log4j.jar</location>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/log4j.jar</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

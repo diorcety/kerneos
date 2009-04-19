@@ -71,10 +71,8 @@ Before using JASMINe-EoS :
     - First run the following command : mvn -P initWTP to copy some dependencies
       in the WTP webapp lib directory
 
-    - In the .project file, change the link path so that matches your own workspace
+    - In the .actionScriptProperties file, change the link path so that matches your own workspace
       path.
-
-    - Do the same in the .actionScriptProperties file
 
     - run the app using eclipse on your favorite server (i.e JOnAS ;) )
 
