@@ -40,7 +40,7 @@
 
       <destination id="logIn">
         <channels>
-          <channel ref="my-graniteamf" />
+          <channel ref="my-graniteamf-kerneos" />
         </channels>
         <properties>
           <scope>session</scope>
@@ -50,7 +50,7 @@
 
       <destination id="modules">
         <channels>
-          <channel ref="my-graniteamf" />
+          <channel ref="my-graniteamf-kerneos" />
         </channels>
         <properties>
           <scope>session</scope>
@@ -62,7 +62,7 @@
   </services>
 
   <channels>
-    <channel-definition id="my-graniteamf"
+    <channel-definition id="my-graniteamf-kerneos"
       class="mx.messaging.channels.AMFChannel">
       <endpoint
         uri="http://{server.name}:{server.port}/{context.root}/graniteamf/amf"

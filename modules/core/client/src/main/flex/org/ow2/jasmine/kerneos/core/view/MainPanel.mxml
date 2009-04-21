@@ -26,7 +26,7 @@
 -->
 <core:Core xmlns:core="org.ow2.jasmine.kerneos.core.api.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
-    xmlns:local="*" >
+    xmlns:local="*">
 
     
     <mx:Script>
@@ -47,6 +47,14 @@
             import org.ow2.jasmine.kerneos.core.model.ModuleModelLocator;
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
             
+            
+            import mx.core.Application;
+			import mx.utils.URLUtil;
+			import mx.messaging.channels.AMFChannel;
+        	import mx.messaging.ChannelSet;
+        	import com.adobe.cairngorm.business.ServiceLocator;
+        	import org.ow2.jasmine.kerneos.common.util.Util;
+        	
             /////////////////////////////////////////////
             // Dummy
              
@@ -72,8 +80,29 @@
 
             [Bindable]
             public static var modules:ArrayCollection = new ArrayCollection();
+            
+            
+            private static var _amfChannel:AMFChannel = null;
+            
+            [Bindable]
+			public static var amfChannelSet:ChannelSet = null;
+			
+			
            
-            public function init() : void {            	
+            public function init() : void {
+                		
+            	var urlServer:String = URLUtil.getServerNameWithPort(Application.application.loaderInfo.url).toString();
+            	var context:String = Util.parserURL(Application.application.loaderInfo.url.toString());
+            	
+            	amfChannelSet = new ChannelSet();
+            	_amfChannel = new AMFChannel("my-graniteamf-kerneos","http://"+urlServer+"/"+context+"/graniteamf/amf");       	
+            	
+            	amfChannelSet.addChannel(_amfChannel);
+
+            	var obl:Object = ServiceLocator.getInstance().getRemoteObject( "logInService" );
+            	ServiceLocator.getInstance().getRemoteObject( "logInService" ).channelSet = amfChannelSet;
+            	ServiceLocator.getInstance().getRemoteObject( "modulesService" ).channelSet = amfChannelSet;      
+            	
                 for each (var obj:Object in this.canvasList ) {
                     obj.canvas.horizontalScrollPolicy = "off";
                     obj.canvas.verticalScrollPolicy = "off";
@@ -83,6 +112,8 @@
                 tb.selectedIndex = viewStack.selectedIndex;
                 this.loaderModuleEvent();
             }
+            
+            
             
             private function manageTabs(event:CollectionEvent):void {
                 if (event.kind == CollectionEventKind.UPDATE) {
@@ -213,6 +244,11 @@
     
     <mx:Binding source="LogInModelLocator.getInstance().loggedIn" destination="logged" />
     
+    <mx:HTTPService id="context" url="@ContextRoot()"/>
+    <mx:RemoteObject id="logInService"  destination="logIn" showBusyCursor="true"/>
+    <mx:RemoteObject id="modulesService"  destination="modules" showBusyCursor="true"/>
+    
+    
     <core:states>
         <mx:State name="logged">
             <mx:SetProperty target="{dg}" name="height" value="50%"/>
@@ -275,5 +311,10 @@
         id="viewStack"
         paddingTop="15"
         width="100%" height="100%" />
-       
+        
+        
+        
+    
+    
+
 </core:Core>
