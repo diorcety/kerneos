@@ -1,5 +1,6 @@
 package org.ow2.jasmine.kerneos.core.model{
 	import com.adobe.cairngorm.model.ModelLocator;
+	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	

@@ -11,6 +11,8 @@ package org.ow2.jasmine.kerneos.core.command
 	
 	import org.ow2.jasmine.kerneos.core.business.IModuleDelegate;
 	import org.ow2.jasmine.kerneos.core.model.ModuleModelLocator;
+	import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+	import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
 	
 	public class ModuleCommand implements ICommand, IResponder{
 	    /**
@@ -34,6 +36,7 @@ package org.ow2.jasmine.kerneos.core.command
 	    	try{
 		        var model:ModuleModelLocator = ModuleModelLocator.getInstance();
 		        var modulesNames:ArrayCollection = (event as ResultEvent).result as ArrayCollection;
+		        
 		        model.listModules = modulesNames;
 	     	}catch(e:Error){
 	     		trace("An error occurred: " + e.message);

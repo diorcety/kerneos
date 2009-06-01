@@ -1,6 +1,6 @@
 /**
  * JASMINe
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2008 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -18,17 +18,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * $Id$
+ * --------------------------------------------------------------------------
+ * $Id $
+ * Jean-Pierre & Tianyi
+ * --------------------------------------------------------------------------
  */
 
-package org.ow2.jasmine.kerneos.core.api{
-import mx.collections.ArrayCollection;
+package org.ow2.jasmine.kerneos.service;
 
-public interface ICore{
-	function addModule(module:Object, name:String, status:Boolean ,description:String):void;
-	
-	function setService(serviceId:String, destination:String):void;
-	
-	function get modulesList():ArrayCollection;
-}	
+/**
+ * Service description.
+ *
+ * @author Guillaume Renault
+ *
+ */
+public class Service {
+
+    private String id;
+
+    private String destination;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(final String destination) {
+        this.destination = destination;
+    }
 }

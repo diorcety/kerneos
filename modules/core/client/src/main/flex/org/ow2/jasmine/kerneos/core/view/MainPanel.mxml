@@ -87,7 +87,12 @@
             [Bindable]
 			public static var amfChannelSet:ChannelSet = null;
 			
-			
+			/**
+			 * Whether it is the first time that someone is logging in or not.
+			 * If some profiles are implmented, this needs to be improve : when logging out
+			 * the services must be removed too.
+			 */
+			private var firstLogIn:Boolean = true;
            
             public function init() : void {
                 		
@@ -164,6 +169,8 @@
     
     <mx:Script>
         <![CDATA[
+        	import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
+        	import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
             //
             //  Login
             //
@@ -183,27 +190,38 @@
             private function set logged(log:Boolean):void {
                 if (log) { // when login
                     this.currentState = "logged";
-                    
-                    // get the instance of ICore
-                    var core_instance:ICore = Core.getInstance();
-                    var loader:ModuleLoader ;
-                    
-                    // get the modules for charging
-                    var modulesFromArchive:ArrayCollection = ModuleModelLocator.getInstance().listModules;
-                    
-                    // charging modules
-					for(var j:int = 0;  j< modulesFromArchive.length; j++){
-						loader = new ModuleLoader();
-	        			loader.url = modulesFromArchive.getItemAt(j).toString();
-						loader.loadModule();
-						this.addChild(loader);
-                	}
-                	
-                	// get modules charged
-                	modules = core_instance.modulesList;
-                	
-                	// add the modules
-					MainPanel.modules.addEventListener(CollectionEvent.COLLECTION_CHANGE, manageTabs); 			
+                    if (this.firstLogIn) {
+	                    // get the instance of ICore
+	                    var core_instance:ICore = Core.getInstance();
+	                    var loader:ModuleLoader ;
+	                    
+	                    // get the modules for charging
+	                    var modulesFromArchive:ArrayCollection = ModuleModelLocator.getInstance().listModules;
+	                    
+	                    // loading modules
+						for(var j:int = 0;  j< modulesFromArchive.length; j++){
+							
+							var module : ModuleVO = modulesFromArchive.getItemAt(j) as ModuleVO;
+							
+							core_instance.addModule(module.swfFile,module.name,module.loaded,module.description);
+							
+							var services : ArrayCollection = module.services;
+							
+							for (var l:int =0 ; l < services.length ; l++) {
+								var service : ServiceVO = services.getItemAt(l) as ServiceVO;
+								core_instance.setService(service.id,service.destination);
+							}
+
+	                	}
+	                	
+	                	// get modules charged
+	                	modules = core_instance.modulesList;
+	                	
+	                	// add the modules
+						MainPanel.modules.addEventListener(CollectionEvent.COLLECTION_CHANGE, manageTabs);
+						
+						this.firstLogIn = false;
+                    }
                 } else { // when logout
                     this.currentState = "";
                     

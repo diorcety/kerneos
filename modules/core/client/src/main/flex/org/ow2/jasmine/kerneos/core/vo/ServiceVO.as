@@ -17,18 +17,44 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- *
+ * 
  * $Id$
  */
+ 
+package org.ow2.jasmine.kerneos.core.vo
+{
+import com.adobe.cairngorm.vo.IValueObject;
 
-package org.ow2.jasmine.kerneos.core.api{
-import mx.collections.ArrayCollection;
+[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Service")]
+[Bindable]
+public class ServiceVO implements IValueObject
+{
+	private var idValue : String = null;
+	private var destinationValue : String = null;
+		
+	/*
+	 *	ID
+	 */
+	
+	public function set id(_id : String) : void {
+		this.idValue = _id;
+	}
+	
+	public function get id() : String {
+		return this.idValue;
+	}
 
-public interface ICore{
-	function addModule(module:Object, name:String, status:Boolean ,description:String):void;
+	/*
+	 *	Destination
+	 */
 	
-	function setService(serviceId:String, destination:String):void;
+	public function set destination(_destination : String) : void {
+		this.destinationValue = _destination;
+	}
 	
-	function get modulesList():ArrayCollection;
-}	
+	public function get destination() : String {
+		return this.destinationValue;
+	}
+
+}
 }

@@ -24,42 +24,118 @@
  * --------------------------------------------------------------------------
  */
 
-
 package org.ow2.jasmine.kerneos.service;
 
-import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ModuleService implements Serializable {
 
 	private static final long serialVersionUID = 7807669487844076133L;
 
-	public List<String> modules() {
+	private static Log logger = LogFactory.getLog(ModuleService.class);
 
-		List<String> modulesList = new ArrayList<String>();
+	private static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";
+
+	public List<Module> modules() {
+
+		return loadModules();
+
+	}
+
+	private List<Module> loadModules() {
+
+		List<Module> modules = new ArrayList<Module>();
+
 
 		try {
-			URL url = Thread.currentThread().getContextClassLoader().getResource("../../");
-			File dir = new File(url.toURI());
-			File[] filesOfDir = dir.listFiles();
+			URL kerneos = ModuleService.class.getClassLoader().getResource("META-INF/kerneos-config.xml");
 
-			for (int i = 0; i < filesOfDir.length; i++) {
-				String s = filesOfDir[i].getName();
-				if (s.endsWith("Loader.swf")) {
-					modulesList.add(s);
+			logger.info("loading file : {0}", kerneos);
+
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document doc = null;
+
+			ClassLoader cl = this.getClass().getClassLoader();
+			if (cl.getResource(KERNEOS_CONFIG_FILE) != null) {
+
+				logger.info("loading file : {0}", KERNEOS_CONFIG_FILE);
+
+				logger.debug("Loading the registy XML file from classpath");
+				InputStream resource = cl.getResourceAsStream(KERNEOS_CONFIG_FILE);
+				try {
+					doc = documentBuilder.parse(resource);
+				} finally {
+					resource.close();
+					resource = null;
+				}
+			} else {
+				logger.error("No configuration file available : {0}", KERNEOS_CONFIG_FILE);
+			}
+
+			if (doc != null) {
+				doc.getDocumentElement().normalize();
+				NodeList listOfEntries = doc.getElementsByTagName("module");
+
+				logger.info("Number of modules : {0}", listOfEntries.getLength());
+
+				for (int i = 0; i < listOfEntries.getLength(); i++) {
+					Module mod = new Module();
+
+					mod.setSwfFile(listOfEntries.item(i).getAttributes().getNamedItem("swfFile").getNodeValue());
+					mod.setLoaded(Boolean.getBoolean(listOfEntries.item(i).getAttributes().getNamedItem("loaded").getNodeValue()));
+
+					NodeList module = listOfEntries.item(i).getChildNodes();
+					for (int j = 0; j < module.getLength(); j++) {
+						Node moduleDetail = module.item(j);
+						if ("name".equals(moduleDetail.getNodeName())) {
+							mod.setName(moduleDetail.getTextContent());
+							logger.info("module name : {0}", mod.getName());
+						} else if ("description".equals(moduleDetail.getNodeName())) {
+							mod.setDescription(moduleDetail.getTextContent());
+							logger.info("module description : {0}", mod.getDescription());
+						} else if ("services".equals(moduleDetail.getNodeName())) {
+							NodeList services = moduleDetail.getChildNodes();
+							List<Service> servicesList = new ArrayList<Service>();
+							logger.info("number of services : {0}", services.getLength());
+							for (int k = 0; k < services.getLength(); k++) {
+								Node servicesDetail = services.item(k);
+								if ("service".equals(servicesDetail.getNodeName())) {
+									Service s = new Service();
+									s.setId(servicesDetail.getAttributes().getNamedItem("id").getNodeValue());
+									s.setDestination(servicesDetail.getAttributes().getNamedItem("destination")
+											.getNodeValue());
+									servicesList.add(s);
+									logger.info("service id : {0}", s.getId());
+									logger.info("service destination : {0}", s.getDestination());
+								}
+							}
+							mod.setServices(servicesList);
+						}
+					}
+					modules.add(mod);
 				}
 			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		catch (Exception e) {
-			Logger.getLogger(getClass().getName()).log(Level.INFO,"error when getting loader of the archive.");
-		}
-		return modulesList;
+
+		return modules;
+
 	}
 }

@@ -64,6 +64,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>wtp/content/META-INF</name>
+			<type>2</type>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/META-INF</locationURI>
+		</link>
+		<link>
 			<name>wtp/content/WEB-INF/flex</name>
 			<type>2</type>
 			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/flex</locationURI>
