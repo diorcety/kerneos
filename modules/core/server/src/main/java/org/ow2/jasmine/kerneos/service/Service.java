@@ -30,7 +30,6 @@ package org.ow2.jasmine.kerneos.service;
  * Service description.
  *
  * @author Guillaume Renault
- *
  */
 public class Service {
 
