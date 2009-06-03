@@ -90,7 +90,7 @@ public class ModuleService implements Serializable {
 				doc.getDocumentElement().normalize();
 				NodeList listOfEntries = doc.getElementsByTagName("module");
 
-				logger.info("Number of modules : {0}", listOfEntries.getLength());
+				logger.debug("Number of modules : {0}", listOfEntries.getLength());
 
 				for (int i = 0; i < listOfEntries.getLength(); i++) {
 					Module mod = new Module();
@@ -103,14 +103,13 @@ public class ModuleService implements Serializable {
 						Node moduleDetail = module.item(j);
 						if ("name".equals(moduleDetail.getNodeName())) {
 							mod.setName(moduleDetail.getTextContent());
-							logger.info("module name : {0}", mod.getName());
+							logger.debug("module name : {0}", mod.getName());
 						} else if ("description".equals(moduleDetail.getNodeName())) {
 							mod.setDescription(moduleDetail.getTextContent());
-							logger.info("module description : {0}", mod.getDescription());
+							logger.debug("module description : {0}", mod.getDescription());
 						} else if ("services".equals(moduleDetail.getNodeName())) {
 							NodeList services = moduleDetail.getChildNodes();
 							List<Service> servicesList = new ArrayList<Service>();
-							logger.info("number of services : {0}", services.getLength());
 							for (int k = 0; k < services.getLength(); k++) {
 								Node servicesDetail = services.item(k);
 								if ("service".equals(servicesDetail.getNodeName())) {
@@ -119,14 +118,13 @@ public class ModuleService implements Serializable {
 									s.setDestination(servicesDetail.getAttributes().getNamedItem("destination")
 											.getNodeValue());
 									servicesList.add(s);
-									logger.info("service id : {0}", s.getId());
-									logger.info("service destination : {0}", s.getDestination());
 								}
 							}
 							mod.setServices(servicesList);
 						}
 					}
 					modules.add(mod);
+					logger.info("{0}", mod.toString());
 				}
 			}
 

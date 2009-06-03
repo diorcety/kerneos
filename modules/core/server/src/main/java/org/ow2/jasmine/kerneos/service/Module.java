@@ -26,6 +26,7 @@
 
 package org.ow2.jasmine.kerneos.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,54 +37,71 @@ import java.util.List;
  */
 public class Module {
 
-    private String        swfFile     = null;
+	private String swfFile = null;
 
-    private boolean       loaded      = false;
+	private boolean loaded = false;
 
-    private String        name        = null;
+	private String name = null;
 
-    private String        description = null;
+	private String description = null;
 
-    private List<Service> services    = null;
+	private List<Service> services = null;
 
-    public String getSwfFile() {
-        return swfFile;
-    }
+	public Module() {
+		services = new ArrayList<Service>();
+	}
 
-    public void setSwfFile(final String swfFile) {
-        this.swfFile = swfFile;
-    }
+	public String getSwfFile() {
+		return swfFile;
+	}
 
-    public boolean isLoaded() {
-        return loaded;
-    }
+	public void setSwfFile(final String swfFile) {
+		this.swfFile = swfFile;
+	}
 
-    public void setLoaded(final boolean loaded) {
-        this.loaded = loaded;
-    }
+	public boolean isLoaded() {
+		return loaded;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setLoaded(final boolean loaded) {
+		this.loaded = loaded;
+	}
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-    public void setDescription(final String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public List<Service> getServices() {
-        return services;
-    }
+	public void setDescription(final String description) {
+		this.description = description;
+	}
 
-    public void setServices(final List<Service> services) {
-        this.services = services;
-    }
+	public List<Service> getServices() {
+		return services;
+	}
+
+	public void setServices(final List<Service> services) {
+		this.services = services;
+	}
+
+	@Override
+	public String toString() {
+		String s = "\nModule '" + name + "' contains " + services.size()
+				+ " services :\n";
+
+		for (Service service : services) {
+			s = s + "\t id : \"" + service.getId() + "\" destination : "
+					+ service.getDestination();
+		}
+
+		return s;
+	}
 
 }
