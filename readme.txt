@@ -64,7 +64,7 @@ Before using JASMINe-EoS :
         };
 
 // ////////////////////////////////////////////////////////////////////////////
-// How to use WTP to develop JASMINe-EoS :
+// How to use WTP to develop Kerneos :
 // ////////////////////////////////////////////////////////////////////////////
 
 
@@ -73,27 +73,49 @@ Before using JASMINe-EoS :
 
     - run the app using eclipse on your favorite server (i.e JOnAS ;) )
 
-    - load the main page EoS.html
+    - load the main page : http://localhost:9000/kerneos/Kerneos.html
     
   
 ////////////////////////////////////////////////////////////////////////////
 // How to add a new module to core
 ////////////////////////////////////////////////////////////////////////////
 
- 	Due to the fact that the core is compiled with the context root "jasmine-eos-core",
- 	every new modules must have their compiler context-root with a value like
- 	"jasmine-eos-root/<module-name>".
- 	
- 	Ex. For JasmineEos QuickVisu :
- 	
- 		extraParameters>
-            <parameter>
-              <!--============================================================================
-                | context root is needed to allow Flex and Java to communicate using Granite |
-                ===========================================================================-->
-              <name>compiler.context-root</name>
-              <values>
-                <value>jasmine-eos-core/jasmine-eos</value>
-              </values>
-            </parameter>
-          </extraParameters>
+ 	Note :
+ 	------
+	All the modules added on a same core should have been compiled with the same
+	context root, the same as were the application is deployed.
+
+	
+	Add modules :
+	-------------
+	Kerneos simply relies on a configuration file : kerneos-config.xml
+	This file must be added in the META-INF directory of the war archive of your
+	application. See the example below :
+
+	<modules xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<!-- Examples on how to set this file. An XSD file to come. -->
+	
+	  <module swfFile="test.swf" loaded="false">
+	    <name>TestModule</name>
+	    <description>Does absolutely nothing, it even doesn't exist</description>
+	    <services>
+	      <service id="testService1" destination="test1"/>
+	      <service id="testService2" destination="test2"/>
+	      <service id="testService3" destination="test2"/>
+	    </services>
+	  </module>
+
+	</modules>
+	
+	In this example, one module is added on Kerneos. The name of the corresponding
+	swf file must be set, as well as a name for the module and a description. If the
+	module needs services to reach a java server side, just add them here.
+	
+	Don't forget to add entries for these services in WEB-INF/flex/services-config.xml
+	of your webapp.
+	
+	For the Kerneos services (loginService and moduleService) the channel ref must be
+	set to "my-graniteamf-kerneos". This channel is overloaded when Kerneos is loaded. 
+	
