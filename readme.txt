@@ -27,31 +27,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // Before investigations ...
 // ////////////////////////////////////////////////////////////////////////////
-Before using JASMINe-EoS :
-
-    - Declare a JORAM topic named "jasmine"
-
-    ex (for JOnAS 4.x) :
-
-        <Topic name="jasmine">
-          <freeReader/>
-          <freeWriter/>
-          <jndi name="jasmine"/>
-        </Topic>
-
-
-
-    - add a JAAS configuration named "eos"
-
-    ex (for JOnAS 4.x) :
-
-
-        eos {
-            // Use LoginModule for EoS authentication
-            org.objectweb.jonas.security.auth.spi.JResourceLoginModule required
-            resourceName="memrlm_1"
-            ;
-        };
+Before using Kerneos :
 
     ex (for JOnAS 5.x) :
 
@@ -71,7 +47,7 @@ Before using JASMINe-EoS :
     - First run the following command : mvn -P initWTP to copy some dependencies
       in the WTP webapp lib directory
 
-    - run the app using eclipse on your favorite server (i.e JOnAS ;) )
+    - set a JOnAS 5 server in your Eclipse environment
 
     - load the main page : http://localhost:9000/kerneos/Kerneos.html
     
