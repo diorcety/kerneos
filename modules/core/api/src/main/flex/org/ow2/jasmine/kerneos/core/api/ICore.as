@@ -27,8 +27,12 @@ import mx.collections.ArrayCollection;
 public interface ICore{
 	function addModule(module:Object, name:String, status:Boolean ,description:String):void;
 	
+	function addIFrame(url:String, name:String, status:Boolean ,description:String):void;
+	
 	function setService(serviceId:String, destination:String):void;
 	
 	function get modulesList():ArrayCollection;
+	
+	function get iFramesList():ArrayCollection;
 }	
 }

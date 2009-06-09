@@ -65,15 +65,27 @@ package org.ow2.jasmine.kerneos.core.api{
         private var modules:ArrayCollection = new ArrayCollection();
         
         /**
+        * List of all the loadable iFrames in Kerneos
+        */
+        [Bindable]
+        private var iFrames:ArrayCollection = new ArrayCollection();
+        
+        /**
         * Add the module in the list of modules
         * 
         * Format :
         *   {module:<ModuleName>,name:<DisplayedName>,load:<State>,load:<LoadState>}
         */
 		public function addModule(module:Object, name:String, status:Boolean ,description:String):void{
-			modules.addItem({module:module,name:name,load:status,description:description});
+			this.modules.addItem({module:module,name:name,load:status,description:description});
 		}
 		
+		/**
+		 * Add an iFrame to the iFrames list.
+		 */ 
+		public function addIFrame(url:String, name:String, status:Boolean ,description:String):void{
+			this.modules.addItem({url:url,name:name,load:status,description:description});
+		}
 		
 		/**
         * Format :
@@ -88,7 +100,14 @@ package org.ow2.jasmine.kerneos.core.api{
 		 * Getter for Modules
 		 */
 		public function get modulesList():ArrayCollection{
-			return modules;
+			return this.modules;
+		}
+		
+		/**
+		 * Gets all the loadable iFrames.
+		 */
+		public function get iFramesList():ArrayCollection{
+			return this.iFrames;
 		}
 	}
 }

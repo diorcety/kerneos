@@ -35,6 +35,7 @@ public class ModuleVO implements IValueObject
 	{
 	}
 
+	private var urlValue : String = null;
 	private var swfFileValue : String = null;
 	private var loadedValue : Boolean = false;
 	private var nameValue : String = null;
@@ -42,6 +43,16 @@ public class ModuleVO implements IValueObject
 	
 	private var servicesValue : ArrayCollection = null;
 
+	/*
+	 *	url
+	 */
+	public function set url(_url:String) : void {
+		this.urlValue = _url;
+	}
+	
+	public function get url() : String {
+		return this.urlValue;
+	}
 
 	/*
 	 *	swfFile

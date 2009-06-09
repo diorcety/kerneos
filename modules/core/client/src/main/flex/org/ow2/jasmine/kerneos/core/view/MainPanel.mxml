@@ -26,11 +26,13 @@
 -->
 <core:Core xmlns:core="org.ow2.jasmine.kerneos.core.api.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
-    xmlns:local="*">
+    xmlns:local="*" xmlns:view="org.ow2.jasmine.kerneos.common.view.*">
 
     
     <mx:Script>
         <![CDATA[
+        	import mx.containers.Panel;
+        	import org.ow2.jasmine.kerneos.common.view.IFrame;
             import org.ow2.jasmine.kerneos.login.model.LogInModelLocator;
             import mx.events.ModuleEvent;
             import mx.containers.VBox;
@@ -116,9 +118,10 @@
                 viewStack.selectedIndex = 0;
                 tb.selectedIndex = viewStack.selectedIndex;
                 this.loaderModuleEvent();
+
             }
             
-            
+            private var frame:IFrame = null;
             
             private function manageTabs(event:CollectionEvent):void {
                 if (event.kind == CollectionEventKind.UPDATE) {
@@ -129,7 +132,11 @@
                         // si dedans, on enleve
                         for each ( var obj:Object in this.canvasList ) {
                             if (obj.id == selected.name) {
-                                (Canvas(obj.canvas).getChildAt(0) as ModuleLoader).unloadModule();
+                            	if (!(obj.canvas is IFrame)) {
+                            		// if the tab is a module, then unload the module. If not,
+                            		// then it's a IFrame, nothing to do but remove the child from the list.
+                                	(Canvas(obj.canvas).getChildAt(0) as ModuleLoader).unloadModule();
+                             	}
                                 this.viewStack.removeChild(obj.canvas);
                                 this.canvasList.removeItemAt(this.canvasList.getItemIndex(obj));
                                 this.enableGrid(null);
@@ -143,15 +150,31 @@
                         canvas.percentHeight = 100;
                         canvas.percentWidth = 100;
                         canvas.label = String(selected.name);
-                        var moduleLoader:ModuleLoader = new ModuleLoader();
-                        moduleLoader.url = selected.module;
-                        moduleLoader.percentWidth = 100;
-                        moduleLoader.percentHeight = 100;
-                        moduleLoader.setStyle("paddingTop",33);
-                        moduleLoader.addEventListener(ModuleEvent.READY,enableGrid);
-                        canvas.addChild(moduleLoader);
-                        this.canvasList.addItem({id:selected.name,canvas:canvas});
-                        this.viewStack.addChild(canvas);
+                        if (selected.module != null ) {
+                        	// in this case, a module is loaded
+	                        var moduleLoader:ModuleLoader = new ModuleLoader();
+	                        moduleLoader.url = selected.module;
+	                        moduleLoader.percentWidth = 100;
+	                        moduleLoader.percentHeight = 100;
+	                        moduleLoader.setStyle("paddingTop",33);
+	                        moduleLoader.addEventListener(ModuleEvent.READY,enableGrid);
+	                        canvas.addChild(moduleLoader);
+	                        this.canvasList.addItem({id:selected.name,canvas:canvas});
+                        	this.viewStack.addChild(canvas);
+                        } else {
+                        	
+                        	frame = new IFrame();
+                        	frame.label = selected.name as String;
+                        	frame.source = selected.url;
+                        	frame.setStyle("paddingTop",33);
+                        	frame.percentHeight=100;
+                        	frame.percentWidth=100;
+                        	
+                        	this.canvasList.addItem({id:selected.name,canvas:frame});
+                        	this.viewStack.addChild(frame);
+                        	
+                        	this.enableGrid(null);
+                        }
                         return;
                     }
                 }                
@@ -162,7 +185,21 @@
             }
             
             public function item(e:ItemClickEvent):void {
+            	
                 viewStack.selectedIndex = e.index;
+                if (viewStack.getChildAt(viewStack.selectedIndex) as IFrame) {
+                	// activate the IFrame if this is a web page. The page is reloaded.
+                	(viewStack.getChildAt(viewStack.selectedIndex) as IFrame).reload(); 
+                	(viewStack.getChildAt(viewStack.selectedIndex) as IFrame).hideIFrame(false);
+                } else {
+                	// disable all iframes otherwise 
+                    for ( var k:int = 0; k<this.viewStack.numChildren; k++ ) {
+                        var obj:DisplayObject = this.viewStack.getChildAt(k);
+                        if (obj is IFrame) {
+							(obj as IFrame).hideIFrame(true);
+                        }
+                    }
+                }
             }
         ]]>
     </mx:Script>
@@ -195,7 +232,7 @@
 	                    var core_instance:ICore = Core.getInstance();
 	                    var loader:ModuleLoader ;
 	                    
-	                    // get the modules for charging
+	                    // get the modules for loading
 	                    var modulesFromArchive:ArrayCollection = ModuleModelLocator.getInstance().listModules;
 	                    
 	                    // loading modules
@@ -203,18 +240,29 @@
 							
 							var module : ModuleVO = modulesFromArchive.getItemAt(j) as ModuleVO;
 							
-							core_instance.addModule(module.swfFile,module.name,module.loaded,module.description);
-							
-							var services : ArrayCollection = module.services;
-							
-							for (var l:int =0 ; l < services.length ; l++) {
-								var service : ServiceVO = services.getItemAt(l) as ServiceVO;
-								core_instance.setService(service.id,service.destination);
+							if (module.swfFile != null) {
+								
+								// in the case of a flex module
+								
+								core_instance.addModule(module.swfFile,module.name,module.loaded,module.description);
+								
+								var services : ArrayCollection = module.services;
+								
+								for (var l:int =0 ; l < services.length ; l++) {
+									var service : ServiceVO = services.getItemAt(l) as ServiceVO;
+									core_instance.setService(service.id,service.destination);
+								}
+								
+							} else {
+								
+								// in the case of an html page to load in a IFrame
+								
+								core_instance.addIFrame(module.url,module.name,module.loaded,module.description);
 							}
 
 	                	}
 	                	
-	                	// get modules charged
+	                	// get lodaded modules
 	                	modules = core_instance.modulesList;
 	                	
 	                	// add the modules
@@ -230,7 +278,11 @@
                         try {
                             var obj:Object = this.canvasList.getItemAt(k);
                             if(obj.canvas != c1) {
-                                (Canvas(obj.canvas).getChildAt(0) as ModuleLoader).unloadModule();
+                            	if (!(obj.canvas is IFrame)) {
+                            		// if the tab is a module, then unload the module. If not,
+                            		// then it's a IFrame, nothing to do but remove the child from the list.
+                                	(Canvas(obj.canvas).getChildAt(0) as ModuleLoader).unloadModule();
+                             	}
                                 this.viewStack.removeChild(obj.canvas);
                             }
                         } catch (e:Error) {
@@ -317,8 +369,9 @@
                 <mx:VBox id="logoutVBox" width="250" height="0" horizontalAlign="center">
                     <mx:Button label="Logout" click="{logout()}"/>
                 </mx:VBox>
-                
+
             </mx:VBox>
+            
     </mx:Canvas>
     
     <mx:TabBar id="tb"
@@ -328,11 +381,6 @@
     <mx:ViewStack
         id="viewStack"
         paddingTop="15"
-        width="100%" height="100%" />
-        
-        
-        
-    
-    
+        width="100%" height="100%" />    
 
 </core:Core>

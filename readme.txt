@@ -95,3 +95,23 @@ Before using Kerneos :
 	For the Kerneos services (loginService and moduleService) the channel ref must be
 	set to "my-graniteamf-kerneos". This channel is overloaded when Kerneos is loaded. 
 	
+	
+	Nota : 
+	------
+	
+	Instead of specify the swfFile attribute, you can specify the url one as the following 
+	example : 
+	
+	  <module url="http://www.yahoo.fr" loaded="false">
+	    <name>Yahoo</name>
+	    <description>Yahoo search engine.</description>
+	  </module>
+	  
+	The goal is to be allowed to load any web page in as a module.
+	
+	#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#
+	#|																					   |#
+	#| HOWEVER, each time you move from a tab that owns an url, when you come back on it,  |# 
+	#| the url is reloaded. 															   |#
+	#|																					   |#
+	#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#|#

@@ -94,7 +94,13 @@ public class ModuleService implements Serializable {
                 for (int i = 0; i < listOfEntries.getLength(); i++) {
                     Module mod = new Module();
 
-                    mod.setSwfFile(listOfEntries.item(i).getAttributes().getNamedItem("swfFile").getNodeValue());
+                    if (listOfEntries.item(i).getAttributes().getNamedItem("swfFile") != null) {
+                        mod.setSwfFile(listOfEntries.item(i).getAttributes().getNamedItem("swfFile").getNodeValue());
+                    } else if (listOfEntries.item(i).getAttributes().getNamedItem("url") != null) {
+                        mod.setUrl(listOfEntries.item(i).getAttributes().getNamedItem("url").getNodeValue());
+                    } else {
+                        new Exception("A swf file or an url must be set up").printStackTrace();
+                    }
                     mod.setLoaded(Boolean.getBoolean(listOfEntries.item(i).getAttributes().getNamedItem("loaded")
                         .getNodeValue()));
 

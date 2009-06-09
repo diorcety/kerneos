@@ -30,7 +30,17 @@
 
 <!-- Examples on how to set this file. An XSD file to come. -->
 
-<!-- 
+
+  <module url="http://www.google.fr" loaded="false">
+    <name>Google</name>
+    <description>Google search engine.</description>
+  </module>
+
+  <module url="http://www.yahoo.fr" loaded="false">
+    <name>Yahoo</name>
+    <description>Yahoo search engine.</description>
+  </module>
+ 
   <module swfFile="test.swf" loaded="false">
     <name>TestModule</name>
     <description>Does absolutely nothing, it even doesn't exist</description>
@@ -50,5 +60,5 @@
       <service id="testService6" destination="test6"/>
     </services>
   </module>
- -->
+ 
 </modules>

@@ -36,6 +36,8 @@ import java.util.List;
  */
 public class Module {
 
+    private String url = null;
+
     private String swfFile = null;
 
     private boolean loaded = false;
@@ -48,6 +50,14 @@ public class Module {
 
     public Module() {
         services = new ArrayList<Service>();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(final String url) {
+        this.url = url;
     }
 
     public String getSwfFile() {
