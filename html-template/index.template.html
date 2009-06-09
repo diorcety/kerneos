@@ -40,6 +40,29 @@ var requiredMinorVersion = ${version_minor};
 var requiredRevision = ${version_revision};
 // -----------------------------------------------------------------------------
 // -->
+
+
+function moveIFrame(x,y,w,h) {
+    var frameRef=document.getElementById("myFrame");
+    frameRef.style.left=x;
+    frameRef.style.top=y;
+    var iFrameRef=document.getElementById("myIFrame");	
+	iFrameRef.width=w;
+	iFrameRef.height=h;
+}
+
+function hideIFrame(){
+    document.getElementById("myFrame").style.visibility="hidden";
+}
+	
+function showIFrame(){
+    document.getElementById("myFrame").style.visibility="visible";
+}
+
+function loadIFrame(url){
+	document.getElementById("myFrame").innerHTML = "<iframe id='myIFrame' src='" + url + "'frameborder='0'></iframe>";
+}
+
 </script>
 </head>
 
@@ -90,7 +113,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			"allowScriptAccess","sameDomain",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer",
-            "allowFullScreen", "true"
+            "allowFullScreen", "true",
+  			"wmode", "opaque"
 	);
   } else {  // flash is too old or we can't detect the plugin
     var alternateContent = 'Alternate HTML content should be placed here. '
@@ -117,8 +141,12 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 				allowFullScreen="true"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
+				wmode="opaque"
 			</embed>
 	</object>
 </noscript>
+
+<div id="myFrame" style="position:absolute;background-color:transparent;border:0px;visibility:hidden;"></div>
+
 </body>
 </html>
