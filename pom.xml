@@ -68,16 +68,6 @@
           <version>1.1</version>
         </dependency>
         <dependency>
-          <groupId>org.objectweb.joram</groupId>
-          <artifactId>joram-client</artifactId>
-          <version>5.0.9</version>
-        </dependency>
-        <dependency>
-          <groupId>org.objectweb.joram</groupId>
-          <artifactId>joram-shared</artifactId>
-          <version>5.0.9</version>
-        </dependency>
-        <dependency>
           <groupId>org.objectweb.monolog</groupId>
           <artifactId>monolog</artifactId>
           <version>2.1.11</version>
@@ -108,17 +98,6 @@
                 </goals>
                 <configuration>
                   <artifactItems>
-                    <artifactItem>
-                      <groupId>org.apache.geronimo.specs</groupId>
-                      <artifactId>geronimo-jms_1.1_spec</artifactId>
-                      <version>1.1</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
                     <!-- usefull if the war is deployed on tomcat in Eclipse -->
                     <artifactItem>
                       <groupId>org.ow2.carol</groupId>
@@ -135,28 +114,6 @@
                       <groupId>commons-logging</groupId>
                       <artifactId>commons-logging-api</artifactId>
                       <version>1.1</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.objectweb.joram</groupId>
-                      <artifactId>joram-client</artifactId>
-                      <version>5.0.9</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.objectweb.joram</groupId>
-                      <artifactId>joram-shared</artifactId>
-                      <version>5.0.9</version>
                       <type>jar</type>
                       <overWrite>true</overWrite>
                       <outputDirectory>
