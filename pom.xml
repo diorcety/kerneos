@@ -58,7 +58,7 @@
           <version>1.1</version>
         </dependency>
         <dependency>
-          <groupId>org.objectweb.carol</groupId>
+          <groupId>org.ow2.carol</groupId>
           <artifactId>carol</artifactId>
           <version>3.0.5</version>
         </dependency>
@@ -121,7 +121,7 @@
 
                     <!-- usefull if the war is deployed on tomcat in Eclipse -->
                     <artifactItem>
-                      <groupId>org.objectweb.carol</groupId>
+                      <groupId>org.ow2.carol</groupId>
                       <artifactId>carol</artifactId>
                       <version>3.0.5</version>
                       <type>jar</type>
