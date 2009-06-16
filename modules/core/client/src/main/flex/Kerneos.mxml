@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - JASMINe
-  - Copyright (C) 2008 Bull S.A.S.
+  - Copyright (C) 2009 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
   - USA
   -
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id: EoS.mxml 2510 2008-10-02 10:02:54Z renaultgu $
+  - $Id: EoS.mxml 4032 2009-06-16 13:35:54Z merisiec $
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
@@ -30,6 +30,7 @@
         xmlns:control="org.ow2.jasmine.kerneos.core.control.*" 
         xmlns:business="org.ow2.jasmine.kerneos.core.business.*"
         paddingLeft="45" paddingRight="45" paddingBottom="35" paddingTop="34"
+        scriptTimeLimit="60"
         applicationComplete="{mainPanel.init();}" >
 
 	<mx:Style source="../assets/styles.css" />
