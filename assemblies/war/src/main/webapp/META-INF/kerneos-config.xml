@@ -30,6 +30,9 @@
 
 <!-- Examples on how to set this file. An XSD file to come. -->
 
+<!-- Here are some example of how to integrate modules on Kerneos -->
+<!--
+
 
   <module url="http://www.google.fr" loaded="false">
     <name>Google</name>
@@ -61,4 +64,6 @@
     </services>
   </module>
  
+-->
+
 </modules>
