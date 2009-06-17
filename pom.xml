@@ -47,6 +47,13 @@
   <properties>
     <flex.home>${env.FLEX_HOME}</flex.home>
   </properties>
+  
+
+  <scm>
+    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
+    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
+    <url>http://fisheye.jasmine.objectweb.org/browse/JASMINe/kerneos</url>
+  </scm>
 
   <profiles>
     <profile>
