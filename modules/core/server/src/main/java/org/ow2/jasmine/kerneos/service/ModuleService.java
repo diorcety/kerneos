@@ -96,6 +96,9 @@ public class ModuleService implements Serializable {
 
                     if (listOfEntries.item(i).getAttributes().getNamedItem("swfFile") != null) {
                         mod.setSwfFile(listOfEntries.item(i).getAttributes().getNamedItem("swfFile").getNodeValue());
+                        if (Thread.currentThread().getContextClassLoader().getResource(mod.getSwfFile()) == null) {
+                            logger.error("ERROR : {0} file is not loadable, check that this file is embedded in the WAR.", mod.getSwfFile());
+                        }
                     } else if (listOfEntries.item(i).getAttributes().getNamedItem("url") != null) {
                         mod.setUrl(listOfEntries.item(i).getAttributes().getNamedItem("url").getNodeValue());
                     } else {
