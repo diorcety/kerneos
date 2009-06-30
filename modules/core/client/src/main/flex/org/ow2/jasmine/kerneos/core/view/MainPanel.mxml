@@ -106,7 +106,6 @@
             	
             	amfChannelSet.addChannel(_amfChannel);
 
-            	var obl:Object = ServiceLocator.getInstance().getRemoteObject( "logInService" );
             	ServiceLocator.getInstance().getRemoteObject( "logInService" ).channelSet = amfChannelSet;
             	ServiceLocator.getInstance().getRemoteObject( "modulesService" ).channelSet = amfChannelSet;      
             	
@@ -224,8 +223,11 @@
                 logInPanel.logout();
             }
             
-            private function set logged(log:Boolean):void {
+            private function set logged(log:Boolean):void {            	
                 if (log) { // when login
+                	
+                	var serviceIds : ArrayCollection = new ArrayCollection();
+                
                     this.currentState = "logged";
                     if (this.firstLogIn) {
 	                    // get the instance of ICore
@@ -251,6 +253,8 @@
 								for (var l:int =0 ; l < services.length ; l++) {
 									var service : ServiceVO = services.getItemAt(l) as ServiceVO;
 									core_instance.setService(service.id,service.destination);
+									// add the ids in the list to overload the AMF Channel
+									serviceIds.addItem(service.id);
 								}
 								
 							} else {
@@ -262,7 +266,12 @@
 
 	                	}
 	                	
-	                	// get lodaded modules
+	                	// overload all AMF channels
+	                	for each (var id : String in serviceIds) {
+	                		ServiceLocator.getInstance().getRemoteObject( id ).channelSet = amfChannelSet;
+	                	}
+	                	
+	                	// get loaded modules
 	                	modules = core_instance.modulesList;
 	                	
 	                	// add the modules
