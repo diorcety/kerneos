@@ -18,6 +18,7 @@
   
   <properties>
     <flex.home>${env.FLEX_HOME}</flex.home>
+    <flexlib.version>2.4</flexlib.version>
   </properties>
   
 
@@ -31,6 +32,12 @@
     <profile>
       <id>initWTP</id>
       <dependencies>
+        <dependency>
+          <groupId>flexlib</groupId>
+          <artifactId>flexlib-bin</artifactId>
+          <version>${flexlib.version}</version>
+          <type>swc</type>
+        </dependency>
         <dependency>
           <groupId>org.apache.geronimo.specs</groupId>
           <artifactId>geronimo-jms_1.1_spec</artifactId>
@@ -144,7 +151,18 @@
                         libs
                       </outputDirectory>
                     </artifactItem>
-
+                    
+                    <artifactItem>
+                      <groupId>flexlib</groupId>
+                      <artifactId>flexlib-bin</artifactId>
+                      <version>${flexlib.version}</version>
+                      <type>swc</type>
+                      <overWrite>true</overWrite>
+                      <outputDirectory>
+                        libs
+                      </outputDirectory>
+                    </artifactItem>
+                    
                   </artifactItems>
                 </configuration>
               </execution>

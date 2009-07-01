@@ -29,7 +29,7 @@
         xmlns:view="org.ow2.jasmine.kerneos.login.view.*" 
         xmlns:control="org.ow2.jasmine.kerneos.login.control.*" 
         xmlns:business="org.ow2.jasmine.kerneos.login.business.*"
-        width="350" height="200">
+        backgroundAlpha="0.0">
 
 	<!--business:Services id="services" /-->
 	<control:Controller id="controller" /> 
@@ -48,6 +48,7 @@
             public function logout():void {
                 loginpanel.logOut();
             }
+            
         ]]>
     </mx:Script>
 

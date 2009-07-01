@@ -1,9 +1,29 @@
 Application
 {
-   background-gradient-colors:	#ffffff, #ffffff;
+   background-gradient-colors:	#FFFFFF, #777777;
    color: 						#000000;
-   background-image: 			Embed(source="./application_background.png",
-								scaleGridTop="94", scaleGridBottom="791", scaleGridLeft="350", scaleGridRight="690");
+   /*background-image: 			Embed(source="./application_background.png",
+								scaleGridTop="94", scaleGridBottom="791", scaleGridLeft="350", scaleGridRight="690");*/
+}
+
+.moduleName{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.moduleDescription{
+    font-size: 11px;
+}
+
+.consoleMark1{
+	font-size: 48px;
+	color: #EFEFEF;
+}
+
+.consoleMark2{
+    font-size: 48px;
+    font-style: italic;
+    color: #FFFFFF;
 }
 
 .maximizeRestoreButton

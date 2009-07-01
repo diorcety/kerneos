@@ -14,6 +14,7 @@
 
   <properties>
     <flex.home>${env.FLEX_HOME}</flex.home>
+    <flexlib.version>2.4</flexlib.version>
   </properties>
 
   <dependencies>
@@ -39,7 +40,13 @@
       <version>${project.version}</version>
       <type>swc</type>
     </dependency>
-
+    
+    <dependency>
+      <groupId>flexlib</groupId>
+      <artifactId>flexlib-bin</artifactId>
+      <type>swc</type>
+      <version>${flexlib.version}</version>
+     </dependency>
 
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>

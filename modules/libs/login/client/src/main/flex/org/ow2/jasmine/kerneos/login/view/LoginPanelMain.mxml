@@ -24,7 +24,12 @@
   - $Id: LoginPanelMain.mxml 2867 2008-12-04 17:06:37Z loverad $
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="75%" xmlns:local="*">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	     width="100%"
+	     height="75%"
+	     xmlns:local="*"
+         xmlns:flexlibControls="flexlib.controls.*"
+	     backgroundAlpha="0.0">
     
     <mx:Script>
         <![CDATA[
@@ -48,18 +53,21 @@
                 CairngormEventDispatcher.getInstance().dispatchEvent(event);
                 return;
             }
+            
+            
         ]]>
     </mx:Script>
     
         <mx:Form width="100%" height="100%">
+
             <mx:FormHeading label="Please fill in the form to log in" />
-            
+
             <mx:FormItem label="User">
-                <mx:TextInput id="user" width="180"/>
+                <flexlibControls:PromptingTextInput prompt="Username" id="user" width="180" toolTip="Please enter your username"/>
             </mx:FormItem>
             
             <mx:FormItem label="Password">
-                <mx:TextInput id="password" width="180" displayAsPassword="true"/>
+                <flexlibControls:PromptingTextInput prompt="Password" id="password" width="180" toolTip="Please enter your password" displayAsPassword="true"/>
             </mx:FormItem>
             
         </mx:Form>     

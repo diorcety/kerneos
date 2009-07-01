@@ -29,7 +29,7 @@
         xmlns:view="org.ow2.jasmine.kerneos.core.view.*" 
         xmlns:control="org.ow2.jasmine.kerneos.core.control.*" 
         xmlns:business="org.ow2.jasmine.kerneos.core.business.*"
-        paddingLeft="45" paddingRight="45" paddingBottom="35" paddingTop="34"
+        paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"
         scriptTimeLimit="60"
         applicationComplete="{mainPanel.init();}" >
 
