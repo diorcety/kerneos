@@ -24,26 +24,6 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-
-<!--================================ DEV NOTES =================================
-	 # BUGS
-        - Keyboard shortcuts bug in full screen
-        - IFrames do not work in full screen
-        - Double click on minimized modules buttons does not behave as expected
-        - Some random graphic bugs when stressing the application	
-	 # TODO
-	    - Style work
-	    - Change module registering API to add Thumb + Icon
-	 
-	 # IDEAS
-	    - Change module registering API to let modules tell if they can be
-	      instanciated only once or several times
-	    - Add drag and drop support to the task bar to allow changing location
-	      of minimized windows
-	    - Add loading animation to the Iframes
-	      (see SuperIFrame.loadIndicatorClass)
-=============================================================================-->
-
 <core:Core xmlns:core="org.ow2.jasmine.kerneos.core.api.*"
            xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:local="*"
@@ -52,7 +32,6 @@
            width="100%"
            height="100%">
 
-    
     <mx:Script>
     <![CDATA[
     
@@ -801,36 +780,48 @@
                              width="100%"
                              height="100%"
                              x="0"
-                             y="0">
+                             y="0"
+                             paddingLeft="0"
+                             paddingRight="0"
+                             paddingBottom="0"
+                             paddingTop="0"
+                             verticalGap="0">
                         <mx:VBox id="vbox"
                                  width="100%"
                                  height="100%"
-                                 paddingLeft="3"
-                                 paddingRight="3"
+                                 paddingLeft="0"
+                                 paddingRight="0"
                                  paddingBottom="0"
-                                 paddingTop="3">
+                                 paddingTop="0"
+                                 verticalGap="0">
                             <flexlibMdiContainers:MDICanvas id="mdiCanvas"
                                                horizontalScrollPolicy="off"
                                                verticalScrollPolicy="off"
                                                width="100%"
                                                height="100%"
                                                backgroundColor="#FFFFFF"
-                                               backgroundAlpha="0">
+                                               backgroundAlpha="0"
+                                               paddingLeft="0"
+                                               paddingRight="0"
+                                               paddingBottom="0"
+                                               paddingTop="0">
                                 <mx:TileList id="modules_list"
                                              height="100%"
-                                             width="100%"
                                              direction="vertical"
                                              dataProvider="{MainPanel.modules}"
                                              backgroundAlpha="0.0"
                                              borderStyle="none"
                                              useRollOver="false"
-                                             itemRenderer="org.ow2.jasmine.kerneos.core.view.ModuleThumb">
+                                             buttonMode="true"
+                                             useHandCursor="true"
+                                             selectable="false"
+                                             itemRenderer="org.ow2.jasmine.kerneos.core.view.ListModuleRenderer">
                                 </mx:TileList>
                             </flexlibMdiContainers:MDICanvas>
                         </mx:VBox>
                         <mx:HBox id="task_bar"
-                                 backgroundAlpha="0.5"
-                                 backgroundColor="#ABABAB"
+                                 backgroundAlpha="0.3"
+                                 backgroundColor="#FFFFFF"
                                  width="100%"
                                  height="32"
                                  verticalAlign="middle"
@@ -845,14 +836,11 @@
                                        icon="{downIcon}"
                                        click="{minimizeAllWindows()}"
                                        toolTip="Minimize all windows"/>
-                            
-                            <!-- TODO -->
                             <mx:HBox id="minimized_windows"
                                      width="100%"
                                      height="100%"
                                      horizontalAlign="left"
                                      verticalAlign="middle"/>
-                            
                             <mx:Spacer width="100%"/>
                             <mx:VRule height="90%"
                                       alpha="0.5"/>
@@ -901,7 +889,7 @@
                    filters="{[console_mark_shadow]}"
                    selectable="false"/>
           <mx:Text id="console_mark_right"
-                   text="Console"
+                   text="EoS"
                    styleName="consoleMark2"
                    filters="{[console_mark_shadow]}"
                    selectable="false"/>

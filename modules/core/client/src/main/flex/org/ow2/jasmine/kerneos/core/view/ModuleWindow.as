@@ -24,9 +24,11 @@
  */
 package org.ow2.jasmine.kerneos.core.view
 {
+import flash.events.Event;
 import flash.events.MouseEvent;
 
 import flexlib.mdi.containers.MDIWindow;
+import flexlib.mdi.events.MDIWindowEvent;
 
 /**
 * A window containing a module
@@ -60,7 +62,13 @@ public class ModuleWindow extends MDIWindow
 	*/
 	public function ModuleWindow()
 	{
+	    // Call super class constructor
 		super();
+		
+		// Listen to window events
+        this.addEventListener(MDIWindowEvent.MAXIMIZE,onMaximize);
+        this.addEventListener(MDIWindowEvent.MINIMIZE,onUnMaximize);
+        this.addEventListener(MDIWindowEvent.RESTORE,onUnMaximize);
 	}
 	
 	
@@ -96,5 +104,27 @@ public class ModuleWindow extends MDIWindow
         super.unMinimize(event);
     }
     
+    
+    // =========================================================================
+    // Window events handling
+    // =========================================================================
+    
+    /**
+    * When the window is maximized
+    */
+    public function onMaximize(e:Event=null):void
+    {
+        // Disable rounded corners
+        this.setStyle("cornerRadius",0);
+    }
+    
+    /**
+    * When the window is maximized
+    */
+    public function onUnMaximize(e:Event=null):void
+    {
+        // Disable rounded corners
+        this.setStyle("cornerRadius",3);
+    }
 }
 }

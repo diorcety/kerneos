@@ -8,14 +8,19 @@ Application
 }
 
 ModuleWindow {
-    background-color: #CCCCCC;
-    background-alpha: 1.0;
-    border-color: #CCCCCC;
-    border-alpha: 1.0;
-    style-name-no-focus: noFocusModuleWindow;
     title-style-name: moduleWindowTitle;
-    drop-shadow-enabled: true;
-    drop-shadow-color: #000000;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    borderColor: #777777;
+    borderAlpha: 1;
+    borderThicknessLeft: 3;
+    borderThicknessTop: 0;
+    borderThicknessBottom: 3;
+    borderThicknessRight: 3;
+    rounded-bottom-corners: true;
+    header-height: 24px;
+    cornerRadius: 3;
+    backgroundColor: #CCCCCC;
     padding-bottom: 5px;
     padding-left: 3px;
     padding-top: 2px;
@@ -24,18 +29,26 @@ ModuleWindow {
     maximize-btn-style-name: moduleWindowMaximizeButton;
     close-btn-style-name: moduleWindowCloseButton;
     restore-btn-style-name: moduleWindowRestoreButton;
+    style-name-no-focus: noFocusModuleWindow;
+    style-name-focus: focusModuleWindow;
+}
+
+.focusModuleWindow {
+    background-alpha: 1;
+    border-alpha: 1;
 }
 
 .noFocusModuleWindow {
-    background-color: #DEDEDE;
-    background-alpha: 0.95;
-    border-color: #DEDEDE;
-    border-alpha: 0.95;
+    background-alpha: 0.90;
+    border-alpha: 0.70;
 }
 
 .moduleWindowTitle {
     font-weight: bold;
     font-size: 13px;
+    color: #FEFEFE;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #FF0000;
     title-style-name-no-focus: moduleWindowTitleNoFocus;
 }
 
@@ -101,6 +114,12 @@ ModuleWindow {
 	up-skin:        Embed("./minimize_up.png");
 	over-skin:      Embed("./minimize_over.png");
 	down-skin:      Embed("./minimize_up.png");
+}
+
+MinimizedModuleWindow {
+    corner-radius: 2;
+    drop-shadow-enabled: true;
+    
 }
 
 TabBar

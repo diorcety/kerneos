@@ -19,7 +19,7 @@
  * USA
  *
  * --------------------------------------------------------------------------
- * $Id:Controller.as 2485 2008-09-30 14:14:35Z renaultgu $
+ * $Id$
  * --------------------------------------------------------------------------
  */
 
@@ -180,11 +180,11 @@ public class SuperIFrame extends Container
     */
     private static var FUNCTION_CREATEIFRAME:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.createSuperIFrame==null)" + 
             "{" + 
                 "createSuperIFrame = function (frameID)" +
-            	"{ " +
+                "{ " +
                     "var bodyID = document.getElementsByTagName(\"body\")[0];" +
                     "var newDiv = document.createElement('div');" +
                     "newDiv.id = frameID;" +
@@ -199,7 +199,7 @@ public class SuperIFrame extends Container
     
     private static var FUNCTION_MOVEIFRAME:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.moveSuperIFrame==null)" +
             "{" +
                 "moveSuperIFrame = function(frameID, iframeID, x,y,w,h) " + 
@@ -208,31 +208,31 @@ public class SuperIFrame extends Container
                     "frameRef.style.left=x;" + 
                     "frameRef.style.top=y;" +
                     "var iFrameRef=document.getElementById(iframeID);" +
-                	"iFrameRef.width=w;" +
-                	"iFrameRef.height=h;" +
-	            "}" +
+                    "iFrameRef.width=w;" +
+                    "iFrameRef.height=h;" +
+                "}" +
             "}" +
         "}";
 
     private static var FUNCTION_HIDEIFRAME:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.hideSuperIFrame==null)" +
             "{" +
                 "hideSuperIFrame = function (frameID, iframeID)" +
                 "{" +
                     "var iframeRef = document.getElementById(iframeID);" +
                     "var iframeDoc;" +
-					"if (iframeRef.contentWindow) {" +
-						"iframeDoc = iframeRef.contentWindow.document;" +
-   					"} else if (iframeRef.contentDocument) {" +
-						"iframeDoc = iframeRef.contentDocument;" +
-					"} else if (iframeRef.document) {" +
-						"iframeDoc = iframeRef.document;" +
-					"}" +
-					"if (iframeDoc) {" +
-						"iframeDoc.body.style.visibility='hidden';" +
-					"}" +
+                    "if (iframeRef.contentWindow) {" +
+                        "iframeDoc = iframeRef.contentWindow.document;" +
+                       "} else if (iframeRef.contentDocument) {" +
+                        "iframeDoc = iframeRef.contentDocument;" +
+                    "} else if (iframeRef.document) {" +
+                        "iframeDoc = iframeRef.document;" +
+                    "}" +
+                    "if (iframeDoc) {" +
+                        "iframeDoc.body.style.visibility='hidden';" +
+                    "}" +
                     "document.getElementById(frameID).style.visibility='hidden';" +
                 "}" +
             "}" +
@@ -240,7 +240,7 @@ public class SuperIFrame extends Container
 
     private static var FUNCTION_SHOWIFRAME:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.showSuperIFrame==null)" +
             "{" +
                 "showSuperIFrame = function (frameID, iframeID)" +
@@ -249,23 +249,23 @@ public class SuperIFrame extends Container
                     "document.getElementById(frameID).style.visibility='visible';" +
                     
                     "var iframeDoc;" +
-					"if (iframeRef.contentWindow) {" +
-						"iframeDoc = iframeRef.contentWindow.document;" +
-   					"} else if (iframeRef.contentDocument) {" +
-						"iframeDoc = iframeRef.contentDocument;" +
-					"} else if (iframeRef.document) {" +
-						"iframeDoc = iframeRef.document;" +
-					"}" +
-					"if (iframeDoc) {" +
-						"iframeDoc.body.style.visibility='visible';" +
-					"}" +
+                    "if (iframeRef.contentWindow) {" +
+                        "iframeDoc = iframeRef.contentWindow.document;" +
+                       "} else if (iframeRef.contentDocument) {" +
+                        "iframeDoc = iframeRef.contentDocument;" +
+                    "} else if (iframeRef.document) {" +
+                        "iframeDoc = iframeRef.document;" +
+                    "}" +
+                    "if (iframeDoc) {" +
+                        "iframeDoc.body.style.visibility='visible';" +
+                    "}" +
                 "}" +
             "}" +
         "}";
         
     private static var FUNCTION_HIDEDIV:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.hideDiv==null)" +
             "{" +
                 "hideDiv = function (frameID, iframeID)" +
@@ -277,7 +277,7 @@ public class SuperIFrame extends Container
 
     private static var FUNCTION_SHOWDIV:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.showDiv==null)" +
             "{" +
                 "showDiv = function (frameID, iframeID)" +
@@ -289,49 +289,49 @@ public class SuperIFrame extends Container
         
     private static var FUNCTION_LOADIFRAME:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.loadSuperIFrame==null)" +
             "{" +
                 "loadSuperIFrame = function (frameID, iframeID, url)" +
                 "{" +
                     "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
-                    	+ Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" + 
+                        + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" + 
                 "}" +
             "}" +
         "}";
         
-   	private static var FUNCTION_LOADDIV_CONTENT:String = 
+       private static var FUNCTION_LOADDIV_CONTENT:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.loadDivContent==null)" +
             "{" +
                 "loadDivContent = function (frameID, iframeID, content)" +
                 "{" +
-                	"document.getElementById(frameID).innerHTML = \"<div id='\"+iframeID+\"' frameborder='0'>\"+content+\"</div>\";" +
+                    "document.getElementById(frameID).innerHTML = \"<div id='\"+iframeID+\"' frameborder='0'>\"+content+\"</div>\";" +
                 "}" +
             "}" +
         "}";
         
     private static var FUNCTION_CALLIFRAMEFUNCTION:String = 
         "document.insertScript = function ()" +
-    	"{ " +
+        "{ " +
             "if (document.callSuperIFrameFunction==null)" +
             "{" +
                 "callSuperIFrameFunction = function (iframeID, functionName, args)" +
                 "{" +
-                	"var iframeRef=document.getElementById(iframeID);" +
-                	"var iframeDoc;" +
-                	"if (iframeRef.contentDocument) {" +
-						"iframeDoc = iframeRef.contentDocument;" +
-					"} else if (iframeRef.contentWindow) {" +
-						"iframeDoc = iframeRef.contentWindow.document;" +
-					"} else if (iframeRef.document) {" +
-						"iframeDoc = iframeRef.document;" +
-					"}" +
-					"if (iframeDoc.wrappedJSObject != undefined) {" +
-						"iframeDoc = iframeDoc.wrappedJSObject;" +
-					"}" +
-					"return iframeDoc[functionName](args);" +
+                    "var iframeRef=document.getElementById(iframeID);" +
+                    "var iframeDoc;" +
+                    "if (iframeRef.contentDocument) {" +
+                        "iframeDoc = iframeRef.contentDocument;" +
+                    "} else if (iframeRef.contentWindow) {" +
+                        "iframeDoc = iframeRef.contentWindow.document;" +
+                    "} else if (iframeRef.document) {" +
+                        "iframeDoc = iframeRef.document;" +
+                    "}" +
+                    "if (iframeDoc.wrappedJSObject != undefined) {" +
+                        "iframeDoc = iframeDoc.wrappedJSObject;" +
+                    "}" +
+                    "return iframeDoc[functionName](args);" +
                 "}" +
             "}" +
         "}";
@@ -344,7 +344,7 @@ public class SuperIFrame extends Container
     public static var idList:Object = new Object();
     
     private var appHost:String;
-   	private var iframeContentHost:String;
+       private var iframeContentHost:String;
     
     /**
     * Constructor
@@ -356,7 +356,7 @@ public class SuperIFrame extends Container
         this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
         this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
     }
-	
+    
     /**
     * Generate DOM elements and build display path.
     * 
@@ -372,21 +372,21 @@ public class SuperIFrame extends Container
         
         if (debug)
         {
-        	logTarget = new TraceTarget();
-        	logTarget.addLogger(logger);
+            logTarget = new TraceTarget();
+            logTarget.addLogger(logger);
         }
         
         // Get the host info to check for cross-domain issues
         BrowserManager.getInstance().initForHistoryManager();
         var url:String = BrowserManager.getInstance().url;
         appHost = URLUtil.getProtocol(url) + "://" 
-        	+ URLUtil.getServerNameWithPort(url);
+            + URLUtil.getServerNameWithPort(url);
 
         // Generate unique id's for frame div name
         var idSuffix:int = 0;
         while (idList[id + idSuffix])
         {
-        	idSuffix++;
+            idSuffix++;
         }
         frameId = id + idSuffix;
         iframeId = "iframe_"+frameId;
@@ -408,20 +408,20 @@ public class SuperIFrame extends Container
 
         // Insert frame into DOM using our precreated function 'createSuperIFrame'
         ExternalInterface.call("createSuperIFrame", frameId);
-       	
+           
         buildContainerList();
 
-		if (loadIndicatorClass)
-		{
-			logger.debug("loadIndicatorClass is {0}", loadIndicatorClass);
-			_loadIndicator = UIComponent(new loadIndicatorClass());
-			addChild(_loadIndicator);
-		}
-		else
-		{
-			logger.debug("loadIndicatorClass is null");
-		}
-			
+        if (loadIndicatorClass)
+        {
+            logger.debug("loadIndicatorClass is {0}", loadIndicatorClass);
+            _loadIndicator = UIComponent(new loadIndicatorClass());
+            addChild(_loadIndicator);
+        }
+        else
+        {
+            logger.debug("loadIndicatorClass is null");
+        }
+            
     }
 
     /**
@@ -446,7 +446,7 @@ public class SuperIFrame extends Container
             {
                 if (current.contains(previous))
                 {
-                	
+                    
                     var childIndex:Number = current.getChildIndex(previous);                
                    logger.debug("index: {0}", childIndex);
                     // Store child index against container
@@ -478,10 +478,10 @@ public class SuperIFrame extends Container
         // Remove systemManager hooks for overlay detection 
         if (overlayDetection)
         {
-        	systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
-			systemManager.removeEventListener(Event.REMOVED, systemManager_removedHandler);
+            systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
+            systemManager.removeEventListener(Event.REMOVED, systemManager_removedHandler);
         }
-    	visible = false;
+        visible = false;
     }
     
    /**
@@ -492,13 +492,13 @@ public class SuperIFrame extends Container
     */
     private function handleAdd(event:Event):void
     {
-    	// Hook the systemManager to provide overlaying object detection
+        // Hook the systemManager to provide overlaying object detection
         if (overlayDetection)
         {
-        	systemManager.addEventListener(Event.ADDED, systemManager_addedHandler);
-			systemManager.addEventListener(Event.REMOVED, systemManager_removedHandler);
+            systemManager.addEventListener(Event.ADDED, systemManager_addedHandler);
+            systemManager.addEventListener(Event.REMOVED, systemManager_removedHandler);
         }
-    	visible = true;
+        visible = true;
     }
 
     /**
@@ -571,7 +571,7 @@ public class SuperIFrame extends Container
         validForDisplay = valid;
         return valid;
     }
-	
+    
     /**
     * Return index of child item on path down to this object. If not
     * found then return -1;
@@ -640,45 +640,45 @@ public class SuperIFrame extends Container
     * Triggered by change to component properties.
     * 
     */
-	override protected function commitProperties():void
-	{
-		super.commitProperties();
-		
+    override protected function commitProperties():void
+    {
+        super.commitProperties();
+        
         if (source)
         {
             frameLoaded = false;
             ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
-			logger.debug("load Iframe id {0}", frameId);
-			// Trigger re-layout of iframe contents.	            
+            logger.debug("load Iframe id {0}", frameId);
+            // Trigger re-layout of iframe contents.                
             invalidateDisplayList();
         } 
         else if (content) 
         {
-        	ExternalInterface.call("loadDivContent", frameId, iframeId, content);
-			logger.debug("load Content id {0}", frameId);
-			// Trigger re-layout of iframe contents.	            
+            ExternalInterface.call("loadDivContent", frameId, iframeId, content);
+            logger.debug("load Content id {0}", frameId);
+            // Trigger re-layout of iframe contents.                
             invalidateDisplayList();
         }
-	}
-	
-	protected function handleFrameLoad():void
-	{			
-		logger.debug("browser reports frame loaded with id {0}", frameId);
-		frameLoaded = true;
-		var queuedCall:Object;
-		var result:Object;
-		// Execute any queued function calls now that the frame is loaded
-		while (functionQueue.length > 0)
-		{
-			queuedCall = functionQueue.pop();
-			logger.debug("frame id {0} calling queued function {1}", frameId, queuedCall.functionName);
-			this.callSuperIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
-		}
-		dispatchEvent(new Event("frameLoad"));
-		
-		invalidateDisplayList();
-	}
-	
+    }
+    
+    protected function handleFrameLoad():void
+    {            
+        logger.debug("browser reports frame loaded with id {0}", frameId);
+        frameLoaded = true;
+        var queuedCall:Object;
+        var result:Object;
+        // Execute any queued function calls now that the frame is loaded
+        while (functionQueue.length > 0)
+        {
+            queuedCall = functionQueue.pop();
+            logger.debug("frame id {0} calling queued function {1}", frameId, queuedCall.functionName);
+            this.callSuperIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
+        }
+        dispatchEvent(new Event("frameLoad"));
+        
+        invalidateDisplayList();
+    }
+    
     /**
     * Triggered when display contents change. Adjusts frame layout.
     * 
@@ -686,29 +686,29 @@ public class SuperIFrame extends Container
     * @param unscaledHeight
     * 
     */
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		
-		if (_loadIndicator)
-		{
-			if (frameLoaded)
-			{
-				_loadIndicator.visible = false;
-			}
-			else
-			{
-				_loadIndicator.visible = true;
-				var w:int = _loadIndicator.measuredWidth;
-				var h:int = _loadIndicator.measuredHeight;
-				_loadIndicator.setActualSize(w, h);
-				_loadIndicator.move(this.width / 2 - w, this.height / 2 - h);
-			}
-		}
-		
+    override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+    {
+        super.updateDisplayList(unscaledWidth, unscaledHeight);
+        
+        if (_loadIndicator)
+        {
+            if (frameLoaded)
+            {
+                _loadIndicator.visible = false;
+            }
+            else
+            {
+                _loadIndicator.visible = true;
+                var w:int = _loadIndicator.measuredWidth;
+                var h:int = _loadIndicator.measuredHeight;
+                _loadIndicator.setActualSize(w, h);
+                _loadIndicator.move(this.width / 2 - w, this.height / 2 - h);
+            }
+        }
+        
         moveSuperIFrame();
-	}
-	
+    }
+    
     /**
     * Set source url
     * 
@@ -721,12 +721,12 @@ public class SuperIFrame extends Container
         {
             __source = source;
             // mark unloaded now so calls in this frame will be queued 
-			frameLoaded = false; 
-			invalidateProperties();
-			
-			// Get the host info to check for cross-domain issues
-			iframeContentHost = URLUtil.getProtocol(source) + "://"
-				 + URLUtil.getServerNameWithPort(source);     
+            frameLoaded = false; 
+            invalidateProperties();
+            
+            // Get the host info to check for cross-domain issues
+            iframeContentHost = URLUtil.getProtocol(source) + "://"
+                 + URLUtil.getServerNameWithPort(source);     
         }
     }
 
@@ -749,7 +749,7 @@ public class SuperIFrame extends Container
         {
             __content = content;
 
-			invalidateProperties();                
+            invalidateProperties();                
         }
     }
 
@@ -772,23 +772,23 @@ public class SuperIFrame extends Container
     {
         super.visible = value;
 
-		// if we have an iframe in the same domain as the app, call the
-		// specialized functions to update visibility inside the iframe
+        // if we have an iframe in the same domain as the app, call the
+        // specialized functions to update visibility inside the iframe
         if (visible)
         {
             if (source && iframeContentHost == appHost)
-            	ExternalInterface.call("showSuperIFrame",frameId,iframeId);
+                ExternalInterface.call("showSuperIFrame",frameId,iframeId);
             else
-            	ExternalInterface.call("showDiv",frameId,iframeId);
-            logger.debug("show iframe id {0}", frameId);
+                ExternalInterface.call("showDiv",frameId,iframeId);
+                logger.debug("show iframe id {0}", frameId);
         }
         else 
         {
-        	if (source && iframeContentHost == appHost)
-            	ExternalInterface.call("hideSuperIFrame",frameId,iframeId);
+            if (source && iframeContentHost == appHost)
+                ExternalInterface.call("hideSuperIFrame",frameId,iframeId);
             else
-            	ExternalInterface.call("hideDiv",frameId,iframeId);
-            logger.debug("hide iframe id {0}", frameId);
+                ExternalInterface.call("hideDiv",frameId,iframeId);
+                logger.debug("hide iframe id {0}", frameId);
         }
     }
     
@@ -812,31 +812,31 @@ public class SuperIFrame extends Container
     {
         if (!source)
         {
-        	throw new Error("No iframe to call functions on");
+            throw new Error("No iframe to call functions on");
         }
         if (iframeContentHost != appHost)
         {
-        	var msg:String = "Warning: attempt to call function " + functionName + 
-        		" on iframe " + frameId + " may fail due to cross-domain security.";
-        	logger.debug(msg);
+            var msg:String = "Warning: attempt to call function " + functionName + 
+                " on iframe " + frameId + " may fail due to cross-domain security.";
+            logger.debug(msg);
         }
         
         if (frameLoaded)
         {
-        	// Call the function immediately
-        	var result:Object = ExternalInterface.call("callSuperIFrameFunction", iframeId, functionName, args);
-        	if (callback != null)
-        	{
-        		callback(result);
-        	}
-        	return String(result);
+            // Call the function immediately
+            var result:Object = ExternalInterface.call("callSuperIFrameFunction", iframeId, functionName, args);
+            if (callback != null)
+            {
+                callback(result);
+            }
+            return String(result);
         }
         else
         {
-        	// Queue the function for call once the iframe has loaded
-        	var queuedCall:Object = {functionName: functionName, args: args, callback:callback};
-        	functionQueue.push(queuedCall);
-        	return null;
+            // Queue the function for call once the iframe has loaded
+            var queuedCall:Object = {functionName: functionName, args: args, callback:callback};
+            functionQueue.push(queuedCall);
+            return null;
         }
     }
     
@@ -858,125 +858,125 @@ public class SuperIFrame extends Container
     // --------------------------------------------------------------------
     
     private var overlappingDict:Dictionary = new Dictionary(true);
-	private var overlapCount:int = 0;
-	
-	protected function systemManager_addedHandler(event:Event):void
-	{
-		// A display object was added somewhere
-		var displayObj:DisplayObject = event.target as DisplayObject;
-		if (displayObj.parent == systemManager && displayObj.name != "cursorHolder")
-		{
-			// If the object is a direct child of systemManager (i.e it floats) and isn't the cursor, 
-			// check to see if it overlaps me after it's been drawn
-			this.callLater(checkOverlay, [displayObj]);
-		}
-	}
-	
-	protected function systemManager_removedHandler(event:Event):void
-	{
-		// A display object was removed somewhere
-		var displayObj:DisplayObject = event.target as DisplayObject;
-		if (displayObj.parent == systemManager && overlappingDict[displayObj])
-		{
-			logger.debug("iframe {0} heard REMOVE for {1}", frameId, displayObj.toString());
-			// If the object is a direct child of systemManager and was an overlapping object, remove it
-			delete overlappingDict[displayObj];
-			if (--overlapCount == 0)
-			{
-				visible = validForDisplay;
-			}
-			
-			if (displayObj is UIComponent)
-			{
-				// Remove listeners for hide and show events on overlappiung UIComponents
-				UIComponent(displayObj).removeEventListener(FlexEvent.HIDE, overlay_hideShowHandler);
-				UIComponent(displayObj).removeEventListener(FlexEvent.SHOW, overlay_hideShowHandler);
-			}
-		}
-	}
-	
-	protected function overlay_hideShowHandler(event:FlexEvent):void
-	{
-		var displayObj:DisplayObject = event.target as DisplayObject;
-		if (event.type == FlexEvent.SHOW && !overlappingDict[displayObj])
-		{
-			logger.debug("iframe {0} heard SHOW for {1}", frameId, displayObj.toString());
-			overlappingDict[displayObj] = displayObj;
-			overlapCount++;
-			visible = false;
-		}
-		else if (event.type == FlexEvent.HIDE && overlappingDict[displayObj])
-		{
-			logger.debug("iframe {0} heard HIDE for {1}", frameId, displayObj.toString());
-			delete overlappingDict[displayObj];
-			if (--overlapCount == 0)
-			{
-				visible = validForDisplay;
-			}
-		}
-	}
-	
-	/**
+    private var overlapCount:int = 0;
+    
+    protected function systemManager_addedHandler(event:Event):void
+    {
+        // A display object was added somewhere
+        var displayObj:DisplayObject = event.target as DisplayObject;
+        if (displayObj.parent == systemManager && displayObj.name != "cursorHolder")
+        {
+            // If the object is a direct child of systemManager (i.e it floats) and isn't the cursor, 
+            // check to see if it overlaps me after it's been drawn
+            this.callLater(checkOverlay, [displayObj]);
+        }
+    }
+    
+    protected function systemManager_removedHandler(event:Event):void
+    {
+        // A display object was removed somewhere
+        var displayObj:DisplayObject = event.target as DisplayObject;
+        if (displayObj.parent == systemManager && overlappingDict[displayObj])
+        {
+            logger.debug("iframe {0} heard REMOVE for {1}", frameId, displayObj.toString());
+            // If the object is a direct child of systemManager and was an overlapping object, remove it
+            delete overlappingDict[displayObj];
+            if (--overlapCount == 0)
+            {
+                visible = validForDisplay;
+            }
+            
+            if (displayObj is UIComponent)
+            {
+                // Remove listeners for hide and show events on overlappiung UIComponents
+                UIComponent(displayObj).removeEventListener(FlexEvent.HIDE, overlay_hideShowHandler);
+                UIComponent(displayObj).removeEventListener(FlexEvent.SHOW, overlay_hideShowHandler);
+            }
+        }
+    }
+    
+    protected function overlay_hideShowHandler(event:FlexEvent):void
+    {
+        var displayObj:DisplayObject = event.target as DisplayObject;
+        if (event.type == FlexEvent.SHOW && !overlappingDict[displayObj])
+        {
+            logger.debug("iframe {0} heard SHOW for {1}", frameId, displayObj.toString());
+            overlappingDict[displayObj] = displayObj;
+            overlapCount++;
+            visible = false;
+        }
+        else if (event.type == FlexEvent.HIDE && overlappingDict[displayObj])
+        {
+            logger.debug("iframe {0} heard HIDE for {1}", frameId, displayObj.toString());
+            delete overlappingDict[displayObj];
+            if (--overlapCount == 0)
+            {
+                visible = validForDisplay;
+            }
+        }
+    }
+    
+    /**
     * Check to see if the given DisplayObject overlaps this object.
     * If so, add it to a dictionary of overlapping objects and update
     * this object's visibility.
     * 
     */
-	protected function checkOverlay(displayObj:DisplayObject):void
-	{			
-		if (this.hitTestStageObject(displayObj))
-		{
-			logger.debug("iframe {0} detected overlap of {1}", frameId, displayObj.toString());
-			overlappingDict[displayObj] = displayObj;
-			overlapCount++;
-			visible = false;
-			
-			if (displayObj is UIComponent)
-			{
-				// Listen for hide and show events on overlapping UIComponents
-				// (ComboBox dropdowns for example aren't removed after use; they're just hidden)
-				UIComponent(displayObj).addEventListener(FlexEvent.HIDE, overlay_hideShowHandler, false, 0, true);
-				UIComponent(displayObj).addEventListener(FlexEvent.SHOW, overlay_hideShowHandler, false, 0, true);
-			}
-		}
-	}
-	
-	/**
+    protected function checkOverlay(displayObj:DisplayObject):void
+    {            
+        if (this.hitTestStageObject(displayObj))
+        {
+            logger.debug("iframe {0} detected overlap of {1}", frameId, displayObj.toString());
+            overlappingDict[displayObj] = displayObj;
+            overlapCount++;
+            visible = false;
+            
+            if (displayObj is UIComponent)
+            {
+                // Listen for hide and show events on overlapping UIComponents
+                // (ComboBox dropdowns for example aren't removed after use; they're just hidden)
+                UIComponent(displayObj).addEventListener(FlexEvent.HIDE, overlay_hideShowHandler, false, 0, true);
+                UIComponent(displayObj).addEventListener(FlexEvent.SHOW, overlay_hideShowHandler, false, 0, true);
+            }
+        }
+    }
+    
+    /**
     * The native hitTestObject method seems to have some issues depending on
     * the situation. This is a custom implementation to work around that.
     * This method assumes that the passed DisplayObject is a direct child
     * of the stage and therefore has x and y coordinates that are already global
     * 
     */
-	protected function hitTestStageObject(o:DisplayObject):Boolean
-	{
-		var overlapX:Boolean = false;
-		var overlapY:Boolean = false;
-		
-		var localMe:Point = new Point(this.x, this.y);
-		var globalMe:Point = this.parent.localToGlobal(localMe);
-		
-		var myLeft:int = globalMe.x;
-		var myRight:int = globalMe.x + this.width;
-		var oLeft:int = o.x;
-		var oRight:int = o.x + o.width;
-		
-		// Does object's left edge fall between my left and right edges?
-		overlapX = oLeft >= myLeft && oLeft <= myRight;
-		// Or does my left edge fall between object's left and right edges?
-		overlapX ||= oLeft <= myLeft && oRight >= myLeft;
-		
-		var myTop:int = globalMe.y;
-		var myBottom:int = globalMe.y + this.height;
-		var oTop:int = o.y;
-		var oBottom:int = o.y + o.height;
-		
-		// Does object's top edge fall between my top and bottom edges?
-		overlapY = oTop >= myTop && oTop <= myBottom;
-		// Or does my top edge fall between object's top and bottom edges?
-		overlapY ||= oTop <= myTop && oBottom >= myTop;
-		
-		return overlapX && overlapY;
-	}  
+    protected function hitTestStageObject(o:DisplayObject):Boolean
+    {
+        var overlapX:Boolean = false;
+        var overlapY:Boolean = false;
+        
+        var localMe:Point = new Point(this.x, this.y);
+        var globalMe:Point = this.parent.localToGlobal(localMe);
+        
+        var myLeft:int = globalMe.x;
+        var myRight:int = globalMe.x + this.width;
+        var oLeft:int = o.x;
+        var oRight:int = o.x + o.width;
+        
+        // Does object's left edge fall between my left and right edges?
+        overlapX = oLeft >= myLeft && oLeft <= myRight;
+        // Or does my left edge fall between object's left and right edges?
+        overlapX ||= oLeft <= myLeft && oRight >= myLeft;
+        
+        var myTop:int = globalMe.y;
+        var myBottom:int = globalMe.y + this.height;
+        var oTop:int = o.y;
+        var oBottom:int = o.y + o.height;
+        
+        // Does object's top edge fall between my top and bottom edges?
+        overlapY = oTop >= myTop && oTop <= myBottom;
+        // Or does my top edge fall between object's top and bottom edges?
+        overlapY ||= oTop <= myTop && oBottom >= myTop;
+        
+        return overlapX && overlapY;
+    }  
 }
 }
