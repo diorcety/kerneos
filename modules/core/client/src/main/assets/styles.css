@@ -2,8 +2,68 @@ Application
 {
    background-gradient-colors:	#FFFFFF, #777777;
    color: 						#000000;
+   theme-color: #777777;
    /*background-image: 			Embed(source="./application_background.png",
 								scaleGridTop="94", scaleGridBottom="791", scaleGridLeft="350", scaleGridRight="690");*/
+}
+
+ModuleWindow {
+    background-color: #CCCCCC;
+    background-alpha: 1.0;
+    border-color: #CCCCCC;
+    border-alpha: 1.0;
+    style-name-no-focus: noFocusModuleWindow;
+    title-style-name: moduleWindowTitle;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #000000;
+    padding-bottom: 5px;
+    padding-left: 3px;
+    padding-top: 2px;
+    padding-right: 3px;
+    minimize-btn-style-name: moduleWindowMinimizeButton;
+    maximize-btn-style-name: moduleWindowMaximizeButton;
+    close-btn-style-name: moduleWindowCloseButton;
+    restore-btn-style-name: moduleWindowRestoreButton;
+}
+
+.noFocusModuleWindow {
+    background-color: #DEDEDE;
+    background-alpha: 0.95;
+    border-color: #DEDEDE;
+    border-alpha: 0.95;
+}
+
+.moduleWindowTitle {
+    font-weight: bold;
+    font-size: 13px;
+    title-style-name-no-focus: moduleWindowTitleNoFocus;
+}
+
+.moduleWindowTitleNoFocus {
+    font-weight: bold;   
+}
+
+.moduleWindowMinimizeButton {
+    upSkin: Embed(source="minimize_up.png");
+    overSkin: Embed(source="minimize_over.png");
+    downSkin: Embed(source="minimize_up.png");
+}
+
+.moduleWindowMaximizeButton {
+    upSkin: Embed(source="maximize_up.png");
+    overSkin: Embed(source="maximize_over.png");
+    downSkin: Embed(source="maximize_up.png");}
+
+.moduleWindowCloseButton {
+    upSkin: Embed(source="close_up.png");
+    overSkin: Embed(source="close_over.png");
+    downSkin: Embed(source="close_up.png");
+}
+
+.moduleWindowRestoreButton {
+    upSkin: Embed(source="restore_up.png");
+    overSkin: Embed(source="restore_over.png");
+    downSkin: Embed(source="restore_up.png");
 }
 
 .moduleName{
