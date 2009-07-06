@@ -29,10 +29,17 @@
          implements="mx.controls.listClasses.IListItemRenderer"
          horizontalAlign="center"
          verticalAlign="middle"
-         width="150"
+         width="140"
          height="100"
          verticalGap="0"
-         toolTip="{_data.description}">
+         toolTip="{_data.description}"
+         buttonMode="true"
+         useHandCursor="true"
+         mouseChildren="false"
+         verticalScrollPolicy="off"
+         horizontalScrollPolicy="off"
+         click="startModule(event)"
+         creationComplete="initRenderer()">
          
     <mx:Script>
     <![CDATA[
@@ -60,8 +67,46 @@
     [Embed(source="/../assets/module.png")]
     [Bindable]
     private var defaultModuleThumbnail:Class;
-
-
+    
+    
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+    
+    /**
+    * Init the component
+    */
+    public function initRenderer(event:Event=null):void
+    {
+        // Listen to mouse events
+        addEventListener(MouseEvent.MOUSE_OVER,mouseOverHandler);
+        addEventListener(MouseEvent.MOUSE_OUT,mouseOutHandler);
+    }
+    
+    
+    // =========================================================================
+    // Events handlers
+    // =========================================================================
+    
+    /**
+    * On mouse over
+    */
+    public function mouseOverHandler(event:Event=null):void
+    {
+        this.setStyle('borderStyle','solid');
+    }
+    
+    /**
+    * On mouse out
+    */
+    public function mouseOutHandler(event:Event=null):void
+    {
+        if (!_data.load) {
+            this.setStyle('borderStyle','none');
+        }
+    }
+    
+    
     // =========================================================================
     // Data object handling
     // =========================================================================
@@ -81,8 +126,14 @@
     override public function set data(value:Object):void
     {
         _data = value;
+        if (_data.load as Boolean) {
+            this.setStyle('borderStyle','solid');
+        } else {
+            this.setStyle('borderStyle','none');
+        }
+        
         invalidateProperties();
-        dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
+        dispatchEvent(new Event("dataChange"));
     }
     
 
@@ -94,10 +145,7 @@
     * Start the module
     */
     private function startModule(e:Event):void {
-        if(_data.load) {
-            Alert.show('This module is already loaded. You cannot start it twice at the same time.',
-                       _data.name + ' is already running.');
-        } else {
+        if(!_data.load) {
             parentDocument.startModule(_data);
         }
     }
@@ -105,22 +153,25 @@
     ]]>
     </mx:Script>
     
+    <!-- The shadow -->
+    <mx:GlowFilter id="nameShadow" 
+                   blurX="10"
+                   blurY="4"
+                   quality="15"
+                   alpha="0.9"
+                   strength="4"
+                   color="#FFFFFF"/>
+                                            
     <!-- The module thumbnail -->
     <local:SmoothImage id="moduleThumb"
                        source="{defaultModuleThumbnail}"
                        width="64"
-                       height="64"
-                       buttonMode="true"
-                       useHandCursor="true"
-                       mouseChildren="false"
-                       doubleClick="startModule(event)"
-                       doubleClickEnabled="true"/>
+                       height="64"/>
+                       
     <!-- The module name -->
     <mx:LinkButton id="moduleName"
+                   color="#111111"
                    label="{_data.name}"
-                   buttonMode="true"
-                   useHandCursor="true"
-                   mouseChildren="false"
-                   doubleClick="startModule(event)"
-                   doubleClickEnabled="true"/>
+                   filters="{[nameShadow]}"/>
+                   
 </mx:VBox>

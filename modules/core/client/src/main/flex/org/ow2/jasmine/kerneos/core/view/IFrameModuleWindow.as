@@ -19,7 +19,7 @@
  * USA
  *
  * --------------------------------------------------------------------------
- * $Id:Controller.as 2485 2008-09-30 14:14:35Z renaultgu $
+ * $Id$
  * --------------------------------------------------------------------------
  */
 package org.ow2.jasmine.kerneos.core.view
@@ -45,7 +45,7 @@ public class IFrameModuleWindow extends ModuleWindow
     // =========================================================================
     
     /**
-    * 
+    * Build a new window hosting an IFrame
     */
 	public function IFrameModuleWindow()
 	{
@@ -57,7 +57,10 @@ public class IFrameModuleWindow extends ModuleWindow
         this.addEventListener(MDIWindowEvent.DRAG_END,showIFrame);
         this.addEventListener(MDIWindowEvent.FOCUS_START,showIFrame);
         this.addEventListener(MDIWindowEvent.FOCUS_END,hideIFrame);
+        this.addEventListener(MDIWindowEvent.RESIZE_START,hideIFrame);
+        this.addEventListener(MDIWindowEvent.RESIZE_END,showIFrame);
 	}
+	
 	
     // =========================================================================
     // Getter & setters

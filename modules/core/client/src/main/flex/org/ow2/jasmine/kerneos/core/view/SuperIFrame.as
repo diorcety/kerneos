@@ -768,7 +768,7 @@ public class SuperIFrame extends Container
     * @param visible Boolean flag
     * 
     */
-    override public function set visible(value: Boolean): void
+    override public function set visible(value: Boolean):void
     {
         super.visible = value;
 
@@ -776,11 +776,12 @@ public class SuperIFrame extends Container
         // specialized functions to update visibility inside the iframe
         if (visible)
         {
-            if (source && iframeContentHost == appHost)
+            if (source && iframeContentHost == appHost) {
                 ExternalInterface.call("showSuperIFrame",frameId,iframeId);
-            else
+            } else {
                 ExternalInterface.call("showDiv",frameId,iframeId);
                 logger.debug("show iframe id {0}", frameId);
+            }
         }
         else 
         {

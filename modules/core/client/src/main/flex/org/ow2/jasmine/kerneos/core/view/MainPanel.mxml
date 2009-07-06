@@ -209,9 +209,9 @@
     */
     [Embed(source="/../assets/module_icon.png")]
     [Bindable]
-    public var defaultModuleIcon:Class;            
+    public var defaultModuleIcon:Class;
     
-    
+        
     // =========================================================================
     // Initialization
     // =========================================================================
@@ -274,10 +274,10 @@
     * Send event for receive the modules in deploied war
     */
     public function loaderModuleEvent():void {
-        try{
+        try {
             var event_module:ModulesEvent = new ModulesEvent(ModulesEvent.GET_MODULE);
             CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
-        }catch(e:Error){
+        } catch(e:Error){
              trace("An error occurred while loading modules: " + e.message);
         }
     }
@@ -287,6 +287,9 @@
     */
     public function startModule(obj:Object):void
     {
+        // Show a busy cursor
+        cursorManager.setBusyCursor();
+        
     	// Update the module status
         obj.load = true;
         MainPanel.modules.itemUpdated(obj);
@@ -320,7 +323,6 @@
         window.title = obj.name;
         window.titleIcon = defaultModuleIcon;
         
-        
         var minimizedModuleWindow:MinimizedModuleWindow =
             new MinimizedModuleWindow(window);
         minimized_windows.addChild(minimizedModuleWindow);
@@ -331,6 +333,8 @@
         mdiCanvas.windowManager.center(window);
         mdiCanvas.windowManager.resize(window);
         
+        // Remove the busy cursor
+        cursorManager.removeBusyCursor();
     }
 
     /**
@@ -471,9 +475,9 @@
         }
         
         // Draw focus to the "username" input
-        //logInPanel.loginpanel.user.setFocus();
-        //logInPanel.loginpanel.user.drawFocus(true);
-        //logInPanel.loginpanel.user.setSelection(0,0);
+        logInPanel.loginpanel.user.setFocus();
+        logInPanel.loginpanel.user.drawFocus(true);
+        logInPanel.loginpanel.user.setSelection(0,0);
     }
     
     
@@ -588,9 +592,9 @@
             case 116: // If key is F5
               reloadPage();
               break;
-            case 122: // F11 => toggle full screen on/off
+            /*case 122: // F11 => toggle full screen on/off
               toggleFullScreen();
-              break;
+              break;*/
         }
     }
     
@@ -640,22 +644,13 @@
     <mx:Binding source="LogInModelLocator.getInstance().loggedIn" destination="logged" />
     
     <!-- Graphical filters -->
-    <mx:DropShadowFilter id="taskbar_shadow"
-                         blurX="10"
-                         blurY="10"
-                         quality="15"
-                         alpha="0.4"
-                         strength="1"
-                         color="#000000"
-                         angle="270"
-                         distance="5"/>
     <mx:GlowFilter id="console_mark_shadow"
-                         blurX="3"
-                         blurY="3"
-                         quality="15"
-                         alpha="0.3"
-                         strength="3"
-                         color="#000000"/>
+                   blurX="3"
+                   blurY="3"
+                   quality="15"
+                   alpha="0.3"
+                   strength="3"
+                   color="#000000"/>
     
     <!-- Transitions -->
     <core:transitions>
@@ -709,9 +704,16 @@
                          alphaTo="1.0"/>
                 <mx:Fade id="modules_list_fade_in"
                          target="{mdiCanvas}"
-                         duration="1500"
+                         duration="400"
                          alphaFrom="0.0"
                          alphaTo="1.0"/>
+                <mx:Blur id="modules_list_blur_in"
+                         target="{mdiCanvas}"
+                         duration="600"
+                         blurXFrom="50"
+                         blurYFrom="5"
+                         blurXTo="0"
+                         blurYTo="0"/>
             </mx:Parallel>
         </mx:Transition>
         <mx:Transition fromState="logged">
@@ -752,8 +754,15 @@
                                   horizontalAlign="center"
                                   verticalAlign="middle"
                                   backgroundAlpha="0.5"
-                                  defaultButton="{loginButton}">
-                            <local:LogInPanel id="logInPanel" />
+                                  defaultButton="{loginButton}"
+                                  width="260"
+                                  paddingBottom="10"
+                                  paddingLeft="30"
+                                  paddingRight="30"
+                                  paddingTop="10">
+                            <local:LogInPanel id="logInPanel"
+                                              width="100%"
+                                              height="100%"/>
                             <mx:ControlBar horizontalAlign="center">
                                 <mx:Button label="Reset"
                                            click="reset()"
@@ -786,85 +795,84 @@
                              paddingBottom="0"
                              paddingTop="0"
                              verticalGap="0">
-                        <mx:VBox id="vbox"
-                                 width="100%"
-                                 height="100%"
-                                 paddingLeft="0"
-                                 paddingRight="0"
-                                 paddingBottom="0"
-                                 paddingTop="0"
-                                 verticalGap="0">
-                            <flexlibMdiContainers:MDICanvas id="mdiCanvas"
-                                               horizontalScrollPolicy="off"
-                                               verticalScrollPolicy="off"
-                                               width="100%"
-                                               height="100%"
-                                               backgroundColor="#FFFFFF"
-                                               backgroundAlpha="0"
-                                               paddingLeft="0"
-                                               paddingRight="0"
-                                               paddingBottom="0"
-                                               paddingTop="0">
-                                <mx:TileList id="modules_list"
-                                             height="100%"
-                                             direction="vertical"
-                                             dataProvider="{MainPanel.modules}"
-                                             backgroundAlpha="0.0"
-                                             borderStyle="none"
-                                             useRollOver="false"
-                                             buttonMode="true"
-                                             useHandCursor="true"
-                                             selectable="false"
-                                             itemRenderer="org.ow2.jasmine.kerneos.core.view.ListModuleRenderer">
-                                </mx:TileList>
-                            </flexlibMdiContainers:MDICanvas>
-                        </mx:VBox>
+                        <flexlibMdiContainers:MDICanvas id="mdiCanvas"
+                                           horizontalScrollPolicy="off"
+                                           verticalScrollPolicy="off"
+                                           width="100%"
+                                           height="100%"
+                                           backgroundColor="#FFFFFF"
+                                           backgroundAlpha="0"
+                                           paddingLeft="0"
+                                           paddingRight="0"
+                                           paddingBottom="0"
+                                           paddingTop="0">
+                            <mx:TileList id="modules_list"
+                                         height="100%"
+                                         x="5"
+                                         y="5"
+                                         direction="vertical"
+                                         dataProvider="{MainPanel.modules}"
+                                         backgroundAlpha="0.0"
+                                         borderStyle="none"
+                                         useRollOver="false"
+                                         selectable="false"
+                                         itemRenderer="org.ow2.jasmine.kerneos.core.view.ListModuleRenderer">
+                            </mx:TileList>
+                        </flexlibMdiContainers:MDICanvas>
                         <mx:HBox id="task_bar"
-                                 backgroundAlpha="0.3"
-                                 backgroundColor="#FFFFFF"
                                  width="100%"
                                  height="32"
-                                 verticalAlign="middle"
                                  bottom="0"
                                  left="0"
                                  right="0"
                                  paddingLeft="5"
                                  paddingRight="5"
-                                 filters="{[taskbar_shadow]}">
+                                 styleName="taskBar">
                             <mx:Button width="22"
                                        height="22"
                                        icon="{downIcon}"
                                        click="{minimizeAllWindows()}"
-                                       toolTip="Minimize all windows"/>
+                                       toolTip="Minimize all windows"
+                                       styleName="taskBarSmallButton"/>
+                            <mx:VRule height="70%"
+                                      alpha="0.25"/>
                             <mx:HBox id="minimized_windows"
                                      width="100%"
                                      height="100%"
                                      horizontalAlign="left"
-                                     verticalAlign="middle"/>
+                                     verticalAlign="middle"
+                                     verticalScrollPolicy="off"
+                                     horizontalScrollPolicy="off"/>
                             <mx:Spacer width="100%"/>
-                            <mx:VRule height="90%"
-                                      alpha="0.5"/>
+                            <mx:VRule height="70%"
+                                      alpha="0.25"/>
                             <mx:Button width="22"
                                        height="22"
                                        icon="{cascadeIcon}"
                                        click="mdiCanvas.windowManager.cascade()"
-                                       toolTip="Cascade windows"/>
+                                       toolTip="Cascade windows"
+                                       styleName="taskBarSmallButton"/>
                             <mx:Button width="22"
                                        height="22"
                                        icon="{tileIcon}"
                                        click="mdiCanvas.windowManager.tile(true,3)"
-                                       toolTip="Tile windows"/>
+                                       toolTip="Tile windows"
+                                       styleName="taskBarSmallButton"/>
                             <mx:Button id="fullScreenButton"
                                        width="22"
                                        height="22"
                                        icon="{(fullScreen)?exitFullScreenIcon:fullScreenIcon}"
                                        click="{toggleFullScreen()}"
-                                       toolTip="Toggle full screen mode on/off"/>
+                                       toolTip="Toggle full screen mode on/off"
+                                       visible="false"
+                                       includeInLayout="false"
+                                       styleName="taskBarSmallButton"/>
                             <mx:Button width="22"
                                        height="22"
                                        icon="{logoutIcon}"
                                        click="{logout()}"
-                                       toolTip="Logout"/>
+                                       toolTip="Logout"
+                                       styleName="taskBarSmallButton"/>
                         </mx:HBox>
                     </mx:VBox>
                 </mx:target>

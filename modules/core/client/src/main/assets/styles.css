@@ -1,22 +1,81 @@
+/**
+ * JASMINe
+ * Copyright (C) 2009 Bull S.A.S.
+ * Contact: jasmine@ow2.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * --------------------------------------------------------------------------
+ * $Id:Controller.as 2485 2008-09-30 14:14:35Z renaultgu $
+ * --------------------------------------------------------------------------
+ */
+ 
+/*******************************************************************************
+ * Application
+ ******************************************************************************/
+ 
 Application
 {
-   background-gradient-colors:	#FFFFFF, #777777;
-   color: 						#000000;
+   background-gradient-colors:	#FFFFFF, #666666;
+   backgroundColor: #FFFFFF;
+   color: #000000;
    theme-color: #777777;
-   /*background-image: 			Embed(source="./application_background.png",
-								scaleGridTop="94", scaleGridBottom="791", scaleGridLeft="350", scaleGridRight="690");*/
 }
 
+
+/*******************************************************************************
+ * Kerneos desktop
+ ******************************************************************************/
+ 
+ListModuleRenderer {
+    border-color: #555555;
+    border-thickness: 2px;
+    corner-radius: 3px;
+}
+
+.consoleMark1{
+    font-size: 48px;
+    color: #EFEFEF;
+}
+
+.consoleMark2{
+    font-size: 48px;
+    font-style: italic;
+    color: #FFFFFF;
+}
+
+
+/*******************************************************************************
+ * Windows
+ ******************************************************************************/
+ 
 ModuleWindow {
     title-style-name: moduleWindowTitle;
     dropShadowEnabled: true;
     dropShadowColor: #000000;
-    borderColor: #777777;
+    borderColor: #666666;
     borderAlpha: 1;
-    borderThicknessLeft: 3;
-    borderThicknessTop: 0;
+    borderThicknessRight: 4;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
+    borderThicknessLeft: 4;
+    borderThicknessTop: 2;
     borderThicknessBottom: 3;
-    borderThicknessRight: 3;
     rounded-bottom-corners: true;
     header-height: 24px;
     cornerRadius: 3;
@@ -33,14 +92,23 @@ ModuleWindow {
     style-name-focus: focusModuleWindow;
 }
 
+
 .focusModuleWindow {
     background-alpha: 1;
     border-alpha: 1;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
 }
 
 .noFocusModuleWindow {
     background-alpha: 0.90;
     border-alpha: 0.70;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
 }
 
 .moduleWindowTitle {
@@ -79,26 +147,42 @@ ModuleWindow {
     downSkin: Embed(source="restore_up.png");
 }
 
-.moduleName{
-    font-weight: bold;
-    font-size: 14px;
+
+/*******************************************************************************
+ * Taskbar
+ ******************************************************************************/
+
+.taskBar {
+    vertical-align: middle;
+    border-style: applicationControlBar;
+    fill-colors: #777777,#000000;
 }
 
-.moduleDescription{
-    font-size: 11px;
+.taskBarSmallButton {
+    cornerRadius: 1;
+    paddingLeft: 0;
+    paddingRight: 0;
+    highlightAlphas: 0.10, 0.10;
+    fillAlphas: 0.30, 0.30, 0.50, 0.50;
+    fillColors: #999999, #cccccc, #ffffff, #eeeeee;
+    borderColor: #AAAAAA;
 }
 
-.consoleMark1{
-	font-size: 48px;
-	color: #EFEFEF;
+MinimizedModuleWindow {
+    cornerRadius: 1;
+    color: #EFEFEF;
+    roll-over-color: #000000;
+    highlightAlphas: 0.10, 0.20;
+    fillAlphas: 0.20, 0.20, 0.50, 0.50;
+    fillColors: #000000, #000000, #ffffff, #eeeeee;
+    borderColor: #454545;
 }
 
-.consoleMark2{
-    font-size: 48px;
-    font-style: italic;
-    color: #FFFFFF;
-}
 
+/*******************************************************************************
+ * Misc
+ ******************************************************************************/
+ 
 .maximizeRestoreButton
 {
 	up-skin:        	Embed("./maximize_up.png");
@@ -116,11 +200,6 @@ ModuleWindow {
 	down-skin:      Embed("./minimize_up.png");
 }
 
-MinimizedModuleWindow {
-    corner-radius: 2;
-    drop-shadow-enabled: true;
-    
-}
 
 TabBar
 {

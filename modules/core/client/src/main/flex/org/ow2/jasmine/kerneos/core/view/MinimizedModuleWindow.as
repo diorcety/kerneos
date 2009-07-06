@@ -30,6 +30,7 @@ import flash.events.MouseEvent;
 import flexlib.mdi.containers.MDIWindow;
 import flexlib.mdi.events.MDIWindowEvent;
 
+import mx.controls.Alert;
 import mx.controls.Button;
 
 /**
@@ -68,6 +69,7 @@ public class MinimizedModuleWindow extends Button
 		// FIXME move to commitProperties
 		this.label = window.moduleName;
 		this.setStyle("icon",window.titleIcon);
+		this.doubleClickEnabled = true;
 		
 		// Intercept button click events
 		this.addEventListener(MouseEvent.CLICK,simpleClickHandler);
@@ -90,15 +92,19 @@ public class MinimizedModuleWindow extends Button
     */
     public function simpleClickHandler(e:MouseEvent):void
     {
-    	// If the window is maximized and has focus, minimize it
-        if(_moduleWindow.maximized && _moduleWindow.hasFocus) {
-        	_moduleWindow.minimize();
+    	// If the window has focus, minimize it
+        if (!_moduleWindow.minimized) {
+            if (_moduleWindow.hasFocus) {
+                //_moduleWindow.minimize();
+            } else {
+                _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);       
+            }
         } else {
             // If the window is minimized, restore it
             if(_moduleWindow.minimized) {
                 _moduleWindow.unMinimize();
             }
-            // In all cases, bring it to front
+            // Bring it to front
             _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);      	
         }
     }
@@ -108,20 +114,10 @@ public class MinimizedModuleWindow extends Button
     */
     public function doubleClickHandler(e:MouseEvent):void
     {
-    	// If the window is maximized, do nothing
-        if(!_moduleWindow.maximized) {
-        	
-            // If the window is minimized, prepare to restore it
-            if(_moduleWindow.minimized) {
-                _moduleWindow.unMinimize();
-            }
-            
+        if (!_moduleWindow.maximized) {
             // Maximize it
             _moduleWindow.maximize();
         }
-        
-        // In all cases, bring it to front
-        _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);
     }
     
     
@@ -134,7 +130,7 @@ public class MinimizedModuleWindow extends Button
     */
     public function windowMinimizeHandler(e:Event):void
     {
-        this.setStyle("fillAlphas", [0.2, 0.2, 1, 1]);
+        windowFocusEndHandler();
     }
     
     /**
@@ -142,7 +138,6 @@ public class MinimizedModuleWindow extends Button
     */
     public function windowRestoreHandler(e:Event):void
     {
-        this.setStyle("fillAlphas", [1, 1, 1, 1]);
     }
     
     /**
@@ -150,15 +145,18 @@ public class MinimizedModuleWindow extends Button
     */
     public function windowFocusStartHandler(e:Event):void
     {
-        this.setStyle("fontWeight","bold");
+        this.setStyle("borderColor", "#454545");
+        this.setStyle("fillColors", [0x000000, 0x000000, 0xffffff, 0xeeeeee]);
+
     }
     
     /**
     * When the window loses the focus
     */
-    public function windowFocusEndHandler(e:Event):void
+    public function windowFocusEndHandler(e:Event=null):void
     {
-        this.setStyle("fontWeight","normal");
+        this.setStyle("borderColor", "#BBBBBB");
+        this.setStyle("fillColors", [0x999999, 0x454545, 0xffffff, 0xeeeeee]);
     }      
 }
 }

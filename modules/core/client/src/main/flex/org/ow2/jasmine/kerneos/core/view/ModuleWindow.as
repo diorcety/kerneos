@@ -116,6 +116,7 @@ public class ModuleWindow extends MDIWindow
     {
         // Disable rounded corners
         this.setStyle("cornerRadius",0);
+        this.setStyle("dropShadowEnabled","false");
     }
     
     /**
@@ -125,6 +126,7 @@ public class ModuleWindow extends MDIWindow
     {
         // Disable rounded corners
         this.setStyle("cornerRadius",3);
+        this.setStyle("dropShadowEnabled","true");
     }
 }
 }
