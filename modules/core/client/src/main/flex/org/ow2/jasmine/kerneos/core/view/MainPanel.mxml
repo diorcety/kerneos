@@ -345,6 +345,9 @@
         if(window is SwfModuleWindow) {
             // Unload the module
             (window.getChildAt(0) as ModuleLoader).unloadModule();
+        } else if (window is IFrameModuleWindow) {
+            // Hide the IFrame
+            (window as IFrameModuleWindow).hideIFrame();
         }
         
         // Update the module state
@@ -352,11 +355,42 @@
             if(module.name == window.moduleName) {
                 module.load = false;
                 MainPanel.modules.itemUpdated(module);
+                break;
             }
         }
         minimized_windows.removeChild(window.minimizedModuleWindow);
     }
-
+    
+    /**
+    * Bring a module window to front
+    */
+    public function bringToFront(moduleName:String):void
+    {
+        var allWindows:Array = 
+           (mdiCanvas.windowManager.windowList as Array).concat();
+        for each(var window:MDIWindow in allWindows) {
+            if(window is ModuleWindow &&
+               (window as ModuleWindow).moduleName == moduleName) {
+                
+                // Bring the window to front
+                if (!window.minimized) {
+                    if (window.hasFocus) {
+                        //_moduleWindow.minimize();
+                    } else {
+                        window.windowManager.bringToFront(window as MDIWindow);       
+                    }
+                } else {
+                    // If the window is minimized, restore it
+                    if(window.minimized) {
+                        window.unMinimize();
+                    }
+                    // Bring it to front
+                    window.windowManager.bringToFront(window as MDIWindow);       
+                }
+                break;
+            }
+        }
+    }
 
     // =========================================================================
     // Logged in/out states switching
@@ -467,7 +501,6 @@
                     stopModuleByWindow(window as ModuleWindow);
                     mdiCanvas.windowManager.remove(window);
                 }
-
             }
             
             // Clear the form
@@ -503,11 +536,15 @@
             var window:ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
             
             // Show an alert box
-            Alert.show("Are you sure you want to exit this module ?",
-                       "Exit " + window.moduleName,
-                       3,
-                       null,
-                       confirmCloseWindow);
+            var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + 
+                                                "All unsaved changes might be lost.",
+                                                "Exit " + window.moduleName,
+                                                3,
+                                                null,
+                                                confirmCloseWindow,
+                                                defaultModuleThumbnail,
+                                                4);
+            closeAlert.titleIcon = defaultModuleIcon;
         }
     }
     

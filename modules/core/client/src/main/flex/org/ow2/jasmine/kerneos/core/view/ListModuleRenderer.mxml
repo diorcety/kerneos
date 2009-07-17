@@ -146,7 +146,9 @@
     */
     private function startModule(e:Event):void {
         if(!_data.load) {
-            parentDocument.startModule(_data);
+            (parentDocument as MainPanel).startModule(_data);
+        } else {
+            (parentDocument as MainPanel).bringToFront(_data.name);
         }
     }
     
