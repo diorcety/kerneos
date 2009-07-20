@@ -77,6 +77,7 @@
     import org.ow2.jasmine.kerneos.core.api.Core;
     import org.ow2.jasmine.kerneos.core.api.ICore;
     import org.ow2.jasmine.kerneos.core.event.ModulesEvent;
+    import org.ow2.jasmine.kerneos.core.api.KerneosModule;
     
     import flexlib.containers.WindowShade;
     import flexlib.mdi.containers.MDIWindow;
@@ -343,8 +344,19 @@
     public function stopModuleByWindow(window:ModuleWindow):void
     {
         if(window is SwfModuleWindow) {
+            
+            // Retrieve the module loader
+            var moduleLoader:ModuleLoader = window.getChildAt(0) as ModuleLoader;
+            
+            // If the module implements the interface KerneosModule,
+            // trigger the closeModule() method
+            if (moduleLoader.child is KerneosModule) {
+                (moduleLoader.child as KerneosModule).closeModule();
+            }
+            
             // Unload the module
-            (window.getChildAt(0) as ModuleLoader).unloadModule();
+            moduleLoader.unloadModule();
+            
         } else if (window is IFrameModuleWindow) {
             // Hide the IFrame
             (window as IFrameModuleWindow).hideIFrame();
