@@ -71,7 +71,7 @@ public class ModuleWindow extends MDIWindow
         this.addEventListener(MDIWindowEvent.RESTORE,onUnMaximize);
 	}
 	
-	
+    
     // =========================================================================
     // Window operations
     // =========================================================================
@@ -102,6 +102,28 @@ public class ModuleWindow extends MDIWindow
         
         // Call super class method
         super.unMinimize(event);
+    }
+    
+    /**
+    * Bring the window
+    */
+    public function bringToFront(e:Event=null):void
+    {
+        // Bring the window to front
+        if (!minimized) {
+            if (hasFocus) {
+                //_moduleWindow.minimize();
+            } else {
+                windowManager.bringToFront(this);       
+            }
+        } else {
+            // If the window is minimized, restore it
+            if(minimized) {
+                unMinimize();
+            }
+            // Bring it to front
+            windowManager.bringToFront(this);       
+        }
     }
     
     

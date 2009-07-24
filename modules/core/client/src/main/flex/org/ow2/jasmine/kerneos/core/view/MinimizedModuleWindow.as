@@ -30,8 +30,10 @@ import flash.events.MouseEvent;
 import flexlib.mdi.containers.MDIWindow;
 import flexlib.mdi.events.MDIWindowEvent;
 
-import mx.controls.Alert;
 import mx.controls.Button;
+import mx.effects.Fade;
+import mx.effects.Glow;
+import mx.effects.Sequence;
 
 /**
 * A button representing a module window, for the taskbar
@@ -81,6 +83,51 @@ public class MinimizedModuleWindow extends Button
         _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START,windowFocusStartHandler);
         _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END,windowFocusEndHandler);
 	}
+	
+	
+    // =========================================================================
+    // Public methods
+    // =========================================================================
+    
+    /**
+    * Flash the button
+    */
+    public function flash(color:uint):void
+    {
+        var effect : Glow = new Glow();
+        effect.blurXTo = 50;
+        effect.blurXFrom = 0;
+        effect.blurYFrom = 0;
+        effect.blurYTo = 15;
+        effect.strength = 5;
+        effect.duration = 300;
+        effect.color = color;
+        effect.repeatCount = 2;
+        effect.play([this]);
+    }
+    
+    /**
+    * Blink the button
+    */
+    public function blink():void
+    {
+        var fadeIn : Fade = new Fade();
+        fadeIn.alphaFrom = 0;
+        fadeIn.alphaTo = 1;
+        fadeIn.duration = 200;
+        
+        var fadeOut : Fade = new Fade();
+        fadeOut.alphaFrom = 1;
+        fadeOut.alphaTo = 0;
+        fadeOut.duration = 200;
+        
+        var effect : Sequence = new Sequence();
+        effect.addChild(fadeOut);
+        effect.addChild(fadeIn);
+        effect.repeatCount = 3;
+        
+        effect.play([this]);
+    }        
     
     
     // =========================================================================
@@ -90,7 +137,7 @@ public class MinimizedModuleWindow extends Button
     /**
     * When the button is simple clicked
     */
-    public function simpleClickHandler(e:MouseEvent):void
+    private function simpleClickHandler(e:MouseEvent):void
     {
     	// If the window has focus, minimize it
         if (!_moduleWindow.minimized) {
@@ -112,7 +159,7 @@ public class MinimizedModuleWindow extends Button
     /**
     * When the button is double clicked
     */
-    public function doubleClickHandler(e:MouseEvent):void
+    private function doubleClickHandler(e:MouseEvent):void
     {
         if (!_moduleWindow.maximized) {
             // Maximize it
@@ -128,7 +175,7 @@ public class MinimizedModuleWindow extends Button
     /**
     * When the window is minimized
     */
-    public function windowMinimizeHandler(e:Event):void
+    private function windowMinimizeHandler(e:Event):void
     {
         windowFocusEndHandler();
     }
@@ -136,14 +183,14 @@ public class MinimizedModuleWindow extends Button
     /**
     * When the window is restored
     */
-    public function windowRestoreHandler(e:Event):void
+    private function windowRestoreHandler(e:Event):void
     {
     }
     
     /**
     * When the window gets the focus
     */
-    public function windowFocusStartHandler(e:Event):void
+    private function windowFocusStartHandler(e:Event):void
     {
         this.setStyle("borderColor", "#454545");
         this.setStyle("fillColors", [0x000000, 0x000000, 0xffffff, 0xeeeeee]);
@@ -153,7 +200,7 @@ public class MinimizedModuleWindow extends Button
     /**
     * When the window loses the focus
     */
-    public function windowFocusEndHandler(e:Event=null):void
+    private function windowFocusEndHandler(e:Event=null):void
     {
         this.setStyle("borderColor", "#BBBBBB");
         this.setStyle("fillColors", [0x999999, 0x454545, 0xffffff, 0xeeeeee]);

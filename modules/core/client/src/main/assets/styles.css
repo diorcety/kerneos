@@ -180,6 +180,26 @@ MinimizedModuleWindow {
 
 
 /*******************************************************************************
+ * Notifications
+ ******************************************************************************/
+ 
+NotificationPopUp {
+    background-image: Embed("./notification_background.png", scaleGridTop="42", scaleGridBottom="138", scaleGridLeft="11", scaleGridRight="118");
+    background-size: "100%";
+    padding-bottom: 5px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 7px;
+}
+
+.closeNotificationPopUpButton {
+    upSkin: Embed(source="notification_close.png");
+    overSkin: Embed(source="notification_close_over.png");
+    downSkin: Embed(source="notification_close.png");
+}
+
+
+/*******************************************************************************
  * Misc
  ******************************************************************************/
  

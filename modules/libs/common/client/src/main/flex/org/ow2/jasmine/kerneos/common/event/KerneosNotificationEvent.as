@@ -53,7 +53,7 @@ public class KerneosNotificationEvent extends Event
     * Message allowed levels
     */
     public static var INFO:String = "Info";
-    //public static var ALERT:String = "Alert"; not supported yet
+    public static var ALERT:String = "Alert";
     
     /**
     * The level of the message

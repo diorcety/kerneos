@@ -78,6 +78,7 @@
     import org.ow2.jasmine.kerneos.core.api.ICore;
     import org.ow2.jasmine.kerneos.core.event.ModulesEvent;
     import org.ow2.jasmine.kerneos.core.api.KerneosModule;
+    import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
     
     import flexlib.containers.WindowShade;
     import flexlib.mdi.containers.MDIWindow;
@@ -306,6 +307,8 @@
             moduleLoader.percentWidth = 100;
             moduleLoader.percentHeight = 100;
             window.addChild(moduleLoader);
+            window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
+                                    handleNotificationEvent);
         } else {
             window = new IFrameModuleWindow();
             // var frame:SuperIFrame = new SuperIFrame();
@@ -337,7 +340,7 @@
         // Remove the busy cursor
         cursorManager.removeBusyCursor();
     }
-
+    
     /**
     * Unload a module
     */
@@ -383,22 +386,7 @@
         for each(var window:MDIWindow in allWindows) {
             if(window is ModuleWindow &&
                (window as ModuleWindow).moduleName == moduleName) {
-                
-                // Bring the window to front
-                if (!window.minimized) {
-                    if (window.hasFocus) {
-                        //_moduleWindow.minimize();
-                    } else {
-                        window.windowManager.bringToFront(window as MDIWindow);       
-                    }
-                } else {
-                    // If the window is minimized, restore it
-                    if(window.minimized) {
-                        window.unMinimize();
-                    }
-                    // Bring it to front
-                    window.windowManager.bringToFront(window as MDIWindow);       
-                }
+                (window as ModuleWindow).bringToFront();
                 break;
             }
         }
@@ -582,6 +570,36 @@
         var allWindows:Array = mdiCanvas.windowManager.windowList;
         for(var i:Number = 0; i < allWindows.length; i++) {
             (allWindows[i] as MDIWindow).minimize();
+        }
+    }
+    
+    /**
+    * Receive notification events from modules
+    */
+    private function handleNotificationEvent(event:KerneosNotificationEvent):void
+    {
+        // Identify the module that sent the notification
+        var window : ModuleWindow = event.currentTarget as ModuleWindow;
+        
+        // Flash the taskbar button
+        // It could also blink with window.minimizedModuleWindow.blink();
+        if (event.level == KerneosNotificationEvent.ALERT) {
+            window.minimizedModuleWindow.flash(0xD34328);
+        } else {
+            window.minimizedModuleWindow.flash(0xFFFFFF);
+        }
+        
+        // If a PopUp should be shown and the window does not have the focus
+        if (event.showPopup) { //  && !window.hasFocus
+            var notifPopUp : NotificationPopUp = new NotificationPopUp();
+            notifPopUp.moduleName = window.moduleName;
+            notifPopUp.message = event.message;
+            notifPopUp.moduleIcon = window.titleIcon;
+            notifPopUp.level = event.level;
+            notifPopUp.window = window;
+            notifPopUp.setStyle("bottom",0);
+            notifPopUp.setStyle("right",0);
+            mdiCanvas.addChild(notifPopUp);
         }
     }
 

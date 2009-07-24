@@ -24,39 +24,39 @@
  */
 package org.ow2.jasmine.kerneos.core.view
 {
-    import flash.display.Bitmap;
-    import mx.controls.Image;
+import flash.display.Bitmap;
+import mx.controls.Image;
 
+/**
+* An Image object with bitmap smoothing activated by default, for a much
+* better rendering
+* 
+* @author Julien Nicoulaud
+*/
+public class SmoothImage extends Image
+{
     /**
-    * An Image object with bitmap smoothing activated by default, for a much
-    * better rendering
-    * 
-    * @author Julien Nicoulaud
+    * Overridden display function to activate bitmap smoothing
     */
-    public class SmoothImage extends Image
+    override protected function updateDisplayList (unscaledWidth : Number,
+                                                   unscaledHeight : Number):void
     {
-        /**
-        * Overridden display function to activate bitmap smoothing
-        */
-        override protected function updateDisplayList (unscaledWidth : Number,
-                                                       unscaledHeight : Number):void
-        {
-            // Call super class function
-            super.updateDisplayList (unscaledWidth, unscaledHeight);
+        // Call super class function
+        super.updateDisplayList (unscaledWidth, unscaledHeight);
 
-            // Check if the image is a bitmap
-            if (content is Bitmap) {
+        // Check if the image is a bitmap
+        if (content is Bitmap) {
+            
+            // Retrieve the bitmap content
+            var bitmap : Bitmap = content as Bitmap;
+            
+            // If not empty and no bitmap smoothing...
+            if (bitmap != null && bitmap.smoothing == false) {
                 
-                // Retrieve the bitmap content
-                var bitmap : Bitmap = content as Bitmap;
-                
-                // If not empty and no bitmap smoothing...
-                if (bitmap != null && bitmap.smoothing == false) {
-                    
-                    // Activate it
-                    bitmap.smoothing = true;
-                }
+                // Activate it
+                bitmap.smoothing = true;
             }
         }
     }
+}
 }
