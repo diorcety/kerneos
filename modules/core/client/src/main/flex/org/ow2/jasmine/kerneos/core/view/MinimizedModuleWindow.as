@@ -69,8 +69,8 @@ public class MinimizedModuleWindow extends Button
 		_moduleWindow = window;
 		
 		// FIXME move to commitProperties
-		this.label = window.moduleName;
-		this.setStyle("icon",window.titleIcon);
+		this.label = window.module.name;
+		this.setStyle("icon",IconUtility.getClass(this,window.module.smallIcon,16,16));
 		this.doubleClickEnabled = true;
 		
 		// Intercept button click events

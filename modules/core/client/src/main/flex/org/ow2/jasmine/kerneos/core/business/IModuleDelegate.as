@@ -18,14 +18,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
+ * $Id$
  */
-
 package org.ow2.jasmine.kerneos.core.business
 {
-	import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
-	
-	public interface IModuleDelegate extends IDelegateResponder{
-		function moduleSearch():void;
-	}
-	
+import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
+
+/**
+* 
+*/
+public interface IModuleDelegate extends IDelegateResponder{
+	function moduleSearch():void;
+}
 }

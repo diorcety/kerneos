@@ -30,11 +30,17 @@ import flash.events.MouseEvent;
 import flexlib.mdi.containers.MDIWindow;
 import flexlib.mdi.events.MDIWindowEvent;
 
+import mx.controls.Alert;
+import mx.events.FlexEvent;
+
+import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+
 /**
 * A window containing a module
 * 
 * @author Julien Nicoulaud
 */
+[Bindable]
 public class ModuleWindow extends MDIWindow
 {
 	
@@ -43,16 +49,21 @@ public class ModuleWindow extends MDIWindow
     // =========================================================================
     
     /**
-    * The module name
+    * The module
     */
-	public var moduleName:String = null;
+	public var module:ModuleVO = null;
 	
 	/**
 	* The minimized module item
 	*/
-	public var minimizedModuleWindow:MinimizedModuleWindow;
+    public var minimizedModuleWindow:MinimizedModuleWindow;
 	
-	
+	/**
+	* The header icon
+	*/
+    private var headerIcon : Class;
+    
+    	
     // =========================================================================
     // Constructor
     // =========================================================================
@@ -60,18 +71,32 @@ public class ModuleWindow extends MDIWindow
 	/**
 	* Builds a new window for a module
 	*/
-	public function ModuleWindow()
+	public function ModuleWindow(module:ModuleVO)
 	{
 	    // Call super class constructor
 		super();
 		
+		// Assign some properties
+		this.module = module;
+		this.titleIcon = headerIcon;
+		this.title = module.name;
+		
 		// Listen to window events
+		this.addEventListener(FlexEvent.CREATION_COMPLETE,onCreationComplete);
         this.addEventListener(MDIWindowEvent.MAXIMIZE,onMaximize);
         this.addEventListener(MDIWindowEvent.MINIMIZE,onUnMaximize);
         this.addEventListener(MDIWindowEvent.RESTORE,onUnMaximize);
 	}
 	
-    
+    /**
+    * 
+    */
+    private function onCreationComplete(e:Event=null):void
+    {
+        this.titleIcon = IconUtility.getClass(this.titleBar,module.smallIcon,16,16);
+    }
+
+
     // =========================================================================
     // Window operations
     // =========================================================================

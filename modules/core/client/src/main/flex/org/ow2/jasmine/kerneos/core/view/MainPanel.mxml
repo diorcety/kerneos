@@ -30,7 +30,8 @@
            xmlns:flexlibMdiContainers="flexlib.mdi.containers.*"
            xmlns:view="org.ow2.jasmine.kerneos.common.view.*"
            width="100%"
-           height="100%">
+           height="100%"
+           creationComplete="creationCompleteHandler()">
 
     <mx:Script>
     <![CDATA[
@@ -120,14 +121,12 @@
     */
     [Bindable]
     public static var amfChannelSet:ChannelSet = null;
-    
+
     /**
-    * Available modules list
-    * Format :
-    *   {module:<ModuleName>,name:<DisplayedName>,load:<LoadState>}
+    * The application model
     */
     [Bindable]
-    public static var modules:ArrayCollection = new ArrayCollection();
+    private var model:ModuleModelLocator;
 
     /**
     * Potential window manager queued event
@@ -199,20 +198,6 @@
     [Bindable]
     private var logoutIcon:Class;
     
-    /**
-    * Default module thumbnail
-    */
-    [Embed(source="/../assets/module.png")]
-    [Bindable]
-    public var defaultModuleThumbnail:Class;
-    
-    /**
-    * Default module icon
-    */
-    [Embed(source="/../assets/module_icon.png")]
-    [Bindable]
-    public var defaultModuleIcon:Class;
-    
         
     // =========================================================================
     // Initialization
@@ -267,7 +252,15 @@
         parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
     }
     
-
+    /**
+    * On component creation complete
+    */
+    private function creationCompleteHandler(e:Event=null):void
+    {
+        this.model = ModuleModelLocator.getInstance();
+    }
+    
+    
     // =========================================================================
     // Available modules management
     // =========================================================================
@@ -287,45 +280,38 @@
     /**
     * Start using a module in its own window
     */
-    public function startModule(obj:Object):void
+    public function startModule(module:ModuleVO):void
     {
         // Show a busy cursor
         cursorManager.setBusyCursor();
         
     	// Update the module status
-        obj.load = true;
-        MainPanel.modules.itemUpdated(obj);
+    	module.loaded = true;
         
         // Declare a new window
         var window:ModuleWindow;
         
         // If this is a module
-        if(obj.module!=null) {
-            window = new SwfModuleWindow();
+        if(module.swfFile!=null) {
+            window = new SwfModuleWindow(module);
             var moduleLoader:ModuleLoader = new ModuleLoader();
-            moduleLoader.url = obj.module;
+            moduleLoader.url = module.swfFile;
             moduleLoader.percentWidth = 100;
             moduleLoader.percentHeight = 100;
             window.addChild(moduleLoader);
             window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
                                     handleNotificationEvent);
         } else {
-            window = new IFrameModuleWindow();
-            // var frame:SuperIFrame = new SuperIFrame();
+            window = new IFrameModuleWindow(module);
             frame = new SuperIFrame();
-            frame.label = obj.name as String;
-            frame.source = obj.url;
+            frame.label = module.name as String;
+            frame.source = module.url;
             frame.percentHeight = 100;
             frame.percentWidth = 100;
             frame.visible = true;
             frame.overlayDetection = true;
             window.addChild(frame);
         }
-        
-        // Set some properties
-        window.moduleName = obj.name;
-        window.title = obj.name;
-        window.titleIcon = defaultModuleIcon;
         
         var minimizedModuleWindow:MinimizedModuleWindow =
             new MinimizedModuleWindow(window);
@@ -349,7 +335,7 @@
         if(window is SwfModuleWindow) {
             
             // Retrieve the module loader
-            var moduleLoader:ModuleLoader = window.getChildAt(0) as ModuleLoader;
+            var moduleLoader:ModuleLoader = (window as SwfModuleWindow).moduleLoader;
             
             // If the module implements the interface KerneosModule,
             // trigger the closeModule() method
@@ -366,31 +352,28 @@
         }
         
         // Update the module state
-        for each (var module:Object in MainPanel.modules) {
-            if(module.name == window.moduleName) {
-                module.load = false;
-                MainPanel.modules.itemUpdated(module);
-                break;
-            }
-        }
+        window.module.loaded = false;
+        
+        // Remove the tasbar button
         minimized_windows.removeChild(window.minimizedModuleWindow);
     }
     
     /**
     * Bring a module window to front
     */
-    public function bringToFront(moduleName:String):void
+    public function bringToFront(module:ModuleVO):void
     {
         var allWindows:Array = 
            (mdiCanvas.windowManager.windowList as Array).concat();
         for each(var window:MDIWindow in allWindows) {
             if(window is ModuleWindow &&
-               (window as ModuleWindow).moduleName == moduleName) {
+               (window as ModuleWindow).module.name == module.name) {
                 (window as ModuleWindow).bringToFront();
                 break;
             }
         }
     }
+
 
     // =========================================================================
     // Logged in/out states switching
@@ -418,63 +401,30 @@
     {
         // Load the modules only if not previously done
         if(firstLogin) {
-            
-            // get the instance of ICore
-            var core_instance:ICore = Core.getInstance();
-            var loader:ModuleLoader ;
-            
-            // get the modules for charging
-            var modulesFromArchive:ArrayCollection =
-               ModuleModelLocator.getInstance().listModules;
-               
-            var serviceIds : ArrayCollection = new ArrayCollection();
 
-            // loading modules
-            for(var j:int = 0;  j< modulesFromArchive.length; j++){
-                
-                var module : ModuleVO = modulesFromArchive.getItemAt(j) as ModuleVO;
-                
+            var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+            var serviceIds : ArrayCollection = new ArrayCollection();
+            
+            // Initialize each SWF module services
+            for each (var module : ModuleVO in model.config.modules) {
                 if (module.swfFile != null) {
-                    
-                    // in the case of a flex module
-                    
-                    core_instance.addModule(module.swfFile,
-                                            module.name,
-                                            module.loaded,
-                                            module.description);
-                    
                     var services : ArrayCollection = module.services;
-                    
                     for (var l:int =0 ; l < services.length ; l++) {
                         var service : ServiceVO = services.getItemAt(l) as ServiceVO;
-                        core_instance.setService(service.id,service.destination);
-                        // add the ids in the list to overload the AMF Channel
+                        serviceLocator.setServiceForId(service.id, service.destination);
                         serviceIds.addItem(service.id);
                     }
-                    
-                } else {
-                    
-                    // in the case of an html page to load in a SuperIFrame
-                    core_instance.addIFrame(module.url,
-                                            module.name,
-                                            module.loaded,
-                                            module.description);
                 }
+            }
 
-            }
-            
-            // overload all AMF channels
+            // Overload all AMF channels
             for each (var id : String in serviceIds) {
-                ServiceLocator.getInstance().getRemoteObject( id ).channelSet = amfChannelSet;
+                serviceLocator.getRemoteObject(id).channelSet = amfChannelSet;
             }
-            
-            // get modules charged
-            modules = core_instance.modulesList;
             
             // Store the successfull login information
             firstLogin = false;
         }
-
     }
     
     /**
@@ -538,13 +488,12 @@
             // Show an alert box
             var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + 
                                                 "All unsaved changes might be lost.",
-                                                "Exit " + window.moduleName,
+                                                "Exit " + window.module.name,
                                                 3,
                                                 null,
                                                 confirmCloseWindow,
-                                                defaultModuleThumbnail,
+                                                null,
                                                 4);
-            closeAlert.titleIcon = defaultModuleIcon;
         }
     }
     
@@ -590,11 +539,11 @@
         }
         
         // If a PopUp should be shown and the window does not have the focus
-        if (event.showPopup) { //  && !window.hasFocus
+        if (model.config.showNotificationPopUps &&
+            event.showPopup &&
+            !window.hasFocus) {
             var notifPopUp : NotificationPopUp = new NotificationPopUp();
-            notifPopUp.moduleName = window.moduleName;
             notifPopUp.message = event.message;
-            notifPopUp.moduleIcon = window.titleIcon;
             notifPopUp.level = event.level;
             notifPopUp.window = window;
             notifPopUp.setStyle("bottom",0);
@@ -666,7 +615,7 @@
     }
     
     /**
-    * Reloads the page
+    * Reload the page
     */
     public function reloadPage():void
     {
@@ -878,7 +827,7 @@
                                          x="5"
                                          y="5"
                                          direction="vertical"
-                                         dataProvider="{MainPanel.modules}"
+                                         dataProvider="{model.config.modules}"
                                          backgroundAlpha="0.0"
                                          borderStyle="none"
                                          useRollOver="false"
@@ -900,9 +849,13 @@
                                        icon="{downIcon}"
                                        click="{minimizeAllWindows()}"
                                        toolTip="Minimize all windows"
-                                       styleName="taskBarSmallButton"/>
+                                       styleName="taskBarSmallButton"
+                                       visible="{model.config.showMinimizeAllIcon}"
+                                       includeInLayout="{model.config.showMinimizeAllIcon}"/>
                             <mx:VRule height="70%"
-                                      alpha="0.25"/>
+                                      alpha="0.25"
+                                      visible="{model.config.showMinimizeAllIcon}"
+                                      includeInLayout="{model.config.showMinimizeAllIcon}"/>
                             <mx:HBox id="minimized_windows"
                                      width="100%"
                                      height="100%"
@@ -918,13 +871,17 @@
                                        icon="{cascadeIcon}"
                                        click="mdiCanvas.windowManager.cascade()"
                                        toolTip="Cascade windows"
-                                       styleName="taskBarSmallButton"/>
+                                       styleName="taskBarSmallButton"
+                                       visible="{model.config.showCascadeIcon}"
+                                       includeInLayout="{model.config.showCascadeIcon}"/>
                             <mx:Button width="22"
                                        height="22"
                                        icon="{tileIcon}"
                                        click="mdiCanvas.windowManager.tile(true,3)"
                                        toolTip="Tile windows"
-                                       styleName="taskBarSmallButton"/>
+                                       styleName="taskBarSmallButton"
+                                       visible="{model.config.showTileIcon}"
+                                       includeInLayout="{model.config.showTileIcon}"/>
                             <mx:Button id="fullScreenButton"
                                        width="22"
                                        height="22"
@@ -959,15 +916,16 @@
                 right="10"
                 verticalAlign="top"
                 horizontalAlign="right">
-          <mx:Text text="JASMINe"
+          <mx:Text text="{model.config.consoleProject}"
                    styleName="consoleMark1"
                    filters="{[console_mark_shadow]}"
                    selectable="false"/>
           <mx:Text id="console_mark_right"
-                   text="EoS"
+                   text="{model.config.consoleName}"
                    styleName="consoleMark2"
                    filters="{[console_mark_shadow]}"
                    selectable="false"/>
        </mx:HBox>
     </mx:Canvas>
+    
 </core:Core>

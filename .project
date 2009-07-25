@@ -108,5 +108,15 @@
 			<type>1</type>
 			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/log4j.jar</locationURI>
 		</link>
+        <link>
+            <name>wtp/content/resources</name>
+            <type>2</type>
+            <locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/resources</locationURI>
+        </link>
+        <link>
+            <name>wtp/content/resources/icons</name>
+            <type>2</type>
+            <locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/resources/icons</locationURI>
+        </link>
 	</linkedResources>
 </projectDescription>

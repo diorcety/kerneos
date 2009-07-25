@@ -19,8 +19,7 @@
  * USA
  *
  * --------------------------------------------------------------------------
- * $Id: ModuleService.java 2665 2009-03-01 15:08:05Z
- * Jean-Pierre & Tianyi
+ * $Id$
  * --------------------------------------------------------------------------
  */
 
@@ -28,7 +27,6 @@ package org.ow2.jasmine.kerneos.service;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,33 +39,54 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ *
+ * @author
+ */
 public class ModuleService implements Serializable {
 
+    /**
+     *
+     */
     private static final long serialVersionUID = 7807669487844076133L;
 
+    /**
+     *
+     */
     private static Log logger = LogFactory.getLog(ModuleService.class);
 
+    /**
+     *
+     */
     private static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";
 
-    public List<Module> modules() {
+    /**
+     *
+     * @return
+     */
+    public KerneosConfig modules() {
 
         return loadModules();
 
     }
 
-    private List<Module> loadModules() {
+    /**
+     *
+     * @return
+     */
+    private KerneosConfig loadModules() {
 
+        KerneosConfig config = new KerneosConfig();
         List<Module> modules = new ArrayList<Module>();
 
         try {
-            URL kerneos = ModuleService.class.getClassLoader().getResource("META-INF/kerneos-config.xml");
 
-            logger.info("loading file : {0}", kerneos);
-
+            // Prepare to parse the xml Kerneos config file
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document doc = null;
 
+            // Retrieve the kerneos config file
             ClassLoader cl = this.getClass().getClassLoader();
             if (cl.getResource(KERNEOS_CONFIG_FILE) != null) {
 
@@ -76,6 +95,8 @@ public class ModuleService implements Serializable {
                 logger.debug("Loading the registy XML file from classpath");
                 InputStream resource = cl.getResourceAsStream(KERNEOS_CONFIG_FILE);
                 try {
+
+                    // Parse the config file
                     doc = documentBuilder.parse(resource);
                 } finally {
                     resource.close();
@@ -85,8 +106,58 @@ public class ModuleService implements Serializable {
                 logger.error("No configuration file available : {0}", KERNEOS_CONFIG_FILE);
             }
 
+            // Extract data from the config file
             if (doc != null) {
+
+                // Normalize the XML document
                 doc.getDocumentElement().normalize();
+
+                // Read the options
+                logger.info("Reading options");
+                NodeList optionsNode = doc.getElementsByTagName("options");
+                NodeList optionsNodes = optionsNode.item(0).getChildNodes();
+
+                for (int i = 0; i < optionsNodes.getLength(); i++) {
+                    Node option = optionsNodes.item(i);
+
+                    // Console project name
+                    if (option.getNodeName().equals("console-project")) {
+                        config.consoleProject = option.getTextContent();
+                        logger.info("Console project : " + config.consoleProject);
+                    }
+
+                    // Console name
+                    else if (option.getNodeName().equals("console-name")) {
+                        config.consoleName = option.getTextContent();
+                        logger.info("Console name : " + config.consoleName);
+                    }
+
+                    // Show "Minimize all" icon
+                    else if (option.getNodeName().equals("show-minimize-all-icon")) {
+                        config.showMinimizeAllIcon = Boolean.parseBoolean(option.getTextContent());
+                        logger.info("Show Minimize all icon : " + config.showMinimizeAllIcon);
+                    }
+
+                    // Show "cascade" icon
+                    else if (option.getNodeName().equals("show-cascade-icon")) {
+                        config.showCascadeIcon = Boolean.parseBoolean(option.getTextContent());
+                        logger.info("Show cascade icon : " + config.showCascadeIcon);
+                    }
+
+                    // Show "tile" icon
+                    else if (option.getNodeName().equals("show-tile-icon")) {
+                        config.showTileIcon = Boolean.parseBoolean(option.getTextContent());
+                        logger.info("Show tile icon : " + config.showTileIcon);
+                    }
+
+                    // Show notifications popups
+                    else if (option.getNodeName().equals("show-notification-popups")) {
+                        config.showNotificationPopUps = Boolean.parseBoolean(option.getTextContent());
+                        logger.info("Show notification popups : " + config.showNotificationPopUps);
+                    }
+                }
+
+                // Read the list of modules
                 NodeList listOfEntries = doc.getElementsByTagName("module");
 
                 logger.debug("Number of modules : {0}", listOfEntries.getLength());
@@ -116,6 +187,12 @@ public class ModuleService implements Serializable {
                         } else if ("description".equals(moduleDetail.getNodeName())) {
                             mod.setDescription(moduleDetail.getTextContent());
                             logger.debug("module description : {0}", mod.getDescription());
+                        } else if ("small-icon".equals(moduleDetail.getNodeName())) {
+                            mod.smallIcon = moduleDetail.getTextContent();
+                            logger.debug("module small icon : {0}", mod.getDescription());
+                        } else if ("big-icon".equals(moduleDetail.getNodeName())) {
+                            mod.bigIcon = moduleDetail.getTextContent();
+                            logger.debug("module big icon : {0}", mod.getDescription());
                         } else if ("services".equals(moduleDetail.getNodeName())) {
                             NodeList services = moduleDetail.getChildNodes();
                             List<Service> servicesList = new ArrayList<Service>();
@@ -137,11 +214,12 @@ public class ModuleService implements Serializable {
             }
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        return modules;
+        config.modules = modules;
+
+        return config;
 
     }
 }

@@ -22,47 +22,55 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.view
-{
-import mx.core.Container;
-import mx.modules.ModuleLoader;
+package org.ow2.jasmine.kerneos.service;
 
-import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
-	
+import java.util.ArrayList;
+import java.util.List;
 
 /**
-* A window hosting a Swf ModuleLoader
-* 
-* @author Julien Nicoulaud
-*/
-[Bindable]
-public class SwfModuleWindow extends ModuleWindow
-{
-		
+ * A configuration of Kerneos
+ *
+ * @author Julien Nicoulaud
+ */
+public class KerneosConfig {
+
     // =========================================================================
-    // Variables
+    // Properties
     // =========================================================================
-    
+
     /**
-    * Build a new Swf module hosting window
-    */
-	public function SwfModuleWindow(module:ModuleVO)
-	{
-		// Call super classe constructor
-		super(module);
-	}
-	
-	
-    // =========================================================================
-    // Getter & setters
-    // =========================================================================
-    
+     * The name of the project (totally random example: "JASMINe")
+     */
+    public String consoleProject = "JASMINe";
+
     /**
-    * Get the hosted module loader
+     * The name of the console
+     */
+    public String consoleName = "Kerneos";
+
+    /**
+    * Allow to show the taskbar "Minimize all" icon
     */
-    public function get moduleLoader():ModuleLoader
-    {
-        return (this as Container).getChildAt(0) as ModuleLoader;
-    }
-}
+    public Boolean showMinimizeAllIcon = true;
+
+    /**
+    * Allow to show the taskbar "cascade" icon
+    */
+    public Boolean showCascadeIcon = true;
+
+    /**
+    * Allow to show the taskbar "tile" icon
+    */
+    public Boolean showTileIcon = true;
+
+    /**
+    * Allow to show notification popups
+    */
+    public Boolean showNotificationPopUps = true;
+
+    /**
+     * The modules
+     */
+    public List<Module> modules = new ArrayList<Module>();
+
 }

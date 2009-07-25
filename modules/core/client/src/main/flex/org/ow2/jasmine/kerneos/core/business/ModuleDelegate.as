@@ -18,8 +18,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  * 
+ * $Id$
  */
- 
 package org.ow2.jasmine.kerneos.core.business
 {
 import com.adobe.cairngorm.business.ServiceLocator;
@@ -29,6 +29,10 @@ import mx.controls.Alert;
 import org.ow2.jasmine.kerneos.common.business.AbsDelegateResponder;
 
 public class ModuleDelegate extends AbsDelegateResponder implements IModuleDelegate{
+    
+    /**
+    * 
+    */
 	public function moduleSearch():void{
 	    	// find service
 	        var service : Object = ServiceLocator.getInstance().getRemoteObject("modulesService");

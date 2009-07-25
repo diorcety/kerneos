@@ -54,22 +54,10 @@
     public static var LIFE_TIME :int = 2500;
     
     /**
-    * The module name to display
-    */
-    [Bindable]
-    public var moduleName : String;
-    
-    /**
     * The html text message
     */
     [Bindable]
     public var message : String;
-    
-    /**
-    * The icon
-    */
-    [Bindable]
-    public var moduleIcon : Class;
     
     /**
     * The message level
@@ -203,11 +191,11 @@
     <!-- UI -->  
     <mx:HBox width="100%"
              verticalAlign="top">
-        <mx:Image id="moduleIconImage"
+        <mx:Image id="moduleIcon"
                   width="16" 
                   height="16"
-                  source="{moduleIcon}"/>
-        <mx:Text text="{moduleName}"
+                  source="{IconUtility.getClass(moduleIcon,window.module.smallIcon)}"/>
+        <mx:Text text="{window.module.name}"
                  fontWeight="bold"
                  selectable="false"
                  useHandCursor="true"

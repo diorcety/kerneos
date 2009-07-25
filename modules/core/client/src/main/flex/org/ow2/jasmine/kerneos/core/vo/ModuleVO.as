@@ -20,7 +20,6 @@
  * 
  * $Id$
  */
- 
 package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
@@ -31,9 +30,6 @@ import mx.collections.ArrayCollection;
 [Bindable]
 public class ModuleVO implements IValueObject
 {
-	public function ModuleVO()
-	{
-	}
 
 	private var urlValue : String = null;
 	private var swfFileValue : String = null;
@@ -41,6 +37,13 @@ public class ModuleVO implements IValueObject
 	private var nameValue : String = null;
 	private var descriptionValue : String = null;
 	
+	
+    public var defaultSmallIcon : String = "resources/icons/module16.png";
+    public var smallIcon : String;
+    public var defaultBigIcon : String = "resources/icons/module64.png";
+    public var bigIcon : String;
+    
+    	
 	private var servicesValue : ArrayCollection = null;
 
 	/*

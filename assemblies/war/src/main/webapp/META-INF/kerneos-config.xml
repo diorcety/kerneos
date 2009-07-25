@@ -25,45 +25,79 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 
-<modules xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<kerneos-config xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                
+    <!-- Examples on how to set this file. An XSD file to come. -->
+    <!-- Here are some example of how to integrate modules on Kerneos -->
+                
+    <!-- Kerneos settings -->
+    <options>
+    
+        <!-- The two parts of the mark displayed on the top right corner -->
+        <!--<console-project>JASMINe</console-project>-->
+        <!--<console-name>Kerneos</console-name>-->
+        
+        <!-- Show the "Minimize all" icon in the taskbar ? -->
+        <!--<show-minimize-all-icon>true</show-minimize-all-icon>-->
+        
+        <!-- Show the "Cascade windows" icon in the taskbar ? -->
+        <!--<show-cascade-icon>true</show-cascade-icon>-->
 
-<!-- Examples on how to set this file. An XSD file to come. -->
+        <!-- Show the "Tile windows" icon in the taskbar ? -->
+        <!--<show-tile-icon>true</show-tile-icon>-->
+        
+        <!-- Show popups on modules notifications ? -->
+        <!--<show-notification-popups>true</show-notification-popups>-->
+        
+    </options>
+    
+    
+    <!-- Modules -->
+    <modules>
 
-<!-- Here are some example of how to integrate modules on Kerneos -->
-<!--
+    <!--
 
-
-  <module url="http://www.google.fr" loaded="false">
-    <name>Google</name>
-    <description>Google search engine.</description>
-  </module>
-
-  <module url="http://www.yahoo.fr" loaded="false">
-    <name>Yahoo</name>
-    <description>Yahoo search engine.</description>
-  </module>
- 
-  <module swfFile="test.swf" loaded="false">
-    <name>TestModule</name>
-    <description>Does absolutely nothing, it even doesn't exist</description>
-    <services>
-      <service id="testService1" destination="test1"/>
-      <service id="testService2" destination="test2"/>
-      <service id="testService3" destination="test2"/>
-    </services>
-  </module>
-  
-  <module swfFile="test.swf" loaded="false">
-    <name>TestModule2</name>
-    <description>Does absolutely nothing, it even doesn't exist</description>
-    <services>
-      <service id="testService4" destination="test4"/>
-      <service id="testService5" destination="test5"/>
-      <service id="testService6" destination="test6"/>
-    </services>
-  </module>
- 
--->
-
-</modules>
+      <module url="http://www.google.fr" loaded="false">
+        <name>Google</name>
+        <description>Google search engine.</description>
+        <small-icon>resources/icons/module16.png</small-icon>
+        <big-icon>resources/icons/module64.png</big-icon>
+      </module>
+    
+      <module url="http://www.yahoo.fr" loaded="false">
+        <name>Yahoo</name>
+        <description>Yahoo search engine.</description>
+        <small-icon>resources/icons/module16.png</small-icon>
+        <big-icon>resources/icons/module64.png</big-icon>
+      </module>
+     
+      <module swfFile="test.swf" loaded="false">
+        <name>TestModule</name>
+        <description>Does absolutely nothing, it even doesn't exist</description>
+        <small-icon>resources/icons/module16.png</small-icon>
+        <big-icon>resources/icons/module64.png</big-icon>
+        <services>
+          <service id="testService1" destination="test1"/>
+          <service id="testService2" destination="test2"/>
+          <service id="testService3" destination="test2"/>
+        </services>
+      </module>
+      
+      <module swfFile="test.swf" loaded="false">
+        <name>TestModule2</name>
+        <description>Does absolutely nothing, it even doesn't exist</description>
+        <small-icon>resources/icons/module16.png</small-icon>
+        <big-icon>resources/icons/module64.png</big-icon>
+        <services>
+          <service id="testService4" destination="test4"/>
+          <service id="testService5" destination="test5"/>
+          <service id="testService6" destination="test6"/>
+        </services>
+      </module>
+     
+    -->
+    
+    </modules>
+    
+</kerneos-config>

@@ -20,7 +20,6 @@
  *
  * --------------------------------------------------------------------------
  * $Id$
- * Jean-Pierre & Tianyi
  * --------------------------------------------------------------------------
  */
 
@@ -47,6 +46,12 @@ public class Module {
     private String description = null;
 
     private List<Service> services = null;
+
+    public static String defaultSmallIcon = "resources/icons/module16.png";
+    public String smallIcon = defaultSmallIcon;
+
+    public static String defaultBigIcon = "resources/icons/module64.png";
+    public String bigIcon = defaultBigIcon;
 
     public Module() {
         services = new ArrayList<Service>();

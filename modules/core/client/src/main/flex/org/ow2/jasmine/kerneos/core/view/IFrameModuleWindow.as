@@ -31,12 +31,15 @@ package org.ow2.jasmine.kerneos.core.view
 	
 	import mx.core.Container;
 	
+	import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+	
 
 /**
-* 
+* A module window hosting an IFrame
 * 
 * @author Julien Nicoulaud
 */
+[Bindable]
 public class IFrameModuleWindow extends ModuleWindow
 {
 		
@@ -47,10 +50,10 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
     * Build a new window hosting an IFrame
     */
-	public function IFrameModuleWindow()
+	public function IFrameModuleWindow(module:ModuleVO)
 	{
 		// Call super class constructor
-		super();
+		super(module);
 		
 		// Listen to window events
         this.addEventListener(MDIWindowEvent.DRAG_START,hideIFrame);

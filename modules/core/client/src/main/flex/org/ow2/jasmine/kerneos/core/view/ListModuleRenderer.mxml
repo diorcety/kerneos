@@ -32,7 +32,7 @@
          width="140"
          height="100"
          verticalGap="0"
-         toolTip="{_data.description}"
+         toolTip="{_module.description}"
          buttonMode="true"
          useHandCursor="true"
          mouseChildren="false"
@@ -46,6 +46,9 @@
     
     import mx.events.FlexEvent;
     import mx.controls.Alert;
+
+    import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+
           
     // =========================================================================
     // Variables
@@ -57,7 +60,7 @@
     * The data displayed by the renderer
     */
     [Bindable]
-    private var _data:Object;
+    private var _module:ModuleVO;
     
     // Assets
     
@@ -101,7 +104,7 @@
     */
     public function mouseOutHandler(event:Event=null):void
     {
-        if (!_data.load) {
+        if (!_module.loaded) {
             this.setStyle('borderStyle','none');
         }
     }
@@ -117,7 +120,7 @@
     [Bindable("dataChange")]
     override public function get data():Object
     {
-        return _data;
+        return _module;
     }
     
     /**
@@ -125,8 +128,8 @@
     */
     override public function set data(value:Object):void
     {
-        _data = value;
-        if (_data.load as Boolean) {
+        _module = value as ModuleVO;
+        if (_module.loaded) {
             this.setStyle('borderStyle','solid');
         } else {
             this.setStyle('borderStyle','none');
@@ -145,10 +148,10 @@
     * Start the module
     */
     private function startModule(e:Event):void {
-        if(!_data.load) {
-            (parentDocument as MainPanel).startModule(_data);
+        if(!_module.loaded) {
+            (parentDocument as MainPanel).startModule(_module);
         } else {
-            (parentDocument as MainPanel).bringToFront(_data.name);
+            (parentDocument as MainPanel).bringToFront(_module);
         }
     }
     
@@ -166,14 +169,14 @@
                                             
     <!-- The module thumbnail -->
     <local:SmoothImage id="moduleThumb"
-                       source="{defaultModuleThumbnail}"
+                       source="{IconUtility.getClass(moduleThumb,_module.bigIcon,64,64)}"
                        width="64"
                        height="64"/>
                        
     <!-- The module name -->
     <mx:LinkButton id="moduleName"
                    color="#111111"
-                   label="{_data.name}"
+                   label="{_module.name}"
                    filters="{[nameShadow]}"/>
                    
 </mx:VBox>

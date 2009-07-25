@@ -23,91 +23,37 @@
  */
 
 package org.ow2.jasmine.kerneos.core.api{
-	import com.adobe.cairngorm.business.ServiceLocator;
+import com.adobe.cairngorm.business.ServiceLocator;
+
+import mx.collections.ArrayCollection;
+import mx.containers.Canvas;
+import mx.managers.DragManager;
+
+public class Core extends Canvas implements ICore {
+
+	/**
+	 * Constructor of Core
+	 * Singleton
+	 */
+    private static var _instance:Core;
+    private static var allowInstantiation:Boolean = true;
+
+    public function Core(){
+     	 if(allowInstantiation){
+     		allowInstantiation = false; 
+     		_instance = this;
+     	} else {
+        	throw new Error("Error: Instantiation failed: Use Core.getInstance() instead of new.");
+      	}
+    }
 	
-	import mx.collections.ArrayCollection;
-	import mx.containers.Canvas;
-	import mx.managers.DragManager;
-	
-	public class Core extends Canvas implements ICore{
-
-		/**
-		 * Constructor of Core
-		 * Singleton
-		 */
-	    private static var _instance:Core;
-	    private static var allowInstantiation:Boolean = true;
-
-	    public function Core(){
-         	 if(allowInstantiation){
-         		allowInstantiation = false; 
-         		_instance = this;
-         	}else{
-            	throw new Error("Error: Instantiation failed: Use Core.getInstance() instead of new.");
-          	}
-	    }
-		
-		public static function getInstance():ICore{
-			if (!allowInstantiation) {
-				return _instance;
-			}else {
-				return new Core();
-			}
-		}
-		
-	    private var dragManager:DragManager;
-
-	    /**
-	    * Format :
-	    *   {id:<ID>,canvas:<Canvas>}
-	    */
-        [Bindable]
-        private var modules:ArrayCollection = new ArrayCollection();
-        
-        /**
-        * List of all the loadable iFrames in Kerneos
-        */
-        [Bindable]
-        private var iFrames:ArrayCollection = new ArrayCollection();
-        
-        /**
-        * Add the module in the list of modules
-        * 
-        * Format :
-        *   {module:<ModuleName>,name:<DisplayedName>,load:<State>,load:<LoadState>}
-        */
-		public function addModule(module:Object, name:String, status:Boolean ,description:String):void{
-			this.modules.addItem({module:module,name:name,load:status,description:description});
-		}
-		
-		/**
-		 * Add an iFrame to the iFrames list.
-		 */ 
-		public function addIFrame(url:String, name:String, status:Boolean ,description:String):void{
-			this.modules.addItem({url:url,name:name,load:status,description:description});
-		}
-		
-		/**
-        * Format :
-        *   {serviceId<the ident of Service>, destination<the Destination of Service>}
-        */
-		public function setService(serviceId:String, destination:String):void{
-			var service:ServiceLocator = ServiceLocator.getInstance();
-			service.setServiceForId(serviceId, destination);
-		}
-		
-		/**
-		 * Getter for Modules
-		 */
-		public function get modulesList():ArrayCollection{
-			return this.modules;
-		}
-		
-		/**
-		 * Gets all the loadable iFrames.
-		 */
-		public function get iFramesList():ArrayCollection{
-			return this.iFrames;
+	public static function getInstance():ICore{
+		if (!allowInstantiation) {
+			return _instance;
+		} else {
+			return new Core();
 		}
 	}
+	
+}
 }
