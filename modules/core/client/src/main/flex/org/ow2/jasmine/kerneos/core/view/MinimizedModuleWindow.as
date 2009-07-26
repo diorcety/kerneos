@@ -102,7 +102,7 @@ public class MinimizedModuleWindow extends Button
         effect.strength = 5;
         effect.duration = 300;
         effect.color = color;
-        effect.repeatCount = 2;
+        effect.repeatCount = 3;
         effect.play([this]);
     }
     

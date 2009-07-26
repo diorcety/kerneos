@@ -22,7 +22,6 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-
 package org.ow2.jasmine.kerneos.service;
 
 import java.util.ArrayList;
@@ -31,79 +30,67 @@ import java.util.List;
 /**
  * Description of a module.
  *
- * @author Guillaume Renault
+ * @author Guillaume Renault, Julien Nicoulaud
  */
 public class Module {
 
-    private String url = null;
+    /**
+     * The web page URL (for IFrame modules)
+     */
+    public String url = null;
 
-    private String swfFile = null;
+    /**
+    * The SWF file path (for SWF modules)
+    */
+    public String swfFile = null;
 
-    private boolean loaded = false;
+    /**
+    * The module services (for SWF modules)
+    */
+    public List<Service> services = new ArrayList<Service>();
 
-    private String name = null;
+    /**
+    * The displayed name of the module
+    */
+    public String name = null;
 
-    private String description = null;
+    /**
+    * The description of the module
+    */
+    public String description = null;
 
-    private List<Service> services = null;
-
+    /**
+    * The default small icon (16x16) path
+    */
     public static String defaultSmallIcon = "resources/icons/module16.png";
+
+    /**
+    * The small icon (16x16) path
+    */
     public String smallIcon = defaultSmallIcon;
 
+    /**
+    * The default big icon (64x64) path
+    */
     public static String defaultBigIcon = "resources/icons/module64.png";
+
+    /**
+    * The big icon (64x64) path
+    */
     public String bigIcon = defaultBigIcon;
 
-    public Module() {
-        services = new ArrayList<Service>();
-    }
+    /**
+    * Load the module on application startup
+    */
+    public Boolean loadOnStartup = false;
 
-    public String getUrl() {
-        return url;
-    }
+    /**
+    * Load the module maximized
+    */
+    public Boolean loadMaximized = false;
 
-    public void setUrl(final String url) {
-        this.url = url;
-    }
 
-    public String getSwfFile() {
-        return swfFile;
-    }
-
-    public void setSwfFile(final String swfFile) {
-        this.swfFile = swfFile;
-    }
-
-    public boolean isLoaded() {
-        return loaded;
-    }
-
-    public void setLoaded(final boolean loaded) {
-        this.loaded = loaded;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public List<Service> getServices() {
-        return services;
-    }
-
-    public void setServices(final List<Service> services) {
-        this.services = services;
-    }
+    // Utils
 
     @Override
     public String toString() {

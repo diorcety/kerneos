@@ -26,93 +26,74 @@ import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
 
+/**
+* Describes the configuration of a Kerneos module
+* 
+* @ author Guillaume Renault, Julien Nicoulaud
+*/
 [RemoteClass(alias="org.ow2.jasmine.kerneos.service.Module")]
 [Bindable]
 public class ModuleVO implements IValueObject
 {
-
-	private var urlValue : String = null;
-	private var swfFileValue : String = null;
-	private var loadedValue : Boolean = false;
-	private var nameValue : String = null;
-	private var descriptionValue : String = null;
+    /**
+    * The web page URL (for IFrame modules)
+    */
+	public var url : String = null;
 	
+	/**
+	* The SWF file path (for SWF modules)
+	*/
+	public var swfFile : String = null;
 	
-    public var defaultSmallIcon : String = "resources/icons/module16.png";
-    public var smallIcon : String;
-    public var defaultBigIcon : String = "resources/icons/module64.png";
-    public var bigIcon : String;
+	/**
+	* The module services (for SWF modules)
+	*/
+    public var services : ArrayCollection = null;
     
-    	
-	private var servicesValue : ArrayCollection = null;
-
-	/*
-	 *	url
-	 */
-	public function set url(_url:String) : void {
-		this.urlValue = _url;
-	}
+    /**
+    * The displayed name of the module
+    */
+	public var name : String = null;
 	
-	public function get url() : String {
-		return this.urlValue;
-	}
-
-	/*
-	 *	swfFile
-	 */
-	public function set swfFile(_swfFile:String) : void {
-		this.swfFileValue = _swfFile;
-	}
+	/**
+	* The description of the module
+	*/
+	public var description : String = null;
 	
-	public function get swfFile() : String {
-		return this.swfFileValue;
-	}
-
-	/*
-	 *	Services
-	 */
-	public function set loaded(_loaded:Boolean) : void {
-		this.loadedValue = _loaded;
-	}
-	
-	public function get loaded() : Boolean {
-		return this.loadedValue;
-	}
-	
-	/*
-	 *	Name
-	 */
-	
-	public function set name(_name:String) : void {
-		this.nameValue = _name;
-	}
-	
-	public function get name() : String {
-		return this.nameValue;
-	}
-	
-	/*
-	 *	Description
-	 */
-	public function set description(_description:String) : void {
-		this.descriptionValue = _description;
-	}
-	
-	public function get description() : String {
-		return this.descriptionValue;
-	}
-	
-	
-	/*
-	 *	Services
-	 */
-	public function set services(_services:ArrayCollection) : void {
-		this.servicesValue = _services;
-	}
-	
-	public function get services() : ArrayCollection {
-		return this.servicesValue;
-	}
-
+	/**
+	* The default small icon (16x16) path
+	*/
+    public var defaultSmallIcon : String = "resources/icons/module16.png";
+    
+    /**
+    * The small icon (16x16) path
+    */
+    public var smallIcon : String = defaultSmallIcon;
+    
+    /**
+    * The default big icon (64x64) path
+    */
+    public var defaultBigIcon : String = "resources/icons/module64.png";
+    
+    /**
+    * The big icon (64x64) path
+    */
+    public var bigIcon : String = defaultBigIcon;
+    
+    /**
+    * Load the module on application startup
+    */
+    public var loadOnStartup : Boolean = false;
+    
+    /**
+    * Load the module maximized
+    */
+    public var loadMaximized : Boolean = false;
+    
+    /**
+    * The current state of the module
+    */
+    [Transient]
+    public var loaded : Boolean = false;
 }
 }

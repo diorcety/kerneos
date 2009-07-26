@@ -151,7 +151,7 @@
     /**
     * A reference to a IFrame object
     */
-    public var frame:SuperIFrame;
+    public var frames:Dictionary = new Dictionary();
     
     
     // Assets
@@ -277,6 +277,9 @@
         }
     }
     
+    public var frame1 : SuperIFrame;
+    public var frame2 : SuperIFrame;
+    
     /**
     * Start using a module in its own window
     */
@@ -293,6 +296,8 @@
         
         // If this is a module
         if(module.swfFile!=null) {
+            
+            // Create a window
             window = new SwfModuleWindow(module);
             var moduleLoader:ModuleLoader = new ModuleLoader();
             moduleLoader.url = module.swfFile;
@@ -302,8 +307,17 @@
             window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
                                     handleNotificationEvent);
         } else {
+            
+            // Hide the existing IFrames
+            for each (var existingFrame : SuperIFrame in frames) {
+                existingFrame.visible = false;
+            }
+            
+            // Create a window
             window = new IFrameModuleWindow(module);
-            frame = new SuperIFrame();
+            frames[module.name] = new SuperIFrame(module.name);
+            var frame : SuperIFrame = frames[module.name] as SuperIFrame;
+            frame = new SuperIFrame(module.name);
             frame.label = module.name as String;
             frame.source = module.url;
             frame.percentHeight = 100;
@@ -313,6 +327,7 @@
             window.addChild(frame);
         }
         
+        // Create the button in the taskbar
         var minimizedModuleWindow:MinimizedModuleWindow =
             new MinimizedModuleWindow(window);
         minimized_windows.addChild(minimizedModuleWindow);
@@ -322,6 +337,11 @@
         mdiCanvas.windowManager.add(window);
         mdiCanvas.windowManager.center(window);
         mdiCanvas.windowManager.resize(window);
+        
+        // Maximize the window if the option is set
+        if (module.loadMaximized) {
+            window.maximize();
+        }
         
         // Remove the busy cursor
         cursorManager.removeBusyCursor();
@@ -405,8 +425,10 @@
             var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
             var serviceIds : ArrayCollection = new ArrayCollection();
             
-            // Initialize each SWF module services
+            // For each module
             for each (var module : ModuleVO in model.config.modules) {
+                
+                // Initialize each SWF module services
                 if (module.swfFile != null) {
                     var services : ArrayCollection = module.services;
                     for (var l:int =0 ; l < services.length ; l++) {
@@ -414,6 +436,11 @@
                         serviceLocator.setServiceForId(service.id, service.destination);
                         serviceIds.addItem(service.id);
                     }
+                }
+                
+                // If "load on startup", load it
+                if (module.loadOnStartup) {
+                    callLater(startModule,[module]);
                 }
             }
 
@@ -541,7 +568,9 @@
         // If a PopUp should be shown and the window does not have the focus
         if (model.config.showNotificationPopUps &&
             event.showPopup &&
-            !window.hasFocus) {
+            (model.config.showPopupsWhenFocused ||
+                (!model.config.showPopupsWhenFocused && !window.hasFocus)))
+        {
             var notifPopUp : NotificationPopUp = new NotificationPopUp();
             notifPopUp.message = event.message;
             notifPopUp.level = event.level;

@@ -34,9 +34,7 @@ import java.util.List;
  */
 public class KerneosConfig {
 
-    // =========================================================================
-    // Properties
-    // =========================================================================
+    // Settings
 
     /**
      * The name of the project (totally random example: "JASMINe")
@@ -67,6 +65,14 @@ public class KerneosConfig {
     * Allow to show notification popups
     */
     public Boolean showNotificationPopUps = true;
+
+    /**
+    * Allow to show notification popups, even on windows that have the focus
+    */
+    public Boolean showPopupsWhenFocused = false;
+
+
+    // Settings
 
     /**
      * The modules

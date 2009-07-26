@@ -29,6 +29,8 @@ import mx.collections.ArrayCollection;
 
 /**
 * A data object that describes a configuration for Kerneos
+* 
+* @author Julien Nicoulaud
 */
 [RemoteClass(alias="org.ow2.jasmine.kerneos.service.KerneosConfig")]
 [Bindable]
@@ -37,7 +39,9 @@ public class KerneosConfigVO implements IValueObject
     // =========================================================================
     // Properties
     // =========================================================================
-        
+    
+    // Options
+    
     /**
     * The name of the project (totally random example: "JASMINe")
     */
@@ -67,6 +71,14 @@ public class KerneosConfigVO implements IValueObject
     * Allow to show notification popups
     */
     public var showNotificationPopUps : Boolean = true;
+    
+    /**
+    * Allow to show notification popups, even on windows that have the focus
+    */
+    public var showPopupsWhenFocused : Boolean = false;
+    
+    
+    // Modules
     
     /**
     * The modules

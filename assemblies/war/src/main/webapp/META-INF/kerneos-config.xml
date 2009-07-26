@@ -25,8 +25,8 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 
-<kerneos-config xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<kerneosConfig xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 
     <!-- Examples on how to set this file. An XSD file to come. -->
     <!-- Here are some example of how to integrate modules on Kerneos -->
@@ -35,20 +35,23 @@
     <options>
     
         <!-- The two parts of the mark displayed on the top right corner -->
-        <!--<console-project>JASMINe</console-project>-->
-        <!--<console-name>Kerneos</console-name>-->
+        <!--<consoleProject>JASMINe</consoleProject>-->
+        <!--<consoleName>Kerneos</consoleName>-->
         
         <!-- Show the "Minimize all" icon in the taskbar ? -->
-        <!--<show-minimize-all-icon>true</show-minimize-all-icon>-->
+        <!--<showMinimizeAllIcon>true</showMinimizeAllIcon>-->
         
         <!-- Show the "Cascade windows" icon in the taskbar ? -->
-        <!--<show-cascade-icon>true</show-cascade-icon>-->
+        <!--<showCascadeIcon>true</showCascadeIcon>-->
 
         <!-- Show the "Tile windows" icon in the taskbar ? -->
-        <!--<show-tile-icon>true</show-tile-icon>-->
+        <!--<showTileIcon>true</showTileIcon>-->
         
         <!-- Show popups on modules notifications ? -->
-        <!--<show-notification-popups>true</show-notification-popups>-->
+        <!--<showNotificationPopups>true</showNotificationPopups>-->
+        
+        <!-- Show notifications popups, even on windows that have the focus -->
+        <!--<showPopupsWhenFocused>false</showPopupsWhenFocused>-->
         
     </options>
     
@@ -58,25 +61,25 @@
 
     <!--
 
-      <module url="http://www.google.fr" loaded="false">
+      <module url="http://www.google.fr" loadOnStartup="false" loadMaximized="false">
         <name>Google</name>
         <description>Google search engine.</description>
-        <small-icon>resources/icons/module16.png</small-icon>
-        <big-icon>resources/icons/module64.png</big-icon>
+        <smallIcon>resources/icons/module16.png</smallIcon>
+        <bigIcon>resources/icons/module64.png</bigIcon>
       </module>
     
-      <module url="http://www.yahoo.fr" loaded="false">
+      <module url="http://www.yahoo.fr" loadOnStartup="false" loadMaximized="false">
         <name>Yahoo</name>
         <description>Yahoo search engine.</description>
-        <small-icon>resources/icons/module16.png</small-icon>
-        <big-icon>resources/icons/module64.png</big-icon>
+        <smallIcon>resources/icons/module16.png</smallIcon>
+        <bigIcon>resources/icons/module64.png</bigIcon>
       </module>
      
-      <module swfFile="test.swf" loaded="false">
+      <module swfFile="test.swf" loadOnStartup="false" loadMaximized="false">
         <name>TestModule</name>
         <description>Does absolutely nothing, it even doesn't exist</description>
-        <small-icon>resources/icons/module16.png</small-icon>
-        <big-icon>resources/icons/module64.png</big-icon>
+        <smallIcon>resources/icons/module16.png</smallIcon>
+        <bigIcon>resources/icons/module64.png</bigIcon>
         <services>
           <service id="testService1" destination="test1"/>
           <service id="testService2" destination="test2"/>
@@ -87,8 +90,8 @@
       <module swfFile="test.swf" loaded="false">
         <name>TestModule2</name>
         <description>Does absolutely nothing, it even doesn't exist</description>
-        <small-icon>resources/icons/module16.png</small-icon>
-        <big-icon>resources/icons/module64.png</big-icon>
+        <smallIcon>resources/icons/module16.png</smallIcon>
+        <bigIcon>resources/icons/module64.png</bigIcon>
         <services>
           <service id="testService4" destination="test4"/>
           <service id="testService5" destination="test5"/>
@@ -100,4 +103,4 @@
     
     </modules>
     
-</kerneos-config>
+</kerneosConfig>

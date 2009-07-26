@@ -140,8 +140,6 @@ import mx.core.UIComponent;
 import mx.events.FlexEvent;
 import mx.events.IndexChangedEvent;
 import mx.events.MoveEvent;
-import mx.logging.ILogger;
-import mx.logging.Log;
 import mx.logging.targets.TraceTarget;
 import mx.managers.BrowserManager;
 import mx.utils.URLUtil;
@@ -150,6 +148,8 @@ import mx.utils.URLUtil;
 * An improved Flex IFrame component
 * 
 * @author Julien Nicoulaud
+* @internal This is a modified version of flex-iframe
+*   ( http://code.google.com/p/flex-iframe/ )
 */
 [Event(name="frameLoad", type="flash.events.Event")] 
 public class SuperIFrame extends Container
@@ -171,9 +171,8 @@ public class SuperIFrame extends Container
 
     private var frameLoaded:Boolean = false;
     private var functionQueue:Array = [];
+    private var firstShow : Boolean = true;
     
-    private static var logger:ILogger = Log.getLogger("com.plus.arutherford.ccgi.SuperIFrame");
-
     /**
     * Here we define javascript functions which will be inserted into the DOM
     * 
@@ -185,6 +184,7 @@ public class SuperIFrame extends Container
             "{" + 
                 "createSuperIFrame = function (frameID)" +
                 "{ " +
+                    // "console.info(\"createSuperIFrame \" + frameID);" +
                     "var bodyID = document.getElementsByTagName(\"body\")[0];" +
                     "var newDiv = document.createElement('div');" +
                     "newDiv.id = frameID;" +
@@ -204,6 +204,7 @@ public class SuperIFrame extends Container
             "{" +
                 "moveSuperIFrame = function(frameID, iframeID, x,y,w,h) " + 
                 "{" +
+                    // "console.info(\"moveSuperIFrame \" + frameID);" +
                     "var frameRef=document.getElementById(frameID);" +
                     "frameRef.style.left=x;" + 
                     "frameRef.style.top=y;" +
@@ -221,6 +222,7 @@ public class SuperIFrame extends Container
             "{" +
                 "hideSuperIFrame = function (frameID, iframeID)" +
                 "{" +
+                    // "console.info(\"hideSuperIFrame \" + frameID);" +
                     "var iframeRef = document.getElementById(iframeID);" +
                     "var iframeDoc;" +
                     "if (iframeRef.contentWindow) {" +
@@ -245,6 +247,7 @@ public class SuperIFrame extends Container
             "{" +
                 "showSuperIFrame = function (frameID, iframeID)" +
                 "{" +
+                    // "console.info(\"showSuperIFrame \" + frameID);" +
                     "var iframeRef = document.getElementById(iframeID);" +
                     "document.getElementById(frameID).style.visibility='visible';" +
                     
@@ -270,6 +273,7 @@ public class SuperIFrame extends Container
             "{" +
                 "hideDiv = function (frameID, iframeID)" +
                 "{" +
+                    // "console.info(\"hideDiv \" + frameID);" +
                     "document.getElementById(frameID).style.visibility='hidden';" +
                 "}" +
             "}" +
@@ -282,6 +286,7 @@ public class SuperIFrame extends Container
             "{" +
                 "showDiv = function (frameID, iframeID)" +
                 "{" +
+                    // "console.info(\"showDiv \" + frameID);" +
                     "document.getElementById(frameID).style.visibility='visible';" +
                 "}" +
             "}" +
@@ -294,6 +299,7 @@ public class SuperIFrame extends Container
             "{" +
                 "loadSuperIFrame = function (frameID, iframeID, url)" +
                 "{" +
+                    // "console.info(\"loadSuperIFrame \" + frameID + \", url: \" + url);" +
                     "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
                         + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" + 
                 "}" +
@@ -307,6 +313,7 @@ public class SuperIFrame extends Container
             "{" +
                 "loadDivContent = function (frameID, iframeID, content)" +
                 "{" +
+                    // "console.info(\"loadDivContent \" + frameID);" +
                     "document.getElementById(frameID).innerHTML = \"<div id='\"+iframeID+\"' frameborder='0'>\"+content+\"</div>\";" +
                 "}" +
             "}" +
@@ -319,6 +326,7 @@ public class SuperIFrame extends Container
             "{" +
                 "callSuperIFrameFunction = function (iframeID, functionName, args)" +
                 "{" +
+                    // "console.info(\"callSuperIFrameFunction \" + frameID);" +
                     "var iframeRef=document.getElementById(iframeID);" +
                     "var iframeDoc;" +
                     "if (iframeRef.contentDocument) {" +
@@ -350,9 +358,10 @@ public class SuperIFrame extends Container
     * Constructor
     * 
     */
-    public function SuperIFrame()
+    public function SuperIFrame(id : String)
     {
         super();
+        this.id = id;
         this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
         this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
     }
@@ -368,12 +377,6 @@ public class SuperIFrame extends Container
         if (! ExternalInterface.available)
         {
             throw new Error("ExternalInterface is not available in this container. Internet Explorer ActiveX, Firefox, Mozilla 1.7.5 and greater, or other browsers that support NPRuntime are required.");
-        }
-        
-        if (debug)
-        {
-            logTarget = new TraceTarget();
-            logTarget.addLogger(logger);
         }
         
         // Get the host info to check for cross-domain issues
@@ -413,13 +416,8 @@ public class SuperIFrame extends Container
 
         if (loadIndicatorClass)
         {
-            logger.debug("loadIndicatorClass is {0}", loadIndicatorClass);
             _loadIndicator = UIComponent(new loadIndicatorClass());
             addChild(_loadIndicator);
-        }
-        else
-        {
-            logger.debug("loadIndicatorClass is null");
         }
             
     }
@@ -448,7 +446,6 @@ public class SuperIFrame extends Container
                 {
                     
                     var childIndex:Number = current.getChildIndex(previous);                
-                   logger.debug("index: {0}", childIndex);
                     // Store child index against container
                     containerDict[current] = childIndex;
                     settingDict[current] = childIndex;
@@ -562,7 +559,6 @@ public class SuperIFrame extends Container
             {
                 var index:Number = lookupIndex(item as Container);
                 var setting:Number = lookupSetting(item as Container);
-                logger.debug(item.toString());
                 valid = valid&&(index==setting);
             }
         }
@@ -591,7 +587,6 @@ public class SuperIFrame extends Container
         {
             // Error not found, we have to catch this or a silent exception
             // will be thrown.
-            logger.debug(e.toString());
         }
         
         return index;
@@ -616,7 +611,6 @@ public class SuperIFrame extends Container
         {
             // Error not found, we have to catch this or a silent exception
             // will be thrown.
-            logger.debug(e.toString());
         }
         
         return index;
@@ -633,7 +627,6 @@ public class SuperIFrame extends Container
         var globalPt:Point = this.localToGlobal(localPt);
 
         ExternalInterface.call("moveSuperIFrame", frameId, iframeId, globalPt.x, globalPt.y, this.width, this.height);
-        logger.debug("move iframe id {0}", frameId);
     }
 
     /**
@@ -647,15 +640,16 @@ public class SuperIFrame extends Container
         if (source)
         {
             frameLoaded = false;
-            ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
-            logger.debug("load Iframe id {0}", frameId);
+            if (firstShow) {
+                ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
+                firstShow = false;
+            }
             // Trigger re-layout of iframe contents.                
             invalidateDisplayList();
         } 
         else if (content) 
         {
             ExternalInterface.call("loadDivContent", frameId, iframeId, content);
-            logger.debug("load Content id {0}", frameId);
             // Trigger re-layout of iframe contents.                
             invalidateDisplayList();
         }
@@ -663,7 +657,6 @@ public class SuperIFrame extends Container
     
     protected function handleFrameLoad():void
     {            
-        logger.debug("browser reports frame loaded with id {0}", frameId);
         frameLoaded = true;
         var queuedCall:Object;
         var result:Object;
@@ -671,7 +664,6 @@ public class SuperIFrame extends Container
         while (functionQueue.length > 0)
         {
             queuedCall = functionQueue.pop();
-            logger.debug("frame id {0} calling queued function {1}", frameId, queuedCall.functionName);
             this.callSuperIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
         }
         dispatchEvent(new Event("frameLoad"));
@@ -780,7 +772,6 @@ public class SuperIFrame extends Container
                 ExternalInterface.call("showSuperIFrame",frameId,iframeId);
             } else {
                 ExternalInterface.call("showDiv",frameId,iframeId);
-                logger.debug("show iframe id {0}", frameId);
             }
         }
         else 
@@ -789,7 +780,6 @@ public class SuperIFrame extends Container
                 ExternalInterface.call("hideSuperIFrame",frameId,iframeId);
             else
                 ExternalInterface.call("hideDiv",frameId,iframeId);
-                logger.debug("hide iframe id {0}", frameId);
         }
     }
     
@@ -819,7 +809,6 @@ public class SuperIFrame extends Container
         {
             var msg:String = "Warning: attempt to call function " + functionName + 
                 " on iframe " + frameId + " may fail due to cross-domain security.";
-            logger.debug(msg);
         }
         
         if (frameLoaded)
@@ -879,7 +868,6 @@ public class SuperIFrame extends Container
         var displayObj:DisplayObject = event.target as DisplayObject;
         if (displayObj.parent == systemManager && overlappingDict[displayObj])
         {
-            logger.debug("iframe {0} heard REMOVE for {1}", frameId, displayObj.toString());
             // If the object is a direct child of systemManager and was an overlapping object, remove it
             delete overlappingDict[displayObj];
             if (--overlapCount == 0)
@@ -901,14 +889,12 @@ public class SuperIFrame extends Container
         var displayObj:DisplayObject = event.target as DisplayObject;
         if (event.type == FlexEvent.SHOW && !overlappingDict[displayObj])
         {
-            logger.debug("iframe {0} heard SHOW for {1}", frameId, displayObj.toString());
             overlappingDict[displayObj] = displayObj;
             overlapCount++;
             visible = false;
         }
         else if (event.type == FlexEvent.HIDE && overlappingDict[displayObj])
         {
-            logger.debug("iframe {0} heard HIDE for {1}", frameId, displayObj.toString());
             delete overlappingDict[displayObj];
             if (--overlapCount == 0)
             {
@@ -927,7 +913,6 @@ public class SuperIFrame extends Container
     {            
         if (this.hitTestStageObject(displayObj))
         {
-            logger.debug("iframe {0} detected overlap of {1}", frameId, displayObj.toString());
             overlappingDict[displayObj] = displayObj;
             overlapCount++;
             visible = false;

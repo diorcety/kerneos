@@ -18,6 +18,7 @@ import flash.display.BitmapData;
 import flash.display.Loader;
 import flash.display.LoaderInfo;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.geom.Matrix;
 import flash.net.URLRequest;
 import flash.system.LoaderContext;
@@ -50,6 +51,7 @@ public class IconUtility extends BitmapAsset
 			dictionary = new Dictionary(false);
 		}
 		var loader:Loader = new Loader();
+		loader.addEventListener(IOErrorEvent.IO_ERROR,function(event:IOErrorEvent):void{ null;});
 		loader.load(new URLRequest(source as String), new LoaderContext(true));
 		dictionary[target] = { source:loader, width:width, height:height };
 		return IconUtility;
