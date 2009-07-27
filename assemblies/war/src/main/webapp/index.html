@@ -41,28 +41,6 @@ var requiredRevision = 28;
 // -----------------------------------------------------------------------------
 // -->
 
-
-function moveIFrame(x,y,w,h) {
-    var frameRef=document.getElementById("myFrame");
-    frameRef.style.left=x;
-    frameRef.style.top=y;
-    var iFrameRef=document.getElementById("myIFrame");	
-	iFrameRef.width=w;
-	iFrameRef.height=h;
-}
-
-function hideIFrame(){
-    document.getElementById("myFrame").style.visibility="hidden";
-}
-	
-function showIFrame(){
-    document.getElementById("myFrame").style.visibility="visible";
-}
-
-function loadIFrame(url){
-	document.getElementById("myFrame").innerHTML = "<iframe id='myIFrame' src='" + url + "'frameborder='0'></iframe>";
-}
-
 </script>
 </head>
 
@@ -144,8 +122,6 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 			
 	</object>
 </noscript>
-
-<div id="myFrame" style="position:absolute;background-color:transparent;border:0px;visibility:hidden;"></div>
 
 </body>
 </html>

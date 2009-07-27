@@ -24,6 +24,8 @@ package org.ow2.jasmine.kerneos.core.model{
 
 import com.adobe.cairngorm.model.ModelLocator;
 
+import mx.collections.ArrayCollection;
+
 import org.ow2.jasmine.kerneos.core.business.IModuleDelegate;
 import org.ow2.jasmine.kerneos.core.business.ModuleDelegate;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
@@ -44,9 +46,16 @@ public class ModuleModelLocator implements ModelLocator{
     */
     [Bindable]
     public var config:KerneosConfigVO;
+
+    /**
+    * The stored notifications
+    */
+    [Bindable]
+    [ArrayElementType('org.ow2.jasmine.kerneos.common.vo.KerneosNotification')]
+    public var notifications:ArrayCollection = new ArrayCollection();
+
     
-    
-    // Singleton class (beurk) unique instance
+    // Singleton class unique instance
     
 	/**
     * Unique instance of this locator.

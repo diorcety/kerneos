@@ -151,6 +151,12 @@ public class ModuleService implements Serializable {
                             config.showPopupsWhenFocused = Boolean.parseBoolean(option.getTextContent());
                             logger.debug("Show notification popups when focused: " + config.showPopupsWhenFocused);
                         }
+
+                        // Enable modules notifications logging
+                        else if (option.getNodeName().equals("enableNotificationsLog")) {
+                            config.enableNotificationsLog = Boolean.parseBoolean(option.getTextContent());
+                            logger.debug("Enable notifications log: " + config.enableNotificationsLog);
+                        }
                     }
                 }
 

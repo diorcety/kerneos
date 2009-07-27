@@ -27,8 +27,7 @@
  * Application
  ******************************************************************************/
  
-Application
-{
+Application{
    background-gradient-colors:	#FFFFFF, #666666;
    backgroundColor: #FFFFFF;
    color: #000000;
@@ -40,7 +39,7 @@ Application
  * Kerneos desktop
  ******************************************************************************/
  
-ListModuleRenderer {
+ListModuleRenderer{
     border-color: #555555;
     border-thickness: 2px;
     corner-radius: 3px;
@@ -61,9 +60,9 @@ ListModuleRenderer {
 /*******************************************************************************
  * Windows
  ******************************************************************************/
- 
-ModuleWindow {
-    title-style-name: moduleWindowTitle;
+
+KerneosWindow{
+    titleStyleName: moduleWindowTitle;
     dropShadowEnabled: true;
     dropShadowColor: #000000;
     borderColor: #666666;
@@ -80,10 +79,10 @@ ModuleWindow {
     header-height: 24px;
     cornerRadius: 3;
     backgroundColor: #CCCCCC;
-    padding-bottom: 5px;
-    padding-left: 3px;
-    padding-top: 2px;
-    padding-right: 3px;
+    paddingBottom: 5px;
+    paddingLeft: 3px;
+    paddingTop: 2px;
+    paddingRight: 3px;
     minimize-btn-style-name: moduleWindowMinimizeButton;
     maximize-btn-style-name: moduleWindowMaximizeButton;
     close-btn-style-name: moduleWindowCloseButton;
@@ -91,7 +90,6 @@ ModuleWindow {
     style-name-no-focus: noFocusModuleWindow;
     style-name-focus: focusModuleWindow;
 }
-
 
 .focusModuleWindow {
     background-alpha: 1;

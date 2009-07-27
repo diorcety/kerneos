@@ -53,6 +53,9 @@
         <!-- Show notifications popups, even on windows that have the focus -->
         <!--<showPopupsWhenFocused>false</showPopupsWhenFocused>-->
         
+        <!-- Enable modules notifications logging -->
+        <!--<enableNotificationsLog>true</enableNotificationsLog>-->
+        
     </options>
     
     

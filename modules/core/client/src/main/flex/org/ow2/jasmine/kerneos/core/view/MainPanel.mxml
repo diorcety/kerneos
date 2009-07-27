@@ -35,6 +35,7 @@
 
     <mx:Script>
     <![CDATA[
+        import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
     
     import flash.display.StageDisplayState;
     import flash.utils.getTimer;
@@ -53,6 +54,7 @@
     import mx.events.CollectionEvent;
     import mx.events.ItemClickEvent;
     import mx.events.ItemClickEvent;
+    import mx.managers.PopUpManager;
     import mx.managers.HistoryManager;
     import mx.managers.DragManager;
     import mx.binding.utils.BindingUtils;
@@ -149,9 +151,14 @@
     public var firstLogin:Boolean = true;
     
     /**
-    * A reference to a IFrame object
+    * The IFrame  objects
     */
     public var frames:Dictionary = new Dictionary();
+    
+    /**
+    * The notifications log window
+    */
+    private var notificationsLogWindow : KerneosWindow = null;
     
     
     // Assets
@@ -190,6 +197,13 @@
     [Embed(source="/../assets/exitfullscreen.png")]
     [Bindable]
     private var exitFullScreenIcon:Class;
+            
+    /**
+    * Events icon
+    */
+    [Embed(source="/../assets/events_list16.png")]
+    [Bindable]
+    private var eventsIcon:Class;
             
     /**
     * Log out icon
@@ -277,9 +291,6 @@
         }
     }
     
-    public var frame1 : SuperIFrame;
-    public var frame2 : SuperIFrame;
-    
     /**
     * Start using a module in its own window
     */
@@ -337,7 +348,7 @@
         mdiCanvas.windowManager.add(window);
         mdiCanvas.windowManager.center(window);
         mdiCanvas.windowManager.resize(window);
-        
+                
         // Maximize the window if the option is set
         if (module.loadMaximized) {
             window.maximize();
@@ -500,27 +511,30 @@
     */
     private function closeWindow(event:Event):void
     {
-        if(event is MDIManagerEvent)
+        if (event is MDIManagerEvent)
         {
-            // Store a copy of the event
-            queuedEvent = event.clone() as MDIManagerEvent;
+            if ((event as MDIManagerEvent).window is ModuleWindow) {
             
-            // This is the line that prevents the default behavior from executing as usual
-            // because the default handler checks event.isDefaultPrevented()
-            event.preventDefault();
-            
-            // Retrieve the target window
-            var window:ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
-            
-            // Show an alert box
-            var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + 
-                                                "All unsaved changes might be lost.",
-                                                "Exit " + window.module.name,
-                                                3,
-                                                null,
-                                                confirmCloseWindow,
-                                                null,
-                                                4);
+                // Retrieve the target window
+                var window:ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
+    
+                // Store a copy of the event
+                queuedEvent = event.clone() as MDIManagerEvent;
+                
+                // This is the line that prevents the default behavior from executing as usual
+                // because the default handler checks event.isDefaultPrevented()
+                event.preventDefault();
+                
+                // Show an alert box
+                var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + 
+                                                    "All unsaved changes might be lost.",
+                                                    "Exit " + window.module.name,
+                                                    3,
+                                                    null,
+                                                    confirmCloseWindow,
+                                                    null,
+                                                    4);
+            }
         }
     }
     
@@ -545,39 +559,9 @@
     private function minimizeAllWindows():void{
         var allWindows:Array = mdiCanvas.windowManager.windowList;
         for(var i:Number = 0; i < allWindows.length; i++) {
-            (allWindows[i] as MDIWindow).minimize();
-        }
-    }
-    
-    /**
-    * Receive notification events from modules
-    */
-    private function handleNotificationEvent(event:KerneosNotificationEvent):void
-    {
-        // Identify the module that sent the notification
-        var window : ModuleWindow = event.currentTarget as ModuleWindow;
-        
-        // Flash the taskbar button
-        // It could also blink with window.minimizedModuleWindow.blink();
-        if (event.level == KerneosNotificationEvent.ALERT) {
-            window.minimizedModuleWindow.flash(0xD34328);
-        } else {
-            window.minimizedModuleWindow.flash(0xFFFFFF);
-        }
-        
-        // If a PopUp should be shown and the window does not have the focus
-        if (model.config.showNotificationPopUps &&
-            event.showPopup &&
-            (model.config.showPopupsWhenFocused ||
-                (!model.config.showPopupsWhenFocused && !window.hasFocus)))
-        {
-            var notifPopUp : NotificationPopUp = new NotificationPopUp();
-            notifPopUp.message = event.message;
-            notifPopUp.level = event.level;
-            notifPopUp.window = window;
-            notifPopUp.setStyle("bottom",0);
-            notifPopUp.setStyle("right",0);
-            mdiCanvas.addChild(notifPopUp);
+            if(allWindows[i] is ModuleWindow) {
+                (allWindows[i] as MDIWindow).minimize();
+            }
         }
     }
 
@@ -680,7 +664,82 @@
         // Log out      
         logInPanel.logout();
     }
+    
+    
+    // =========================================================================
+    // Modules notifications
+    // =========================================================================
+    
+    /**
+    * Receive notification events from modules
+    */
+    private function handleNotificationEvent(event:KerneosNotificationEvent):void
+    {
+        // Identify the module that sent the notification
+        var window : ModuleWindow = event.currentTarget as ModuleWindow;
         
+        // Store the notification, if notifications log activated
+        if (model.config.enableNotificationsLog) {
+            model.notifications.addItem(
+                new KerneosNotification(window.module,event.message,event.level)
+            );
+        }
+        
+        // Flash the taskbar button
+        // It could also blink with window.minimizedModuleWindow.blink();
+        if (event.level == KerneosNotificationEvent.ALERT) {
+            window.minimizedModuleWindow.flash(0xD34328);
+        } else {
+            window.minimizedModuleWindow.flash(0xFFFFFF);
+        }
+        
+        // If a PopUp should be shown and the window does not have the focus
+        if (model.config.showNotificationPopUps &&
+            event.showPopup &&
+            (model.config.showPopupsWhenFocused ||
+                (!model.config.showPopupsWhenFocused && !window.hasFocus)))
+        {
+            var notifPopUp : NotificationPopUp = new NotificationPopUp();
+            notifPopUp.message = event.message;
+            notifPopUp.level = event.level;
+            notifPopUp.window = window;
+            notifPopUp.setStyle("bottom",0);
+            notifPopUp.setStyle("right",0);
+            mdiCanvas.addChild(notifPopUp);
+        }
+    }
+        
+    /**
+    * Show the notifications log window
+    */
+    private function showNotificationsLog(e:Event=null):void
+    {
+        if (notificationsLogWindow == null) {
+            notificationsLogWindow = new KerneosWindow();
+            notificationsLogWindow.title = "Events log";
+            notificationsLogWindow.titleIcon = eventsIcon;
+            var notificationsLog : NotificationsLog = new NotificationsLog();
+            notificationsLogWindow.addChild(new NotificationsLog());
+            notificationsLog.percentHeight = 100;
+            notificationsLog.percentWidth = 100;
+            notificationsLogWindow.addEventListener(MDIWindowEvent.CLOSE,
+                                                    notificationsLogWindowCloseHandler);
+            notificationsLogWindow.minimizeBtn.visible = false;
+            mdiCanvas.windowManager.add(notificationsLogWindow);
+            mdiCanvas.windowManager.center(notificationsLogWindow);
+            mdiCanvas.windowManager.resize(notificationsLogWindow);
+        } else {
+            notificationsLogWindow.bringToFront();
+        }
+    }
+    
+    /**
+    * When the notifications log window is closed
+    */
+    private function notificationsLogWindowCloseHandler(e:Event):void
+    {
+        notificationsLogWindow = null;
+    }
         
     ]]>
     </mx:Script>
@@ -920,6 +979,14 @@
                                        visible="false"
                                        includeInLayout="false"
                                        styleName="taskBarSmallButton"/>
+                            <mx:Button width="22"
+                                       height="22"
+                                       icon="{eventsIcon}"
+                                       click="{showNotificationsLog()}"
+                                       toolTip="Show events log"
+                                       styleName="taskBarSmallButton"
+                                       visible="{model.config.enableNotificationsLog}"
+                                       includeInLayout="{model.config.enableNotificationsLog}"/>
                             <mx:Button width="22"
                                        height="22"
                                        icon="{logoutIcon}"

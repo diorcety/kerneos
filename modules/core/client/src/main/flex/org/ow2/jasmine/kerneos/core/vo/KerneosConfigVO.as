@@ -40,7 +40,7 @@ public class KerneosConfigVO implements IValueObject
     // Properties
     // =========================================================================
     
-    // Options
+    // Settings
     
     /**
     * The name of the project (totally random example: "JASMINe")
@@ -76,6 +76,11 @@ public class KerneosConfigVO implements IValueObject
     * Allow to show notification popups, even on windows that have the focus
     */
     public var showPopupsWhenFocused : Boolean = false;
+    
+    /**
+    * Enable notifications logging
+    */
+    public var enableNotificationsLog : Boolean = true;
     
     
     // Modules

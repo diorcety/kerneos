@@ -95,5 +95,13 @@ public class ModuleVO implements IValueObject
     */
     [Transient]
     public var loaded : Boolean = false;
+    
+    /**
+    * Ouput the module name
+    */
+    public function toString():String
+    {
+        return name;
+    }
 }
 }

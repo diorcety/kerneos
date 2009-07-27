@@ -71,8 +71,13 @@ public class KerneosConfig {
     */
     public Boolean showPopupsWhenFocused = false;
 
+    /**
+    * Enable notifications logging
+    */
+    public Boolean enableNotificationsLog = true;
 
-    // Settings
+
+    // Modules
 
     /**
      * The modules

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - JASMINe
+  - Copyright (C) 2008 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         xmlns:local="org.ow2.jasmine.kerneos.core.view.*"
+         implements="mx.controls.listClasses.IListItemRenderer"
+         paddingBottom="3"
+         paddingLeft="3"
+         paddingRight="3"
+         paddingTop="3"
+         width="100%"
+         height="100%">
+    
+    <mx:Script>
+    <![CDATA[
+
+    import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+    import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
+
+    // =========================================================================
+    // Properties
+    // =========================================================================
+
+    /**
+    * The kerneos notification object
+    */    
+    [Bindable]
+    private var _notif : KerneosNotification = null;
+    
+    
+    // =========================================================================
+    // Data object handling
+    // =========================================================================
+    
+    /**
+    * Get the item renderer data object
+    */
+    [Bindable("dataChange")]
+    override public function get data():Object
+    {
+        return _notif;
+    }
+    
+    /**
+    * Set the item renderer data object
+    */
+    override public function set data(value:Object):void
+    {
+        _notif = value as KerneosNotification;
+        invalidateProperties();
+        dispatchEvent(new Event("dataChange"));
+    }
+    
+    ]]>
+    </mx:Script>
+    
+    <!-- The module thumbnail -->
+    <local:SmoothImage id="moduleThumb"
+                       source="{IconUtility.getClass(moduleThumb,_notif.module.bigIcon,64,64)}"
+                       width="16"
+                       height="16"/>
+                       
+    <!-- The module name -->
+    <mx:Text selectable="false"
+             text="{_notif.module.name}"
+             width="100%"/>
+             
+</mx:HBox>
