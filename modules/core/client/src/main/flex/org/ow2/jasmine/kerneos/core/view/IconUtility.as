@@ -17,6 +17,7 @@ package org.ow2.jasmine.kerneos.core.view
 import flash.display.BitmapData;
 import flash.display.Loader;
 import flash.display.LoaderInfo;
+import flash.errors.IOError;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.geom.Matrix;
@@ -48,11 +49,16 @@ public class IconUtility extends BitmapAsset
 	 */
 	public static function getClass( target:UIComponent, source:String, width:Number = NaN, height:Number = NaN ):Class {
 		if(!dictionary) {
-			dictionary = new Dictionary(false);
+			dictionary = new Dictionary(false); 
 		}
 		var loader:Loader = new Loader();
-		loader.addEventListener(IOErrorEvent.IO_ERROR,function(event:IOErrorEvent):void{ null;});
-		loader.load(new URLRequest(source as String), new LoaderContext(true));
+		loader.addEventListener(IOErrorEvent.IO_ERROR,function(event:IOErrorEvent):void{null;});
+        try {
+          loader.load(new URLRequest(source as String), new LoaderContext(true));
+        } catch (e:IOError) {
+            // Do nothing
+        }
+        
 		dictionary[target] = { source:loader, width:width, height:height };
 		return IconUtility;
 	}
@@ -89,6 +95,7 @@ public class IconUtility extends BitmapAsset
 				var loader:Loader = source as Loader;
 				if(!loader.content) {
 					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,function(event:IOErrorEvent):void{null;}, false, 0, true);
 				} else {
 					displayLoader(loader);
 				}
