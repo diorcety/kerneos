@@ -25,14 +25,14 @@
 package org.ow2.jasmine.kerneos.common.event
 {
 
-import flash.events.Event;
+import com.adobe.cairngorm.control.CairngormEvent;
 
 /**
 * An event that can be dispatched by modules to let Kerneos notify the user.
 * 
 * @author Julien Nicoulaud
 */
-public class KerneosNotificationEvent extends Event
+public class KerneosNotificationEvent extends CairngormEvent
 {
     // =========================================================================
     // Properties
@@ -88,5 +88,19 @@ public class KerneosNotificationEvent extends Event
         this.showPopup = showPopup;
     }
 
+
+    // =========================================================================
+    // Utils
+    // =========================================================================
+    
+    /**
+    * Clone a KerneosNotificationEvent
+    */
+    override public function clone() : Event
+    {
+        return new KerneosNotificationEvent(this.message,
+                                            this.level,
+                                            this.showPopup);
+    }
 }
 }

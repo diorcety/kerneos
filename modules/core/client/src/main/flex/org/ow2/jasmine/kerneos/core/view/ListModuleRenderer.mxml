@@ -62,15 +62,6 @@
     [Bindable]
     private var _module:ModuleVO;
     
-    // Assets
-    
-    /**
-    * The default module thumbnail
-    */
-    [Embed(source="/../assets/module.png")]
-    [Bindable]
-    private var defaultModuleThumbnail:Class;
-    
     
     // =========================================================================
     // Initialization
