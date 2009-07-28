@@ -26,13 +26,21 @@
 -->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
          width="100%"
-         height="100%">
+         height="100%"
+         creationComplete="initComponent()">
     
     <mx:Script>
     <![CDATA[
     
+    import mx.collections.ArrayCollection;
+    
     import org.ow2.jasmine.kerneos.core.model.ModuleModelLocator;
-
+    import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
+    
+    
+    // =========================================================================
+    // Variables
+    // =========================================================================
 
     /**
     * Clear list icon
@@ -40,7 +48,50 @@
     [Embed(source="/../assets/clear16.png")]
     [Bindable]
     private var clearIcon:Class;
+
+
+    // =========================================================================
+    // Initialization
+    // =========================================================================
     
+    /**
+    * Init the component
+    */
+    private function initComponent(event:Event=null):void
+    {
+        ModuleModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
+        ModuleModelLocator.getInstance().notifications.refresh();
+    }
+    
+    
+    // =========================================================================
+    // Private methods
+    // =========================================================================
+        
+    /**
+    * When the "show debug" checkbox changes
+    */
+    private function handleShowDebugCheckboxChange(event:Event):void
+    {
+        if (showDebugCheckBox.selected) {
+            ModuleModelLocator.getInstance().notifications.filterFunction = null;
+            ModuleModelLocator.getInstance().notifications.refresh();
+        } else {
+            ModuleModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
+            ModuleModelLocator.getInstance().notifications.refresh();
+        }
+    }
+    
+    /**
+    * Filters the "debug" level messages on the list
+    */
+    public function filterDebugMessages(item:Object):Boolean
+    {
+        if ((item as KerneosNotification).level == KerneosNotification.DEBUG) {
+            return false;
+        }
+        return true;
+    }
     
     ]]>
     </mx:Script>
@@ -77,11 +128,17 @@
     
     <mx:HBox width="100%"
              borderStyle="applicationControlBar"
-             horizontalAlign="right"
              paddingBottom="3"
              paddingTop="3"
              paddingLeft="4"
-             paddingRight="4">
+             paddingRight="4"
+             verticalAlign="middle">
+        <mx:CheckBox id="showDebugCheckBox"
+                     change="handleShowDebugCheckboxChange(event)"
+                     selected="false"/>
+        <mx:Text text="Show debug messages"
+                 fontWeight="bold"/>
+        <mx:Spacer width="100%"/>
         <mx:Button label="clear"
                    click="{ModuleModelLocator.getInstance().notifications.removeAll()}"
                    icon="{clearIcon}"/>

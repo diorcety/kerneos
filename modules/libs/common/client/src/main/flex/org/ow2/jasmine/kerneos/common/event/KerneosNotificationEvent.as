@@ -52,8 +52,10 @@ public class KerneosNotificationEvent extends CairngormEvent
     /**
     * Message allowed levels
     */
+    public static var DEBUG:String = "Debug";
+    public static var WARNING:String = "Warning";
     public static var INFO:String = "Info";
-    public static var ALERT:String = "Alert";
+    public static var ERROR:String = "Error";
     
     /**
     * The level of the message

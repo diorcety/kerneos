@@ -51,8 +51,10 @@ public class KerneosNotification
     /**
     * Message allowed levels
     */
+    public static var DEBUG:String = "Debug";
+    public static var WARNING:String = "Warning";
     public static var INFO:String = "Info";
-    public static var ALERT:String = "Alert";
+    public static var ERROR:String = "Error";
     
     /**
     * The level of the message
@@ -94,7 +96,7 @@ public class KerneosNotification
     */
     public function toString():String
     {
-        return "[" + level + "] " + module.name + ": " + message;
+        return "[" + level.toUpperCase() + "] " + module.name + ": " + message;
     }
 }
 }

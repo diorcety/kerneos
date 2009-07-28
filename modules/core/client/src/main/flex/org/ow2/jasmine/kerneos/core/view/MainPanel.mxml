@@ -685,27 +685,33 @@
             );
         }
         
-        // Flash the taskbar button
-        // It could also blink with window.minimizedModuleWindow.blink();
-        if (event.level == KerneosNotificationEvent.ALERT) {
-            window.minimizedModuleWindow.flash(0xD34328);
-        } else {
-            window.minimizedModuleWindow.flash(0xFFFFFF);
-        }
+        // If this is not a debug notif, display visual notifications
+        if (event.level !== KerneosNotificationEvent.DEBUG) {
         
-        // If a PopUp should be shown and the window does not have the focus
-        if (model.config.showNotificationPopUps &&
-            event.showPopup &&
-            (model.config.showPopupsWhenFocused ||
-                (!model.config.showPopupsWhenFocused && !window.hasFocus)))
-        {
-            var notifPopUp : NotificationPopUp = new NotificationPopUp();
-            notifPopUp.message = event.message;
-            notifPopUp.level = event.level;
-            notifPopUp.window = window;
-            notifPopUp.setStyle("bottom",0);
-            notifPopUp.setStyle("right",0);
-            mdiCanvas.addChild(notifPopUp);
+            // Flash the taskbar button
+            // It could also blink with window.minimizedModuleWindow.blink();
+            if (event.level == KerneosNotificationEvent.WARNING) {
+                window.minimizedModuleWindow.flash(0xCC6600);
+            } else if (event.level == KerneosNotificationEvent.ERROR) {
+                window.minimizedModuleWindow.flash(0xD34328);
+            } else {
+                window.minimizedModuleWindow.blink();
+            }
+            
+            // If a PopUp should be shown and the window does not have the focus
+            if (model.config.showNotificationPopUps &&
+                event.showPopup &&
+                (model.config.showPopupsWhenFocused ||
+                    (!model.config.showPopupsWhenFocused && !window.hasFocus)))
+            {
+                var notifPopUp : NotificationPopUp = new NotificationPopUp();
+                notifPopUp.message = event.message;
+                notifPopUp.level = event.level;
+                notifPopUp.window = window;
+                notifPopUp.setStyle("bottom",0);
+                notifPopUp.setStyle("right",0);
+                mdiCanvas.addChild(notifPopUp);
+            }
         }
     }
         

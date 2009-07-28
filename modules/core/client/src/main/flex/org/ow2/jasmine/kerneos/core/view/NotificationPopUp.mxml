@@ -39,6 +39,7 @@
     
     <mx:Script>
     <![CDATA[
+        import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
     
     import mx.core.Container;
     import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
@@ -215,14 +216,13 @@
             verticalAlign="middle"
             horizontalAlign="center"
             horizontalScrollPolicy="off">
-    <mx:Text htmlText="{message}"
+    <mx:Text htmlText="{(level !== KerneosNotification.INFO)?level+': ':''}{message}"
              width="100%"
              textAlign="center"
              selectable="false"
              useHandCursor="true"
              mouseChildren="false"
              buttonMode="true"
-             color="{(level == KerneosNotificationEvent.ALERT)?0xD34328:0x000000}"
              click="{window.bringToFront()}"/>
     </mx:Box>
     

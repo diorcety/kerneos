@@ -72,11 +72,19 @@
         _notif = value as KerneosNotification;
         
         switch (_notif.level) {
-            case KerneosNotification.INFO:
+            case KerneosNotification.DEBUG:
                setStyle("color",0x000000);
                setStyle("fontWeight","normal");
                break;
-            case KerneosNotification.ALERT:
+            case KerneosNotification.INFO:
+               setStyle("color",0x000000);
+               setStyle("fontWeight","bold");
+               break;
+            case KerneosNotification.WARNING:
+               setStyle("color",0xCC6600);
+               setStyle("fontWeight","bold");
+               break;
+            case KerneosNotification.ERROR:
                setStyle("color",0xB33A25);
                setStyle("fontWeight","bold");
                break;
