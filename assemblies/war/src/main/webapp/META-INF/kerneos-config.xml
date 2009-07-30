@@ -26,13 +26,14 @@
 -->
 
 <kerneosConfig xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
-               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="org.ow2.jasmine.kerneos:KerneosConfig ../resources/kerneos-config.xsd">
                 
     <!-- Examples on how to set this file. An XSD file to come. -->
     <!-- Here are some example of how to integrate modules on Kerneos -->
                 
     <!-- Kerneos settings -->
-    <options>
+    <!--<options>-->
     
         <!-- The two parts of the mark displayed on the top right corner -->
         <!--<consoleProject>JASMINe</consoleProject>-->
@@ -56,7 +57,7 @@
         <!-- Enable modules notifications logging -->
         <!--<enableNotificationsLog>true</enableNotificationsLog>-->
         
-    </options>
+    <!--</options>-->
     
     
     <!-- Modules -->
