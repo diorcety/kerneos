@@ -35,7 +35,6 @@
 
     <mx:Script>
     <![CDATA[
-        import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
     
     import flash.display.StageDisplayState;
     import flash.utils.getTimer;
@@ -82,6 +81,7 @@
     import org.ow2.jasmine.kerneos.core.event.ModulesEvent;
     import org.ow2.jasmine.kerneos.core.api.KerneosModule;
     import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
+    import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
     
     import flexlib.containers.WindowShade;
     import flexlib.mdi.containers.MDIWindow;
@@ -860,7 +860,7 @@
                              x="0"
                              y="0">
                         <mx:Panel id="login_panel"
-                                  title="Log in to the console"
+                                  title="Log in to {model.config.consoleProject} {model.config.consoleName}"
                                   horizontalAlign="center"
                                   verticalAlign="middle"
                                   backgroundAlpha="0.5"
@@ -873,11 +873,7 @@
                             <local:LogInPanel id="logInPanel"
                                               width="100%"
                                               height="100%"/>
-                            <mx:ControlBar horizontalAlign="center">
-                                <mx:Button label="Reset"
-                                           click="reset()"
-                                           focusEnabled="false"/>
-                                <mx:Spacer width="100%"/>
+                            <mx:ControlBar horizontalAlign="right">
                                 <mx:Button id="loginButton"
                                            label="Login"
                                            click="logIn()"/>

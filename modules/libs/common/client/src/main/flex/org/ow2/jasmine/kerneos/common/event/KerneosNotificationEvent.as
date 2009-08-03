@@ -77,12 +77,13 @@ public class KerneosNotificationEvent extends CairngormEvent
     /**
     * Build a new Kerneos notification event
     */
-    public function KerneosNotificationEvent(message:String,
+    public function KerneosNotificationEvent(type:String,
+                                             message:String,
                                              level:String="Info",
                                              showPopup:Boolean=true)
     {
         // Call super class constructor
-        super(KERNEOS_NOTIFICATION,true);
+        super(type,true);
         
         // Assign variables
         this.message = message;
@@ -100,7 +101,8 @@ public class KerneosNotificationEvent extends CairngormEvent
     */
     override public function clone() : Event
     {
-        return new KerneosNotificationEvent(this.message,
+        return new KerneosNotificationEvent(this.type,
+                                            this.message,
                                             this.level,
                                             this.showPopup);
     }

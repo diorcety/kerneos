@@ -31,6 +31,8 @@
     
     <mx:Script>
     <![CDATA[
+
+    import flash.system.Capabilities;
     
     import mx.collections.ArrayCollection;
     
@@ -49,7 +51,14 @@
     [Bindable]
     private var clearIcon:Class;
 
-
+    /**
+    * Copy icon
+    */
+    [Embed(source="/../assets/copy16.png")]
+    [Bindable]
+    private var copyIcon:Class;
+    
+    
     // =========================================================================
     // Initialization
     // =========================================================================
@@ -65,9 +74,37 @@
     
     
     // =========================================================================
-    // Private methods
+    // Public Methods
     // =========================================================================
+    
+    /**
+    * Filters the "debug" level messages on the list
+    */
+    public function filterDebugMessages(item:Object):Boolean
+    {
+        if ((item as KerneosNotification).level == KerneosNotification.DEBUG) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+    * Exports the list as a text and copy it to the system clipboard
+    */
+    public function copyToClipboard():void
+    {
+        var res : String = "";
+        for each (var notif : KerneosNotification in ModuleModelLocator.getInstance().notifications) {
+            res += notif.toString() + "\n";
+        }
+        System.setClipboard(res);
+    }
+    
         
+    // =========================================================================
+    // Private Methods
+    // =========================================================================
+    
     /**
     * When the "show debug" checkbox changes
     */
@@ -82,17 +119,6 @@
         }
     }
     
-    /**
-    * Filters the "debug" level messages on the list
-    */
-    public function filterDebugMessages(item:Object):Boolean
-    {
-        if ((item as KerneosNotification).level == KerneosNotification.DEBUG) {
-            return false;
-        }
-        return true;
-    }
-    
     ]]>
     </mx:Script>
     
@@ -105,7 +131,8 @@
         selectable="false"
         editable="false"
         horizontalScrollPolicy="on"
-        verticalScrollPolicy="on">
+        verticalScrollPolicy="on"
+        variableRowHeight="true">
         
         <mx:columns>
             <mx:DataGridColumn headerText="Module"
@@ -121,26 +148,34 @@
                                itemRenderer="org.ow2.jasmine.kerneos.core.view.NotificationsLogLevelRenderer"
                                width="120"/>
             <mx:DataGridColumn headerText="Message"
-                               dataField="message"/>
+                               dataField="message"
+                               wordWrap="true"/>
         </mx:columns>
         
     </mx:DataGrid>
     
     <mx:HBox width="100%"
+             height="30"
              borderStyle="applicationControlBar"
              paddingBottom="3"
              paddingTop="3"
              paddingLeft="4"
              paddingRight="4"
              verticalAlign="middle">
+        <mx:Button label="clear"
+                   click="{ModuleModelLocator.getInstance().notifications.removeAll()}"
+                   icon="{clearIcon}"/>
+        <mx:Button label="Copy to clipboard"
+                   click="{copyToClipboard()}"
+                   icon="{copyIcon}"/>
         <mx:CheckBox id="showDebugCheckBox"
                      change="handleShowDebugCheckboxChange(event)"
                      selected="false"/>
         <mx:Text text="Show debug messages"
+                 selectable="false"
                  fontWeight="bold"/>
         <mx:Spacer width="100%"/>
-        <mx:Button label="clear"
-                   click="{ModuleModelLocator.getInstance().notifications.removeAll()}"
-                   icon="{clearIcon}"/>
+        <mx:Text id="playerInfo"
+                 render="{playerInfo.text = 'Flash player ' + Capabilities.version + ((Capabilities.isDebugger)?' debug':' ') + ' (memory used: ' + System.totalMemory/1024 + ' Ko)';}"/>
     </mx:HBox>
 </mx:VBox>

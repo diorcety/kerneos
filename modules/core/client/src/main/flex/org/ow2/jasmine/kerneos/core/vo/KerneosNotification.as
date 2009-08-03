@@ -96,7 +96,7 @@ public class KerneosNotification
     */
     public function toString():String
     {
-        return "[" + level.toUpperCase() + "] " + module.name + ": " + message;
+        return date.toUTCString() + " [" + level.toUpperCase() + "] " + module.name + ": " + message;
     }
 }
 }
