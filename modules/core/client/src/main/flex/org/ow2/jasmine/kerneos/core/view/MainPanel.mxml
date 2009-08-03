@@ -698,7 +698,9 @@
     }
     
     private function set initApplication(conf : KerneosConfigVO) : void {
-        this.currentState = "logged";
+        if (conf != null) {
+            this.currentState = "logged";
+        }
     }
         
     ]]>
