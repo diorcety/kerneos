@@ -31,10 +31,12 @@
            xmlns:view="org.ow2.jasmine.kerneos.common.view.*"
            width="100%"
            height="100%"
-           creationComplete="creationCompleteHandler()">
+           creationComplete="creationCompleteHandler()"
+           currentState="init">
 
     <mx:Script>
     <![CDATA[
+        import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
     
     import flash.display.StageDisplayState;
     import flash.utils.getTimer;
@@ -240,9 +242,6 @@
         // Send event for receive the modules in deploied war
         this.loaderModuleEvent();
         
-        // Set current state to "not logged"
-        this.currentState = "not_logged";
-        
         // Set windows events listeners
         // This is where all windows related events can be intercepted.
         // this.mdiCanvas.windowManager.addEventListener(MDIManagerEvent.WINDOW_ADD, windowEventHandler);
@@ -409,19 +408,6 @@
     // =========================================================================
     // Logged in/out states switching
     // =========================================================================
-   
-    /**
-    * Logged in / out setter
-    */
-    private function set logged(log:Boolean):void {
-        if (log) {
-            // when login
-            this.currentState = "logged";
-        } else {
-            // when logout
-            this.currentState = "not_logged";
-        }
-    }
                 
     /**
     * Called when entering "logged" state
@@ -430,8 +416,9 @@
     */
     private function enterLoggedStateHandler(e:Event):void
     {
+        
         // Load the modules only if not previously done
-        if(firstLogin) {
+        if(firstLogin && ModuleModelLocator.getInstance().config != null) {
 
             var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
             var serviceIds : ArrayCollection = new ArrayCollection();
@@ -490,15 +477,9 @@
                     mdiCanvas.windowManager.remove(window);
                 }
             }
-            
-            // Clear the form
-            reset();
+
         }
-        
-        // Draw focus to the "username" input
-        logInPanel.loginpanel.user.setFocus();
-        logInPanel.loginpanel.user.drawFocus(true);
-        logInPanel.loginpanel.user.setSelection(0,0);
+
     }
     
     
@@ -634,37 +615,6 @@
     {
         navigateToURL(new URLRequest("javascript:location.reload();"),"_self");
     }
-
-
-    // =========================================================================
-    // Login form handlers
-    // =========================================================================
-                
-    /**
-    * Login
-    */
-    private function logIn():void
-    {
-        logInPanel.logIn();                
-    }
-    
-    /**
-    * Reset login form
-    */
-    private function reset():void
-    {
-        logInPanel.reset();
-    }
-    
-    /**
-    * Logout
-    */
-    private function logout():void
-    {
-        // Log out      
-        logInPanel.logout();
-    }
-    
     
     // =========================================================================
     // Modules notifications
@@ -746,12 +696,15 @@
     {
         notificationsLogWindow = null;
     }
+    
+    private function set initApplication(conf : KerneosConfigVO) : void {
+        this.currentState = "logged";
+    }
         
     ]]>
     </mx:Script>
-    
-    <!-- Logged boolean source -->
-    <mx:Binding source="LogInModelLocator.getInstance().loggedIn" destination="logged" />
+  
+    <mx:Binding source="this.model.config" destination="initApplication" />
     
     <!-- Graphical filters -->
     <mx:GlowFilter id="console_mark_shadow"
@@ -764,47 +717,6 @@
     
     <!-- Transitions -->
     <core:transitions>
-        <mx:Transition fromState="*" toState="not_logged">
-            <mx:Parallel id="console_mark_transition_in">
-                <mx:Fade id="login_panel_fade_in"
-                         target="{login_panel}"
-                         duration="500"
-                         alphaFrom="0.0"
-                         alphaTo="1.0"/>
-                <mx:Fade id="console_mark_fade_in"
-                         duration="3000"
-                         alphaFrom="0.0"
-                         alphaTo="1.0"
-                         target="{console_mark}"/>
-                <mx:Sequence target="{console_mark}">
-                        <mx:Glow duration="1000" 
-                            alphaFrom="0.0" alphaTo="0.0" 
-                            blurXFrom="0.0" blurXTo="0.0" 
-                            blurYFrom="0.0" blurYTo="0.0" 
-                            color="0x000000"
-                            target="{console_mark}"/>    
-                        <mx:Glow duration="500" 
-                            alphaFrom="0.0" alphaTo="0.5" 
-                            blurXFrom="0.0" blurXTo="15.0" 
-                            blurYFrom="0.0" blurYTo="15.0" 
-                            color="0x000000"
-                            target="{console_mark}"/>
-                        <mx:Glow duration="500" 
-                            alphaFrom="0.5" alphaTo="0.0" 
-                            blurXFrom="15.0" blurXTo="0.0" 
-                            blurYFrom="15.0" blurYTo="0.0" 
-                            color="0x000000"
-                            target="{console_mark}"/>
-                </mx:Sequence>
-            </mx:Parallel>
-        </mx:Transition>
-        <mx:Transition fromState="not_logged">
-            <mx:Fade id="login_panel_fade_out"
-                     target="{login_panel}"
-                     duration="2000"
-                     alphaFrom="1.0"
-                     alphaTo="0.0"/>
-        </mx:Transition>
         <mx:Transition toState="logged">
             <mx:Parallel>
                 <mx:Fade id="task_bar_fade_in"
@@ -826,60 +738,16 @@
                          blurYTo="0"/>
             </mx:Parallel>
         </mx:Transition>
-        <mx:Transition fromState="logged">
-            <mx:Parallel>
-                <mx:Fade id="task_bar_fade_out"
-                         target="{task_bar}"
-                         duration="3000"
-                         alphaFrom="1.0"
-                         alphaTo="0.0"/>
-                <mx:Fade id="modules_list_fade_out"
-                         target="{modules_list}"
-                         duration="2000"
-                         alphaFrom="0.0"
-                         alphaTo="1.0"/>
-            </mx:Parallel>
-        </mx:Transition>
     </core:transitions>
     
     <!-- States -->
     <core:states>
-
-        <!-- When not logged in -->
-        <mx:State name="not_logged"
-                  enterState="enterNotLoggedStateHandler(event)">
+        
+        <mx:State name="init">
             <mx:AddChild relativeTo="{application_container}"
                          position="firstChild">
                 <mx:target>
-                    <!-- Displayed when not logged in -->
-                    <mx:VBox id="not_logged_in_container"
-                             width="100%"
-                             height="100%"
-                             verticalAlign="middle"
-                             horizontalAlign="center"
-                             x="0"
-                             y="0">
-                        <mx:Panel id="login_panel"
-                                  title="Log in to {model.config.consoleProject} {model.config.consoleName}"
-                                  horizontalAlign="center"
-                                  verticalAlign="middle"
-                                  backgroundAlpha="0.5"
-                                  defaultButton="{loginButton}"
-                                  width="260"
-                                  paddingBottom="10"
-                                  paddingLeft="30"
-                                  paddingRight="30"
-                                  paddingTop="10">
-                            <local:LogInPanel id="logInPanel"
-                                              width="100%"
-                                              height="100%"/>
-                            <mx:ControlBar horizontalAlign="right">
-                                <mx:Button id="loginButton"
-                                           label="Login"
-                                           click="logIn()"/>
-                            </mx:ControlBar>
-                        </mx:Panel>
-                    </mx:VBox>
+                    <mx:ProgressBar indeterminate="true" width="50%" horizontalCenter="true" verticalCenter="true"/>
                 </mx:target>
             </mx:AddChild>
         </mx:State>
@@ -989,12 +857,14 @@
                                        styleName="taskBarSmallButton"
                                        visible="{model.config.enableNotificationsLog}"
                                        includeInLayout="{model.config.enableNotificationsLog}"/>
+<!--                            
                             <mx:Button width="22"
                                        height="22"
                                        icon="{logoutIcon}"
                                        click="{logout()}"
                                        toolTip="Logout"
                                        styleName="taskBarSmallButton"/>
+-->
                         </mx:HBox>
                     </mx:VBox>
                 </mx:target>

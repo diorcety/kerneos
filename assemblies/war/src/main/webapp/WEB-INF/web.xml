@@ -95,5 +95,35 @@
     <welcome-file>Kerneos.html</welcome-file>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+  
+  <security-constraint>
+    <display-name>Kerneos Authentication</display-name>
+    <!-- secured pages -->
+    <web-resource-collection>
+      <web-resource-name>Secured pages</web-resource-name>
+      <url-pattern>/*</url-pattern>
+      <url-pattern>*.html</url-pattern>
+      <url-pattern>*.jsp</url-pattern>
+    </web-resource-collection>
+    <!-- allowed roles -->
+    <auth-constraint>
+      <role-name>tomcat</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+
+  <login-config>
+    <!-- Authentication type -->
+    <auth-method>BASIC</auth-method>
+    <realm-name>Espace Membres</realm-name>
+  </login-config>
+
+  <!-- Used roles -->
+  <security-role>
+    <description>Administrateur</description>
+    <role-name>tomcat</role-name>
+  </security-role>
 
 </web-app>

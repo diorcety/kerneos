@@ -30,7 +30,8 @@
 Before using Kerneos :
 
     ex (for JOnAS 5.x) :
-
+	
+	This is the entry if you want to use the log in composant.
 
         eos {
             // Use LoginModule for EoS authentication
@@ -38,6 +39,11 @@ Before using Kerneos :
             resourceName="memrlm_1"
             ;
         };
+        
+        
+	However, Kerneos is actually based on the JavaEE authentication. Just set
+	it in the web.xml file. The default configuration uses the tomcat role name,
+	and the BASIC type.
 
 // ////////////////////////////////////////////////////////////////////////////
 // How to use WTP to develop Kerneos :
