@@ -721,6 +721,31 @@
     <core:transitions>
         <mx:Transition toState="logged">
             <mx:Parallel>
+                <mx:Fade id="console_mark_fade_in"
+                         duration="3000"
+                         alphaFrom="0.0"
+                         alphaTo="1.0"
+                         target="{console_mark}"/>
+                <mx:Sequence target="{console_mark}">
+                        <mx:Glow duration="1000" 
+                            alphaFrom="0.0" alphaTo="0.0" 
+                            blurXFrom="0.0" blurXTo="0.0" 
+                            blurYFrom="0.0" blurYTo="0.0" 
+                            color="0x000000"
+                            target="{console_mark}"/>    
+                        <mx:Glow duration="500" 
+                            alphaFrom="0.0" alphaTo="0.5" 
+                            blurXFrom="0.0" blurXTo="15.0" 
+                            blurYFrom="0.0" blurYTo="15.0" 
+                            color="0x000000"
+                            target="{console_mark}"/>
+                        <mx:Glow duration="500" 
+                            alphaFrom="0.5" alphaTo="0.0" 
+                            blurXFrom="15.0" blurXTo="0.0" 
+                            blurYFrom="15.0" blurYTo="0.0" 
+                            color="0x000000"
+                            target="{console_mark}"/>
+                </mx:Sequence>
                 <mx:Fade id="task_bar_fade_in"
                          target="{task_bar}"
                          duration="1500"
@@ -746,12 +771,7 @@
     <core:states>
         
         <mx:State name="init">
-            <mx:AddChild relativeTo="{application_container}"
-                         position="firstChild">
-                <mx:target>
-                    <mx:ProgressBar indeterminate="true" width="50%" horizontalCenter="true" verticalCenter="true"/>
-                </mx:target>
-            </mx:AddChild>
+
         </mx:State>
         
         <!-- When logged in -->
