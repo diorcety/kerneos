@@ -44,6 +44,7 @@
         <xs:element ref="k:showNotificationPopups" maxOccurs="1"/>
         <xs:element ref="k:showPopupsWhenFocused" maxOccurs="1"/>
         <xs:element ref="k:enableNotificationsLog" maxOccurs="1"/>
+        <xs:element ref="k:showConfirmCloseDialog" maxOccurs="1"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -55,6 +56,7 @@
   <xs:element name="showNotificationPopups" type="xs:boolean"/>
   <xs:element name="showPopupsWhenFocused" type="xs:boolean"/>
   <xs:element name="enableNotificationsLog" type="xs:boolean"/>
+  <xs:element name="showConfirmCloseDialog" type="xs:boolean"/>
   <xs:element name="modules">
     <xs:complexType>
       <xs:sequence>

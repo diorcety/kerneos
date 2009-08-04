@@ -157,6 +157,12 @@ public class ModuleService implements Serializable {
                             config.enableNotificationsLog = Boolean.parseBoolean(option.getTextContent());
                             logger.debug("Enable notifications log: " + config.enableNotificationsLog);
                         }
+
+                        // Show confirm close dialog
+                        else if (option.getNodeName().equals("showConfirmCloseDialog")) {
+                            config.showConfirmCloseDialog = Boolean.parseBoolean(option.getTextContent());
+                            logger.debug("Show confirm close dialog: " + config.showConfirmCloseDialog);
+                        }
                     }
                 }
 

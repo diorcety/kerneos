@@ -275,6 +275,21 @@
     
     
     // =========================================================================
+    // Public methods
+    // =========================================================================
+        
+    /**
+    * Return true if the application can be closed without prompting
+    * 
+    * @internal Check module per module if it declares itself as ready to be closed
+    */
+    public function canBeClosed():Boolean
+    {
+        return !model.config.showConfirmCloseDialog;
+    }
+    
+        
+    // =========================================================================
     // Available modules management
     // =========================================================================
     

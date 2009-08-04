@@ -82,6 +82,11 @@ public class KerneosConfigVO implements IValueObject
     */
     public var enableNotificationsLog : Boolean = true;
     
+    /**
+    * Show a "confirm close" dialog when closing the browser window
+    */
+    public var showConfirmCloseDialog : Boolean = true;
+    
     
     // Modules
     

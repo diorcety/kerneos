@@ -76,6 +76,11 @@ public class KerneosConfig {
     */
     public Boolean enableNotificationsLog = true;
 
+    /**
+    * Show a "confirm close" dialog when closing the browser window
+    */
+    public Boolean showConfirmCloseDialog = true;
+
 
     // Modules
 

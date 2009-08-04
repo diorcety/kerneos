@@ -51,11 +51,14 @@
         <!-- Show popups on modules notifications ? -->
         <!--<showNotificationPopups>true</showNotificationPopups>-->
         
-        <!-- Show notifications popups, even on windows that have the focus -->
+        <!-- Show notifications popups, even on windows that have the focus ? -->
         <!--<showPopupsWhenFocused>false</showPopupsWhenFocused>-->
         
-        <!-- Enable modules notifications logging -->
+        <!-- Enable modules notifications logging ? -->
         <!--<enableNotificationsLog>true</enableNotificationsLog>-->
+        
+        <!-- Show a "confirm close" dialog ? -->
+        <!--<showConfirmCloseDialog>true</showConfirmCloseDialog>-->
         
     <!--</options>-->
     
