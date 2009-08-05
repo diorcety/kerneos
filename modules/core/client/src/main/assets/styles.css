@@ -200,7 +200,14 @@ NotificationPopUp {
 /*******************************************************************************
  * Misc
  ******************************************************************************/
- 
+
+ToolTip {
+   backgroundAlpha: 0.9;
+   cornerRadius: 2;
+   backgroundColor: #454545;
+   color: #FFFFFF;
+}
+
 .maximizeRestoreButton
 {
 	up-skin:        	Embed("./maximize_up.png");
