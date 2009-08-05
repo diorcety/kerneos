@@ -50,7 +50,7 @@ var requiredRevision = ${version_revision};
 <!-- Window close confirmation system -->
 var alreadyClosing = false;
 window.onbeforeunload = function () {
-    if (!alreadyClosing && !${application}.canBeClosed())
+    if (!alreadyClosing && !document.getElementById('${application}').canBeClosed())
     {
         alreadyClosing = true;
         return ""
