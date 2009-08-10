@@ -24,17 +24,30 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
+<!---
+    A component that displays Kerneos' notifications log. Allows to clear the list
+    and export it as text. Shows some informations about the Flash player too.
+    
+    @author Julien Nicoulaud
+-->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
          width="100%"
          height="100%"
          creationComplete="initComponent()">
     
+    <!--========================================================================
+    | SCRIPT
+    =========================================================================-->
+        
     <mx:Script>
     <![CDATA[
 
     import flash.system.Capabilities;
     
+    import mx.controls.Alert;
     import mx.collections.ArrayCollection;
+    
+    import com.adobe.cairngorm.model.ModelLocator;
     
     import org.ow2.jasmine.kerneos.core.model.ModuleModelLocator;
     import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
@@ -68,6 +81,7 @@
     */
     private function initComponent(event:Event=null):void
     {
+        // Filter debug messages by default
         ModuleModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
         ModuleModelLocator.getInstance().notifications.refresh();
     }
@@ -78,29 +92,33 @@
     // =========================================================================
     
     /**
-    * Filters the "debug" level messages on the list
-    */
-    public function filterDebugMessages(item:Object):Boolean
-    {
-        if ((item as KerneosNotification).level == KerneosNotification.DEBUG) {
-            return false;
-        }
-        return true;
-    }
-    
-    /**
-    * Exports the list as a text and copy it to the system clipboard
+    * Export the list as a text and copy it to the system clipboard
     */
     public function copyToClipboard():void
     {
-        var res : String = "";
-        for each (var notif : KerneosNotification in ModuleModelLocator.getInstance().notifications) {
-            res += notif.toString() + "\n";
-        }
-        System.setClipboard(res);
+        // Generate the text and copy it in the clipboard
+        System.setClipboard(exportListToText());
+        
+        // Display a message
+        Alert.show('The events log has been formatted as text and is ready to ' + 
+                   'be pasted in any text file.',
+                   'Copied to clipboard',
+                   4,
+                   null,
+                   null,
+                   copyIcon,
+                   4);
     }
     
-        
+    /**
+    * Clear the notifications list
+    */
+    public function clearList(e:Event=null):void
+    {
+        ModuleModelLocator.getInstance().notifications.removeAll()
+    }
+    
+    
     // =========================================================================
     // Private Methods
     // =========================================================================
@@ -119,9 +137,44 @@
         }
     }
     
+    /**
+    * Format the log as text
+    */
+    private function exportListToText():String
+    {
+        var res : String = '================================================================================\n' +
+                           ModuleModelLocator.getInstance().config.consoleProject + ' ' +
+                           ModuleModelLocator.getInstance().config.consoleName +
+                           ', generated on ' + new Date().toUTCString() + '\n' +
+                           'Running on Flash player ' + Capabilities.version + ((Capabilities.isDebugger)?' debug':' ') +
+                           ' (memory used: ' + System.totalMemory/1024 + ' Ko)\n' +
+                           '================================================================================\n';
+        for each (var notif : KerneosNotification in ModuleModelLocator.getInstance().notifications) {
+            res += notif.toString() + "\n";
+        }
+        return res;
+    }
+    
+    /**
+    * Filters the "debug" level messages on the list
+    */
+    private function filterDebugMessages(item:Object):Boolean
+    {
+        if ((item as KerneosNotification).level == KerneosNotification.DEBUG) {
+            return false;
+        }
+        return true;
+    }
+    
     ]]>
     </mx:Script>
     
+    
+    <!--========================================================================
+    | GUI components
+    =========================================================================-->
+    
+    <!-- The notifications list -->
     <mx:DataGrid
         id="notificationsList"
         width="100%"
@@ -154,6 +207,7 @@
         
     </mx:DataGrid>
     
+    <!-- The controls bar -->
     <mx:HBox width="100%"
              height="30"
              borderStyle="applicationControlBar"
@@ -163,7 +217,7 @@
              paddingRight="4"
              verticalAlign="middle">
         <mx:Button label="clear"
-                   click="{ModuleModelLocator.getInstance().notifications.removeAll()}"
+                   click="{clearList()}"
                    icon="{clearIcon}"/>
         <mx:Button label="Copy to clipboard"
                    click="{copyToClipboard()}"
@@ -178,4 +232,5 @@
         <mx:Text id="playerInfo"
                  render="{playerInfo.text = 'Flash player ' + Capabilities.version + ((Capabilities.isDebugger)?' debug':' ') + ' (memory used: ' + System.totalMemory/1024 + ' Ko)';}"/>
     </mx:HBox>
+    
 </mx:VBox>

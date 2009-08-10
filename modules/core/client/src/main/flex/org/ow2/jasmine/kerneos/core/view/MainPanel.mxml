@@ -36,7 +36,6 @@
 
     <mx:Script>
     <![CDATA[
-        import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
     
     import flash.display.StageDisplayState;
     import flash.utils.getTimer;
@@ -84,6 +83,7 @@
     import org.ow2.jasmine.kerneos.core.api.KerneosModule;
     import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
     import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
+    import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
     
     import flexlib.containers.WindowShade;
     import flexlib.mdi.containers.MDIWindow;
@@ -398,6 +398,9 @@
         
         // Update the module state
         window.module.loaded = false;
+        
+        // Force garbage collection
+        System.gc();
         
         // Remove the tasbar button
         minimized_windows.removeChild(window.minimizedModuleWindow);

@@ -198,7 +198,7 @@ NotificationPopUp {
 
 
 /*******************************************************************************
- * Misc
+ * Base components
  ******************************************************************************/
 
 ToolTip {
@@ -208,6 +208,54 @@ ToolTip {
    color: #FFFFFF;
 }
 
+Alert{
+    titleStyleName: "alertTitle";
+    messageStyleName: "alertMessage";
+    buttonStyleName: "alertButton";
+    headerHeight: 22;
+    borderThickness: 1;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    color: #EFEFEF;
+    backgroundColor: #555555;
+    cornerRadius: 3;
+    borderStyle: solid;
+    headerColors: #777777, #454545;
+    footerColors: #454545, #EFEFEF;
+    borderColor: #454545;
+}
+
+.alertTitle{
+    fontSize: 12px;
+    fontWeight: bold;
+    textAlign: left;
+    color: #EFEFEF;
+}
+
+.alertMessage {
+    letterSpacing: 0;
+    fontSize: 10;
+    fontWeight: normal;
+}
+
+.alertButton {
+    themeColor: #444444;
+    letterSpacing: 0;
+    fontSize: 10;
+    borderColor: #454545;
+    cornerRadius: 3;
+    fontWeight: bold;
+    color: #EFEFEF;
+    textRollOverColor: #232323;
+    highlightAlphas: 0.3, 0;
+    fillAlphas: 0.2, 0.1, 0.3, 0.3;
+}
+
+
+/*******************************************************************************
+ * Misc
+ ******************************************************************************/
+ 
 .maximizeRestoreButton
 {
 	up-skin:        	Embed("./maximize_up.png");
