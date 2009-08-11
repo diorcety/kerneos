@@ -40,6 +40,7 @@
     import flash.display.StageDisplayState;
     import flash.utils.getTimer;
     import flash.events.KeyboardEvent;
+    import flash.net.navigateToURL;
     
     import com.adobe.cairngorm.business.ServiceLocator;
     import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -161,6 +162,11 @@
     * The notifications log window
     */
     private var notificationsLogWindow : KerneosWindow = null;
+    
+    /**
+    * Wether the logout() function has been called
+    */
+    private var loggingOut : Boolean = false;
     
     
     // Assets
@@ -285,10 +291,29 @@
     */
     public function canBeClosed():Boolean
     {
-        return !model.config.showConfirmCloseDialog;
+        return (loggingOut || !model.config.showConfirmCloseDialog);
     }
     
-        
+    /**
+    * Logout from the application
+    */
+    public function logout(event:Event=null):void
+    {
+        // Call the logout servlet
+        var req : URLRequest = new URLRequest("./LogoutServlet");
+        var loader : URLLoader = new URLLoader();
+        loader.addEventListener(Event.COMPLETE,function():void {
+            // Mark this as logging out
+            loggingOut = true;
+            
+            // Reload the page
+            reloadPage();
+        });
+        loader.load(req);
+
+    }
+    
+    
     // =========================================================================
     // Available modules management
     // =========================================================================
@@ -634,6 +659,7 @@
         navigateToURL(new URLRequest("javascript:location.reload();"),"_self");
     }
     
+    
     // =========================================================================
     // Modules notifications
     // =========================================================================
@@ -897,14 +923,12 @@
                                        styleName="taskBarSmallButton"
                                        visible="{model.config.enableNotificationsLog}"
                                        includeInLayout="{model.config.enableNotificationsLog}"/>
-<!--                            
                             <mx:Button width="22"
                                        height="22"
                                        icon="{logoutIcon}"
                                        click="{logout()}"
                                        toolTip="Logout"
                                        styleName="taskBarSmallButton"/>
--->
                         </mx:HBox>
                     </mx:VBox>
                 </mx:target>

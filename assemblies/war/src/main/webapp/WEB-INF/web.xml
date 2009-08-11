@@ -60,35 +60,22 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
-  <servlet>
-  	<display-name>UploadFileServlet</display-name>
-  	<servlet-name>UploadFileServlet</servlet-name>
-  	<servlet-class>
-      org.ow2.jasmine.kerneos.common.servlet.UploadFileServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet>
-    <display-name>ExportBitmapServlet</display-name>
-    <servlet-name>ExportBitmapServlet</servlet-name>
-    <servlet-class>
-      org.ow2.jasmine.kerneos.common.servlet.ExportBitmapServlet
-    </servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>ExportBitmapServlet</servlet-name>
-    <url-pattern>/ExportBitmapServlet</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>UploadFileServlet</servlet-name>
-    <url-pattern>/UploadFileServlet</url-pattern>
-  </servlet-mapping>
-
   <servlet-mapping>
     <servlet-name>AMFMessageServlet</servlet-name>
     <url-pattern>/graniteamf/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+  	<display-name>LogoutServlet</display-name>
+  	<servlet-name>LogoutServlet</servlet-name>
+  	<servlet-class>
+      org.ow2.jasmine.kerneos.login.LogoutServlet
+    </servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/LogoutServlet</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>
