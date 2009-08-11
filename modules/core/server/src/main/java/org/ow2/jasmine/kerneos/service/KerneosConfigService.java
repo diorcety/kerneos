@@ -1,6 +1,6 @@
 /**
  * JASMINe
- * Copyright (C) 2008 Bull S.A.S.
+ * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -42,28 +42,27 @@ import org.w3c.dom.NodeList;
 /**
  * Kerneos configuration loading service
  */
-public class ModuleService implements Serializable {
+public class KerneosConfigService implements Serializable {
 
     /**
-     *
+     * The class serial version ID
      */
     private static final long serialVersionUID = 7807669487844076133L;
 
     /**
-     *
+     * The logger
      */
-    private static Log logger = LogFactory.getLog(ModuleService.class);
+    private static Log logger = LogFactory.getLog(KerneosConfigService.class);
 
     /**
-     *
+     * The path to the Kerneos config file
      */
     private static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";
 
     /**
-     *
-     * @return
+     * Load the Kerneos config file and build the configuration object
      */
-    public KerneosConfig modules() {
+    public KerneosConfig loadKerneosConfig() {
 
         KerneosConfig config = new KerneosConfig();
         List<Module> modules = new ArrayList<Module>();

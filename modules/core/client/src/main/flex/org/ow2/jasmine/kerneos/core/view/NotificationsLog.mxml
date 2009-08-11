@@ -49,8 +49,8 @@
     
     import com.adobe.cairngorm.model.ModelLocator;
     
-    import org.ow2.jasmine.kerneos.core.model.ModuleModelLocator;
     import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
+    import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
     
     
     // =========================================================================
@@ -82,8 +82,8 @@
     private function initComponent(event:Event=null):void
     {
         // Filter debug messages by default
-        ModuleModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
-        ModuleModelLocator.getInstance().notifications.refresh();
+        KerneosModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
+        KerneosModelLocator.getInstance().notifications.refresh();
     }
     
     
@@ -115,7 +115,7 @@
     */
     public function clearList(e:Event=null):void
     {
-        ModuleModelLocator.getInstance().notifications.removeAll()
+        KerneosModelLocator.getInstance().notifications.removeAll()
     }
     
     
@@ -129,11 +129,11 @@
     private function handleShowDebugCheckboxChange(event:Event):void
     {
         if (showDebugCheckBox.selected) {
-            ModuleModelLocator.getInstance().notifications.filterFunction = null;
-            ModuleModelLocator.getInstance().notifications.refresh();
+            KerneosModelLocator.getInstance().notifications.filterFunction = null;
+            KerneosModelLocator.getInstance().notifications.refresh();
         } else {
-            ModuleModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
-            ModuleModelLocator.getInstance().notifications.refresh();
+            KerneosModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
+            KerneosModelLocator.getInstance().notifications.refresh();
         }
     }
     
@@ -143,13 +143,13 @@
     private function exportListToText():String
     {
         var res : String = '================================================================================\n' +
-                           ModuleModelLocator.getInstance().config.consoleProject + ' ' +
-                           ModuleModelLocator.getInstance().config.consoleName +
+                           KerneosModelLocator.getInstance().config.consoleProject + ' ' +
+                           KerneosModelLocator.getInstance().config.consoleName +
                            ', generated on ' + new Date().toUTCString() + '\n' +
                            'Running on Flash player ' + Capabilities.version + ((Capabilities.isDebugger)?' debug':' ') +
                            ' (memory used: ' + System.totalMemory/1024 + ' Ko)\n' +
                            '================================================================================\n';
-        for each (var notif : KerneosNotification in ModuleModelLocator.getInstance().notifications) {
+        for each (var notif : KerneosNotification in KerneosModelLocator.getInstance().notifications) {
             res += notif.toString() + "\n";
         }
         return res;
@@ -179,7 +179,7 @@
         id="notificationsList"
         width="100%"
         height="100%"
-        dataProvider="{ModuleModelLocator.getInstance().notifications}"
+        dataProvider="{KerneosModelLocator.getInstance().notifications}"
         useRollOver="false"
         selectable="false"
         editable="false"

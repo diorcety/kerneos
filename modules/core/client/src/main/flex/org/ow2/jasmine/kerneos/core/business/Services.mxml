@@ -33,7 +33,7 @@
     <mx:RemoteObject id="logInService" destination="logIn" showBusyCursor="true">
     </mx:RemoteObject>
  
-    <mx:RemoteObject id="modulesService" destination="modules" showBusyCursor="true">
+    <mx:RemoteObject id="kerneosConfigService" destination="kerneosConfig" showBusyCursor="true">
     </mx:RemoteObject>
     
 </cairngorm:ServiceLocator>

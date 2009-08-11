@@ -36,6 +36,8 @@
 
     <mx:Script>
     <![CDATA[
+        import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
+        import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
     
     import flash.display.StageDisplayState;
     import flash.utils.getTimer;
@@ -72,7 +74,6 @@
     import mx.messaging.channels.AMFChannel;
     import mx.messaging.ChannelSet;
     
-    import org.ow2.jasmine.kerneos.core.model.ModuleModelLocator;
     import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
     import org.ow2.jasmine.kerneos.common.util.Util;
     import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
@@ -80,7 +81,6 @@
     import org.ow2.jasmine.kerneos.login.model.LogInModelLocator;
     import org.ow2.jasmine.kerneos.core.api.Core;
     import org.ow2.jasmine.kerneos.core.api.ICore;
-    import org.ow2.jasmine.kerneos.core.event.ModulesEvent;
     import org.ow2.jasmine.kerneos.core.api.KerneosModule;
     import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
     import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
@@ -131,7 +131,7 @@
     * The application model
     */
     [Bindable]
-    private var model:ModuleModelLocator;
+    private var model:KerneosModelLocator;
 
     /**
     * Potential window manager queued event
@@ -241,12 +241,11 @@
         
         amfChannelSet.addChannel(_amfChannel);
 
-        var obl:Object = ServiceLocator.getInstance().getRemoteObject( "logInService" );
-        ServiceLocator.getInstance().getRemoteObject( "logInService" ).channelSet = amfChannelSet;
-        ServiceLocator.getInstance().getRemoteObject( "modulesService" ).channelSet = amfChannelSet;
+        ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
+        ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
         
-        // Send event for receive the modules in deploied war
-        this.loaderModuleEvent();
+        // Load the Kerneos configuration
+        this.loadKerneosConfig();
         
         // Set windows events listeners
         // This is where all windows related events can be intercepted.
@@ -276,7 +275,7 @@
     */
     private function creationCompleteHandler(e:Event=null):void
     {
-        this.model = ModuleModelLocator.getInstance();
+        this.model = KerneosModelLocator.getInstance();
     }
     
     
@@ -321,12 +320,12 @@
     /**
     * Send event for receive the modules in deploied war
     */
-    public function loaderModuleEvent():void {
+    public function loadKerneosConfig():void {
         try {
-            var event_module:ModulesEvent = new ModulesEvent(ModulesEvent.GET_MODULE);
+            var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.LOAD_KERNEOS_CONFIG);
             CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
         } catch(e:Error){
-             trace("An error occurred while loading modules: " + e.message);
+             trace("An error occurred while loading Kerneos config file: " + e.message);
         }
     }
     
@@ -461,7 +460,7 @@
     {
         
         // Load the modules only if not previously done
-        if(firstLogin && ModuleModelLocator.getInstance().config != null) {
+        if(firstLogin && model.config != null) {
 
             var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
             var serviceIds : ArrayCollection = new ArrayCollection();

@@ -26,9 +26,8 @@ package org.ow2.jasmine.kerneos.core.control
 {
 import com.adobe.cairngorm.control.FrontController;
 
-import org.ow2.jasmine.kerneos.core.command.ModuleCommand;
-import org.ow2.jasmine.kerneos.core.event.ModulesEvent;
-import mx.controls.Alert;
+import org.ow2.jasmine.kerneos.core.command.*;
+import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
 
 /**
  * Bind a type of command to an action.
@@ -46,7 +45,7 @@ public class Controller extends FrontController {
     * Add all of the commands to the pool of commands.
     */
     public function initialiseCommands() : void {
-        addCommand( ModulesEvent.GET_MODULE, ModuleCommand);
+        addCommand(KerneosConfigEvent.LOAD_KERNEOS_CONFIG,LoadKerneosConfigCommand);
     }
 }
 }

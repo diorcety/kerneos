@@ -30,24 +30,25 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.jasmine.kerneos.core.business.IModuleDelegate;
-import org.ow2.jasmine.kerneos.core.model.ModuleModelLocator;
+import org.ow2.jasmine.kerneos.core.business.ILoadKerneosConfigDelegate;
+import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 
 /**
+* Load the Kerneos configuration
 * 
 * @author Guillaume Renault, Julien Nicoulaud
 */ 
-public class ModuleCommand implements ICommand, IResponder{
+public class LoadKerneosConfigCommand implements ICommand, IResponder{
     
     /**
     * Send the event to the java side, using the business layer of the pattern
     */
     public function execute( e:CairngormEvent ):void {
     	try {
-	    	var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getModuleDelegate();
+	    	var delegate:ILoadKerneosConfigDelegate = KerneosModelLocator.getInstance().getLoadKerneosConfigDelegate();
         	delegate.responder = this;
-        	delegate.moduleSearch();
+        	delegate.loadKerneosConfig();
     	} catch(e:Error){
      		trace("An error occurred: " + e.message);
      	}
@@ -57,10 +58,10 @@ public class ModuleCommand implements ICommand, IResponder{
     * Get the result of the java side. this method is called on each event from
     * Java.
     */
-    public function result( event : Object ):void {
+    public function result(event : Object):void {
     	try {
     	    // Retrieve the model
-	        var model:ModuleModelLocator = ModuleModelLocator.getInstance();
+	        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
 	        
 	        // Retrieve the result
 	        var result:KerneosConfigVO = (event as ResultEvent).result as KerneosConfigVO;
@@ -74,11 +75,11 @@ public class ModuleCommand implements ICommand, IResponder{
     }
     
     /**
-    * 
+    * Handle faults
     */
     public function fault( event : Object ) : void {
     	var faultEvent : FaultEvent = FaultEvent( event );
-    	Alert.show( "Error when get modules names : Unhandled error","Error" );
+    	Alert.show( "Error while loading Kerneos configuration file : Unhandled error","Error" );
 	}
 }
 }

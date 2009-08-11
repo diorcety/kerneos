@@ -36,7 +36,6 @@
     
     <mx:Script>
     <![CDATA[
-        import mx.controls.Alert;
     
     /**
     * On application creation complete

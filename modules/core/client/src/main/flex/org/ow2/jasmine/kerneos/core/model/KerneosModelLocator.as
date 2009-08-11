@@ -26,8 +26,7 @@ import com.adobe.cairngorm.model.ModelLocator;
 
 import mx.collections.ArrayCollection;
 
-import org.ow2.jasmine.kerneos.core.business.IModuleDelegate;
-import org.ow2.jasmine.kerneos.core.business.ModuleDelegate;
+import org.ow2.jasmine.kerneos.core.business.*;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 
 /**
@@ -35,7 +34,7 @@ import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 * 
 * @author Guillaume Renault, Julien Nicoulaud
 */
-public class ModuleModelLocator implements ModelLocator{
+public class KerneosModelLocator implements ModelLocator{
     
     // =========================================================================
     // Properties
@@ -60,15 +59,15 @@ public class ModuleModelLocator implements ModelLocator{
 	/**
     * Unique instance of this locator.
     */
-    private static var model:ModuleModelLocator;
+    private static var model:KerneosModelLocator;
     
     
     // Delegates unique instances
     
     /**
-    * Unique instance of delegate.
+    * "Load Kerneos config file" delegate unique instance
     */
-    private var moduleDelegate:IModuleDelegate = null;
+    private var loadKerneosConfigDelegate:ILoadKerneosConfigDelegate = null;
 
     
     // =========================================================================
@@ -76,24 +75,24 @@ public class ModuleModelLocator implements ModelLocator{
     // =========================================================================
     
     /**
-    * 
+    * Build a new KerneosModelLocator
     */
-    public function ModuleModelLocator(){
+    public function KerneosModelLocator(){
         super();
         if (model != null){
-            throw new Error("Only one ModuleModelLocator has to be set");
+            throw new Error("Only one KerneosModelLocator can be instantiated.");
         }
     }
     
     /**
-    * 
+    * Get the unique instance of KerneosModelLocator
     */
-    public static function getInstance() : ModuleModelLocator{
-        if (ModuleModelLocator.model == null) {
-            ModuleModelLocator.model = new ModuleModelLocator();
+    public static function getInstance() : KerneosModelLocator{
+        if (KerneosModelLocator.model == null) {
+            KerneosModelLocator.model = new KerneosModelLocator();
         }
-        return ModuleModelLocator.model;
-	}	
+        return KerneosModelLocator.model;
+    }
     
     
     // =========================================================================
@@ -101,13 +100,13 @@ public class ModuleModelLocator implements ModelLocator{
     // =========================================================================
     
     /**
-    * 
+    * Get the "Load Kerneos config file" delegate unique instance
     */
-    public function getModuleDelegate():IModuleDelegate {
-        if (this.moduleDelegate == null) {
-            this.moduleDelegate = new ModuleDelegate();
+    public function getLoadKerneosConfigDelegate():ILoadKerneosConfigDelegate {
+        if (this.loadKerneosConfigDelegate == null) {
+            this.loadKerneosConfigDelegate = new LoadKerneosConfigDelegate();
         }
-        return this.moduleDelegate;
+        return this.loadKerneosConfigDelegate;
     }
 }
 }

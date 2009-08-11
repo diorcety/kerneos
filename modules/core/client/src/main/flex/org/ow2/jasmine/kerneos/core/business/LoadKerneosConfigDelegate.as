@@ -24,24 +24,29 @@ package org.ow2.jasmine.kerneos.core.business
 {
 import com.adobe.cairngorm.business.ServiceLocator;
 
-import mx.controls.Alert;
-
 import org.ow2.jasmine.kerneos.common.business.AbsDelegateResponder;
 
-public class ModuleDelegate extends AbsDelegateResponder implements IModuleDelegate{
+/**
+* Load the Kerneos config file
+* 
+* @author Julien Nicoulaud
+*/
+public class LoadKerneosConfigDelegate extends AbsDelegateResponder
+                                       implements ILoadKerneosConfigDelegate {
     
     /**
-    * 
+    * Load the Kerneos config file
     */
-	public function moduleSearch():void{
+	public function loadKerneosConfig():void
+	{
 	    	// find service
-	        var service : Object = ServiceLocator.getInstance().getRemoteObject("modulesService");
+	        var service : Object = ServiceLocator.getInstance().getRemoteObject("kerneosConfigService");
 	
 	        // call service
-	        var call : Object = service.modules();
+	        var call : Object = service.loadKerneosConfig();
 	
 	        // add the responder as a listener for the answer of the java side
-	        call.addResponder( this.responder );
+	        call.addResponder(this.responder);
 	}
 }
 }

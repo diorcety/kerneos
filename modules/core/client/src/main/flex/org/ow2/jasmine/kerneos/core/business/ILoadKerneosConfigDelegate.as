@@ -25,9 +25,15 @@ package org.ow2.jasmine.kerneos.core.business
 import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
 
 /**
+* Load the Kerneos config file
 * 
+* @author Julien Nicoulaud
 */
-public interface IModuleDelegate extends IDelegateResponder{
-	function moduleSearch():void;
+public interface ILoadKerneosConfigDelegate extends IDelegateResponder{
+    
+    /**
+    * Load the Kerneos config file
+    */
+	function loadKerneosConfig():void;
 }
 }

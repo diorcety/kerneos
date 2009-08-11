@@ -29,21 +29,23 @@ import com.adobe.cairngorm.control.CairngormEvent;
 import flash.events.Event;
 
 /**
- * ModuleEvent class. This is the link between the view layer and the command layer
- */
-public class ModulesEvent extends CairngormEvent {
+* An event that holds the order to retrieve the Kerneos configuration file
+* 
+* @author Guillaume Renault, Julien Nicoulaud
+*/
+public class KerneosConfigEvent extends CairngormEvent {
 
     /**
-    * type of the event.
+    * Type of the event
     */
-    public static var GET_MODULE:String = "Get modules";
+    public static var LOAD_KERNEOS_CONFIG:String = "loadKerneosConfig";
 
     /**
      * Create a new instance, and call the super.
      *
      * @param type String to put in the event.
      */
-    public function ModulesEvent(type:String) {
+    public function KerneosConfigEvent(type:String) {
         super( type );
     }
 
@@ -53,7 +55,7 @@ public class ModulesEvent extends CairngormEvent {
      * @return this event
      */
     override public function clone() : Event {
-        return new ModulesEvent(this.type);
+        return new KerneosConfigEvent(this.type);
     }
 }
 }
