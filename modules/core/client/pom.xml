@@ -66,10 +66,31 @@
       <version>1.0-alpha-3</version>
     </dependency>
 
-    <!-- Tests -->
+    <!-- Flex -->
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
 
   </dependencies>
+  
+  
   <build>
+  
+    <sourceDirectory>src/main/flex</sourceDirectory>
+  
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonatype.flexmojos</groupId>
+          <artifactId>flexmojos-maven-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
 
       <plugin>
@@ -79,38 +100,53 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-
+      
       <plugin>
-        <groupId>net.israfil.mojo</groupId>
-        <artifactId>maven-flex2-plugin</artifactId>
-        <version>1.3</version>
+
+        <dependencies>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>license</artifactId>
+            <version>${flex.version}</version>
+          </dependency>
+        </dependencies>
+
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <version>3.2.0</version>
         <extensions>true</extensions>
 
+
+
         <configuration>
-          <finalName>Kerneos</finalName>
-          <flexHome>${flex.home}</flexHome>
-          <main>Kerneos.mxml</main>
+          <!--
+          <resourceBundlePath>${basedir}/src/main/locales/{locale}</resourceBundlePath>
+           
+          <compiledLocales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+          </compiledLocales>
+          -->
 
-          <dataServicesConfig>
-            src/main/resources/flex/services-config.xml
-          </dataServicesConfig>
+          <mergeResourceBundle>true</mergeResourceBundle>
 
-          <extraParameters>
-            <parameter>
-              <!--============================================================================
-                | context root is needed to allow Flex and Java to communicate using Granite |
-                ===========================================================================-->
-              <name>compiler.context-root</name>
-              <values>
-                <value>kerneos</value>
-              </values>
-            </parameter>
-          </extraParameters>
+          <licenses>
+            <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
+          </licenses>
+
+          <contextRoot>kerneos</contextRoot>
+
+          <sourceFile>Kerneos.mxml</sourceFile>
+
+          <optimize>true</optimize>
+
         </configuration>
-
       </plugin>
 
     </plugins>
+  
     <finalName>Kerneos</finalName>
+  
   </build>
+  
 </project>
