@@ -79,7 +79,7 @@ Before using Kerneos :
 	
 	<!-- Examples on how to set this file. An XSD file to come. -->
 	
-	  <module swfFile="test.swf" loaded="false">
+	  <module swfFile="test.swf" loadOnStartup="false" loadMaximized="false">
 	    <name>TestModule</name>
 	    <description>Does absolutely nothing, it even doesn't exist</description>
 	    <services>
@@ -108,10 +108,10 @@ Before using Kerneos :
 	Instead of specify the swfFile attribute, you can specify the url one as the following 
 	example : 
 	
-	  <module url="http://www.yahoo.fr" loaded="false">
+      <module url="http://www.yahoo.fr" loadOnStartup="true" loadMaximized="false">
 	    <name>Yahoo</name>
 	    <description>Yahoo search engine.</description>
-	  </module>
+      </module>    
 	  
 	The goal is to be allowed to load any web page in as a module.
 	
