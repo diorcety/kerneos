@@ -113,14 +113,11 @@
 
 
         <configuration>
-          <!--
-          <resourceBundlePath>${basedir}/src/main/locales/{locale}</resourceBundlePath>
            
           <compiledLocales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
-          -->
 
           <mergeResourceBundle>true</mergeResourceBundle>
 
