@@ -39,6 +39,9 @@
   
   
   <build>
+  
+    <sourceDirectory>src/main/flex</sourceDirectory>
+    
     <plugins>
 
       <plugin>
