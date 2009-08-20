@@ -14,6 +14,12 @@
   <dependencies>
 
     <dependency>
+      <groupId>net.israfil.mojo</groupId>
+      <artifactId>maven-flex2-plugin</artifactId>
+      <version>1.3</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-enforcer-plugin</artifactId>
       <version>1.0-alpha-3</version>
@@ -27,17 +33,8 @@
       <classifier>kerneos</classifier>
     </dependency>
     
-    <!-- Flex -->
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
-      <version>${flex.version}</version>
-      <type>pom</type>
-    </dependency>
-    
+    <!-- Tests -->
   </dependencies>
-  
-  
   <build>
     <plugins>
 
@@ -50,43 +47,16 @@
       </plugin>
 
       <plugin>
-
-        <dependencies>
-          <dependency>
-            <groupId>com.adobe.flex</groupId>
-            <artifactId>license</artifactId>
-            <version>${flex.version}</version>
-          </dependency>
-        </dependencies>
-
-        <groupId>org.sonatype.flexmojos</groupId>
-        <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>3.2.0</version>
+        <groupId>net.israfil.mojo</groupId>
+        <artifactId>maven-flex2-plugin</artifactId>
+        <version>1.3</version>
         <extensions>true</extensions>
 
-
-
         <configuration>
-          <!--
-          <resourceBundlePath>${basedir}/src/main/locales/{locale}</resourceBundlePath>
-           
-          <compiledLocales>
-            <locale>en_US</locale>
-            <locale>fr_FR</locale>
-          </compiledLocales>
-          -->
-
-          <mergeResourceBundle>true</mergeResourceBundle>
-
-          <licenses>
-            <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
-          </licenses>
-
-          <optimize>false</optimize>
-
+          <flexHome>${flex.home}</flexHome>
         </configuration>
-      </plugin>
 
+      </plugin>
 
     </plugins>
     <finalName>Kerneos-API</finalName>
