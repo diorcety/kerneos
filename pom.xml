@@ -30,6 +30,13 @@
     <url>http://fisheye.jasmine.objectweb.org/browse/JASMINe/kerneos/trunk</url>
   </scm>
 
+  <repositories>
+    <repository>
+      <id>flexmojos-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+    </repository>
+  </repositories>
+
   <profiles>
     <profile>
       <id>initWTP</id>
