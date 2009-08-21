@@ -60,6 +60,7 @@
         <!-- Show a "confirm close" dialog ? -->
         <!--<showConfirmCloseDialog>true</showConfirmCloseDialog>-->
         
+        <!-- Default language of Kerneos. values : fr_FR or en_US -->
         <defaultLanguage>en_US</defaultLanguage>
         
     </options>
