@@ -1046,7 +1046,7 @@
     <mx:Canvas id = "application_container"
                width = "100%"
                height = "100%">
-        <!-- "JASMINe Console" mark" -->
+        <!-- "Kerneos Console" mark" -->
         <mx:HBox id = "console_mark"
                  width = "1000"
                  height = "128"
