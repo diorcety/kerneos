@@ -162,6 +162,12 @@ public class KerneosConfigService implements Serializable {
                             config.showConfirmCloseDialog = Boolean.parseBoolean(option.getTextContent());
                             logger.debug("Show confirm close dialog: " + config.showConfirmCloseDialog);
                         }
+
+                        // Set the default language
+                        else if (option.getNodeName().equals("defaultLanguage")) {
+                            config.defaultLanguage = option.getTextContent();
+                            logger.debug("Default Language : " + config.defaultLanguage);
+                        }
                     }
                 }
 

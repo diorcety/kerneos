@@ -17,21 +17,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- * 
+ *
  * $Id$
  */
- 
+
 package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
 
+
 /**
-* A data object that describes a configuration for Kerneos
-* 
-* @author Julien Nicoulaud
-*/
+ * A data object that describes a configuration for Kerneos
+ *
+ * @author Julien Nicoulaud
+ */
 [RemoteClass(alias="org.ow2.jasmine.kerneos.service.KerneosConfig")]
 [Bindable]
 public class KerneosConfigVO implements IValueObject
@@ -43,56 +44,60 @@ public class KerneosConfigVO implements IValueObject
     // Settings
     
     /**
-    * The name of the project (totally random example: "JASMINe")
-    */
+     * The name of the project (totally random example: "JASMINe")
+     */
     public var consoleProject : String = "JASMINe";
     
     /**
-    * The name of the console
-    */
+     * The name of the console
+     */
     public var consoleName : String = "Kerneos";
     
     /**
-    * Allow to show the taskbar "Minimize all" icon
-    */
+     * Allow to show the taskbar "Minimize all" icon
+     */
     public var showMinimizeAllIcon : Boolean = true;
     
     /**
-    * Allow to show the taskbar "cascade" icon
-    */
+     * Allow to show the taskbar "cascade" icon
+     */
     public var showCascadeIcon : Boolean = true;
     
     /**
-    * Allow to show the taskbar "tile" icon
-    */
+     * Allow to show the taskbar "tile" icon
+     */
     public var showTileIcon : Boolean = true;
     
     /**
-    * Allow to show notification popups
-    */
+     * Allow to show notification popups
+     */
     public var showNotificationPopUps : Boolean = true;
     
     /**
-    * Allow to show notification popups, even on windows that have the focus
-    */
+     * Allow to show notification popups, even on windows that have the focus
+     */
     public var showPopupsWhenFocused : Boolean = false;
     
     /**
-    * Enable notifications logging
-    */
+     * Enable notifications logging
+     */
     public var enableNotificationsLog : Boolean = true;
     
     /**
-    * Show a "confirm close" dialog when closing the browser window
-    */
+     * Show a "confirm close" dialog when closing the browser window
+     */
     public var showConfirmCloseDialog : Boolean = true;
     
+    /**
+     * Set the default language used in Kerneos when loading.
+     */
+    public var defaultLanguage : String = "en_US";
     
     // Modules
     
     /**
-    * The modules
-    */
+     * The modules
+     */
     [ArrayElementType('org.ow2.jasmine.kerneos.core.vo.ModuleVO')]
     public var modules : ArrayCollection;
 

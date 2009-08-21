@@ -817,10 +817,14 @@
                 if (conf != null)
                 {
                     this.currentState = "logged";
+                    
+                    resourceManager.localeChain = [this.model.config.defaultLanguage];
+                    
+                    localeComboBox_initializeHandler();
                 }
             }
             
-            private function localeComboBox_initializeHandler(event : Event) : void
+            private function localeComboBox_initializeHandler(event : Event=null) : void
             {
                 localeComboBox.selectedIndex = locales.indexOf(resourceManager.localeChain[0]);
             }

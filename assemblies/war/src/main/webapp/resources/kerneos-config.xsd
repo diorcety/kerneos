@@ -36,17 +36,18 @@
   </xs:element>
   <xs:element name="options">
     <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="k:consoleProject" maxOccurs="1" />
-        <xs:element ref="k:consoleName" maxOccurs="1" />
-        <xs:element ref="k:showMinimizeAllIcon" maxOccurs="1" />
-        <xs:element ref="k:showCascadeIcon" maxOccurs="1" />
-        <xs:element ref="k:showTileIcon" maxOccurs="1" />
-        <xs:element ref="k:showNotificationPopups" maxOccurs="1" />
-        <xs:element ref="k:showPopupsWhenFocused" maxOccurs="1" />
-        <xs:element ref="k:enableNotificationsLog" maxOccurs="1" />
-        <xs:element ref="k:showConfirmCloseDialog" maxOccurs="1" />
-      </xs:sequence>
+      <xs:all>
+        <xs:element ref="k:consoleProject" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:consoleName" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:showMinimizeAllIcon" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:showCascadeIcon" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:showTileIcon" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:showNotificationPopups" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:showPopupsWhenFocused" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:enableNotificationsLog" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:showConfirmCloseDialog" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:defaultLanguage" maxOccurs="1" minOccurs="0" />
+      </xs:all>
     </xs:complexType>
   </xs:element>
   <xs:element name="consoleProject" type="xs:NCName" />
@@ -58,6 +59,7 @@
   <xs:element name="showPopupsWhenFocused" type="xs:boolean" />
   <xs:element name="enableNotificationsLog" type="xs:boolean" />
   <xs:element name="showConfirmCloseDialog" type="xs:boolean" />
+  <xs:element name="defaultLanguage" type="xs:string" />
   <xs:element name="modules">
     <xs:complexType>
       <xs:sequence>

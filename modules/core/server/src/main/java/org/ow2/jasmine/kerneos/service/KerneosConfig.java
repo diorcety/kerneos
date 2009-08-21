@@ -81,6 +81,10 @@ public class KerneosConfig {
     */
     public Boolean showConfirmCloseDialog = true;
 
+    /**
+     * Set the default language used in Kerneos when loading.
+     */
+    public String defaultLanguage = "en_US";
 
     // Modules
 

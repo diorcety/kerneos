@@ -33,7 +33,7 @@
     <!-- Here are some example of how to integrate modules on Kerneos -->
                 
     <!-- Kerneos settings -->
-    <!--<options>-->
+    <options>
     
         <!-- The two parts of the mark displayed on the top right corner -->
         <!--<consoleProject>JASMINe</consoleProject>-->
@@ -60,7 +60,9 @@
         <!-- Show a "confirm close" dialog ? -->
         <!--<showConfirmCloseDialog>true</showConfirmCloseDialog>-->
         
-    <!--</options>-->
+        <defaultLanguage>en_US</defaultLanguage>
+        
+    </options>
     
     
     <!-- Modules -->
@@ -107,6 +109,19 @@
       </module>
      
     -->
+      <module url="http://www.google.fr" loadOnStartup="false" loadMaximized="false">
+        <name>Google</name>
+        <description>Google search engine.</description>
+        <smallIcon>resources/icons/module16.png</smallIcon>
+        <bigIcon>resources/icons/module64.png</bigIcon>
+      </module>
+    
+      <module url="http://www.yahoo.fr" loadOnStartup="false" loadMaximized="false">
+        <name>Yahoo</name>
+        <description>Yahoo search engine.</description>
+        <smallIcon>resources/icons/module16.png</smallIcon>
+        <bigIcon>resources/icons/module64.png</bigIcon>
+      </module>
     
     </modules>
     
