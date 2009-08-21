@@ -1048,7 +1048,7 @@
                height = "100%">
         <!-- "JASMINe Console" mark" -->
         <mx:HBox id = "console_mark"
-                 width = "500"
+                 width = "1000"
                  height = "128"
                  top = "10"
                  right = "10"
