@@ -32,8 +32,8 @@
 // 1.1       29/09/07  AJR    .Fixed bug where the frame wasn't resizing itself
 //                             when the source url was assigned.
 // 1.2       14/12/07  Max    .http://16-bits.com/HTMLTest/HTMLTest.html
-//                             I modified it a little bit so that you can also set 
-//                             a content property instead of source to display a div 
+//                             I modified it a little bit so that you can also set
+//                             a content property instead of source to display a div
 //                             container instead of iFrame.
 // 1.3       22/09/08  RAB    .Frame will now move with the Flex component
 //                             (for example, dragging a popup TitleWindow parent)
@@ -41,7 +41,7 @@
 //                             the displayList for MoveEvent.MOVE
 
 //                            .Fixed issue where frame might not display if it
-//                             was visible at component creation and not a child 
+//                             was visible at component creation and not a child
 //                             of a navigator control like TabNavigator,
 //                             ViewStack or Accordion
 
@@ -56,7 +56,7 @@
 //                             be queued and executed once it has loaded)
 
 //                            .Added option for SuperIFrame component to try and detect
-//                             new global objects such as alerts, tooltips and 
+//                             new global objects such as alerts, tooltips and
 //                             pop up windows that are added on top of it and hide the
 //                             browser iframe temporarily. This option must be
 //                             explicitly enabled with the overlayDetection property
@@ -76,7 +76,7 @@
 //                             id within the application by tracking all SuperIFrame
 //                             component ids in use with a static var and
 //                             appending a unique number to the end if needed.
-//                             This allows use of SuperIFrame within a reusable MXML 
+//                             This allows use of SuperIFrame within a reusable MXML
 //                             component that gets instantiated more than once
 
 // 1.3.1     13/10/08  RAB    .Fixed issue where parent document body could be
@@ -86,14 +86,14 @@
 // 1.3.2     20/10/08  RAB    .Added checks for cross-domain security violations.
 //                             Fixes a problem with hiding and showing iframes with
 //                             content from a different domain, and will now log
-//                             a warning in debug mode when attempting to call 
+//                             a warning in debug mode when attempting to call
 //                             a function inside an iframe in a different domain
 
 //
 // -----------------------------------------------------------------------
 // This component is based on the work of:
-// 
-// Christophe Conraets 
+//
+// Christophe Conraets
 // www.coenraets.org
 //
 // and
@@ -110,11 +110,11 @@
 // - Component generates it's own div and iframe element and inserts them
 // into the DOM.
 //
-// - When the component is created the display list is traversed from the 
-// component down to the root element. At each traversal a test is made to 
-// see if current component is a container. If it is a container then the 
-// child of the element which leads back to the component is determined and 
-// a note madeof the appropriate 'index' on the path. The index is stored 
+// - When the component is created the display list is traversed from the
+// component down to the root element. At each traversal a test is made to
+// see if current component is a container. If it is a container then the
+// child of the element which leads back to the component is determined and
+// a note madeof the appropriate 'index' on the path. The index is stored
 // against a reference to the Container in a Dictionary. Also the container
 // is 'seeded' with an event handler so that if the container triggers an
 // IndexChangedEvent.CHANGE (i.e. when you click on a tab in a tab navigator)
@@ -122,7 +122,7 @@
 // path indicates that the indexes 'line up' to expose the component then
 // the view is made visible. I hope I have explained this correctly :)
 // -----------------------------------------------------------------------
-// 
+//
 // -----------------------------------------------------------------------
 
 package org.ow2.jasmine.kerneos.core.view
@@ -146,24 +146,24 @@ import mx.utils.URLUtil;
 
 /**
 * An improved Flex IFrame component
-* 
+*
 * @author Julien Nicoulaud
 * @internal This is a modified version of flex-iframe
 *   ( http://code.google.com/p/flex-iframe/ )
 */
-[Event(name="frameLoad", type="flash.events.Event")] 
+[Event(name="frameLoad", type="flash.events.Event")]
 public class SuperIFrame extends Container
 {
     public var debug:Boolean = false;
     public var overlayDetection:Boolean = false;
-    
+
     private var logTarget:TraceTarget;
-    
+
     private var __source: String;
     private var __content: String;
     private var frameId:String;
     private var iframeId:String;
-    
+
     private var validForDisplay:Boolean = true;
 
     private var containerDict:Object = null;
@@ -172,16 +172,16 @@ public class SuperIFrame extends Container
     private var frameLoaded:Boolean = false;
     private var functionQueue:Array = [];
     private var firstShow : Boolean = true;
-    
+
     /**
     * Here we define javascript functions which will be inserted into the DOM
-    * 
+    *
     */
-    private static var FUNCTION_CREATEIFRAME:String = 
+    private static var FUNCTION_CREATEIFRAME:String =
         "document.insertScript = function ()" +
         "{ " +
-            "if (document.createSuperIFrame==null)" + 
-            "{" + 
+            "if (document.createSuperIFrame==null)" +
+            "{" +
                 "createSuperIFrame = function (frameID)" +
                 "{ " +
                     // "console.info(\"createSuperIFrame \" + frameID);" +
@@ -189,33 +189,33 @@ public class SuperIFrame extends Container
                     "var newDiv = document.createElement('div');" +
                     "newDiv.id = frameID;" +
                     "newDiv.style.position ='absolute';" +
-                    "newDiv.style.backgroundColor = 'transparent';" + 
+                    "newDiv.style.backgroundColor = 'transparent';" +
                     "newDiv.style.border = '0px';" +
                     "newDiv.style.visibility = 'hidden';" +
                     "bodyID.appendChild(newDiv);" +
                 "}" +
             "}" +
         "}";
-    
-    private static var FUNCTION_MOVEIFRAME:String = 
+
+    private static var FUNCTION_MOVEIFRAME:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.moveSuperIFrame==null)" +
             "{" +
-                "moveSuperIFrame = function(frameID, iframeID, x,y,w,h) " + 
+                "moveSuperIFrame = function(frameID, iframeID, x, y, w, h) " +
                 "{" +
                     // "console.info(\"moveSuperIFrame \" + frameID);" +
-                    "var frameRef=document.getElementById(frameID);" +
-                    "frameRef.style.left=x;" + 
-                    "frameRef.style.top=y;" +
-                    "var iFrameRef=document.getElementById(iframeID);" +
-                    "iFrameRef.width=w;" +
-                    "iFrameRef.height=h;" +
+                    "var frameRef = document.getElementById(frameID);" +
+                    "frameRef.style.left = parseInt(x) + 'px';" +
+                    "frameRef.style.top = parseInt(y) + 'px';" +
+                    "var iFrameRef = document.getElementById(iframeID);" +
+                    "iFrameRef.width = parseInt(w);" +
+                    "iFrameRef.height = parseInt(h);" +
                 "}" +
             "}" +
         "}";
 
-    private static var FUNCTION_HIDEIFRAME:String = 
+    private static var FUNCTION_HIDEIFRAME:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.hideSuperIFrame==null)" +
@@ -240,7 +240,7 @@ public class SuperIFrame extends Container
             "}" +
         "}";
 
-    private static var FUNCTION_SHOWIFRAME:String = 
+    private static var FUNCTION_SHOWIFRAME:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.showSuperIFrame==null)" +
@@ -250,7 +250,7 @@ public class SuperIFrame extends Container
                     // "console.info(\"showSuperIFrame \" + frameID);" +
                     "var iframeRef = document.getElementById(iframeID);" +
                     "document.getElementById(frameID).style.visibility='visible';" +
-                    
+
                     "var iframeDoc;" +
                     "if (iframeRef.contentWindow) {" +
                         "iframeDoc = iframeRef.contentWindow.document;" +
@@ -265,8 +265,8 @@ public class SuperIFrame extends Container
                 "}" +
             "}" +
         "}";
-        
-    private static var FUNCTION_HIDEDIV:String = 
+
+    private static var FUNCTION_HIDEDIV:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.hideDiv==null)" +
@@ -279,7 +279,7 @@ public class SuperIFrame extends Container
             "}" +
         "}";
 
-    private static var FUNCTION_SHOWDIV:String = 
+    private static var FUNCTION_SHOWDIV:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.showDiv==null)" +
@@ -291,8 +291,8 @@ public class SuperIFrame extends Container
                 "}" +
             "}" +
         "}";
-        
-    private static var FUNCTION_LOADIFRAME:String = 
+
+    private static var FUNCTION_LOADIFRAME:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.loadSuperIFrame==null)" +
@@ -301,12 +301,12 @@ public class SuperIFrame extends Container
                 "{" +
                     // "console.info(\"loadSuperIFrame \" + frameID + \", url: \" + url);" +
                     "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
-                        + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" + 
+                        + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" +
                 "}" +
             "}" +
         "}";
-        
-       private static var FUNCTION_LOADDIV_CONTENT:String = 
+
+       private static var FUNCTION_LOADDIV_CONTENT:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.loadDivContent==null)" +
@@ -318,8 +318,8 @@ public class SuperIFrame extends Container
                 "}" +
             "}" +
         "}";
-        
-    private static var FUNCTION_CALLIFRAMEFUNCTION:String = 
+
+    private static var FUNCTION_CALLIFRAMEFUNCTION:String =
         "document.insertScript = function ()" +
         "{ " +
             "if (document.callSuperIFrameFunction==null)" +
@@ -343,20 +343,20 @@ public class SuperIFrame extends Container
                 "}" +
             "}" +
         "}";
-    
+
     /**
     * Track IDs in use throughout the app for iframe
     * instances in order to detect and prevent collisions
-    * 
+    *
     */
     public static var idList:Object = new Object();
-    
+
     private var appHost:String;
-       private var iframeContentHost:String;
-    
+    private var iframeContentHost:String;
+
     /**
     * Constructor
-    * 
+    *
     */
     public function SuperIFrame(id : String)
     {
@@ -365,24 +365,24 @@ public class SuperIFrame extends Container
         this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
         this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
     }
-    
+
     /**
     * Generate DOM elements and build display path.
-    * 
+    *
     */
     override protected function createChildren():void
     {
         super.createChildren();
-        
+
         if (! ExternalInterface.available)
         {
             throw new Error("ExternalInterface is not available in this container. Internet Explorer ActiveX, Firefox, Mozilla 1.7.5 and greater, or other browsers that support NPRuntime are required.");
         }
-        
+
         // Get the host info to check for cross-domain issues
         BrowserManager.getInstance().initForHistoryManager();
         var url:String = BrowserManager.getInstance().url;
-        appHost = URLUtil.getProtocol(url) + "://" 
+        appHost = URLUtil.getProtocol(url) + "://"
             + URLUtil.getServerNameWithPort(url);
 
         // Generate unique id's for frame div name
@@ -394,10 +394,10 @@ public class SuperIFrame extends Container
         frameId = id + idSuffix;
         iframeId = "iframe_"+frameId;
         idList[frameId] = true;
-        
+
         // Register a uniquely-named load event callback for this frame (for load notification)
         ExternalInterface.addCallback(frameId + "_load", this.handleFrameLoad);
-        
+
         // Add functions to DOM if they aren't already there
         ExternalInterface.call(FUNCTION_CREATEIFRAME);
         ExternalInterface.call(FUNCTION_MOVEIFRAME);
@@ -411,7 +411,7 @@ public class SuperIFrame extends Container
 
         // Insert frame into DOM using our precreated function 'createSuperIFrame'
         ExternalInterface.call("createSuperIFrame", frameId);
-           
+
         buildContainerList();
 
         if (loadIndicatorClass)
@@ -419,7 +419,7 @@ public class SuperIFrame extends Container
             _loadIndicator = UIComponent(new loadIndicatorClass());
             addChild(_loadIndicator);
         }
-            
+
     }
 
     /**
@@ -437,42 +437,42 @@ public class SuperIFrame extends Container
 
         var current:DisplayObjectContainer = parent;
         var previous:DisplayObjectContainer = this;
-        
+
         while (current!=null)
         {
             if (current is Container)
             {
                 if (current.contains(previous))
                 {
-                    
-                    var childIndex:Number = current.getChildIndex(previous);                
+
+                    var childIndex:Number = current.getChildIndex(previous);
                     // Store child index against container
                     containerDict[current] = childIndex;
                     settingDict[current] = childIndex;
-                    
-                    // Tag on a change listener             
+
+                    // Tag on a change listener
                     current.addEventListener(IndexChangedEvent.CHANGE, handleChange);
                     current.addEventListener(MoveEvent.MOVE, handleMove);
                 }
-                
-            }        
-            
+
+            }
+
             previous = current;
             current = current.parent;
         }
         // make sure frame runs visible setter using initial visible state
         visible = visible;
     }
-    
+
    /**
     * Triggered by removal of this object from the stage
-    * 
+    *
     * @param event Event trigger
     *
     */
     private function handleRemove(event:Event):void
     {
-        // Remove systemManager hooks for overlay detection 
+        // Remove systemManager hooks for overlay detection
         if (overlayDetection)
         {
             systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
@@ -480,10 +480,10 @@ public class SuperIFrame extends Container
         }
         visible = false;
     }
-    
+
    /**
     * Triggered by addition of this object to the stage
-    * 
+    *
     * @param event Event trigger
     *
     */
@@ -501,29 +501,29 @@ public class SuperIFrame extends Container
     /**
     * Triggered by one of our listeners seeded all the way up the display
     * list to catch a 'changed' event which might hide or display this object.
-    * 
+    *
     * @param event Event trigger
     *
     */
     private function handleChange(event:Event):void
     {
         var target:Object = event.target;
-        
+
         if (event is IndexChangedEvent)
         {
             var changedEvent:IndexChangedEvent = IndexChangedEvent(event)
 
             var newIndex:Number = changedEvent.newIndex;
-            
+
             visible = checkDisplay(target, newIndex);
-            
+
         }
     }
-    
+
    /**
     * Triggered by one of our listeners seeded all the way up the display
     * list to catch a 'move' event which might reposition this object.
-    * 
+    *
     * @param event Event trigger
     *
     */
@@ -531,7 +531,7 @@ public class SuperIFrame extends Container
     {
         moveSuperIFrame();
     }
-    
+
     /**
     * This function updates the selected view child of the signalling container
     * and then compares the path from our SuperIFrame up the displaylist to see if
@@ -540,21 +540,21 @@ public class SuperIFrame extends Container
     *
     * @param target Object event source
     * @param newIndex Number index from target object.
-    * 
+    *
     */
     private function checkDisplay(target:Object, newIndex:Number):Boolean
     {
         var valid:Boolean = false;
-        
+
         if (target is Container)
         {
             var container:DisplayObjectContainer = DisplayObjectContainer(target);
-            
+
             // Update current setting
             settingDict[container] = newIndex;
-            
+
             valid = true;
-            
+
             for (var item:Object in containerDict)
             {
                 var index:Number = lookupIndex(item as Container);
@@ -562,23 +562,23 @@ public class SuperIFrame extends Container
                 valid = valid&&(index==setting);
             }
         }
-        
+
         // Remember this state so we can re-check later without a new IndexChangedEvent
         validForDisplay = valid;
         return valid;
     }
-    
+
     /**
     * Return index of child item on path down to this object. If not
     * found then return -1;
     *
     * @param target Container object
-    * 
+    *
     */
     public function lookupIndex(target:Container):Number
     {
         var index:Number = -1;
-        
+
         try
         {
             index = containerDict[target];
@@ -588,7 +588,7 @@ public class SuperIFrame extends Container
             // Error not found, we have to catch this or a silent exception
             // will be thrown.
         }
-        
+
         return index;
     }
 
@@ -597,12 +597,12 @@ public class SuperIFrame extends Container
     * found then return -1;
     *
     * @param target Container object
-    * 
+    *
     */
     public function lookupSetting(target:Container):Number
     {
         var index:Number = -1;
-        
+
         try
         {
             index = settingDict[target];
@@ -612,13 +612,13 @@ public class SuperIFrame extends Container
             // Error not found, we have to catch this or a silent exception
             // will be thrown.
         }
-        
+
         return index;
-    }                
-    
+    }
+
     /**
     * Adjust frame position to match the exposed area in the application.
-    * 
+    *
     */
     private function moveSuperIFrame(): void
     {
@@ -631,12 +631,12 @@ public class SuperIFrame extends Container
 
     /**
     * Triggered by change to component properties.
-    * 
+    *
     */
     override protected function commitProperties():void
     {
         super.commitProperties();
-        
+
         if (source)
         {
             frameLoaded = false;
@@ -644,19 +644,19 @@ public class SuperIFrame extends Container
                 ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
                 firstShow = false;
             }
-            // Trigger re-layout of iframe contents.                
+            // Trigger re-layout of iframe contents.
             invalidateDisplayList();
-        } 
-        else if (content) 
+        }
+        else if (content)
         {
             ExternalInterface.call("loadDivContent", frameId, iframeId, content);
-            // Trigger re-layout of iframe contents.                
+            // Trigger re-layout of iframe contents.
             invalidateDisplayList();
         }
     }
-    
+
     protected function handleFrameLoad():void
-    {            
+    {
         frameLoaded = true;
         var queuedCall:Object;
         var result:Object;
@@ -667,21 +667,21 @@ public class SuperIFrame extends Container
             this.callSuperIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
         }
         dispatchEvent(new Event("frameLoad"));
-        
+
         invalidateDisplayList();
     }
-    
+
     /**
     * Triggered when display contents change. Adjusts frame layout.
-    * 
+    *
     * @param unscaledWidth
     * @param unscaledHeight
-    * 
+    *
     */
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
     {
         super.updateDisplayList(unscaledWidth, unscaledHeight);
-        
+
         if (_loadIndicator)
         {
             if (frameLoaded)
@@ -697,43 +697,43 @@ public class SuperIFrame extends Container
                 _loadIndicator.move(this.width / 2 - w, this.height / 2 - h);
             }
         }
-        
+
         moveSuperIFrame();
     }
-    
+
     /**
     * Set source url
-    * 
+    *
     * @param url Frame contents
-    * 
+    *
     */
     public function set source(source: String): void
     {
         if (source)
         {
             __source = source;
-            // mark unloaded now so calls in this frame will be queued 
-            frameLoaded = false; 
+            // mark unloaded now so calls in this frame will be queued
+            frameLoaded = false;
             invalidateProperties();
-            
+
             // Get the host info to check for cross-domain issues
             iframeContentHost = URLUtil.getProtocol(source) + "://"
-                 + URLUtil.getServerNameWithPort(source);     
+                 + URLUtil.getServerNameWithPort(source);
         }
     }
 
     /**
     * Return url of frame contents
-    * 
+    *
     */
     public function get source(): String
     {
         return __source;
     }
-    
+
      /**
     * Set content string
-    * 
+    *
     */
     public function set content(content: String): void
     {
@@ -741,24 +741,24 @@ public class SuperIFrame extends Container
         {
             __content = content;
 
-            invalidateProperties();                
+            invalidateProperties();
         }
     }
 
     /**
     * Return content string of div contents
-    * 
+    *
     */
     public function get content(): String
     {
         return __content;
     }
-    
+
     /**
     * Sets visibility of html iframe. Rtn calls inserted javascript functions.
-    * 
+    *
     * @param visible Boolean flag
-    * 
+    *
     */
     override public function set visible(value: Boolean):void
     {
@@ -774,7 +774,7 @@ public class SuperIFrame extends Container
                 ExternalInterface.call("showDiv",frameId,iframeId);
             }
         }
-        else 
+        else
         {
             if (source && iframeContentHost == appHost)
                 ExternalInterface.call("hideSuperIFrame",frameId,iframeId);
@@ -782,22 +782,22 @@ public class SuperIFrame extends Container
                 ExternalInterface.call("hideDiv",frameId,iframeId);
         }
     }
-    
+
     /**
     * Calls a function of the specified name defined on the SuperIFrame document
     * (like document.functionName = function () {...} ), passing it an array of arguments.
     * May not work if the iframe contents are in a different domain due to security.
-    * 
+    *
     * If the frame contents are loaded when this method is called, it will return any
     * results from the function immediately to the caller (as well as to the callback
     * function, if defined). Otherwise, the call will be queued, this method will return
     * null, and results will be passed to the callback function after the frame loads
     * and the queued function call executes.
-    * 
+    *
     * @param functionName String Name of function to call
     * @param args Array List of arguments to pass as an array
     * @param callback Function to call (if any) with results of SuperIFrame function execution
-    * 
+    *
     */
     public function callSuperIFrameFunction(functionName:String, args:Array = null, callback:Function = null):String
     {
@@ -807,10 +807,10 @@ public class SuperIFrame extends Container
         }
         if (iframeContentHost != appHost)
         {
-            var msg:String = "Warning: attempt to call function " + functionName + 
+            var msg:String = "Warning: attempt to call function " + functionName +
                 " on iframe " + frameId + " may fail due to cross-domain security.";
         }
-        
+
         if (frameLoaded)
         {
             // Call the function immediately
@@ -829,7 +829,7 @@ public class SuperIFrame extends Container
             return null;
         }
     }
-    
+
     // --------------------------------------------------------------------
     //  Loading indicator
     // --------------------------------------------------------------------
@@ -839,29 +839,29 @@ public class SuperIFrame extends Container
     * and measuredWidth in order to be properly sized
     */
     public var loadIndicatorClass:Class;
-    
+
     protected var _loadIndicator:UIComponent;
-    
-    
+
+
     // --------------------------------------------------------------------
     //  Overlaying object detection
     // --------------------------------------------------------------------
-    
+
     private var overlappingDict:Dictionary = new Dictionary(true);
     private var overlapCount:int = 0;
-    
+
     protected function systemManager_addedHandler(event:Event):void
     {
         // A display object was added somewhere
         var displayObj:DisplayObject = event.target as DisplayObject;
         if (displayObj.parent == systemManager && displayObj.name != "cursorHolder")
         {
-            // If the object is a direct child of systemManager (i.e it floats) and isn't the cursor, 
+            // If the object is a direct child of systemManager (i.e it floats) and isn't the cursor,
             // check to see if it overlaps me after it's been drawn
             this.callLater(checkOverlay, [displayObj]);
         }
     }
-    
+
     protected function systemManager_removedHandler(event:Event):void
     {
         // A display object was removed somewhere
@@ -874,7 +874,7 @@ public class SuperIFrame extends Container
             {
                 visible = validForDisplay;
             }
-            
+
             if (displayObj is UIComponent)
             {
                 // Remove listeners for hide and show events on overlappiung UIComponents
@@ -883,7 +883,7 @@ public class SuperIFrame extends Container
             }
         }
     }
-    
+
     protected function overlay_hideShowHandler(event:FlexEvent):void
     {
         var displayObj:DisplayObject = event.target as DisplayObject;
@@ -902,21 +902,21 @@ public class SuperIFrame extends Container
             }
         }
     }
-    
+
     /**
     * Check to see if the given DisplayObject overlaps this object.
     * If so, add it to a dictionary of overlapping objects and update
     * this object's visibility.
-    * 
+    *
     */
     protected function checkOverlay(displayObj:DisplayObject):void
-    {            
+    {
         if (this.hitTestStageObject(displayObj))
         {
             overlappingDict[displayObj] = displayObj;
             overlapCount++;
             visible = false;
-            
+
             if (displayObj is UIComponent)
             {
                 // Listen for hide and show events on overlapping UIComponents
@@ -926,43 +926,43 @@ public class SuperIFrame extends Container
             }
         }
     }
-    
+
     /**
     * The native hitTestObject method seems to have some issues depending on
     * the situation. This is a custom implementation to work around that.
     * This method assumes that the passed DisplayObject is a direct child
     * of the stage and therefore has x and y coordinates that are already global
-    * 
+    *
     */
     protected function hitTestStageObject(o:DisplayObject):Boolean
     {
         var overlapX:Boolean = false;
         var overlapY:Boolean = false;
-        
+
         var localMe:Point = new Point(this.x, this.y);
         var globalMe:Point = this.parent.localToGlobal(localMe);
-        
+
         var myLeft:int = globalMe.x;
         var myRight:int = globalMe.x + this.width;
         var oLeft:int = o.x;
         var oRight:int = o.x + o.width;
-        
+
         // Does object's left edge fall between my left and right edges?
         overlapX = oLeft >= myLeft && oLeft <= myRight;
         // Or does my left edge fall between object's left and right edges?
         overlapX ||= oLeft <= myLeft && oRight >= myLeft;
-        
+
         var myTop:int = globalMe.y;
         var myBottom:int = globalMe.y + this.height;
         var oTop:int = o.y;
         var oBottom:int = o.y + o.height;
-        
+
         // Does object's top edge fall between my top and bottom edges?
         overlapY = oTop >= myTop && oTop <= myBottom;
         // Or does my top edge fall between object's top and bottom edges?
         overlapY ||= oTop <= myTop && oBottom >= myTop;
-        
+
         return overlapX && overlapY;
-    }  
+    }
 }
 }
