@@ -174,9 +174,64 @@ public class SuperIFrame extends Container
     private var firstShow : Boolean = true;
 
     /**
-    * Here we define javascript functions which will be inserted into the DOM
-    *
-    */
+     * Here we define javascript functions which will be inserted into the DOM
+     */
+    private static var FUNCTION_SHOWDIV:String =
+        "document.insertScript = function ()" +
+        "{ " +
+            "if (document.showDiv==null)" +
+            "{" +
+                "showDiv = function (frameID, iframeID)" +
+                "{" +
+                    // "console.info(\"showDiv \" + frameID);" +
+                    "document.getElementById(frameID).style.visibility='visible';" +
+                "}" +
+            "}" +
+        "}";
+
+    private static var FUNCTION_MOVEDIV:String =
+        "document.insertScript = function ()" +
+        "{ " +
+            "if (document.moveDiv==null)" +
+            "{" +
+                "moveDiv = function(frameID, x, y, w, h) " +
+                "{" +
+                    // "console.info(\"moveDiv \" + frameID);" +
+                    "var frameRef = document.getElementById(frameID);" +
+                    "frameRef.style.left = parseInt(x) + 'px';" +
+                    "frameRef.style.top = parseInt(y) + 'px';" +
+                    "frameRef.style.width = parseInt(w) + 'px';" +
+                    "frameRef.style.height = parseInt(h) + 'px';" +
+                "}" +
+            "}" +
+        "}";
+
+    private static var FUNCTION_HIDEDIV:String =
+        "document.insertScript = function ()" +
+        "{ " +
+            "if (document.hideDiv==null)" +
+            "{" +
+                "hideDiv = function (frameID, iframeID)" +
+                "{" +
+                    // "console.info(\"hideDiv \" + frameID);" +
+                    "document.getElementById(frameID).style.visibility='hidden';" +
+                "}" +
+            "}" +
+        "}";
+
+       private static var FUNCTION_LOADDIV_CONTENT:String =
+        "document.insertScript = function ()" +
+        "{ " +
+            "if (document.loadDivContent==null)" +
+            "{" +
+                "loadDivContent = function (frameID, iframeID, content)" +
+                "{" +
+                    // "console.info(\"loadDivContent \" + frameID);" +
+                    "document.getElementById(frameID).innerHTML = \"<div id='\"+iframeID+\"' frameborder='0'>\"+content+\"</div>\";" +
+                "}" +
+            "}" +
+        "}";
+
     private static var FUNCTION_CREATEIFRAME:String =
         "document.insertScript = function ()" +
         "{ " +
@@ -193,6 +248,46 @@ public class SuperIFrame extends Container
                     "newDiv.style.border = '0px';" +
                     "newDiv.style.visibility = 'hidden';" +
                     "bodyID.appendChild(newDiv);" +
+                "}" +
+            "}" +
+        "}";
+
+    private static var FUNCTION_LOADIFRAME:String =
+        "document.insertScript = function ()" +
+        "{ " +
+            "if (document.loadSuperIFrame==null)" +
+            "{" +
+                "loadSuperIFrame = function (frameID, iframeID, url)" +
+                "{" +
+                    // "console.info(\"loadSuperIFrame \" + frameID + \", url: \" + url);" +
+                    "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
+                        + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" +
+                "}" +
+            "}" +
+        "}";
+
+    private static var FUNCTION_SHOWIFRAME:String =
+        "document.insertScript = function ()" +
+        "{ " +
+            "if (document.showSuperIFrame==null)" +
+            "{" +
+                "showSuperIFrame = function (frameID, iframeID)" +
+                "{" +
+                    // "console.info(\"showSuperIFrame \" + frameID);" +
+                    "var iframeRef = document.getElementById(iframeID);" +
+                    "document.getElementById(frameID).style.visibility='visible';" +
+
+                    "var iframeDoc;" +
+                    "if (iframeRef.contentWindow) {" +
+                        "iframeDoc = iframeRef.contentWindow.document;" +
+                       "} else if (iframeRef.contentDocument) {" +
+                        "iframeDoc = iframeRef.contentDocument;" +
+                    "} else if (iframeRef.document) {" +
+                        "iframeDoc = iframeRef.document;" +
+                    "}" +
+                    "if (iframeDoc) {" +
+                        "iframeDoc.body.style.visibility='visible';" +
+                    "}" +
                 "}" +
             "}" +
         "}";
@@ -236,85 +331,6 @@ public class SuperIFrame extends Container
                         "iframeDoc.body.style.visibility='hidden';" +
                     "}" +
                     "document.getElementById(frameID).style.visibility='hidden';" +
-                "}" +
-            "}" +
-        "}";
-
-    private static var FUNCTION_SHOWIFRAME:String =
-        "document.insertScript = function ()" +
-        "{ " +
-            "if (document.showSuperIFrame==null)" +
-            "{" +
-                "showSuperIFrame = function (frameID, iframeID)" +
-                "{" +
-                    // "console.info(\"showSuperIFrame \" + frameID);" +
-                    "var iframeRef = document.getElementById(iframeID);" +
-                    "document.getElementById(frameID).style.visibility='visible';" +
-
-                    "var iframeDoc;" +
-                    "if (iframeRef.contentWindow) {" +
-                        "iframeDoc = iframeRef.contentWindow.document;" +
-                       "} else if (iframeRef.contentDocument) {" +
-                        "iframeDoc = iframeRef.contentDocument;" +
-                    "} else if (iframeRef.document) {" +
-                        "iframeDoc = iframeRef.document;" +
-                    "}" +
-                    "if (iframeDoc) {" +
-                        "iframeDoc.body.style.visibility='visible';" +
-                    "}" +
-                "}" +
-            "}" +
-        "}";
-
-    private static var FUNCTION_HIDEDIV:String =
-        "document.insertScript = function ()" +
-        "{ " +
-            "if (document.hideDiv==null)" +
-            "{" +
-                "hideDiv = function (frameID, iframeID)" +
-                "{" +
-                    // "console.info(\"hideDiv \" + frameID);" +
-                    "document.getElementById(frameID).style.visibility='hidden';" +
-                "}" +
-            "}" +
-        "}";
-
-    private static var FUNCTION_SHOWDIV:String =
-        "document.insertScript = function ()" +
-        "{ " +
-            "if (document.showDiv==null)" +
-            "{" +
-                "showDiv = function (frameID, iframeID)" +
-                "{" +
-                    // "console.info(\"showDiv \" + frameID);" +
-                    "document.getElementById(frameID).style.visibility='visible';" +
-                "}" +
-            "}" +
-        "}";
-
-    private static var FUNCTION_LOADIFRAME:String =
-        "document.insertScript = function ()" +
-        "{ " +
-            "if (document.loadSuperIFrame==null)" +
-            "{" +
-                "loadSuperIFrame = function (frameID, iframeID, url)" +
-                "{" +
-                    // "console.info(\"loadSuperIFrame \" + frameID + \", url: \" + url);" +
-                    "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
-                        + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" +
-                "}" +
-            "}" +
-        "}";
-
-       private static var FUNCTION_LOADDIV_CONTENT:String =
-        "document.insertScript = function ()" +
-        "{ " +
-            "if (document.loadDivContent==null)" +
-            "{" +
-                "loadDivContent = function (frameID, iframeID, content)" +
-                "{" +
-                    // "console.info(\"loadDivContent \" + frameID);" +
-                    "document.getElementById(frameID).innerHTML = \"<div id='\"+iframeID+\"' frameborder='0'>\"+content+\"</div>\";" +
                 "}" +
             "}" +
         "}";
@@ -399,14 +415,16 @@ public class SuperIFrame extends Container
         ExternalInterface.addCallback(frameId + "_load", this.handleFrameLoad);
 
         // Add functions to DOM if they aren't already there
+        ExternalInterface.call(FUNCTION_SHOWDIV);
+        ExternalInterface.call(FUNCTION_MOVEDIV);
+        ExternalInterface.call(FUNCTION_HIDEDIV);
+        ExternalInterface.call(FUNCTION_LOADDIV_CONTENT);
+
         ExternalInterface.call(FUNCTION_CREATEIFRAME);
+        ExternalInterface.call(FUNCTION_LOADIFRAME);
+        ExternalInterface.call(FUNCTION_SHOWIFRAME);
         ExternalInterface.call(FUNCTION_MOVEIFRAME);
         ExternalInterface.call(FUNCTION_HIDEIFRAME);
-        ExternalInterface.call(FUNCTION_SHOWIFRAME);
-        ExternalInterface.call(FUNCTION_SHOWDIV);
-        ExternalInterface.call(FUNCTION_HIDEDIV);
-        ExternalInterface.call(FUNCTION_LOADIFRAME);
-        ExternalInterface.call(FUNCTION_LOADDIV_CONTENT);
         ExternalInterface.call(FUNCTION_CALLIFRAMEFUNCTION);
 
         // Insert frame into DOM using our precreated function 'createSuperIFrame'
@@ -529,7 +547,7 @@ public class SuperIFrame extends Container
     */
     private function handleMove(event:Event):void
     {
-        moveSuperIFrame();
+        moveContent();
     }
 
     /**
@@ -620,13 +638,19 @@ public class SuperIFrame extends Container
     * Adjust frame position to match the exposed area in the application.
     *
     */
-    private function moveSuperIFrame(): void
+    private function moveContent(): void
     {
-
         var localPt:Point = new Point(0, 0);
         var globalPt:Point = this.localToGlobal(localPt);
 
-        ExternalInterface.call("moveSuperIFrame", frameId, iframeId, globalPt.x, globalPt.y, this.width, this.height);
+        if (source)
+        {
+            ExternalInterface.call("moveSuperIFrame", frameId, iframeId, globalPt.x, globalPt.y, this.width, this.height);
+        }
+        else
+        {
+            ExternalInterface.call("moveDiv", frameId, globalPt.x, globalPt.y, this.width, this.height);
+        }
     }
 
     /**
@@ -698,7 +722,7 @@ public class SuperIFrame extends Container
             }
         }
 
-        moveSuperIFrame();
+        moveContent();
     }
 
     /**
