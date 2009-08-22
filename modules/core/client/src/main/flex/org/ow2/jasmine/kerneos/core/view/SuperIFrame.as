@@ -355,19 +355,17 @@ public class SuperIFrame extends Container
         "}";
 
     /**
-    * Track IDs in use throughout the app for iframe
-    * instances in order to detect and prevent collisions
-    *
-    */
+     * Track IDs in use throughout the app for iframe
+     * instances in order to detect and prevent collisions
+     */
     public static var idList:Object = new Object();
 
     private var appHost:String;
     private var iframeContentHost:String;
 
     /**
-    * Constructor
-    *
-    */
+     * Constructor
+     */
     public function SuperIFrame(id : String)
     {
         super();
@@ -377,9 +375,8 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Generate DOM elements and build display path.
-    *
-    */
+     * Generate DOM elements and build display path.
+     */
     override protected function createChildren():void
     {
         super.createChildren();
@@ -435,11 +432,10 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Build list of container objects on the display list path all the way down
-    * to this object. We will seed the container classes we find with an event
-    * listener which will be used to test if this object is to be displayed or not.
-    *
-    */
+     * Build list of container objects on the display list path all the way down
+     * to this object. We will seed the container classes we find with an event
+     * listener which will be used to test if this object is to be displayed or not.
+     */
     private function buildContainerList():void
     {
         // We are going to store containers against index of child which leads down
@@ -477,11 +473,10 @@ public class SuperIFrame extends Container
     }
 
    /**
-    * Triggered by removal of this object from the stage
-    *
-    * @param event Event trigger
-    *
-    */
+     * Triggered by removal of this object from the stage
+     *
+     * @param event Event trigger
+     */
     private function handleRemove(event:Event):void
     {
         // Remove systemManager hooks for overlay detection
@@ -494,11 +489,10 @@ public class SuperIFrame extends Container
     }
 
    /**
-    * Triggered by addition of this object to the stage
-    *
-    * @param event Event trigger
-    *
-    */
+     * Triggered by addition of this object to the stage
+     *
+     * @param event Event trigger
+     */
     private function handleAdd(event:Event):void
     {
         // Hook the systemManager to provide overlaying object detection
@@ -511,12 +505,11 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Triggered by one of our listeners seeded all the way up the display
-    * list to catch a 'changed' event which might hide or display this object.
-    *
-    * @param event Event trigger
-    *
-    */
+     * Triggered by one of our listeners seeded all the way up the display
+     * list to catch a 'changed' event which might hide or display this object.
+     *
+     * @param event Event trigger
+     */
     private function handleChange(event:Event):void
     {
         var target:Object = event.target;
@@ -533,27 +526,25 @@ public class SuperIFrame extends Container
     }
 
    /**
-    * Triggered by one of our listeners seeded all the way up the display
-    * list to catch a 'move' event which might reposition this object.
-    *
-    * @param event Event trigger
-    *
-    */
+     * Triggered by one of our listeners seeded all the way up the display
+     * list to catch a 'move' event which might reposition this object.
+     *
+     * @param event Event trigger
+     */
     private function handleMove(event:Event):void
     {
         moveContent();
     }
 
     /**
-    * This function updates the selected view child of the signalling container
-    * and then compares the path from our SuperIFrame up the displaylist to see if
-    * the index settings match. Only an exact match all the way down to our
-    * SuperIFrame will satisfy the condition to display the SuperIFrame contents.
-    *
-    * @param target Object event source
-    * @param newIndex Number index from target object.
-    *
-    */
+     * This function updates the selected view child of the signalling container
+     * and then compares the path from our SuperIFrame up the displaylist to see if
+     * the index settings match. Only an exact match all the way down to our
+     * SuperIFrame will satisfy the condition to display the SuperIFrame contents.
+     *
+     * @param target Object event source
+     * @param newIndex Number index from target object.
+     */
     private function checkDisplay(target:Object, newIndex:Number):Boolean
     {
         var valid:Boolean = false;
@@ -581,12 +572,11 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Return index of child item on path down to this object. If not
-    * found then return -1;
-    *
-    * @param target Container object
-    *
-    */
+     * Return index of child item on path down to this object. If not
+     * found then return -1;
+     *
+     * @param target Container object
+     */
     public function lookupIndex(target:Container):Number
     {
         var index:Number = -1;
@@ -605,12 +595,11 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Return index of child item on path down to this object. If not
-    * found then return -1;
-    *
-    * @param target Container object
-    *
-    */
+     * Return index of child item on path down to this object. If not
+     * found then return -1;
+     *
+     * @param target Container object
+     */
     public function lookupSetting(target:Container):Number
     {
         var index:Number = -1;
@@ -629,9 +618,8 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Adjust frame position to match the exposed area in the application.
-    *
-    */
+     * Adjust frame position to match the exposed area in the application.
+     */
     private function moveContent(): void
     {
         var localPt:Point = new Point(0, 0);
@@ -648,9 +636,8 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Triggered by change to component properties.
-    *
-    */
+     * Triggered by change to component properties.
+     */
     override protected function commitProperties():void
     {
         super.commitProperties();
@@ -690,12 +677,11 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Triggered when display contents change. Adjusts frame layout.
-    *
-    * @param unscaledWidth
-    * @param unscaledHeight
-    *
-    */
+     * Triggered when display contents change. Adjusts frame layout.
+     *
+     * @param unscaledWidth
+     * @param unscaledHeight
+     */
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
     {
         super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -720,11 +706,10 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Set source url
-    *
-    * @param url Frame contents
-    *
-    */
+     * Set source url
+     *
+     * @param url Frame contents
+     */
     public function set source(source: String): void
     {
         if (source)
@@ -741,18 +726,16 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Return url of frame contents
-    *
-    */
+     * Return url of frame contents
+     */
     public function get source(): String
     {
         return __source;
     }
 
-     /**
-    * Set content string
-    *
-    */
+    /**
+     * Set content string
+     */
     public function set content(content: String): void
     {
         if (content)
@@ -764,20 +747,18 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Return content string of div contents
-    *
-    */
+     * Return content string of div contents
+     */
     public function get content(): String
     {
         return __content;
     }
 
     /**
-    * Sets visibility of html iframe. Rtn calls inserted javascript functions.
-    *
-    * @param visible Boolean flag
-    *
-    */
+     * Sets visibility of html iframe. Rtn calls inserted javascript functions.
+     *
+     * @param visible Boolean flag
+     */
     override public function set visible(value: Boolean):void
     {
         super.visible = value;
@@ -801,21 +782,20 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Calls a function of the specified name defined on the SuperIFrame document
-    * (like document.functionName = function () {...} ), passing it an array of arguments.
-    * May not work if the iframe contents are in a different domain due to security.
-    *
-    * If the frame contents are loaded when this method is called, it will return any
-    * results from the function immediately to the caller (as well as to the callback
-    * function, if defined). Otherwise, the call will be queued, this method will return
-    * null, and results will be passed to the callback function after the frame loads
-    * and the queued function call executes.
-    *
-    * @param functionName String Name of function to call
-    * @param args Array List of arguments to pass as an array
-    * @param callback Function to call (if any) with results of SuperIFrame function execution
-    *
-    */
+     * Calls a function of the specified name defined on the SuperIFrame document
+     * (like document.functionName = function () {...} ), passing it an array of arguments.
+     * May not work if the iframe contents are in a different domain due to security.
+     *
+     * If the frame contents are loaded when this method is called, it will return any
+     * results from the function immediately to the caller (as well as to the callback
+     * function, if defined). Otherwise, the call will be queued, this method will return
+     * null, and results will be passed to the callback function after the frame loads
+     * and the queued function call executes.
+     *
+     * @param functionName String Name of function to call
+     * @param args Array List of arguments to pass as an array
+     * @param callback Function to call (if any) with results of SuperIFrame function execution
+     */
     public function callSuperIFrameFunction(functionName:String, args:Array = null, callback:Function = null):String
     {
         if (!source)
@@ -851,10 +831,10 @@ public class SuperIFrame extends Container
     //  Loading indicator
     // --------------------------------------------------------------------
     /**
-    * A UIComponent class to display centered over the iframe container while
-    * the browser is loading its content. Should implement measuredHeight
-    * and measuredWidth in order to be properly sized
-    */
+     * A UIComponent class to display centered over the iframe container while
+     * the browser is loading its content. Should implement measuredHeight
+     * and measuredWidth in order to be properly sized
+     */
     public var loadIndicatorClass:Class;
 
     protected var _loadIndicator:UIComponent;
@@ -921,11 +901,10 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * Check to see if the given DisplayObject overlaps this object.
-    * If so, add it to a dictionary of overlapping objects and update
-    * this object's visibility.
-    *
-    */
+     * Check to see if the given DisplayObject overlaps this object.
+     * If so, add it to a dictionary of overlapping objects and update
+     * this object's visibility.
+     */
     protected function checkOverlay(displayObj:DisplayObject):void
     {
         if (this.hitTestStageObject(displayObj))
@@ -945,12 +924,11 @@ public class SuperIFrame extends Container
     }
 
     /**
-    * The native hitTestObject method seems to have some issues depending on
-    * the situation. This is a custom implementation to work around that.
-    * This method assumes that the passed DisplayObject is a direct child
-    * of the stage and therefore has x and y coordinates that are already global
-    *
-    */
+     * The native hitTestObject method seems to have some issues depending on
+     * the situation. This is a custom implementation to work around that.
+     * This method assumes that the passed DisplayObject is a direct child
+     * of the stage and therefore has x and y coordinates that are already global
+     */
     protected function hitTestStageObject(o:DisplayObject):Boolean
     {
         var overlapX:Boolean = false;
