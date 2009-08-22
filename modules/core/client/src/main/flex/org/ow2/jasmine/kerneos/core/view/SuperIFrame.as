@@ -184,7 +184,8 @@ public class SuperIFrame extends Container
                 "showDiv = function (frameID, iframeID)" +
                 "{" +
                     // "console.info(\"showDiv \" + frameID);" +
-                    "document.getElementById(frameID).style.visibility='visible';" +
+                    "var frameRef = document.getElementById(frameID);" +
+                    "frameRef.style.visibility = 'visible';" +
                 "}" +
             "}" +
         "}";
@@ -214,7 +215,8 @@ public class SuperIFrame extends Container
                 "hideDiv = function (frameID, iframeID)" +
                 "{" +
                     // "console.info(\"hideDiv \" + frameID);" +
-                    "document.getElementById(frameID).style.visibility='hidden';" +
+                    "var frameRef = document.getElementById(frameID);" +
+                    "frameRef.style.visibility = 'hidden';" +
                 "}" +
             "}" +
         "}";
@@ -271,23 +273,19 @@ public class SuperIFrame extends Container
         "{ " +
             "if (document.showSuperIFrame==null)" +
             "{" +
-                "showSuperIFrame = function (frameID, iframeID)" +
+                "showSuperIFrame = function (frameID, iframeID, w, h)" +
                 "{" +
                     // "console.info(\"showSuperIFrame \" + frameID);" +
-                    "var iframeRef = document.getElementById(iframeID);" +
-                    "document.getElementById(frameID).style.visibility='visible';" +
+                    "var frameRef = document.getElementById(frameID);" +
+                    "frameRef.style.visibility = 'visible';" +
 
-                    "var iframeDoc;" +
-                    "if (iframeRef.contentWindow) {" +
-                        "iframeDoc = iframeRef.contentWindow.document;" +
-                       "} else if (iframeRef.contentDocument) {" +
-                        "iframeDoc = iframeRef.contentDocument;" +
-                    "} else if (iframeRef.document) {" +
-                        "iframeDoc = iframeRef.document;" +
-                    "}" +
-                    "if (iframeDoc) {" +
-                        "iframeDoc.body.style.visibility='visible';" +
-                    "}" +
+                    // some browsers have trouble hiding an iFrame even when
+                    // its owner DIV is hidden. the hideSuperIFrame therefore
+                    // sets the iFrame's width and height to 0. now that the
+                    // iFrame is visible, revert to the original size.
+                    "var iframeRef = document.getElementById(iframeID);" +
+                    "iFrameRef.width = parseInt(w);" +
+                    "iFrameRef.height = parseInt(h);" +
                 "}" +
             "}" +
         "}";
@@ -318,19 +316,15 @@ public class SuperIFrame extends Container
                 "hideSuperIFrame = function (frameID, iframeID)" +
                 "{" +
                     // "console.info(\"hideSuperIFrame \" + frameID);" +
+                    "var frameRef = document.getElementById(frameID);" +
+                    "frameRef.style.visibility = 'hidden';" +
+
+                    // some browsers have trouble hiding an iFrame even when
+                    // its owner DIV is hidden. set the iFrame's width and
+                    // height to 0 so they "hide" the iFrame as well.
                     "var iframeRef = document.getElementById(iframeID);" +
-                    "var iframeDoc;" +
-                    "if (iframeRef.contentWindow) {" +
-                        "iframeDoc = iframeRef.contentWindow.document;" +
-                       "} else if (iframeRef.contentDocument) {" +
-                        "iframeDoc = iframeRef.contentDocument;" +
-                    "} else if (iframeRef.document) {" +
-                        "iframeDoc = iframeRef.document;" +
-                    "}" +
-                    "if (iframeDoc) {" +
-                        "iframeDoc.body.style.visibility='hidden';" +
-                    "}" +
-                    "document.getElementById(frameID).style.visibility='hidden';" +
+                    "iFrameRef.width = 0;" +
+                    "iFrameRef.height = 0;" +
                 "}" +
             "}" +
         "}";
@@ -788,22 +782,21 @@ public class SuperIFrame extends Container
     {
         super.visible = value;
 
-        // if we have an iframe in the same domain as the app, call the
-        // specialized functions to update visibility inside the iframe
         if (visible)
         {
-            if (source && iframeContentHost == appHost) {
-                ExternalInterface.call("showSuperIFrame",frameId,iframeId);
+            if (source) {
+                ExternalInterface.call("showSuperIFrame", frameId, iframeId, this.width, this.height);
             } else {
-                ExternalInterface.call("showDiv",frameId,iframeId);
+                ExternalInterface.call("showDiv", frameId, iframeId);
             }
         }
         else
         {
-            if (source && iframeContentHost == appHost)
-                ExternalInterface.call("hideSuperIFrame",frameId,iframeId);
-            else
-                ExternalInterface.call("hideDiv",frameId,iframeId);
+            if (source) {
+                ExternalInterface.call("hideSuperIFrame", frameId, iframeId);
+            } else {
+                ExternalInterface.call("hideDiv", frameId, iframeId);
+            }
         }
     }
 
