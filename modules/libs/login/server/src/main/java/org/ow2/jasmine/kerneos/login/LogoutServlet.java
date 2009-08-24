@@ -47,7 +47,6 @@ public class LogoutServlet extends HttpServlet {
     /**
      * Handle GET requests
      */
-    @SuppressWarnings("unchecked")
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse res) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
