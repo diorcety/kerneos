@@ -29,7 +29,7 @@ import mx.collections.ArrayCollection;
 /**
 * Describes the configuration of a Kerneos module
 * 
-* @ author Guillaume Renault, Julien Nicoulaud
+* @author Guillaume Renault, Julien Nicoulaud
 */
 [RemoteClass(alias="org.ow2.jasmine.kerneos.service.Module")]
 [Bindable]
