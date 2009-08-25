@@ -15,18 +15,42 @@
   <packaging>war</packaging>
 
   <dependencies>
- 
-    <dependency>
-      <groupId>org.ow2.jasmine.kerneos</groupId>
-      <artifactId>kerneos-core-server</artifactId>
-      <version>${project.version}</version>
-    </dependency>
 
-    <dependency>
-      <groupId>org.ow2.jasmine.kerneos</groupId>
-      <artifactId>kerneos-login-server</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+  <dependency>
+    <groupId>org.ow2.jasmine.kerneos</groupId>
+    <artifactId>kerneos-core-server</artifactId>
+    <version>${project.version}</version>
+    <exclusions>
+      <exclusion>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+      </exclusion>
+      <exclusion>
+        <groupId>org.ow2.util</groupId>
+        <artifactId>util-log</artifactId>
+      </exclusion>
+      <exclusion>
+        <groupId>log4j</groupId>
+        <artifactId>apache-log4j-extras</artifactId>
+      </exclusion>
+      <exclusion>
+        <groupId>org.ow2.easybeans.osgi</groupId>
+        <artifactId>easybeans-osgi-annotations</artifactId>
+      </exclusion>
+    </exclusions>
+  </dependency>
+
+  <dependency>
+    <groupId>org.ow2.jasmine.kerneos</groupId>
+    <artifactId>kerneos-login-server</artifactId>
+    <version>${project.version}</version>
+    <exclusions>
+      <exclusion>
+        <groupId>org.ow2.jonas</groupId>
+        <artifactId>jonas-security</artifactId>
+      </exclusion>
+    </exclusions>
+  </dependency>
     
   </dependencies>
 

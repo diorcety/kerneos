@@ -35,6 +35,7 @@
       <groupId>org.ow2.jonas</groupId>
       <artifactId>jonas-security</artifactId>
       <version>5.1.0-RC2</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
