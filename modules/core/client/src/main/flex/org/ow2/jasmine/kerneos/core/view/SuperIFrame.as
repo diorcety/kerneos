@@ -767,17 +767,15 @@ public class SuperIFrame extends Container
         {
             if (source) {
                 ExternalInterface.call("showSuperIFrame", frameId, iframeId, this.width, this.height);
-            } else {
-                ExternalInterface.call("showDiv", frameId, iframeId);
-            }
+            } 
+            ExternalInterface.call("showDiv", frameId, iframeId);
         }
         else
         {
             if (source) {
                 ExternalInterface.call("hideSuperIFrame", frameId, iframeId);
-            } else {
-                ExternalInterface.call("hideDiv", frameId, iframeId);
             }
+            ExternalInterface.call("hideDiv", frameId, iframeId);
         }
     }
 
