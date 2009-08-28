@@ -100,7 +100,6 @@ public class ModuleWindow extends KerneosWindow
     	
     	// Hide the minimized window
         this.showControls = false;
-    	this.visible = false;
     	this.includeInLayout = false;
     }
 
@@ -111,7 +110,6 @@ public class ModuleWindow extends KerneosWindow
     {
     	// Restore the window visibility
         this.showControls = true;
-        this.visible = true;
         this.includeInLayout = true;
         
         // Call super class method
