@@ -1,4 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Kerneos
+  - Copyright (C) 2008-2009 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.jasmine.kerneos</groupId>
@@ -26,7 +53,7 @@
       <type>swc</type>
       <classifier>kerneos</classifier>
     </dependency>
-    
+
     <!-- Flex -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
@@ -34,26 +61,12 @@
       <version>${flex.version}</version>
       <type>pom</type>
     </dependency>
-    
   </dependencies>
-  
-  
+
   <build>
-  
     <sourceDirectory>src/main/flex</sourceDirectory>
-    
     <plugins>
-
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-
-      <plugin>
-
         <dependencies>
           <dependency>
             <groupId>com.adobe.flex</groupId>
@@ -67,10 +80,7 @@
         <version>3.2.0</version>
         <extensions>true</extensions>
 
-
-
         <configuration>
-
           <compiledLocales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
@@ -83,13 +93,10 @@
           <includeSources>
             <sources>src/main/flex</sources>
           </includeSources>
-          
-          <mergeResourceBundle>true</mergeResourceBundle>
 
+          <mergeResourceBundle>true</mergeResourceBundle>
         </configuration>
       </plugin>
-
-
     </plugins>
     <finalName>Kerneos-API</finalName>
   </build>

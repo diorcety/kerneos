@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - JASMINe
-  - Copyright (C) 2008 Bull S.A.S.
+  - Kerneos
+  - Copyright (C) 2008-2009 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -21,12 +21,11 @@
   - USA
   -
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id: pom.xml 2492 2008-09-30 16:49:37Z renaultgu $
+  - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.jasmine.kerneos</groupId>
@@ -37,12 +36,11 @@
 
   <artifactId>cairngorm-kerneos</artifactId>
 
-  <name>Kerneos :: Modules :: Libraries :: Login :: Client</name>
+  <name>Kerneos :: Modules :: Cairngorm</name>
 
   <packaging>swc</packaging>
 
   <dependencies>
-
     <dependency>
       <groupId>net.israfil.mojo</groupId>
       <artifactId>maven-flex2-plugin</artifactId>
@@ -54,21 +52,10 @@
       <artifactId>maven-enforcer-plugin</artifactId>
       <version>1.0-alpha-3</version>
     </dependency>
-
-    <!-- Tests -->
-
   </dependencies>
+
   <build>
     <plugins>
-
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>net.israfil.mojo</groupId>
         <artifactId>maven-flex2-plugin</artifactId>
@@ -93,9 +80,7 @@
             </parameter>
           </extraParameters>
         </configuration>
-
       </plugin>
-
     </plugins>
     <finalName>Cairngorm-kerneos</finalName>
   </build>

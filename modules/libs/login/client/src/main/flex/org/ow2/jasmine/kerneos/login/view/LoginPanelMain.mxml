@@ -21,7 +21,7 @@
   - USA
   -
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id: LoginPanelMain.mxml 2867 2008-12-04 17:06:37Z loverad $
+  - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
