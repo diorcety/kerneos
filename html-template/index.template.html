@@ -63,8 +63,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
     AC_FL_RunContent(
         "src", "playerProductInstall",
         "FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
-        "width", "${width}",
-        "height", "${height}",
+        "width", "100%",
+        "height", "100%",
         "align", "middle",
         "id", "${application}",
         "quality", "high",
@@ -81,8 +81,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
     // embed the Flash Content SWF when all tests are passed
     AC_FL_RunContent(
             "src", "${application}",
-            "width", "${width}",
-            "height", "${height}",
+            "width", "100%",
+            "height", "100%",
             "align", "middle",
             "id", "${application}",
             "quality", "high",
@@ -95,23 +95,22 @@ if ( hasProductInstall && !hasRequestedVersion ) {
             "allowFullScreen", "true"
     );
   } else {  // flash is too old or we can't detect the plugin
-    var alternateContent = 'The Administration console is now requiring Adobe Flash. '
-       + '<a href=http://www.adobe.com/go/getflash/>Get Flash here</a><br /><br>'
-    + 'The <a href="/jonasAdmin/Welcome.do">Basic console (without Flash) is available on this link</a>';
+    var alternateContent = 'This JASMINe Module requires Adobe Flash. '
+       + '<a href=http://www.adobe.com/go/getflash/>Get Flash here</a>.';
     document.write(alternateContent);  // insert non-flash content
   }
 // -->
 </script>
 <noscript>
       <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-            id="${application}" width="${width}" height="${height}"
+            id="${application}" width="100%" height="100%"
             codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
             <param name="movie" value="${application}.swf" />
             <param name="quality" value="high" />
             <param name="bgcolor" value="${bgcolor}" />
             <param name="allowScriptAccess" value="sameDomain" />
             <embed src="${application}.swf" quality="high" bgcolor="${bgcolor}"
-                width="${width}" height="${height}" name="${application}" align="middle"
+                width="100%" height="100%" name="${application}" align="middle"
                 play="true"
                 loop="false"
                 quality="high"

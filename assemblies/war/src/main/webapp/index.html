@@ -95,9 +95,8 @@ if ( hasProductInstall && !hasRequestedVersion ) {
             "allowFullScreen", "true"
     );
   } else {  // flash is too old or we can't detect the plugin
-    var alternateContent = 'The Administration console is now requiring Adobe Flash. '
-       + '<a href=http://www.adobe.com/go/getflash/>Get Flash here</a><br /><br>'
-    + 'The <a href="/jonasAdmin/Welcome.do">Basic console (without Flash) is available on this link</a>';
+    var alternateContent = 'This JASMINe Module requires Adobe Flash. '
+       + '<a href=http://www.adobe.com/go/getflash/>Get Flash here</a>.';
     document.write(alternateContent);  // insert non-flash content
   }
 // -->
