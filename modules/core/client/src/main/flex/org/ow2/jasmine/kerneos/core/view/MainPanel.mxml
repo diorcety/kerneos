@@ -158,6 +158,11 @@
             private var locales : Array = ["fr_FR", "en_US"];
             
             /**
+             * The IFrame  objects
+             */
+            public var frames : Dictionary = new Dictionary();
+            
+            /**
              * The notifications log window
              */
             private var notificationsLogWindow : KerneosWindow = null;
@@ -370,11 +375,23 @@
                 else
                 {
                     
+                    // Hide the existing IFrames
+                    for each (var existingFrame : SuperIFrame in frames)
+                    {
+                        existingFrame.visible = false;
+                    }
+                    
                     // Create a window
                     window = new IFrameModuleWindow(module);
-                    var frame : SuperIFrame = new SuperIFrame(module.url);
+                    frames[module.name] = new SuperIFrame(module.name);
+                    var frame : SuperIFrame = frames[module.name] as SuperIFrame;
+                    frame = new SuperIFrame(module.name);
+                    frame.label = module.name as String;
+                    frame.source = module.url;
                     frame.percentHeight = 100;
                     frame.percentWidth = 100;
+                    frame.visible = true;
+                    frame.overlayDetection = true;
                     window.addChild(frame);
                 }
                 
@@ -421,6 +438,11 @@
                     // Unload the module
                     moduleLoader.unloadModule();
                     
+                }
+                else if (window is IFrameModuleWindow)
+                {
+                    // Hide the IFrame
+                    (window as IFrameModuleWindow).hideIFrame();
                 }
                 
                 // Update the module state

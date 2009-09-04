@@ -37,7 +37,7 @@ import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
 
 /**
 * A window in Kerneos
-*
+* 
 * @author Julien Nicoulaud
 */
 [Bindable]
@@ -47,72 +47,71 @@ public class KerneosWindow extends MDIWindow
     // =========================================================================
     // Constructor
     // =========================================================================
-
-    /**
-     * Builds a new window
-     */
-    public function KerneosWindow()
-    {
-        // Call super class constructor
-        super();
-
-        // Listen to window events
+	
+	/**
+	* Builds a new window
+	*/
+	public function KerneosWindow()
+	{
+	    // Call super class constructor
+		super();
+		
+		// Listen to window events
         this.addEventListener(MDIWindowEvent.MAXIMIZE,onMaximize);
-        this.addEventListener(MDIWindowEvent.MINIMIZE,onMinimize);
+        this.addEventListener(MDIWindowEvent.MINIMIZE,onUnMaximize);
         this.addEventListener(MDIWindowEvent.RESTORE,onUnMaximize);
-    }
-
+	}
+	
 
     // =========================================================================
     // Window operations
     // =========================================================================
-
+    
     /**
-     * Bring the window to the front
-     */
+    * Bring the window to the front
+    */
     public function bringToFront(e:Event=null):void
     {
         // Bring the window to front
-        if(minimized) {
-            unMinimize();
+        if (!minimized) {
+            if (hasFocus) {
+                //_moduleWindow.minimize();
+            } else {
+                windowManager.bringToFront(this);       
+            }
+        } else {
+            // If the window is minimized, restore it
+            if(minimized) {
+                unMinimize();
+            }
+            // Bring it to front
+            windowManager.bringToFront(this);       
         }
-
-        windowManager.bringToFront(this);
     }
-
-
+    
+    
     // =========================================================================
     // Window events handling
     // =========================================================================
-
+    
     /**
-     * When the window is maximized
-     */
+    * When the window is maximized
+    */
     public function onMaximize(e:Event=null):void
     {
         // Disable rounded corners
         this.setStyle("cornerRadius",0);
         this.setStyle("dropShadowEnabled","false");
     }
-
+    
     /**
-     * When the window is restored
-     */
+    * When the window is maximized
+    */
     public function onUnMaximize(e:Event=null):void
     {
         // Disable rounded corners
         this.setStyle("cornerRadius",3);
         this.setStyle("dropShadowEnabled","true");
-    }
-
-    /**
-     * When the window is minimized
-     */
-    public function onMinimize(e:Event=null):void
-    {
-        // Disable rounded corners
-        this.setStyle("cornerRadius",0);
-        this.setStyle("dropShadowEnabled","false");
     }
 }
 }
