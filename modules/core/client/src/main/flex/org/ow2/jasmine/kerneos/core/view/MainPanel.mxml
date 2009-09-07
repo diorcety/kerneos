@@ -383,9 +383,9 @@
                     
                     // Create a window
                     window = new IFrameModuleWindow(module);
-                    frames[module.name] = new SuperIFrame(module.name);
+                    frames[module.name] = new SuperIFrame();
                     var frame : SuperIFrame = frames[module.name] as SuperIFrame;
-                    frame = new SuperIFrame(module.name);
+                    frame = new SuperIFrame();
                     frame.label = module.name as String;
                     frame.source = module.url;
                     frame.percentHeight = 100;
