@@ -34,7 +34,7 @@
   </parent>
   <groupId>org.ow2.jasmine.kerneos</groupId>
   <artifactId>kerneos</artifactId>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>1.2.1-M5</version>
 
   <name>Kerneos</name>
   <packaging>pom</packaging>
@@ -51,9 +51,9 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
-    <url>http://fisheye.jasmine.objectweb.org/browse/JASMINe/kerneos/trunk</url>
+    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/tags/kerneos-1.2.1-M5</connection>
+    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/tags/kerneos-1.2.1-M5</developerConnection>
+    <url>http://fisheye.jasmine.objectweb.org/browse/JASMINe/kerneos/tags/kerneos-1.2.1-M5</url>
   </scm>
 
   <repositories>
