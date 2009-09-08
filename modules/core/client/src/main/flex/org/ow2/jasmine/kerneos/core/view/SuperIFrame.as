@@ -692,10 +692,13 @@ package org.ow2.jasmine.kerneos.core.view
         {
             super.commitProperties();
 
-            if (source && !frameLoaded)
+            if (source)
             {
-                ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
-                logger.debug("load Iframe id {0}", frameId);
+                if (!frameLoaded)
+                {
+                    ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
+                    logger.debug("load Iframe id {0}", frameId);
+                }
                 // Trigger re-layout of iframe contents.
                 invalidateDisplayList();
             }
