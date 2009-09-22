@@ -36,11 +36,9 @@ var requiredRevision = 28;
 <script language="JavaScript" type="text/javascript">
 
 <!-- Window close confirmation system -->
-var alreadyClosing = false;
 window.onbeforeunload = function () {
-    if (!alreadyClosing && !document.getElementById('Kerneos').canBeClosed())
+    if (!document.getElementById('EoS').canBeClosed())
     {
-        alreadyClosing = true;
         return ""
     }
 }
