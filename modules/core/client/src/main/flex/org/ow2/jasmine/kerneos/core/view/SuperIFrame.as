@@ -24,7 +24,7 @@
  */
 
 // -----------------------------------------------------------------------
-// SuperIFrame.as, Alistair Rutherford, www.netthreads.co.uk
+// IFrame.as, Alistair Rutherford, www.netthreads.co.uk
 // -----------------------------------------------------------------------
 // Revision  Date      Who    Notes
 // --------  ----      ---    -----
@@ -45,17 +45,17 @@
 //                             of a navigator control like TabNavigator,
 //                             ViewStack or Accordion
 
-//                            .SuperIFrame now registers an onLoad callback for its
+//                            .IFrame now registers an onLoad callback for its
 //                             iframe element and will dispatch a 'frameLoad' flash
 //                             event when the browser reports iframe content load
 
-//                            .Added callSuperIFrameFunction that allows calling of
-//                             JavaScript functions defined on the SuperIFrame content's
+//                            .Added callIFrameFunction that allows calling of
+//                             JavaScript functions defined on the IFrame content's
 //                             document object, if everything is in the same domain
 //                             (if the iframe hasn't fully loaded yet, the call will
 //                             be queued and executed once it has loaded)
 
-//                            .Added option for SuperIFrame component to try and detect
+//                            .Added option for IFrame component to try and detect
 //                             new global objects such as alerts, tooltips and
 //                             pop up windows that are added on top of it and hide the
 //                             browser iframe temporarily. This option must be
@@ -72,11 +72,11 @@
 //                             over the iframe container while its contents are
 //                             being loaded by the browser
 
-//                            .SuperIFrame will now ensure that it's using a unique
-//                             id within the application by tracking all SuperIFrame
+//                            .IFrame will now ensure that it's using a unique
+//                             id within the application by tracking all IFrame
 //                             component ids in use with a static var and
 //                             appending a unique number to the end if needed.
-//                             This allows use of SuperIFrame within a reusable MXML
+//                             This allows use of IFrame within a reusable MXML
 //                             component that gets instantiated more than once
 
 // 1.3.1     13/10/08  RAB    .Fixed issue where parent document body could be
@@ -139,7 +139,7 @@
  *
  * @author Julien Nicoulaud
  * @internal Original source code:
- *   http://flex-iframe.googlecode.com/svn/trunk/fb3/SuperIFrameDemo/src/SuperIFrame.as
+ *   http://flex-iframe.googlecode.com/svn/trunk/fb3/IFrameDemo/src/IFrame.as
  */
 package org.ow2.jasmine.kerneos.core.view
 {
@@ -182,6 +182,7 @@ package org.ow2.jasmine.kerneos.core.view
 
         private var frameLoaded:Boolean = false;
         private var functionQueue:Array = [];
+        private var firstShow:Boolean = true;
 
         private static var logger:ILogger = Log.getLogger("com.plus.arutherford.ccgi.SuperIFrame");
 
@@ -694,11 +695,17 @@ package org.ow2.jasmine.kerneos.core.view
 
             if (source)
             {
-                if (!frameLoaded)
+                frameLoaded = false;
+                if (firstShow)
                 {
                     ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
                     logger.debug("load Iframe id {0}", frameId);
+                    firstShow = false;
                 }
+				else
+				{
+                    logger.debug("Iframe id {0} already loaded", frameId);
+				}
                 // Trigger re-layout of iframe contents.
                 invalidateDisplayList();
             }
@@ -774,6 +781,7 @@ package org.ow2.jasmine.kerneos.core.view
             {
                 __source = source;
                 // mark unloaded now so calls in this frame will be queued
+                firstShow = true;
                 frameLoaded = false;
                 invalidateProperties();
 
