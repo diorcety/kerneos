@@ -702,10 +702,10 @@ package org.ow2.jasmine.kerneos.core.view
                     logger.debug("load Iframe id {0}", frameId);
                     firstShow = false;
                 }
-				else
-				{
+                else
+                {
                     logger.debug("Iframe id {0} already loaded", frameId);
-				}
+                }
                 // Trigger re-layout of iframe contents.
                 invalidateDisplayList();
             }
