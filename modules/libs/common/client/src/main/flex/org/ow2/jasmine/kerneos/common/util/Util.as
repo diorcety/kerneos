@@ -21,39 +21,39 @@
  * $Id$
  * 
  */
- 
- 
 package org.ow2.jasmine.kerneos.common.util
 {
-	import mx.controls.Alert;
-	
-	public class Util
-	{
-		
-		/**
-		 * This function parse the input URL and return the associated context
-		 * 
-		 */
-		public static function parserURL(s:String):String
-		{	
-			var context:String = new String();
-			var defaut_protocol:String = "http://"
-			
-			// remove the protocol on the url string
-			var s_without_protocol:String = s.substring(defaut_protocol.length,s.length);
-			
-			// splicing the string into an array
-			var tokens:Array = s_without_protocol.split("/");
-			
-			for(var i:int = 1;  i< tokens.length - 1; i++){
-				context += tokens[i].toString();
-				if (i < tokens.length - 2) {
-					context += "/";
-				}
-			}
-			
-			return context;
-		}
 
+/**
+ * Static util functions for Kerneos
+ */
+public class Util
+{
+	
+	/**
+	 * This function parse the input URL and return the associated context
+	 * 
+	 */
+	public static function parserURL(s:String):String
+	{	
+		var context:String = new String();
+		var defaut_protocol:String = "http://"
+		
+		// remove the protocol on the url string
+		var s_without_protocol:String = s.substring(defaut_protocol.length,s.length);
+		
+		// splicing the string into an array
+		var tokens:Array = s_without_protocol.split("/");
+		
+		for(var i:int = 1;  i< tokens.length - 1; i++){
+			context += tokens[i].toString();
+			if (i < tokens.length - 2) {
+				context += "/";
+			}
+		}
+		
+		return context;
 	}
+
+}
 }

@@ -36,8 +36,6 @@
 
     <mx:Script>
         <![CDATA[
-            import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
-            import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
             
             import flash.display.StageDisplayState;
             import flash.utils.getTimer;
@@ -85,11 +83,15 @@
             import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
             import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
             import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
-            
+            import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
+            import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
+            import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
+                        
             import flexlib.containers.WindowShade;
             import flexlib.mdi.containers.MDIWindow;
             import flexlib.mdi.events.MDIWindowEvent;
             import flexlib.mdi.events.MDIManagerEvent;
+            
             
             // =========================================================================
             // Variables
@@ -234,7 +236,12 @@
              */
             public function init() : void
             {
-                
+                // Listen to server side exceptions events
+                CairngormEventDispatcher.getInstance().addEventListener(
+                    ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
+                    ServerSideExceptionEvent.show
+                );
+                                
                 // Init client-server communications channels properties
                 var urlServer : String = URLUtil.getServerNameWithPort(Application.application.loaderInfo.url).toString();
                 var context : String = Util.parserURL(Application.application.loaderInfo.url.toString());
@@ -271,6 +278,7 @@
                 
                 // Listen to keyboards events at the "application" level
                 parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
+                
             }
             
             

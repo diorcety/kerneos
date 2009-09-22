@@ -24,12 +24,15 @@ package org.ow2.jasmine.kerneos.core.command
 {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
+import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import mx.controls.Alert;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
+import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
+import org.ow2.jasmine.kerneos.common.view.ServerSideException;
 import org.ow2.jasmine.kerneos.core.business.ILoadKerneosConfigDelegate;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
@@ -39,19 +42,17 @@ import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 * 
 * @author Guillaume Renault, Julien Nicoulaud
 */ 
+[Event(name="serverSideException", type="org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent")] 
 public class LoadKerneosConfigCommand implements ICommand, IResponder{
     
     /**
     * Send the event to the java side, using the business layer of the pattern
     */
     public function execute( e:CairngormEvent ):void {
-    	try {
-	    	var delegate:ILoadKerneosConfigDelegate = KerneosModelLocator.getInstance().getLoadKerneosConfigDelegate();
-        	delegate.responder = this;
-        	delegate.loadKerneosConfig();
-    	} catch(e:Error){
-     		trace("An error occurred: " + e.message);
-     	}
+    	
+    	var delegate:ILoadKerneosConfigDelegate = KerneosModelLocator.getInstance().getLoadKerneosConfigDelegate();
+    	delegate.responder = this;
+    	delegate.loadKerneosConfig();
     }
 
     /**
@@ -59,27 +60,34 @@ public class LoadKerneosConfigCommand implements ICommand, IResponder{
     * Java.
     */
     public function result(event : Object):void {
-    	try {
-    	    // Retrieve the model
-	        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
-	        
-	        // Retrieve the result
-	        var result:KerneosConfigVO = (event as ResultEvent).result as KerneosConfigVO;
-	        
-	        // Extract the data and update the model
-	        model.config = result;
-	        
-     	} catch(e:Error){
-     		trace("An error occurred: " + e.message);
-     	}
+    	
+	    // Retrieve the model
+        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
+        
+        // Retrieve the result
+        var result:KerneosConfigVO = (event as ResultEvent).result as KerneosConfigVO;
+        
+        // Extract the data and update the model
+        model.config = result;
     }
     
     /**
     * Handle faults
     */
-    public function fault( event : Object ) : void {
-    	var faultEvent : FaultEvent = FaultEvent( event );
-    	Alert.show( "Error while loading Kerneos configuration file : Unhandled error","Error" );
+    public function fault( event : Object ):void {
+    	
+        // Retrieve the fault event
+        var faultEvent : FaultEvent = FaultEvent(event);
+
+        // Tell the view and let it handle this
+        var serverSideExceptionEvent : ServerSideExceptionEvent =
+            new ServerSideExceptionEvent(
+                "serverSideException",
+                new ServerSideException("Error while loading the configuration",
+                                        "The console configuration file could not be read successfully."
+                                        + "\n" + faultEvent.fault.faultString,
+                                        faultEvent.fault.getStackTrace()));
+        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
 	}
 }
 }
