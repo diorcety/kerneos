@@ -91,6 +91,18 @@ public class ModuleVO implements IValueObject
     public var loadMaximized : Boolean = false;
     
     /**
+    * Prompt the user before closing the module
+    * 
+    * Can be "never", "always", or "default". "default" means that if the module implements 
+    * {@see KerneosModule}, the method canBeCloseWithoutPrompt() is called. If not, the user is
+    * prompted by default.
+    */
+    public static const DEFAULT_PROMPT_BEFORE_CLOSE : String = "default";
+    public static const NEVER_PROMPT_BEFORE_CLOSE : String = "never";
+    public static const ALWAYS_PROMPT_BEFORE_CLOSE : String = "always";
+    public var promptBeforeClose : String = DEFAULT_PROMPT_BEFORE_CLOSE;
+    
+    /**
     * The current state of the module
     */
     [Transient]

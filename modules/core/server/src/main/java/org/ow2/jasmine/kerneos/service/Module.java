@@ -89,6 +89,18 @@ public class Module {
     */
     public Boolean loadMaximized = false;
 
+    /**
+    * Prompt the user before closing the module
+    *
+    * Can be "never", "always", or "default". "default" means that if the module implements
+    * {@see KerneosModule}, the method canBeCloseWithoutPrompt() is called. If not, the user is
+    * prompted by default.
+    */
+    public static String DEFAULT_PROMPT_BEFORE_CLOSE = "default";
+    public static String NEVER_PROMPT_BEFORE_CLOSE = "never";
+    public static String ALWAYS_PROMPT_BEFORE_CLOSE = "always";
+    public String promptBeforeClose = DEFAULT_PROMPT_BEFORE_CLOSE;
+
 
     // Utils
 

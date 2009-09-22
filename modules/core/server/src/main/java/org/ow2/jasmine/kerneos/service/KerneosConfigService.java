@@ -197,6 +197,15 @@ public class KerneosConfigService implements Serializable {
                     mod.loadMaximized = Boolean.parseBoolean(listOfEntries.item(i).getAttributes().getNamedItem("loadMaximized").getTextContent());
                     logger.debug("load module maximized: {0}", mod.loadMaximized);
                 }
+                if (listOfEntries.item(i).getAttributes().getNamedItem("promptBeforeClose") != null) {
+                    mod.promptBeforeClose = listOfEntries.item(i).getAttributes().getNamedItem("promptBeforeClose").getTextContent();
+                    if (!(mod.promptBeforeClose.equals(Module.DEFAULT_PROMPT_BEFORE_CLOSE) ||
+                          mod.promptBeforeClose.equals(Module.ALWAYS_PROMPT_BEFORE_CLOSE) ||
+                          mod.promptBeforeClose.equals(Module.NEVER_PROMPT_BEFORE_CLOSE))) {
+                        throw new Exception("\"prompBeforeClose\" attribute value must be \"default\", \"alaways\", or \"never\".");
+                    }
+                    logger.debug("prompt before close: {0}", mod.loadMaximized);
+                }
 
                 NodeList module = listOfEntries.item(i).getChildNodes();
                 for (int j = 0; j < module.getLength(); j++) {

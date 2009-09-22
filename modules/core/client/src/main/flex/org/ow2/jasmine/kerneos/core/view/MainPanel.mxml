@@ -589,19 +589,56 @@
                 {
                     if ((event as MDIManagerEvent).window is ModuleWindow)
                     {
-                        
-                        // Retrieve the target window
-                        var window : ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
-                        
                         // Store a copy of the event
                         queuedEvent = event.clone() as MDIManagerEvent;
                         
                         // This is the line that prevents the default behavior from executing as usual
                         // because the default handler checks event.isDefaultPrevented()
                         event.preventDefault();
+                     
                         
-                        // Show an alert box
-                        var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + "All unsaved changes might be lost.", "Exit " + window.module.name, 3, null, confirmCloseWindow, null, 4);
+                        // Retrieve the target window
+                        var window : ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
+
+                        // Resolve wether the user should be prompted before closing the window
+                        var prompt : Boolean = true;
+
+                        if (window.module.promptBeforeClose == ModuleVO.NEVER_PROMPT_BEFORE_CLOSE)
+                        {
+                        	prompt = false;
+                        }
+                        else if (window.module.promptBeforeClose == ModuleVO.ALWAYS_PROMPT_BEFORE_CLOSE)
+                        {
+                            prompt = true;
+                        }
+                        else
+                        {
+                        	// If this is a SWF module that implements KerneosModule, call the
+                        	// canBeClosedWithoutPrompt() method.
+                            if (window is SwfModuleWindow)
+	                        {
+	                            
+	                            // Retrieve the module loader
+	                            var moduleLoader : ModuleLoader = (window as SwfModuleWindow).moduleLoader;
+	                            
+	                            if (moduleLoader.child is KerneosModule)
+	                            {
+                                    prompt = !(moduleLoader.child as KerneosModule).canBeClosedWithoutPrompt();
+	                            }
+	                        }
+                        }
+                        
+                        // Prompt the user or close directly the window
+                        if (prompt)
+                        {
+	                        // Show an alert box
+	                        var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + "All unsaved changes might be lost.", "Exit " + window.module.name, 3, null, confirmCloseWindow, null, 4);
+                        }
+                        else
+                        {
+                        	// Directly close the window
+                        	confirmCloseWindow();
+                        }
                     }
                 }
             }
@@ -613,7 +650,7 @@
              */
             private function confirmCloseWindow(event : CloseEvent = null) : void
             {
-                if (event.detail == mx.controls.Alert.YES)
+                if (event == null || event.detail == mx.controls.Alert.YES)
                 {
                     // Unload the module
                     stopModuleByWindow(queuedEvent.window as ModuleWindow);

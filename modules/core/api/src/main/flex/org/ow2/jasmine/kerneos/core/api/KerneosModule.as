@@ -34,9 +34,15 @@ package org.ow2.jasmine.kerneos.core.api
 public interface KerneosModule
 {
     /**
+    * Returns true if Kerneos can close the module without prompting the user
+    */
+    function canBeClosedWithoutPrompt():Boolean;
+
+    /**
     * Module called before the module is unloaded. Use it to close client-server
     * connexions for example.
     */
     function closeModule():void;
+    
 }
 }

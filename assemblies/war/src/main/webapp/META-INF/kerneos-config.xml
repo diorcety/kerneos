@@ -69,23 +69,32 @@
     <!-- Modules -->
     <modules>
 
-    <!--
+      <!--
 
-      <module url="http://www.google.fr" loadOnStartup="false" loadMaximized="false">
+      <module url="http://www.google.fr"
+              loadOnStartup="false"
+              loadMaximized="false"
+              promptBeforeClose="never">
         <name>Google</name>
         <description>Google search engine.</description>
         <smallIcon>resources/icons/module16.png</smallIcon>
         <bigIcon>resources/icons/module64.png</bigIcon>
       </module>
     
-      <module url="http://www.yahoo.fr" loadOnStartup="false" loadMaximized="false">
+      <module url="http://www.yahoo.fr"
+              loadOnStartup="false"
+              loadMaximized="false"
+              promptBeforeClose="never">
         <name>Yahoo</name>
         <description>Yahoo search engine.</description>
         <smallIcon>resources/icons/module16.png</smallIcon>
         <bigIcon>resources/icons/module64.png</bigIcon>
       </module>
      
-      <module swfFile="test.swf" loadOnStartup="false" loadMaximized="false">
+      <module swfFile="test.swf"
+              loadOnStartup="false"
+              loadMaximized="false"
+              promptBeforeClose="never">
         <name>TestModule</name>
         <description>Does absolutely nothing, it even doesn't exist</description>
         <smallIcon>resources/icons/module16.png</smallIcon>
@@ -97,7 +106,10 @@
         </services>
       </module>
       
-      <module swfFile="test.swf" loaded="false">
+      <module swfFile="test.swf"
+              loadOnStartup="false"
+              loadMaximized="false"
+              promptBeforeClose="never">
         <name>TestModule2</name>
         <description>Does absolutely nothing, it even doesn't exist</description>
         <smallIcon>resources/icons/module16.png</smallIcon>
@@ -109,20 +121,28 @@
         </services>
       </module>
      
-    -->
-      <module url="http://www.google.fr" loadOnStartup="false" loadMaximized="false">
+    
+      <module url="http://www.google.fr"
+              loadOnStartup="false"
+              loadMaximized="false"
+              promptBeforeClose="never">
         <name>Google</name>
         <description>Google search engine.</description>
         <smallIcon>resources/icons/module16.png</smallIcon>
         <bigIcon>resources/icons/module64.png</bigIcon>
       </module>
     
-      <module url="http://www.yahoo.fr" loadOnStartup="false" loadMaximized="false">
+      <module url="http://www.yahoo.fr"
+              loadOnStartup="false"
+              loadMaximized="false"
+              promptBeforeClose="never">
         <name>Yahoo</name>
         <description>Yahoo search engine.</description>
         <smallIcon>resources/icons/module16.png</smallIcon>
         <bigIcon>resources/icons/module64.png</bigIcon>
       </module>
+    
+      -->
     
     </modules>
     

@@ -80,6 +80,7 @@
       </xs:sequence>
       <xs:attribute name="loadMaximized" use="required" type="xs:boolean" />
       <xs:attribute name="loadOnStartup" use="required" type="xs:boolean" />
+      <xs:attribute name="promptBeforeClose" use="required" type="k:promptBeforeCloseType"/>
       <xs:attribute name="swfFile" type="xs:NCName" />
       <xs:attribute name="url" type="xs:anyURI" />
     </xs:complexType>
@@ -101,4 +102,11 @@
       <xs:attribute name="id" use="required" type="xs:NCName" />
     </xs:complexType>
   </xs:element>
+  <xs:simpleType name="promptBeforeCloseType">
+  	<xs:restriction base="xs:string">
+     <xs:enumeration value="default"/>
+     <xs:enumeration value="always"/>
+     <xs:enumeration value="never"/>
+  	</xs:restriction>
+  </xs:simpleType>
 </xs:schema>
