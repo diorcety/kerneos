@@ -114,6 +114,20 @@
              */
             private var hist : HistoryManager;
             
+            
+            // Constants
+            
+            /**
+            * New windows size and placement parameters
+            */
+            public static var WINDOW_DEFAULT_PERCENT_WIDTH : int = 80;
+            public static var WINDOW_DEFAULT_PERCENT_HEIGHT : int = 90;
+            public static var WINDOW_DEFAULT_X_OFFSET : int = 30;
+            public static var WINDOW_DEFAULT_Y_OFFSET : int = 15;
+            public static var LEFT_MARGIN : int = 150;
+            public static var TOP_MARGIN : int = 15;
+            
+            
             // Variables
             
             /**
@@ -410,8 +424,15 @@
                 
                 // Add it to the windows manager
                 mdiCanvas.windowManager.add(window);
-                mdiCanvas.windowManager.center(window);
-                mdiCanvas.windowManager.resize(window);
+                
+                // Size and place the window
+                var xOffset : int = mdiCanvas.windowManager.windowList.length * WINDOW_DEFAULT_X_OFFSET;
+                var yOffset : int = mdiCanvas.windowManager.windowList.length * WINDOW_DEFAULT_Y_OFFSET;
+                window.width = Math.min(mdiCanvas.width - LEFT_MARGIN - xOffset, mdiCanvas.width * (WINDOW_DEFAULT_PERCENT_WIDTH/100));
+                window.height = Math.min(mdiCanvas.height - TOP_MARGIN - yOffset, mdiCanvas.height * (WINDOW_DEFAULT_PERCENT_HEIGHT/100));
+                var xPos : int = Math.max(LEFT_MARGIN, mdiCanvas.width - window.width - xOffset);
+                var yPos : int = Math.max(TOP_MARGIN, mdiCanvas.height - window.height - yOffset);
+                mdiCanvas.windowManager.absPos(window, xPos, yPos);
                 
                 // Maximize the window if the option is set
                 if (module.loadMaximized)
