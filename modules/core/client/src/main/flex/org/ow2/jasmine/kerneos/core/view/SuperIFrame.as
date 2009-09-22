@@ -182,7 +182,8 @@ package org.ow2.jasmine.kerneos.core.view
 
         private var frameLoaded:Boolean = false;
         private var functionQueue:Array = [];
-
+        private var firstShow : Boolean = true;
+    
         private static var logger:ILogger = Log.getLogger("com.plus.arutherford.ccgi.SuperIFrame");
 
         /**
@@ -695,7 +696,10 @@ package org.ow2.jasmine.kerneos.core.view
             if (source)
             {
                 frameLoaded = false;
-                ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
+	            if (firstShow) {
+	                ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
+	                firstShow = false;
+	            }
                 logger.debug("load Iframe id {0}", frameId);
                 // Trigger re-layout of iframe contents.
                 invalidateDisplayList();
