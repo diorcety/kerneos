@@ -59,6 +59,8 @@ public class KerneosConfigService implements Serializable {
      */
     private static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";
 
+    private static final String PREFIX = "../../";
+
     /**
      * Load the Kerneos config file and build the configuration object
      */
@@ -77,8 +79,8 @@ public class KerneosConfigService implements Serializable {
         ClassLoader cl = this.getClass().getClassLoader();
         if (cl.getResource(KERNEOS_CONFIG_FILE) != null) {
             configurationFile = KERNEOS_CONFIG_FILE;
-        } else if (cl.getResource("../../" + KERNEOS_CONFIG_FILE) != null) {
-            configurationFile = "../../" + KERNEOS_CONFIG_FILE;
+        } else if (cl.getResource(PREFIX + KERNEOS_CONFIG_FILE) != null) {
+            configurationFile = PREFIX + KERNEOS_CONFIG_FILE;
         }
 
         if (!configurationFile.equals("")) {
@@ -188,7 +190,7 @@ public class KerneosConfigService implements Serializable {
 
                 if (listOfEntries.item(i).getAttributes().getNamedItem("swfFile") != null) {
                     mod.swfFile = listOfEntries.item(i).getAttributes().getNamedItem("swfFile").getTextContent();
-                    if (Thread.currentThread().getContextClassLoader().getResource(mod.swfFile) == null) {
+                    if (Thread.currentThread().getContextClassLoader().getResource(mod.swfFile) == null && Thread.currentThread().getContextClassLoader().getResource(PREFIX + mod.swfFile) == null) {
                         throw new Exception(mod.swfFile + " file is not loadable, check that this file is embedded in the WAR.");
                     }
                 } else if (listOfEntries.item(i).getAttributes().getNamedItem("url") != null) {
