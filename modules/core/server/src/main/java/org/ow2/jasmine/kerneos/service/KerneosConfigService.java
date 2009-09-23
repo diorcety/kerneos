@@ -73,13 +73,19 @@ public class KerneosConfigService implements Serializable {
         Document doc = null;
 
         // Retrieve the kerneos config file
+        String configurationFile = "";
         ClassLoader cl = this.getClass().getClassLoader();
         if (cl.getResource(KERNEOS_CONFIG_FILE) != null) {
+            configurationFile = KERNEOS_CONFIG_FILE;
+        } else if (cl.getResource("../../" + KERNEOS_CONFIG_FILE) != null) {
+            configurationFile = "../../" + KERNEOS_CONFIG_FILE;
+        }
 
-            logger.debug("loading file : {0}", KERNEOS_CONFIG_FILE);
+        if (!configurationFile.equals("")) {
+            logger.debug("loading file : {0}", configurationFile);
 
             logger.debug("Loading the registy XML file from classpath");
-            InputStream resource = cl.getResourceAsStream(KERNEOS_CONFIG_FILE);
+            InputStream resource = cl.getResourceAsStream(configurationFile);
             try {
 
                 // Parse the config file
@@ -145,7 +151,8 @@ public class KerneosConfigService implements Serializable {
                         logger.debug("Show notification popups : " + config.showNotificationPopUps);
                     }
 
-                    // Show notifications popups, even on windows that have the focus
+                    // Show notifications popups, even on windows that have the
+                    // focus
                     else if (option.getNodeName().equals("showPopupsWhenFocused")) {
                         config.showPopupsWhenFocused = Boolean.parseBoolean(option.getTextContent());
                         logger.debug("Show notification popups when focused: " + config.showPopupsWhenFocused);
@@ -190,19 +197,23 @@ public class KerneosConfigService implements Serializable {
                     throw new Exception("A swf file or an url must be set up for each module declaration.");
                 }
                 if (listOfEntries.item(i).getAttributes().getNamedItem("loadOnStartup") != null) {
-                    mod.loadOnStartup = Boolean.parseBoolean(listOfEntries.item(i).getAttributes().getNamedItem("loadOnStartup").getTextContent());
+                    mod.loadOnStartup = Boolean.parseBoolean(listOfEntries.item(i).getAttributes()
+                        .getNamedItem("loadOnStartup").getTextContent());
                     logger.debug("load module on startup: {0}", mod.loadOnStartup);
                 }
                 if (listOfEntries.item(i).getAttributes().getNamedItem("loadMaximized") != null) {
-                    mod.loadMaximized = Boolean.parseBoolean(listOfEntries.item(i).getAttributes().getNamedItem("loadMaximized").getTextContent());
+                    mod.loadMaximized = Boolean.parseBoolean(listOfEntries.item(i).getAttributes()
+                        .getNamedItem("loadMaximized").getTextContent());
                     logger.debug("load module maximized: {0}", mod.loadMaximized);
                 }
                 if (listOfEntries.item(i).getAttributes().getNamedItem("promptBeforeClose") != null) {
-                    mod.promptBeforeClose = listOfEntries.item(i).getAttributes().getNamedItem("promptBeforeClose").getTextContent();
-                    if (!(mod.promptBeforeClose.equals(Module.DEFAULT_PROMPT_BEFORE_CLOSE) ||
-                          mod.promptBeforeClose.equals(Module.ALWAYS_PROMPT_BEFORE_CLOSE) ||
-                          mod.promptBeforeClose.equals(Module.NEVER_PROMPT_BEFORE_CLOSE))) {
-                        throw new Exception("\"prompBeforeClose\" attribute value must be \"default\", \"alaways\", or \"never\".");
+                    mod.promptBeforeClose = listOfEntries.item(i).getAttributes().getNamedItem("promptBeforeClose")
+                        .getTextContent();
+                    if (!(mod.promptBeforeClose.equals(Module.DEFAULT_PROMPT_BEFORE_CLOSE)
+                        || mod.promptBeforeClose.equals(Module.ALWAYS_PROMPT_BEFORE_CLOSE) || mod.promptBeforeClose
+                        .equals(Module.NEVER_PROMPT_BEFORE_CLOSE))) {
+                        throw new Exception(
+                            "\"prompBeforeClose\" attribute value must be \"default\", \"alaways\", or \"never\".");
                     }
                     logger.debug("prompt before close: {0}", mod.loadMaximized);
                 }
