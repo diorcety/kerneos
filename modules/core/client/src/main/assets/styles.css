@@ -161,7 +161,7 @@ KerneosWindow{
     paddingLeft: 0;
     paddingRight: 0;
     highlightAlphas: 0.10, 0.10;
-    fillAlphas: 0.30, 0.30, 0.50, 0.50;
+    fillAlphas: 0.40, 0.40, 0.50, 0.50;
     fillColors: #999999, #cccccc, #ffffff, #eeeeee;
     borderColor: #AAAAAA;
 }
@@ -176,7 +176,16 @@ MinimizedModuleWindow {
     borderColor: #454545;
 }
 
+.localeComboBox {
+    cornerRadius: 2;
+    color: #111111;
+    highlightAlphas: 0.10, 0.10;
+    fillAlphas: 0.40, 0.40, 0.50, 0.50;
+    fillColors: #999999, #cccccc, #ffffff, #eeeeee;
+    borderColor: #AAAAAA;
+}
 
+	
 /*******************************************************************************
  * Notifications
  ******************************************************************************/

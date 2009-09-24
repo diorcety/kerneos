@@ -171,7 +171,8 @@
             * The actual available and supported languages.
             */
             [Bindable]
-            private var locales : Array = ["fr_FR", "en_US"];
+            private var locales : Array = [{locale:"fr_FR",label:"Français"},
+                                           {locale:"en_US",label:"English"}];
             
             /**
              * The IFrame  objects
@@ -340,7 +341,6 @@
                     reloadPage();
                 });
                 loader.load(req);
-            
             }
             
             
@@ -877,7 +877,9 @@
             }
             
             
-            
+            /**
+            * Initialize the application with a given configuration
+            */
             private function set initApplication(conf : KerneosConfigVO) : void
             {
                 if (conf != null)
@@ -890,18 +892,31 @@
                 }
             }
             
+            
+            
+            /**
+            * Initialize the locale selector
+            */
             private function localeComboBox_initializeHandler(event : Event=null) : void
             {
-                localeComboBox.selectedIndex = locales.indexOf(resourceManager.localeChain[0]);
+            	for (var i : int = 0; i<locales.length; i++)
+            	{
+            		if (locales[i].locale == resourceManager.localeChain[0])
+            		{
+            			localeComboBox.selectedIndex = i;
+            		}
+            	}
             }
             
             
-            
+            /**
+            * When the locale selection has been changed
+            */
             private function localeComboBox_changeHandler(event : Event) : void
             {
                 // Set the localeChain to either the one-element Array
                 // [ "en_US" ] or the one-element Array [ "fr_FR" ].
-                resourceManager.localeChain = [localeComboBox.selectedItem];
+                resourceManager.localeChain = [localeComboBox.selectedItem.locale];
             }
         ]]>
     </mx:Script>
@@ -1058,8 +1073,8 @@
                                       alpha = "0.25" />
                             <mx:ComboBox id = "localeComboBox"
                                          dataProvider = "{locales}"
-                                         initialize = "localeComboBox_initializeHandler(event)"
-                                         change = "localeComboBox_changeHandler(event)" />
+                                         change = "localeComboBox_changeHandler(event)"
+                                         styleName = "localeComboBox" />
                             <mx:VRule height = "70%"
                                       alpha = "0.25" />
                             <mx:Button width = "22"
