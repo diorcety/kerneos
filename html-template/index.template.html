@@ -37,7 +37,7 @@ var requiredRevision = ${version_revision};
 
 <!-- Window close confirmation system -->
 window.onbeforeunload = function () {
-    if (!document.getElementById('EoS').canBeClosed())
+    if (!document.getElementById('${application}').canBeClosed())
     {
         return ""
     }
