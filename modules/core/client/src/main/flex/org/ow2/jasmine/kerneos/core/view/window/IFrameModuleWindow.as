@@ -126,6 +126,15 @@ public class IFrameModuleWindow extends ModuleWindow
     // =========================================================================
     // Public methods
     // =========================================================================
+
+    
+    /**
+    * Kill the IFrame, and leave nothing
+    */
+    public function kill(e:Event=null):void
+    {
+        _frame.kill();
+    }
     
     /**
     * Hide the IFrame content

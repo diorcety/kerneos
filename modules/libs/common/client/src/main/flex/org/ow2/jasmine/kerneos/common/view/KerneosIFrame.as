@@ -208,6 +208,18 @@ package org.ow2.jasmine.kerneos.common.view
                     "}" +
                 "}" +
             "}";
+        private static var FUNCTION_REMOVEIFRAME:String = 
+            "document.insertScript = function ()" +
+            "{ " +
+                "if (document.removeIFrame==null)" + 
+                "{" + 
+                    "removeIFrame = function (frameID)" +
+                    "{ " +
+                        "var iFrameDiv = document.getElementById(frameID);" +
+                        "iFrameDiv.parentNode.removeChild(iFrameDiv);" +
+                    "}" +
+                "}" +
+            "}";
 
         private static var FUNCTION_MOVEIFRAME:String =
             "document.insertScript = function ()" +
@@ -475,6 +487,7 @@ package org.ow2.jasmine.kerneos.common.view
 
             // Add functions to DOM if they aren't already there
             ExternalInterface.call(FUNCTION_CREATEIFRAME);
+            ExternalInterface.call(FUNCTION_REMOVEIFRAME);
             ExternalInterface.call(FUNCTION_MOVEIFRAME);
             ExternalInterface.call(FUNCTION_HIDEIFRAME);
             ExternalInterface.call(FUNCTION_SHOWIFRAME);
@@ -1071,6 +1084,14 @@ package org.ow2.jasmine.kerneos.common.view
             overlapY ||= oTop <= myTop && oBottom >= myTop;
 
             return overlapX && overlapY;
+        }
+        
+        /**
+        * Remove the iFrame
+        */
+        public function kill(e:Event=null):void
+        {
+        	ExternalInterface.call("removeIFrame", frameId);
         }
     }
 }

@@ -501,7 +501,7 @@
                 else if (window is IFrameModuleWindow)
                 {
                     // Hide the IFrame
-                    (window as IFrameModuleWindow).hideIFrame();
+                    (window as IFrameModuleWindow).kill();
                 }
                 
                 // Update the module state
