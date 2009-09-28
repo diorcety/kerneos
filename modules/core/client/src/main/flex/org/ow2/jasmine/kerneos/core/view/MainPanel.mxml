@@ -28,11 +28,12 @@
            xmlns:mx = "http://www.adobe.com/2006/mxml"
            xmlns:local = "*"
            xmlns:flexlibMdiContainers = "flexlib.mdi.containers.*"
-           xmlns:view = "org.ow2.jasmine.kerneos.common.view.*"
+           xmlns:view = "org.ow2.jasmine.kerneos.core.view.*"
+           xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
            width = "100%"
            height = "100%"
            creationComplete = "creationCompleteHandler()"
-           currentState = "init">
+           currentState = "init" >
 
     <mx:Script>
         <![CDATA[
@@ -72,21 +73,21 @@
             import mx.messaging.channels.AMFChannel;
             import mx.messaging.ChannelSet;
             
-            import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
+            import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
+            import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
             import org.ow2.jasmine.kerneos.common.util.Util;
-            import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
-            import org.ow2.jasmine.kerneos.core.view.SuperIFrame;
+            import org.ow2.jasmine.kerneos.common.util.IconUtility;
+            import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
             import org.ow2.jasmine.kerneos.login.model.LogInModelLocator;
             import org.ow2.jasmine.kerneos.core.api.Core;
             import org.ow2.jasmine.kerneos.core.api.ICore;
             import org.ow2.jasmine.kerneos.core.api.KerneosModule;
-            import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
-            import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
-            import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
-            import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
             import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-                        
+            import org.ow2.jasmine.kerneos.core.vo.*;
+            import org.ow2.jasmine.kerneos.core.view.window.*
+            import org.ow2.jasmine.kerneos.core.view.notification.*;
+            
             import flexlib.containers.WindowShade;
             import flexlib.mdi.containers.MDIWindow;
             import flexlib.mdi.events.MDIWindowEvent;
@@ -97,6 +98,72 @@
             // Variables
             // =========================================================================
             
+            // Assets
+            
+            /**
+             * Minimize all windows icon
+             */
+            [Embed(source="/../assets/down.png")]
+            [Bindable]
+            private var downIcon : Class;
+            
+            /**
+             * Cascade windows icon
+             */
+            [Embed(source="/../assets/cascade.png")]
+            [Bindable]
+            private var cascadeIcon : Class;
+            
+            /**
+             * Tile windows icon
+             */
+            [Embed(source="/../assets/tile.png")]
+            [Bindable]
+            private var tileIcon : Class;
+            
+            /**
+             * Enter Full screen icon
+             */
+            [Embed(source="/../assets/fullscreen.png")]
+            [Bindable]
+            private var fullScreenIcon : Class;
+            
+            /**
+             * Exit Full screen icon
+             */
+            [Embed(source="/../assets/exitfullscreen.png")]
+            [Bindable]
+            private var exitFullScreenIcon : Class;
+            
+            /**
+             * Events icon
+             */
+            [Embed(source="/../assets/events_list16.png")]
+            [Bindable]
+            private var eventsIcon : Class;
+            
+            /**
+             * Log out icon
+             */
+            [Embed(source="/../assets/exit.png")]
+            [Bindable]
+            private var logoutIcon : Class;
+            
+            /**
+            * Icon for the en_US locale
+            */
+            [Embed(source="/../assets/en_US.png")]
+            [Bindable]
+            public var en_USIcon:Class;
+            
+            /**
+            * Icon for the fr_FR locale
+            */            
+            [Embed(source="/../assets/fr_FR.png")]
+            [Bindable]
+            public var fr_FRIcon:Class;
+            
+                        
             // Dummy: flex SDK bugs workarounds
             
             /**
@@ -171,8 +238,8 @@
             * The actual available and supported languages.
             */
             [Bindable]
-            private var locales : Array = [{locale:"fr_FR",label:"Français"},
-                                           {locale:"en_US",label:"English"}];
+            private var locales : Array = [{locale:"fr_FR",label:"Français", icon:fr_FRIcon},
+                                           {locale:"en_US",label:"English", icon:en_USIcon}];
             
             /**
              * The IFrame  objects
@@ -189,57 +256,11 @@
              */
             private var loggingOut : Boolean = false;
             
-            // Assets
-            
             /**
-             * Minimize all windows icon
-             */
-            [Embed(source="/../assets/down.png")]
+            * The displayed logo
+            */
             [Bindable]
-            private var downIcon : Class;
-            
-            /**
-             * Cascade windows icon
-             */
-            [Embed(source="/../assets/cascade.png")]
-            [Bindable]
-            private var cascadeIcon : Class;
-            
-            /**
-             * Tile windows icon
-             */
-            [Embed(source="/../assets/tile.png")]
-            [Bindable]
-            private var tileIcon : Class;
-            
-            /**
-             * Enter Full screen icon
-             */
-            [Embed(source="/../assets/fullscreen.png")]
-            [Bindable]
-            private var fullScreenIcon : Class;
-            
-            /**
-             * Exit Full screen icon
-             */
-            [Embed(source="/../assets/exitfullscreen.png")]
-            [Bindable]
-            private var exitFullScreenIcon : Class;
-            
-            /**
-             * Events icon
-             */
-            [Embed(source="/../assets/events_list16.png")]
-            [Bindable]
-            private var eventsIcon : Class;
-            
-            /**
-             * Log out icon
-             */
-            [Embed(source="/../assets/exit.png")]
-            [Bindable]
-            private var logoutIcon : Class;
-            
+            private var consoleLogoIcon:Class = null;
             
             
             // =========================================================================
@@ -253,7 +274,7 @@
             {
                 // Listen to server side exceptions events
                 CairngormEventDispatcher.getInstance().addEventListener(
-                    ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
+                    ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID,
                     ServerSideExceptionEvent.show
                 );
                                 
@@ -296,8 +317,6 @@
                 
             }
             
-            
-            
             /**
              * On component creation complete
              */
@@ -306,7 +325,28 @@
                 this.model = KerneosModelLocator.getInstance();
             }
             
-            
+
+            /**
+            * Initialize the application with a given configuration
+            */
+            private function set initApplication(conf : KerneosConfigVO) : void
+            {
+                if (conf != null)
+                {
+                    this.currentState = "logged";
+                    
+                    resourceManager.localeChain = [this.model.config.defaultLanguage];
+                    
+                    localeComboBox_initializeHandler();
+                    
+                    if (model.config.consoleLogo !== null)
+                    {
+                        consoleLogoIcon = IconUtility.getClass(consoleLogo,model.config.consoleLogo,64,64);
+                    }
+                    
+                }
+            }
+                        
             
             // =========================================================================
             // Public methods
@@ -381,40 +421,30 @@
                 // Declare a new window
                 var window : ModuleWindow;
                 
-                // If this is a module
+                // If this is a swf module
                 if (module.swfFile != null)
                 {
                     
                     // Create a window
                     window = new SwfModuleWindow(module);
-                    var moduleLoader : ModuleLoader = new ModuleLoader();
-                    moduleLoader.url = module.swfFile;
-                    moduleLoader.percentWidth = 100;
-                    moduleLoader.percentHeight = 100;
-                    window.addChild(moduleLoader);
                     window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, handleNotificationEvent);
                 }
+                
+                // Else this is an IFrame module
                 else
                 {
                     
                     // Hide the existing IFrames
-                    for each (var existingFrame : SuperIFrame in frames)
+                    for each (var existingFrame : KerneosIFrame in frames)
                     {
                         existingFrame.visible = false;
                     }
                     
                     // Create a window
-                    window = new IFrameModuleWindow(module);
-                    frames[module.name] = new SuperIFrame();
-                    var frame : SuperIFrame = frames[module.name] as SuperIFrame;
-                    frame = new SuperIFrame();
-                    frame.label = module.name as String;
-                    frame.source = module.url;
-                    frame.percentHeight = 100;
-                    frame.percentWidth = 100;
-                    frame.visible = true;
-                    frame.overlayDetection = true;
-                    window.addChild(frame);
+                    frames[module.name] = new KerneosIFrame();
+                    var frame : KerneosIFrame = frames[module.name] as KerneosIFrame;
+                    window = new IFrameModuleWindow(module,frame);
+                    
                 }
                 
                 // Create the button in the taskbar
@@ -877,22 +907,9 @@
             }
             
             
-            /**
-            * Initialize the application with a given configuration
-            */
-            private function set initApplication(conf : KerneosConfigVO) : void
-            {
-                if (conf != null)
-                {
-                    this.currentState = "logged";
-                    
-                    resourceManager.localeChain = [this.model.config.defaultLanguage];
-                    
-                    localeComboBox_initializeHandler();
-                }
-            }
-            
-            
+            // =========================================================================
+            // Localization
+            // =========================================================================            
             
             /**
             * Initialize the locale selector
@@ -918,6 +935,20 @@
                 // [ "en_US" ] or the one-element Array [ "fr_FR" ].
                 resourceManager.localeChain = [localeComboBox.selectedItem.locale];
             }
+            
+            
+            /**
+            * Returns the selected locale icon
+            */
+            private function getLocaleIcon(item:Object):Class
+            {
+                if(item.icon){
+                    return item.icon;
+                }
+                return null;
+            }
+            
+            
         ]]>
     </mx:Script>
 
@@ -929,7 +960,7 @@
                    blurX = "3"
                    blurY = "3"
                    quality = "15"
-                   alpha = "0.3"
+                   alpha = "0.2"
                    strength = "3"
                    color = "#000000" />
 
@@ -1071,10 +1102,13 @@
                             <mx:Spacer width = "100%" />
                             <mx:VRule height = "70%"
                                       alpha = "0.25" />
-                            <mx:ComboBox id = "localeComboBox"
-                                         dataProvider = "{locales}"
-                                         change = "localeComboBox_changeHandler(event)"
-                                         styleName = "localeComboBox" />
+                            <commonView:IconComboBox id = "localeComboBox"
+		                                       dataProvider = "{locales}"
+		                                       labelField = "label"
+		                                       iconFunction = "getLocaleIcon"
+		                                       change = "localeComboBox_changeHandler(event)"
+		                                       styleName = "localeComboBox"
+		                                       toolTip = "Switch language" />
                             <mx:VRule height = "70%"
                                       alpha = "0.25" />
                             <mx:Button width = "22"
@@ -1130,11 +1164,18 @@
         <!-- "Kerneos Console" mark" -->
         <mx:HBox id = "console_mark"
                  width = "1000"
-                 height = "128"
+                 height = "80"
                  top = "10"
                  right = "10"
-                 verticalAlign = "top"
-                 horizontalAlign = "right">
+                 verticalAlign = "middle"
+                 horizontalAlign = "right"
+                 verticalScrollPolicy = "off"
+                 horizontalScrollPolicy = "off" >
+            <commonView:SmoothImage id = "consoleLogo"
+            	              source = "{consoleLogoIcon}"
+                              filters = "{[console_mark_shadow]}"
+            	              width = "64"
+            	              height = "64" />
             <mx:Text text = "{model.config.consoleProject}"
                      styleName = "consoleMark1"
                      filters = "{[console_mark_shadow]}"

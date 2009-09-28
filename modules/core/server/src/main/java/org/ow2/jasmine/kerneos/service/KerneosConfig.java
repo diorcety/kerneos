@@ -47,6 +47,11 @@ public class KerneosConfig {
     public String consoleName = "Kerneos";
 
     /**
+     * The path to the console logo (64x64 image)
+     */
+    public String consoleLogo = null;
+
+    /**
     * Allow to show the taskbar "Minimize all" icon
     */
     public Boolean showMinimizeAllIcon = true;

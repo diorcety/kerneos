@@ -60,24 +60,14 @@ public class Module {
     public String description = null;
 
     /**
-    * The default small icon (16x16) path
-    */
-    public static String defaultSmallIcon = "resources/icons/module16.png";
-
-    /**
     * The small icon (16x16) path
     */
-    public String smallIcon = defaultSmallIcon;
-
-    /**
-    * The default big icon (64x64) path
-    */
-    public static String defaultBigIcon = "resources/icons/module64.png";
+    public String smallIcon = null;
 
     /**
     * The big icon (64x64) path
     */
-    public String bigIcon = defaultBigIcon;
+    public String bigIcon = null;
 
     /**
     * Load the module on application startup

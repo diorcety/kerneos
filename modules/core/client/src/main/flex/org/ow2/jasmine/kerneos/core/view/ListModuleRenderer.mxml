@@ -25,7 +25,7 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-         xmlns:local="org.ow2.jasmine.kerneos.core.view.*"
+         xmlns:commonView="org.ow2.jasmine.kerneos.common.view.*"
          implements="mx.controls.listClasses.IListItemRenderer"
          horizontalAlign="center"
          verticalAlign="middle"
@@ -159,10 +159,10 @@
                    color="#FFFFFF"/>
                                             
     <!-- The module thumbnail -->
-    <local:SmoothImage id="moduleThumb"
-                       source="{IconUtility.getClass(moduleThumb,_module.bigIcon,64,64)}"
-                       width="64"
-                       height="64"/>
+    <commonView:SmoothImage id="moduleThumb"
+	                        source="{_module.getBigIconClass(moduleThumb)}"
+	                        width="64"
+	                        height="64"/>
                        
     <!-- The module name -->
     <mx:LinkButton id="moduleName"

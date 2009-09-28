@@ -26,7 +26,6 @@ import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
-import mx.controls.Alert;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
@@ -78,11 +77,14 @@ public class LoadKerneosConfigCommand implements ICommand, IResponder{
     	
         // Retrieve the fault event
         var faultEvent : FaultEvent = FaultEvent(event);
-
+        
+        // Retrieve the model
+        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
+        
         // Tell the view and let it handle this
         var serverSideExceptionEvent : ServerSideExceptionEvent =
             new ServerSideExceptionEvent(
-                "serverSideException",
+                ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + model.componentID,
                 new ServerSideException("Error while loading the configuration",
                                         "The console configuration file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,

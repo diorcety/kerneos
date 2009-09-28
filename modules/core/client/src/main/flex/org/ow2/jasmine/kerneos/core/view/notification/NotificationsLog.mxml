@@ -191,14 +191,14 @@
             <mx:DataGridColumn headerText="Module"
                                dataField="module"
                                width="150"
-                               itemRenderer="org.ow2.jasmine.kerneos.core.view.NotificationsLogModuleRenderer"/>
+                               itemRenderer="org.ow2.jasmine.kerneos.core.view.notification.NotificationsLogModuleRenderer"/>
             <mx:DataGridColumn headerText="Date"
                                dataField="date"
                                width="120"
-                               itemRenderer="org.ow2.jasmine.kerneos.core.view.NotificationsLogDateRenderer"/>
+                               itemRenderer="org.ow2.jasmine.kerneos.core.view.notification.NotificationsLogDateRenderer"/>
             <mx:DataGridColumn headerText="Level"
                                dataField="level"
-                               itemRenderer="org.ow2.jasmine.kerneos.core.view.NotificationsLogLevelRenderer"
+                               itemRenderer="org.ow2.jasmine.kerneos.core.view.notification.NotificationsLogLevelRenderer"
                                width="120"/>
             <mx:DataGridColumn headerText="Message"
                                dataField="message"

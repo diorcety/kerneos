@@ -109,6 +109,21 @@ KerneosWindow{
     paddingTop: 0px;
 }
 
+IFrameModuleWindow{
+    backgroundColor: #FFFFFF;
+    style-name-no-focus: noFocusIFrameModuleWindow;
+}
+
+.noFocusIFrameModuleWindow {
+    background-alpha: 0.70;
+    backgroundColor: #666666;
+    border-alpha: 0.70;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
+}
+
 .moduleWindowTitle {
     font-weight: bold;
     font-size: 13px;
@@ -161,9 +176,9 @@ KerneosWindow{
     paddingLeft: 0;
     paddingRight: 0;
     highlightAlphas: 0.10, 0.10;
-    fillAlphas: 0.40, 0.40, 0.50, 0.50;
-    fillColors: #999999, #cccccc, #ffffff, #eeeeee;
-    borderColor: #AAAAAA;
+    fillAlphas: 0.10, 0.20;
+    fillColors: #000000, #000000, #ffffff, #eeeeee;
+    borderColor: #666666;
 }
 
 MinimizedModuleWindow {
@@ -178,11 +193,22 @@ MinimizedModuleWindow {
 
 .localeComboBox {
     cornerRadius: 2;
-    color: #111111;
+    color: #EFEFEF;
     highlightAlphas: 0.10, 0.10;
-    fillAlphas: 0.40, 0.40, 0.50, 0.50;
-    fillColors: #999999, #cccccc, #ffffff, #eeeeee;
-    borderColor: #AAAAAA;
+    fillAlphas: 0.10, 0.20;
+    fillColors: #000000, #000000, #ffffff, #eeeeee;
+    borderColor: #666666;
+    selectionColor: #555555;
+    textSelectedColor: #EFEFEF;
+    alternatingItemColors: #454545, #454545;
+    openDuration: 60;
+    closeDuration: 60;
+    dropDownStyleName: "localeComboBoxDropDown";
+}
+
+.localeComboBoxDropDown {
+    cornerRadius: 2;
+    borderColor: #666666;
 }
 
 	

@@ -54,6 +54,11 @@ public class KerneosConfigVO implements IValueObject
     public var consoleName : String = "Kerneos";
     
     /**
+     * The path to the console logo (64x64 image)
+     */
+    public var consoleLogo : String = null;
+    
+    /**
      * Allow to show the taskbar "Minimize all" icon
      */
     public var showMinimizeAllIcon : Boolean = true;

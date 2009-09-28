@@ -1,6 +1,6 @@
 /**
  * JASMINe
- * Copyright (C) 2008 Bull S.A.S.
+ * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or

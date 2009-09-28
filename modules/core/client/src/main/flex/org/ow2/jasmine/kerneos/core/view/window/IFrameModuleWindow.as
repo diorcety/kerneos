@@ -22,16 +22,18 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.view
+package org.ow2.jasmine.kerneos.core.view.window
 {
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	
-	import flexlib.mdi.events.MDIWindowEvent;
-	
-	import mx.core.Container;
-	
-	import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+import flash.display.FrameLabel;
+import flash.events.Event;
+import flash.events.MouseEvent;
+
+import flexlib.mdi.events.MDIWindowEvent;
+
+import mx.containers.Canvas;
+
+import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
+import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
 	
 
 /**
@@ -42,26 +44,61 @@ package org.ow2.jasmine.kerneos.core.view
 [Bindable]
 public class IFrameModuleWindow extends ModuleWindow
 {
-		
     // =========================================================================
-    // Constructor
+    // Variables
+    // =========================================================================
+    
+    /**
+    * The hosted IFrame
+    */
+    private var _frame : KerneosIFrame;
+    
+    
+    // =========================================================================
+    // Constructor & initialization
     // =========================================================================
     
     /**
     * Build a new window hosting an IFrame
     */
-	public function IFrameModuleWindow(module:ModuleVO)
+	public function IFrameModuleWindow(module:ModuleVO, frame:KerneosIFrame)
 	{
 		// Call super class constructor
 		super(module);
 		
+		// Assign properties
+		_frame = frame;
+		
 		// Listen to window events
         this.addEventListener(MDIWindowEvent.DRAG_START,hideIFrame);
+        this.addEventListener(MDIWindowEvent.DRAG_START,hideWhiteBackground);
         this.addEventListener(MDIWindowEvent.DRAG_END,showIFrame);
+        this.addEventListener(MDIWindowEvent.DRAG_END,showWhiteBackground);
         this.addEventListener(MDIWindowEvent.FOCUS_START,showIFrame);
+        this.addEventListener(MDIWindowEvent.FOCUS_START,showWhiteBackground);
         this.addEventListener(MDIWindowEvent.FOCUS_END,hideIFrame);
+        this.addEventListener(MDIWindowEvent.FOCUS_END,hideWhiteBackground);
         this.addEventListener(MDIWindowEvent.RESIZE_START,hideIFrame);
+        this.addEventListener(MDIWindowEvent.RESIZE_START,hideWhiteBackground);
         this.addEventListener(MDIWindowEvent.RESIZE_END,showIFrame);
+        this.addEventListener(MDIWindowEvent.RESIZE_END,showWhiteBackground);
+        
+	}
+	
+	/**
+	* Create UI children
+	*/
+	override protected function createChildren():void
+	{
+		// Call super class method
+		super.createChildren();
+        
+        // Add the IFrame
+        _frame.source = module.url;
+        _frame.percentHeight = 100;
+        _frame.percentWidth = 100;
+        _frame.visible = true;
+        addChild(_frame);
 	}
 	
 	
@@ -72,9 +109,17 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
     * Get the hosted IFrame
     */
-    public function get iFrame():SuperIFrame
+    public function get iFrame():KerneosIFrame
     {
-    	return (this as Container).getChildAt(0) as SuperIFrame;
+        return _frame;
+    }
+    
+    /**
+    * Set the hosted IFrame
+    */
+    public function set iFrame(value:KerneosIFrame):void
+    {
+        throw new Error('This is a read only property.');
     }
     
     
@@ -83,19 +128,37 @@ public class IFrameModuleWindow extends ModuleWindow
     // =========================================================================
     
     /**
-    * Show the IFrame content
+    * Hide the IFrame content
     */
     public function hideIFrame(e:Event=null):void
     {
-    	this.iFrame.visible = false;
+        this.iFrame.overlayDetection = false;
+        this.iFrame.visible = false;
     }
     
     /**
-    * Hide the Iframe content
+    * Show the Iframe content
     */
     public function showIFrame(e:Event=null):void
     {
         this.iFrame.visible = true;
+        this.iFrame.overlayDetection = true;
+    }
+    
+    /**
+    * Hide the white background
+    */
+    public function hideWhiteBackground(e:Event=null):void
+    {
+        this.setStyle("backgroundColor",0x666666);
+    }
+    
+    /**
+    * Show the white background
+    */
+    public function showWhiteBackground(e:Event=null):void
+    {
+        this.setStyle("backgroundColor",0xFFFFFF);
     }
     
     

@@ -135,13 +135,13 @@
 // -----------------------------------------------------------------------
 
 /**
- * An improved Flex SuperIFrame component
+ * An improved Flex KerneosIFrame component
  *
  * @author Julien Nicoulaud
  * @internal Original source code:
  *   http://flex-iframe.googlecode.com/svn/trunk/fb3/IFrameDemo/src/IFrame.as
  */
-package org.ow2.jasmine.kerneos.core.view
+package org.ow2.jasmine.kerneos.common.view
 {
     import flash.display.DisplayObject;
     import flash.display.DisplayObjectContainer;
@@ -149,7 +149,7 @@ package org.ow2.jasmine.kerneos.core.view
     import flash.external.ExternalInterface;
     import flash.geom.Point;
     import flash.utils.Dictionary;
-
+    
     import mx.core.Application;
     import mx.core.Container;
     import mx.core.UIComponent;
@@ -164,9 +164,9 @@ package org.ow2.jasmine.kerneos.core.view
 
     [Event(name="frameLoad", type="flash.events.Event")]
 
-    public class SuperIFrame extends Container
+    public class KerneosIFrame extends Container
     {
-        public var overlayDetection:Boolean = false;
+        private var _overlayDetection:Boolean = false;
 
         private var logTarget:TraceTarget;
 
@@ -184,7 +184,7 @@ package org.ow2.jasmine.kerneos.core.view
         private var functionQueue:Array = [];
         private var firstShow:Boolean = true;
 
-        private static var logger:ILogger = Log.getLogger("com.plus.arutherford.ccgi.SuperIFrame");
+        private static var logger:ILogger = Log.getLogger("com.plus.arutherford.ccgi.KerneosIFrame");
 
         /**
          * Here we define javascript functions which will be inserted into the DOM
@@ -193,9 +193,9 @@ package org.ow2.jasmine.kerneos.core.view
         private static var FUNCTION_CREATEIFRAME:String =
             "document.insertScript = function ()" +
             "{ " +
-                "if (document.createSuperIFrame==null)" +
+                "if (document.createKerneosIFrame==null)" +
                 "{" +
-                    "createSuperIFrame = function (frameID)" +
+                    "createKerneosIFrame = function (frameID)" +
                     "{ " +
                         "var bodyID = document.getElementsByTagName(\"body\")[0];" +
                         "var newDiv = document.createElement('div');" +
@@ -212,9 +212,9 @@ package org.ow2.jasmine.kerneos.core.view
         private static var FUNCTION_MOVEIFRAME:String =
             "document.insertScript = function ()" +
             "{ " +
-                "if (document.moveSuperIFrame==null)" +
+                "if (document.moveKerneosIFrame==null)" +
                 "{" +
-                    "moveSuperIFrame = function(frameID, iframeID, x,y,w,h) " +
+                    "moveKerneosIFrame = function(frameID, iframeID, x,y,w,h) " +
                     "{" +
                         "var frameRef=document.getElementById(frameID);" +
                         "frameRef.style.left=x;" +
@@ -229,9 +229,9 @@ package org.ow2.jasmine.kerneos.core.view
         private static var FUNCTION_HIDEIFRAME:String =
             "document.insertScript = function ()" +
             "{ " +
-                "if (document.hideSuperIFrame==null)" +
+                "if (document.hideKerneosIFrame==null)" +
                 "{" +
-                    "hideSuperIFrame = function (frameID, iframeID)" +
+                    "hideKerneosIFrame = function (frameID, iframeID)" +
                     "{" +
                         "var iframeRef = document.getElementById(iframeID);" +
                         "var iframeDoc;" +
@@ -253,9 +253,9 @@ package org.ow2.jasmine.kerneos.core.view
         private static var FUNCTION_SHOWIFRAME:String =
             "document.insertScript = function ()" +
             "{ " +
-                "if (document.showSuperIFrame==null)" +
+                "if (document.showKerneosIFrame==null)" +
                 "{" +
-                    "showSuperIFrame = function (frameID, iframeID)" +
+                    "showKerneosIFrame = function (frameID, iframeID)" +
                     "{" +
                         "var iframeRef = document.getElementById(iframeID);" +
                         "document.getElementById(frameID).style.visibility='visible';" +
@@ -302,9 +302,9 @@ package org.ow2.jasmine.kerneos.core.view
         private static var FUNCTION_LOADIFRAME:String =
             "document.insertScript = function ()" +
             "{ " +
-                "if (document.loadSuperIFrame==null)" +
+                "if (document.loadKerneosIFrame==null)" +
                 "{" +
-                    "loadSuperIFrame = function (frameID, iframeID, url)" +
+                    "loadKerneosIFrame = function (frameID, iframeID, url)" +
                     "{" +
                         "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
                             + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" +
@@ -327,9 +327,9 @@ package org.ow2.jasmine.kerneos.core.view
         private static var FUNCTION_CALLIFRAMEFUNCTION:String =
             "document.insertScript = function ()" +
             "{ " +
-                "if (document.callSuperIFrameFunction==null)" +
+                "if (document.callKerneosIFrameFunction==null)" +
                 "{" +
-                    "callSuperIFrameFunction = function (iframeID, functionName, args)" +
+                    "callKerneosIFrameFunction = function (iframeID, functionName, args)" +
                     "{" +
                         "var iframeRef=document.getElementById(iframeID);" +
                         "var iframeDoc;" +
@@ -362,7 +362,7 @@ package org.ow2.jasmine.kerneos.core.view
          * Constructor
          *
          */
-        public function SuperIFrame()
+        public function KerneosIFrame()
         {
             super();
             this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
@@ -394,6 +394,35 @@ package org.ow2.jasmine.kerneos.core.view
             }
 
             _debug = value;
+        }
+
+        /**
+        * Activate/deactivate the overlay detection system
+        */
+        public function set overlayDetection(value:Boolean):void
+        {
+            if (_overlayDetection !== value)
+            {
+                _overlayDetection = value;
+                if (_overlayDetection)
+                {
+                    systemManager.addEventListener(Event.ADDED, systemManager_addedHandler);
+                    systemManager.addEventListener(Event.REMOVED, systemManager_removedHandler);
+                }
+                else
+                {
+                    systemManager.removeEventListener(Event.ADDED, systemManager_addedHandler);
+                    systemManager.removeEventListener(Event.REMOVED, systemManager_removedHandler);
+                }
+            }
+        }
+        
+        /**
+        * Get the state of the overlay detection system
+        */
+        public function get overlayDetection():Boolean
+        {
+            return _overlayDetection;
         }
 
         /**
@@ -455,8 +484,8 @@ package org.ow2.jasmine.kerneos.core.view
             ExternalInterface.call(FUNCTION_LOADDIV_CONTENT);
             ExternalInterface.call(FUNCTION_CALLIFRAMEFUNCTION);
 
-            // Insert frame into DOM using our precreated function 'createSuperIFrame'
-            ExternalInterface.call("createSuperIFrame", frameId);
+            // Insert frame into DOM using our precreated function 'createKerneosIFrame'
+            ExternalInterface.call("createKerneosIFrame", frameId);
 
             buildContainerList();
 
@@ -482,7 +511,7 @@ package org.ow2.jasmine.kerneos.core.view
         private function buildContainerList():void
         {
             // We are going to store containers against index of child which leads down
-            // to SuperIFrame item.
+            // to KerneosIFrame item.
             containerDict = new Dictionary();
             settingDict = new Dictionary();
 
@@ -522,7 +551,7 @@ package org.ow2.jasmine.kerneos.core.view
          * @param event Event trigger
          *
          */
-        private function handleRemove(event:Event):void
+        private function handleRemove(event:Event=null):void
         {
             // Remove systemManager hooks for overlay detection
             if (overlayDetection)
@@ -539,7 +568,7 @@ package org.ow2.jasmine.kerneos.core.view
          * @param event Event trigger
          *
          */
-        private function handleAdd(event:Event):void
+        private function handleAdd(event:Event=null):void
         {
             // Hook the systemManager to provide overlaying object detection
             if (overlayDetection)
@@ -580,16 +609,16 @@ package org.ow2.jasmine.kerneos.core.view
          */
         private function handleMove(event:Event):void
         {
-            //moveSuperIFrame();
+            //moveKerneosIFrame();
             invalidateDisplayList();
-            //this will cause moveSuperIFrame() to be called in the next validation cycle
+            //this will cause moveKerneosIFrame() to be called in the next validation cycle
         }
 
         /**
          * This function updates the selected view child of the signalling container
-         * and then compares the path from our SuperIFrame up the displaylist to see if
+         * and then compares the path from our KerneosIFrame up the displaylist to see if
          * the index settings match. Only an exact match all the way down to our
-         * SuperIFrame will satisfy the condition to display the SuperIFrame contents.
+         * KerneosIFrame will satisfy the condition to display the KerneosIFrame contents.
          *
          * @param target Object event source
          * @param newIndex Number index from target object.
@@ -675,13 +704,13 @@ package org.ow2.jasmine.kerneos.core.view
          * Adjust frame position to match the exposed area in the application.
          *
          */
-        private function moveSuperIFrame(): void
+        private function moveKerneosIFrame(): void
         {
 
             var localPt:Point = new Point(0, 0);
             var globalPt:Point = this.localToGlobal(localPt);
 
-            ExternalInterface.call("moveSuperIFrame", frameId, iframeId, globalPt.x, globalPt.y, this.width, this.height);
+            ExternalInterface.call("moveKerneosIFrame", frameId, iframeId, globalPt.x, globalPt.y, this.width, this.height);
             logger.debug("move iframe id {0}", frameId);
         }
 
@@ -698,7 +727,7 @@ package org.ow2.jasmine.kerneos.core.view
                 frameLoaded = false;
                 if (firstShow)
                 {
-                    ExternalInterface.call("loadSuperIFrame", frameId, iframeId, source);
+                    ExternalInterface.call("loadKerneosIFrame", frameId, iframeId, source);
                     logger.debug("load Iframe id {0}", frameId);
                     firstShow = false;
                 }
@@ -729,7 +758,7 @@ package org.ow2.jasmine.kerneos.core.view
             {
                 queuedCall = functionQueue.pop();
                 logger.debug("frame id {0} calling queued function {1}", frameId, queuedCall.functionName);
-                this.callSuperIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
+                this.callKerneosIFrameFunction(queuedCall.functionName, queuedCall.args, queuedCall.callback);
             }
             dispatchEvent(new Event("frameLoad"));
 
@@ -765,7 +794,7 @@ package org.ow2.jasmine.kerneos.core.view
 
             // make sure we are allowed to display before doing the work of positioning the frame
             if (validForDisplay)
-                moveSuperIFrame();
+                moveKerneosIFrame();
 
         }
 
@@ -838,19 +867,19 @@ package org.ow2.jasmine.kerneos.core.view
             if (visible && validForDisplay)
             {
                 if (source && iframeContentHost == appHost)
-                    ExternalInterface.call("showSuperIFrame",frameId,iframeId);
+                    ExternalInterface.call("showKerneosIFrame",frameId,iframeId);
                 else
                     ExternalInterface.call("showDiv",frameId,iframeId);
                 logger.debug("show iframe id {0}", frameId);
 
                 // make sure position and status indicators get updated when revealed
                 invalidateDisplayList();
-
+                
             }
             else
             {
                 if (source && iframeContentHost == appHost)
-                    ExternalInterface.call("hideSuperIFrame",frameId,iframeId);
+                    ExternalInterface.call("hideKerneosIFrame",frameId,iframeId);
                 else
                     ExternalInterface.call("hideDiv",frameId,iframeId);
                 logger.debug("hide iframe id {0}", frameId);
@@ -858,7 +887,7 @@ package org.ow2.jasmine.kerneos.core.view
         }
 
         /**
-         * Calls a function of the specified name defined on the SuperIFrame document
+         * Calls a function of the specified name defined on the KerneosIFrame document
          * (like document.functionName = function () {...} ), passing it an array of arguments.
          * May not work if the iframe contents are in a different domain due to security.
          *
@@ -870,10 +899,10 @@ package org.ow2.jasmine.kerneos.core.view
          *
          * @param functionName String Name of function to call
          * @param args Array List of arguments to pass as an array
-         * @param callback Function to call (if any) with results of SuperIFrame function execution
+         * @param callback Function to call (if any) with results of KerneosIFrame function execution
          *
          */
-        public function callSuperIFrameFunction(functionName:String, args:Array = null, callback:Function = null):String
+        public function callKerneosIFrameFunction(functionName:String, args:Array = null, callback:Function = null):String
         {
             if (!source)
             {
@@ -889,7 +918,7 @@ package org.ow2.jasmine.kerneos.core.view
             if (frameLoaded)
             {
                 // Call the function immediately
-                var result:Object = ExternalInterface.call("callSuperIFrameFunction", iframeId, functionName, args);
+                var result:Object = ExternalInterface.call("callKerneosIFrameFunction", iframeId, functionName, args);
                 if (callback != null)
                 {
                     callback(result);

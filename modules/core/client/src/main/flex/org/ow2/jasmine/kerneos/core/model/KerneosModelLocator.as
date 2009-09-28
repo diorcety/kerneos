@@ -25,6 +25,7 @@ package org.ow2.jasmine.kerneos.core.model{
 import com.adobe.cairngorm.model.ModelLocator;
 
 import mx.collections.ArrayCollection;
+import mx.utils.UIDUtil;
 
 import org.ow2.jasmine.kerneos.core.business.*;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
@@ -34,12 +35,24 @@ import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 * 
 * @author Guillaume Renault, Julien Nicoulaud
 */
-public class KerneosModelLocator implements ModelLocator{
+public class KerneosModelLocator implements ModelLocator {
     
     // =========================================================================
     // Properties
     // =========================================================================
-
+    
+    /**
+    * The unique ID of this component
+    * 
+    * @internal
+    *   Used to prevent a Cairngorm issue: when a command event is dispatched,
+    * every controller that registered this event type receives it, even if
+    * located in another module. To prevent this from happening and triggering
+    * multiple severe unexpected concurrence bugs, each event dispatched is
+    * postfixed with this unique ID.
+    */
+    public var componentID:String = UIDUtil.createUID();
+    
     /**
     * The config of Kerneos
     */

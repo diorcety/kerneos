@@ -25,16 +25,45 @@ package org.ow2.jasmine.kerneos.core.vo
 import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
+import mx.core.UIComponent;
+
+import org.ow2.jasmine.kerneos.common.util.IconUtility;
+
 
 /**
-* Describes the configuration of a Kerneos module
-* 
-* @author Guillaume Renault, Julien Nicoulaud
-*/
+ * Describes the configuration of a Kerneos module
+ * 
+ * @author Guillaume Renault
+ * @author Julien Nicoulaud
+ */
 [RemoteClass(alias="org.ow2.jasmine.kerneos.service.Module")]
 [Bindable]
 public class ModuleVO implements IValueObject
 {
+	
+    // =========================================================================
+    // Properties
+    // =========================================================================
+   
+    // Assets
+         
+    /**
+    * Default module small icon (16x16)
+    */
+    [Transient]
+    [Embed(source="/../assets/module16.png")]
+    public static var defaultSmallIcon : Class;
+    
+    /**
+    * Default module big icon (64x64)
+    */
+    [Transient]
+    [Embed(source="/../assets/module64.png")]
+    public static var defaultBigIcon : Class;
+    
+    
+    // Fields
+    
     /**
     * The web page URL (for IFrame modules)
     */
@@ -60,25 +89,15 @@ public class ModuleVO implements IValueObject
 	*/
 	public var description : String = null;
 	
-	/**
-	* The default small icon (16x16) path
-	*/
-    public var defaultSmallIcon : String = "resources/icons/module16.png";
-    
     /**
     * The small icon (16x16) path
     */
-    public var smallIcon : String = defaultSmallIcon;
-    
-    /**
-    * The default big icon (64x64) path
-    */
-    public var defaultBigIcon : String = "resources/icons/module64.png";
+    public var smallIcon : String = null;
     
     /**
     * The big icon (64x64) path
     */
-    public var bigIcon : String = defaultBigIcon;
+    public var bigIcon : String = null;
     
     /**
     * Load the module on application startup
@@ -102,11 +121,55 @@ public class ModuleVO implements IValueObject
     public static const ALWAYS_PROMPT_BEFORE_CLOSE : String = "always";
     public var promptBeforeClose : String = DEFAULT_PROMPT_BEFORE_CLOSE;
     
+    
+    // Transient fields (client-side only)
+    
     /**
     * The current state of the module
     */
     [Transient]
     public var loaded : Boolean = false;
+    
+    
+    // =========================================================================
+    // Public methods
+    // =========================================================================
+    
+    /**
+    * Get the the small icon asset
+    */
+    public function getSmallIconClass(target:UIComponent):Class
+    {
+        // If no icon specified, return the default one
+        if (smallIcon == null)
+        {
+            return defaultSmallIcon;
+        }
+        
+        // Else load the given URL
+        else
+        {
+            return IconUtility.getClass(target,bigIcon,16,16);
+        }
+    }
+    
+    /**
+    * Get the the big icon asset
+    */
+    public function getBigIconClass(target:UIComponent):Class
+    {
+        // If no icon specified, return the default one
+        if (bigIcon == null)
+        {
+            return defaultBigIcon;
+        }
+        
+        // Else load the given URL
+        else
+        {
+            return IconUtility.getClass(target,bigIcon,64,64);
+        }
+    }
     
     /**
     * Ouput the module name

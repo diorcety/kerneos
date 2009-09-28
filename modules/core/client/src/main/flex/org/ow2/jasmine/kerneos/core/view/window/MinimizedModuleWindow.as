@@ -19,10 +19,10 @@
  * USA
  *
  * --------------------------------------------------------------------------
- * $Id:Controller.as 2485 2008-09-30 14:14:35Z renaultgu $
+ * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.view
+package org.ow2.jasmine.kerneos.core.view.window
 {
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -70,7 +70,7 @@ public class MinimizedModuleWindow extends Button
 		
 		// FIXME move to commitProperties
 		this.label = window.module.name;
-		this.setStyle("icon",IconUtility.getClass(this,window.module.smallIcon,16,16));
+		this.setStyle("icon",window.module.getSmallIconClass(this));
 		this.doubleClickEnabled = true;
 		
 		// Intercept button click events

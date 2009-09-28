@@ -22,47 +22,41 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.view
+package org.ow2.jasmine.kerneos.common.view
 {
-import mx.core.Container;
-import mx.modules.ModuleLoader;
-
-import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
-	
+import flash.display.Bitmap;
+import mx.controls.Image;
 
 /**
-* A window hosting a Swf ModuleLoader
+* An Image object with bitmap smoothing activated by default, for a much
+* better rendering
 * 
 * @author Julien Nicoulaud
 */
-[Bindable]
-public class SwfModuleWindow extends ModuleWindow
+public class SmoothImage extends Image
 {
-		
-    // =========================================================================
-    // Variables
-    // =========================================================================
-    
     /**
-    * Build a new Swf module hosting window
+    * Overridden display function to activate bitmap smoothing
     */
-	public function SwfModuleWindow(module:ModuleVO)
-	{
-		// Call super classe constructor
-		super(module);
-	}
-	
-	
-    // =========================================================================
-    // Getter & setters
-    // =========================================================================
-    
-    /**
-    * Get the hosted module loader
-    */
-    public function get moduleLoader():ModuleLoader
+    override protected function updateDisplayList (unscaledWidth : Number,
+                                                   unscaledHeight : Number):void
     {
-        return (this as Container).getChildAt(0) as ModuleLoader;
+        // Call super class function
+        super.updateDisplayList (unscaledWidth, unscaledHeight);
+
+        // Check if the image is a bitmap
+        if (content is Bitmap) {
+            
+            // Retrieve the bitmap content
+            var bitmap : Bitmap = content as Bitmap;
+            
+            // If not empty and no bitmap smoothing...
+            if (bitmap != null && bitmap.smoothing == false) {
+                
+                // Activate it
+                bitmap.smoothing = true;
+            }
+        }
     }
 }
 }

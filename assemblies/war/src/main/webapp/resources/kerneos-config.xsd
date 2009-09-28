@@ -39,6 +39,7 @@
       <xs:all>
         <xs:element ref="k:consoleProject" maxOccurs="1" minOccurs="0" />
         <xs:element ref="k:consoleName" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="k:consoleLogo" maxOccurs="1" minOccurs="0" />
         <xs:element ref="k:showMinimizeAllIcon" maxOccurs="1" minOccurs="0" />
         <xs:element ref="k:showCascadeIcon" maxOccurs="1" minOccurs="0" />
         <xs:element ref="k:showTileIcon" maxOccurs="1" minOccurs="0" />
@@ -52,6 +53,7 @@
   </xs:element>
   <xs:element name="consoleProject" type="xs:NCName" />
   <xs:element name="consoleName" type="xs:NCName" />
+  <xs:element name="consoleLogo" type="xs:string" />
   <xs:element name="showMinimizeAllIcon" type="xs:boolean" />
   <xs:element name="showCascadeIcon" type="xs:boolean" />
   <xs:element name="showTileIcon" type="xs:boolean" />
@@ -78,14 +80,14 @@
         </xs:sequence>
         <xs:element ref="k:services" maxOccurs="1" minOccurs="0"/>
       </xs:sequence>
-      <xs:attribute name="loadMaximized" use="required" type="xs:boolean" />
-      <xs:attribute name="loadOnStartup" use="required" type="xs:boolean" />
-      <xs:attribute name="promptBeforeClose" use="required" type="k:promptBeforeCloseType"/>
+      <xs:attribute name="loadMaximized" use="optional" type="xs:boolean" />
+      <xs:attribute name="loadOnStartup" use="optional" type="xs:boolean" />
+      <xs:attribute name="promptBeforeClose" use="optional" type="k:promptBeforeCloseType"/>
       <xs:attribute name="swfFile" type="xs:NCName" />
       <xs:attribute name="url" type="xs:anyURI" />
     </xs:complexType>
   </xs:element>
-  <xs:element name="name" type="xs:anyURI" />
+  <xs:element name="name" type="xs:string" />
   <xs:element name="description" type="xs:string" />
   <xs:element name="smallIcon" type="xs:string" />
   <xs:element name="bigIcon" type="xs:string" />

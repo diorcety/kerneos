@@ -12,7 +12,7 @@
  $Id$
  
 *********************************************************************************************************************************/
-package org.ow2.jasmine.kerneos.core.view
+package org.ow2.jasmine.kerneos.common.util
 {
 import flash.display.BitmapData;
 import flash.display.Loader;

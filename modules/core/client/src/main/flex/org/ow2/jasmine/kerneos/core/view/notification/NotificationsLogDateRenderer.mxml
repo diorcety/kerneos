@@ -25,7 +25,6 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
-         xmlns:local="org.ow2.jasmine.kerneos.core.view.*"
          implements="mx.controls.listClasses.IListItemRenderer"
          paddingBottom="3"
          paddingLeft="3"

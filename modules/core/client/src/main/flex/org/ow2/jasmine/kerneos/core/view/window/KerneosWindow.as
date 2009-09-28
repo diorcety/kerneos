@@ -22,7 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.view
+package org.ow2.jasmine.kerneos.core.view.window
 {
 import flash.events.Event;
 import flash.events.MouseEvent;

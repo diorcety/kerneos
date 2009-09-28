@@ -39,6 +39,9 @@
         <!--<consoleProject>JASMINe</consoleProject>-->
         <!--<consoleName>Kerneos</consoleName>-->
         
+        <!-- The path to the console logo (64x64 image) -->
+        <!--<consoleLogo>resources/icons/logo.png</consoleLogo>-->
+        
         <!-- Show the "Minimize all" icon in the taskbar ? -->
         <!--<showMinimizeAllIcon>true</showMinimizeAllIcon>-->
         
@@ -61,7 +64,7 @@
         <!--<showConfirmCloseDialog>true</showConfirmCloseDialog>-->
         
         <!-- Default language of Kerneos. values : fr_FR or en_US -->
-        <defaultLanguage>en_US</defaultLanguage>
+        <!--<defaultLanguage>en_US</defaultLanguage>-->
         
     </options>
     

@@ -22,7 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.view
+package org.ow2.jasmine.kerneos.core.view.window
 {
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -82,7 +82,7 @@ public class ModuleWindow extends KerneosWindow
     */
     private function onCreationComplete(e:Event=null):void
     {
-        this.titleIcon = IconUtility.getClass(this.titleBar,module.smallIcon,16,16);
+        this.titleIcon = module.getSmallIconClass(this.titleBar);
     }
 
 

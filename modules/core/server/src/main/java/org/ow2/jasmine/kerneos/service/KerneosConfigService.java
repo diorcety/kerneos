@@ -59,6 +59,9 @@ public class KerneosConfigService implements Serializable {
      */
     private static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";
 
+    /**
+     * The path to the application root
+     */
     private static final String PREFIX = "../../";
 
     /**
@@ -127,6 +130,12 @@ public class KerneosConfigService implements Serializable {
                     else if (option.getNodeName().equals("consoleName")) {
                         config.consoleName = option.getTextContent();
                         logger.debug("Console name : " + config.consoleName);
+                    }
+
+                    // Console logo
+                    else if (option.getNodeName().equals("consoleLogo")) {
+                        config.consoleLogo = option.getTextContent();
+                        logger.debug("Console logo : " + config.consoleLogo);
                     }
 
                     // Show "Minimize all" icon

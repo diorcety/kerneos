@@ -27,6 +27,8 @@ package org.ow2.jasmine.kerneos.common.event
 
 import com.adobe.cairngorm.control.CairngormEvent;
 
+import flash.events.Event;
+
 /**
 * An event that can be dispatched by modules to let Kerneos notify the user.
 * 
