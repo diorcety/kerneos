@@ -89,6 +89,8 @@ KerneosWindow{
     restore-btn-style-name: moduleWindowRestoreButton;
     style-name-no-focus: noFocusModuleWindow;
     style-name-focus: focusModuleWindow;
+    vertical-align: middle;
+    horizontal-align: center;
 }
 
 .focusModuleWindow {

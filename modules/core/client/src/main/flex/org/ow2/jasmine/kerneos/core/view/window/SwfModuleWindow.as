@@ -24,7 +24,11 @@
  */
 package org.ow2.jasmine.kerneos.core.view.window
 {
-import mx.core.Container;
+import flash.events.ProgressEvent;
+
+import mx.controls.Alert;
+import mx.controls.ProgressBar;
+import mx.events.ModuleEvent;
 import mx.modules.ModuleLoader;
 
 import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
@@ -48,9 +52,14 @@ public class SwfModuleWindow extends ModuleWindow
     */
     private var _loader : ModuleLoader;
     
+    /**
+    * The progress bar
+    */
+    private var _progressBar : ProgressBar;
+    
     
     // =========================================================================
-    // Constructor & intiialization
+    // Constructor & initialization
     // =========================================================================
     
     /**
@@ -70,12 +79,29 @@ public class SwfModuleWindow extends ModuleWindow
         // Call super class method
         super.createChildren();
         
-        // Add the SWF module loader
+        // Setup the SWF module loader
         _loader = new ModuleLoader();
         _loader.url = module.swfFile;
         _loader.percentWidth = 100;
         _loader.percentHeight = 100;
-        addChild(_loader);
+        _loader.addEventListener(ModuleEvent.READY,onLoaderReady);
+        _loader.addEventListener(ModuleEvent.ERROR,onLoaderError);
+        
+        // Setup the progress bar
+        _progressBar = new ProgressBar();
+        _progressBar.setStyle("trackHeight",20);
+        _progressBar.setStyle("color",0xEFEFEF);
+        _progressBar.setStyle("borderColor",0x333333);
+        _progressBar.setStyle("trackColors",[0xAAAAAA,0xEEEEEE]);
+        _progressBar.source = _loader;
+        _progressBar.conversion = 1024;
+        _progressBar.label = "Loading... %3%% (%1/%2 kb)";
+        addChild(_progressBar);
+        
+        // Start loading
+        this.setStyle("backgroundColor",0x666666);
+        _loader.loadModule();
+
     }
 	
 	
@@ -90,5 +116,29 @@ public class SwfModuleWindow extends ModuleWindow
     {
         return _loader;
     }
+    
+    
+    // =========================================================================
+    // Private methods
+    // =========================================================================
+    
+    /**
+    * When the module has finished loading
+    */
+    private function onLoaderReady(event:ProgressEvent):void
+    {
+        removeChild(_progressBar);
+        addChild(_loader);
+        this.setStyle("backgroundColor",0xCCCCCC);
+    }
+    
+    /**
+    * If there was an error while loading the module
+    */
+    private function onLoaderError(event:ModuleEvent):void
+    {
+    	Alert.show(event.errorText + '\nTry reopening the module.','Error loading ' + module.name);
+    }
+    
 }
 }
