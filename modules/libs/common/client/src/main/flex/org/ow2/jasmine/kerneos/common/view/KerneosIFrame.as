@@ -241,63 +241,12 @@ package org.ow2.jasmine.kerneos.common.view
                 "}" +
             "}";
 
-        private static var FUNCTION_HIDEIFRAME:String =
-            "document.insertScript = function ()" +
-            "{ " +
-                "if (document.hideKerneosIFrame==null)" +
-                "{" +
-                    "hideKerneosIFrame = function (frameID, iframeID)" +
-                    "{" +
-                        "var iframeRef = document.getElementById(iframeID);" +
-                        "var iframeDoc;" +
-                        "if (iframeRef.contentWindow) {" +
-                            "iframeDoc = iframeRef.contentWindow.document;" +
-                           "} else if (iframeRef.contentDocument) {" +
-                            "iframeDoc = iframeRef.contentDocument;" +
-                        "} else if (iframeRef.document) {" +
-                            "iframeDoc = iframeRef.document;" +
-                        "}" +
-                        "if (iframeDoc) {" +
-                            "iframeDoc.body.style.visibility='hidden';" +
-                        "}" +
-                        "document.getElementById(frameID).style.visibility='hidden';" +
-                        //"console.info('[KerneosIFrame] hideKerneosIFrame('+ frameID +')');" +
-                    "}" +
-                "}" +
-            "}";
-
-        private static var FUNCTION_SHOWIFRAME:String =
-            "document.insertScript = function ()" +
-            "{ " +
-                "if (document.showKerneosIFrame==null)" +
-                "{" +
-                    "showKerneosIFrame = function (frameID, iframeID)" +
-                    "{" +
-                        "var iframeRef = document.getElementById(iframeID);" +
-                        "document.getElementById(frameID).style.visibility='visible';" +
-
-                        "var iframeDoc;" +
-                        "if (iframeRef.contentWindow) {" +
-                            "iframeDoc = iframeRef.contentWindow.document;" +
-                           "} else if (iframeRef.contentDocument) {" +
-                            "iframeDoc = iframeRef.contentDocument;" +
-                        "} else if (iframeRef.document) {" +
-                            "iframeDoc = iframeRef.document;" +
-                        "}" +
-                        "if (iframeDoc) {" +
-                            "iframeDoc.body.style.visibility='visible';" +
-                        "}" +
-                        //"console.info('[KerneosIFrame] showKerneosIFrame('+ frameID +')');" +
-                    "}" +
-                "}" +
-            "}";
-
         private static var FUNCTION_HIDEDIV:String =
             "document.insertScript = function ()" +
             "{ " +
                 "if (document.hideDiv==null)" +
                 "{" +
-                    "hideDiv = function (frameID, iframeID)" +
+                    "hideDiv = function (frameID)" +
                     "{" +
                         "document.getElementById(frameID).style.visibility='hidden';" +
                         //"console.info('[KerneosIFrame] hideDiv('+ frameID +')');" +
@@ -310,7 +259,7 @@ package org.ow2.jasmine.kerneos.common.view
             "{ " +
                 "if (document.showDiv==null)" +
                 "{" +
-                    "showDiv = function (frameID, iframeID)" +
+                    "showDiv = function (frameID)" +
                     "{" +
                         "document.getElementById(frameID).style.visibility='visible';" +
                         //"console.info('[KerneosIFrame] showDiv('+ frameID +')');" +
@@ -499,8 +448,6 @@ package org.ow2.jasmine.kerneos.common.view
             ExternalInterface.call(FUNCTION_CREATEIFRAME);
             ExternalInterface.call(FUNCTION_REMOVEIFRAME);
             ExternalInterface.call(FUNCTION_MOVEIFRAME);
-            ExternalInterface.call(FUNCTION_HIDEIFRAME);
-            ExternalInterface.call(FUNCTION_SHOWIFRAME);
             ExternalInterface.call(FUNCTION_SHOWDIV);
             ExternalInterface.call(FUNCTION_HIDEDIV);
             ExternalInterface.call(FUNCTION_LOADIFRAME);
@@ -885,27 +832,21 @@ package org.ow2.jasmine.kerneos.common.view
         {
             super.visible = value;
 
-            // if we have an iframe in the same domain as the app, call the
-            // specialized functions to update visibility inside the iframe
-            if (visible && validForDisplay)
+            if (visible)
             {
-                if (source && iframeContentHost == appHost)
-                    ExternalInterface.call("showKerneosIFrame",frameId,iframeId);
-                else
-                    ExternalInterface.call("showDiv",frameId,iframeId);
-                logger.debug("show iframe id {0}", frameId);
+                if (validForDisplay)
+                {
+                    ExternalInterface.call("showDiv", frameId);
+                    logger.debug("show div id {0}", frameId);
 
-                // make sure position and status indicators get updated when revealed
-                invalidateDisplayList();
-
+                    // make sure position and status indicators get updated when revealed
+                    invalidateDisplayList();
+                }
             }
             else
             {
-                if (source && iframeContentHost == appHost)
-                    ExternalInterface.call("hideKerneosIFrame",frameId,iframeId);
-                else
-                    ExternalInterface.call("hideDiv",frameId,iframeId);
-                logger.debug("hide iframe id {0}", frameId);
+                ExternalInterface.call("hideDiv", frameId);
+                logger.debug("hide div id {0}", frameId);
             }
         }
 
