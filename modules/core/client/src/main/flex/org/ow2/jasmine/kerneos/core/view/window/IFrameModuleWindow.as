@@ -24,14 +24,12 @@
  */
 package org.ow2.jasmine.kerneos.core.view.window
 {
-import flash.display.FrameLabel;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
 import flexlib.mdi.events.MDIWindowEvent;
 
-import mx.containers.Canvas;
-
+import org.ow2.jasmine.kerneos.common.util.logger.KerneosLogger;
 import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
 import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
 	
@@ -150,8 +148,10 @@ public class IFrameModuleWindow extends ModuleWindow
     */
     public function showIFrame(e:Event=null):void
     {
-        this.iFrame.visible = true;
-        this.iFrame.overlayDetection = true;
+    	if (!minimized) {
+	        this.iFrame.visible = true;
+	        this.iFrame.overlayDetection = true;
+        }
     }
     
     /**
@@ -194,8 +194,9 @@ public class IFrameModuleWindow extends ModuleWindow
     override public function unMinimize(event:MouseEvent=null):void
     {
         // Restore the IFrame visibility
-        showIFrame();
-        
+        this.iFrame.visible = true;
+        this.iFrame.overlayDetection = true;
+                    
         // Call super class method
         super.unMinimize(event);
     }
