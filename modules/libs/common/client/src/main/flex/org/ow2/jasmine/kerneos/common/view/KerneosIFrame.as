@@ -135,7 +135,7 @@
 // -----------------------------------------------------------------------
 
 /**
- * An improved Flex KerneosIFrame component
+ * An improved Flex-IFrame component
  *
  * @author Julien Nicoulaud
  * @internal Original source code:
@@ -205,6 +205,7 @@ package org.ow2.jasmine.kerneos.common.view
                         "newDiv.style.border = '0px';" +
                         "newDiv.style.visibility = 'hidden';" +
                         "bodyID.appendChild(newDiv);" +
+                        //"console.info('[KerneosIFrame] createKerneosIFrame('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -217,6 +218,7 @@ package org.ow2.jasmine.kerneos.common.view
                     "{ " +
                         "var iFrameDiv = document.getElementById(frameID);" +
                         "iFrameDiv.parentNode.removeChild(iFrameDiv);" +
+                        //"console.info('[KerneosIFrame] removeIFrame('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -234,6 +236,7 @@ package org.ow2.jasmine.kerneos.common.view
                         "var iFrameRef=document.getElementById(iframeID);" +
                         "iFrameRef.width=w;" +
                         "iFrameRef.height=h;" +
+                        //"console.info('[KerneosIFrame] moveKerneosIFrame('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -258,6 +261,7 @@ package org.ow2.jasmine.kerneos.common.view
                             "iframeDoc.body.style.visibility='hidden';" +
                         "}" +
                         "document.getElementById(frameID).style.visibility='hidden';" +
+                        //"console.info('[KerneosIFrame] hideKerneosIFrame('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -283,6 +287,7 @@ package org.ow2.jasmine.kerneos.common.view
                         "if (iframeDoc) {" +
                             "iframeDoc.body.style.visibility='visible';" +
                         "}" +
+                        //"console.info('[KerneosIFrame] showKerneosIFrame('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -295,6 +300,7 @@ package org.ow2.jasmine.kerneos.common.view
                     "hideDiv = function (frameID, iframeID)" +
                     "{" +
                         "document.getElementById(frameID).style.visibility='hidden';" +
+                        //"console.info('[KerneosIFrame] hideDiv('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -307,6 +313,7 @@ package org.ow2.jasmine.kerneos.common.view
                     "showDiv = function (frameID, iframeID)" +
                     "{" +
                         "document.getElementById(frameID).style.visibility='visible';" +
+                        //"console.info('[KerneosIFrame] showDiv('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -320,6 +327,7 @@ package org.ow2.jasmine.kerneos.common.view
                     "{" +
                         "document.getElementById(frameID).innerHTML = \"<iframe id='\"+iframeID+\"' src='\"+url+\"' onLoad='"
                             + Application.application.id + ".\"+frameID+\"_load()' frameborder='0'></iframe>\";" +
+                        //"console.info('[KerneosIFrame] loadKerneosIFrame('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -332,6 +340,7 @@ package org.ow2.jasmine.kerneos.common.view
                     "loadDivContent = function (frameID, iframeID, content)" +
                     "{" +
                         "document.getElementById(frameID).innerHTML = \"<div id='\"+iframeID+\"' frameborder='0'>\"+content+\"</div>\";" +
+                        //"console.info('[KerneosIFrame] loadDivContent('+ frameID +')');" +
                     "}" +
                 "}" +
             "}";
@@ -355,6 +364,7 @@ package org.ow2.jasmine.kerneos.common.view
                         "if (iframeDoc.wrappedJSObject != undefined) {" +
                             "iframeDoc = iframeDoc.wrappedJSObject;" +
                         "}" +
+                        //"console.info('[KerneosIFrame] callKerneosIFrameFunction('+ iframeID +')');" +
                         "return iframeDoc[functionName](args);" +
                     "}" +
                 "}" +
@@ -377,8 +387,8 @@ package org.ow2.jasmine.kerneos.common.view
         public function KerneosIFrame()
         {
             super();
-            this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
-            this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
+            //this.addEventListener(Event.REMOVED_FROM_STAGE, handleRemove);
+            //this.addEventListener(Event.ADDED_TO_STAGE, handleAdd);
         }
 
         private var _debug:Boolean = false;

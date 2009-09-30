@@ -424,7 +424,6 @@
                 // If this is a swf module
                 if (module.swfFile != null)
                 {
-                    
                     // Create a window
                     window = new SwfModuleWindow(module);
                     window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, handleNotificationEvent);
@@ -433,18 +432,10 @@
                 // Else this is an IFrame module
                 else
                 {
-                    
-                    // Hide the existing IFrames
-                    for each (var existingFrame : KerneosIFrame in frames)
-                    {
-                        existingFrame.visible = false;
-                    }
-                    
                     // Create a window
                     frames[module.name] = new KerneosIFrame();
                     var frame : KerneosIFrame = frames[module.name] as KerneosIFrame;
                     window = new IFrameModuleWindow(module,frame);
-                    
                 }
                 
                 // Create the button in the taskbar
