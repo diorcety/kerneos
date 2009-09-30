@@ -29,7 +29,6 @@ import flash.events.MouseEvent;
 
 import flexlib.mdi.events.MDIWindowEvent;
 
-import org.ow2.jasmine.kerneos.common.util.logger.KerneosLogger;
 import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
 import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
 	
