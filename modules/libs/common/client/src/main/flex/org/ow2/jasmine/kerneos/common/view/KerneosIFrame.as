@@ -149,7 +149,7 @@ package org.ow2.jasmine.kerneos.common.view
     import flash.external.ExternalInterface;
     import flash.geom.Point;
     import flash.utils.Dictionary;
-    
+
     import mx.core.Application;
     import mx.core.Container;
     import mx.core.UIComponent;
@@ -209,11 +209,11 @@ package org.ow2.jasmine.kerneos.common.view
                     "}" +
                 "}" +
             "}";
-        private static var FUNCTION_REMOVEIFRAME:String = 
+        private static var FUNCTION_REMOVEIFRAME:String =
             "document.insertScript = function ()" +
             "{ " +
-                "if (document.removeIFrame==null)" + 
-                "{" + 
+                "if (document.removeIFrame==null)" +
+                "{" +
                     "removeIFrame = function (frameID)" +
                     "{ " +
                         "var iFrameDiv = document.getElementById(frameID);" +
@@ -438,7 +438,7 @@ package org.ow2.jasmine.kerneos.common.view
                 }
             }
         }
-        
+
         /**
         * Get the state of the overlay detection system
         */
@@ -897,7 +897,7 @@ package org.ow2.jasmine.kerneos.common.view
 
                 // make sure position and status indicators get updated when revealed
                 invalidateDisplayList();
-                
+
             }
             else
             {
@@ -1095,13 +1095,13 @@ package org.ow2.jasmine.kerneos.common.view
 
             return overlapX && overlapY;
         }
-        
+
         /**
         * Remove the iFrame
         */
         public function kill(e:Event=null):void
         {
-        	ExternalInterface.call("removeIFrame", frameId);
+            ExternalInterface.call("removeIFrame", frameId);
         }
     }
 }
