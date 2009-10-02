@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>${groupId}</groupId>
+	<artifactId>${artifactId}</artifactId>
+	<version>${version}</version>
+	<name>${groupId} :: ${artifactId}</name>
+
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.ow2.jasmine.kerneos</groupId>
+			<artifactId>kerneos-core-server</artifactId>
+			<version>1.2.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>apache-log4j-extras</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.ow2.easybeans.osgi</groupId>
+					<artifactId>easybeans-osgi-annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.util</groupId>
+			<artifactId>util-log</artifactId>
+			<version>1.0.20</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.util</groupId>
+			<artifactId>util-i18n</artifactId>
+			<version>1.0.20</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.0-alpha-4</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+
+								<!-- Core -->
+								<artifactItem>
+									<groupId>org.ow2.jasmine.kerneos</groupId>
+									<artifactId>kerneos-core-client</artifactId>
+									<version>1.2.1-SNAPSHOT</version>
+									<type>swf</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/${artifactId}/</outputDirectory>
+									<destFileName>Kerneos.swf</destFileName>
+								</artifactItem>
+
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<finalName>${artifactId}</finalName>
+	</build>
+</project>
