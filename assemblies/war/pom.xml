@@ -65,6 +65,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.graniteds</groupId>
+      <artifactId>granite-core</artifactId>
+      <version>${graniteds.version}</version>
+    </dependency>
+        
+    <dependency>
       <groupId>org.ow2.jasmine.kerneos</groupId>
       <artifactId>kerneos-login-server</artifactId>
       <version>${project.version}</version>

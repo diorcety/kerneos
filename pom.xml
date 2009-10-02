@@ -47,6 +47,7 @@
     <flex.home>${env.FLEX_HOME}</flex.home>
     <flexlib.version>r169</flexlib.version>
     <flex.version>3.0.0.477</flex.version>
+    <graniteds.version>2.0.0.SP1</graniteds.version>
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
   </properties>
 
@@ -60,6 +61,10 @@
     <repository>
       <id>flexmojos-repository</id>
       <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+    </repository>
+    <repository>
+      <id>java-net</id>
+      <url>http://download.java.net/maven/2/</url>
     </repository>
   </repositories>
 
@@ -78,6 +83,11 @@
           <artifactId>geronimo-jms_1.1_spec</artifactId>
           <version>1.1</version>
         </dependency>
+	    <dependency>
+	      <groupId>log4j</groupId>
+	      <artifactId>apache-log4j-extras</artifactId>
+	      <version>1.0</version>
+	    </dependency>
         <dependency>
           <groupId>org.ow2.carol</groupId>
           <artifactId>carol</artifactId>
@@ -87,6 +97,11 @@
           <groupId>commons-logging</groupId>
           <artifactId>commons-logging-api</artifactId>
           <version>1.1</version>
+        </dependency>
+        <dependency>
+          <groupId>org.graniteds</groupId>
+          <artifactId>granite-core</artifactId>
+          <version>${graniteds.version}</version>
         </dependency>
         <dependency>
           <groupId>org.objectweb.monolog</groupId>
@@ -135,6 +150,28 @@
                       <groupId>commons-logging</groupId>
                       <artifactId>commons-logging-api</artifactId>
                       <version>1.1</version>
+                      <type>jar</type>
+                      <overWrite>true</overWrite>
+                      <outputDirectory>
+                        wtp/content/WEB-INF/lib
+                      </outputDirectory>
+                    </artifactItem>
+
+                    <artifactItem>
+			          <groupId>org.graniteds</groupId>
+			          <artifactId>granite-core</artifactId>
+			          <version>${graniteds.version}</version>
+                      <type>jar</type>
+                      <overWrite>true</overWrite>
+                      <outputDirectory>
+                        wtp/content/WEB-INF/lib
+                      </outputDirectory>
+                    </artifactItem>
+
+                    <artifactItem>
+			          <groupId>log4j</groupId>
+			          <artifactId>apache-log4j-extras</artifactId>
+			          <version>1.0</version>
                       <type>jar</type>
                       <overWrite>true</overWrite>
                       <outputDirectory>

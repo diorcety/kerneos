@@ -69,6 +69,11 @@
 			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/META-INF</locationURI>
 		</link>
 		<link>
+			<name>wtp/content/resources</name>
+			<type>2</type>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/resources</locationURI>
+		</link>
+		<link>
 			<name>wtp/content/WEB-INF/flex</name>
 			<type>2</type>
 			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/flex</locationURI>
@@ -77,6 +82,11 @@
 			<name>wtp/content/WEB-INF/web.xml</name>
 			<type>1</type>
 			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/web.xml</locationURI>
+		</link>
+		<link>
+			<name>wtp/content/resources/icons</name>
+			<type>2</type>
+			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/resources/icons</locationURI>
 		</link>
 		<link>
 			<name>wtp/content/WEB-INF/classes/log4j.xml</name>
@@ -88,35 +98,5 @@
 			<type>1</type>
 			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/granite/granite-config.xml</locationURI>
 		</link>
-		<link>
-			<name>wtp/content/WEB-INF/lib/commons-beanutils.jar</name>
-			<type>1</type>
-			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/commons-beanutils.jar</locationURI>
-		</link>
-		<link>
-			<name>wtp/content/WEB-INF/lib/granite.jar</name>
-			<type>1</type>
-			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/granite.jar</locationURI>
-		</link>
-		<link>
-			<name>wtp/content/WEB-INF/lib/jdom.jar</name>
-			<type>1</type>
-			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/jdom.jar</locationURI>
-		</link>
-		<link>
-			<name>wtp/content/WEB-INF/lib/log4j.jar</name>
-			<type>1</type>
-			<locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/WEB-INF/lib/log4j.jar</locationURI>
-		</link>
-        <link>
-            <name>wtp/content/resources</name>
-            <type>2</type>
-            <locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/resources</locationURI>
-        </link>
-        <link>
-            <name>wtp/content/resources/icons</name>
-            <type>2</type>
-            <locationURI>DOCUMENTS/kerneos/assemblies/war/src/main/webapp/resources/icons</locationURI>
-        </link>
 	</linkedResources>
 </projectDescription>
