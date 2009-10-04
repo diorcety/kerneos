@@ -33,11 +33,10 @@
            width = "100%"
            height = "100%"
            creationComplete = "creationCompleteHandler()"
-           currentState = "init" >
+           currentState = "init">
 
     <mx:Script>
         <![CDATA[
-            
             import flash.display.StageDisplayState;
             import flash.utils.getTimer;
             import flash.events.KeyboardEvent;
@@ -84,6 +83,7 @@
             import org.ow2.jasmine.kerneos.core.api.KerneosModule;
             import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
+            import org.ow2.jasmine.kerneos.core.util.SharedObjectManager;
             import org.ow2.jasmine.kerneos.core.vo.*;
             import org.ow2.jasmine.kerneos.core.view.window.*
             import org.ow2.jasmine.kerneos.core.view.notification.*;
@@ -92,7 +92,6 @@
             import flexlib.mdi.containers.MDIWindow;
             import flexlib.mdi.events.MDIWindowEvent;
             import flexlib.mdi.events.MDIManagerEvent;
-            
             
             // =========================================================================
             // Variables
@@ -150,20 +149,19 @@
             private var logoutIcon : Class;
             
             /**
-            * Icon for the en_US locale
-            */
+             * Icon for the en_US locale
+             */
             [Embed(source="/../assets/en_US.png")]
             [Bindable]
-            public var en_USIcon:Class;
+            public var en_USIcon : Class;
             
             /**
-            * Icon for the fr_FR locale
-            */            
+             * Icon for the fr_FR locale
+             */
             [Embed(source="/../assets/fr_FR.png")]
             [Bindable]
-            public var fr_FRIcon:Class;
+            public var fr_FRIcon : Class;
             
-                        
             // Dummy: flex SDK bugs workarounds
             
             /**
@@ -180,20 +178,6 @@
              * @see http://bugs.adobe.com/jira/browse/SDK-15249
              */
             private var hist : HistoryManager;
-            
-            
-            // Constants
-            
-            /**
-            * New windows size and placement parameters
-            */
-            public static var WINDOW_DEFAULT_PERCENT_WIDTH : int = 80;
-            public static var WINDOW_DEFAULT_PERCENT_HEIGHT : int = 90;
-            public static var WINDOW_DEFAULT_X_OFFSET : int = 30;
-            public static var WINDOW_DEFAULT_Y_OFFSET : int = 15;
-            public static var LEFT_MARGIN : int = 150;
-            public static var TOP_MARGIN : int = 15;
-            
             
             // Variables
             
@@ -233,13 +217,13 @@
              */
             [Bindable]
             public var firstLogin : Boolean = true;
-
+            
             /**
-            * The actual available and supported languages.
-            */
+             * The actual available and supported languages.
+             */
             [Bindable]
-            private var locales : Array = [{locale:"fr_FR",label:"Français", icon:fr_FRIcon},
-                                           {locale:"en_US",label:"English", icon:en_USIcon}];
+            private var locales : Array = [{locale: "fr_FR", label: "Français", icon: fr_FRIcon},
+                                           {locale: "en_US", label: "English", icon: en_USIcon}];
             
             /**
              * The IFrame  objects
@@ -257,10 +241,11 @@
             private var loggingOut : Boolean = false;
             
             /**
-            * The displayed logo
-            */
+             * The displayed logo
+             */
             [Bindable]
-            private var consoleLogoIcon:Class = null;
+            private var consoleLogoIcon : Class = null;
+            
             
             
             // =========================================================================
@@ -272,12 +257,12 @@
              */
             public function init() : void
             {
+                // Load the user's shared object
+                SharedObjectManager.load();
+                
                 // Listen to server side exceptions events
-                CairngormEventDispatcher.getInstance().addEventListener(
-                    ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID,
-                    ServerSideExceptionEvent.show
-                );
-                                
+                CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+                
                 // Init client-server communications channels properties
                 var urlServer : String = URLUtil.getServerNameWithPort(Application.application.loaderInfo.url).toString();
                 var context : String = Util.parserURL(Application.application.loaderInfo.url.toString());
@@ -314,8 +299,10 @@
                 
                 // Listen to keyboards events at the "application" level
                 parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
-                
+            
             }
+            
+            
             
             /**
              * On component creation complete
@@ -325,28 +312,39 @@
                 this.model = KerneosModelLocator.getInstance();
             }
             
-
+            
+            
             /**
-            * Initialize the application with a given configuration
-            */
+             * Initialize the application with a given configuration
+             */
             private function set initApplication(conf : KerneosConfigVO) : void
             {
                 if (conf != null)
                 {
                     this.currentState = "logged";
                     
-                    resourceManager.localeChain = [this.model.config.defaultLanguage];
+                    var userActiveLanguage : String = SharedObjectManager.getActiveLanguage();
+                    
+                    if (userActiveLanguage != null)
+                    {
+                        resourceManager.localeChain = [userActiveLanguage];
+                    }
+                    else
+                    {
+                        resourceManager.localeChain = [this.model.config.defaultLanguage];
+                    }
                     
                     localeComboBox_initializeHandler();
                     
                     if (model.config.consoleLogo !== null)
                     {
-                        consoleLogoIcon = IconUtility.getClass(consoleLogo,model.config.consoleLogo,64,64);
+                        consoleLogoIcon = IconUtility.getClass(consoleLogo, model.config.consoleLogo, 64, 64);
                     }
                     
                 }
             }
-                        
+            
+            
             
             // =========================================================================
             // Public methods
@@ -359,6 +357,15 @@
              */
             public function canBeClosed() : Boolean
             {
+                // Save the opened windows setup
+                for each (var window : KerneosWindow in mdiCanvas.windowManager.windowList)
+                {
+                    window.saveWindowSetup();
+                }
+                
+                // Save the user settings
+                SharedObjectManager.save();
+                
                 return (loggingOut || !model.config.showConfirmCloseDialog);
             }
             
@@ -435,7 +442,7 @@
                     // Create a window
                     frames[module.name] = new KerneosIFrame();
                     var frame : KerneosIFrame = frames[module.name] as KerneosIFrame;
-                    window = new IFrameModuleWindow(module,frame);
+                    window = new IFrameModuleWindow(module, frame);
                 }
                 
                 // Create the button in the taskbar
@@ -445,21 +452,6 @@
                 
                 // Add it to the windows manager
                 mdiCanvas.windowManager.add(window);
-                
-                // Size and place the window
-                var xOffset : int = mdiCanvas.windowManager.windowList.length * WINDOW_DEFAULT_X_OFFSET;
-                var yOffset : int = mdiCanvas.windowManager.windowList.length * WINDOW_DEFAULT_Y_OFFSET;
-                window.width = Math.min(mdiCanvas.width - LEFT_MARGIN - xOffset, mdiCanvas.width * (WINDOW_DEFAULT_PERCENT_WIDTH/100));
-                window.height = Math.min(mdiCanvas.height - TOP_MARGIN - yOffset, mdiCanvas.height * (WINDOW_DEFAULT_PERCENT_HEIGHT/100));
-                var xPos : int = Math.max(LEFT_MARGIN, mdiCanvas.width - window.width - xOffset);
-                var yPos : int = Math.max(TOP_MARGIN, mdiCanvas.height - window.height - yOffset);
-                mdiCanvas.windowManager.absPos(window, xPos, yPos);
-                
-                // Maximize the window if the option is set
-                if (module.loadMaximized)
-                {
-                    window.maximize();
-                }
                 
                 // Remove the busy cursor
                 cursorManager.removeBusyCursor();
@@ -637,17 +629,16 @@
                         // This is the line that prevents the default behavior from executing as usual
                         // because the default handler checks event.isDefaultPrevented()
                         event.preventDefault();
-                     
                         
                         // Retrieve the target window
                         var window : ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
-
+                        
                         // Resolve wether the user should be prompted before closing the window
                         var prompt : Boolean = true;
-
+                        
                         if (window.module.promptBeforeClose == ModuleVO.NEVER_PROMPT_BEFORE_CLOSE)
                         {
-                        	prompt = false;
+                            prompt = false;
                         }
                         else if (window.module.promptBeforeClose == ModuleVO.ALWAYS_PROMPT_BEFORE_CLOSE)
                         {
@@ -655,31 +646,31 @@
                         }
                         else
                         {
-                        	// If this is a SWF module that implements KerneosModule, call the
-                        	// canBeClosedWithoutPrompt() method.
+                            // If this is a SWF module that implements KerneosModule, call the
+                            // canBeClosedWithoutPrompt() method.
                             if (window is SwfModuleWindow)
-	                        {
-	                            
-	                            // Retrieve the module loader
-	                            var moduleLoader : ModuleLoader = (window as SwfModuleWindow).moduleLoader;
-	                            
-	                            if (moduleLoader.child is KerneosModule)
-	                            {
+                            {
+                                
+                                // Retrieve the module loader
+                                var moduleLoader : ModuleLoader = (window as SwfModuleWindow).moduleLoader;
+                                
+                                if (moduleLoader.child is KerneosModule)
+                                {
                                     prompt = !(moduleLoader.child as KerneosModule).canBeClosedWithoutPrompt();
-	                            }
-	                        }
+                                }
+                            }
                         }
                         
                         // Prompt the user or close directly the window
                         if (prompt)
                         {
-	                        // Show an alert box
-	                        var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + "All unsaved changes might be lost.", "Exit " + window.module.name, 3, null, confirmCloseWindow, null, 4);
+                            // Show an alert box
+                            var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + "All unsaved changes might be lost.", "Exit " + window.module.name, 3, null, confirmCloseWindow, null, 4);
                         }
                         else
                         {
-                        	// Directly close the window
-                        	confirmCloseWindow();
+                            // Directly close the window
+                            confirmCloseWindow();
                         }
                     }
                 }
@@ -878,8 +869,6 @@
                     notificationsLogWindow.addEventListener(MDIWindowEvent.CLOSE, notificationsLogWindowCloseHandler);
                     notificationsLogWindow.minimizeBtn.visible = false;
                     mdiCanvas.windowManager.add(notificationsLogWindow);
-                    mdiCanvas.windowManager.center(notificationsLogWindow);
-                    mdiCanvas.windowManager.resize(notificationsLogWindow);
                 }
                 else
                 {
@@ -898,48 +887,54 @@
             }
             
             
+            
             // =========================================================================
             // Localization
             // =========================================================================            
             
             /**
-            * Initialize the locale selector
-            */
-            private function localeComboBox_initializeHandler(event : Event=null) : void
+             * Initialize the locale selector
+             */
+            private function localeComboBox_initializeHandler(event : Event = null) : void
             {
-            	for (var i : int = 0; i<locales.length; i++)
-            	{
-            		if (locales[i].locale == resourceManager.localeChain[0])
-            		{
-            			localeComboBox.selectedIndex = i;
-            		}
-            	}
+                for (var i : int = 0; i < locales.length; i++)
+                {
+                    if (locales[i].locale == resourceManager.localeChain[0])
+                    {
+                        localeComboBox.selectedIndex = i;
+                        return;
+                    }
+                }
             }
             
             
+            
             /**
-            * When the locale selection has been changed
-            */
+             * When the locale selection has been changed
+             */
             private function localeComboBox_changeHandler(event : Event) : void
             {
                 // Set the localeChain to either the one-element Array
                 // [ "en_US" ] or the one-element Array [ "fr_FR" ].
                 resourceManager.localeChain = [localeComboBox.selectedItem.locale];
+                
+                // Store the user's choice
+                SharedObjectManager.setActiveLanguage(localeComboBox.selectedItem.locale);
             }
             
             
+            
             /**
-            * Returns the selected locale icon
-            */
-            private function getLocaleIcon(item:Object):Class
+             * Returns the selected locale icon
+             */
+            private function getLocaleIcon(item : Object) : Class
             {
-                if(item.icon){
+                if (item.icon)
+                {
                     return item.icon;
                 }
                 return null;
             }
-            
-            
         ]]>
     </mx:Script>
 
@@ -1049,8 +1044,8 @@
                                                         paddingRight = "0"
                                                         paddingBottom = "0"
                                                         paddingTop = "0"
-                                                        snapDistance = "20" 
-                                                        tilePadding = "5" >
+                                                        snapDistance = "20"
+                                                        tilePadding = "5">
                             <mx:TileList id = "modules_list"
                                          height = "100%"
                                          x = "5"
@@ -1096,12 +1091,12 @@
                             <mx:VRule height = "70%"
                                       alpha = "0.25" />
                             <commonView:IconComboBox id = "localeComboBox"
-		                                       dataProvider = "{locales}"
-		                                       labelField = "label"
-		                                       iconFunction = "getLocaleIcon"
-		                                       change = "localeComboBox_changeHandler(event)"
-		                                       styleName = "localeComboBox"
-		                                       toolTip = "Switch language" />
+                                                     dataProvider = "{locales}"
+                                                     labelField = "label"
+                                                     iconFunction = "getLocaleIcon"
+                                                     change = "localeComboBox_changeHandler(event)"
+                                                     styleName = "localeComboBox"
+                                                     toolTip = "Switch language" />
                             <mx:VRule height = "70%"
                                       alpha = "0.25" />
                             <mx:Button width = "22"
@@ -1163,12 +1158,12 @@
                  verticalAlign = "middle"
                  horizontalAlign = "right"
                  verticalScrollPolicy = "off"
-                 horizontalScrollPolicy = "off" >
+                 horizontalScrollPolicy = "off">
             <commonView:SmoothImage id = "consoleLogo"
-            	              source = "{consoleLogoIcon}"
-                              filters = "{[console_mark_shadow]}"
-            	              width = "64"
-            	              height = "64" />
+                                    source = "{consoleLogoIcon}"
+                                    filters = "{[console_mark_shadow]}"
+                                    width = "64"
+                                    height = "64" />
             <mx:Text text = "{model.config.consoleProject}"
                      styleName = "consoleMark1"
                      filters = "{[console_mark_shadow]}"

@@ -31,68 +31,73 @@ import flexlib.mdi.containers.MDIWindow;
 import flexlib.mdi.events.MDIWindowEvent;
 
 import mx.controls.Button;
+import mx.controls.ToolTip;
 import mx.effects.Fade;
 import mx.effects.Glow;
 import mx.effects.Sequence;
 
+
 /**
-* A button representing a module window, for the taskbar
-* 
-* @author Julien Nicoulaud
-*/
+ * A button representing a module window, for the taskbar.
+ *
+ * @author Julien Nicoulaud
+ */
 public class MinimizedModuleWindow extends Button
 {
-	
+    
     // =========================================================================
     // Variables
     // =========================================================================
     
     /**
-    * The corresponding module window
-    */
-	public var _moduleWindow:ModuleWindow;
-	
-	
+     * The corresponding module window.
+     */
+    public var _moduleWindow : ModuleWindow;
+    
+    
+    
     // =========================================================================
     // Constructors
     // =========================================================================
-	
-	/**
-	* Builds a new window for a module
-	*/
-	public function MinimizedModuleWindow(window:ModuleWindow)
-	{
-		// Call super class constructor
-		super();
-		
-		// Assign variables
-		_moduleWindow = window;
-		
-		// FIXME move to commitProperties
-		this.label = window.module.name;
-		this.setStyle("icon",window.module.getSmallIconClass(this));
-		this.doubleClickEnabled = true;
-		
-		// Intercept button click events
-		this.addEventListener(MouseEvent.CLICK,simpleClickHandler);
-        this.addEventListener(MouseEvent.DOUBLE_CLICK,doubleClickHandler);
+    
+    /**
+     * Builds a new window for a module.
+     */
+    public function MinimizedModuleWindow(window : ModuleWindow)
+    {
+        // Call super class constructor
+        super();
+        
+        // Assign variables
+        _moduleWindow = window;
+        
+        // FIXME move to commitProperties
+        this.label = window.module.name;
+        this.toolTip = "Click to bring " + window.module.name + " window to front.\nDouble click to maximize it.";
+        this.setStyle("icon", window.module.getSmallIconClass(this));
+        this.doubleClickEnabled = true;
+        
+        // Intercept button click events
+        this.addEventListener(MouseEvent.CLICK, simpleClickHandler);
+        this.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
         
         // Intercept window events
-		_moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE,windowMinimizeHandler);
-        _moduleWindow.addEventListener(MDIWindowEvent.RESTORE,windowRestoreHandler);
-        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START,windowFocusStartHandler);
-        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END,windowFocusEndHandler);
-	}
-	
-	
+        _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler);
+        _moduleWindow.addEventListener(MDIWindowEvent.RESTORE, windowRestoreHandler);
+        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START, windowFocusStartHandler);
+        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END, windowFocusEndHandler);
+    }
+    
+    
+    
     // =========================================================================
     // Public methods
     // =========================================================================
     
     /**
-    * Flash the button
-    */
-    public function flash(color:uint):void
+     * Flash the button.
+     */
+    public function flash(color : uint) : void
     {
         var effect : Glow = new Glow();
         effect.blurXTo = 50;
@@ -106,10 +111,12 @@ public class MinimizedModuleWindow extends Button
         effect.play([this]);
     }
     
+    
+    
     /**
-    * Blink the button
-    */
-    public function blink():void
+     * Blink the button.
+     */
+    public function blink() : void
     {
         var fadeIn : Fade = new Fade();
         fadeIn.alphaFrom = 0;
@@ -127,83 +134,101 @@ public class MinimizedModuleWindow extends Button
         effect.repeatCount = 3;
         
         effect.play([this]);
-    }        
+    }
+    
     
     
     // =========================================================================
     // Button click events handlers
     // =========================================================================
-        
+    
     /**
-    * When the button is simple clicked
-    */
-    private function simpleClickHandler(e:MouseEvent):void
+     * When the button is simple clicked.
+     */
+    private function simpleClickHandler(e : MouseEvent) : void
     {
-    	// If the window has focus, minimize it
-        if (!_moduleWindow.minimized) {
-            if (_moduleWindow.hasFocus) {
+        // If the window has focus, minimize it
+        if (!_moduleWindow.minimized)
+        {
+            if (_moduleWindow.hasFocus)
+            {
                 //_moduleWindow.minimize();
-            } else {
-                _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);       
             }
-        } else {
+            else
+            {
+                _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);
+            }
+        }
+        else
+        {
             // If the window is minimized, restore it
-            if(_moduleWindow.minimized) {
+            if (_moduleWindow.minimized)
+            {
                 _moduleWindow.unMinimize();
             }
             // Bring it to front
-            _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);      	
+            _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);
         }
     }
     
+    
+    
     /**
-    * When the button is double clicked
-    */
-    private function doubleClickHandler(e:MouseEvent):void
+     * When the button is double clicked.
+     */
+    private function doubleClickHandler(e : MouseEvent) : void
     {
-        if (!_moduleWindow.maximized) {
+        if (!_moduleWindow.maximized)
+        {
             // Maximize it
             _moduleWindow.maximize();
         }
     }
     
     
+    
     // =========================================================================
     // Window events handler
     // =========================================================================
-                 
+    
     /**
-    * When the window is minimized
-    */
-    private function windowMinimizeHandler(e:Event):void
+     * When the window is minimized.
+     */
+    private function windowMinimizeHandler(e : Event) : void
     {
         windowFocusEndHandler();
     }
     
+    
+    
     /**
-    * When the window is restored
-    */
-    private function windowRestoreHandler(e:Event):void
+     * When the window is restored.
+     */
+    private function windowRestoreHandler(e : Event) : void
     {
     }
     
+    
+    
     /**
-    * When the window gets the focus
-    */
-    private function windowFocusStartHandler(e:Event):void
+     * When the window gets the focus.
+     */
+    private function windowFocusStartHandler(e : Event) : void
     {
         this.setStyle("borderColor", "#454545");
         this.setStyle("fillColors", [0x000000, 0x000000, 0xffffff, 0xeeeeee]);
-
+    
     }
     
+    
+    
     /**
-    * When the window loses the focus
-    */
-    private function windowFocusEndHandler(e:Event=null):void
+     * When the window loses the focus.
+     */
+    private function windowFocusEndHandler(e : Event = null) : void
     {
         this.setStyle("borderColor", "#BBBBBB");
         this.setStyle("fillColors", [0x999999, 0x454545, 0xffffff, 0xeeeeee]);
-    }      
+    }
 }
 }
