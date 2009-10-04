@@ -12,6 +12,6 @@
   <groupId>org.ow2.jasmine.kerneos</groupId>
   <artifactId>kerneos-module-archetype</artifactId>
 
-  <name>Archetype - kerneos-module-archetype</name>
+  <name>Kerneos :: Modules :: Kerneos Module Archetype</name>
   <url>http://maven.apache.org</url>
 </project>
