@@ -35,7 +35,7 @@
   <groupId>org.ow2.jasmine.kerneos</groupId>
   <artifactId>kerneos-war-archetype</artifactId>
   
-  <name>Kerneos :: Modules :: Kerneos Archetype</name>
+  <name>Kerneos :: Modules :: Kerneos WAR Archetype</name>
   <url>http://jasmine.ow2.org/</url>
   
 </project>
