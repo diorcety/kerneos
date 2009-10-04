@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype xmlns="http://maven.apache.org/Archetype/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/Archetype/1.0.0 http://jira.codehaus.org/secure/attachment/21696/archetype-v1_0_0.xsd">
+
+  <id>kerneos-module-artifact</id>
+
+  <resources>
+    <!-- Server side datas -->
+    <resource>server/src/main/java/Service.java</resource>
+    <resource>server/src/test/java/ServiceTest.java</resource>
+    <resource>server/pom.xml</resource>
+    
+    <!-- Client side datas -->
+    <resource>client/pom.xml</resource>
+    <resource>client/src/main/flex/business/IModuleDelegate.as</resource>
+    <resource>client/src/main/flex/business/ModuleDelegate.as</resource>
+    <resource>client/src/main/flex/command/ModuleCommand.as</resource>
+    <resource>client/src/main/flex/control/Controller.as</resource>
+    <resource>client/src/main/flex/event/ModuleEvent.as</resource>
+    <resource>client/src/main/flex/model/ModuleModelLocator.as</resource>
+    <resource>client/src/main/flex/view/MainView.mxml</resource>
+    <resource>client/src/main/flex/MyModule.mxml</resource>
+    
+    <resource>client/src/main/locales/en_US/moduleResources.properties</resource>
+    <resource>client/src/main/locales/fr_FR/moduleResources.properties</resource>
+    <resource>client/src/main/locales/fr_FR/CairngormMessages.properties</resource>
+    
+    <resource>client/src/main/resources/flex/services-config.xml</resource>
+  </resources>
+
+</archetype>
