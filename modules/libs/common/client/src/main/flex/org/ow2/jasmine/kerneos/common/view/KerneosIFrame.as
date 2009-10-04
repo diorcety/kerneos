@@ -149,7 +149,8 @@ package org.ow2.jasmine.kerneos.common.view
     import flash.external.ExternalInterface;
     import flash.geom.Point;
     import flash.utils.Dictionary;
-
+    
+    import mx.controls.ToolTip;
     import mx.core.Application;
     import mx.core.Container;
     import mx.core.UIComponent;
@@ -922,7 +923,7 @@ package org.ow2.jasmine.kerneos.common.view
         {
             // A display object was added somewhere
             var displayObj:DisplayObject = event.target as DisplayObject;
-            if (displayObj.parent == systemManager && displayObj.name != "cursorHolder")
+            if (displayObj.parent == systemManager && displayObj.name != "cursorHolder" && !(displayObj is ToolTip))
             {
                 // If the object is a direct child of systemManager (i.e it floats) and isn't the cursor,
                 // check to see if it overlaps me after it's been drawn
