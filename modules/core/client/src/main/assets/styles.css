@@ -162,6 +162,15 @@ IFrameModuleWindow{
     downSkin: Embed(source="restore_up.png");
 }
 
+.iFrameWindowNavigateExternallyButton {
+    upSkin: Embed(source="arrow_up_right_up.png");
+    overSkin: Embed(source="arrow_up_right_over.png");
+    downSkin: Embed(source="arrow_up_right_up.png");
+}
+
+.iFrameWindowSeparator {
+}
+
 
 /*******************************************************************************
  * Taskbar
