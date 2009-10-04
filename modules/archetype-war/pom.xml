@@ -33,7 +33,7 @@
   </parent>
   
   <groupId>org.ow2.jasmine.kerneos</groupId>
-  <artifactId>kerneos-archetype</artifactId>
+  <artifactId>kerneos-war-archetype</artifactId>
   
   <name>Kerneos :: Modules :: Kerneos Archetype</name>
   <url>http://jasmine.ow2.org/</url>
