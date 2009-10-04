@@ -25,6 +25,122 @@
 #
 
 // ////////////////////////////////////////////////////////////////////////////
+// How to use the archetypes
+// ////////////////////////////////////////////////////////////////////////////
+
+	Some very new archetype that allows users to quickly set up a maven project
+	to develop a flex based web application using Kerneos is now available.
+	
+	Some tips on how to use them :
+	
+		- the first step could be to prepare a folder that contains a main 
+		  pom.xml file. this file will be the parent file of the entire 
+		  project.
+		  
+		- Going into this folder, create one maven module that will trigger the
+		  war file, and other maven modules to trigger flex modules. to do,
+		  just follow those steps :
+		  	- create the war structure by executing the following command line
+		  	
+				 	mvn archetype:create \
+				 		-DarchetypeGroupId=org.ow2.jasmine.kerneos \
+				 		-DarchetypeArtifactId=kerneos-war-archetype \
+				 		-DarchetypeVersion=1.2.1-SNAPSHOT \
+				 		-DgroupId=your.group.id \
+				 		-DartifactId=your-war-artifact-name \
+				 		-Dversion=version-of-your-war
+				 		
+			- create a kerneos module structure with a similar command line
+			
+					mvn archetype:create \
+				 		-DarchetypeGroupId=org.ow2.jasmine.kerneos \
+				 		-DarchetypeArtifactId=kerneos-module-archetype \
+				 		-DarchetypeVersion=1.2.1-SNAPSHOT \
+				 		-DgroupId=your.group.id \
+				 		-DartifactId=your-module-artifact-name \
+				 		-Dversion=version-of-your-module 
+
+		- You should then have a structure that looks this way
+		
+					main folder
+					|-- pom.xml
+					|-- your-war-artifact-name
+					|   |-- pom.xml
+					|	`-- src
+					|	    `-- main
+					|	        `-- webapp
+					|	            |-- AC_OETags.js
+					|	            |-- META-INF
+					|	            |   `-- kerneos-config.xml
+					|	            |-- WEB-INF
+					|	            |   |-- classes
+					|	            |   |   `-- log4j.xml
+					|	            |   |-- flex
+					|	            |   |   `-- services-config.xml
+					|	            |   |-- granite
+					|	            |   |   `-- granite-config.xml
+					|	            |   `-- web.xml
+					|	            |-- history
+					|	            |   |-- history.css
+					|	            |   |-- history.js
+					|	            |   `-- historyFrame.html
+					|	            |-- index.html
+					|	            `-- resources
+					|	                `-- kerneos-config.xsd
+					|						
+					`-- your-module-artifact-name
+					 	|-- client
+						|   |-- pom.xml
+						|   `-- src
+						|       `-- main
+						|           |-- flex
+						|           |   |-- MyModule.mxml
+						|           |   |-- business
+						|           |   |   |-- IModuleDelegate.as
+						|           |   |   `-- ModuleDelegate.as
+						|           |   |-- command
+						|           |   |   `-- ModuleCommand.as
+						|           |   |-- control
+						|           |   |   `-- Controller.as
+						|           |   |-- event
+						|           |   |   `-- ModuleEvent.as
+						|           |   |-- model
+						|           |   |   `-- ModuleModelLocator.as
+						|           |   `-- view
+						|           |       `-- MainView.mxml
+						|           |-- locales
+						|           |   |-- en_US
+						|           |   |   `-- moduleResources.properties
+						|           |   `-- fr_FR
+						|           |       |-- CairngormMessages.properties
+						|           |       `-- moduleResources.properties
+						|           `-- resources
+						|               `-- flex
+						|                   `-- services-config.xml
+						|-- server
+						|   |-- pom.xml
+						|   `-- src
+						|       |-- main
+						|       |   `-- java
+						|       |       `-- Service.java
+						|       `-- test
+						|           `-- java
+						|               `-- ServiceTest.java
+						`-- pom.xml
+						
+		Nota :
+		  If the war module is built as soon as the structure is created, it can 
+		  be deployed directly on a tomcat webserver without any other work.
+		  
+		- Link the main pom.xml file with the two new module created.
+		
+		- Finally, configure the war to
+			- embed the new flex module, created (the swf file).
+			- include the module on the Kerneos desktop by setting up the 
+			  Kerneos configuration file.
+
+
+// ////////////////////////////////////////////////////////////////////////////
 // Before investigations ...
 // ////////////////////////////////////////////////////////////////////////////
 Before using Kerneos :
