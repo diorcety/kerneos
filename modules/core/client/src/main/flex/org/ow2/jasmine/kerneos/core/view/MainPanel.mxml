@@ -24,8 +24,7 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<core:Core xmlns:core = "org.ow2.jasmine.kerneos.core.api.*"
-           xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:Canvas xmlns:mx = "http://www.adobe.com/2006/mxml"
            xmlns:local = "*"
            xmlns:flexlibMdiContainers = "flexlib.mdi.containers.*"
            xmlns:view = "org.ow2.jasmine.kerneos.core.view.*"
@@ -78,8 +77,6 @@
             import org.ow2.jasmine.kerneos.common.util.IconUtility;
             import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
             import org.ow2.jasmine.kerneos.login.model.LogInModelLocator;
-            import org.ow2.jasmine.kerneos.core.api.Core;
-            import org.ow2.jasmine.kerneos.core.api.ICore;
             import org.ow2.jasmine.kerneos.core.api.KerneosModule;
             import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
@@ -951,7 +948,7 @@
                    color = "#000000" />
 
     <!-- Transitions -->
-    <core:transitions>
+    <mx:transitions>
         <mx:Transition toState = "logged">
             <mx:Parallel>
                 <mx:Fade id = "console_mark_fade_in"
@@ -1007,10 +1004,10 @@
                          blurYTo = "0" />
             </mx:Parallel>
         </mx:Transition>
-    </core:transitions>
+    </mx:transitions>
 
     <!-- States -->
-    <core:states>
+    <mx:states>
 
         <mx:State name = "init">
 
@@ -1143,7 +1140,7 @@
                 </mx:target>
             </mx:AddChild>
         </mx:State>
-    </core:states>
+    </mx:states>
 
     <!-- Main application container -->
     <mx:Canvas id = "application_container"
@@ -1176,4 +1173,4 @@
         </mx:HBox>
     </mx:Canvas>
 
-</core:Core>
+</mx:Canvas>

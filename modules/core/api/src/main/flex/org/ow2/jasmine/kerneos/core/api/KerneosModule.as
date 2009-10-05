@@ -27,19 +27,19 @@ package org.ow2.jasmine.kerneos.core.api
 
 /**
 * Any Kerneos module can implement this interface in order to have the member
-* methods triggered
+* methods triggered.
 * 
 * @author Julien Nicoulaud
 */
 public interface KerneosModule
 {
     /**
-    * Returns true if Kerneos can close the module without prompting the user
+    * Returns true if Kerneos can close the module without prompting the user.
     */
     function canBeClosedWithoutPrompt():Boolean;
 
     /**
-    * Module called before the module is unloaded. Use it to close client-server
+    * Method called before the module is unloaded. Use it to close client-server
     * connexions for example.
     */
     function closeModule():void;
