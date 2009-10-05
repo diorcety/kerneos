@@ -232,11 +232,11 @@ package org.ow2.jasmine.kerneos.common.view
                     "moveKerneosIFrame = function(frameID, iframeID, x,y,w,h) " +
                     "{" +
                         "var frameRef=document.getElementById(frameID);" +
-                        "frameRef.style.left=x;" +
-                        "frameRef.style.top=y;" +
+                        "frameRef.style.left=parseInt(x)+'px';" +
+                        "frameRef.style.top=parseInt(y)+'px';" +
                         "var iFrameRef=document.getElementById(iframeID);" +
-                        "iFrameRef.width=w;" +
-                        "iFrameRef.height=h;" +
+                        "iFrameRef.width=parseInt(w)+'px';" +
+                        "iFrameRef.height=parseInt(h)+'px';" +
                         //"console.info('[KerneosIFrame] moveKerneosIFrame('+ frameID +')');" +
                     "}" +
                 "}" +
