@@ -52,9 +52,9 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
-    <url>http://fisheye.jasmine.objectweb.org/browse/JASMINe/kerneos/trunk</url>
+    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/branches/kerneos-1.2.x</connection>
+    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/branches/kerneos-1.2.x</developerConnection>
+    <url>http://fisheye.jasmine.objectweb.org/browse/JASMINe/kerneos/branches/kerneos-1.2.x</url>
   </scm>
 
   <repositories>
