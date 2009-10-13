@@ -13,7 +13,7 @@
     <flex.version>3.0.0.477</flex.version>
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
     <cairngorm.version>2.2.2-Beta</cairngorm.version>
-    <kerneos.version>1.2.1-SNAPSHOT</kerneos.version>
+    <kerneos.version>$kerneos-version</kerneos.version>
   </properties>
   
   <dependencies>

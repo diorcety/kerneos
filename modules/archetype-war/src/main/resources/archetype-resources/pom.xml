@@ -31,7 +31,7 @@
     <dependency>
       <groupId>org.ow2.jasmine.kerneos</groupId>
       <artifactId>kerneos-core-server</artifactId>
-      <version>1.2.1-SNAPSHOT</version>
+      <version>$kerneos-version</version>
       <exclusions>
         <exclusion>
           <groupId>javax.servlet</groupId>
@@ -88,7 +88,7 @@
                 <artifactItem>
                   <groupId>org.ow2.jasmine.kerneos</groupId>
                   <artifactId>kerneos-core-client</artifactId>
-                  <version>1.2.1-SNAPSHOT</version>
+                  <version>$kerneos-version</version>
                   <type>swf</type>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/${artifactId}/</outputDirectory>

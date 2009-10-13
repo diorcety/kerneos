@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - JASMINe
-  - Copyright (C) 2008 Bull S.A.S.
+  - JASMINe Kerneos
+  - Copyright (C) 2008-2009 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -20,9 +21,11 @@
   - USA
   -
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id: pom.xml 5399 2009-09-22 13:04:39Z alitokmen $
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
@@ -37,5 +40,29 @@
   
   <name>Kerneos :: Modules :: Kerneos WAR Archetype</name>
   <url>http://jasmine.ow2.org/</url>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$kerneos-version</replacetoken>
+                  <replacevalue>${project.version}</replacevalue>
+                </replace>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   
 </project>
