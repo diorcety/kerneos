@@ -29,7 +29,7 @@ import mx.collections.ArrayCollection;
 
 
 /**
- * A data object that describes a configuration for Kerneos
+ * A data object that describes a configuration for Kerneos.
  *
  * @author Julien Nicoulaud
  */
@@ -44,52 +44,52 @@ public class KerneosConfigVO implements IValueObject
     // Settings
     
     /**
-     * The name of the project (totally random example: "JASMINe")
+     * The name of the project (totally random example: "JASMINe").
      */
-    public var consoleProject : String = "JASMINe";
+    public var applicationProject : String = "JASMINe";
     
     /**
-     * The name of the console
+     * The name of the application.
      */
-    public var consoleName : String = "Kerneos";
+    public var applicationName : String = "Kerneos";
     
     /**
-     * The path to the console logo (64x64 image)
+     * The path to the application logo (64x64 image).
      */
-    public var consoleLogo : String = null;
+    public var applicationLogo : String = null;
     
     /**
-     * Allow to show the taskbar "Minimize all" icon
+     * Allow to show the taskbar "Minimize all" button.
      */
-    public var showMinimizeAllIcon : Boolean = true;
+    public var showMinimizeAllButton : Boolean = true;
     
     /**
-     * Allow to show the taskbar "cascade" icon
+     * Allow to show the taskbar "cascade" button.
      */
-    public var showCascadeIcon : Boolean = true;
+    public var showCascadeButton : Boolean = true;
     
     /**
-     * Allow to show the taskbar "tile" icon
+     * Allow to show the taskbar "tile" button.
      */
-    public var showTileIcon : Boolean = true;
+    public var showTileButton : Boolean = true;
     
     /**
-     * Allow to show notification popups
+     * Allow to show notification popups.
      */
     public var showNotificationPopUps : Boolean = true;
     
     /**
-     * Allow to show notification popups, even on windows that have the focus
+     * Allow to show notification popups, even on windows that have the focus.
      */
-    public var showPopupsWhenFocused : Boolean = false;
+    public var showPopupsFromActiveWindow : Boolean = false;
     
     /**
-     * Enable notifications logging
+     * Enable notifications logging.
      */
     public var enableNotificationsLog : Boolean = true;
     
     /**
-     * Show a "confirm close" dialog when closing the browser window
+     * Show a "confirm close" dialog when closing the browser window.
      */
     public var showConfirmCloseDialog : Boolean = true;
     
@@ -101,7 +101,7 @@ public class KerneosConfigVO implements IValueObject
     // Modules
     
     /**
-     * The modules
+     * The modules.
      */
     [ArrayElementType('org.ow2.jasmine.kerneos.core.vo.ModuleVO')]
     public var modules : ArrayCollection;

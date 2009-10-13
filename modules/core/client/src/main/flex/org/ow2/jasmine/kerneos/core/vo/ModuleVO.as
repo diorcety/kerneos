@@ -65,22 +65,7 @@ public class ModuleVO implements IValueObject
     // Fields
     
     /**
-    * The web page URL (for IFrame modules)
-    */
-	public var url : String = null;
-	
-	/**
-	* The SWF file path (for SWF modules)
-	*/
-	public var swfFile : String = null;
-	
-	/**
-	* The module services (for SWF modules)
-	*/
-    public var services : ArrayCollection = null;
-    
-    /**
-    * The displayed name of the module
+    * The displayed name of the module.
     */
 	public var name : String = null;
 	

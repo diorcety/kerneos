@@ -26,7 +26,7 @@ package org.ow2.jasmine.kerneos.core.vo
 {
 
 /**
-* A module notification
+* A module notification.
 * 
 * @author Julien Nicoulaud
 */
@@ -37,19 +37,19 @@ public class KerneosNotification
     // =========================================================================
         
     /**
-    * The module sending the event
+    * The module sending the event.
     */
     [Bindable]
     public var module : ModuleVO;
     
     /**
-    * The message carried by the event
+    * The message carried by the event.
     */
     [Bindable]
     public var message : String;
     
     /**
-    * Message allowed levels
+    * Message allowed levels.
     */
     public static var DEBUG:String = "Debug";
     public static var WARNING:String = "Warning";
@@ -57,13 +57,13 @@ public class KerneosNotification
     public static var ERROR:String = "Error";
     
     /**
-    * The level of the message
+    * The level of the message.
     */
     [Bindable]
     public var level : String;
     
     /**
-    * The emission date of the message
+    * The emission date of the message.
     */
     [Bindable]
     public var date : Date;
@@ -74,7 +74,7 @@ public class KerneosNotification
     // =========================================================================
     
     /**
-    * 
+    * Build a new KerneosNotification.
     */
     public function KerneosNotification(module:ModuleVO,
                                         message:String,
@@ -92,7 +92,9 @@ public class KerneosNotification
     // =========================================================================
         
     /**
+    * Output the notification as a String.
     * 
+    * @see org.ow2.jasmine.kerneos.core.view.notification.NotificationsLog#exportListToText()
     */
     public function toString():String
     {

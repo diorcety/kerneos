@@ -86,7 +86,7 @@ public class LoadKerneosConfigCommand implements ICommand, IResponder{
             new ServerSideExceptionEvent(
                 ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + model.componentID,
                 new ServerSideException("Error while loading the configuration",
-                                        "The console configuration file could not be read successfully."
+                                        "The application configuration file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,
                                         faultEvent.fault.getStackTrace()));
         CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);

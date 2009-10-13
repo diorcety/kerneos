@@ -333,9 +333,9 @@
                     
                     localeComboBox_initializeHandler();
                     
-                    if (model.config.consoleLogo !== null)
+                    if (model.config.applicationLogo !== null)
                     {
-                        consoleLogoIcon = IconUtility.getClass(consoleLogo, model.config.consoleLogo, 64, 64);
+                        consoleLogoIcon = IconUtility.getClass(consoleLogo, model.config.applicationLogo, 64, 64);
                     }
                     
                 }
@@ -426,20 +426,20 @@
                 var window : ModuleWindow;
                 
                 // If this is a swf module
-                if (module.swfFile != null)
+                if (module is SWFModuleVO)
                 {
                     // Create a window
-                    window = new SwfModuleWindow(module);
+                    window = new SwfModuleWindow(module as SWFModuleVO);
                     window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, handleNotificationEvent);
                 }
                 
-                // Else this is an IFrame module
-                else
+                // Else if this is an IFrame module
+                else if (module is IFrameModuleVO)
                 {
                     // Create a window
                     frames[module.name] = new KerneosIFrame();
                     var frame : KerneosIFrame = frames[module.name] as KerneosIFrame;
-                    window = new IFrameModuleWindow(module, frame);
+                    window = new IFrameModuleWindow(module as IFrameModuleVO, frame);
                 }
                 
                 // Create the button in the taskbar
@@ -539,9 +539,9 @@
                     {
                         
                         // Initialize each SWF module services
-                        if (module.swfFile != null)
+                        if (module is SWFModuleVO)
                         {
-                            var services : ArrayCollection = module.services;
+                            var services : ArrayCollection = (module as SWFModuleVO).services;
                             
                             for (var l : int = 0; l < services.length; l++)
                             {
@@ -834,7 +834,7 @@
                     }
                     
                     // If a PopUp should be shown and the window does not have the focus
-                    if (model.config.showNotificationPopUps && event.showPopup && (model.config.showPopupsWhenFocused || (!model.config.showPopupsWhenFocused && !window.hasFocus)))
+                    if (model.config.showNotificationPopUps && event.showPopup && (model.config.showPopupsFromActiveWindow || (!model.config.showPopupsFromActiveWindow && !window.hasFocus)))
                     {
                         var notifPopUp : NotificationPopUp = new NotificationPopUp();
                         notifPopUp.message = event.message;
@@ -1071,12 +1071,12 @@
                                        click = "{minimizeAllWindows()}"
                                        toolTip = "Minimize all windows"
                                        styleName = "taskBarSmallButton"
-                                       visible = "{model.config.showMinimizeAllIcon}"
-                                       includeInLayout = "{model.config.showMinimizeAllIcon}" />
+                                       visible = "{model.config.showMinimizeAllButton}"
+                                       includeInLayout = "{model.config.showMinimizeAllButton}" />
                             <mx:VRule height = "70%"
                                       alpha = "0.25"
-                                      visible = "{model.config.showMinimizeAllIcon}"
-                                      includeInLayout = "{model.config.showMinimizeAllIcon}" />
+                                      visible = "{model.config.showMinimizeAllButton}"
+                                      includeInLayout = "{model.config.showMinimizeAllButton}" />
                             <mx:HBox id = "minimized_windows"
                                      width = "100%"
                                      height = "100%"
@@ -1102,16 +1102,16 @@
                                        click = "mdiCanvas.windowManager.cascade()"
                                        toolTip = "Cascade windows"
                                        styleName = "taskBarSmallButton"
-                                       visible = "{model.config.showCascadeIcon}"
-                                       includeInLayout = "{model.config.showCascadeIcon}" />
+                                       visible = "{model.config.showCascadeButton}"
+                                       includeInLayout = "{model.config.showCascadeButton}" />
                             <mx:Button width = "22"
                                        height = "22"
                                        icon = "{tileIcon}"
                                        click = "mdiCanvas.windowManager.tile(true,3)"
                                        toolTip = "Tile windows"
                                        styleName = "taskBarSmallButton"
-                                       visible = "{model.config.showTileIcon}"
-                                       includeInLayout = "{model.config.showTileIcon}" />
+                                       visible = "{model.config.showTileButton}"
+                                       includeInLayout = "{model.config.showTileButton}" />
                             <mx:Button id = "fullScreenButton"
                                        width = "22"
                                        height = "22"
@@ -1161,12 +1161,12 @@
                                     filters = "{[console_mark_shadow]}"
                                     width = "64"
                                     height = "64" />
-            <mx:Text text = "{model.config.consoleProject}"
+            <mx:Text text = "{model.config.applicationProject}"
                      styleName = "consoleMark1"
                      filters = "{[console_mark_shadow]}"
                      selectable = "false" />
             <mx:Text id = "console_mark_right"
-                     text = "{model.config.consoleName}"
+                     text = "{model.config.applicationName}"
                      styleName = "consoleMark2"
                      filters = "{[console_mark_shadow]}"
                      selectable = "false" />

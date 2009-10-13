@@ -1,6 +1,6 @@
 /**
  * JASMINe
- * Copyright (C) 2008 Bull S.A.S.
+ * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -18,44 +18,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * --------------------------------------------------------------------------
  * $Id$
- * --------------------------------------------------------------------------
  */
+package org.ow2.jasmine.kerneos.core.vo
+{
+import com.adobe.cairngorm.vo.IValueObject;
 
-package org.ow2.jasmine.kerneos.service;
-
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Service description.
+ * An IFrame deployed as a module in Kerneos.
  *
  * @author Guillaume Renault
  * @author Julien Nicoulaud
- * @see SWFModule
  */
-@XmlRootElement(name = "service", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-public class Service {
-
+[RemoteClass(alias="org.ow2.jasmine.kerneos.service.IFrameModule")]
+[Bindable]
+public class IFrameModuleVO extends ModuleVO implements IValueObject
+{
+    
+    // =========================================================================
+    // Properties
+    // =========================================================================
+    
     /**
-     * The id of the service.
+     * The web page URL.
      */
-    @XmlAttribute
-    public String id = null;
-
-    /**
-     * The destination of the service.
-     */
-    @XmlAttribute
-    public String destination = null;
-
-
-    /**
-     * Output a String preview of the object.
-     */
-    @Override
-    public String toString() {
-        return "id: " + id + ", destination: " + destination;
-    }
+    public var url : String = null;
+}
 }

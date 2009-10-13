@@ -24,85 +24,73 @@
  */
 package org.ow2.jasmine.kerneos.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
- * Description of a module.
+ * A module deployed in Kerneos.
  *
  * @author Guillaume Renault, Julien Nicoulaud
  */
 public class Module {
 
     /**
-     * The web page URL (for IFrame modules)
+     * The displayed name of the module.
      */
-    public String url = null;
-
-    /**
-    * The SWF file path (for SWF modules)
-    */
-    public String swfFile = null;
-
-    /**
-    * The module services (for SWF modules)
-    */
-    public List<Service> services = new ArrayList<Service>();
-
-    /**
-    * The displayed name of the module
-    */
+    @XmlElement(name = "name", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public String name = null;
 
     /**
-    * The description of the module
-    */
+     * The description of the module.
+     */
+    @XmlElement(name = "description", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public String description = null;
 
     /**
-    * The small icon (16x16) path
-    */
+     * The small icon (16x16) path.
+     */
+    @XmlElement(name = "small-icon", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public String smallIcon = null;
 
     /**
-    * The big icon (64x64) path
-    */
+     * The big icon (64x64) path.
+     */
+    @XmlElement(name = "big-icon", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public String bigIcon = null;
 
     /**
-    * Load the module on application startup
-    */
+     * Load the module on application startup.
+     */
+    @XmlElement(name = "load-on-startup", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public Boolean loadOnStartup = false;
 
     /**
-    * Load the module maximized
-    */
+     * Load the module maximized.
+     */
+    @XmlElement(name = "load-maximized", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public Boolean loadMaximized = false;
 
     /**
-    * Prompt the user before closing the module
-    *
-    * Can be "never", "always", or "default". "default" means that if the module implements
-    * {@see KerneosModule}, the method canBeCloseWithoutPrompt() is called. If not, the user is
-    * prompted by default.
-    */
+     * Prompt the user before closing the module Can be "never", "always", or
+     * "default". "default" means that if the module implements {@see
+     * KerneosModule}, the method canBeCloseWithoutPrompt() is called. If not,
+     * the user is prompted by default.
+     */
     public static String DEFAULT_PROMPT_BEFORE_CLOSE = "default";
+
     public static String NEVER_PROMPT_BEFORE_CLOSE = "never";
+
     public static String ALWAYS_PROMPT_BEFORE_CLOSE = "always";
+
+    @XmlElement(name = "prompt-before-close", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public String promptBeforeClose = DEFAULT_PROMPT_BEFORE_CLOSE;
 
-
-    // Utils
-
+    /**
+     * Output a String preview of the object.
+     */
     @Override
     public String toString() {
-        String s = "\nModule '" + name + "' contains " + services.size() + " services :\n";
-
-        for (Service service : services) {
-            s = s + "\t id : \"" + service.getId() + "\" destination : " + service.getDestination();
-        }
-
-        return s;
+        return "name: " + name + ", description: " + description + ", smallIcon: " + smallIcon + ", bigIcon: " + bigIcon
+            + ", loadOnStartup: " + loadOnStartup + ", loadMaximized: " + loadMaximized + ", promptBeforeClose: " + promptBeforeClose;
     }
 
 }

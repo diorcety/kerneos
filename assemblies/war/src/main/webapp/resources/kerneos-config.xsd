@@ -24,91 +24,131 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-  targetNamespace="org.ow2.jasmine.kerneos:KerneosConfig" xmlns:k="org.ow2.jasmine.kerneos:KerneosConfig">
-  <xs:element name="kerneosConfig">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="k:options" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:modules" maxOccurs="1" minOccurs="1" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="options">
-    <xs:complexType>
-      <xs:all>
-        <xs:element ref="k:consoleProject" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:consoleName" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:consoleLogo" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:showMinimizeAllIcon" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:showCascadeIcon" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:showTileIcon" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:showNotificationPopups" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:showPopupsWhenFocused" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:enableNotificationsLog" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:showConfirmCloseDialog" maxOccurs="1" minOccurs="0" />
-        <xs:element ref="k:defaultLanguage" maxOccurs="1" minOccurs="0" />
-      </xs:all>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="consoleProject" type="xs:NCName" />
-  <xs:element name="consoleName" type="xs:NCName" />
-  <xs:element name="consoleLogo" type="xs:string" />
-  <xs:element name="showMinimizeAllIcon" type="xs:boolean" />
-  <xs:element name="showCascadeIcon" type="xs:boolean" />
-  <xs:element name="showTileIcon" type="xs:boolean" />
-  <xs:element name="showNotificationPopups" type="xs:boolean" />
-  <xs:element name="showPopupsWhenFocused" type="xs:boolean" />
-  <xs:element name="enableNotificationsLog" type="xs:boolean" />
-  <xs:element name="showConfirmCloseDialog" type="xs:boolean" />
-  <xs:element name="defaultLanguage" type="xs:string" />
-  <xs:element name="modules">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="k:module" minOccurs="0" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="module">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="k:name" />
-        <xs:element ref="k:description" />
-        <xs:sequence minOccurs="0">
-          <xs:element ref="k:smallIcon" maxOccurs="1" />
-          <xs:element ref="k:bigIcon" maxOccurs="1" />
-        </xs:sequence>
-        <xs:element ref="k:services" maxOccurs="1" minOccurs="0"/>
-      </xs:sequence>
-      <xs:attribute name="loadMaximized" use="optional" type="xs:boolean" />
-      <xs:attribute name="loadOnStartup" use="optional" type="xs:boolean" />
-      <xs:attribute name="promptBeforeClose" use="optional" type="k:promptBeforeCloseType"/>
-      <xs:attribute name="swfFile" type="xs:NCName" />
-      <xs:attribute name="url" type="xs:anyURI" />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="name" type="xs:string" />
-  <xs:element name="description" type="xs:string" />
-  <xs:element name="smallIcon" type="xs:string" />
-  <xs:element name="bigIcon" type="xs:string" />
-  <xs:element name="services">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="k:service" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="service">
-    <xs:complexType>
-      <xs:attribute name="destination" use="required" type="xs:NCName" />
-      <xs:attribute name="id" use="required" type="xs:NCName" />
-    </xs:complexType>
-  </xs:element>
-  <xs:simpleType name="promptBeforeCloseType">
-  	<xs:restriction base="xs:string">
-     <xs:enumeration value="default"/>
-     <xs:enumeration value="always"/>
-     <xs:enumeration value="never"/>
-  	</xs:restriction>
-  </xs:simpleType>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="org.ow2.jasmine.kerneos:kerneos-config"
+    xmlns:k="org.ow2.jasmine.kerneos:kerneos-config">
+    
+    
+    <!--##################################################################################
+    # kerneos-config
+    ###################################################################################-->
+    
+    <xs:element name="kerneos-config">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="k:application-project" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:application-name" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:application-logo" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-minimize-all-button" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-cascade-button" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-tile-button" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-notification-popups" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-popups-from-active-window" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:enable-notifications-log" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-confirm-close-dialog" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:default-language" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:modules" maxOccurs="1" minOccurs="1" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    
+    <!--##################################################################################
+    # Options
+    ###################################################################################-->
+    
+
+    <xs:element name="application-project" type="xs:string" />
+    <xs:element name="application-name" type="xs:string" />
+    <xs:element name="application-logo" type="xs:string" />
+    <xs:element name="show-minimize-all-button" type="xs:boolean" />
+    <xs:element name="show-cascade-button" type="xs:boolean" />
+    <xs:element name="show-tile-button" type="xs:boolean" />
+    <xs:element name="show-notification-popups" type="xs:boolean" />
+    <xs:element name="show-popups-from-active-window" type="xs:boolean" />
+    <xs:element name="enable-notifications-log" type="xs:boolean" />
+    <xs:element name="show-confirm-close-dialog" type="xs:boolean" />
+    <xs:element name="default-language" type="xs:string" />
+    
+    
+    <!--##################################################################################
+    # Modules
+    ###################################################################################-->
+    
+    <!-- The modules list -->
+    
+    <xs:element name="modules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="k:swf-module" maxOccurs="unbounded" minOccurs="0" />
+                <xs:element ref="k:iframe-module" maxOccurs="unbounded" minOccurs="0" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    
+    <!-- Modules types -->
+    
+    <xs:element name="iframe-module">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="name" type="xs:string" maxOccurs="1" minOccurs="1" />
+                <xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="1" />
+                <xs:element name="small-icon" type="xs:string" maxOccurs="1" minOccurs="0" />
+                <xs:element name="big-icon" type="xs:string" maxOccurs="1" minOccurs="0" />
+                <xs:element name="load-maximized" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+                <xs:element name="load-on-startup" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+                <xs:element name="prompt-before-close" type="k:prompt-before-close" maxOccurs="1" minOccurs="0" />
+                <xs:element name="url" type="xs:anyURI" maxOccurs="1" minOccurs="1" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="swf-module">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="name" type="xs:string" maxOccurs="1" minOccurs="1" />
+                <xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="1" />
+                <xs:element name="small-icon" type="xs:string" maxOccurs="1" minOccurs="0" />
+                <xs:element name="big-icon" type="xs:string" maxOccurs="1" minOccurs="0" />
+                <xs:element name="load-maximized" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+                <xs:element name="load-on-startup" type="xs:boolean" maxOccurs="1" minOccurs="0" />
+                <xs:element name="prompt-before-close" type="k:prompt-before-close" maxOccurs="1" minOccurs="0" />
+                <xs:element name="file" type="xs:string" maxOccurs="1" minOccurs="1" />
+                <xs:element ref="k:services" maxOccurs="1" minOccurs="0"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+    
+    
+    <!-- Services -->
+    
+    <xs:element name="services">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="k:service" maxOccurs="unbounded" minOccurs="1" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="service">
+        <xs:complexType>
+            <xs:attribute name="destination" use="required" type="xs:string" />
+            <xs:attribute name="id" use="required" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+    
+    
+    <!-- Module options types -->
+    
+    <xs:simpleType name="prompt-before-close">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="default"/>
+            <xs:enumeration value="always"/>
+            <xs:enumeration value="never"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
 </xs:schema>

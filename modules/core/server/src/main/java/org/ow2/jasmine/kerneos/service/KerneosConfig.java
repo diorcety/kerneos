@@ -27,68 +27,93 @@ package org.ow2.jasmine.kerneos.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * A configuration of Kerneos
  *
  * @author Julien Nicoulaud
  */
+@XmlRootElement(name = "kerneos-config", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
 public class KerneosConfig {
+
+    /**
+     * The namespace for Kerneos XML configuration files.
+     */
+    public static final String KERNEOS_CONFIG_NAMESPACE = "org.ow2.jasmine.kerneos:kerneos-config";
+
 
     // Settings
 
     /**
-     * The name of the project (totally random example: "JASMINe")
+     * The name of the project (totally random example: "JASMINe").
      */
-    public String consoleProject = "JASMINe";
+    @XmlElement(name = "application-project", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public String applicationProject = "JASMINe";
 
     /**
-     * The name of the console
+     * The name of the application.
      */
-    public String consoleName = "Kerneos";
+    @XmlElement(name = "application-name", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public String applicationName = "Kerneos";
 
     /**
-     * The path to the console logo (64x64 image)
+     * The path to the application logo (64x64 image).
      */
-    public String consoleLogo = null;
+    @XmlElement(name = "application-logo", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public String applicationLogo = null;
 
     /**
-    * Allow to show the taskbar "Minimize all" icon
+    * Allow to show the taskbar "Minimize all" button.
     */
-    public Boolean showMinimizeAllIcon = true;
+    @XmlElement(name = "show-minimize-all-button", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public Boolean showMinimizeAllButton = true;
 
     /**
-    * Allow to show the taskbar "cascade" icon
+    * Allow to show the taskbar "cascade" button.
     */
-    public Boolean showCascadeIcon = true;
+    @XmlElement(name = "show-cascade-button", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public Boolean showCascadeButton = true;
 
     /**
-    * Allow to show the taskbar "tile" icon
+    * Allow to show the taskbar "tile" button.
     */
-    public Boolean showTileIcon = true;
+    @XmlElement(name = "show-tile-button", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public Boolean showTileButton = true;
 
     /**
-    * Allow to show notification popups
+    * Allow to show notification popups.
     */
+    @XmlElement(name = "show-notification-popups", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public Boolean showNotificationPopUps = true;
 
     /**
-    * Allow to show notification popups, even on windows that have the focus
+    * Allow to show notification popups, even from the window that has the focus.
     */
-    public Boolean showPopupsWhenFocused = false;
+    @XmlElement(name = "show-popups-from-active-window", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public Boolean showPopupsFromActiveWindow = false;
 
     /**
-    * Enable notifications logging
+    * Enable notifications logging.
     */
+    @XmlElement(name = "enable-notifications-log", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public Boolean enableNotificationsLog = true;
 
     /**
-    * Show a "confirm close" dialog when closing the browser window
+    * Show a "confirm close" dialog when closing the browser window.
     */
+    @XmlElement(name = "show-confirm-close-dialog", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public Boolean showConfirmCloseDialog = true;
 
     /**
      * Set the default language used in Kerneos when loading.
      */
+    @XmlElement(name = "default-language", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public String defaultLanguage = "en_US";
 
     // Modules
@@ -96,6 +121,37 @@ public class KerneosConfig {
     /**
      * The modules
      */
+    @XmlElementWrapper(name = "modules", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    @XmlAnyElement(lax = true)
+    @XmlElementRefs({
+        @XmlElementRef(type = SWFModule.class, name = "swf-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE),
+        @XmlElementRef(type = IFrameModule.class, name = "iframe-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    })
     public List<Module> modules = new ArrayList<Module>();
 
+
+    /**
+     * Output a String preview of the object.
+     */
+    @Override
+    public String toString() {
+        String res = new String();
+        res += "[KerneosConfig: " + applicationProject + " " + applicationName + "]";
+        res += "\n\t[Options]";
+        res += "\n\t\t* applicationLogo: " + applicationLogo;
+        res += "\n\t\t* showMinimizeAllButton: " + showMinimizeAllButton;
+        res += "\n\t\t* showCascadeButton: " + showCascadeButton;
+        res += "\n\t\t* showTileButton: " + showTileButton;
+        res += "\n\t\t* showNotificationPopUps: " + showNotificationPopUps;
+        res += "\n\t\t* showPopupsFromActiveWindow: " + showPopupsFromActiveWindow;
+        res += "\n\t\t* enableNotificationsLog: " + enableNotificationsLog;
+        res += "\n\t\t* showConfirmCloseDialog: " + showConfirmCloseDialog;
+        res += "\n\t\t* defaultLanguage: " + defaultLanguage;
+        res += "\n\t[Modules]";
+        for (Module module : modules) {
+            res += "\n\t\t" + module.toString();
+        }
+
+        return res;
+    }
 }

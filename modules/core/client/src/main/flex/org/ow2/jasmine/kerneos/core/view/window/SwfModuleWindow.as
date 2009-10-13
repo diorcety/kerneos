@@ -31,7 +31,7 @@ import mx.controls.ProgressBar;
 import mx.events.ModuleEvent;
 import mx.modules.ModuleLoader;
 
-import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
 	
 
 /**
@@ -65,7 +65,7 @@ public class SwfModuleWindow extends ModuleWindow
     /**
     * Build a new Swf module hosting window
     */
-	public function SwfModuleWindow(module:ModuleVO)
+	public function SwfModuleWindow(module:SWFModuleVO)
 	{
 		// Call super classe constructor
 		super(module);
@@ -81,7 +81,7 @@ public class SwfModuleWindow extends ModuleWindow
         
         // Setup the SWF module loader
         _loader = new ModuleLoader();
-        _loader.url = module.swfFile;
+        _loader.url = (module as SWFModuleVO).file;
         _loader.percentWidth = 100;
         _loader.percentHeight = 100;
         _loader.addEventListener(ModuleEvent.READY,onLoaderReady);

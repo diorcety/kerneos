@@ -22,40 +22,57 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-
 package org.ow2.jasmine.kerneos.service;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Service description.
+ * A SWF module deployed in Kerneos.
  *
- * @author Guillaume Renault
  * @author Julien Nicoulaud
- * @see SWFModule
+ * @see Service
  */
-@XmlRootElement(name = "service", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-public class Service {
+@XmlRootElement(name = "swf-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+public class SWFModule extends Module {
 
     /**
-     * The id of the service.
+     * The SWF file path.
      */
-    @XmlAttribute
-    public String id = null;
+    @XmlElement(name = "file", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public String file = null;
 
     /**
-     * The destination of the service.
+     * The module services.
      */
-    @XmlAttribute
-    public String destination = null;
+    @XmlElementWrapper(name = "services", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    @XmlAnyElement(lax = true)
+    @XmlElementRefs({
+        @XmlElementRef(type = Service.class, name = "service", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    })
+    public List<Service> services = new ArrayList<Service>();
 
+    // Utils
 
     /**
      * Output a String preview of the object.
      */
     @Override
     public String toString() {
-        return "id: " + id + ", destination: " + destination;
+        String res = "[SWF module] file: " + file + ", services: {";
+
+        for (Service service : services) {
+            res += "(" + service.toString() + ")";
+        }
+
+        return res + "}, " + super.toString();
     }
+
 }

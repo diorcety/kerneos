@@ -17,35 +17,39 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- *
+ * 
  * $Id$
  */
-
 package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
+import mx.collections.ArrayCollection;
+
 
 /**
- * Service description.
- *
+ * A SWF module deployed in Kerneos.
+ * 
  * @author Guillaume Renault
  * @author Julien Nicoulaud
- * @see SWFModuleVO
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Service")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.service.SWFModule")]
 [Bindable]
-public class ServiceVO implements IValueObject
+public class SWFModuleVO extends ModuleVO implements IValueObject
 {
-    /**
-     * The id of the service.
-     */
-    public var id : String = null;
-    
-    /**
-     * The destination of the service.
-     */
-    public var destination : String = null;
-
+	
+    // =========================================================================
+    // Properties
+    // =========================================================================
+	
+	/**
+	* The SWF file path.
+	*/
+	public var file : String = null;
+	
+	/**
+	* The module services.
+	*/
+    public var services : ArrayCollection = null;
 }
 }

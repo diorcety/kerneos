@@ -143,8 +143,8 @@
     private function exportListToText():String
     {
         var res : String = '================================================================================\n' +
-                           KerneosModelLocator.getInstance().config.consoleProject + ' ' +
-                           KerneosModelLocator.getInstance().config.consoleName +
+                           KerneosModelLocator.getInstance().config.applicationProject + ' ' +
+                           KerneosModelLocator.getInstance().config.applicationName +
                            ', generated on ' + new Date().toUTCString() + '\n' +
                            'Running on Flash player ' + Capabilities.version + ((Capabilities.isDebugger)?' debug':' ') +
                            ' (memory used: ' + System.totalMemory/1024 + ' Ko)\n' +

@@ -32,7 +32,7 @@ import flash.net.navigateToURL;
 import flexlib.mdi.events.MDIWindowEvent;
 
 import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
-import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+import org.ow2.jasmine.kerneos.core.vo.IFrameModuleVO;
 
 
 /**
@@ -62,7 +62,7 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * Build a new window hosting an IFrame
      */
-    public function IFrameModuleWindow(module : ModuleVO, frame : KerneosIFrame)
+    public function IFrameModuleWindow(module : IFrameModuleVO, frame : KerneosIFrame)
     {
         // Call super class constructor
         super(module);
@@ -99,7 +99,7 @@ public class IFrameModuleWindow extends ModuleWindow
         super.createChildren();
         
         // Add the IFrame
-        _frame.source = module.url;
+        _frame.source = (module as IFrameModuleVO).url;
         _frame.percentHeight = 100;
         _frame.percentWidth = 100;
         _frame.visible = true;
@@ -201,7 +201,7 @@ public class IFrameModuleWindow extends ModuleWindow
      */
     public function navigateExternally(event : Event = null) : void
     {
-        navigateToURL(new URLRequest(module.url), "_blank");
+        navigateToURL(new URLRequest((module as IFrameModuleVO).url), "_blank");
     }
     
     

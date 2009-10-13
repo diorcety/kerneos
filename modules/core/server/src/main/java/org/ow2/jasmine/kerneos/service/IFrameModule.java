@@ -22,40 +22,32 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-
 package org.ow2.jasmine.kerneos.service;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
- * Service description.
+ * An IFrame deployed as a module in Kerneos.
  *
- * @author Guillaume Renault
  * @author Julien Nicoulaud
- * @see SWFModule
  */
-@XmlRootElement(name = "service", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-public class Service {
+@XmlRootElement(name = "iframe-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+public class IFrameModule extends Module {
 
     /**
-     * The id of the service.
+     * The web page URL.
      */
-    @XmlAttribute
-    public String id = null;
-
-    /**
-     * The destination of the service.
-     */
-    @XmlAttribute
-    public String destination = null;
+    @XmlElement(name = "url", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public String url = null;
 
 
-    /**
-     * Output a String preview of the object.
-     */
+    // Utils
+
     @Override
     public String toString() {
-        return "id: " + id + ", destination: " + destination;
+        return "[IFrame module] url: \"" + url + "\", " + super.toString();
     }
+
 }

@@ -27,246 +27,90 @@ package org.ow2.jasmine.kerneos.service;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
- * Kerneos configuration loading service
+ * Kerneos configuration file loading and parsing service.
+ *
+ * @author Guillaume Renault
+ * @author Julien Nicoulaud
  */
 public class KerneosConfigService implements Serializable {
 
     /**
-     * The class serial version ID
+     * The class serial version ID.
      */
     private static final long serialVersionUID = 7807669487844076133L;
 
     /**
-     * The logger
+     * The logger.
      */
     private static Log logger = LogFactory.getLog(KerneosConfigService.class);
 
     /**
-     * The path to the Kerneos config file
+     * The path to the Kerneos config file.
      */
     private static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";
 
     /**
-     * The path to the application root
+     * The path to the application root.
      */
     private static final String PREFIX = "../../";
+
+    /**
+     * The JAXB context for rules packages serialization/deserialization.
+     *
+     * Must be declared with all the potentially involved classes.
+     */
+    private JAXBContext jaxbContext;
 
     /**
      * Load the Kerneos config file and build the configuration object
      */
     public KerneosConfig loadKerneosConfig() throws Exception {
 
-        KerneosConfig config = new KerneosConfig();
-        List<Module> modules = new ArrayList<Module>();
-
-        // Prepare to parse the xml Kerneos config file
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document doc = null;
-
         // Retrieve the kerneos config file
         String configurationFile = "";
-        ClassLoader cl = this.getClass().getClassLoader();
-        if (cl.getResource(KERNEOS_CONFIG_FILE) != null) {
+        ClassLoader loader = this.getClass().getClassLoader();
+        if (loader.getResource(KERNEOS_CONFIG_FILE) != null) {
             configurationFile = KERNEOS_CONFIG_FILE;
-        } else if (cl.getResource(PREFIX + KERNEOS_CONFIG_FILE) != null) {
+        } else if (loader.getResource(PREFIX + KERNEOS_CONFIG_FILE) != null) {
             configurationFile = PREFIX + KERNEOS_CONFIG_FILE;
         }
 
-        if (!configurationFile.equals("")) {
-            logger.debug("loading file : {0}", configurationFile);
+        if (!(configurationFile.equals("") || configurationFile == null)) {
 
-            logger.debug("Loading the registy XML file from classpath");
-            InputStream resource = cl.getResourceAsStream(configurationFile);
+            // Load the file
+            logger.debug("loading file : {0}", configurationFile);
+            InputStream resource = loader.getResourceAsStream(configurationFile);
+
+            // Unmarshall it
             try {
 
-                // Parse the config file
-                doc = documentBuilder.parse(resource);
+                if (jaxbContext == null) {
+                    jaxbContext = JAXBContext.newInstance(KerneosConfig.class, SWFModule.class, Service.class,
+                        IFrameModule.class);
+                }
+
+                // Create an unmarshaller
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+                // Deserialize the configuration file
+                return (KerneosConfig) unmarshaller.unmarshal(resource);
+
             } catch (Exception e) {
                 throw e;
             } finally {
                 resource.close();
-                resource = null;
             }
         } else {
             throw new Exception("No configuration file available at " + KERNEOS_CONFIG_FILE);
         }
-
-        // Extract data from the config file
-        if (doc != null) {
-
-            // Normalize the XML document
-            doc.getDocumentElement().normalize();
-
-            // Read the options
-            logger.debug("Reading options");
-            NodeList optionsNode = doc.getElementsByTagName("options");
-            if (optionsNode.getLength() > 0) {
-                NodeList optionsNodes = optionsNode.item(0).getChildNodes();
-
-                for (int i = 0; i < optionsNodes.getLength(); i++) {
-                    Node option = optionsNodes.item(i);
-
-                    // Console project name
-                    if (option.getNodeName().equals("consoleProject")) {
-                        config.consoleProject = option.getTextContent();
-                        logger.debug("Console project : " + config.consoleProject);
-                    }
-
-                    // Console name
-                    else if (option.getNodeName().equals("consoleName")) {
-                        config.consoleName = option.getTextContent();
-                        logger.debug("Console name : " + config.consoleName);
-                    }
-
-                    // Console logo
-                    else if (option.getNodeName().equals("consoleLogo")) {
-                        config.consoleLogo = option.getTextContent();
-                        logger.debug("Console logo : " + config.consoleLogo);
-                    }
-
-                    // Show "Minimize all" icon
-                    else if (option.getNodeName().equals("showMinimizeAllIcon")) {
-                        config.showMinimizeAllIcon = Boolean.parseBoolean(option.getTextContent());
-                        logger.debug("Show Minimize all icon : " + config.showMinimizeAllIcon);
-                    }
-
-                    // Show "cascade" icon
-                    else if (option.getNodeName().equals("showCascadeIcon")) {
-                        config.showCascadeIcon = Boolean.parseBoolean(option.getTextContent());
-                        logger.debug("Show cascade icon : " + config.showCascadeIcon);
-                    }
-
-                    // Show "tile" icon
-                    else if (option.getNodeName().equals("showTileIcon")) {
-                        config.showTileIcon = Boolean.parseBoolean(option.getTextContent());
-                        logger.debug("Show tile icon : " + config.showTileIcon);
-                    }
-
-                    // Show notifications popups
-                    else if (option.getNodeName().equals("showNotificationPopups")) {
-                        config.showNotificationPopUps = Boolean.parseBoolean(option.getTextContent());
-                        logger.debug("Show notification popups : " + config.showNotificationPopUps);
-                    }
-
-                    // Show notifications popups, even on windows that have the
-                    // focus
-                    else if (option.getNodeName().equals("showPopupsWhenFocused")) {
-                        config.showPopupsWhenFocused = Boolean.parseBoolean(option.getTextContent());
-                        logger.debug("Show notification popups when focused: " + config.showPopupsWhenFocused);
-                    }
-
-                    // Enable modules notifications logging
-                    else if (option.getNodeName().equals("enableNotificationsLog")) {
-                        config.enableNotificationsLog = Boolean.parseBoolean(option.getTextContent());
-                        logger.debug("Enable notifications log: " + config.enableNotificationsLog);
-                    }
-
-                    // Show confirm close dialog
-                    else if (option.getNodeName().equals("showConfirmCloseDialog")) {
-                        config.showConfirmCloseDialog = Boolean.parseBoolean(option.getTextContent());
-                        logger.debug("Show confirm close dialog: " + config.showConfirmCloseDialog);
-                    }
-
-                    // Set the default language
-                    else if (option.getNodeName().equals("defaultLanguage")) {
-                        config.defaultLanguage = option.getTextContent();
-                        logger.debug("Default Language : " + config.defaultLanguage);
-                    }
-                }
-            }
-
-            // Read the list of modules
-            NodeList listOfEntries = doc.getElementsByTagName("module");
-
-            logger.debug("Number of modules : {0}", listOfEntries.getLength());
-
-            for (int i = 0; i < listOfEntries.getLength(); i++) {
-                Module mod = new Module();
-
-                if (listOfEntries.item(i).getAttributes().getNamedItem("swfFile") != null) {
-                    mod.swfFile = listOfEntries.item(i).getAttributes().getNamedItem("swfFile").getTextContent();
-                    if (Thread.currentThread().getContextClassLoader().getResource(mod.swfFile) == null && Thread.currentThread().getContextClassLoader().getResource(PREFIX + mod.swfFile) == null) {
-                        throw new Exception(mod.swfFile + " file is not loadable, check that this file is embedded in the WAR.");
-                    }
-                } else if (listOfEntries.item(i).getAttributes().getNamedItem("url") != null) {
-                    mod.url = listOfEntries.item(i).getAttributes().getNamedItem("url").getTextContent();
-                } else {
-                    throw new Exception("A swf file or an url must be set up for each module declaration.");
-                }
-                if (listOfEntries.item(i).getAttributes().getNamedItem("loadOnStartup") != null) {
-                    mod.loadOnStartup = Boolean.parseBoolean(listOfEntries.item(i).getAttributes()
-                        .getNamedItem("loadOnStartup").getTextContent());
-                    logger.debug("load module on startup: {0}", mod.loadOnStartup);
-                }
-                if (listOfEntries.item(i).getAttributes().getNamedItem("loadMaximized") != null) {
-                    mod.loadMaximized = Boolean.parseBoolean(listOfEntries.item(i).getAttributes()
-                        .getNamedItem("loadMaximized").getTextContent());
-                    logger.debug("load module maximized: {0}", mod.loadMaximized);
-                }
-                if (listOfEntries.item(i).getAttributes().getNamedItem("promptBeforeClose") != null) {
-                    mod.promptBeforeClose = listOfEntries.item(i).getAttributes().getNamedItem("promptBeforeClose")
-                        .getTextContent();
-                    if (!(mod.promptBeforeClose.equals(Module.DEFAULT_PROMPT_BEFORE_CLOSE)
-                        || mod.promptBeforeClose.equals(Module.ALWAYS_PROMPT_BEFORE_CLOSE) || mod.promptBeforeClose
-                        .equals(Module.NEVER_PROMPT_BEFORE_CLOSE))) {
-                        throw new Exception(
-                            "\"prompBeforeClose\" attribute value must be \"default\", \"alaways\", or \"never\".");
-                    }
-                    logger.debug("prompt before close: {0}", mod.loadMaximized);
-                }
-
-                NodeList module = listOfEntries.item(i).getChildNodes();
-                for (int j = 0; j < module.getLength(); j++) {
-                    Node moduleDetail = module.item(j);
-                    if ("name".equals(moduleDetail.getNodeName())) {
-                        mod.name = moduleDetail.getTextContent();
-                        logger.debug("module name : {0}", mod.name);
-                    } else if ("description".equals(moduleDetail.getNodeName())) {
-                        mod.description = moduleDetail.getTextContent();
-                        logger.debug("module description : {0}", mod.description);
-                    } else if ("smallIcon".equals(moduleDetail.getNodeName())) {
-                        mod.smallIcon = moduleDetail.getTextContent();
-                        logger.debug("module small icon : {0}", mod.smallIcon);
-                    } else if ("bigIcon".equals(moduleDetail.getNodeName())) {
-                        mod.bigIcon = moduleDetail.getTextContent();
-                        logger.debug("module big icon : {0}", mod.bigIcon);
-                    } else if ("services".equals(moduleDetail.getNodeName())) {
-                        NodeList services = moduleDetail.getChildNodes();
-                        List<Service> servicesList = new ArrayList<Service>();
-                        for (int k = 0; k < services.getLength(); k++) {
-                            Node servicesDetail = services.item(k);
-                            if ("service".equals(servicesDetail.getNodeName())) {
-                                Service s = new Service();
-                                s.setId(servicesDetail.getAttributes().getNamedItem("id").getTextContent());
-                                s.setDestination(servicesDetail.getAttributes().getNamedItem("destination").getTextContent());
-                                servicesList.add(s);
-                            }
-                        }
-                        mod.services = servicesList;
-                    }
-                }
-                modules.add(mod);
-                logger.debug("{0}", mod.toString());
-            }
-        }
-
-        config.modules = modules;
-
-        return config;
 
     }
 }
