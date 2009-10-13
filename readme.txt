@@ -45,7 +45,7 @@
                      mvn archetype:create \
                          -DarchetypeGroupId=org.ow2.jasmine.kerneos \
                          -DarchetypeArtifactId=kerneos-war-archetype \
-                         -DarchetypeVersion=1.2.1-SNAPSHOT \
+                         -DarchetypeVersion=1.2.2-SNAPSHOT \
                          -DgroupId=your.group.id \
                          -DartifactId=your-war-artifact-name \
                          -Dversion=version-of-your-war
@@ -55,7 +55,7 @@
                     mvn archetype:create \
                          -DarchetypeGroupId=org.ow2.jasmine.kerneos \
                          -DarchetypeArtifactId=kerneos-module-archetype \
-                         -DarchetypeVersion=1.2.1-SNAPSHOT \
+                         -DarchetypeVersion=1.2.2-SNAPSHOT \
                          -DgroupId=your.group.id \
                          -DartifactId=your-module-artifact-name \
                          -Dversion=version-of-your-module
