@@ -25,7 +25,7 @@
 
 <kerneosConfig xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="org.ow2.jasmine.kerneos:KerneosConfig ../resources/kerneos-config.xsd">
+               xsi:schemaLocation="org.ow2.jasmine.kerneos:KerneosConfig http://jasmine.ow2.org/xsds/kerneos-config-1.2">
                 
     <!-- Examples on how to set this file. An XSD file to come. -->
     <!-- Here are some example of how to integrate modules on Kerneos -->
