@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Julien Nicoulaud
  */
 @XmlRootElement(name = "iframe-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-public class IFrameModule extends Module {
+public class IFrameModule extends ModuleWithWindow {
 
     /**
      * The web page URL.
@@ -42,12 +42,24 @@ public class IFrameModule extends Module {
     @XmlElement(name = "url", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     public String url = null;
 
+    /**
+    * Show the "Open in browser" button.
+    */
+    @XmlElement(name = "show-open-in-browser-button", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public Boolean showOpenInBrowserButton = false;
+
+    /**
+    * Show the history navigation buttons.
+    */
+    @XmlElement(name = "show-history-navigation-buttons", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public Boolean showHistoryNavigationButtons = false;
+
 
     // Utils
 
     @Override
     public String toString() {
-        return "[IFrame module] url: \"" + url + "\", " + super.toString();
+        return "[IFrame module] "  + super.toString() + ", url: \"" + url + "\"";
     }
 
 }

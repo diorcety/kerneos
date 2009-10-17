@@ -43,6 +43,8 @@
             
             import com.adobe.cairngorm.business.ServiceLocator;
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
+
+            import com.google.code.flexiframe.IFrame;
             
             import mx.core.Application;
             import mx.core.UIComponent;
@@ -68,6 +70,7 @@
             import mx.controls.TextArea;
             import mx.collections.ArrayCollection;
             import mx.utils.URLUtil;
+            import mx.utils.UIDUtil;
             import mx.messaging.channels.AMFChannel;
             import mx.messaging.ChannelSet;
             
@@ -75,7 +78,6 @@
             import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
             import org.ow2.jasmine.kerneos.common.util.Util;
             import org.ow2.jasmine.kerneos.common.util.IconUtility;
-            import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
             import org.ow2.jasmine.kerneos.login.model.LogInModelLocator;
             import org.ow2.jasmine.kerneos.core.api.KerneosModule;
             import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
@@ -419,36 +421,48 @@
                 // Show a busy cursor
                 cursorManager.setBusyCursor();
                 
-                // Update the module status
-                module.loaded = true;
-                
-                // Declare a new window
-                var window : ModuleWindow;
-                
-                // If this is a swf module
-                if (module is SWFModuleVO)
+                // If this is a module with its own window
+                if (module is ModuleWithWindowVO)
                 {
-                    // Create a window
-                    window = new SwfModuleWindow(module as SWFModuleVO);
-                    window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, handleNotificationEvent);
+	                // Update the module status
+	                module.loaded = true;
+                
+	                // Declare a new window
+	                var window : ModuleWindow;
+	                
+	                // If this is a swf module
+	                if (module is SWFModuleVO)
+	                {
+	                    // Create a window
+	                    window = new SwfModuleWindow(module as SWFModuleVO);
+	                    window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, handleNotificationEvent);
+	                }
+	                
+	                // Else if this is an IFrame module
+	                else if (module is IFrameModuleVO)
+	                {
+	                    // Create an IFrame (with a unique Id)
+	                    frames[module.name] = new IFrame("KerneosIFrame" + UIDUtil.createUID().split("-").join(""));
+	                    var frame : IFrame = frames[module.name] as IFrame;
+	                    window = new IFrameModuleWindow(module as IFrameModuleVO, frame);
+	                }
+
+	                // Create the button in the taskbar
+	                var minimizedModuleWindow : MinimizedModuleWindow = new MinimizedModuleWindow(window);
+	                minimized_windows.addChild(minimizedModuleWindow);
+	                window.minimizedModuleWindow = minimizedModuleWindow;
+	                
+	                // Add it to the windows manager
+	                mdiCanvas.windowManager.add(window);
+                
                 }
                 
-                // Else if this is an IFrame module
-                else if (module is IFrameModuleVO)
+                // Else if this is a simple link
+                else if (module is LinkVO)
                 {
-                    // Create a window
-                    frames[module.name] = new KerneosIFrame();
-                    var frame : KerneosIFrame = frames[module.name] as KerneosIFrame;
-                    window = new IFrameModuleWindow(module as IFrameModuleVO, frame);
+                    // Open it
+                    navigateToURL(new URLRequest((module as LinkVO).url),"_blank");
                 }
-                
-                // Create the button in the taskbar
-                var minimizedModuleWindow : MinimizedModuleWindow = new MinimizedModuleWindow(window);
-                minimized_windows.addChild(minimizedModuleWindow);
-                window.minimizedModuleWindow = minimizedModuleWindow;
-                
-                // Add it to the windows manager
-                mdiCanvas.windowManager.add(window);
                 
                 // Remove the busy cursor
                 cursorManager.removeBusyCursor();
@@ -552,7 +566,7 @@
                         }
                         
                         // If "load on startup", load it
-                        if (module.loadOnStartup)
+                        if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup)
                         {
                             callLater(startModule, [module]);
                         }
@@ -633,11 +647,11 @@
                         // Resolve wether the user should be prompted before closing the window
                         var prompt : Boolean = true;
                         
-                        if (window.module.promptBeforeClose == ModuleVO.NEVER_PROMPT_BEFORE_CLOSE)
+                        if (window.module.promptBeforeClose == ModuleWithWindowVO.NEVER_PROMPT_BEFORE_CLOSE)
                         {
                             prompt = false;
                         }
-                        else if (window.module.promptBeforeClose == ModuleVO.ALWAYS_PROMPT_BEFORE_CLOSE)
+                        else if (window.module.promptBeforeClose == ModuleWithWindowVO.ALWAYS_PROMPT_BEFORE_CLOSE)
                         {
                             prompt = true;
                         }

@@ -24,6 +24,8 @@
  */
 package org.ow2.jasmine.kerneos.core.view.window
 {
+import com.google.code.flexiframe.IFrame;
+
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.net.URLRequest;
@@ -31,7 +33,6 @@ import flash.net.navigateToURL;
 
 import flexlib.mdi.events.MDIWindowEvent;
 
-import org.ow2.jasmine.kerneos.common.view.KerneosIFrame;
 import org.ow2.jasmine.kerneos.core.vo.IFrameModuleVO;
 
 
@@ -51,7 +52,7 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * The hosted IFrame
      */
-    private var _frame : KerneosIFrame;
+    private var _frame : IFrame;
     
     
     
@@ -62,7 +63,7 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * Build a new window hosting an IFrame
      */
-    public function IFrameModuleWindow(module : IFrameModuleVO, frame : KerneosIFrame)
+    public function IFrameModuleWindow(module : IFrameModuleVO, frame : IFrame)
     {
         // Call super class constructor
         super(module);
@@ -71,21 +72,15 @@ public class IFrameModuleWindow extends ModuleWindow
         _frame = frame;
         
         // Special controls bar for the IFrame windows...
-        this.setStyle("windowControlsClass", org.ow2.jasmine.kerneos.core.view.window.IFrameModuleWindowControlsContainer);
+        this.setStyle("windowControlsClass", IFrameModuleWindowControlsContainer);
         
         // Listen to window events
         this.addEventListener(MDIWindowEvent.DRAG_START, hideIFrame);
-        this.addEventListener(MDIWindowEvent.DRAG_START, hideWhiteBackground);
         this.addEventListener(MDIWindowEvent.DRAG_END, showIFrame);
-        this.addEventListener(MDIWindowEvent.DRAG_END, showWhiteBackground);
         this.addEventListener(MDIWindowEvent.FOCUS_START, showIFrame);
-        this.addEventListener(MDIWindowEvent.FOCUS_START, showWhiteBackground);
         this.addEventListener(MDIWindowEvent.FOCUS_END, hideIFrame);
-        this.addEventListener(MDIWindowEvent.FOCUS_END, hideWhiteBackground);
         this.addEventListener(MDIWindowEvent.RESIZE_START, hideIFrame);
-        this.addEventListener(MDIWindowEvent.RESIZE_START, hideWhiteBackground);
         this.addEventListener(MDIWindowEvent.RESIZE_END, showIFrame);
-        this.addEventListener(MDIWindowEvent.RESIZE_END, showWhiteBackground);
     }
     
     
@@ -99,18 +94,58 @@ public class IFrameModuleWindow extends ModuleWindow
         super.createChildren();
         
         // Add the IFrame
+        _frame.loadIndicatorClass = IFrameLoadIndicator;
         _frame.source = (module as IFrameModuleVO).url;
         _frame.percentHeight = 100;
         _frame.percentWidth = 100;
-        _frame.visible = true;
+        _frame.overlayDetection = true;
         addChild(_frame);
         
         // Setup the controls
-        (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.addEventListener(MouseEvent.CLICK, navigateExternally);
+        setupControls();
     }
     
     
     
+    /**
+     * Setup which controls should be displayed.
+     */
+    protected function setupControls():void
+    {
+        var showSeparator : Boolean = false;
+        if ((module as IFrameModuleVO).showHistoryNavigationButtons)
+        {
+            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.addEventListener(MouseEvent.CLICK, historyBack);
+            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.addEventListener(MouseEvent.CLICK, historyForward);
+            showSeparator = true;
+        }
+        else
+        {
+            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.visible =
+            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.includeInLayout = false;
+            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.visible =
+            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.includeInLayout = false;
+        }
+        
+        if ((module as IFrameModuleVO).showOpenInBrowserButton)
+        {        
+            (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.addEventListener(MouseEvent.CLICK, navigateExternally);
+            showSeparator = true;
+        }
+        else
+        {
+            (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.visible =
+            (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.includeInLayout = false;
+        }
+        
+        if (!showSeparator)
+        {
+            (windowControls as IFrameModuleWindowControlsContainer).separator.visible =
+            (windowControls as IFrameModuleWindowControlsContainer).separator.includeInLayout = false;
+        }
+    }
+
+
     // =========================================================================
     // Getter & setters
     // =========================================================================
@@ -118,7 +153,7 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * Get the hosted IFrame.
      */
-    public function get iFrame() : KerneosIFrame
+    public function get iFrame() : IFrame
     {
         return _frame;
     }
@@ -128,7 +163,7 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * Set the hosted IFrame.
      */
-    public function set iFrame(value : KerneosIFrame) : void
+    public function set iFrame(value : IFrame) : void
     {
         throw new Error('This is a read only property.');
     }
@@ -144,7 +179,7 @@ public class IFrameModuleWindow extends ModuleWindow
      */
     public function kill(e : Event = null) : void
     {
-        _frame.kill();
+        _frame.removeIFrame();
     }
     
     
@@ -154,8 +189,7 @@ public class IFrameModuleWindow extends ModuleWindow
      */
     public function hideIFrame(e : Event = null) : void
     {
-        this.iFrame.overlayDetection = false;
-        this.iFrame.visible = false;
+        this.iFrame.hidden = true;
     }
     
     
@@ -167,29 +201,8 @@ public class IFrameModuleWindow extends ModuleWindow
     {
         if (!minimized)
         {
-            this.iFrame.visible = true;
-            this.iFrame.overlayDetection = true;
+            this.iFrame.hidden = false;
         }
-    }
-    
-    
-    
-    /**
-     * Hide the white background.
-     */
-    public function hideWhiteBackground(e : Event = null) : void
-    {
-        this.setStyle("backgroundColor", 0x666666);
-    }
-    
-    
-    
-    /**
-     * Show the white background.
-     */
-    public function showWhiteBackground(e : Event = null) : void
-    {
-        this.setStyle("backgroundColor", 0xFFFFFF);
     }
     
     
@@ -197,13 +210,32 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * Open the module URL in the browser.
      * 
-     * Opens in a new tab, expect for Internet Explorer where it is opened in a new window...
+     * Opens in a new tab, excepted for Internet Explorer where it is opened in a new window...
      */
     public function navigateExternally(event : Event = null) : void
     {
         navigateToURL(new URLRequest((module as IFrameModuleVO).url), "_blank");
     }
     
+    
+    
+    /**
+    * Load the IFrame's last page in the navigation history.
+    */
+    public function historyBack(event : Event = null):void
+    {
+        _frame.historyBack();
+    }
+    
+    
+    
+    /**
+    * Load the IFrame's next page in the navigation history.
+    */
+    public function historyForward(event : Event = null):void
+    {
+        _frame.historyForward();
+    }
     
     
     // =========================================================================
@@ -230,8 +262,7 @@ public class IFrameModuleWindow extends ModuleWindow
     override public function unMinimize(event : MouseEvent = null) : void
     {
         // Restore the IFrame visibility
-        this.iFrame.visible = true;
-        this.iFrame.overlayDetection = true;
+        this.iFrame.hidden = false;
         
         // Call super class method
         super.unMinimize(event);

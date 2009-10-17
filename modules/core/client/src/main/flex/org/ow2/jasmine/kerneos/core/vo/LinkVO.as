@@ -26,14 +26,13 @@ import com.adobe.cairngorm.vo.IValueObject;
 
 
 /**
- * An IFrame deployed as a module in Kerneos.
+ * A link displayed in Kerneos.
  *
- * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.IFrameModule")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Link")]
 [Bindable]
-public class IFrameModuleVO extends ModuleWithWindowVO implements IValueObject
+public class LinkVO extends ModuleVO implements IValueObject
 {
     
     // =========================================================================
@@ -44,15 +43,6 @@ public class IFrameModuleVO extends ModuleWithWindowVO implements IValueObject
      * The web page URL.
      */
     public var url : String = null;
-    
-    /**
-    * Show the "Open in browser" button.
-    */
-    public var showOpenInBrowserButton : Boolean = false;
-    
-    /**
-    * Show the history navigation buttons.
-    */
-    public var showHistoryNavigationButtons : Boolean = false;
+
 }
 }

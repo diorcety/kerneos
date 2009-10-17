@@ -61,7 +61,7 @@
       <type>swc</type>
     </dependency>
 
-     <dependency>
+    <dependency>
       <groupId>org.ow2.jasmine.kerneos</groupId>
       <artifactId>kerneos-api</artifactId>
       <version>${project.version}</version>
@@ -73,7 +73,14 @@
       <artifactId>flexlib-bin</artifactId>
       <type>swc</type>
       <version>${flexlib.version}</version>
-     </dependency>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.code</groupId>
+      <artifactId>flex-iframe</artifactId>
+      <version>${flexiframe.version}</version>
+      <type>swc</type>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>

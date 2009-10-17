@@ -24,14 +24,13 @@ package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
-import mx.collections.ArrayCollection;
 import mx.core.UIComponent;
 
 import org.ow2.jasmine.kerneos.common.util.IconUtility;
 
 
 /**
- * Describes the configuration of a Kerneos module
+ * Describes the configuration of a Kerneos module.
  * 
  * @author Guillaume Renault
  * @author Julien Nicoulaud
@@ -48,14 +47,14 @@ public class ModuleVO implements IValueObject
     // Assets
          
     /**
-    * Default module small icon (16x16)
+    * Default module small icon (16x16).
     */
     [Transient]
     [Embed(source="/../assets/module16.png")]
     public static var defaultSmallIcon : Class;
     
     /**
-    * Default module big icon (64x64)
+    * Default module big icon (64x64).
     */
     [Transient]
     [Embed(source="/../assets/module64.png")]
@@ -70,41 +69,19 @@ public class ModuleVO implements IValueObject
 	public var name : String = null;
 	
 	/**
-	* The description of the module
+	* The description of the module.
 	*/
 	public var description : String = null;
 	
     /**
-    * The small icon (16x16) path
+    * The small icon (16x16) path.
     */
     public var smallIcon : String = null;
     
     /**
-    * The big icon (64x64) path
+    * The big icon (64x64) path.
     */
     public var bigIcon : String = null;
-    
-    /**
-    * Load the module on application startup
-    */
-    public var loadOnStartup : Boolean = false;
-    
-    /**
-    * Load the module maximized
-    */
-    public var loadMaximized : Boolean = false;
-    
-    /**
-    * Prompt the user before closing the module
-    * 
-    * Can be "never", "always", or "default". "default" means that if the module implements 
-    * {@see KerneosModule}, the method canBeCloseWithoutPrompt() is called. If not, the user is
-    * prompted by default.
-    */
-    public static const DEFAULT_PROMPT_BEFORE_CLOSE : String = "default";
-    public static const NEVER_PROMPT_BEFORE_CLOSE : String = "never";
-    public static const ALWAYS_PROMPT_BEFORE_CLOSE : String = "always";
-    public var promptBeforeClose : String = DEFAULT_PROMPT_BEFORE_CLOSE;
     
     
     // Transient fields (client-side only)

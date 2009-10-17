@@ -1,6 +1,6 @@
 /**
  * JASMINe
- * Copyright (C) 2008 Bull S.A.S.
+ * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -25,44 +25,29 @@
 package org.ow2.jasmine.kerneos.service;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
- * A module deployed in Kerneos.
+ * A link shown as a module in Kerneos.
  *
- * @author Guillaume Renault, Julien Nicoulaud
+ * @author Julien Nicoulaud
  */
-public class Module {
+@XmlRootElement(name = "link", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+public class Link extends Module {
 
     /**
-     * The displayed name of the module.
+     * The web page URL.
      */
-    @XmlElement(name = "name", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-    public String name = null;
+    @XmlElement(name = "url", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+    public String url = null;
 
-    /**
-     * The description of the module.
-     */
-    @XmlElement(name = "description", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-    public String description = null;
 
-    /**
-     * The small icon (16x16) path.
-     */
-    @XmlElement(name = "small-icon", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-    public String smallIcon = null;
+    // Utils
 
-    /**
-     * The big icon (64x64) path.
-     */
-    @XmlElement(name = "big-icon", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-    public String bigIcon = null;
-
-    /**
-     * Output a String preview of the object.
-     */
     @Override
     public String toString() {
-        return "name: " + name + ", description: " + description + ", smallIcon: " + smallIcon + ", bigIcon: " + bigIcon;
+        return "[Link] " + super.toString() + ", url: \"" + url + "\"";
     }
 
 }

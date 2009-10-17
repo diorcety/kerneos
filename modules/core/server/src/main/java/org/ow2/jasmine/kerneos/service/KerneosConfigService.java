@@ -94,7 +94,7 @@ public class KerneosConfigService implements Serializable {
 
                 if (jaxbContext == null) {
                     jaxbContext = JAXBContext.newInstance(KerneosConfig.class, SWFModule.class, Service.class,
-                        IFrameModule.class);
+                        IFrameModule.class, Link.class);
                 }
 
                 // Create an unmarshaller

@@ -43,6 +43,16 @@ import mx.events.ToolTipEvent;
 public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContainer
 {
     /**
+     * The "Previous page" button.
+     */
+    public var previousPageButton : Button;
+    
+    /**
+     * The "Next page" button.
+     */
+    public var nextPageButton : Button;
+    
+    /**
      * The "Navigate externally" button.
      */
     public var navigateExternallyButton : Button;
@@ -69,6 +79,26 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
      */
     override protected function createChildren() : void
     {
+        // Create the "Previous page" button
+        if (!previousPageButton)
+        {
+            previousPageButton = new Button();
+            previousPageButton.buttonMode = true;
+            previousPageButton.setStyle("styleName", "iFrameWindowPreviousPageButton");
+            previousPageButton.toolTip = "Previous page";
+            addChild(previousPageButton);
+        }
+        
+        // Create the "Next page" button
+        if (!nextPageButton)
+        {
+            nextPageButton = new Button();
+            nextPageButton.buttonMode = true;
+            nextPageButton.setStyle("styleName", "iFrameWindowNextPageButton");
+            nextPageButton.toolTip = "Next page";
+            addChild(nextPageButton);
+        }
+        
         // Create the "Navigate externally" button
         if (!navigateExternallyButton)
         {
@@ -84,7 +114,7 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
         {
             separator = new VRule();
             separator.setStyle("styleName", "iFrameWindowSeparator");
-            separator.percentHeight = 100;
+            separator.height = 10;
             separator.alpha = 0.3;
             addChild(separator);
         }
@@ -97,6 +127,8 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
         maximizeRestoreBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
         closeBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
         navigateExternallyButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
+        previousPageButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
+        nextPageButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
     }
     
     

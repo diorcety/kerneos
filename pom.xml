@@ -46,6 +46,7 @@
   <properties>
     <flex.home>${env.FLEX_HOME}</flex.home>
     <flexlib.version>r169</flexlib.version>
+    <flexiframe.version>1.4</flexiframe.version>
     <flex.version>3.0.0.477</flex.version>
     <graniteds.version>2.0.0.SP1</graniteds.version>
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
@@ -72,6 +73,10 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>flex-iframe</id>
+      <url>http://flex-iframe.googlecode.com/svn/maven2</url>
+    </repository>
   </repositories>
 
   <profiles>
@@ -84,6 +89,12 @@
           <version>${flexlib.version}</version>
           <type>swc</type>
         </dependency>
+		<dependency>
+		  <groupId>com.google.code</groupId>
+		  <artifactId>flex-iframe</artifactId>
+		  <version>${flexiframe.version}</version>
+          <type>swc</type>
+		</dependency>
         <dependency>
           <groupId>org.apache.geronimo.specs</groupId>
           <artifactId>geronimo-jms_1.1_spec</artifactId>
@@ -250,6 +261,17 @@
                       <groupId>flexlib</groupId>
                       <artifactId>flexlib-bin</artifactId>
                       <version>${flexlib.version}</version>
+                      <type>swc</type>
+                      <overWrite>true</overWrite>
+                      <outputDirectory>
+                        libs
+                      </outputDirectory>
+                    </artifactItem>
+
+                    <artifactItem>
+			          <groupId>com.google.code</groupId>
+			          <artifactId>flex-iframe</artifactId>
+			          <version>${flexiframe.version}</version>
                       <type>swc</type>
                       <overWrite>true</overWrite>
                       <outputDirectory>

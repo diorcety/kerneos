@@ -112,7 +112,7 @@ KerneosWindow{
 }
 
 IFrameModuleWindow{
-    backgroundColor: #FFFFFF;
+    backgroundColor: #666666;
     style-name-no-focus: noFocusIFrameModuleWindow;
 }
 
@@ -160,6 +160,18 @@ IFrameModuleWindow{
     upSkin: Embed(source="restore_up.png");
     overSkin: Embed(source="restore_over.png");
     downSkin: Embed(source="restore_up.png");
+}
+
+.iFrameWindowPreviousPageButton {
+    upSkin: Embed(source="arrow_left_up.png");
+    overSkin: Embed(source="arrow_left_over.png");
+    downSkin: Embed(source="arrow_left_up.png");
+}
+
+.iFrameWindowNextPageButton {
+    upSkin: Embed(source="arrow_right_up.png");
+    overSkin: Embed(source="arrow_right_over.png");
+    downSkin: Embed(source="arrow_right_up.png");
 }
 
 .iFrameWindowNavigateExternallyButton {

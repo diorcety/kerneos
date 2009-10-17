@@ -35,7 +35,7 @@ import mx.collections.ArrayCollection;
  */
 [RemoteClass(alias="org.ow2.jasmine.kerneos.service.SWFModule")]
 [Bindable]
-public class SWFModuleVO extends ModuleVO implements IValueObject
+public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
 {
 	
     // =========================================================================

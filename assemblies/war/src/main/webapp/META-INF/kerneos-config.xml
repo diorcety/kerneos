@@ -140,6 +140,10 @@
             <load-maximized>false</load-maximized>
             <load-on-startup>false</load-on-startup>
             <prompt-before-close>default</prompt-before-close>
+            <width>650</width>
+            <height>490</height>
+            <resizable>true</resizable>
+            <maximizable>true</maximizable>
             <services>
                 <service id="quickvisuService" destination="quickvisu" />
             </services>
@@ -156,10 +160,33 @@
             <name>JASMINe on IRC</name>
             <description>The JASMINe project IRC channel</description>
             <url>http://webchat.freenode.net/?nick=kerneos-user-.&amp;channels=jasmine&amp;prompt=1</url>
+            <small-icon>resources/icons/icon16.png</small-icon>
+            <big-icon>resources/icons/icon64.png</big-icon>
             <load-maximized>false</load-maximized>
             <load-on-startup>false</load-on-startup>
             <prompt-before-close>always</prompt-before-close>
+            <width>650</width>
+            <height>490</height>
+            <resizable>true</resizable>
+            <maximizable>true</maximizable>
+            <show-open-in-browser-button>false</show-open-in-browser-button>
+            <show-history-navigation-buttons>false</show-history-navigation-buttons>
         </iframe-module>
+        -->
+        
+        <!--
+          - An example of simple link displayed in the list of modules.
+          - 
+          - * Only the "name", "description" and "url" parameters are mandatory.
+          -->
+        <!--
+        <link>
+            <name>JASMINe website</name>
+            <description>JASMINe on OW2</description>
+            <url>http://jasmine.ow2.org</url>
+            <small-icon>resources/icons/icon16.png</small-icon>
+            <big-icon>resources/icons/icon64.png</big-icon>
+        </link>
         -->
 
     </modules>

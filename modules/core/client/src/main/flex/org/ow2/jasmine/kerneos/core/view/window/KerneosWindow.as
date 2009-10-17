@@ -58,6 +58,9 @@ public class KerneosWindow extends MDIWindow
     
     public static var TOP_MARGIN : int = 15;
     
+    public static var MINIMUM_ACCEPTED_WINDOW_WIDTH : int = 100;
+    
+    public static var MINIMUM_ACCEPTED_WINDOW_HEIGHT : int = 100;
     
     
     // =========================================================================
@@ -98,82 +101,6 @@ public class KerneosWindow extends MDIWindow
         windowControls.closeBtn.toolTip = "Close";
     }
     
-    
-    
-    /**
-     * Setup the window size and position.
-     *
-     * Tries to read the user preferences from the shared object. If valid, applies it. Else
-     * calculates the window size and position.
-     */
-    protected function setupWindowSizeAndPosition(event : Event = null) : void
-    {
-        // Define the variables to calculate
-        var windowWidth : int;
-        var windowHeight : int;
-        var xPos : int;
-        var yPos : int;
-        
-        // Try to get the user saved preferences for this window,
-        // and check if they are still applicable.
-        var userWindowPlacement : Object = SharedObjectManager.getWindowSizeAndPosition(title);
-        var userWindowPlacementIsApplicable : Boolean = true;
-        
-        if (userWindowPlacement == null)
-        {
-            userWindowPlacementIsApplicable = false;
-        }
-        else
-        {
-        	// Read the user preferences
-            windowWidth = userWindowPlacement.width as int;
-            windowHeight = userWindowPlacement.height as int;
-            xPos = userWindowPlacement.x as int;
-            yPos = userWindowPlacement.y as int;
-            
-            // Check that there are still applicable
-            if (windowWidth + xPos > (windowManager.container as MDICanvas).width || windowHeight + yPos > (windowManager.container as MDICanvas).height)
-            {
-                userWindowPlacementIsApplicable = false;
-            }
-        }
-        
-        // If no user preference applicable, recalculate the window placement
-        if (!userWindowPlacementIsApplicable)
-        {
-            var xOffset : int = windowManager.windowList.length * WINDOW_DEFAULT_X_OFFSET;
-            var yOffset : int = windowManager.windowList.length * WINDOW_DEFAULT_Y_OFFSET;
-            windowWidth = Math.min((windowManager.container as MDICanvas).width - LEFT_MARGIN - xOffset, (windowManager.container as MDICanvas).width * (WINDOW_DEFAULT_PERCENT_WIDTH / 100));
-            windowHeight = Math.min((windowManager.container as MDICanvas).height - TOP_MARGIN - yOffset, (windowManager.container as MDICanvas).height * (WINDOW_DEFAULT_PERCENT_HEIGHT / 100));
-            xPos = Math.max(LEFT_MARGIN, (windowManager.container as MDICanvas).width - windowWidth - xOffset);
-            yPos = Math.max(TOP_MARGIN, (windowManager.container as MDICanvas).height - windowHeight - yOffset);
-        }
-        
-        // Assign the calculated coordinates
-        width = windowWidth;
-        height = windowHeight;
-        windowManager.absPos(this, xPos, yPos);
-        
-        // Setup wether the window is maximized
-        setupWindowMaximization();
-    }
-    
-    
-    
-    /**
-     * Setup wether the window must be maximized.
-     */
-    protected function setupWindowMaximization(event : Event = null) : void
-    {
-        // Try to get the user saved preference for this window,
-        var userWindowIsMaximized : Object = SharedObjectManager.getWindowIsMaximized(title);
-        
-        if (userWindowIsMaximized == true)
-        {
-            maximize();
-        }
-    }
-
 
     // =========================================================================
     // Window operations
@@ -264,6 +191,105 @@ public class KerneosWindow extends MDIWindow
         SharedObjectManager.setWindowSizeAndPosition(title, width, height, x, y);
         SharedObjectManager.setWindowIsMaximized(title, maximized);
     }
-
+    
+    
+    // =========================================================================
+    // Window size and placement
+    // =========================================================================
+    
+    /**
+     * Setup the window size and position.
+     *
+     * Tries to read the user preferences from the shared object. If valid, applies it. Else
+     * calculates the window size and position.
+     */
+    protected function setupWindowSizeAndPosition(event : Event = null) : void
+    {
+        // Try the user settings, then the default settings
+        if (!setupUserWindowSizeAndPosition())
+        {
+        	setupDefaultWindowSizeAndPosition();
+        }
+        
+        // Setup wether the window should be maximized
+        setupWindowMaximization();
+    }
+    
+    /**
+    * Try to apply the user saved setting for positioning and sizing this window.
+    * 
+    * @return false
+    *           if no setting saved or not applicable anymore.
+    */
+    protected function setupUserWindowSizeAndPosition():Boolean
+    {
+        // Try to get the user saved preferences for this window,
+        // and check if they are still applicable.
+        var userWindowPlacement : Object = SharedObjectManager.getWindowSizeAndPosition(title);
+        
+        // If the user has no saved setting
+        if (userWindowPlacement == null)
+        {
+            return false;
+        }
+        else
+        {
+            // Read the user preferences
+            var windowWidth : int = userWindowPlacement.width as int;
+            var windowHeight : int = userWindowPlacement.height as int;
+            var xPos : int = userWindowPlacement.x as int;
+            var yPos : int = userWindowPlacement.y as int;
+            
+            // Check that they are still applicable
+            if (windowWidth + xPos > (windowManager.container as MDICanvas).width || windowHeight + yPos > (windowManager.container as MDICanvas).height)
+            {
+                return false;
+            }
+            
+	        // Assign the calculated coordinates
+	        width = windowWidth;
+	        height = windowHeight;
+	        windowManager.absPos(this, xPos, yPos);
+	        
+	        return true;
+        }
+        
+    }
+    
+    /**
+    * Apply the default algorithm for positioning and sizing the window.
+    */
+    protected function setupDefaultWindowSizeAndPosition():void
+    {
+        // Compute the default settings
+        var xOffset : int = windowManager.windowList.length * WINDOW_DEFAULT_X_OFFSET;
+        var yOffset : int = windowManager.windowList.length * WINDOW_DEFAULT_Y_OFFSET;
+        var windowWidth = Math.min((windowManager.container as MDICanvas).width - LEFT_MARGIN - xOffset, (windowManager.container as MDICanvas).width * (WINDOW_DEFAULT_PERCENT_WIDTH / 100));
+        var windowHeight : int = Math.min((windowManager.container as MDICanvas).height - TOP_MARGIN - yOffset, (windowManager.container as MDICanvas).height * (WINDOW_DEFAULT_PERCENT_HEIGHT / 100));
+        var xPos : int = Math.max(LEFT_MARGIN, (windowManager.container as MDICanvas).width - windowWidth - xOffset);
+        var yPos : int = Math.max(TOP_MARGIN, (windowManager.container as MDICanvas).height - windowHeight - yOffset);
+        
+        // Assign the calculated coordinates
+        width = windowWidth;
+        height = windowHeight;
+        windowManager.absPos(this, xPos, yPos);
+    }
+    
+    
+    
+    /**
+     * Setup wether the window must be maximized.
+     */
+    protected function setupWindowMaximization(event : Event = null) : void
+    {
+        // Try to get the user saved preference for this window,
+        var userWindowIsMaximized : Object = SharedObjectManager.getWindowIsMaximized(title);
+        
+        if (userWindowIsMaximized == true)
+        {
+            maximize();
+        }
+    }
+    
 }
 }

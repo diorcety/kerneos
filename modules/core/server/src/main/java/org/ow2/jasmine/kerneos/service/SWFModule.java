@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @see Service
  */
 @XmlRootElement(name = "swf-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-public class SWFModule extends Module {
+public class SWFModule extends ModuleWithWindow {
 
     /**
      * The SWF file path.
@@ -66,13 +66,13 @@ public class SWFModule extends Module {
      */
     @Override
     public String toString() {
-        String res = "[SWF module] file: " + file + ", services: {";
+        String res = "[SWF module] "  + super.toString() + ", file: " + file + ", services: {";
 
         for (Service service : services) {
             res += "(" + service.toString() + ")";
         }
 
-        return res + "}, " + super.toString();
+        return res + "}";
     }
 
 }
