@@ -31,7 +31,7 @@ import flexlib.mdi.containers.MDICanvas;
 
 import mx.events.FlexEvent;
 
-import org.ow2.jasmine.kerneos.core.util.SharedObjectManager;
+import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
 import org.ow2.jasmine.kerneos.core.vo.ModuleWithWindowVO;
 
 

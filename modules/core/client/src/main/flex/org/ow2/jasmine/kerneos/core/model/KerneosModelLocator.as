@@ -31,7 +31,7 @@ import org.ow2.jasmine.kerneos.core.business.*;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 
 /**
-* Kerneos model
+* Kerneos model.
 * 
 * @author Guillaume Renault, Julien Nicoulaud
 */
@@ -42,7 +42,7 @@ public class KerneosModelLocator implements ModelLocator {
     // =========================================================================
     
     /**
-    * The unique ID of this component
+    * The unique ID of this component.
     * 
     * @internal
     *   Used to prevent a Cairngorm issue: when a command event is dispatched,
@@ -52,43 +52,43 @@ public class KerneosModelLocator implements ModelLocator {
     * postfixed with this unique ID.
     */
     public var componentID:String = UIDUtil.createUID();
-    
+
     /**
-    * The config of Kerneos
+    * The config of Kerneos.
     */
     [Bindable]
     public var config:KerneosConfigVO;
 
     /**
-    * The stored notifications
+    * The stored notifications.
     */
     [Bindable]
     [ArrayElementType('org.ow2.jasmine.kerneos.common.vo.KerneosNotification')]
     public var notifications:ArrayCollection = new ArrayCollection();
 
-    
+
     // Singleton class unique instance
-    
+
 	/**
     * Unique instance of this locator.
     */
     private static var model:KerneosModelLocator;
-    
-    
+
+
     // Delegates unique instances
-    
+
     /**
     * "Load Kerneos config file" delegate unique instance
     */
     private var loadKerneosConfigDelegate:ILoadKerneosConfigDelegate = null;
 
-    
+
     // =========================================================================
     // Construction
     // =========================================================================
-    
+
     /**
-    * Build a new KerneosModelLocator
+    * Build a new KerneosModelLocator.
     */
     public function KerneosModelLocator(){
         super();
@@ -96,9 +96,9 @@ public class KerneosModelLocator implements ModelLocator {
             throw new Error("Only one KerneosModelLocator can be instantiated.");
         }
     }
-    
+
     /**
-    * Get the unique instance of KerneosModelLocator
+    * Get the unique instance of KerneosModelLocator.
     */
     public static function getInstance() : KerneosModelLocator{
         if (KerneosModelLocator.model == null) {
@@ -106,14 +106,14 @@ public class KerneosModelLocator implements ModelLocator {
         }
         return KerneosModelLocator.model;
     }
-    
-    
+
+
     // =========================================================================
     // Delegates getters
     // =========================================================================
-    
+
     /**
-    * Get the "Load Kerneos config file" delegate unique instance
+    * Get the "Load Kerneos config file" delegate unique instance.
     */
     public function getLoadKerneosConfigDelegate():ILoadKerneosConfigDelegate {
         if (this.loadKerneosConfigDelegate == null) {

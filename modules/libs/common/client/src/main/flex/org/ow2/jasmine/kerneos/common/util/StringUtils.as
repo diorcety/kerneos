@@ -90,6 +90,61 @@ public class StringUtils
     
     
     
+    /**
+     * Parse the input URL and return the associated context.
+     */
+    public static function parseURLContext(s:String):String
+    {   
+        var context:String = new String();
+        var defaut_protocol:String = "http://"
+        
+        // remove the protocol on the url string
+        var s_without_protocol:String = s.substring(defaut_protocol.length,s.length);
+        
+        // splicing the string into an array
+        var tokens:Array = s_without_protocol.split("/");
+        
+        for(var i:int = 1;  i< tokens.length - 1; i++){
+            context += tokens[i].toString();
+            if (i < tokens.length - 2) {
+                context += "/";
+            }
+        }
+        
+        return context;
+    }
+    
+    
+    
+    /**
+     * Parse the String Boolean value.
+     *
+     * @return true
+     *           if the String value is in {"1","true","yes"}.
+     *         false
+     *           if the String value is in {"0","false","no"}.
+     *         Boolean(string)
+     *           in every other case.
+     */
+    public static function parseBoolean(string : String) : Boolean
+    {
+        switch (string.toLowerCase())
+        {
+            case "1":
+            case "true":
+            case "yes":
+                return true;
+            case "0":
+            case "false":
+            case "no":
+                return false;
+            default:
+                return Boolean(string);
+        }
+    }
+    
+    
+    
     // =========================================================================
     // Format the String
     // =========================================================================
@@ -208,39 +263,6 @@ public class StringUtils
             return '';
         }
         return string.replace(/^\s\s\s\s(.*)/gm, '$1');
-    }
-    
-    
-    
-    // =========================================================================
-    // Private helper methods
-    // =========================================================================
-    
-    /**
-     * Parse the String Boolean value.
-     *
-     * @return true
-     *           if the String value is in {"1","true","yes"}.
-     *         false
-     *           if the String value is in {"0","false","no"}.
-     *         Boolean(string)
-     *           in every other case.
-     */
-    public static function parseBoolean(string : String) : Boolean
-    {
-        switch (string.toLowerCase())
-        {
-            case "1":
-            case "true":
-            case "yes":
-                return true;
-            case "0":
-            case "false":
-            case "no":
-                return false;
-            default:
-                return Boolean(string);
-        }
     }
     
     

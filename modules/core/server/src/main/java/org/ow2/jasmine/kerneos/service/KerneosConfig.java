@@ -126,7 +126,8 @@ public class KerneosConfig {
     @XmlElementRefs({
         @XmlElementRef(type = SWFModule.class, name = "swf-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE),
         @XmlElementRef(type = IFrameModule.class, name = "iframe-module", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE),
-        @XmlElementRef(type = Link.class, name = "link", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
+        @XmlElementRef(type = Link.class, name = "link", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE),
+        @XmlElementRef(type = Folder.class, name = "folder", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
     })
     public List<Module> modules = new ArrayList<Module>();
 

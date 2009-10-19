@@ -32,7 +32,7 @@ import flexlib.mdi.events.MDIWindowEvent;
 
 import mx.events.FlexEvent;
 
-import org.ow2.jasmine.kerneos.core.util.SharedObjectManager;
+import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
 
 
 /**
@@ -264,7 +264,7 @@ public class KerneosWindow extends MDIWindow
         // Compute the default settings
         var xOffset : int = windowManager.windowList.length * WINDOW_DEFAULT_X_OFFSET;
         var yOffset : int = windowManager.windowList.length * WINDOW_DEFAULT_Y_OFFSET;
-        var windowWidth = Math.min((windowManager.container as MDICanvas).width - LEFT_MARGIN - xOffset, (windowManager.container as MDICanvas).width * (WINDOW_DEFAULT_PERCENT_WIDTH / 100));
+        var windowWidth : int = Math.min((windowManager.container as MDICanvas).width - LEFT_MARGIN - xOffset, (windowManager.container as MDICanvas).width * (WINDOW_DEFAULT_PERCENT_WIDTH / 100));
         var windowHeight : int = Math.min((windowManager.container as MDICanvas).height - TOP_MARGIN - yOffset, (windowManager.container as MDICanvas).height * (WINDOW_DEFAULT_PERCENT_HEIGHT / 100));
         var xPos : int = Math.max(LEFT_MARGIN, (windowManager.container as MDICanvas).width - windowWidth - xOffset);
         var yPos : int = Math.max(TOP_MARGIN, (windowManager.container as MDICanvas).height - windowHeight - yOffset);

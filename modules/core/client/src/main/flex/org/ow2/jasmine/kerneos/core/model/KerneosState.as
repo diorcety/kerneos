@@ -1,6 +1,6 @@
 /**
  * JASMINe
- * Copyright (C) 2008 Bull S.A.S.
+ * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -17,43 +17,39 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- *
- * $Id$
  * 
+ * $Id$
  */
-package org.ow2.jasmine.kerneos.common.util
+package org.ow2.jasmine.kerneos.core.model
 {
 
 /**
- * Static util functions for Kerneos
- */
-public class Util
-{
-	
-	/**
-	 * This function parse the input URL and return the associated context
-	 * 
-	 */
-	public static function parserURL(s:String):String
-	{	
-		var context:String = new String();
-		var defaut_protocol:String = "http://"
-		
-		// remove the protocol on the url string
-		var s_without_protocol:String = s.substring(defaut_protocol.length,s.length);
-		
-		// splicing the string into an array
-		var tokens:Array = s_without_protocol.split("/");
-		
-		for(var i:int = 1;  i< tokens.length - 1; i++){
-			context += tokens[i].toString();
-			if (i < tokens.length - 2) {
-				context += "/";
-			}
-		}
-		
-		return context;
-	}
+* An enumerated type representing the states of Kerneos.
+* 
+* @author Julien Nicoulaud
+*/
+[Bindable]
+public class KerneosState {
 
+    /**
+    * When the application is loading.
+    */
+    public static var LOADING : String = "loading";
+
+    /**
+    * When the config is loaded.
+    */
+    public static var CONFIG_LOADED : String = "configLoaded";
+
+    /**
+    * When the desktop is displayed.
+    */
+    public static var DESKTOP : String = "desktop";
+
+    /**
+    * When the connexion to the server has been lost.
+    */
+    public static var DISCONNECTED : String = "disconnected";
+    
 }
 }

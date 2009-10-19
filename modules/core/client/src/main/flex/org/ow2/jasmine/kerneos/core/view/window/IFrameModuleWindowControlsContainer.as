@@ -114,7 +114,7 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
         {
             separator = new VRule();
             separator.setStyle("styleName", "iFrameWindowSeparator");
-            separator.height = 10;
+            separator.height = 16;
             separator.alpha = 0.3;
             addChild(separator);
         }

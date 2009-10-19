@@ -17,80 +17,58 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- * 
+ *
  * $Id$
  */
 package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
+import mx.collections.ArrayCollection;
 import mx.core.UIComponent;
 
 import org.ow2.jasmine.kerneos.common.util.IconUtility;
 
 
 /**
- * Describes the configuration of a Kerneos module.
- * 
- * @author Guillaume Renault
+ * A group of modules displayed as a folder in Kerneos.
+ *
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Module")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Folder")]
 [Bindable]
-public class ModuleVO implements IValueObject
+public class FolderVO extends ModuleWithWindowVO
+                      implements IValueObject
 {
-	
+    
     // =========================================================================
     // Properties
     // =========================================================================
-   
+    
     // Assets
          
     /**
-    * Default module small icon (16x16).
+    * Default folder small icon (16x16).
     */
     [Transient]
-    [Embed(source="/../assets/module16.png")]
-    public static var defaultSmallIcon : Class;
+    [Embed(source="/../assets/folder16.png")]
+    public static var defaultFolderSmallIcon : Class;
     
     /**
-    * Default module big icon (64x64).
+    * Default folder big icon (64x64).
     */
     [Transient]
-    [Embed(source="/../assets/module64.png")]
-    public static var defaultBigIcon : Class;
+    [Embed(source="/../assets/folder64.png")]
+    public static var defaultFolderBigIcon : Class;
     
     
     // Fields
     
     /**
-    * The displayed name of the module.
-    */
-	public var name : String = null;
-	
-	/**
-	* The description of the module.
-	*/
-	public var description : String = null;
-	
-    /**
-    * The small icon (16x16) path.
-    */
-    public var smallIcon : String = null;
-    
-    /**
-    * The big icon (64x64) path.
-    */
-    public var bigIcon : String = null;
-    
-    
-    // Transient fields (client-side only)
-    
-    /**
-    * The current state of the module
-    */
-    [Transient]
-    public var loaded : Boolean = false;
+     * The modules.
+     */
+    [ArrayElementType('org.ow2.jasmine.kerneos.core.vo.ModuleVO')]
+    public var modules : ArrayCollection;
     
     
     // =========================================================================
@@ -100,12 +78,12 @@ public class ModuleVO implements IValueObject
     /**
     * Get the the small icon asset.
     */
-    public function getSmallIconClass(target:UIComponent):Class
+    override public function getSmallIconClass(target:UIComponent):Class
     {
         // If no icon specified, return the default one
         if (smallIcon == null)
         {
-            return defaultSmallIcon;
+            return defaultFolderSmallIcon;
         }
         
         // Else load the given URL
@@ -118,12 +96,12 @@ public class ModuleVO implements IValueObject
     /**
     * Get the the big icon asset.
     */
-    public function getBigIconClass(target:UIComponent):Class
+    override public function getBigIconClass(target:UIComponent):Class
     {
         // If no icon specified, return the default one
         if (bigIcon == null)
         {
-            return defaultBigIcon;
+            return defaultFolderBigIcon;
         }
         
         // Else load the given URL
@@ -131,14 +109,6 @@ public class ModuleVO implements IValueObject
         {
             return IconUtility.getClass(target,bigIcon,64,64);
         }
-    }
-    
-    /**
-    * Ouput the module name
-    */
-    public function toString():String
-    {
-        return name;
     }
 }
 }

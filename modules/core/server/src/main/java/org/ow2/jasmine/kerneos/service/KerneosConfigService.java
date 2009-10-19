@@ -63,9 +63,8 @@ public class KerneosConfigService implements Serializable {
     private static final String PREFIX = "../../";
 
     /**
-     * The JAXB context for rules packages serialization/deserialization.
-     *
-     * Must be declared with all the potentially involved classes.
+     * The JAXB context for rules packages serialization/deserialization. Must
+     * be declared with all the potentially involved classes.
      */
     private JAXBContext jaxbContext;
 
@@ -94,7 +93,7 @@ public class KerneosConfigService implements Serializable {
 
                 if (jaxbContext == null) {
                     jaxbContext = JAXBContext.newInstance(KerneosConfig.class, SWFModule.class, Service.class,
-                        IFrameModule.class, Link.class);
+                        IFrameModule.class, Link.class, Folder.class);
                 }
 
                 // Create an unmarshaller

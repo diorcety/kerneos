@@ -188,6 +188,30 @@
             <big-icon>resources/icons/icon64.png</big-icon>
         </link>
         -->
+        
+        <!--
+          - An example of folder, which is a group of modules.
+          - 
+          - * Only the "name", "description" and "modules" parameters are mandatory.
+          -->
+        <!--
+        <folder>
+            <name>Test folder</name>
+            <description>This is a test folder with a description.</description>
+            <small-icon>resources/icons/quickvisu16.png</small-icon>
+            <big-icon>resources/icons/quickvisu64.png</big-icon>
+            <load-maximized>false</load-maximized>
+            <load-on-startup>false</load-on-startup>
+            <prompt-before-close>default</prompt-before-close>
+            <width>650</width>
+            <height>490</height>
+            <resizable>true</resizable>
+            <maximizable>true</maximizable>
+            <modules>
+                ...
+            </modules>
+        </folder
+        -->
 
     </modules>
     

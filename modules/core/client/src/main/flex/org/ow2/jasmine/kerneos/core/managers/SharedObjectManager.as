@@ -22,7 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.util
+package org.ow2.jasmine.kerneos.core.managers
 {
 import flash.events.NetStatusEvent;
 import flash.net.SharedObject;

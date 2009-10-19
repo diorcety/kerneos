@@ -177,7 +177,7 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * Kill the IFrame, and leave nothing.
      */
-    public function kill(e : Event = null) : void
+    public function removeIFrame(e : Event = null) : void
     {
         _frame.removeIFrame();
     }

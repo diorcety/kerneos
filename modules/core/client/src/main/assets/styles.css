@@ -126,6 +126,41 @@ IFrameModuleWindow{
     paddingTop: 0px;
 }
 
+FolderWindow {
+    backgroundImage: ClassReference("org.ow2.jasmine.kerneos.common.view.GradientBackground");
+    backgroundSize: "100%";
+    fillColors: #666666, #EEEEEE;
+    fillAlphas: 1.0,0.2;
+    style-name-no-focus: noFocusFolderWindow;
+}
+
+.noFocusFolderWindow {
+    background-alpha: 0.70;
+    border-alpha: 0.70;
+}
+
+.folderWindowDescriptionBox {
+    background-color: #121212;
+    background-alpha: 0.6;
+    border-style: solid;
+    border-color: #222222;
+    corner-radius: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+}
+
+.folderWindowDescriptionLabel {
+    color: #EFEFEF;
+}
+
+.folderWindowModulesList {
+	background-alpha: 0.0;
+	border-style: none;
+	use-roll-over: false;
+}
+
 .moduleWindowTitle {
     font-weight: bold;
     font-size: 13px;
@@ -266,7 +301,7 @@ ToolTip {
    color: #FFFFFF;
 }
 
-Alert{
+Alert {
     titleStyleName: "alertTitle";
     messageStyleName: "alertMessage";
     buttonStyleName: "alertButton";
@@ -283,7 +318,7 @@ Alert{
     borderColor: #454545;
 }
 
-.alertTitle{
+.alertTitle {
     fontSize: 12px;
     fontWeight: bold;
     textAlign: left;

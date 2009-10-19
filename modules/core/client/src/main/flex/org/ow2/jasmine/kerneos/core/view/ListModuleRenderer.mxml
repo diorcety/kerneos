@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version = "1.0" encoding = "utf-8"?>
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - JASMINe
@@ -22,152 +22,172 @@
   -
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - $Id$
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-         xmlns:commonView="org.ow2.jasmine.kerneos.common.view.*"
-         implements="mx.controls.listClasses.IListItemRenderer"
-         horizontalAlign="center"
-         verticalAlign="middle"
-         width="140"
-         height="100"
-         verticalGap="0"
-         toolTip="{_module.description}"
-         buttonMode="true"
-         useHandCursor="true"
-         mouseChildren="false"
-         verticalScrollPolicy="off"
-         horizontalScrollPolicy="off"
-         click="startModule(event)"
-         creationComplete="initRenderer()">
-         
+<!---
+     Renders a module as a list icon.
+
+     @author Julien Nicoulaud
+-->
+<mx:VBox xmlns:mx = "http://www.adobe.com/2006/mxml"
+         xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
+         implements = "mx.controls.listClasses.IListItemRenderer"
+         horizontalAlign = "center"
+         verticalAlign = "middle"
+         width = "140"
+         height = "100"
+         verticalGap = "0"
+         toolTip = "{_module.description}"
+         buttonMode = "true"
+         useHandCursor = "true"
+         mouseChildren = "false"
+         verticalScrollPolicy = "off"
+         horizontalScrollPolicy = "off"
+         click = "startModule(event)"
+         creationComplete = "initRenderer()">
+
     <mx:Script>
-    <![CDATA[
-    
-    import mx.events.FlexEvent;
-    import mx.controls.Alert;
-
-    import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
-
-          
-    // =========================================================================
-    // Variables
-    // =========================================================================
-    
-    // The item renderer stored data
-    
-    /**
-    * The data displayed by the renderer
-    */
-    [Bindable]
-    private var _module:ModuleVO;
-    
-    
-    // =========================================================================
-    // Initialization
-    // =========================================================================
-    
-    /**
-    * Init the component
-    */
-    public function initRenderer(event:Event=null):void
-    {
-        // Listen to mouse events
-        addEventListener(MouseEvent.MOUSE_OVER,mouseOverHandler);
-        addEventListener(MouseEvent.MOUSE_OUT,mouseOutHandler);
-    }
-    
-    
-    // =========================================================================
-    // Events handlers
-    // =========================================================================
-    
-    /**
-    * On mouse over
-    */
-    public function mouseOverHandler(event:Event=null):void
-    {
-        this.setStyle('borderStyle','solid');
-    }
-    
-    /**
-    * On mouse out
-    */
-    public function mouseOutHandler(event:Event=null):void
-    {
-        if (!_module.loaded) {
-            this.setStyle('borderStyle','none');
-        }
-    }
-    
-    
-    // =========================================================================
-    // Data object handling
-    // =========================================================================
-    
-    /**
-    * Get the item renderer data object
-    */
-    [Bindable("dataChange")]
-    override public function get data():Object
-    {
-        return _module;
-    }
-    
-    /**
-    * Set the item renderer data object
-    */
-    override public function set data(value:Object):void
-    {
-        _module = value as ModuleVO;
-        if (_module.loaded) {
-            this.setStyle('borderStyle','solid');
-        } else {
-            this.setStyle('borderStyle','none');
-        }
-        
-        invalidateProperties();
-        dispatchEvent(new Event("dataChange"));
-    }
-    
-
-    // =========================================================================
-    // Private methods
-    // =========================================================================
-    
-    /**
-    * Start the module
-    */
-    private function startModule(e:Event):void {
-        if(!_module.loaded) {
-            (parentDocument as MainPanel).startModule(_module);
-        } else {
-            (parentDocument as MainPanel).bringToFront(_module);
-        }
-    }
-    
-    ]]>
+        <![CDATA[
+            import mx.events.FlexEvent;
+            import mx.controls.Alert;
+            
+            import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
+            import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
+            
+            // =========================================================================
+            // Variables
+            // =========================================================================
+            
+            // The item renderer stored data
+            
+            /**
+             * The data displayed by the renderer
+             */
+            [Bindable]
+            private var _module : ModuleVO;
+            
+            
+            
+            // =========================================================================
+            // Initialization
+            // =========================================================================
+            
+            /**
+             * Init the component
+             */
+            public function initRenderer(event : Event = null) : void
+            {
+                // Listen to mouse events
+                addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+                addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+            }
+            
+            
+            
+            // =========================================================================
+            // Events handlers
+            // =========================================================================
+            
+            /**
+             * On mouse over
+             */
+            public function mouseOverHandler(event : Event = null) : void
+            {
+                this.setStyle('borderStyle', 'solid');
+            }
+            
+            
+            
+            /**
+             * On mouse out
+             */
+            public function mouseOutHandler(event : Event = null) : void
+            {
+                if (!_module.loaded)
+                {
+                    this.setStyle('borderStyle', 'none');
+                }
+            }
+            
+            
+            
+            // =========================================================================
+            // Data object handling
+            // =========================================================================
+            
+            /**
+             * Get the item renderer data object
+             */
+            [Bindable("dataChange")]
+            override public function get data() : Object
+            {
+                return _module;
+            }
+            
+            
+            
+            /**
+             * Set the item renderer data object
+             */
+            override public function set data(value : Object) : void
+            {
+                _module = value as ModuleVO;
+                
+                if (_module.loaded)
+                {
+                    this.setStyle('borderStyle', 'solid');
+                }
+                else
+                {
+                    this.setStyle('borderStyle', 'none');
+                }
+                
+                invalidateProperties();
+                dispatchEvent(new Event("dataChange"));
+            }
+            
+            
+            
+            // =========================================================================
+            // Private methods
+            // =========================================================================
+            
+            /**
+             * Start the module
+             */
+            private function startModule(e : Event) : void
+            {
+                if (!_module.loaded)
+                {
+                    ModulesLifeCycleManager.startModule(_module);
+                }
+                else
+                {
+                    ModulesLifeCycleManager.bringToFront(_module);
+                }
+            }
+        ]]>
     </mx:Script>
-    
+
     <!-- The shadow -->
-    <mx:GlowFilter id="nameShadow" 
-                   blurX="10"
-                   blurY="4"
-                   quality="15"
-                   alpha="0.9"
-                   strength="4"
-                   color="#FFFFFF"/>
-                                            
+    <mx:GlowFilter id = "nameShadow"
+                   blurX = "10"
+                   blurY = "4"
+                   quality = "15"
+                   alpha = "0.9"
+                   strength = "4"
+                   color = "#FFFFFF" />
+
     <!-- The module thumbnail -->
-    <commonView:SmoothImage id="moduleThumb"
-	                        source="{_module.getBigIconClass(moduleThumb)}"
-	                        width="64"
-	                        height="64"/>
-                       
+    <commonView:SmoothImage id = "moduleThumb"
+                            source = "{_module.getBigIconClass(moduleThumb)}"
+                            width = "64"
+                            height = "64" />
+
     <!-- The module name -->
-    <mx:LinkButton id="moduleName"
-                   color="#111111"
-                   label="{_module.name}"
-                   filters="{[nameShadow]}"/>
-                   
+    <mx:LinkButton id = "moduleName"
+                   color = "#111111"
+                   label = "{_module.name}"
+                   filters = "{[nameShadow]}" />
+
 </mx:VBox>
