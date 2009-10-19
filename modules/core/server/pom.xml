@@ -85,5 +85,11 @@
       <version>1.0.17</version>
     </dependency>
     
+    <dependency>
+      <groupId>org.graniteds</groupId>
+      <artifactId>granite-core</artifactId>
+      <version>${graniteds.version}</version>
+    </dependency>
+    
   </dependencies>
 </project>

@@ -31,6 +31,7 @@ import java.io.Serializable;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.granite.messaging.service.annotations.RemoteDestination;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -40,6 +41,7 @@ import org.ow2.util.log.LogFactory;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
+@RemoteDestination(id="kerneosConfig")
 public class KerneosConfigService implements Serializable {
 
     /**

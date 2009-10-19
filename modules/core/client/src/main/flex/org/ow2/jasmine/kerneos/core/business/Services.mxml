@@ -30,10 +30,11 @@
     
     <!-- List of services to provide to the modules. This list is static for the moment. --> 
     
+    <!--    
     <mx:RemoteObject id="logInService" destination="logIn" showBusyCursor="true">
     </mx:RemoteObject>
  
     <mx:RemoteObject id="kerneosConfigService" destination="kerneosConfig" showBusyCursor="true">
     </mx:RemoteObject>
-    
+    -->   
 </cairngorm:ServiceLocator>

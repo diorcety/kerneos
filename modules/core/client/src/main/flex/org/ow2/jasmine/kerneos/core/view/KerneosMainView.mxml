@@ -132,7 +132,10 @@
                 
                 amfChannelSet.addChannel(_amfChannel);
                 
-                ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
+                // Set the kerneosConfigService. Done this way because of the @remoteDestination on the JAVA service
+                ServiceLocator.getInstance().setServiceForId("kerneosConfigService","kerneosConfig");
+                
+                // ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
                 ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
                 
                 // Load the Kerneos configuration
