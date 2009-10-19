@@ -14,6 +14,7 @@
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
     <cairngorm.version>2.2.2-Beta</cairngorm.version>
     <kerneos.version>$kerneos-version</kerneos.version>
+    <graniteds.version>$graniteds-version</graniteds.version>
   </properties>
   
   <dependencies>

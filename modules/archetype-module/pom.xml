@@ -57,6 +57,10 @@
                   <replacetoken>$kerneos-version</replacetoken>
                   <replacevalue>${project.version}</replacevalue>
                 </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$graniteds-version</replacetoken>
+                  <replacevalue>${graniteds.version}</replacevalue>
+                </replace>
               </tasks>
             </configuration>
           </execution>

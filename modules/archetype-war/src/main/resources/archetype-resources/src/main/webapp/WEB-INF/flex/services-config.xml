@@ -30,31 +30,6 @@
     <service id="granite-service"
       class="flex.messaging.services.RemotingService"
       messageTypes="flex.messaging.messages.RemotingMessage">
-      <!--======================================================================
-        | This is where the mapping between the flex application and a         |
-        | java class is done. Just specify an id (which absolutly need to      |
-        | be the same in your mxml file) and the class this ID is mapped with. |
-        =====================================================================-->
-
-      <destination id="logIn">
-        <channels>
-          <channel ref="my-graniteamf-kerneos" />
-        </channels>
-        <properties>
-          <scope>session</scope>
-          <source>org.ow2.jasmine.kerneos.login.LoginService</source>
-        </properties>
-      </destination>
-
-      <destination id="kerneosConfig">
-        <channels>
-          <channel ref="my-graniteamf-kerneos" />
-        </channels>
-        <properties>
-          <scope>session</scope>
-          <source>org.ow2.jasmine.kerneos.service.KerneosConfigService</source>
-        </properties>
-      </destination>
 
     </service>
   </services>

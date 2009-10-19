@@ -1,9 +1,12 @@
 //package ${groupId};
 
+import org.granite.messaging.service.annotations.RemoteDestination;
+
 /**
  * Hello world!
  *
  */
+@RemoteDestination(id="myJavaService")
 public class Service 
 {
     
