@@ -25,43 +25,43 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:Application xmlns:mx = "http://www.adobe.com/2006/mxml" 
-		        xmlns:view = "org.ow2.jasmine.kerneos.core.view.*" 
-		        xmlns:control = "org.ow2.jasmine.kerneos.core.control.*" 
-		        xmlns:business = "org.ow2.jasmine.kerneos.core.business.*"
-		        paddingLeft = "0" paddingRight = "0" paddingBottom = "0" paddingTop = "0"
+                xmlns:view = "org.ow2.jasmine.kerneos.core.view.*" 
+                xmlns:control = "org.ow2.jasmine.kerneos.core.control.*" 
+                xmlns:business = "org.ow2.jasmine.kerneos.core.business.*"
+                paddingLeft = "0" paddingRight = "0" paddingBottom = "0" paddingTop = "0"
                 pageTitle = "Kerneos" 
-		        scriptTimeLimit = "60"
-		        applicationComplete = "applicationCompleteHandler()">
+                scriptTimeLimit = "60"
+                applicationComplete = "applicationCompleteHandler()">
 
     <mx:Script>
-	    <![CDATA[
+        <![CDATA[
 
-		    /**
-		    * On application creation complete.
-		    */
-		    private function applicationCompleteHandler():void
-		    {
-		    	// Initialize the main view
+            /**
+            * On application creation complete.
+            */
+            private function applicationCompleteHandler():void
+            {
+                // Initialize the main view
                 mainView.initializeView();
 
-		        // Register methods that can be called externally from the Javascript.
-		        ExternalInterface.addCallback("canBeClosed",
-		                                      mainView.canBeClosed);
-		    }
+                // Register methods that can be called externally from the Javascript.
+                ExternalInterface.addCallback("canBeClosed",
+                                              mainView.canBeClosed);
+            }
 
-	    ]]>
+        ]]>
     </mx:Script>
 
     <!-- The business layer -->
-	<business:Services id="services" />
+    <business:Services id="services" />
 
-	<!-- The controller -->
+    <!-- The controller -->
     <control:Controller id="controller"/>
 
     <!-- The style sheet -->
     <mx:Style source="/../assets/styles.css" />
 
-	<!-- The main view that contains the complete app -->
-	<view:KerneosMainView id="mainView"/>
+    <!-- The main view that contains the complete app -->
+    <view:KerneosMainView id="mainView"/>
 
 </mx:Application>

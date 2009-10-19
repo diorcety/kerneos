@@ -208,7 +208,7 @@ public class KerneosWindow extends MDIWindow
         // Try the user settings, then the default settings
         if (!setupUserWindowSizeAndPosition())
         {
-        	setupDefaultWindowSizeAndPosition();
+            setupDefaultWindowSizeAndPosition();
         }
         
         // Setup wether the window should be maximized
@@ -246,12 +246,12 @@ public class KerneosWindow extends MDIWindow
                 return false;
             }
             
-	        // Assign the calculated coordinates
-	        width = windowWidth;
-	        height = windowHeight;
-	        windowManager.absPos(this, xPos, yPos);
-	        
-	        return true;
+            // Assign the calculated coordinates
+            width = windowWidth;
+            height = windowHeight;
+            windowManager.absPos(this, xPos, yPos);
+            
+            return true;
         }
         
     }

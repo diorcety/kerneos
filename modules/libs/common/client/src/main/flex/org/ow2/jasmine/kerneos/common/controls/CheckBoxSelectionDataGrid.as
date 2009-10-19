@@ -51,7 +51,7 @@ import org.ow2.jasmine.kerneos.common.renderers.DataGridSelectionIndicatorHeader
 */
 public class CheckBoxSelectionDataGrid extends DataGrid
 {
-	
+    
     // =========================================================================
     // Private variables
     // =========================================================================

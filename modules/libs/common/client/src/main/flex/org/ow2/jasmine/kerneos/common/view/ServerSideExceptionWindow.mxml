@@ -30,18 +30,18 @@
     @author Julien Nicoulaud
 -->
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-	            width="350"
-	            height="150"
-	            showCloseButton="true"
-	            close="close();"
-	            titleIcon="@Embed(source='/../assets/exception.png')"
-	            title="{exception.name}"
-	            borderAlpha="1.0"
-	            backgroundAlpha="1.0"
-	            borderColor="#CCCCCC"
-	            backgroundColor="#CCCCCC">
-	            
-	            
+                width="350"
+                height="150"
+                showCloseButton="true"
+                close="close();"
+                titleIcon="@Embed(source='/../assets/exception.png')"
+                title="{exception.name}"
+                borderAlpha="1.0"
+                backgroundAlpha="1.0"
+                borderColor="#CCCCCC"
+                backgroundColor="#CCCCCC">
+                
+                
     <!--========================================================================
     | SCRIPT
     =========================================================================-->
@@ -98,7 +98,7 @@
     */
     public function close(e:Event=null):void
     {
-    	PopUpManager.removePopUp(this);
+        PopUpManager.removePopUp(this);
     }
     
     /**
@@ -106,7 +106,7 @@
     */
     public function copyToClipboard(e:Event=null):void
     {
-    	System.setClipboard(exception.stackTrace);
+        System.setClipboard(exception.stackTrace);
     }
     
     /**
@@ -114,14 +114,14 @@
     */
     public function toggleDetails(e:Event=null):void
     {
-    	if (this.currentState == null) {
-    		this.currentState = "detailedView";
-    		detailsButton.label = "Hide details";
-    	} else if (this.currentState == "detailedView") {
+        if (this.currentState == null) {
+            this.currentState = "detailedView";
+            detailsButton.label = "Hide details";
+        } else if (this.currentState == "detailedView") {
             this.currentState = null;
             detailsButton.label = "Show details";
         }
-    	PopUpManager.centerPopUp(this);
+        PopUpManager.centerPopUp(this);
     }
     
     ]]>
@@ -133,50 +133,50 @@
     =========================================================================-->
     
     <mx:VBox id="content"
-    	     width="100%"
-    	     height="100%">
+             width="100%"
+             height="100%">
         <mx:Text id="descriptionDisplay"
-        	     width="100%"
+                 width="100%"
                  text="{(exception.hasDescription())?exception.description:'The following exception has been raised: ' + exception.name}"/>
     </mx:VBox>
         <mx:ControlBar id="theControlBar"
-        	           width="100%"
-        	           horizontalAlign="center">
+                       width="100%"
+                       horizontalAlign="center">
             <mx:Button id="CloseButton"
-            	       label="Close"
-            	       click="close();"
-            	       icon="{closeIcon16}"/>
+                       label="Close"
+                       click="close();"
+                       icon="{closeIcon16}"/>
             <mx:Button id="detailsButton"
-            	       label="Show details"
-            	       visible="{exception.hasStackTrace()}"
-            	       includeInLayout="{exception.hasStackTrace()}"
+                       label="Show details"
+                       visible="{exception.hasStackTrace()}"
+                       includeInLayout="{exception.hasStackTrace()}"
                        click="toggleDetails()"
                        icon="{detailsIcon16}"/>
         </mx:ControlBar>
     
     <mx:states>
-    	<mx:State name="detailedView">
-    	    <mx:AddChild relativeTo="{content}"
-    	    	         position="lastChild">
-		        <mx:TextArea id="stackTraceDisplay"
-		                     text="{exception.stackTrace}"
-		                     width="100%"
-		                     height="100%"
-		                     editable="false"/>
-    	    </mx:AddChild>
-    		<mx:AddChild relativeTo="{theControlBar}"
-    			         position="lastChild">
-		        <mx:Button label="Copy to clipboard"
-		                   click="copyToClipboard();"
-		                   icon="{copyIcon16}"/>
-    		</mx:AddChild>
-    		<mx:SetProperty target="{this}"
-    			            name="width"
-    		                value="700"/>
+        <mx:State name="detailedView">
+            <mx:AddChild relativeTo="{content}"
+                         position="lastChild">
+                <mx:TextArea id="stackTraceDisplay"
+                             text="{exception.stackTrace}"
+                             width="100%"
+                             height="100%"
+                             editable="false"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{theControlBar}"
+                         position="lastChild">
+                <mx:Button label="Copy to clipboard"
+                           click="copyToClipboard();"
+                           icon="{copyIcon16}"/>
+            </mx:AddChild>
             <mx:SetProperty target="{this}"
-            	            name="height"
+                            name="width"
+                            value="700"/>
+            <mx:SetProperty target="{this}"
+                            name="height"
                             value="450"/>
-    	</mx:State>
+        </mx:State>
     </mx:states>
     
 </mx:TitleWindow>

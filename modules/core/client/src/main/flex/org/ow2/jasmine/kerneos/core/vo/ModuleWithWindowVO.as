@@ -40,7 +40,7 @@ import org.ow2.jasmine.kerneos.common.util.IconUtility;
 public class ModuleWithWindowVO extends ModuleVO
                                 implements IValueObject
 {
-	
+    
     // =========================================================================
     // Properties
     // =========================================================================

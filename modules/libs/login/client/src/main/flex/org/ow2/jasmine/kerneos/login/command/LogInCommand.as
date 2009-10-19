@@ -57,7 +57,7 @@ public class LogInCommand implements ICommand, IResponder
     * Java.
     */
     public function result( event : Object ):void {
-        var model:LogInModelLocator = LogInModelLocator.getInstance();		
+        var model:LogInModelLocator = LogInModelLocator.getInstance();        
         var logged:Boolean = (event as ResultEvent).result as Boolean;        
         model.loggedIn = logged;
     }

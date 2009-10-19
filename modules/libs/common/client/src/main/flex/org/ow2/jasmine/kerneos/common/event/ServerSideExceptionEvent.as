@@ -80,7 +80,7 @@ public class ServerSideExceptionEvent extends CairngormEvent
         super(type);
         this.exception = exception;
         if (func != null) {
-        	this.funcObj = func;
+            this.funcObj = func;
         }
     }
     
@@ -103,10 +103,10 @@ public class ServerSideExceptionEvent extends CairngormEvent
     */
     public function show():void
     {
-    	if (this.funcObj != null) {	
-    		this.funcObj.call(this);
-    	}    	
-    	this.exception.show();
+        if (this.funcObj != null) {    
+            this.funcObj.call(this);
+        }        
+        this.exception.show();
     }
         
     /**
@@ -114,11 +114,11 @@ public class ServerSideExceptionEvent extends CairngormEvent
     */
     public static function show(exceptionEvent:ServerSideExceptionEvent):void
     {
-    	// Stop the event propagation
-    	exceptionEvent.stopImmediatePropagation();
-    	exceptionEvent.preventDefault();
-    	
-    	// Show it
+        // Stop the event propagation
+        exceptionEvent.stopImmediatePropagation();
+        exceptionEvent.preventDefault();
+        
+        // Show it
         exceptionEvent.show();
         
     }

@@ -64,9 +64,9 @@
   </servlet-mapping>
 
   <servlet>
-  	<display-name>LogoutServlet</display-name>
-  	<servlet-name>LogoutServlet</servlet-name>
-  	<servlet-class>
+      <display-name>LogoutServlet</display-name>
+      <servlet-name>LogoutServlet</servlet-name>
+      <servlet-class>
       org.ow2.jasmine.kerneos.login.LogoutServlet
     </servlet-class>
   </servlet>

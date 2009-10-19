@@ -34,6 +34,6 @@ public interface ILoadKerneosConfigDelegate extends IDelegateResponder{
     /**
     * Load the Kerneos config file
     */
-	function loadKerneosConfig():void;
+    function loadKerneosConfig():void;
 }
 }

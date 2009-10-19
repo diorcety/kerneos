@@ -33,7 +33,7 @@ import mx.states.SetStyle;
 
 import org.ow2.jasmine.kerneos.core.view.ListModuleRenderer;
 import org.ow2.jasmine.kerneos.core.vo.FolderVO;
-	
+    
 
 /**
  * A window hosting a folder of modules.
@@ -65,11 +65,11 @@ public class FolderWindow extends ModuleWindow
     /**
      * Build a new folder window.
      */
-	public function FolderWindow(module:FolderVO)
-	{
-		// Call super classe constructor
-		super(module);
-	}
+    public function FolderWindow(module:FolderVO)
+    {
+        // Call super classe constructor
+        super(module);
+    }
     
     /**
      * Create UI children.
@@ -100,16 +100,16 @@ public class FolderWindow extends ModuleWindow
             addChild(modulesList);
         }
     }
-	
-	/**
-	 * Commit the component properties.
-	 */
-	override protected function commitProperties():void
-	{
-		// Call super class function
-		super.commitProperties();
-		
-		// Set some window properties
+    
+    /**
+     * Commit the component properties.
+     */
+    override protected function commitProperties():void
+    {
+        // Call super class function
+        super.commitProperties();
+        
+        // Set some window properties
         setStyle("paddingTop",5);
         setStyle("paddingBottom",5);
         setStyle("paddingLeft",5);
@@ -121,12 +121,12 @@ public class FolderWindow extends ModuleWindow
         descriptionBox.setStyle("styleName","folderWindowDescriptionBox");
         
         // Set the properties for the description label
-		descriptionLabel.text = module.description;
+        descriptionLabel.text = module.description;
         descriptionLabel.percentWidth = 100;
-		descriptionLabel.selectable = false;
+        descriptionLabel.selectable = false;
         descriptionLabel.setStyle("styleName","folderWindowDescriptionLabel");
-		
-		// Set the properties for the modules list
+        
+        // Set the properties for the modules list
         modulesList.percentHeight = 100;
         modulesList.percentWidth = 100;
         modulesList.verticalScrollPolicy = "none";
@@ -135,6 +135,6 @@ public class FolderWindow extends ModuleWindow
         modulesList.selectable = false;
         modulesList.dataProvider = (module as FolderVO).modules;
         modulesList.itemRenderer = new ClassFactory(ListModuleRenderer);
-	}
+    }
 }
 }

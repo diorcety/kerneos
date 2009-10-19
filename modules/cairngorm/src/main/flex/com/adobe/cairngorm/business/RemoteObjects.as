@@ -146,7 +146,7 @@ package com.adobe.cairngorm.business
       }
       
         /* Dynamic remote objects registration */
-    	
+        
       /**
        * Register a new remote object as module
        * @param name the module name to set.
@@ -154,15 +154,15 @@ package com.adobe.cairngorm.business
        */
       public function registerRemoteObject(name : String, object : RemoteObject) : void 
       {
-      	if (services[ name ] == null) 
-      	{
-      		services[ name ] = object;
-      	}
-      	else
-      	{
-      		 throw new CairngormError(
+          if (services[ name ] == null) 
+          {
+              services[ name ] = object;
+          }
+          else
+          {
+               throw new CairngormError(
                CairngormMessageCodes.SERVICE_ID_ALREADY_REGISTERED, name );
-      	}
+          }
       }
       
       

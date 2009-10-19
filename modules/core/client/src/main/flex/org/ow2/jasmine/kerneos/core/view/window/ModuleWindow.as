@@ -248,27 +248,27 @@ public class ModuleWindow extends KerneosWindow
      */
     override protected function setupWindowMaximization(event : Event = null) : void
     {
-    	// If maximization is not forbidden
+        // If maximization is not forbidden
         if (module.maximizable)
         {
-	        // Try to get the user setting
-	        var userWindowIsMaximized : Object = SharedObjectManager.getWindowIsMaximized(title);
-	        if (userWindowIsMaximized != null)
-	        {
-	            if (userWindowIsMaximized == true)
-	            {
-	                maximize();
-	            }
-	        }
-	        
-	        // Else get the kerneos config setting
-	        else
-	        {
-	            if (module.loadMaximized)
-	            {
-	                maximize();
-	            }
-	        }
+            // Try to get the user setting
+            var userWindowIsMaximized : Object = SharedObjectManager.getWindowIsMaximized(title);
+            if (userWindowIsMaximized != null)
+            {
+                if (userWindowIsMaximized == true)
+                {
+                    maximize();
+                }
+            }
+            
+            // Else get the kerneos config setting
+            else
+            {
+                if (module.loadMaximized)
+                {
+                    maximize();
+                }
+            }
         }
     }
 }

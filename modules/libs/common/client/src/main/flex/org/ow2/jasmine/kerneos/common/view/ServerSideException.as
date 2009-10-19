@@ -24,12 +24,12 @@
  */
 package org.ow2.jasmine.kerneos.common.view
 {
-	
+    
 import flash.display.DisplayObject;
 
 import mx.core.Application;
 import mx.managers.PopUpManager;
-	
+    
 
 /**
 * An object that holds informations about a server-side thrown exception
@@ -70,7 +70,7 @@ public class ServerSideException {
                                         description:String=null,
                                         stackTrace:String=null)
     {
-    	// Assign properties
+        // Assign properties
         this.name = name;
         if (description != null) {
             this.description = description;
@@ -89,7 +89,7 @@ public class ServerSideException {
     */
     public function hasDescription():Boolean
     {
-    	return (description != null);
+        return (description != null);
     }
     
     /**
@@ -110,7 +110,7 @@ public class ServerSideException {
     */
     public function show():void
     {
-    	// Draw a window and display the message
+        // Draw a window and display the message
         var window : ServerSideExceptionWindow = new ServerSideExceptionWindow();
         window.exception = this;
         PopUpManager.addPopUp(window,
@@ -124,7 +124,7 @@ public class ServerSideException {
     */
     public static function show(exception:ServerSideException):void
     {
-    	exception.show();
+        exception.show();
     }
 }
 }

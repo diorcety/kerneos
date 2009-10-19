@@ -24,16 +24,16 @@
 <archetype>
   <id>kerneos-war-archetype</id>
   <resources>
-  	<resource>src/main/webapp/index.html</resource>
-  	<resource>src/main/webapp/AC_OETags.js</resource>
-  	<resource>src/main/webapp/history/history.css</resource>
-  	<resource>src/main/webapp/history/history.js</resource>
-  	<resource>src/main/webapp/history/historyFrame.html</resource>
-  	<resource>src/main/webapp/META-INF/kerneos-config.xml</resource>
-  	<resource>src/main/webapp/resources/kerneos-config.xsd</resource>
-  	<resource>src/main/webapp/WEB-INF/web.xml</resource>
-  	<resource>src/main/webapp/WEB-INF/classes/log4j.xml</resource>
-  	<resource>src/main/webapp/WEB-INF/flex/services-config.xml</resource>
-  	<resource>src/main/webapp/WEB-INF/granite/granite-config.xml</resource>
+      <resource>src/main/webapp/index.html</resource>
+      <resource>src/main/webapp/AC_OETags.js</resource>
+      <resource>src/main/webapp/history/history.css</resource>
+      <resource>src/main/webapp/history/history.js</resource>
+      <resource>src/main/webapp/history/historyFrame.html</resource>
+      <resource>src/main/webapp/META-INF/kerneos-config.xml</resource>
+      <resource>src/main/webapp/resources/kerneos-config.xsd</resource>
+      <resource>src/main/webapp/WEB-INF/web.xml</resource>
+      <resource>src/main/webapp/WEB-INF/classes/log4j.xml</resource>
+      <resource>src/main/webapp/WEB-INF/flex/services-config.xml</resource>
+      <resource>src/main/webapp/WEB-INF/granite/granite-config.xml</resource>
   </resources>
 </archetype>

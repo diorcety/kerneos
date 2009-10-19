@@ -39,7 +39,7 @@ import org.ow2.jasmine.kerneos.common.util.IconUtility;
 [Bindable]
 public class ModuleVO implements IValueObject
 {
-	
+    
     // =========================================================================
     // Properties
     // =========================================================================
@@ -66,13 +66,13 @@ public class ModuleVO implements IValueObject
     /**
     * The displayed name of the module.
     */
-	public var name : String = null;
-	
-	/**
-	* The description of the module.
-	*/
-	public var description : String = null;
-	
+    public var name : String = null;
+    
+    /**
+    * The description of the module.
+    */
+    public var description : String = null;
+    
     /**
     * The small icon (16x16) path.
     */

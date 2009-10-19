@@ -37,19 +37,19 @@ import mx.collections.ArrayCollection;
 [Bindable]
 public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
 {
-	
+    
     // =========================================================================
     // Properties
     // =========================================================================
-	
-	/**
-	* The SWF file path.
-	*/
-	public var file : String = null;
-	
-	/**
-	* The module services.
-	*/
+    
+    /**
+    * The SWF file path.
+    */
+    public var file : String = null;
+    
+    /**
+    * The module services.
+    */
     public var services : ArrayCollection = null;
 }
 }

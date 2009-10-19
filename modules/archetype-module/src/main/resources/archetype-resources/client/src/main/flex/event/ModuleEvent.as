@@ -30,11 +30,11 @@ import com.adobe.cairngorm.control.CairngormEvent;
 public class ModuleEvent extends CairngormEvent
 {
     
-   	////////////////////////////////////
-	//  							  //
-	//			 Event Type			  //
-	//								  //
-	////////////////////////////////////
+       ////////////////////////////////////
+    //                                //
+    //             Event Type              //
+    //                                  //
+    ////////////////////////////////////
     public static var MY_ACTION : String = "My action to be done";
  
     

@@ -33,12 +33,12 @@
         horizontalAlign="center"
         verticalAlign="middle">
 
-	    <mx:ProgressBar id="progressBar"
-	                    indeterminate="true"
-	                    labelPlacement="center"
-	                    trackHeight="20"
-	                    color="#EFEFEF"
-	                    borderColor="#666666"
-	                    trackColors="{[0xAAAAAA,0xEEEEEE]}"/>
+        <mx:ProgressBar id="progressBar"
+                        indeterminate="true"
+                        labelPlacement="center"
+                        trackHeight="20"
+                        color="#EFEFEF"
+                        borderColor="#666666"
+                        trackColors="{[0xAAAAAA,0xEEEEEE]}"/>
 
 </mx:Box>

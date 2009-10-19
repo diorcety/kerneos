@@ -62,9 +62,9 @@ public class Controller extends FrontController {
         var model : ModuleModelLocator = ModuleModelLocator.getInstance();
         
         /*
-        	Add the events to the controler with the associated command
-        	Example :
-        		this.addCommand(ModuleEvent.MY_ACTION + model.componentID, ModuleCommand);
+            Add the events to the controler with the associated command
+            Example :
+                this.addCommand(ModuleEvent.MY_ACTION + model.componentID, ModuleCommand);
         */
     }
 

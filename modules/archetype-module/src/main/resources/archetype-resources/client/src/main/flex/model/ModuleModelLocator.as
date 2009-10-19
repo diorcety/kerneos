@@ -32,11 +32,11 @@ import com.adobe.cairngorm.model.ModelLocator;
 public class ModuleModelLocator implements ModelLocator
 {
 
-	////////////////////////////////////
-	//  							  //
-	//			 Variables			  //
-	//								  //
-	////////////////////////////////////
+    ////////////////////////////////////
+    //                                //
+    //             Variables              //
+    //                                  //
+    ////////////////////////////////////
 
   /**
     * The unique ID of this component
@@ -56,34 +56,34 @@ public class ModuleModelLocator implements ModelLocator
     */
     private static var model : ModuleModelLocator = null;
     
-	////////////////////////////////////////////
-	//  							          //
-	//			 Variables Delegate			  //
-	//								          //
-	////////////////////////////////////////////
-	/*
-	Put here the delegate instances of your model.
-	Example :
-		private var myDelegate : IMyDelegate = null;
-	*/
+    ////////////////////////////////////////////
+    //                                        //
+    //             Variables Delegate              //
+    //                                          //
+    ////////////////////////////////////////////
+    /*
+    Put here the delegate instances of your model.
+    Example :
+        private var myDelegate : IMyDelegate = null;
+    */
 
-	////////////////////////////////////////////////
-	//  							          	  //
-	//			 Variables Of the model			  //
-	//								          	  //
-	////////////////////////////////////////////////
-	
-	/*
-	Put here all the variables of the model
-	Example :
-		private var myDataObj : String = null;
-	*/
+    ////////////////////////////////////////////////
+    //                                              //
+    //             Variables Of the model              //
+    //                                                //
+    ////////////////////////////////////////////////
     
-	////////////////////////////////////
-	//  							  //
-	//			 Functions			  //
-	//								  //
-	////////////////////////////////////
+    /*
+    Put here all the variables of the model
+    Example :
+        private var myDataObj : String = null;
+    */
+    
+    ////////////////////////////////////
+    //                                //
+    //             Functions              //
+    //                                  //
+    ////////////////////////////////////
 
     public function ModuleModelLocator()
     {
@@ -107,52 +107,52 @@ public class ModuleModelLocator implements ModelLocator
         return ModuleModelLocator.model;
     }
 
-   	////////////////////////////////////
-	//  							  //
-	//			 Setters			  //
-	//								  //
-	////////////////////////////////////
+       ////////////////////////////////////
+    //                                //
+    //             Setters              //
+    //                                  //
+    ////////////////////////////////////
 
-	/*
-	Put here all the setters for the model update.
-	Example :
-		public function set myData(_myData : String) : void {
-			this.myDataObj = _myData;
-		}
-	*/
+    /*
+    Put here all the setters for the model update.
+    Example :
+        public function set myData(_myData : String) : void {
+            this.myDataObj = _myData;
+        }
+    */
 
-	////////////////////////////////////
-	//  							  //
-	//			 Getters			  //
-	//								  //
-	////////////////////////////////////
-	
-	/*
-	Put here all the getters to access the model variables
-	Example :
-		public function get myData() : String {
-			return this.myDataObj;
-		}
-	*/
+    ////////////////////////////////////
+    //                                //
+    //             Getters              //
+    //                                  //
+    ////////////////////////////////////
+    
+    /*
+    Put here all the getters to access the model variables
+    Example :
+        public function get myData() : String {
+            return this.myDataObj;
+        }
+    */
 
 
-	////////////////////////////////////////////
-	//  							 		  //
-	//  	      Delegate Getters			  //
-	//								  		  //
-	////////////////////////////////////////////
+    ////////////////////////////////////////////
+    //                                         //
+    //            Delegate Getters              //
+    //                                            //
+    ////////////////////////////////////////////
 
-	/*
-	Put here the getters to access all the delegates of the created module
-	Example :
-	    public function getMyDelegate() : IMyDelegate {
-	        if (this.myDelegate == null) {
-	            this.myDelegate = new MyDelegate();
-	        }
-	        return this.myDelegate;
-	    }
-	
-	*/
+    /*
+    Put here the getters to access all the delegates of the created module
+    Example :
+        public function getMyDelegate() : IMyDelegate {
+            if (this.myDelegate == null) {
+                this.myDelegate = new MyDelegate();
+            }
+            return this.myDelegate;
+        }
+    
+    */
 
 }
 }

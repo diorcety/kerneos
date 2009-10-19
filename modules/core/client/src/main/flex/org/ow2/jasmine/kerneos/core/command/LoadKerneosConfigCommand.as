@@ -48,10 +48,10 @@ public class LoadKerneosConfigCommand implements ICommand, IResponder{
     * Send the event to the java side, using the business layer of the pattern
     */
     public function execute( e:CairngormEvent ):void {
-    	
-    	var delegate:ILoadKerneosConfigDelegate = KerneosModelLocator.getInstance().getLoadKerneosConfigDelegate();
-    	delegate.responder = this;
-    	delegate.loadKerneosConfig();
+        
+        var delegate:ILoadKerneosConfigDelegate = KerneosModelLocator.getInstance().getLoadKerneosConfigDelegate();
+        delegate.responder = this;
+        delegate.loadKerneosConfig();
     }
 
     /**
@@ -59,8 +59,8 @@ public class LoadKerneosConfigCommand implements ICommand, IResponder{
     * Java.
     */
     public function result(event : Object):void {
-    	
-	    // Retrieve the model
+        
+        // Retrieve the model
         var model:KerneosModelLocator = KerneosModelLocator.getInstance();
         
         // Retrieve the result
@@ -74,7 +74,7 @@ public class LoadKerneosConfigCommand implements ICommand, IResponder{
     * Handle faults
     */
     public function fault( event : Object ):void {
-    	
+        
         // Retrieve the fault event
         var faultEvent : FaultEvent = FaultEvent(event);
         
@@ -90,6 +90,6 @@ public class LoadKerneosConfigCommand implements ICommand, IResponder{
                                         + "\n" + faultEvent.fault.faultString,
                                         faultEvent.fault.getStackTrace()));
         CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
-	}
+    }
 }
 }

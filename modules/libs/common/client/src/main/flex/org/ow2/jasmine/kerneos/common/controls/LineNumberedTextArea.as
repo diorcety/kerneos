@@ -80,7 +80,7 @@ public class LineNumberedTextArea extends TextArea
     */
     public function LineNumberedTextArea()
     {
-    	// Call super class constructor
+        // Call super class constructor
         super();
         
         // Initialize some properties
@@ -159,8 +159,8 @@ public class LineNumberedTextArea extends TextArea
     {
         return _showLineNumbers;
     }
-	
-	
+    
+    
     // =========================================================================
     // Line numbering
     // =========================================================================
@@ -172,7 +172,7 @@ public class LineNumberedTextArea extends TextArea
     */
     private function updateLineNumbers(event:Event=null):void
     {
-    	// Calculate the numbers of lines of the TextArea
+        // Calculate the numbers of lines of the TextArea
         var firstLineNumber : int = (this.verticalScrollPosition<1)?1:int(this.verticalScrollPosition+1);
         
         // Generate the text to display
@@ -183,7 +183,7 @@ public class LineNumberedTextArea extends TextArea
         // Loop on the visible lines
         while(visibleTextHeight < this.height && i <= super.mx_internal::getTextField().numLines)
         {
-        	// If this is not the first line, start a new line
+            // If this is not the first line, start a new line
             if(i != firstLineNumber)
             {
                 lineNumber += "\n";
@@ -198,7 +198,7 @@ public class LineNumberedTextArea extends TextArea
             }
             
             // Step to the next line
-        	i++;
+            i++;
         }
         
         // Set it as the text to display

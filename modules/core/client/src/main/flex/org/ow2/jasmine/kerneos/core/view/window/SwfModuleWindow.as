@@ -32,7 +32,7 @@ import mx.events.ModuleEvent;
 import mx.modules.ModuleLoader;
 
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
-	
+    
 
 /**
 * A window hosting a Swf ModuleLoader
@@ -65,11 +65,11 @@ public class SwfModuleWindow extends ModuleWindow
     /**
     * Build a new Swf module hosting window
     */
-	public function SwfModuleWindow(module:SWFModuleVO)
-	{
-		// Call super classe constructor
-		super(module);
-	}
+    public function SwfModuleWindow(module:SWFModuleVO)
+    {
+        // Call super classe constructor
+        super(module);
+    }
     
     /**
     * Create UI children
@@ -103,8 +103,8 @@ public class SwfModuleWindow extends ModuleWindow
         _loader.loadModule();
 
     }
-	
-	
+    
+    
     // =========================================================================
     // Getter & setters
     // =========================================================================
@@ -137,7 +137,7 @@ public class SwfModuleWindow extends ModuleWindow
     */
     private function onLoaderError(event:ModuleEvent):void
     {
-    	Alert.show(event.errorText + '\nTry reopening the module.','Error loading ' + module.name);
+        Alert.show(event.errorText + '\nTry reopening the module.','Error loading ' + module.name);
     }
     
 }

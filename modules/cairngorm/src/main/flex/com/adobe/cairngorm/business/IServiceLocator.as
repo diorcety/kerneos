@@ -39,39 +39,39 @@ package com.adobe.cairngorm.business
    import mx.rpc.soap.WebService;
    
    /**
-	 * IServiceLocator defines an interface for service locator. Its intention is
-	 * to support unit testing.
-	 */
+     * IServiceLocator defines an interface for service locator. Its intention is
+     * to support unit testing.
+     */
    public interface IServiceLocator
    {
       /**
-		 * Return the HTTPService for the given service id.
-		 * @param serviceId the service id.
-		 * @return the RemoteObject.
-		 */
+         * Return the HTTPService for the given service id.
+         * @param serviceId the service id.
+         * @return the RemoteObject.
+         */
       function getHTTPService( serviceId : String ) : HTTPService;
       
-		/**
-		 * Return the RemoteObject for the given service id.
-		 * @param serviceId the service id.
-		 * @return the RemoteObject.
-		 */
+        /**
+         * Return the RemoteObject for the given service id.
+         * @param serviceId the service id.
+         * @return the RemoteObject.
+         */
       function getRemoteObject( serviceId : String ) : RemoteObject;
       
-		/**
-		 * Return the WebService for the given service id.
-		 * @param serviceId the service id.
-		 * @return the RemoteObject.
-		 */
+        /**
+         * Return the WebService for the given service id.
+         * @param serviceId the service id.
+         * @return the RemoteObject.
+         */
       function getWebService( destinationId : String ) : WebService;
       
-		/**
-		 * Set the credentials for all registered services. Note that services
-		 * that use a proxy or a third-party adapter to a remote endpoint will
-		 * need to setRemoteCredentials instead.
-		 * @param username the username to set.
-		 * @param password the password to set.
-		 */
+        /**
+         * Set the credentials for all registered services. Note that services
+         * that use a proxy or a third-party adapter to a remote endpoint will
+         * need to setRemoteCredentials instead.
+         * @param username the username to set.
+         * @param password the password to set.
+         */
       function setCredentials( username : String,   password : String ) : void;
       
       /**
@@ -81,19 +81,19 @@ package com.adobe.cairngorm.business
        */
       function setRemoteCredentials( username : String, password : String ) : void
       
-		/**
-		 * Logs the user out of all registered services.
-		 */
+        /**
+         * Logs the user out of all registered services.
+         */
       function logout() : void;
 
-		/**
-		 * Sets the timeout on all services.
-		 */      
+        /**
+         * Sets the timeout on all services.
+         */      
       function set timeout( timeoutTime : int ):void
       
-  		/**
-		 * gets the timeout for all services.
-		 */      
+          /**
+         * gets the timeout for all services.
+         */      
       function get timeout(): int
    }
 }

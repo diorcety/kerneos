@@ -191,7 +191,7 @@ package com.adobe.cairngorm.control
             throw new CairngormError( CairngormMessageCodes.COMMAND_ALREADY_REGISTERED, commandName );
          
          if ( implementsICommand( commandRef ) == false )
-         	throw new CairngormError( CairngormMessageCodes.COMMAND_SHOULD_IMPLEMENT_ICOMMAND, commandRef );
+             throw new CairngormError( CairngormMessageCodes.COMMAND_SHOULD_IMPLEMENT_ICOMMAND, commandRef );
          
          commands[ commandName ] = commandRef;
          CairngormEventDispatcher.getInstance().addEventListener( commandName, executeCommand, false, 0, useWeakReference );

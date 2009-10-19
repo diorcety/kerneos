@@ -25,8 +25,8 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <cairngorm:ServiceLocator
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:cairngorm="http://www.adobe.com/2006/cairngorm"> 
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:cairngorm="http://www.adobe.com/2006/cairngorm"> 
     
     <!-- List of services to provide to the modules. This list is static for the moment. --> 
     

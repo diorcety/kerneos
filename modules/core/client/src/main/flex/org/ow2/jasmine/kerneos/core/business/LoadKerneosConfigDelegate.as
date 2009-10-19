@@ -37,16 +37,16 @@ public class LoadKerneosConfigDelegate extends AbsDelegateResponder
     /**
     * Load the Kerneos config file
     */
-	public function loadKerneosConfig():void
-	{
-	    	// find service
-	        var service : Object = ServiceLocator.getInstance().getRemoteObject("kerneosConfigService");
-	
-	        // call service
-	        var call : Object = service.loadKerneosConfig();
-	
-	        // add the responder as a listener for the answer of the java side
-	        call.addResponder(this.responder);
-	}
+    public function loadKerneosConfig():void
+    {
+            // find service
+            var service : Object = ServiceLocator.getInstance().getRemoteObject("kerneosConfigService");
+    
+            // call service
+            var call : Object = service.loadKerneosConfig();
+    
+            // add the responder as a listener for the answer of the java side
+            call.addResponder(this.responder);
+    }
 }
 }

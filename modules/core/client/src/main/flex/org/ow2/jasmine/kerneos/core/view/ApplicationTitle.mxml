@@ -38,11 +38,11 @@
          creationComplete = "creationCompleteHandler()" >
 
     <mx:Script>
-    	<![CDATA[
-    	
-    		import org.ow2.jasmine.kerneos.common.util.IconUtility;
-    		import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-    		
+        <![CDATA[
+        
+            import org.ow2.jasmine.kerneos.common.util.IconUtility;
+            import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
+            
             // =========================================================================
             // Variables
             // =========================================================================
@@ -65,13 +65,13 @@
             */
             private function creationCompleteHandler(e:Event=null):void
             {
-	            if (KerneosModelLocator.getInstance().config.applicationLogo !== null)
-	            {
-	                applicationLogoIcon = IconUtility.getClass(applicationLogo, KerneosModelLocator.getInstance().config.applicationLogo, 64, 64);
-	            }
+                if (KerneosModelLocator.getInstance().config.applicationLogo !== null)
+                {
+                    applicationLogoIcon = IconUtility.getClass(applicationLogo, KerneosModelLocator.getInstance().config.applicationLogo, 64, 64);
+                }
             }
             
-    	]]>
+        ]]>
     </mx:Script>
 
 

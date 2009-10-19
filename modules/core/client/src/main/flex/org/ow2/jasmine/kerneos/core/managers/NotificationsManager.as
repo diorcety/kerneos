@@ -33,7 +33,7 @@ import org.ow2.jasmine.kerneos.core.view.DesktopView;
 import org.ow2.jasmine.kerneos.core.view.notification.NotificationPopUp;
 import org.ow2.jasmine.kerneos.core.view.window.ModuleWindow;
 import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
-	
+    
 
 /**
  * Manages the notifications sent from modules to Kerneos.
@@ -100,8 +100,8 @@ public class NotificationsManager
             // If a PopUp should be shown and the window does not have the focus
             if (model.config.showNotificationPopUps && event.showPopup && (model.config.showPopupsFromActiveWindow || (!model.config.showPopupsFromActiveWindow && !window.hasFocus)))
             {
-		        // Check that desktop is not null
-		        checkDesktopNotNull();
+                // Check that desktop is not null
+                checkDesktopNotNull();
                 
                 // Build and display the popup
                 var notifPopUp : NotificationPopUp = new NotificationPopUp();

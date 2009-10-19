@@ -31,8 +31,8 @@
         xmlns:business="org.ow2.jasmine.kerneos.login.business.*"
         backgroundAlpha="0.0">
 
-	<!--business:Services id="services" /-->
-	<control:Controller id="controller" /> 
+    <!--business:Services id="services" /-->
+    <control:Controller id="controller" /> 
 
     <mx:Script>
         <![CDATA[
@@ -52,8 +52,8 @@
         ]]>
     </mx:Script>
 
-	<!-- Main view -->
-	<view:LoginPanelMain id="loginpanel"
+    <!-- Main view -->
+    <view:LoginPanelMain id="loginpanel"
                          width="100%"
                          height="100%"/>
 

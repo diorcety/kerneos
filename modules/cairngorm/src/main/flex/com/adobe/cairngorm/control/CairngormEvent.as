@@ -82,7 +82,7 @@ package com.adobe.cairngorm.control
        */
       public function get data() : * 
       {
-      	return _data;
+          return _data;
       }
       
       /**
@@ -90,7 +90,7 @@ package com.adobe.cairngorm.control
        */
       public function set data( value : * ) : void 
       {
-      	_data = value;
+          _data = value;
       }
    }
 }

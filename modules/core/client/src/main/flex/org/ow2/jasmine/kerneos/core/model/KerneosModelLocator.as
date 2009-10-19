@@ -69,7 +69,7 @@ public class KerneosModelLocator implements ModelLocator {
 
     // Singleton class unique instance
 
-	/**
+    /**
     * Unique instance of this locator.
     */
     private static var model:KerneosModelLocator;

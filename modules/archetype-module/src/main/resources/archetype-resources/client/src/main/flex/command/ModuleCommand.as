@@ -47,20 +47,20 @@ public class ModuleCommand implements ICommand, IResponder
      */
     public function execute(event:CairngormEvent):void
     {
-       	////////////////////////////////////////////////
-		//  							 			  //
-		//			 Handle the execution			  //
-		//								  			  //
-		////////////////////////////////////////////////
-		
-		/*
-			- Get the delegate
-			- Register the responder
-			- Make the call
-			Example :
-        		var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();       
-        		delegate.responder = this;
-        		delegate.callServerSide(parameters);
+           ////////////////////////////////////////////////
+        //                                             //
+        //             Handle the execution              //
+        //                                                //
+        ////////////////////////////////////////////////
+        
+        /*
+            - Get the delegate
+            - Register the responder
+            - Make the call
+            Example :
+                var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();       
+                delegate.responder = this;
+                delegate.callServerSide(parameters);
         */
     }
 
@@ -70,18 +70,18 @@ public class ModuleCommand implements ICommand, IResponder
     public function result(data:Object):void
     {
         ////////////////////////////////////////////////
-		//  							 			  //
-		//			 Handle the result  			  //
-		//								  			  //
-		////////////////////////////////////////////////
-		
-		/*
-			Handle the result of the call. Usely, the model is updated.
-			Example :
-		        var model:ModuleModelLocator = ModuleModelLocator.getInstance();
-		        model.myData = (data as ResultEvent).result as String;
-			
-		*/
+        //                                             //
+        //             Handle the result                //
+        //                                                //
+        ////////////////////////////////////////////////
+        
+        /*
+            Handle the result of the call. Usely, the model is updated.
+            Example :
+                var model:ModuleModelLocator = ModuleModelLocator.getInstance();
+                model.myData = (data as ResultEvent).result as String;
+            
+        */
     }
 
     /**
@@ -91,36 +91,36 @@ public class ModuleCommand implements ICommand, IResponder
     {
     
         ////////////////////////////////////////
-		//  								  //
-		//			 Handle fault  			  //
-		//									  //
-		////////////////////////////////////////
-		
-		/*
-			The following code generates a formated panel that contains
-			the fault. However, librairies from jasmine-eos should be included
-			to get the common and util classes
-			
-			Code :
-			
-			     // Retrieve the fault event
-		        var faultEvent : FaultEvent = FaultEvent(info);
-		
-		        // Tell the view and let it handle this
-		        var serverSideExceptionEvent : ServerSideExceptionEvent =
-		            new ServerSideExceptionEvent(
-		                "serverSideException",
-		                new ServerSideException("Error while Executing the action",
-		                                        "The operation could not be performed."
-		                                        + "\n" + faultEvent.fault.faultCode
-		                                        + "\n" + faultEvent.fault.faultString,
-		                                        faultEvent.fault.getStackTrace()));
-		                                        
-				// Dispatch the event using the cairngorm event dispatcher
-		        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
-			 
-		*/
-		
+        //                                    //
+        //             Handle fault                //
+        //                                      //
+        ////////////////////////////////////////
+        
+        /*
+            The following code generates a formated panel that contains
+            the fault. However, librairies from jasmine-eos should be included
+            to get the common and util classes
+            
+            Code :
+            
+                 // Retrieve the fault event
+                var faultEvent : FaultEvent = FaultEvent(info);
+        
+                // Tell the view and let it handle this
+                var serverSideExceptionEvent : ServerSideExceptionEvent =
+                    new ServerSideExceptionEvent(
+                        "serverSideException",
+                        new ServerSideException("Error while Executing the action",
+                                                "The operation could not be performed."
+                                                + "\n" + faultEvent.fault.faultCode
+                                                + "\n" + faultEvent.fault.faultString,
+                                                faultEvent.fault.getStackTrace()));
+                                                
+                // Dispatch the event using the cairngorm event dispatcher
+                CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+             
+        */
+        
     }
 
 }

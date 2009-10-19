@@ -31,37 +31,37 @@ POSSIBILITY OF SUCH DAMAGE.
 */
 package com.adobe.cairngorm
 {
-	import mx.resources.ResourceBundle;
-	import mx.resources.ResourceManager;
-	import mx.utils.StringUtil;
-	
-	/**
-	 * Error class thrown when a Cairngorm error occurs.
-	 * Used to substitute data in error messages.
-	 */
-	public class CairngormError extends Error
-	{
-		[ResourceBundle("CairngormMessages")] 
-	 	private static var rb : ResourceBundle;
-		
-		public function CairngormError( errorCode : String, ... rest )
-		{
-			super( formatMessage( errorCode, rest.toString() ) );
-		}
-		
-		private function formatMessage( errorCode : String, ... rest ) : String
-		{
-			//var message : String =  StringUtil.substitute( resourceBundle.getString( errorCode ), rest );
-			
-			var formatString : String = ResourceManager.getInstance().getString("CairngormMessages", errorCode);
-			var message : String = StringUtil.substitute( formatString, rest ); 
-			
-			return StringUtil.substitute( "{0}: {1}", errorCode, message);
-		}
-		
-		protected function get resourceBundle() : ResourceBundle
-		{
-			return rb;
-		}
-	}
+    import mx.resources.ResourceBundle;
+    import mx.resources.ResourceManager;
+    import mx.utils.StringUtil;
+    
+    /**
+     * Error class thrown when a Cairngorm error occurs.
+     * Used to substitute data in error messages.
+     */
+    public class CairngormError extends Error
+    {
+        [ResourceBundle("CairngormMessages")] 
+         private static var rb : ResourceBundle;
+        
+        public function CairngormError( errorCode : String, ... rest )
+        {
+            super( formatMessage( errorCode, rest.toString() ) );
+        }
+        
+        private function formatMessage( errorCode : String, ... rest ) : String
+        {
+            //var message : String =  StringUtil.substitute( resourceBundle.getString( errorCode ), rest );
+            
+            var formatString : String = ResourceManager.getInstance().getString("CairngormMessages", errorCode);
+            var message : String = StringUtil.substitute( formatString, rest ); 
+            
+            return StringUtil.substitute( "{0}: {1}", errorCode, message);
+        }
+        
+        protected function get resourceBundle() : ResourceBundle
+        {
+            return rb;
+        }
+    }
 }

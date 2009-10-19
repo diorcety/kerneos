@@ -265,7 +265,7 @@ package com.adobe.cairngorm.business
       
       
       
-    	/* Dynamic service setting */
+        /* Dynamic service setting */
       
       /**
        * Set a new service name.
@@ -273,17 +273,17 @@ package com.adobe.cairngorm.business
        */
       public function setServiceForId(serviceId : String, destination : String) : void 
       {
-			var remote:RemoteObject = new RemoteObject();
-			
-			if (_remoteObjects == null) 
-			{
-				_remoteObjects = new RemoteObjects();
-				_remoteObjects.timeout = timeout;
-			}
-			 remote.destination = destination;
-			_remoteObjects.registerRemoteObject(serviceId, remote);
-			 remote.requestTimeout = timeout;
-		}
+            var remote:RemoteObject = new RemoteObject();
+            
+            if (_remoteObjects == null) 
+            {
+                _remoteObjects = new RemoteObjects();
+                _remoteObjects.timeout = timeout;
+            }
+             remote.destination = destination;
+            _remoteObjects.registerRemoteObject(serviceId, remote);
+             remote.requestTimeout = timeout;
+        }
        
       
    }

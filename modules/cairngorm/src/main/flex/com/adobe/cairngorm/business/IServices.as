@@ -40,14 +40,14 @@ package com.adobe.cairngorm.business
        */
       function logout() : void;
       
-		/**
-		 * Set the timeout on the service 
-		 */      
+        /**
+         * Set the timeout on the service 
+         */      
       function set timeout( timeoutTime : int ) : void;
 
-		/**
-		 * get the timeout on the service 
-		 */      
+        /**
+         * get the timeout on the service 
+         */      
       function get timeout() : int;
 
       

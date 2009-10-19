@@ -60,8 +60,8 @@ public class LoginService implements Serializable {
      * @return true if the user successfully logged in, false otherwise.
      */
 
-	@SuppressWarnings("unchecked")
-	public boolean login(final String user, final String password) {
+    @SuppressWarnings("unchecked")
+    public boolean login(final String user, final String password) {
 
         try {
             // try for Jonas 4.X first
@@ -71,7 +71,7 @@ public class LoginService implements Serializable {
 
         } catch (Exception e) {
             // try for Jonas 5.X then
-        	Logger.getLogger(getClass().getName()).log(Level.INFO,"Login on JOnAS 5");
+            Logger.getLogger(getClass().getName()).log(Level.INFO,"Login on JOnAS 5");
             this.handler = new NoInputCallbackHandler(user, password);
         }
 

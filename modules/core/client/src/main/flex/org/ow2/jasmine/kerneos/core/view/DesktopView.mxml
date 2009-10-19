@@ -48,16 +48,16 @@
             import flexlib.mdi.events.MDIManagerEvent;
             import flexlib.mdi.events.MDIWindowEvent;
 
-        	import org.ow2.jasmine.kerneos.core.vo.ModuleWithWindowVO;
+            import org.ow2.jasmine.kerneos.core.vo.ModuleWithWindowVO;
             import org.ow2.jasmine.kerneos.core.api.KerneosModule;
-        	import org.ow2.jasmine.kerneos.core.view.window.SwfModuleWindow;
+            import org.ow2.jasmine.kerneos.core.view.window.SwfModuleWindow;
             import org.ow2.jasmine.kerneos.core.view.window.KerneosWindow;
-        	import org.ow2.jasmine.kerneos.core.view.window.ModuleWindow;
-        	import org.ow2.jasmine.kerneos.core.view.notification.NotificationsLog;
-        	import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
-        	import org.ow2.jasmine.kerneos.core.managers.NotificationsManager;
-        	import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
-        	import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
+            import org.ow2.jasmine.kerneos.core.view.window.ModuleWindow;
+            import org.ow2.jasmine.kerneos.core.view.notification.NotificationsLog;
+            import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
+            import org.ow2.jasmine.kerneos.core.managers.NotificationsManager;
+            import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
+            import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 
             
             // =========================================================================

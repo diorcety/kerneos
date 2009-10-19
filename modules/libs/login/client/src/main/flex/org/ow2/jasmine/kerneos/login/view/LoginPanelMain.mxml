@@ -25,11 +25,11 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-	     xmlns:local="*"
+         xmlns:local="*"
          xmlns:flexlibControls="flexlib.controls.*"
-	     backgroundAlpha="0.0"
-	     horizontalAlign="center"
-	     verticalAlign="middle">
+         backgroundAlpha="0.0"
+         horizontalAlign="center"
+         verticalAlign="middle">
     
     <mx:Script>
         <![CDATA[

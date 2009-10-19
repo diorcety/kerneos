@@ -26,16 +26,16 @@ import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
 
 public interface IModuleDelegate extends IDelegateResponder
 {
-	////////////////////////////////////////////////////////////////////
-	//  							 			  					  //
-	//			 Function that does the requested operation			  //
-	//								  			  					  //
-	////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    //                                                                   //
+    //             Function that does the requested operation              //
+    //                                                                      //
+    ////////////////////////////////////////////////////////////////////
     
     /*
-    	The interface of the delegate.    
-    	Example :
-    		function callServerSide(parameters : Object) : void;
+        The interface of the delegate.    
+        Example :
+            function callServerSide(parameters : Object) : void;
     */
     
 }

@@ -57,11 +57,11 @@
     @author Julien Nicoulaud
 -->
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-	            width="700"
-	            height="450"
-	            showCloseButton="true"
-	            close="close();"
-	            titleIcon="@Embed(source='/../assets/help16.png')"
+                width="700"
+                height="450"
+                showCloseButton="true"
+                close="close();"
+                titleIcon="@Embed(source='/../assets/help16.png')"
                 creationComplete="initializeComponent()"
                 verticalScrollPolicy="off"
                 horizontalScrollPolicy="off"
@@ -73,8 +73,8 @@
                 borderColor="#EEEEEE"
                 backgroundAlpha="1.0"
                 backgroundColor="#EEEEEE">
-	            
-	            
+                
+                
     <!--========================================================================
     | SCRIPT
     =========================================================================-->
@@ -135,7 +135,7 @@
     */
     public function close(e:Event=null):void
     {
-    	PopUpManager.removePopUp(this);
+        PopUpManager.removePopUp(this);
     }
         
     /**
