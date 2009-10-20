@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="**" kind="src" path="modules/core/client/src/main/resources"/>
 	<classpathentry kind="src" path="modules/core/server/src/main/java"/>
 	<classpathentry kind="src" path="modules/core/api/src/main/flex"/>
 	<classpathentry kind="src" path="modules/core/client/src/main/flex"/>
-		<classpathentry kind="src" path="modules/libs/common/client/src/main/flex"/>
+	<classpathentry kind="src" path="modules/libs/common/client/src/main/flex"/>
 	<classpathentry excluding="**" kind="src" path="modules/libs/login/client/src/main/resources"/>
 	<classpathentry kind="src" path="modules/libs/login/server/src/main/java"/>
 	<classpathentry kind="src" path="modules/libs/login/client/src/main/flex"/>
