@@ -68,7 +68,7 @@ public class KerneosConfigService implements Serializable {
      * The JAXB context for rules packages serialization/deserialization. Must
      * be declared with all the potentially involved classes.
      */
-    private JAXBContext jaxbContext;
+    transient private JAXBContext jaxbContext;
 
     /**
      * Load the Kerneos config file and build the configuration object
