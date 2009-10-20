@@ -25,6 +25,24 @@
 #
 
 // ////////////////////////////////////////////////////////////////////////////
+// Compile Kerneos with maven :
+// ////////////////////////////////////////////////////////////////////////////
+
+	Some flex libraries need to be added manually from a flex sdk. The following 
+	commands are for a 3.0.0.477 sdk version:
+	
+	The jar for the flex license (to use a license, specify the FLEX_LICENSE 
+	environment variable) :
+	mvn install:install-file -DgroupId=com.adobe.flex -DartifactId=license -Dversion=3.0.0.477 -Dpackaging=jar -Dfile=${flexSDK_path}/lib/license.jar
+	
+	The datavisualization flex libraries :
+	mvn install:install-file -DgroupId=com.adobe.flex.sdk -DartifactId=datavisualization -Dversion=3.0.0.477 -Dpackaging=swc -Dfile=${flexSDK_path}/frameworks/libs/datavisualization.swc
+	
+	mvn install:install-file -DgroupId=com.adobe.flex.sdk -DartifactId=datavisualization -Dversion=3.0.0.477 -Dpackaging=rb.swc -Dfile=${flexSDK_path}/frameworks/locale/en_US/datavisualization_rb.swc
+	mvn install:install-file -DgroupId=com.adobe.flex.sdk -DartifactId=datavisualization -Dversion=3.0.0.477 -Dclassifier=en_US -Dpackaging=rb.swc -Dfile=${flexSDK_path}/frameworks/locale/en_US/datavisualization_rb.swc
+	mvn install:install-file -DgroupId=com.adobe.flex.sdk -DartifactId=datavisualization -Dversion=3.0.0.477 -Dclassifier=fr_FR -Dpackaging=rb.swc -Dfile=${flexSDK_path}/frameworks/locale/en_US/datavisualization_rb.swc
+
+// ////////////////////////////////////////////////////////////////////////////
 // How to use the archetypes
 // ////////////////////////////////////////////////////////////////////////////
 
