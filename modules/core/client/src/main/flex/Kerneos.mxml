@@ -29,12 +29,15 @@
                 xmlns:control = "org.ow2.jasmine.kerneos.core.control.*" 
                 xmlns:business = "org.ow2.jasmine.kerneos.core.business.*"
                 paddingLeft = "0" paddingRight = "0" paddingBottom = "0" paddingTop = "0"
-                pageTitle = "Kerneos" 
+                pageTitle = "Kerneos"
+                preloader="org.ow2.jasmine.kerneos.core.view.preloader.KerneosPreloader"
                 scriptTimeLimit = "60"
-                applicationComplete = "applicationCompleteHandler()">
+                applicationComplete = "applicationCompleteHandler()"
+                frameRate="60">
 
     <mx:Script>
         <![CDATA[
+        	import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
 
             /**
             * On application creation complete.
@@ -46,7 +49,7 @@
 
                 // Register methods that can be called externally from the Javascript.
                 ExternalInterface.addCallback("canBeClosed",
-                                              mainView.canBeClosed);
+                                              KerneosLifeCycleManager.canBeClosed);
             }
 
         ]]>

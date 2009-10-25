@@ -1,53 +1,55 @@
 <?xml version = "1.0" encoding = "utf-8"?>
 <!--
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - JASMINe
-  - Copyright (C) 2008 Bull S.A.S.
-  - Contact: jasmine@ow2.org
-  -
-  - This library is free software; you can redistribute it and/or
-  - modify it under the terms of the GNU Lesser General Public
-  - License as published by the Free Software Foundation; either
-  - version 2.1 of the License, or any later version.
-  -
-  - This library is distributed in the hope that it will be useful,
-  - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  - Lesser General Public License for more details.
-  -
-  - You should have received a copy of the GNU Lesser General Public
-  - License along with this library; if not, write to the Free Software
-  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
-  - USA
-  -
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id$
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - JASMINe
+     - Copyright (C) 2008 Bull S.A.S.
+     - Contact: jasmine@ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <!---
-    The desktop view displayed when everything is loaded and OK.
-    
-    @author Julien Nicoulaud
-    @author Guillaume Renault
+     The desktop view displayed when everything is loaded and OK.
+
+     @author Julien Nicoulaud
+     @author Guillaume Renault
 -->
 <mx:VBox xmlns:mx = "http://www.adobe.com/2006/mxml"
          xmlns:view = "org.ow2.jasmine.kerneos.core.view.*"
          xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
+         xmlns:flexlibContainers = "flexlib.containers.*"
          xmlns:flexlibMdiContainers = "flexlib.mdi.containers.*"
          creationComplete = "creationCompleteHandler()"
-         verticalGap = "1" >
+         verticalGap = "1">
 
     <mx:Script>
         <![CDATA[
-
+            import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
+            
             import mx.controls.Alert;
             import mx.events.CloseEvent;
             import mx.modules.ModuleLoader;
-
+            
             import flexlib.mdi.containers.MDIWindow;
             import flexlib.mdi.events.MDIManagerEvent;
             import flexlib.mdi.events.MDIWindowEvent;
-
+            
             import org.ow2.jasmine.kerneos.core.vo.ModuleWithWindowVO;
             import org.ow2.jasmine.kerneos.core.api.KerneosModule;
             import org.ow2.jasmine.kerneos.core.view.window.SwfModuleWindow;
@@ -58,7 +60,6 @@
             import org.ow2.jasmine.kerneos.core.managers.NotificationsManager;
             import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-
             
             // =========================================================================
             // Variables
@@ -156,11 +157,7 @@
                 model = KerneosModelLocator.getInstance();
                 
                 // Register as the desktop view to the different managers
-                ModulesLifeCycleManager.desktop =
-                NotificationsManager.desktop = this;
-                
-                // Setup the modules.
-                ModulesLifeCycleManager.setupModules();
+                ModulesLifeCycleManager.desktop = KerneosLifeCycleManager.desktop = NotificationsManager.desktop = this;
                 
                 // Set windows events listeners.
                 windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow);
@@ -189,22 +186,12 @@
             
             
             
-            /**
-             * Logout from the application.
-             */
-            public function logout(event : Event = null) : void
-            {
-                (parent as KerneosMainView).logout();
-            }
-            
-            
-            
             // =========================================================================
             // Windows events handlers
             // =========================================================================
             
             /**
-             * When closing a module window, force a confirmation from the user
+             * When closing a module window, force a confirmation from the user.
              */
             private function closeWindow(event : Event) : void
             {
@@ -268,7 +255,7 @@
             
             
             /**
-             * When user confirms closing the window
+             * When user confirms closing the window.
              */
             private function confirmCloseWindow(event : CloseEvent = null) : void
             {
@@ -285,7 +272,7 @@
             
             
             /**
-             * Minimize all windows
+             * Minimize all windows.
              */
             private function minimizeAllWindows() : void
             {
@@ -418,6 +405,10 @@
     </mx:Script>
 
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- UI Children                                                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <flexlibMdiContainers:MDICanvas id = "windowContainer"
                                     horizontalScrollPolicy = "off"
                                     verticalScrollPolicy = "off"
@@ -465,14 +456,24 @@
                   alpha = "0.25"
                   visible = "{model.config.showMinimizeAllButton}"
                   includeInLayout = "{model.config.showMinimizeAllButton}" />
-        <mx:HBox id = "minimizedWindowsButtonsContainer"
-                 width = "100%"
-                 height = "100%"
-                 horizontalAlign = "left"
-                 verticalAlign = "middle"
-                 verticalScrollPolicy = "off"
-                 horizontalScrollPolicy = "off" />
-        <mx:Spacer width = "100%" />
+        <view:KerneosButtonScrollingCanvas id = "scrollabeTaskBarZone"
+                                           width = "100%"
+                                           height = "100%"
+                                           buttonWidth = "24"
+                                           explicitButtonHeight = "24"
+                                           leftButtonStyleName = "taskBarScrollLeftButton"
+                                           rightButtonStyleName = "taskBarScrollRightButton"
+                                           scrollJump = "40"
+                                           scrollSpeed = "20">
+            <mx:HBox id = "minimizedWindowsButtonsContainer"
+                     width = "100%"
+                     height = "100%"
+                     horizontalAlign = "left"
+                     verticalAlign = "middle"
+                     verticalScrollPolicy = "off"
+                     horizontalScrollPolicy = "off" />
+            <mx:Spacer width = "100%" />
+        </view:KerneosButtonScrollingCanvas>
         <mx:VRule height = "70%"
                   alpha = "0.25" />
         <commonView:IconComboBox id = "languageSelector"
@@ -511,7 +512,7 @@
         <mx:Button width = "22"
                    height = "22"
                    icon = "{logoutIcon}"
-                   click = "{logout()}"
+                   click = "{KerneosLifeCycleManager.logout()}"
                    toolTip = "Logout"
                    styleName = "taskBarSmallButton" />
     </mx:HBox>

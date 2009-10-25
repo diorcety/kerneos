@@ -26,15 +26,18 @@ package org.ow2.jasmine.kerneos.core.view.window
 {
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.geom.Point;
 
 import flexlib.mdi.containers.MDIWindow;
 import flexlib.mdi.events.MDIWindowEvent;
 
 import mx.controls.Button;
-import mx.controls.ToolTip;
+import mx.core.UIComponent;
 import mx.effects.Fade;
 import mx.effects.Glow;
 import mx.effects.Sequence;
+import mx.events.ToolTipEvent;
+import mx.graphics.ImageSnapshot;
 
 
 /**
@@ -50,9 +53,24 @@ public class MinimizedModuleWindow extends Button
     // =========================================================================
     
     /**
+     * The default displayed snapshot width.
+     */
+    public static var SNAPSHOT_WIDTH : Number = 300;
+    
+    /**
      * The corresponding module window.
      */
     public var _moduleWindow : ModuleWindow;
+    
+    /**
+     * A snapshot of the attached window.
+     */
+    protected var snapshot : ImageSnapshot;
+    
+    /**
+     * Wether the snapshot is marked as obsolete.
+     */
+    protected var snapshotObsolete : Boolean = true;
     
     
     
@@ -69,9 +87,7 @@ public class MinimizedModuleWindow extends Button
         super();
         
         // Assign variables
-        _moduleWindow = window;
-        
-        // FIXME move to commitProperties
+        this._moduleWindow = window;
         this.label = window.module.name;
         this.toolTip = "Click to bring " + window.module.name + " window to front.\nDouble click to maximize it.";
         this.setStyle("icon", window.module.getSmallIconClass(this));
@@ -80,6 +96,11 @@ public class MinimizedModuleWindow extends Button
         // Intercept button click events
         this.addEventListener(MouseEvent.CLICK, simpleClickHandler);
         this.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
+        
+        // Snapshot ToolTip
+        this.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, createSnapshotToolTip);
+        this.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
+        this.addEventListener(MouseEvent.MOUSE_OVER, updateSnapshot);
         
         // Intercept window events
         _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler);
@@ -145,7 +166,7 @@ public class MinimizedModuleWindow extends Button
     /**
      * When the button is simple clicked.
      */
-    private function simpleClickHandler(e : MouseEvent) : void
+    protected function simpleClickHandler(e : MouseEvent) : void
     {
         // If the window has focus, minimize it
         if (!_moduleWindow.minimized)
@@ -176,7 +197,7 @@ public class MinimizedModuleWindow extends Button
     /**
      * When the button is double clicked.
      */
-    private function doubleClickHandler(e : MouseEvent) : void
+    protected function doubleClickHandler(e : MouseEvent) : void
     {
         if (!_moduleWindow.maximized)
         {
@@ -194,7 +215,7 @@ public class MinimizedModuleWindow extends Button
     /**
      * When the window is minimized.
      */
-    private function windowMinimizeHandler(e : Event) : void
+    protected function windowMinimizeHandler(e : Event) : void
     {
         windowFocusEndHandler();
     }
@@ -204,7 +225,7 @@ public class MinimizedModuleWindow extends Button
     /**
      * When the window is restored.
      */
-    private function windowRestoreHandler(e : Event) : void
+    protected function windowRestoreHandler(e : Event) : void
     {
     }
     
@@ -213,11 +234,10 @@ public class MinimizedModuleWindow extends Button
     /**
      * When the window gets the focus.
      */
-    private function windowFocusStartHandler(e : Event) : void
+    protected function windowFocusStartHandler(e : Event) : void
     {
         this.setStyle("borderColor", "#454545");
         this.setStyle("fillColors", [0x000000, 0x000000, 0xffffff, 0xeeeeee]);
-    
     }
     
     
@@ -225,10 +245,61 @@ public class MinimizedModuleWindow extends Button
     /**
      * When the window loses the focus.
      */
-    private function windowFocusEndHandler(e : Event = null) : void
+    protected function windowFocusEndHandler(e : Event = null) : void
     {
         this.setStyle("borderColor", "#BBBBBB");
         this.setStyle("fillColors", [0x999999, 0x454545, 0xffffff, 0xeeeeee]);
+        snapshotObsolete = true;
+    }
+    
+    
+    
+    // =========================================================================
+    // Window snapshot ToolTip
+    // =========================================================================
+    
+    /**
+     * Update the window snapshot.
+     */
+    public function updateSnapshot(e : Event = null) : void
+    {
+        // Don't take the snapshot if it is not obsolete, the window is minimized or this is an
+        // IFrame window.
+        if (snapshotObsolete && !_moduleWindow.minimized && !(_moduleWindow is IFrameModuleWindow))
+        {
+            snapshot = ImageSnapshot.captureImage(_moduleWindow);
+            snapshotObsolete = false;
+        }
+    }
+    
+    
+    
+    /**
+     * Position the ToolTip.
+     */
+    protected function positionToolTip(e : ToolTipEvent) : void
+    {
+        var targetPoint : Point = ((this as UIComponent).parent as UIComponent).contentToGlobal(new Point(this.x, this.y));
+        e.toolTip.x = Math.max(2, (targetPoint.x + this.width / 2) - e.toolTip.width / 2);
+        e.toolTip.y = targetPoint.y - e.toolTip.height - 4;
+    }
+    
+    
+    
+    /**
+     * Create a window snapshot ToolTip.
+     */
+    protected function createSnapshotToolTip(event : ToolTipEvent) : void
+    {
+        if (snapshot != null)
+        {
+            var ptt : ModuleSnapshotTooltip = new ModuleSnapshotTooltip();
+            ptt.text = _moduleWindow.module.name;
+            ptt.bitmapData = snapshot.data;
+            ptt.snapshotWidth = SNAPSHOT_WIDTH;
+            ptt.snapshotHeight = SNAPSHOT_WIDTH * snapshot.height / snapshot.width;
+            event.toolTip = ptt;
+        }
     }
 }
 }

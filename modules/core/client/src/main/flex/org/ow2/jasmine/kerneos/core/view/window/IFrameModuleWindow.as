@@ -202,6 +202,7 @@ public class IFrameModuleWindow extends ModuleWindow
         if (!minimized)
         {
             this.iFrame.hidden = false;
+            this.iFrame.visible = true;
         }
     }
     

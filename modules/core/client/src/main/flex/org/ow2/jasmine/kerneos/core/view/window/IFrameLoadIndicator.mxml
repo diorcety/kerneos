@@ -29,13 +29,15 @@
 
     @author Julien Nicoulaud
 -->
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         xmlns:commonControls = "org.ow2.jasmine.kerneos.common.controls.*">
 
-    <mx:ProgressBar id="iFrameProgressBar"
-                    indeterminate="true"
-                    label="Loading..."
-                    trackHeight="20"
-                    color="#EFEFEF"
-                    borderColor="#333333"
-                    trackColors="{[0xAAAAAA,0xEEEEEE]}"/>
+    <commonControls:KerneosProgressBar id="iFrameProgressBar"
+					                   indeterminate="true"
+					                   label="Loading..."
+					                   trackHeight="20"
+					                   color="#EFEFEF"
+					                   borderColor="#EFEFEF"
+					                   barColor="#666666"
+					                   trackColors="{[0x444444,0x444444]}"/>
 </mx:HBox>

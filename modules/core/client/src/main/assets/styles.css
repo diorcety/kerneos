@@ -27,8 +27,8 @@
  * Application
  ******************************************************************************/
  
-Application{
-   background-gradient-colors:    #FFFFFF, #666666;
+Application {
+   background-gradient-colors: #FFFFFF, #666666;
    backgroundColor: #FFFFFF;
    color: #000000;
    theme-color: #777777;
@@ -39,18 +39,18 @@ Application{
  * Kerneos desktop
  ******************************************************************************/
  
-ListModuleRenderer{
+ListModuleRenderer {
     border-color: #555555;
     border-thickness: 2px;
     corner-radius: 3px;
 }
 
-.consoleMark1{
+.consoleMark1 {
     font-size: 48px;
     color: #EFEFEF;
 }
 
-.consoleMark2{
+.consoleMark2 {
     font-size: 48px;
     font-style: italic;
     color: #FFFFFF;
@@ -61,7 +61,7 @@ ListModuleRenderer{
  * Windows
  ******************************************************************************/
 
-KerneosWindow{
+KerneosWindow {
     titleStyleName: moduleWindowTitle;
     dropShadowEnabled: true;
     dropShadowColor: #000000;
@@ -111,7 +111,7 @@ KerneosWindow{
     paddingTop: 0px;
 }
 
-IFrameModuleWindow{
+IFrameModuleWindow {
     backgroundColor: #666666;
     style-name-no-focus: noFocusIFrameModuleWindow;
 }
@@ -269,7 +269,29 @@ MinimizedModuleWindow {
     borderColor: #666666;
 }
 
-    
+ModuleSnapshotTooltip {
+   backgroundAlpha: 0.8;
+   borderAlpha: 1.0;
+   backgroundColor: #454545;
+   borderColor: #404040;
+   borderStyle: solid;
+   border-thickness: 2px;
+   color: #EFEFEF;
+   cornerRadius: 2px;
+}
+
+.taskBarScrollLeftButton {
+    upSkin: Embed(source="taskbar_left_up.png");
+    overSkin: Embed(source="taskbar_left_over.png");
+    downSkin: Embed(source="taskbar_left_up.png");
+}
+
+.taskBarScrollRightButton {
+    upSkin: Embed(source="taskbar_right_up.png");
+    overSkin: Embed(source="taskbar_right_over.png");
+    downSkin: Embed(source="taskbar_right_up.png");
+}
+
 /*******************************************************************************
  * Notifications
  ******************************************************************************/
@@ -349,8 +371,7 @@ Alert {
  * Misc
  ******************************************************************************/
  
-.maximizeRestoreButton
-{
+.maximizeRestoreButton {
     up-skin:            Embed("./maximize_up.png");
     over-skin:          Embed("./maximize_over.png");
     down-skin:          Embed("./maximize_up.png");
@@ -359,22 +380,19 @@ Alert {
     selected-down-skin: Embed("./restore_up.png");
 }
 
-.minimizeButton
-{
+.minimizeButton {
     up-skin:        Embed("./minimize_up.png");
     over-skin:      Embed("./minimize_over.png");
     down-skin:      Embed("./minimize_up.png");
 }
 
 
-TabBar
-{
+TabBar {
     selected-tab-text-style-name:     tabBarButtonSelected;
     tab-style-name:                 tabBarButton;
 }
 
-.tabBarButton
-{
+.tabBarButton {
     up-skin:                Embed("./tab_up.png", scaleGridTop="11", scaleGridBottom="30", scaleGridLeft="10", scaleGridRight="92");
     over-skin:                Embed("./tab_up.png", scaleGridTop="11", scaleGridBottom="30", scaleGridLeft="10", scaleGridRight="92");
     down-skin:                Embed("./tab_up.png", scaleGridTop="11", scaleGridBottom="30", scaleGridLeft="10", scaleGridRight="92");
@@ -391,14 +409,12 @@ TabBar
     padding-top:            -4px;
 }
 
-.tabBarButtonSelected
-{
+.tabBarButtonSelected {
     text-roll-over-color:    #003399;
     color:                    #003399;
 }
 
-Pod
-{
+Pod {
     padding-top: 10px;
     padding-left: 5px;
     padding-right: 5px;
@@ -416,31 +432,27 @@ Pod
     drop-shadow-color: #999999;
 }
 
-.podTitle
-{
+.podTitle {
     font-size: 11px;
     font-family: arial;
     font-weight: bold;
 }
 
-DragHighlight
-{
+DragHighlight {
     border-color: #CCCCCC;
     border-thickness: 3px;
     border-style: solid;
     background-color: #F3F3F3;
 }
 
-.leftArrowButton
-{
+.leftArrowButton {
     up-skin:        Embed("./left_arrow_up.gif");
     over-skin:        Embed("./left_arrow_over.gif");
     down-skin:        Embed("./left_arrow_up.gif");
     disabled-skin:    Embed("./left_arrow_disabled.gif");
 }
 
-.rightArrowButton
-{
+.rightArrowButton {
     up-skin:        Embed("./right_arrow_up.gif");
     over-skin:        Embed("./right_arrow_over.gif");
     down-skin:        Embed("./right_arrow_up.gif");

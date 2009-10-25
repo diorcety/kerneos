@@ -36,27 +36,20 @@
            xmlns:view = "org.ow2.jasmine.kerneos.core.view.*"
            width = "100%"
            height = "100%"
-           currentState = "{KerneosState.LOADING}">
+           currentState = "{KerneosModelLocator.getInstance().state}">
 
     <mx:Script>
         <![CDATA[
-            import com.adobe.cairngorm.business.ServiceLocator;
-            import com.adobe.cairngorm.control.CairngormEventDispatcher;
-            
-            import mx.core.Application;
             import mx.managers.DragManager;
             import mx.managers.HistoryManager;
-            import mx.messaging.ChannelSet;
-            import mx.messaging.channels.AMFChannel;
-            import mx.utils.URLUtil;
             
-            import org.ow2.jasmine.kerneos.common.util.StringUtils;
+            import com.adobe.cairngorm.control.CairngormEventDispatcher;
+            
             import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
-            import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
-            import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
             import org.ow2.jasmine.kerneos.core.model.KerneosState;
             import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
-            import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
+            import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
+            import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
             
             // =========================================================================
             // Variables
@@ -79,30 +72,6 @@
              */
             private var hist : HistoryManager;
             
-            // Variables
-            
-            /**
-             * AMF Channel.
-             */
-            private static var _amfChannel : AMFChannel = null;
-            
-            /**
-             * AMF Channel set.
-             */
-            [Bindable]
-            public static var amfChannelSet : ChannelSet = null;
-            
-            /**
-             * The application model.
-             */
-            [Bindable]
-            private var model : KerneosModelLocator;
-            
-            /**
-             * Wether the logout() function has been called.
-             */
-            private var loggingOut : Boolean = false;
-            
             
             
             // =========================================================================
@@ -114,117 +83,14 @@
              */
             public function initializeView(e : Event = null) : void
             {
-                // Retrieve the application model
-                this.model = KerneosModelLocator.getInstance();
-                
-                // Load the user's shared object
-                SharedObjectManager.load();
-                
                 // Listen to server side exceptions events
                 CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
                 
-                // Init client-server communications channels properties
-                var urlServer : String = URLUtil.getServerNameWithPort(Application.application.loaderInfo.url).toString();
-                var context : String = StringUtils.parseURLContext(Application.application.loaderInfo.url.toString());
-                
-                amfChannelSet = new ChannelSet();
-                _amfChannel = new AMFChannel("my-graniteamf-kerneos", "http://" + urlServer + "/" + context + "/graniteamf/amf");
-                
-                amfChannelSet.addChannel(_amfChannel);
-                
-                // Set the kerneosConfigService. Done this way because of the @remoteDestination on the JAVA service
-                ServiceLocator.getInstance().setServiceForId("kerneosConfigService","kerneosConfig");
-                
-                // ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
-                ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
-                
-                // Load the Kerneos configuration
-                this.loadKerneosConfig();
-                
                 // Listen to keyboards events at the "application" level
                 parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
-            }
-            
-            
-            
-            /**
-             * When the application config has been loaded.
-             */
-            private function set kerneosConfigLoaded(conf : KerneosConfigVO) : void
-            {
-                if (conf != null)
-                {
-                    // Switch to the desktop view.
-                    this.currentState = KerneosState.DESKTOP;
-                }
-            }
-            
-            
-            
-            // =========================================================================
-            // Public methods
-            // =========================================================================
-            
-            /**
-             * Return true if the application can be closed without prompting
-             *
-             * @internal Check module per module if it declares itself as ready to be closed
-             */
-            public function canBeClosed() : Boolean
-            {
-                // Save windows setup
-                if (desktopView != null)
-                {
-                    desktopView.saveAllWindowsSetup();
-                }
                 
-                // Save the user settings
-                SharedObjectManager.save();
-                
-                return (loggingOut || !model.config.showConfirmCloseDialog);
-            }
-            
-            
-            
-            /**
-             * Logout from the application
-             */
-            public function logout(event : Event = null) : void
-            {
-                // Call the logout servlet
-                var req : URLRequest = new URLRequest("./LogoutServlet");
-                var loader : URLLoader = new URLLoader();
-                loader.addEventListener(Event.COMPLETE, function() : void
-                {
-                    // Mark this as logging out
-                    loggingOut = true;
-                    
-                    // Reload the page
-                    reloadPage();
-                });
-                loader.load(req);
-            }
-            
-            
-            
-            // =========================================================================
-            // Available modules management
-            // =========================================================================
-            
-            /**
-             * Send event for receive the modules in deploied war
-             */
-            public function loadKerneosConfig() : void
-            {
-                try
-                {
-                    var event_module : KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.LOAD_KERNEOS_CONFIG);
-                    CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
-                }
-                catch (e : Error)
-                {
-                    trace("An error occurred while loading Kerneos config file: " + e.message);
-                }
+                // Switch to the "loading" state
+                KerneosModelLocator.getInstance().state = KerneosState.LOADING;
             }
             
             
@@ -241,36 +107,17 @@
                 switch (event.keyCode)
                 {
                     case 116: // keycode for F5
-                        reloadPage();
+                        KerneosLifeCycleManager.reloadPage();
                         break;
                 }
-            }
-            
-            
-            
-            /**
-             * Reload the page
-             */
-            public function reloadPage() : void
-            {
-                navigateToURL(new URLRequest("javascript:location.reload();"), "_self");
             }
         ]]>
     </mx:Script>
 
 
-    <!--========================================================================
-    | Bindings
-    =========================================================================-->
-
-    <!-- The binding triggered when the config is loaded. -->
-    <mx:Binding source = "this.model.config"
-                destination = "kerneosConfigLoaded" />
-
-
-    <!--========================================================================
-    | States
-    =========================================================================-->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- States                                                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <mx:states>
 
@@ -319,22 +166,20 @@
     </mx:states>
 
 
-    <!--========================================================================
-    | Transitions
-    =========================================================================-->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Transitions                                                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <!-- Transitions -->
     <mx:transitions>
         <mx:Transition fromState = "{KerneosState.LOADING}"
                        toState = "{KerneosState.DESKTOP}">
             <mx:Parallel>
-                <mx:Fade id = "applicationTitleFadeIn"
+                <mx:Fade target = "{applicationTitle}"
                          duration = "3000"
                          alphaFrom = "0.0"
-                         alphaTo = "1.0"
-                         target = "{applicationTitle}" />
-                <mx:Sequence target = "{applicationTitle}">
-                    <mx:Glow duration = "1000"
+                         alphaTo = "1.0" />
+                <mx:Sequence>
+                    <mx:Glow duration = "1500"
                              alphaFrom = "0.0"
                              alphaTo = "0.0"
                              blurXFrom = "0.0"
@@ -364,18 +209,18 @@
                 </mx:Sequence>
                 <mx:Fade id = "taskBarFadeIn"
                          target = "{desktopView.taskBar}"
-                         duration = "1500"
+                         duration = "2000"
                          alphaFrom = "0.0"
                          alphaTo = "1.0" />
                 <mx:Fade id = "modulesListFadeIn"
                          target = "{desktopView.windowContainer}"
-                         duration = "400"
+                         duration = "700"
                          alphaFrom = "0.0"
                          alphaTo = "1.0" />
                 <mx:Blur id = "modulesListBlurIn"
                          target = "{desktopView.windowContainer}"
-                         duration = "600"
-                         blurXFrom = "50"
+                         duration = "900"
+                         blurXFrom = "100"
                          blurYFrom = "5"
                          blurXTo = "0"
                          blurYTo = "0" />

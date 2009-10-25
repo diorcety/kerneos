@@ -1,44 +1,161 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version = "1.0" encoding = "utf-8"?>
 <!--
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - JASMINe
-  - Copyright (C) 2009 Bull S.A.S.
-  - Contact: jasmine@ow2.org
-  -
-  - This library is free software; you can redistribute it and/or
-  - modify it under the terms of the GNU Lesser General Public
-  - License as published by the Free Software Foundation; either
-  - version 2.1 of the License, or any later version.
-  -
-  - This library is distributed in the hope that it will be useful,
-  - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  - Lesser General Public License for more details.
-  -
-  - You should have received a copy of the GNU Lesser General Public
-  - License along with this library; if not, write to the Free Software
-  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
-  - USA
-  -
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id$
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - JASMINe
+     - Copyright (C) 2009 Bull S.A.S.
+     - Contact: jasmine@ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <!---
-    The view displayed while loading and parsing the application configuration.
+     The view displayed while loading and parsing the application configuration.
 
-    @author Julien Nicoulaud
+     @author Julien Nicoulaud
+     @internal Some styles are hardcoded to fit the preloader ones and make sure a smooth transition
+     is done.
+     @see org.ow2.jasmine.kerneos.core.view.preloader.KerneosPreloader
 -->
-<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml"
-        horizontalAlign="center"
-        verticalAlign="middle">
+<mx:Box xmlns:mx = "http://www.adobe.com/2006/mxml"
+        xmlns:commonControls = "org.ow2.jasmine.kerneos.common.controls.*"
+        horizontalAlign = "center"
+        verticalAlign = "middle"
+        creationComplete = "initializeView()"
+        hideEffect = "{viewHideEffect}"
+        removedEffect = "{viewHideEffect}">
 
-        <mx:ProgressBar id="progressBar"
-                        indeterminate="true"
-                        labelPlacement="center"
-                        trackHeight="20"
-                        color="#EFEFEF"
-                        borderColor="#666666"
-                        trackColors="{[0xAAAAAA,0xEEEEEE]}"/>
+    <mx:Script>
+        <![CDATA[
+            import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
+            
+            import com.adobe.cairngorm.control.CairngormEventDispatcher;
+            
+            import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
+            import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
+            import org.ow2.jasmine.kerneos.core.model.KerneosState;
+            import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
+            import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
+            import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
+            
+            
+            
+            // =========================================================================
+            // Initialization
+            // =========================================================================
+            
+            /**
+             * On component creation complete.
+             */
+            private function initializeView(e : Event = null) : void
+            {
+                // Update the displayed label
+                progressBar.label = "Setting up the communication with the server";
+                
+                // Setup the AMF channel and Kerneos services
+                KerneosLifeCycleManager.setupKerneosServices();
+                
+                // Update the displayed label
+                progressBar.label = "Loading the saved settings";
+                
+                // Load the user's shared object
+                SharedObjectManager.load();
+                
+                // Update the displayed label
+                progressBar.label = "Loading the application configuration";
+                
+                // Load the Kerneos configuration
+                KerneosLifeCycleManager.loadKerneosConfig();
+            }
+            
+            
+            
+            /**
+             * When the application config has been loaded.
+             */
+            private function set kerneosConfigLoaded(conf : KerneosConfigVO) : void
+            {
+                if (conf != null)
+                {
+                    
+                    // Update the displayed label
+                    progressBar.label = "Setup up modules and icon cache";
+                    
+                    // Load the application logo if one
+                    if (conf.applicationLogo != null)
+                    {
+                        ModulesLifeCycleManager.cacheIcon(conf.applicationLogo);
+                    }
+                    
+                    // Setup the modules
+                    ModulesLifeCycleManager.setupModulesServicesAndIcons();
+                    
+                    // Update the displayed label
+                    progressBar.label = "Ready";
+                    
+                    // Switch state
+                    KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+                }
+            }
+        ]]>
+    </mx:Script>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Bindings                                                                -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <!-- The binding triggered when the config is loaded. -->
+    <mx:Binding source = "KerneosModelLocator.getInstance().config"
+                destination = "kerneosConfigLoaded" />
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Graphical filters & effects                                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <mx:DropShadowFilter id = "progressBarShadow"
+                         distance = "2"
+                         angle = "45"
+                         color = "#000000"
+                         alpha = "0.5" />
+
+    <mx:Fade id = "viewHideEffect"
+             target = "{this}"
+             duration = "1000"
+             alphaFrom = "1.0"
+             alphaTo = "0.0" />
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- UI children                                                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <commonControls:KerneosProgressBar id = "progressBar"
+                                       indeterminate = "true"
+                                       labelPlacement = "top"
+                                       trackHeight = "20"
+                                       width = "300"
+                                       height = "40"
+                                       color = "#EFEFEF"
+                                       barColor = "#FFFFFF"
+                                       fontFamily = "Verdana"
+                                       fontStyle = "normal"
+                                       fontWeight = "bold"
+                                       fontSize = "12"
+                                       filters = "{[progressBarShadow]}" />
 
 </mx:Box>

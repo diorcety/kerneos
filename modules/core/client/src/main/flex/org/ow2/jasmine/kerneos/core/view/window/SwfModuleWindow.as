@@ -27,10 +27,10 @@ package org.ow2.jasmine.kerneos.core.view.window
 import flash.events.ProgressEvent;
 
 import mx.controls.Alert;
-import mx.controls.ProgressBar;
 import mx.events.ModuleEvent;
 import mx.modules.ModuleLoader;
 
+import org.ow2.jasmine.kerneos.common.controls.KerneosProgressBar;
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
     
 
@@ -55,7 +55,7 @@ public class SwfModuleWindow extends ModuleWindow
     /**
     * The progress bar
     */
-    private var _progressBar : ProgressBar;
+    private var _progressBar : KerneosProgressBar;
     
     
     // =========================================================================
@@ -88,11 +88,11 @@ public class SwfModuleWindow extends ModuleWindow
         _loader.addEventListener(ModuleEvent.ERROR,onLoaderError);
         
         // Setup the progress bar
-        _progressBar = new ProgressBar();
+        _progressBar = new KerneosProgressBar();
         _progressBar.setStyle("trackHeight",20);
+        _progressBar.setStyle("barColor",0x444444);
         _progressBar.setStyle("color",0xEFEFEF);
-        _progressBar.setStyle("borderColor",0x333333);
-        _progressBar.setStyle("trackColors",[0xAAAAAA,0xEEEEEE]);
+        _progressBar.setStyle("borderColor",0xFFFFFF);
         _progressBar.source = _loader;
         _progressBar.conversion = 1024;
         _progressBar.label = "Loading... %3%% (%1/%2 kb)";
