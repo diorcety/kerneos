@@ -106,10 +106,6 @@ public class LineNumberedTextArea extends TextArea
         _lineNumberField.autoSize = "left";
         _lineNumberField.type = TextFieldType.DYNAMIC;
         
-        // Format its style
-        // FIXME does not work
-        _lineNumberField.defaultTextFormat = defaultLineNumbersFormat;
-        
         // Add it to the stage
         addChild(DisplayObject(_lineNumberField));
         
