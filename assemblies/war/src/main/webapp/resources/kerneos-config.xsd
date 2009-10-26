@@ -82,9 +82,10 @@
     <xs:element name="modules">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="k:swf-module" maxOccurs="unbounded" minOccurs="0" />
-                <xs:element ref="k:iframe-module" maxOccurs="unbounded" minOccurs="0" />
-                <xs:element ref="k:link" maxOccurs="unbounded" minOccurs="0" />
+              <xs:element ref="k:folder" maxOccurs="unbounded" minOccurs="0" />
+              <xs:element ref="k:swf-module" maxOccurs="unbounded" minOccurs="0" />
+              <xs:element ref="k:iframe-module" maxOccurs="unbounded" minOccurs="0" />
+              <xs:element ref="k:link" maxOccurs="unbounded" minOccurs="0" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
