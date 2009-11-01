@@ -30,8 +30,8 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-// import org.ow2.jasmine.monitoring.eos.common.controls.ServerSideException;
-// import org.ow2.jasmine.monitoring.eos.common.events.ServerSideExceptionEvent;
+// import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
+// import org.ow2.jasmine.kerneos.common.view.ServerSideException;
 import business.*;
 import event.ModuleEvent;
 import model.ModuleModelLocator;
@@ -39,7 +39,7 @@ import model.ModuleModelLocator;
 /**
   * The command class from the cairngorm model.
   */
-[Event(name="serverSideException", type="org.ow2.jasmine.monitoring.eos.common.events.ServerSideExceptionEvent")]
+[Event(name="serverSideException", type="org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent")]
 public class ModuleCommand implements ICommand, IResponder
 {
     /**
@@ -47,10 +47,10 @@ public class ModuleCommand implements ICommand, IResponder
      */
     public function execute(event:CairngormEvent):void
     {
-           ////////////////////////////////////////////////
-        //                                             //
-        //             Handle the execution              //
-        //                                                //
+        ////////////////////////////////////////////////
+        //                                            //
+        //             Handle the execution           //
+        //                                            //
         ////////////////////////////////////////////////
         
         /*
@@ -70,9 +70,9 @@ public class ModuleCommand implements ICommand, IResponder
     public function result(data:Object):void
     {
         ////////////////////////////////////////////////
-        //                                             //
-        //             Handle the result                //
-        //                                                //
+        //                                            //
+        //             Handle the result              //
+        //                                            //
         ////////////////////////////////////////////////
         
         /*
@@ -92,8 +92,8 @@ public class ModuleCommand implements ICommand, IResponder
     
         ////////////////////////////////////////
         //                                    //
-        //             Handle fault                //
-        //                                      //
+        //             Handle fault           //
+        //                                    //
         ////////////////////////////////////////
         
         /*

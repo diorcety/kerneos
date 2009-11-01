@@ -28,10 +28,10 @@ import org.ow2.jasmine.kerneos.common.business.AbsDelegateResponder;
 
 public class ModuleDelegate extends AbsDelegateResponder implements IModuleDelegate
 {
-       ////////////////////////////////////////////////////////////////////
-    //                                                                   //
-    //             Function that does the requested operation              //
-    //                                                                      //
+    ////////////////////////////////////////////////////////////////////
+    //                                                                //
+    //             Function that does the requested operation         //
+    //                                                                //
     ////////////////////////////////////////////////////////////////////
     
     

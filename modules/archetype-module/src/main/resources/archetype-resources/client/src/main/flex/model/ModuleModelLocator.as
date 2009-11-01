@@ -34,8 +34,8 @@ public class ModuleModelLocator implements ModelLocator
 
     ////////////////////////////////////
     //                                //
-    //             Variables              //
-    //                                  //
+    //             Variables          //
+    //                                //
     ////////////////////////////////////
 
   /**
@@ -58,8 +58,8 @@ public class ModuleModelLocator implements ModelLocator
     
     ////////////////////////////////////////////
     //                                        //
-    //             Variables Delegate              //
-    //                                          //
+    //             Variables Delegate         //
+    //                                        //
     ////////////////////////////////////////////
     /*
     Put here the delegate instances of your model.
@@ -68,9 +68,9 @@ public class ModuleModelLocator implements ModelLocator
     */
 
     ////////////////////////////////////////////////
-    //                                              //
-    //             Variables Of the model              //
-    //                                                //
+    //                                            //
+    //             Variables Of the model         //
+    //                                            //
     ////////////////////////////////////////////////
     
     /*
@@ -81,8 +81,8 @@ public class ModuleModelLocator implements ModelLocator
     
     ////////////////////////////////////
     //                                //
-    //             Functions              //
-    //                                  //
+    //             Functions          //
+    //                                //
     ////////////////////////////////////
 
     public function ModuleModelLocator()
@@ -107,10 +107,10 @@ public class ModuleModelLocator implements ModelLocator
         return ModuleModelLocator.model;
     }
 
-       ////////////////////////////////////
+    ////////////////////////////////////
     //                                //
-    //             Setters              //
-    //                                  //
+    //             Setters            //
+    //                                //
     ////////////////////////////////////
 
     /*
@@ -123,8 +123,8 @@ public class ModuleModelLocator implements ModelLocator
 
     ////////////////////////////////////
     //                                //
-    //             Getters              //
-    //                                  //
+    //             Getters            //
+    //                                //
     ////////////////////////////////////
     
     /*
@@ -137,9 +137,9 @@ public class ModuleModelLocator implements ModelLocator
 
 
     ////////////////////////////////////////////
-    //                                         //
-    //            Delegate Getters              //
-    //                                            //
+    //                                        //
+    //            Delegate Getters            //
+    //                                        //
     ////////////////////////////////////////////
 
     /*

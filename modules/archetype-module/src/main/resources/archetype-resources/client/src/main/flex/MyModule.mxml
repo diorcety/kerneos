@@ -42,18 +42,18 @@
             public function closeModule() : void
             {
                 ////////////////////////////////////////////////////////////////
-                //                                                              //
-                //             Action to do when the module is closed              //
-                //                                                                //
+                //                                                            //
+                //             Action to do when the module is closed         //
+                //                                                            //
                 ////////////////////////////////////////////////////////////////
             }
             
             public function canBeClosedWithoutPrompt() : Boolean {
             
                 ////////////////////////////////////////////////////////////////////////////////////////////////
-                //                                                                                              //
-                //             return whether or not a prompt should be shown when closing the module              //
-                //                                                                                                //
+                //                                                                                            //
+                //             return whether or not a prompt should be shown when closing the module         //
+                //                                                                                            //
                 ////////////////////////////////////////////////////////////////////////////////////////////////
             
                 return true;
