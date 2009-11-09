@@ -31,10 +31,17 @@
 -->
 <mx:HBox xmlns:mx = "http://www.adobe.com/2006/mxml"
          xmlns:commonControls = "org.ow2.jasmine.kerneos.common.controls.*">
+         
+    <mx:Script>
+    	<![CDATA[
+    		import mx.resources.ResourceManager;
+    		import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
+    	]]>
+    </mx:Script>
 
     <commonControls:KerneosProgressBar id = "iFrameProgressBar"
                                        indeterminate = "true"
-                                       label = "Loading..."
+                                       label = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.iframe.loading-bar.label')}"
                                        trackHeight = "20"
                                        color = "#EFEFEF"
                                        borderColor = "#EFEFEF"

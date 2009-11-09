@@ -54,6 +54,11 @@
 
         ]]>
     </mx:Script>
+    
+    <!-- The locales resource bundles -->
+    <mx:Metadata>
+        [ResourceBundle("kerneosLocales")]
+    </mx:Metadata>
 
     <!-- The business layer -->
     <business:Services id="services" />

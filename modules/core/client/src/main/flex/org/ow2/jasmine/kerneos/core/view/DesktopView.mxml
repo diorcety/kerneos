@@ -40,6 +40,8 @@
 
     <mx:Script>
         <![CDATA[
+        	import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
+        	import mx.resources.ResourceManager;
             import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
             
             import mx.controls.Alert;
@@ -241,7 +243,7 @@
                         if (prompt)
                         {
                             // Show an alert box
-                            var closeAlert : Alert = Alert.show("Are you sure you want to exit this module ? \n" + "All unsaved changes might be lost.", "Exit " + window.module.name, 3, null, confirmCloseWindow, null, 4);
+                            var closeAlert : Alert = Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.windows.closeconfirmdialog.body'), ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.windows.closeconfirmdialog.title',[window.module.name]), 3, null, confirmCloseWindow, null, 4);
                         }
                         else
                         {
@@ -301,7 +303,7 @@
                 if (notificationsLogWindow == null)
                 {
                     notificationsLogWindow = new KerneosWindow();
-                    notificationsLogWindow.title = "Events log";
+                    notificationsLogWindow.title = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.windows.notification.title');
                     notificationsLogWindow.titleIcon = eventsIcon;
                     var notificationsLog : NotificationsLog = new NotificationsLog();
                     notificationsLogWindow.addChild(new NotificationsLog());
@@ -448,7 +450,7 @@
                    height = "22"
                    icon = "{downIcon}"
                    click = "{minimizeAllWindows()}"
-                   toolTip = "Minimize all windows"
+                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.minimizeButton.tooltip')}"
                    styleName = "taskBarSmallButton"
                    visible = "{model.config.showMinimizeAllButton}"
                    includeInLayout = "{model.config.showMinimizeAllButton}" />
@@ -482,14 +484,14 @@
                                  iconFunction = "getLocaleIcon"
                                  change = "languageSelectorChangeHandler(event)"
                                  styleName = "localeComboBox"
-                                 toolTip = "Switch language" />
+                                 toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.languageSelector.tooltip')}" />
         <mx:VRule height = "70%"
                   alpha = "0.25" />
         <mx:Button width = "22"
                    height = "22"
                    icon = "{cascadeIcon}"
                    click = "windowContainer.windowManager.cascade()"
-                   toolTip = "Cascade windows"
+                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.cascadeButton.tooltip')}"
                    styleName = "taskBarSmallButton"
                    visible = "{model.config.showCascadeButton}"
                    includeInLayout = "{model.config.showCascadeButton}" />
@@ -497,7 +499,7 @@
                    height = "22"
                    icon = "{tileIcon}"
                    click = "windowContainer.windowManager.tile(true,3)"
-                   toolTip = "Tile windows"
+                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.tileButton.tooltip')}"
                    styleName = "taskBarSmallButton"
                    visible = "{model.config.showTileButton}"
                    includeInLayout = "{model.config.showTileButton}" />
@@ -505,7 +507,7 @@
                    height = "22"
                    icon = "{eventsIcon}"
                    click = "{showNotificationsLog()}"
-                   toolTip = "Show events log"
+                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.notificationsLogButton.tooltip')}"
                    styleName = "taskBarSmallButton"
                    visible = "{model.config.enableNotificationsLog}"
                    includeInLayout = "{model.config.enableNotificationsLog}" />
@@ -513,8 +515,7 @@
                    height = "22"
                    icon = "{logoutIcon}"
                    click = "{KerneosLifeCycleManager.logout()}"
-                   toolTip = "Logout"
+                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.logoutButton.tooltip')}"
                    styleName = "taskBarSmallButton" />
     </mx:HBox>
-
 </mx:VBox>

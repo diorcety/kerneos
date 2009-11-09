@@ -32,6 +32,9 @@ import mx.controls.Button;
 import mx.controls.VRule;
 import mx.core.UIComponent;
 import mx.events.ToolTipEvent;
+import mx.resources.ResourceManager;
+
+import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
 
 
 /**
@@ -85,7 +88,7 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
             previousPageButton = new Button();
             previousPageButton.buttonMode = true;
             previousPageButton.setStyle("styleName", "iFrameWindowPreviousPageButton");
-            previousPageButton.toolTip = "Previous page";
+            previousPageButton.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.iframe.previousPageButton.tooltip');
             addChild(previousPageButton);
         }
         
@@ -95,7 +98,7 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
             nextPageButton = new Button();
             nextPageButton.buttonMode = true;
             nextPageButton.setStyle("styleName", "iFrameWindowNextPageButton");
-            nextPageButton.toolTip = "Next page";
+            nextPageButton.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.iframe.nextPageButton.tooltip');
             addChild(nextPageButton);
         }
         
@@ -105,7 +108,7 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
             navigateExternallyButton = new Button();
             navigateExternallyButton.buttonMode = true;
             navigateExternallyButton.setStyle("styleName", "iFrameWindowNavigateExternallyButton");
-            navigateExternallyButton.toolTip = "Open in the web browser";
+            navigateExternallyButton.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.iframe.navigateExternallyButton.tooltip');
             addChild(navigateExternallyButton);
         }
         

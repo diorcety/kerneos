@@ -45,12 +45,14 @@
     import flash.system.Capabilities;
     
     import mx.controls.Alert;
+    import mx.resources.ResourceManager;
     import mx.collections.ArrayCollection;
     
     import com.adobe.cairngorm.model.ModelLocator;
     
     import org.ow2.jasmine.kerneos.core.vo.KerneosNotification;
     import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
+    import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
     
     
     // =========================================================================
@@ -100,9 +102,8 @@
         System.setClipboard(exportListToText());
         
         // Display a message
-        Alert.show('The events log has been formatted as text and is ready to ' + 
-                   'be pasted in any text file.',
-                   'Copied to clipboard',
+        Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.export.ready-dialog.body'),
+                   ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.export.ready-dialog.title'),
                    4,
                    null,
                    null,
@@ -145,9 +146,9 @@
         var res : String = '================================================================================\n' +
                            KerneosModelLocator.getInstance().config.applicationProject + ' ' +
                            KerneosModelLocator.getInstance().config.applicationName +
-                           ', generated on ' + new Date().toUTCString() + '\n' +
-                           'Running on Flash player ' + Capabilities.version + ((Capabilities.isDebugger)?' debug':' ') +
-                           ' (memory used: ' + System.totalMemory/1024 + ' Ko)\n' +
+                           ', ' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.export.header.date',[new Date().toUTCString()]) + '\n' +
+                           ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.export.header.flash-player-version',[Capabilities.version + ((Capabilities.isDebugger)?' debug':' ')]) +
+                           ' (' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.export.header.flash-player-memory-used',[(System.totalMemory/1024).toString()]) + ')\n' +
                            '================================================================================\n';
         for each (var notif : KerneosNotification in KerneosModelLocator.getInstance().notifications) {
             res += notif.toString() + "\n";
@@ -188,19 +189,19 @@
         variableRowHeight="true">
         
         <mx:columns>
-            <mx:DataGridColumn headerText="Module"
+            <mx:DataGridColumn headerText="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.table.headers.module')}"
                                dataField="module"
                                width="150"
                                itemRenderer="org.ow2.jasmine.kerneos.core.view.notification.NotificationsLogModuleRenderer"/>
-            <mx:DataGridColumn headerText="Date"
+            <mx:DataGridColumn headerText="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.table.headers.date')}"
                                dataField="date"
                                width="120"
                                itemRenderer="org.ow2.jasmine.kerneos.core.view.notification.NotificationsLogDateRenderer"/>
-            <mx:DataGridColumn headerText="Level"
+            <mx:DataGridColumn headerText="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.table.headers.level')}"
                                dataField="level"
                                itemRenderer="org.ow2.jasmine.kerneos.core.view.notification.NotificationsLogLevelRenderer"
                                width="120"/>
-            <mx:DataGridColumn headerText="Message"
+            <mx:DataGridColumn headerText="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.table.headers.message')}"
                                dataField="message"
                                wordWrap="true"/>
         </mx:columns>
@@ -216,21 +217,19 @@
              paddingLeft="4"
              paddingRight="4"
              verticalAlign="middle">
-        <mx:Button label="clear"
+        <mx:Button label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.clearButton.label')}"
                    click="{clearList()}"
                    icon="{clearIcon}"/>
-        <mx:Button label="Copy to clipboard"
+        <mx:Button label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.copyToClipboardButton.label')}"
                    click="{copyToClipboard()}"
                    icon="{copyIcon}"/>
         <mx:CheckBox id="showDebugCheckBox"
                      change="handleShowDebugCheckboxChange(event)"
                      selected="false"/>
-        <mx:Text text="Show debug messages"
+        <mx:Text text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.notifications.showDebugMessagesButton.label')}"
                  selectable="false"
                  fontWeight="bold"/>
         <mx:Spacer width="100%"/>
-        <mx:Text id="playerInfo"
-                 render="{playerInfo.text = 'Flash player ' + Capabilities.version + ((Capabilities.isDebugger)?' debug':' ') + ' (memory used: ' + System.totalMemory/1024 + ' Ko)';}"/>
     </mx:HBox>
     
 </mx:VBox>

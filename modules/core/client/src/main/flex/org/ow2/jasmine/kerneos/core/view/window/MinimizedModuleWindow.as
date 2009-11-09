@@ -38,6 +38,9 @@ import mx.effects.Glow;
 import mx.effects.Sequence;
 import mx.events.ToolTipEvent;
 import mx.graphics.ImageSnapshot;
+import mx.resources.ResourceManager;
+
+import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
 
 
 /**
@@ -89,7 +92,7 @@ public class MinimizedModuleWindow extends Button
         // Assign variables
         this._moduleWindow = window;
         this.label = window.module.name;
-        this.toolTip = "Click to bring " + window.module.name + " window to front.\nDouble click to maximize it.";
+        this.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.taskbar.label',[window.module.name]);
         this.setStyle("icon", window.module.getSmallIconClass(this));
         this.doubleClickEnabled = true;
         

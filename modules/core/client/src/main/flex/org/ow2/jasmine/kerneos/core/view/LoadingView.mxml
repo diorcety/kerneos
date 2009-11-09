@@ -42,6 +42,8 @@
 
     <mx:Script>
         <![CDATA[
+        	import mx.resources.ResourceManager;
+        	import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
             import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
             
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -65,19 +67,19 @@
             private function initializeView(e : Event = null) : void
             {
                 // Update the displayed label
-                progressBar.label = "Setting up the communication with the server";
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.setup-server-communication');
                 
                 // Setup the AMF channel and Kerneos services
                 KerneosLifeCycleManager.setupKerneosServices();
                 
                 // Update the displayed label
-                progressBar.label = "Loading the saved settings";
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.loading-saved-settings');
                 
                 // Load the user's shared object
                 SharedObjectManager.load();
                 
                 // Update the displayed label
-                progressBar.label = "Loading the application configuration";
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.loading-application-configuration');
                 
                 // Load the Kerneos configuration
                 KerneosLifeCycleManager.loadKerneosConfig();
@@ -94,7 +96,7 @@
                 {
                     
                     // Update the displayed label
-                    progressBar.label = "Setup up modules and icon cache";
+                    progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.setup-modules-icon-cache');
                     
                     // Load the application logo if one
                     if (conf.applicationLogo != null)
@@ -106,7 +108,7 @@
                     ModulesLifeCycleManager.setupModulesServicesAndIcons();
                     
                     // Update the displayed label
-                    progressBar.label = "Ready";
+                    progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.ready');
                     
                     // Switch state
                     KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;

@@ -31,7 +31,9 @@ import flexlib.mdi.containers.MDIWindow;
 import flexlib.mdi.events.MDIWindowEvent;
 
 import mx.events.FlexEvent;
+import mx.resources.ResourceManager;
 
+import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
 import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
 
 
@@ -96,9 +98,9 @@ public class KerneosWindow extends MDIWindow
         super.createChildren();
         
         // Setup the controls
-        windowControls.minimizeBtn.toolTip = "Minimize";
-        windowControls.maximizeRestoreBtn.toolTip = "Maximize/Restore";
-        windowControls.closeBtn.toolTip = "Close";
+        windowControls.minimizeBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.minimizeButton.tooltip');
+        windowControls.maximizeRestoreBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.maximizeRestoreButton.tooltip');
+        windowControls.closeBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.closeButton.tooltip');
     }
     
 

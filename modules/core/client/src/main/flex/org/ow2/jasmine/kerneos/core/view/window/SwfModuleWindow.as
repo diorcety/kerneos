@@ -29,8 +29,10 @@ import flash.events.ProgressEvent;
 import mx.controls.Alert;
 import mx.events.ModuleEvent;
 import mx.modules.ModuleLoader;
+import mx.resources.ResourceManager;
 
 import org.ow2.jasmine.kerneos.common.controls.KerneosProgressBar;
+import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
     
 
@@ -95,7 +97,7 @@ public class SwfModuleWindow extends ModuleWindow
         _progressBar.setStyle("borderColor",0xFFFFFF);
         _progressBar.source = _loader;
         _progressBar.conversion = 1024;
-        _progressBar.label = "Loading... %3%% (%1/%2 kb)";
+        _progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-bar.label') + " %3%% (%1/%2 kb)";
         addChild(_progressBar);
         
         // Start loading
@@ -137,7 +139,7 @@ public class SwfModuleWindow extends ModuleWindow
     */
     private function onLoaderError(event:ModuleEvent):void
     {
-        Alert.show(event.errorText + '\nTry reopening the module.','Error loading ' + module.name);
+        Alert.show(event.errorText + '\n' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-failed-dialog.body'),ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-failed-dialog.title',[module.name]));
     }
     
 }
