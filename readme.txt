@@ -60,7 +60,7 @@
           just follow those steps :
               - create the war structure by executing the following command line
 
-                     mvn archetype:create \
+                     mvn archetype:generate \
                          -DarchetypeGroupId=org.ow2.jasmine.kerneos \
                          -DarchetypeArtifactId=kerneos-war-archetype \
                          -DarchetypeVersion=1.3.1-SNAPSHOT \
@@ -70,7 +70,7 @@
 
             - create a kerneos module structure with a similar command line
 
-                    mvn archetype:create \
+                    mvn archetype:generate \
                          -DarchetypeGroupId=org.ow2.jasmine.kerneos \
                          -DarchetypeArtifactId=kerneos-module-archetype \
                          -DarchetypeVersion=1.3.1-SNAPSHOT \
