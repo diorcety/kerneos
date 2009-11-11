@@ -31,8 +31,9 @@ import flash.events.MouseEvent;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-import flexlib.mdi.events.MDIWindowEvent;
+import mx.collections.ArrayCollection;
 
+import org.ow2.jasmine.kerneos.common.util.KerneosLogger;
 import org.ow2.jasmine.kerneos.core.vo.IFrameModuleVO;
 
 
@@ -50,9 +51,20 @@ public class IFrameModuleWindow extends ModuleWindow
     // =========================================================================
     
     /**
-     * The hosted IFrame
+     * The hosted IFrame.
      */
-    private var _frame : IFrame;
+    protected var _frame : IFrame;
+    
+    /**
+     * True when the frame content has finished loading.
+     */
+    protected var _frameLoaded : Boolean = false;
+    
+    /**
+     * The registry of the windows that currently overlap this window.
+     */
+    [ArrayElementType('org.ow2.jasmine.kerneos.core.view.window.KerneosWindow')]
+    protected var _overlappingWindows : ArrayCollection = new ArrayCollection();
     
     
     
@@ -69,18 +81,13 @@ public class IFrameModuleWindow extends ModuleWindow
         super(module);
         
         // Assign properties
-        _frame = frame;
+        this._frame = frame;
         
         // Special controls bar for the IFrame windows...
         this.setStyle("windowControlsClass", IFrameModuleWindowControlsContainer);
         
-        // Listen to window events
-        this.addEventListener(MDIWindowEvent.DRAG_START, hideIFrame);
-        this.addEventListener(MDIWindowEvent.DRAG_END, showIFrame);
-        this.addEventListener(MDIWindowEvent.FOCUS_START, showIFrame);
-        this.addEventListener(MDIWindowEvent.FOCUS_END, hideIFrame);
-        this.addEventListener(MDIWindowEvent.RESIZE_START, hideIFrame);
-        this.addEventListener(MDIWindowEvent.RESIZE_END, showIFrame);
+        // Listen to the "frameLoad" event
+        this._frame.addEventListener("frameLoad", onFrameLoaded);
     }
     
     
@@ -99,6 +106,7 @@ public class IFrameModuleWindow extends ModuleWindow
         _frame.percentHeight = 100;
         _frame.percentWidth = 100;
         _frame.overlayDetection = true;
+        _frame.debug = true;
         addChild(_frame);
         
         // Setup the controls
@@ -110,9 +118,10 @@ public class IFrameModuleWindow extends ModuleWindow
     /**
      * Setup which controls should be displayed.
      */
-    protected function setupControls():void
+    protected function setupControls() : void
     {
         var showSeparator : Boolean = false;
+        
         if ((module as IFrameModuleVO).showHistoryNavigationButtons)
         {
             (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.addEventListener(MouseEvent.CLICK, historyBack);
@@ -121,31 +130,28 @@ public class IFrameModuleWindow extends ModuleWindow
         }
         else
         {
-            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.visible =
-            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.includeInLayout = false;
-            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.visible =
-            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.includeInLayout = false;
+            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.visible = (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.includeInLayout = false;
+            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.visible = (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.includeInLayout = false;
         }
         
         if ((module as IFrameModuleVO).showOpenInBrowserButton)
-        {        
+        {
             (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.addEventListener(MouseEvent.CLICK, navigateExternally);
             showSeparator = true;
         }
         else
         {
-            (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.visible =
-            (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.includeInLayout = false;
+            (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.visible = (windowControls as IFrameModuleWindowControlsContainer).navigateExternallyButton.includeInLayout = false;
         }
         
         if (!showSeparator)
         {
-            (windowControls as IFrameModuleWindowControlsContainer).separator.visible =
-            (windowControls as IFrameModuleWindowControlsContainer).separator.includeInLayout = false;
+            (windowControls as IFrameModuleWindowControlsContainer).separator.visible = (windowControls as IFrameModuleWindowControlsContainer).separator.includeInLayout = false;
         }
     }
-
-
+    
+    
+    
     // =========================================================================
     // Getter & setters
     // =========================================================================
@@ -179,7 +185,7 @@ public class IFrameModuleWindow extends ModuleWindow
      */
     public function removeIFrame(e : Event = null) : void
     {
-        _frame.removeIFrame();
+        iFrame.removeIFrame();
     }
     
     
@@ -189,7 +195,10 @@ public class IFrameModuleWindow extends ModuleWindow
      */
     public function hideIFrame(e : Event = null) : void
     {
-        this.iFrame.hidden = true;
+        if (_frameLoaded && !iFrame.hidden)
+        {
+            iFrame.hidden = true;
+        }
     }
     
     
@@ -199,10 +208,12 @@ public class IFrameModuleWindow extends ModuleWindow
      */
     public function showIFrame(e : Event = null) : void
     {
-        if (!minimized)
+        if (!minimized && _overlappingWindows.length == 0)
         {
-            this.iFrame.hidden = false;
-            this.iFrame.visible = true;
+            if (iFrame.hidden)
+            {
+                iFrame.hidden = false;
+            }
         }
     }
     
@@ -210,7 +221,7 @@ public class IFrameModuleWindow extends ModuleWindow
     
     /**
      * Open the module URL in the browser.
-     * 
+     *
      * Opens in a new tab, excepted for Internet Explorer where it is opened in a new window...
      */
     public function navigateExternally(event : Event = null) : void
@@ -221,9 +232,9 @@ public class IFrameModuleWindow extends ModuleWindow
     
     
     /**
-    * Load the IFrame's last page in the navigation history.
-    */
-    public function historyBack(event : Event = null):void
+     * Load the IFrame's last page in the navigation history.
+     */
+    public function historyBack(event : Event = null) : void
     {
         _frame.historyBack();
     }
@@ -231,16 +242,17 @@ public class IFrameModuleWindow extends ModuleWindow
     
     
     /**
-    * Load the IFrame's next page in the navigation history.
-    */
-    public function historyForward(event : Event = null):void
+     * Load the IFrame's next page in the navigation history.
+     */
+    public function historyForward(event : Event = null) : void
     {
         _frame.historyForward();
     }
     
     
+    
     // =========================================================================
-    // Window operations
+    // Window operations & events
     // =========================================================================
     
     /**
@@ -267,6 +279,149 @@ public class IFrameModuleWindow extends ModuleWindow
         
         // Call super class method
         super.unMinimize(event);
+    }
+    
+    
+    
+    /**
+     * When the window gets the focus.
+     */
+    override protected function onFocusStart(e : Event = null) : void
+    {
+        // Call super class method
+        super.onFocusStart(e);
+        
+        // Reset the overlapping window registry since we heve the focus
+        clearOverlappingWindowsRegistry();
+        
+        // Try to show the iframe
+        showIFrame();
+    }
+    
+    
+    
+    /**
+     * When the window starts being resized.
+     */
+    override protected function onResizeStart(e : Event = null) : void
+    {
+        // Call super class method
+        super.onResizeStart(e);
+        
+        // Hide the IFrame
+        hideIFrame();
+    }
+    
+    
+    
+    /**
+     * When the window stops being resized.
+     */
+    override protected function onResizeEnd(e : Event = null) : void
+    {
+        // Call super class method
+        super.onResizeEnd(e);
+        
+        // Try to show the iframe
+        showIFrame();
+    }
+    
+    
+    
+    /**
+     * When the window starts being dragged.
+     */
+    override protected function onDragStart(e : Event = null) : void
+    {
+        // Call super class method
+        super.onDragStart(e);
+        
+        // Hide the IFrame
+        hideIFrame();
+    }
+    
+    
+    
+    /**
+     * When the window stops being dragged.
+     */
+    override protected function onDragEnd(e : Event = null) : void
+    {
+        // Call super class method
+        super.onDragEnd(e);
+        
+        // Try to show the iframe
+        showIFrame();
+    }
+    
+    
+    
+    /**
+     * When the frame content has finished loading.
+     */
+    protected function onFrameLoaded(e : Event = null) : void
+    {
+        // Mark it as loaded
+        _frameLoaded = true;
+        
+        // FIXME Ugly... Prevent the iframe component from directly being visible, and display
+        // it on our own criterias.
+        hideIFrame();
+        showIFrame();
+    }
+    
+    
+    
+    // =========================================================================
+    // Overlapping system
+    // =========================================================================
+    
+    /**
+     * Allow another window to declare that it overlaps this one.
+     */
+    public function declareOverlapping(window : KerneosWindow) : void
+    {
+        // If this is a new overlapping window
+        if (_overlappingWindows.getItemIndex(window) < 0)
+        {
+            
+            // Hide the iFrame
+            hideIFrame();
+            
+            // Remember the window
+            _overlappingWindows.addItem(window);
+        }
+    }
+    
+    
+    
+    /**
+     * Allow another window to declare that it does not overlap this one.
+     */
+    public function declareNotOverlapping(window : KerneosWindow) : void
+    {
+        // If the window was overlapping us
+        var overlappingWindowIndex : int = _overlappingWindows.getItemIndex(window);
+        
+        if (overlappingWindowIndex >= 0)
+        {
+            
+            // Remove it from the register
+            _overlappingWindows.removeItemAt(overlappingWindowIndex);
+            
+            // Try to show the iframe
+            showIFrame();
+        }
+    }
+    
+    
+    
+    /**
+     * Reset the registry of the overlapping windows.
+     */
+    protected function clearOverlappingWindowsRegistry(e : Event = null) : void
+    {
+        _overlappingWindows = new ArrayCollection();
     }
 
 }

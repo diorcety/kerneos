@@ -30,6 +30,7 @@ import flexlib.mdi.containers.MDICanvas;
 import flexlib.mdi.containers.MDIWindow;
 import flexlib.mdi.events.MDIWindowEvent;
 
+import mx.effects.Fade;
 import mx.events.FlexEvent;
 import mx.resources.ResourceManager;
 
@@ -45,6 +46,10 @@ import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
 [Bindable]
 public class KerneosWindow extends MDIWindow
 {
+    // =========================================================================
+    // Properties
+    // =========================================================================
+    
     /**
      * New windows size and placement parameters
      */
@@ -64,6 +69,16 @@ public class KerneosWindow extends MDIWindow
     
     public static var MINIMUM_ACCEPTED_WINDOW_HEIGHT : int = 100;
     
+    public static var WINDOW_MOVE_COLLISION_MARGIN : int = 50;
+    
+    // Effects
+    
+    /**
+     * The effect shown when displaying the window.
+     */
+    public var showEffect : Fade;
+    
+    
     
     // =========================================================================
     // Constructor & initialization
@@ -77,14 +92,31 @@ public class KerneosWindow extends MDIWindow
         // Call super class constructor
         super();
         
-        // Listen to window events
+        // Event listeners are declared here, sub-classes must not redeclare them and override
+        // the event handlers instead.
         this.addEventListener(MDIWindowEvent.MAXIMIZE, onMaximize);
         this.addEventListener(MDIWindowEvent.MINIMIZE, onMinimize);
-        this.addEventListener(MDIWindowEvent.RESTORE, onUnMaximize);
-        this.addEventListener(MDIWindowEvent.CLOSE, saveWindowSetup);
+        this.addEventListener(MDIWindowEvent.RESTORE, onRestore);
+        this.addEventListener(MDIWindowEvent.CLOSE, onClose);
+        this.addEventListener(MDIWindowEvent.FOCUS_START, onFocusStart);
+        this.addEventListener(MDIWindowEvent.FOCUS_END, onFocusEnd);
+        this.addEventListener(MDIWindowEvent.RESIZE_START, onResizeStart);
+        this.addEventListener(MDIWindowEvent.RESIZE, onResize);
+        this.addEventListener(MDIWindowEvent.RESIZE_END, onResizeEnd);
+        this.addEventListener(MDIWindowEvent.DRAG_START, onDragStart);
+        this.addEventListener(MDIWindowEvent.DRAG, onDrag);
+        this.addEventListener(MDIWindowEvent.DRAG_END, onDragEnd);
         
         // On creation complete, setup the window size and position
         this.addEventListener(FlexEvent.CREATION_COMPLETE, setupWindowSizeAndPosition);
+        
+        // Setup the effects
+        showEffect = new Fade();
+        showEffect.alphaFrom = 0;
+        showEffect.alphaTo = 1;
+        showEffect.duration = 500;
+        this.setStyle("showEffect", showEffect);
+        this.setStyle("addedEffect", showEffect);
     }
     
     
@@ -98,12 +130,13 @@ public class KerneosWindow extends MDIWindow
         super.createChildren();
         
         // Setup the controls
-        windowControls.minimizeBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.minimizeButton.tooltip');
-        windowControls.maximizeRestoreBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.maximizeRestoreButton.tooltip');
-        windowControls.closeBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.closeButton.tooltip');
+        windowControls.minimizeBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.windows.minimizeButton.tooltip');
+        windowControls.maximizeRestoreBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.windows.maximizeRestoreButton.tooltip');
+        windowControls.closeBtn.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.windows.closeButton.tooltip');
     }
     
-
+    
+    
     // =========================================================================
     // Window operations
     // =========================================================================
@@ -157,7 +190,7 @@ public class KerneosWindow extends MDIWindow
     // =========================================================================
     
     /**
-     * When the window is maximized
+     * When the window is maximized.
      */
     protected function onMaximize(e : Event = null) : void
     {
@@ -173,9 +206,9 @@ public class KerneosWindow extends MDIWindow
     
     
     /**
-     * When the window is maximized
+     * When the window is restored.
      */
-    protected function onUnMaximize(e : Event = null) : void
+    protected function onRestore(e : Event = null) : void
     {
         // Disable rounded corners
         this.setStyle("cornerRadius", 3);
@@ -185,7 +218,7 @@ public class KerneosWindow extends MDIWindow
     
     
     /**
-     * When the window is maximized
+     * When the window is minimized.
      */
     protected function onMinimize(e : Event = null) : void
     {
@@ -193,6 +226,100 @@ public class KerneosWindow extends MDIWindow
         SharedObjectManager.setWindowSizeAndPosition(title, width, height, x, y);
         SharedObjectManager.setWindowIsMaximized(title, maximized);
     }
+    
+    
+    
+    /**
+     * When the window is closed.
+     */
+    protected function onClose(e : Event = null) : void
+    {
+        // Save the window layout for the next time it is opened.
+        saveWindowSetup();
+    }
+    
+    
+    
+    /**
+     * When the window gets the focus.
+     */
+    protected function onFocusStart(e : Event = null) : void
+    {
+        // Check collisions with iframes.
+        checkCollisions();
+    }
+    
+    
+    
+    /**
+     * When the window loses the focus.
+     */
+    protected function onFocusEnd(e : Event = null) : void
+    {
+    }
+    
+    
+    
+    /**
+     * When the window starts being resized.
+     */
+    protected function onResizeStart(e : Event = null) : void
+    {
+    }
+    
+    
+    
+    /**
+     * When the window is resized.
+     */
+    protected function onResize(e : Event = null) : void
+    {
+        // Check collisions with iframes, with a margin to avoid the mouse "falling" in one of them.
+        checkCollisions(WINDOW_MOVE_COLLISION_MARGIN);
+    }
+    
+    
+    
+    /**
+     * When the window stops being resized.
+     */
+    protected function onResizeEnd(e : Event = null) : void
+    {
+        // Check collisions with iframes.
+        checkCollisions();
+    }
+    
+    
+    
+    /**
+     * When the window starts being dragged.
+     */
+    protected function onDragStart(e : Event = null) : void
+    {
+    }
+    
+    
+    
+    /**
+     * When the window is being dragged.
+     */
+    protected function onDrag(e : Event = null) : void
+    {
+        // Check collisions with iframes, with a margin to avoid the mouse "falling" in one of them.
+        checkCollisions(WINDOW_MOVE_COLLISION_MARGIN);
+    }
+    
+    
+    
+    /**
+     * When the window stops being dragged.
+     */
+    protected function onDragEnd(e : Event = null) : void
+    {
+        // Check collisions with iframes.
+        checkCollisions();
+    }
+    
     
     
     // =========================================================================
@@ -217,13 +344,15 @@ public class KerneosWindow extends MDIWindow
         setupWindowMaximization();
     }
     
+    
+    
     /**
-    * Try to apply the user saved setting for positioning and sizing this window.
-    * 
-    * @return false
-    *           if no setting saved or not applicable anymore.
-    */
-    protected function setupUserWindowSizeAndPosition():Boolean
+     * Try to apply the user saved setting for positioning and sizing this window.
+     *
+     * @return false
+     *           if no setting saved or not applicable anymore.
+     */
+    protected function setupUserWindowSizeAndPosition() : Boolean
     {
         // Try to get the user saved preferences for this window,
         // and check if they are still applicable.
@@ -255,13 +384,15 @@ public class KerneosWindow extends MDIWindow
             
             return true;
         }
-        
+    
     }
     
+    
+    
     /**
-    * Apply the default algorithm for positioning and sizing the window.
-    */
-    protected function setupDefaultWindowSizeAndPosition():void
+     * Apply the default algorithm for positioning and sizing the window.
+     */
+    protected function setupDefaultWindowSizeAndPosition() : void
     {
         // Compute the default settings
         var xOffset : int = windowManager.windowList.length * WINDOW_DEFAULT_X_OFFSET;
@@ -293,5 +424,69 @@ public class KerneosWindow extends MDIWindow
         }
     }
     
+    
+    
+    // =========================================================================
+    // Collisions with IFrameWindows
+    // =========================================================================
+    
+    /**
+     * Calculate which IFrameWindows this one overlaps and notify them.
+     *
+     * @param margin the margin to apply when calculating the collisions
+     */
+    protected function checkCollisions(margin : Number = 0) : void
+    {
+        for each (var window : MDIWindow in windowManager.windowList)
+        {
+            if (window != this && window is IFrameModuleWindow)
+            {
+                var iFrameWindow : IFrameModuleWindow = window as IFrameModuleWindow;
+                
+                if (checkCollisionWithWindow(iFrameWindow, margin))
+                {
+                    iFrameWindow.declareOverlapping(this);
+                }
+                else
+                {
+                    iFrameWindow.declareNotOverlapping(this);
+                }
+            }
+        }
+    }
+    
+    
+    
+    /**
+     * Check if the current window overlaps the given window.
+     *
+     * @param margin the margin to apply when calculating the collisions
+     */
+    protected function checkCollisionWithWindow(window : IFrameModuleWindow, margin : Number = 0) : Boolean
+    {
+        // The windows overlap each other if they overlap on both X and Y axis.
+        var overlapX : Boolean = false;
+        var overlapY : Boolean = false;
+        
+        // Calcul for the X axis.
+        var myLeft : int = this.x;
+        var myRight : int = this.x + this.width;
+        var windowLeft : int = window.x - margin;
+        var windowRight : int = window.x + window.width + margin;
+        
+        overlapX = windowLeft >= myLeft && windowLeft <= myRight;
+        overlapX ||= windowLeft <= myLeft && windowRight >= myLeft;
+        
+        // Calcul for the Y axis.
+        var myTop : int = this.y;
+        var myBottom : int = this.y + this.height;
+        var windowTop : int = window.y - margin;
+        var windowBottom : int = window.y + window.height + margin;
+        
+        overlapY = windowTop >= myTop && windowTop <= myBottom;
+        overlapY ||= windowTop <= myTop && windowBottom >= myTop;
+        
+        return overlapX && overlapY;
+    }
 }
 }
