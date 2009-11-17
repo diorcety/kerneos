@@ -24,7 +24,6 @@ package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
-import mx.collections.ArrayCollection;
 import mx.core.UIComponent;
 
 import org.ow2.jasmine.kerneos.common.util.IconUtility;
@@ -35,7 +34,7 @@ import org.ow2.jasmine.kerneos.common.util.IconUtility;
  *
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Folder")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.Folder")]
 [Bindable]
 public class FolderVO extends ModuleWithWindowVO
                       implements IValueObject
@@ -52,14 +51,14 @@ public class FolderVO extends ModuleWithWindowVO
     */
     [Transient]
     [Embed(source="/../assets/folder16.png")]
-    public static var defaultFolderSmallIcon : Class;
+    public static const defaultFolderSmallIcon : Class;
     
     /**
     * Default folder big icon (64x64).
     */
     [Transient]
     [Embed(source="/../assets/folder64.png")]
-    public static var defaultFolderBigIcon : Class;
+    public static const defaultFolderBigIcon : Class;
     
     
     // Fields
@@ -67,9 +66,7 @@ public class FolderVO extends ModuleWithWindowVO
     /**
      * The modules.
      */
-    [ArrayElementType('org.ow2.jasmine.kerneos.core.vo.ModuleVO')]
-    public var modules : ArrayCollection;
-    
+    public var modules : ModulesVO;
     
     // =========================================================================
     // Public methods

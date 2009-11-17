@@ -40,6 +40,7 @@
 
     <mx:Script>
         <![CDATA[
+            import org.ow2.jasmine.kerneos.core.vo.PromptBeforeCloseVO;
         	import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
         	import mx.resources.ResourceManager;
             import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
@@ -214,11 +215,11 @@
                         // Resolve wether the user should be prompted before closing the window
                         var prompt : Boolean = true;
                         
-                        if (window.module.promptBeforeClose == ModuleWithWindowVO.NEVER_PROMPT_BEFORE_CLOSE)
+                        if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.NEVER))
                         {
                             prompt = false;
                         }
-                        else if (window.module.promptBeforeClose == ModuleWithWindowVO.ALWAYS_PROMPT_BEFORE_CLOSE)
+                        else if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.ALWAYS))
                         {
                             prompt = true;
                         }
@@ -429,7 +430,7 @@
                      x = "5"
                      y = "5"
                      direction = "vertical"
-                     dataProvider = "{model.config.modules}"
+                     dataProvider = "{model.config.modules.allModules}"
                      backgroundAlpha = "0.0"
                      borderStyle = "none"
                      useRollOver = "false"

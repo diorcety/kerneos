@@ -33,7 +33,7 @@ import com.adobe.cairngorm.vo.IValueObject;
  * @author Julien Nicoulaud
  * @see SWFModuleVO
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Service")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.Service")]
 [Bindable]
 public class ServiceVO implements IValueObject
 {

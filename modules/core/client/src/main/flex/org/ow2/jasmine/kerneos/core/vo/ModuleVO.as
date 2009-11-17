@@ -35,7 +35,7 @@ import org.ow2.jasmine.kerneos.common.util.IconUtility;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Module")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.Module")]
 [Bindable]
 public class ModuleVO implements IValueObject
 {

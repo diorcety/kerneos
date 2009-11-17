@@ -98,7 +98,7 @@ public class ModulesLifeCycleManager
     public static function setupModulesServicesAndIcons(e : Event = null) : void
     {
         // Setup the modules services and icons
-        setupModulesCollection(KerneosModelLocator.getInstance().config.modules);
+        setupModulesCollection(KerneosModelLocator.getInstance().config.modules.allModules);
     }
     
     
@@ -108,7 +108,7 @@ public class ModulesLifeCycleManager
      */
     public static function doLoadOnStartup(e : Event = null) : void
     {
-        doLoadOnStartupModules(KerneosModelLocator.getInstance().config.modules);
+        doLoadOnStartupModules(KerneosModelLocator.getInstance().config.modules.allModules);
     }
     
     
@@ -123,7 +123,7 @@ public class ModulesLifeCycleManager
         
         // Show a busy cursor
         desktop.cursorManager.setBusyCursor();
-        
+		
         // If this is a module with its own window
         if (module is ModuleWithWindowVO)
         {
@@ -317,9 +317,9 @@ public class ModulesLifeCycleManager
             }
             
             // Initialize each SWF module services
-            if (module is SWFModuleVO)
+            if (module is SWFModuleVO && ((module as SWFModuleVO).services != null))
             {
-                var services : ArrayCollection = (module as SWFModuleVO).services;
+                var services : ArrayCollection = (module as SWFModuleVO).services.service;
                 
                 for (var l : int = 0; l < services.length; l++)
                 {
@@ -330,9 +330,9 @@ public class ModulesLifeCycleManager
             }
             
             // Call the function recursively for folders
-            else if (module is FolderVO)
+            else if (module is FolderVO && ((module as FolderVO).modules != null) )
             {
-                setupModulesCollection((module as FolderVO).modules);
+                setupModulesCollection((module as FolderVO).modules.allModules);
             }
         }
         
@@ -359,7 +359,7 @@ public class ModulesLifeCycleManager
             // Call the function recursively for folders
             if (module is FolderVO)
             {
-                doLoadOnStartupModules((module as FolderVO).modules);
+                doLoadOnStartupModules((module as FolderVO).modules.allModules);
             }
             
             // If "load on startup", load it

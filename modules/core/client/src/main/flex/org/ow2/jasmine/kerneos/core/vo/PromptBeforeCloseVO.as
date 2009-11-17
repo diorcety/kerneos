@@ -20,39 +20,39 @@
  *
  * $Id$
  */
+
 package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
+import org.granite.util.Enum;
+
 
 /**
- * An IFrame deployed as a module in Kerneos.
+ * Describes all the differents way to close a window.
  *
  * @author Guillaume Renault
- * @author Julien Nicoulaud
+ * @see ModuleWithWindowVO
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.IframeModule")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.PromptBeforeClose")]
 [Bindable]
-public class IFrameModuleVO extends ModuleWithWindowVO implements IValueObject
+public class PromptBeforeCloseVO extends Enum implements IValueObject
 {
+    public static const DEFAULT : PromptBeforeCloseVO = new PromptBeforeCloseVO("DEFAULT", _);
+    public static const NEVER : PromptBeforeCloseVO = new PromptBeforeCloseVO("NEVER",_);
+    public static const ALWAYS : PromptBeforeCloseVO = new PromptBeforeCloseVO("ALWAYS",_);
+
+    function PromptBeforeCloseVO(value:String = null, restrictor:* = null) {
+        super((value || DEFAULT.name), restrictor);
+    }
     
-    // =========================================================================
-    // Properties
-    // =========================================================================
-    
-    /**
-     * The web page URL.
-     */
-    public var url : String = null;
-    
-    /**
-    * Show the "Open in browser" button.
-    */
-    public var showOpenInBrowserButton : Boolean = false;
-    
-    /**
-    * Show the history navigation buttons.
-    */
-    public var showHistoryNavigationButtons : Boolean = false;
+    override protected function getConstants():Array {
+        return constants;
+    }
+
+    public static function get constants():Array {
+        return [DEFAULT, NEVER, ALWAYS];
+    } 
+
 }
 }

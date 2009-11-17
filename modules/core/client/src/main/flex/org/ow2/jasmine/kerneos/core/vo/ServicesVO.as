@@ -18,36 +18,50 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * --------------------------------------------------------------------------
  * $Id$
- * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.service;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+package org.ow2.jasmine.kerneos.core.vo
+{
+import com.adobe.cairngorm.vo.IValueObject;
+
+import mx.collections.ArrayCollection;
 
 
 /**
- * A link shown as a module in Kerneos.
+ * Services.
  *
- * @author Julien Nicoulaud
+ * @author Guillaume Renault
+ * @see ServiceVO
  */
-@XmlRootElement(name = "link", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-public class Link extends Module {
-
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.Services")]
+[Bindable]
+public class ServicesVO implements IValueObject
+{
+    
     /**
-     * The web page URL.
+     * The services.
      */
-    @XmlElement(name = "url", namespace = KerneosConfig.KERNEOS_CONFIG_NAMESPACE)
-    public String url = null;
-
-
-    // Utils
-
-    @Override
-    public String toString() {
-        return "[Link] " + super.toString() + ", url: \"" + url + "\"";
+    [ArrayElementType('org.ow2.jasmine.kerneos.core.vo.ServiceVO')]
+    private var m_service : ArrayCollection;
+    
+    
+    
+    public function set service(p_service : ArrayCollection) : void
+    {
+        this.m_service = p_service;
+    }
+    
+    
+    
+    public function get service() : ArrayCollection
+    {
+        if (this.m_service == null)
+        {
+            this.m_service = new ArrayCollection();
+        }
+        return this.m_service;
     }
 
+}
 }

@@ -25,15 +25,13 @@ package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
-import mx.collections.ArrayCollection;
-
 
 /**
  * A data object that describes a configuration for Kerneos.
  *
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.KerneosConfig")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.KerneosConfig")]
 [Bindable]
 public class KerneosConfigVO implements IValueObject
 {
@@ -103,8 +101,7 @@ public class KerneosConfigVO implements IValueObject
     /**
      * The modules.
      */
-    [ArrayElementType('org.ow2.jasmine.kerneos.core.vo.ModuleVO')]
-    public var modules : ArrayCollection;
+    public var modules : ModulesVO;
 
 }
 }

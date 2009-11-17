@@ -32,6 +32,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.granite.messaging.service.annotations.RemoteDestination;
+import org.ow2.jasmine.kerneos.config.generated.KerneosConfig;
+import org.ow2.jasmine.kerneos.config.generated.ObjectFactory;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -94,17 +96,18 @@ public class KerneosConfigService implements Serializable {
             try {
 
                 if (jaxbContext == null) {
-                    jaxbContext = JAXBContext.newInstance(KerneosConfig.class, SWFModule.class, Service.class,
-                        IFrameModule.class, Link.class, Folder.class);
+                    jaxbContext = JAXBContext.newInstance(ObjectFactory.class.getPackage().getName());
                 }
 
                 // Create an unmarshaller
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
                 // Deserialize the configuration file
-                return (KerneosConfig) unmarshaller.unmarshal(resource);
+                KerneosConfig kerneosConfig = (KerneosConfig) unmarshaller.unmarshal(resource);
+                return kerneosConfig;
 
             } catch (Exception e) {
+            	e.printStackTrace();
                 throw e;
             } finally {
                 resource.close();

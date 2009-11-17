@@ -24,10 +24,6 @@ package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
-import mx.core.UIComponent;
-
-import org.ow2.jasmine.kerneos.common.util.IconUtility;
-
 
 /**
  * Describes the configuration of a Kerneos module with its own window.
@@ -35,7 +31,7 @@ import org.ow2.jasmine.kerneos.common.util.IconUtility;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.Module")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.ModuleWithWindow")]
 [Bindable]
 public class ModuleWithWindowVO extends ModuleVO
                                 implements IValueObject
@@ -82,10 +78,8 @@ public class ModuleWithWindowVO extends ModuleVO
     * {@see KerneosModule}, the method canBeCloseWithoutPrompt() is called. If not, the user is
     * prompted by default.
     */
-    public static const DEFAULT_PROMPT_BEFORE_CLOSE : String = "default";
-    public static const NEVER_PROMPT_BEFORE_CLOSE : String = "never";
-    public static const ALWAYS_PROMPT_BEFORE_CLOSE : String = "always";
-    public var promptBeforeClose : String = DEFAULT_PROMPT_BEFORE_CLOSE;
+
+    public var promptBeforeClose : PromptBeforeCloseVO = PromptBeforeCloseVO.DEFAULT;
     
 }
 }

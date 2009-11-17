@@ -24,8 +24,6 @@ package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
-import mx.collections.ArrayCollection;
-
 
 /**
  * A SWF module deployed in Kerneos.
@@ -33,7 +31,7 @@ import mx.collections.ArrayCollection;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.service.SWFModule")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.SwfModule")]
 [Bindable]
 public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
 {
@@ -50,6 +48,6 @@ public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
     /**
     * The module services.
     */
-    public var services : ArrayCollection = null;
+    public var services : ServicesVO = null;
 }
 }

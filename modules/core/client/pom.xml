@@ -95,6 +95,13 @@
       <version>${flex.version}</version>
       <type>pom</type>
     </dependency>
+    
+    <dependency>
+      <groupId>org.graniteds</groupId>
+      <artifactId>granite-swc</artifactId>
+      <version>${graniteds.version}</version>
+      <type>swc</type>
+    </dependency>
   </dependencies>
 
   <build>
