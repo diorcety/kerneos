@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="modules/core/server/src/main/java"/>
-	<classpathentry kind="src" path="modules/core/api/src/main/flex"/>
-	<classpathentry kind="src" path="modules/core/client/src/main/flex"/>
-	<classpathentry kind="src" path="modules/libs/common/client/src/main/flex"/>
-	<classpathentry excluding="**" kind="src" path="modules/libs/login/client/src/main/resources"/>
-	<classpathentry kind="src" path="modules/libs/login/server/src/main/java"/>
-	<classpathentry kind="src" path="modules/libs/login/client/src/main/flex"/>
+	<classpathentry excluding="**" kind="src" output="modules/archetype-module/target/classes" path="modules/archetype-module/src/main/resources"/>
+	<classpathentry excluding="**" kind="src" output="modules/archetype-war/target/classes" path="modules/archetype-war/src/main/resources"/>
+	<classpathentry kind="src" output="modules/libs/common/client/target/classes" path="modules/libs/common/client/src/main/flex"/>
+	<classpathentry kind="src" output="modules/libs/login/client/target/classes" path="modules/libs/login/client/src/main/flex"/>
+	<classpathentry excluding="**" kind="src" output="modules/libs/login/client/target/classes" path="modules/libs/login/client/src/main/resources"/>
+	<classpathentry kind="src" output="modules/libs/login/server/target/classes" path="modules/libs/login/server/src/main/java"/>
+	<classpathentry kind="src" output="modules/core/api/target/classes" path="modules/core/api/src/main/flex"/>
+	<classpathentry kind="src" output="modules/core/client/target/classes" path="modules/core/client/src/main/flex"/>
+	<classpathentry kind="src" output="modules/core/server/target/classes" path="modules/core/server/src/main/java"/>
+	<classpathentry kind="src" output="modules/core/server/target/classes" path="modules/core/server/target/generated-sources/xjc"/>
+	<classpathentry excluding="**" kind="src" output="modules/core/server/target/classes" path="modules/core/server/src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/guillaume/programmation/com.farata.dto2fx.annotations.jar"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
