@@ -16,13 +16,15 @@
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/login/client/src/main/resources"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/client/src/main/resources"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/server/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/module/server/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/api/src/main"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/module/server/src/main/java"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/api/src/main"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/api/src/main/flex"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/client/src/main/flex"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/chartszoom/src/main/flex"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/common/client/src/main/flex"/>
 <wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/libs/login/client/src/main/flex"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/server/target/generated-sources/xjc"/>
+<wb-resource deploy-path="/WEB-INF/classes" source-path="/modules/core/server/src/main/resources"/>
 <property name="java-output-path" value="target/classes"/>
         <property name="context-root" value="kerneos"/>
 </wb-module>
