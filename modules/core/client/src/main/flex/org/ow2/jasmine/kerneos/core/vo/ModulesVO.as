@@ -26,7 +26,6 @@ package org.ow2.jasmine.kerneos.core.vo
 import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
-import mx.controls.Alert;
 
 
 /**
@@ -112,37 +111,43 @@ public class ModulesVO implements IValueObject
     // Public methods
     // =========================================================================
 
+    [ArrayElementType('org.ow2.jasmine.kerneos.core.vo.ModuleVO')]
+    private var m_allModules : ArrayCollection = null;
+
     /**
     * Get all modules.
     */
     public function get allModules() : ArrayCollection {
-        var result : ArrayCollection = new ArrayCollection();
-        
-        if (this.m_folder != null) {
-            for each ( var _folder : ModuleVO in this.m_folder) {
-                result.addItem(_folder);
-            }    
+
+        if (this.m_allModules == null) {
+            
+            this.m_allModules = new ArrayCollection();
+            
+            if (this.m_folder != null) {
+                for each ( var _folder : ModuleVO in this.m_folder) {
+                    this.m_allModules.addItem(_folder);
+                }    
+            }
+            
+            if (this.m_link != null) {
+                for each ( var _link : ModuleVO in this.m_link) {
+                    this.m_allModules.addItem(_link);
+                }    
+            }
+            
+            if (this.m_iframeModule != null) {
+                for each ( var _iframeModule : ModuleVO in this.m_iframeModule) {
+                    this.m_allModules.addItem(_iframeModule);
+                }    
+            }
+            
+            if (this.m_swfModule != null) {
+                for each ( var _swfModule : ModuleVO in this.m_swfModule) {
+                    this.m_allModules.addItem(_swfModule);
+                }    
+            }
         }
-        
-        if (this.m_link != null) {
-            for each ( var _link : ModuleVO in this.m_link) {
-                result.addItem(_link);
-            }    
-        }
-        
-        if (this.m_iframeModule != null) {
-            for each ( var _iframeModule : ModuleVO in this.m_iframeModule) {
-                result.addItem(_iframeModule);
-            }    
-        }
-        
-        if (this.m_swfModule != null) {
-            for each ( var _swfModule : ModuleVO in this.m_swfModule) {
-                result.addItem(_swfModule);
-            }    
-        }
-        
-        return result;
+        return this.m_allModules;
     }
     
     public function set allModules(_allModules : ArrayCollection) : void {
