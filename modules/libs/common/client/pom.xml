@@ -77,7 +77,7 @@
 
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>${flexmojos.version}</version>
         <extensions>true</extensions>
 
         <configuration>

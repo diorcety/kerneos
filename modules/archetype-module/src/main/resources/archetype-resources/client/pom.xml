@@ -38,7 +38,7 @@
 
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}-client</artifactId>
-  
+
   <packaging>swf</packaging>
 
   <dependencies>
@@ -50,9 +50,9 @@
       <type>swc</type>
       <classifier>kerneos</classifier>
     </dependency>
-    
+
     <!-- Common classes form JASMINe-EoS -->
-    <!-- 
+    <!--
     <dependency>
       <groupId>org.ow2.jasmine.monitoring</groupId>
       <artifactId>jasmine-eos-common-client</artifactId>
@@ -60,7 +60,7 @@
       <type>swc</type>
     </dependency>
     -->
-    
+
     <dependency>
       <groupId>org.ow2.jasmine.kerneos</groupId>
       <artifactId>kerneos-common-client</artifactId>
@@ -108,7 +108,7 @@
         <plugin>
           <groupId>org.sonatype.flexmojos</groupId>
           <artifactId>flexmojos-maven-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>${flexmojos.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -135,7 +135,7 @@
 
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>${flexmojos.version}</version>
         <extensions>true</extensions>
 
 
