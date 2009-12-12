@@ -141,15 +141,6 @@
 
         </configuration>
 
-        <executions>
-            <execution>
-                  <phase>install</phase>
-                  <goals>
-                    <goal>asdoc</goal>
-                  </goals>
-            </execution>
-        </executions>
-
       </plugin>
     </plugins>
     <finalName>Kerneos</finalName>
