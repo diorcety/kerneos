@@ -1,183 +1,191 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version = "1.0" encoding = "utf-8"?>
 <!--
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - JASMINe
-  - Copyright (C) 2009 Bull S.A.S.
-  - Contact: jasmine@ow2.org
-  -
-  - This library is free software; you can redistribute it and/or
-  - modify it under the terms of the GNU Lesser General Public
-  - License as published by the Free Software Foundation; either
-  - version 2.1 of the License, or any later version.
-  -
-  - This library is distributed in the hope that it will be useful,
-  - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  - Lesser General Public License for more details.
-  -
-  - You should have received a copy of the GNU Lesser General Public
-  - License along with this library; if not, write to the Free Software
-  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
-  - USA
-  -
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id$
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - JASMINe
+     - Copyright (C) 2009 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<!---
-    A window that displays a ServerSideException
-    
-    @author Julien Nicoulaud
--->
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-                width="350"
-                height="150"
-                showCloseButton="true"
-                close="close();"
-                titleIcon="@Embed(source='/../assets/exception.png')"
-                title="{exception.name}"
-                borderAlpha="1.0"
-                backgroundAlpha="1.0"
-                borderColor="#CCCCCC"
-                backgroundColor="#CCCCCC">
-                
-                
-    <!--========================================================================
-    | SCRIPT
-    =========================================================================-->
-    
-    <mx:Script>
-    <![CDATA[
-       
-    import mx.managers.PopUpManager;
-    import mx.controls.Text;
-    import flash.events.Event;
-    
-    
-    // =====================================================================
-    // Variables
-    // =====================================================================
-    
-    /**
-    * The exception
-    */
-    [Bindable]
-    public var exception : ServerSideException;
-    
-    
-    // Assets
-    
-    /**
-    * Close icon (16 pixels)
-    */
-    [Embed(source='/../assets/close16.png')]
-    [Bindable]
-    public var closeIcon16:Class;
+<mx:TitleWindow xmlns:mx = "http://www.adobe.com/2006/mxml"
+                width = "350"
+                height = "150"
+                showCloseButton = "true"
+                close = "close();"
+                titleIcon = "@Embed(source='/../assets/exception.png')"
+                title = "{exception.name}"
+                borderAlpha = "1.0"
+                backgroundAlpha = "1.0"
+                borderColor = "#CCCCCC"
+                backgroundColor = "#CCCCCC">
 
-    /**
-    * Copy icon (16 pixels)
-    */
-    [Embed(source='/../assets/copy16.png')]
-    [Bindable]
-    public var copyIcon16:Class;
-    
-    /**
-    * Details icon (16 pixels)
-    */
-    [Embed(source='/../assets/details16.png')]
-    [Bindable]
-    public var detailsIcon16:Class;
-    
-    
-    // =====================================================================
-    // Public methods
-    // =====================================================================
-    
-    /**
-    * Close the window
-    */
-    public function close(e:Event=null):void
-    {
-        PopUpManager.removePopUp(this);
-    }
-    
-    /**
-    * Copy the content to the system clipboard
-    */
-    public function copyToClipboard(e:Event=null):void
-    {
-        System.setClipboard(exception.stackTrace);
-    }
-    
-    /**
-    * Show/hide details button handler
-    */
-    public function toggleDetails(e:Event=null):void
-    {
-        if (this.currentState == null) {
-            this.currentState = "detailedView";
-            detailsButton.label = "Hide details";
-        } else if (this.currentState == "detailedView") {
-            this.currentState = null;
-            detailsButton.label = "Show details";
-        }
-        PopUpManager.centerPopUp(this);
-    }
-    
-    ]]>
+    <mx:Metadata>
+        <![CDATA[
+        /**
+         * A window that displays a ServerSideException.
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
+    </mx:Metadata>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- SCRIPT                                                                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <mx:Script>
+        <![CDATA[
+            import mx.managers.PopUpManager;
+            import mx.controls.Text;
+            import flash.events.Event;
+
+            // =====================================================================================
+            // Variables
+            // =====================================================================================
+
+            /**
+             * The exception
+             */
+            [Bindable]
+            public var exception : ServerSideException;
+
+            // Assets
+
+            /**
+             * Close icon (16 pixels)
+             */
+            [Embed(source='/../assets/close16.png')]
+            [Bindable]
+            public var closeIcon16 : Class;
+
+            /**
+             * Copy icon (16 pixels)
+             */
+            [Embed(source='/../assets/copy16.png')]
+            [Bindable]
+            public var copyIcon16 : Class;
+
+            /**
+             * Details icon (16 pixels)
+             */
+            [Embed(source='/../assets/details16.png')]
+            [Bindable]
+            public var detailsIcon16 : Class;
+
+
+
+            // =====================================================================================
+            // Public methods
+            // =====================================================================================
+
+            /**
+             * Close the window
+             */
+            public function close(e : Event = null) : void
+            {
+                PopUpManager.removePopUp(this);
+            }
+
+
+
+            /**
+             * Copy the content to the system clipboard
+             */
+            public function copyToClipboard(e : Event = null) : void
+            {
+                System.setClipboard(exception.stackTrace);
+            }
+
+
+
+            /**
+             * Show/hide details button handler
+             */
+            public function toggleDetails(e : Event = null) : void
+            {
+                if (this.currentState == null)
+                {
+                    this.currentState = "detailedView";
+                    detailsButton.label = "Hide details";
+                }
+                else if (this.currentState == "detailedView")
+                {
+                    this.currentState = null;
+                    detailsButton.label = "Show details";
+                }
+                PopUpManager.centerPopUp(this);
+            }
+        ]]>
     </mx:Script>
-    
-    
-    <!--========================================================================
-    | GUI Components
-    =========================================================================-->
-    
-    <mx:VBox id="content"
-             width="100%"
-             height="100%">
-        <mx:Text id="descriptionDisplay"
-                 width="100%"
-                 text="{(exception.hasDescription())?exception.description:'The following exception has been raised: ' + exception.name}"/>
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- GUI Components                                                                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <mx:VBox id = "content"
+             width = "100%"
+             height = "100%">
+        <mx:Text id = "descriptionDisplay"
+                 width = "100%"
+                 text = "{(exception.hasDescription())?exception.description:'The following exception has been raised: ' + exception.name}" />
     </mx:VBox>
-        <mx:ControlBar id="theControlBar"
-                       width="100%"
-                       horizontalAlign="center">
-            <mx:Button id="CloseButton"
-                       label="Close"
-                       click="close();"
-                       icon="{closeIcon16}"/>
-            <mx:Button id="detailsButton"
-                       label="Show details"
-                       visible="{exception.hasStackTrace()}"
-                       includeInLayout="{exception.hasStackTrace()}"
-                       click="toggleDetails()"
-                       icon="{detailsIcon16}"/>
-        </mx:ControlBar>
-    
+    <mx:ControlBar id = "theControlBar"
+                   width = "100%"
+                   horizontalAlign = "center">
+        <mx:Button id = "CloseButton"
+                   label = "Close"
+                   click = "close();"
+                   icon = "{closeIcon16}" />
+        <mx:Button id = "detailsButton"
+                   label = "Show details"
+                   visible = "{exception.hasStackTrace()}"
+                   includeInLayout = "{exception.hasStackTrace()}"
+                   click = "toggleDetails()"
+                   icon = "{detailsIcon16}" />
+    </mx:ControlBar>
+
     <mx:states>
-        <mx:State name="detailedView">
-            <mx:AddChild relativeTo="{content}"
-                         position="lastChild">
-                <mx:TextArea id="stackTraceDisplay"
-                             text="{exception.stackTrace}"
-                             width="100%"
-                             height="100%"
-                             editable="false"/>
+        <mx:State name = "detailedView">
+            <mx:AddChild relativeTo = "{content}"
+                         position = "lastChild">
+                <mx:TextArea id = "stackTraceDisplay"
+                             text = "{exception.stackTrace}"
+                             width = "100%"
+                             height = "100%"
+                             editable = "false" />
             </mx:AddChild>
-            <mx:AddChild relativeTo="{theControlBar}"
-                         position="lastChild">
-                <mx:Button label="Copy to clipboard"
-                           click="copyToClipboard();"
-                           icon="{copyIcon16}"/>
+            <mx:AddChild relativeTo = "{theControlBar}"
+                         position = "lastChild">
+                <mx:Button label = "Copy to clipboard"
+                           click = "copyToClipboard();"
+                           icon = "{copyIcon16}" />
             </mx:AddChild>
-            <mx:SetProperty target="{this}"
-                            name="width"
-                            value="700"/>
-            <mx:SetProperty target="{this}"
-                            name="height"
-                            value="450"/>
+            <mx:SetProperty target = "{this}"
+                            name = "width"
+                            value = "700" />
+            <mx:SetProperty target = "{this}"
+                            name = "height"
+                            value = "450" />
         </mx:State>
     </mx:states>
-    
+
 </mx:TitleWindow>
 

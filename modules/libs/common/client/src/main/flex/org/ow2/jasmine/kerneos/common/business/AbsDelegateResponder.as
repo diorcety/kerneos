@@ -1,7 +1,7 @@
 /**
  * JASMINe
  * Copyright (C) 2008 Bull S.A.S.
- * Contact: jasmine@ow2.org
+ * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,37 +24,51 @@
  */
 package org.ow2.jasmine.kerneos.common.business
 {
-    import mx.rpc.IResponder;
+import mx.rpc.IResponder;
+
+
+/**
+ * Abstract class that manage the responder for the delegate.
+ *
+ * @author Guillaume Renault
+ */
+public class AbsDelegateResponder implements IDelegateResponder
+{
 
     /**
-    * Abstract class that manage the responder for the delagate.
-    *
-    * @author Guillaume Renault
-    */
-    public class AbsDelegateResponder implements IDelegateResponder
+     * The responder that will handle the answer.
+     */
+    private var responderObj : IResponder;
+
+
+
+    /**
+     * Build a new AbsDelegateResponder.
+     */
+    public function AbsDelegateResponder()
     {
-
-        /**
-        * The responder that will handle the answer.
-        */
-        private var responderObj : IResponder;
-
-        /**
-        * Sets the responder.
-        * @param responderObject The responder that will handle the answer.
-        */
-        public function set responder(responderObject : IResponder) : void
-        {
-            this.responderObj = responderObject;
-        }
-
-        /**
-        * @return The responder.
-        */
-        public function get responder() : IResponder
-        {
-            return this.responderObj;
-        }
-
     }
+
+
+
+    /**
+     * Sets the responder.
+     * @param responderObject The responder that will handle the answer.
+     */
+    public function set responder(responderObject : IResponder) : void
+    {
+        this.responderObj = responderObject;
+    }
+
+
+
+    /**
+     * @return The responder.
+     */
+    public function get responder() : IResponder
+    {
+        return this.responderObj;
+    }
+
+}
 }

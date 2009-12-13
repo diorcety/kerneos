@@ -3,7 +3,7 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      - JASMINe
      - Copyright (C) 2009 Bull S.A.S.
-     - Contact: jasmine@ow2.org
+     - Contact: jasmine AT ow2.org
      -
      - This library is free software; you can redistribute it and/or
      - modify it under the terms of the GNU Lesser General Public
@@ -24,11 +24,6 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<!---
-     A ProgressBar with a custom skin.
-
-     @author Julien Nicoulaud
--->
 <mx:ProgressBar xmlns:mx = "http://www.adobe.com/2006/mxml"
                 barSkin = "org.ow2.jasmine.kerneos.common.skins.KerneosProgressBarSkin"
                 maskSkin = "org.ow2.jasmine.kerneos.common.skins.KerneosProgressMaskSkin"
@@ -37,5 +32,15 @@
                 borderColor = "#FFFFFF"
                 trackColors = "{[0x444444,0x444444]}"
                 barColor = "#666666">
+
+    <mx:Metadata>
+        <![CDATA[
+        /**
+         * A ProgressBar with a custom skin.
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
+    </mx:Metadata>
 
 </mx:ProgressBar>

@@ -1,7 +1,7 @@
 /**
  * JASMINe
  * Copyright (C) 2009 Bull S.A.S.
- * Contact: jasmine@ow2.org
+ * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,15 +32,14 @@ import mx.utils.StringUtil;
  * A static class that provides utility functions to manipulate Strings.
  *
  * @author Julien Nicoulaud
- * @see mx.util.String.Utils Flex's StringUtil class for the missing methods
  */
 public class StringUtils
 {
-    
+
     // =========================================================================
     // Get informations about the String
     // =========================================================================
-    
+
     /**
      * Determines whether the specified string contains text.
      *
@@ -52,9 +51,9 @@ public class StringUtils
         var str : String = removeExtraWhitespace(string);
         return !!str.length;
     }
-    
-    
-    
+
+
+
     /**
      * Determines whether the specified string is numeric.
      *
@@ -70,9 +69,9 @@ public class StringUtils
         var regx : RegExp = /^[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?$/;
         return regx.test(string);
     }
-    
-    
-    
+
+
+
     /**
      * Count the number of words in a string
      *
@@ -87,35 +86,38 @@ public class StringUtils
         }
         return string.match(/\b\w+\b/g).length;
     }
-    
-    
-    
+
+
+
     /**
      * Parse the input URL and return the associated context.
      */
-    public static function parseURLContext(s:String):String
-    {   
-        var context:String = new String();
-        var defaut_protocol:String = "http://"
-        
+    public static function parseURLContext(s : String) : String
+    {
+        var context : String = new String();
+        var defaut_protocol : String = "http://"
+
         // remove the protocol on the url string
-        var s_without_protocol:String = s.substring(defaut_protocol.length,s.length);
-        
+        var s_without_protocol : String = s.substring(defaut_protocol.length, s.length);
+
         // splicing the string into an array
-        var tokens:Array = s_without_protocol.split("/");
-        
-        for(var i:int = 1;  i< tokens.length - 1; i++){
+        var tokens : Array = s_without_protocol.split("/");
+
+        for (var i : int = 1; i < tokens.length - 1; i++)
+        {
             context += tokens[i].toString();
-            if (i < tokens.length - 2) {
+
+            if (i < tokens.length - 2)
+            {
                 context += "/";
             }
         }
-        
+
         return context;
     }
-    
-    
-    
+
+
+
     /**
      * Parse the String Boolean value.
      *
@@ -142,13 +144,13 @@ public class StringUtils
                 return Boolean(string);
         }
     }
-    
-    
-    
+
+
+
     // =========================================================================
     // Format the String
     // =========================================================================
-    
+
     /**
      * Escapes all of the characters in a string to create a friendly "quotable" sting
      *
@@ -160,9 +162,9 @@ public class StringUtils
         var regx : RegExp = /[\\"\r\n]/g;
         return '"' + string.replace(regx, _quote) + '"';
     }
-    
-    
-    
+
+
+
     /**
      * Removes extra whitespaces (extra spaces, tabs, line breaks, etc) from the
      * specified string.
@@ -179,9 +181,9 @@ public class StringUtils
         var str : String = StringUtil.trim(string);
         return str.replace(/\s+/g, ' ');
     }
-    
-    
-    
+
+
+
     /**
      * Remove all < and > based tags from a string
      *
@@ -196,9 +198,9 @@ public class StringUtils
         }
         return string.replace(/<\/?[^>]+>/igm, '');
     }
-    
-    
-    
+
+
+
     /**
      * Remove whitespace from the front (left-side) of the specified string
      *
@@ -213,9 +215,9 @@ public class StringUtils
         }
         return string.replace(/^\s+/, '');
     }
-    
-    
-    
+
+
+
     /**
      * Remove whitespaces from the end (right-side) of the specified string
      *
@@ -230,9 +232,9 @@ public class StringUtils
         }
         return string.replace(/\s+$/, '');
     }
-    
-    
-    
+
+
+
     /**
      * Indent each line of the String with 4 spaces
      *
@@ -247,9 +249,9 @@ public class StringUtils
         }
         return string.replace(/^(.*)/gm, '    $1');
     }
-    
-    
-    
+
+
+
     /**
      * Unindent each line of the String if possible
      *
@@ -264,13 +266,13 @@ public class StringUtils
         }
         return string.replace(/^\s\s\s\s(.*)/gm, '$1');
     }
-    
-    
-    
+
+
+
     // =========================================================================
     // Private helper methods
     // =========================================================================
-    
+
     /**
      * Escape the given String
      */

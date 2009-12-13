@@ -1,7 +1,7 @@
 /**
  * JASMINe
  * Copyright (C) 2009 Bull S.A.S.
- * Contact: jasmine@ow2.org
+ * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -44,7 +44,7 @@ public class JASMINeLicenseHeaderFactory
     private static var JASMINE_LGPL_HEADER : String =
         "JASMINe\n" +
         "Copyright (C) [[[YEAR]]] Bull S.A.S.\n" +
-        "Contact: jasmine@ow2.org\n" +
+        "Contact: jasmine AT ow2.org\n" +
         "\n" +
         "This library is free software; you can redistribute it and/or\n" +
         "modify it under the terms of the GNU Lesser General Public\n" +

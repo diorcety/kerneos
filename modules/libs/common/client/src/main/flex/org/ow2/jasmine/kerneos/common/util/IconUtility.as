@@ -37,6 +37,11 @@ import mx.core.UIComponent;
  * Provides a workaround for using run-time loaded graphics in styles and properties which
  * require a Class reference.
  *
+ * @example How to use it:
+ * <listing version="3.0">
+ * &lt;mx:Button id="button" icon="{IconUtility.getClass(button, 'http://www.yourdomain.com/images/test.jpg')}" /&gt;
+ * </listing>
+ *
  * @author Ben Stucki
  * @author Julien Nicoulaud
  */
@@ -46,14 +51,14 @@ public class IconUtility extends BitmapAsset
      * The association UIComponent => Loader.
      */
     private static var dictionary : Dictionary;
-    
+
     /**
      * The association URL => Loader.
      */
     private static var dictionaryByURL : Dictionary;
-    
-    
-    
+
+
+
     /**
      * Used to associate run-time graphics with a target.
      *
@@ -74,32 +79,32 @@ public class IconUtility extends BitmapAsset
         {
             dictionary = new Dictionary(false);
         }
-        
+
         if (!dictionaryByURL)
         {
             dictionaryByURL = new Dictionary(false);
         }
-        
-        // Prepare to create or locate a Loader for the asset.        
+
+        // Prepare to create or locate a Loader for the asset.
         var loader : Loader;
-        
+
         // If a Loader is already associated to this URL, choose it.
         if (dictionaryByURL[source] != null)
         {
             loader = dictionaryByURL[source];
         }
-        
+
         // Else
         else
         {
             // Create a new one.
             loader = new Loader();
-            
+
             try
             {
                 // Start loading
                 loader.load(new URLRequest(source as String), new LoaderContext(true));
-                
+
                 // Store the reference to the new Loader.
                 dictionaryByURL[source] = loader;
             }
@@ -108,16 +113,16 @@ public class IconUtility extends BitmapAsset
                 // Do nothing
             }
         }
-        
+
         // Store the selected Loader for the UIComponent.
         dictionary[target] = {source: loader, width: width, height: height};
-        
+
         // Return this
         return IconUtility;
     }
-    
-    
-    
+
+
+
     /**
      * Build a new IconUtility.
      */
@@ -126,9 +131,9 @@ public class IconUtility extends BitmapAsset
         // Wait to be added to the stage.
         addEventListener(Event.ADDED, addedHandler, false, 0, true);
     }
-    
-    
-    
+
+
+
     /**
      * Triggered when this class is added to the stage.
      */
@@ -153,9 +158,9 @@ public class IconUtility extends BitmapAsset
             }
         }
     }
-    
-    
-    
+
+
+
     /**
      * Get data bytes for an Object.
      */
@@ -163,28 +168,28 @@ public class IconUtility extends BitmapAsset
     {
         // Get the stored data for this Object.
         var data : Object = dictionary[object];
-        
+
         if (data)
         {
             // Get the loader.
             var source : Object = data.source;
-            
+
             // Init a BitmapData with the specified width and height if specified.
             if (data.width > 0 && data.height > 0)
             {
                 bitmapData = new BitmapData(data.width, data.height, true, 0x00FFFFFF);
             }
-            
+
             if (source is Loader)
             {
                 var loader : Loader = source as Loader;
-                
+
                 // If loader not ready, wait for the completion.
                 if (!loader.content)
                 {
                     loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
                 }
-                
+
                 // Else directly display it.
                 else
                 {
@@ -193,9 +198,9 @@ public class IconUtility extends BitmapAsset
             }
         }
     }
-    
-    
-    
+
+
+
     /**
      * Triggered when the Loader has finished loading.
      */
@@ -207,9 +212,9 @@ public class IconUtility extends BitmapAsset
             displayLoader(event.target.loader as Loader);
         }
     }
-    
-    
-    
+
+
+
     /**
      * Display a Loader's content.
      */
@@ -220,10 +225,10 @@ public class IconUtility extends BitmapAsset
         {
             bitmapData = new BitmapData(loader.content.width, loader.content.height, true, 0x00FFFFFF);
         }
-        
+
         // Draw the loader contents to the Bitmap data.
         bitmapData.draw(loader, new Matrix(bitmapData.width / loader.width, 0, 0, bitmapData.height / loader.height, 0, 0));
-        
+
         // Force the parent component to recalculate its size.
         if (parent is UIComponent)
         {

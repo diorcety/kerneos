@@ -1,7 +1,7 @@
 /**
  * JASMINe
  * Copyright (C) 2009 Bull S.A.S.
- * Contact: jasmine@ow2.org
+ * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,18 +35,18 @@ import mx.events.ListEvent;
 
 
 /**
- * A Checkbox renderer to set an item of a DataGrid selected/unselected
+ * A Checkbox renderer to set an item of a DataGrid selected/unselected.
  *
  * @author Julien Nicoulaud
  * @see org.ow2.jasmine.kerneos.common.controls.CheckBoxSelectionDataGrid
  */
 public class DataGridSelectionIndicator extends CheckBox
 {
-    
+
     // =====================================================================
     // Constructors
     // =====================================================================
-    
+
     /**
      * Build a new DataGridSelectionIndicator
      */
@@ -56,13 +56,13 @@ public class DataGridSelectionIndicator extends CheckBox
         addEventListener(Event.CHANGE, onChange);
         setStyle("paddingLeft", 3);
     }
-    
-    
-    
+
+
+
     // =====================================================================
     // Events handling
     // =====================================================================
-    
+
     /**
      * Called on data change
      *
@@ -72,7 +72,7 @@ public class DataGridSelectionIndicator extends CheckBox
     {
         var grid : DataGrid = DataGrid(listData.owner);
         var myIndex : int = grid.itemRendererToIndex(this);
-        
+
         if (selected)
         {
             if (grid.selectedIndices.indexOf(myIndex) >= 0)
@@ -93,9 +93,9 @@ public class DataGridSelectionIndicator extends CheckBox
             })
         }
     }
-    
-    
-    
+
+
+
     /**
      * Called on item click
      *
@@ -107,13 +107,13 @@ public class DataGridSelectionIndicator extends CheckBox
         var myIndex : int = grid.itemRendererToIndex(this)
         selected = grid.selectedIndices.indexOf(myIndex) >= 0
     }
-    
-    
-    
+
+
+
     // =====================================================================
     // Getters & setters
     // =====================================================================
-    
+
     /**
      * Set the list data
      *
@@ -122,17 +122,17 @@ public class DataGridSelectionIndicator extends CheckBox
     override public function set listData(value : BaseListData) : void
     {
         super.listData = value;
-        
+
         var grid : DataGrid = DataGrid(value.owner);
-        
+
         grid.addEventListener(FlexEvent.VALUE_COMMIT, onItemClick);
         grid.addEventListener(ListEvent.ITEM_CLICK, onItemClick);
         //grid.addEventListener(ListEvent.CHANGE, onItemClick)
         selected = false;
     }
-    
-    
-    
+
+
+
     /**
      * Set the row data
      *

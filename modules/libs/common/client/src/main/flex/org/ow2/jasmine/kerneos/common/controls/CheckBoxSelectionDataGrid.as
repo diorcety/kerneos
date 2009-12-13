@@ -1,7 +1,7 @@
 /**
  * JASMINe
  * Copyright (C) 2009 Bull S.A.S.
- * Contact: jasmine@ow2.org
+ * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,51 +38,51 @@ import org.ow2.jasmine.kerneos.common.renderers.DataGridSelectionIndicatorHeader
 
 /**
 * A DataGrid that provides multiple selection by checkbox.
-* 
+*
 * @author Julien Nicoulaud
 * @example Example of use:
 *   <listing version="3.0">
-*       <CheckBoxSelectionDataGrid allowMultipleSelection="true" 
+*       <CheckBoxSelectionDataGrid allowMultipleSelection="true"
 *                                   dataProvider="{myDataProvider}"
 *                                   indicatorAlign="left"/>
 *   </listing>
-* @see org.ow2.jasmine.monitoring.eos.common.renderers.DataGridSelectionIndicator
-* @see org.ow2.jasmine.monitoring.eos.common.renderers.DataGridSelectionIndicatorHeader
+* @see org.ow2.jasmine.kerneos.common.renderers.DataGridSelectionIndicator
+* @see org.ow2.jasmine.kerneos.common.renderers.DataGridSelectionIndicatorHeader
 */
 public class CheckBoxSelectionDataGrid extends DataGrid
 {
-    
+
     // =========================================================================
     // Private variables
     // =========================================================================
-    
+
     /**
     * The raw Datagrid columns
-    * 
+    *
     * @private
-    */ 
+    */
     private var rawColumns:Array;
-    
+
     /**
     * The alignment of the checkbox indicators column
-    * 
+    *
     * @default right
     * @private
     */
     private var _indicatorAlign:String = "right";
-    
+
     /**
     * The checkbox indicators column
-    * 
+    *
     * @private
-    */ 
+    */
     private var _indicatorsColumn:DataGridColumn;
-    
-    
+
+
     // =========================================================================
     // Constructors
     // =========================================================================
-    
+
     /**
     * Build a new CheckBoxSelectionDataGrid object
     */
@@ -90,28 +90,28 @@ public class CheckBoxSelectionDataGrid extends DataGrid
     {
         super();
     }
-    
-    
+
+
     // =========================================================================
     // Public methods
     // =========================================================================
-    
+
     /**
     * Select/Unselect all the Datagrid rows
-    */ 
+    */
     public function selectAll(value:Boolean=true):void
     {
          selectedItems = value ? ArrayCollection(collection).source : [];
     }
-    
-    
+
+
     // =========================================================================
     // Overriden getters & setters
     // =========================================================================
-    
+
     /**
     * Set the Datagrid columns
-    * 
+    *
     * @override
     */
     override public function set columns(value:Array):void
@@ -119,10 +119,10 @@ public class CheckBoxSelectionDataGrid extends DataGrid
         super.columns = value;
         rawColumns = value;
     }
-     
+
     /**
     * Set the indicator align property
-    */ 
+    */
     public function set indicatorAlign(value:String):void
     {
         if (value != _indicatorAlign) {
@@ -131,7 +131,7 @@ public class CheckBoxSelectionDataGrid extends DataGrid
              dispatchEvent (new Event("indicatorAlignChange"));
         }
     }
-    
+
     /**
     * Get the indicator align property
     */
@@ -141,10 +141,10 @@ public class CheckBoxSelectionDataGrid extends DataGrid
     {
         return _indicatorAlign;
     }
-    
+
     /**
     * Get the checkbox selection indicators column
-    */ 
+    */
     public function get indicatorsColumn():DataGridColumn
     {
         if (!_indicatorsColumn){
@@ -162,46 +162,46 @@ public class CheckBoxSelectionDataGrid extends DataGrid
         }
         return _indicatorsColumn;
     }
-     
+
     /**
     * Set the selected items
-    * 
+    *
     * @override
-    */         
+    */
     override public function set selectedItems(items:Array):void
     {
         super.selectedItems = items;
         dispatchEvent(new ListEvent(ListEvent.CHANGE));
     }
-    
+
     /**
     * Set the selected rows indices
-    * 
+    *
     * @override
-    */ 
+    */
     override public function set selectedIndices(indices:Array):void {
         super.selectedIndices = indices;
         dispatchEvent(new ListEvent(ListEvent.CHANGE));
     }
-    
+
     /**
     * Set the dataProvider
-    * 
+    *
     * @override
-    */ 
+    */
     override public function set dataProvider(value:Object):void {
         super.dataProvider = value;
         dispatchEvent(new ListEvent(ListEvent.CHANGE));
     }
-    
-    
+
+
     // =========================================================================
     // Overrides
     // =========================================================================
-    
+
     /**
     * Commit the component properties
-    * 
+    *
     * @override
     */
     override protected function commitProperties():void
@@ -214,7 +214,7 @@ public class CheckBoxSelectionDataGrid extends DataGrid
         }
         super.columns = newColumns;
         super.commitProperties();
-        
+
         // Force the column width to prevent a bug when
         // using a fluid width datagrid
         indicatorsColumn.width = 20;

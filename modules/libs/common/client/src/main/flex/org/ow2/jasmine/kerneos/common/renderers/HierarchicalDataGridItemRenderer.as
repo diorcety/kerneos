@@ -1,7 +1,7 @@
 /**
  * JASMINe
  * Copyright (C) 2008 Bull S.A.S.
- * Contact: jasmine@ow2.org
+ * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -45,9 +45,18 @@ public class HierarchicalDataGridItemRenderer extends DataGridItemRenderer
      * The list data
      */
     private var _listData2 : BaseListData;
-    
-    
-    
+
+
+
+    /**
+     * Build a new HierarchicalDataGridItemRenderer.
+     */
+    public function HierarchicalDataGridItemRenderer()
+    {
+    }
+
+
+
     /**
      * Set the itemRenderer data
      */
@@ -55,33 +64,33 @@ public class HierarchicalDataGridItemRenderer extends DataGridItemRenderer
     {
         // Forward value to super class
         super.data = value;
-        
+
         // Retrieve the parent Datagrid
         var dg : DataGrid = DataGrid(_listData2.owner);
-        
+
         // Retrieve the column
         var column : DataGridColumn = dg.columns[_listData2.columnIndex];
-        
+
         // Split the path in fields
         var fields : Array = column.dataField.split(".");
-        
+
         // Follow the path to the real value
         var buffer : * = value;
-        
+
         for each (var p : String in fields)
         {
             buffer = buffer[p];
         }
-        
+
         // Set the real value
         _listData2.label = buffer;
-        
+
         // Set the list data
         super.listData = _listData2;
     }
-    
-    
-    
+
+
+
     /**
      * Intercept the list data
      */

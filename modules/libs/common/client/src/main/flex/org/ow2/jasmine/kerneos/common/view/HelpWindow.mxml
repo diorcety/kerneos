@@ -1,161 +1,172 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version = "1.0" encoding = "utf-8"?>
 <!--
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - JASMINe
-  - Copyright (C) 2009 Bull S.A.S.
-  - Contact: jasmine@ow2.org
-  -
-  - This library is free software; you can redistribute it and/or
-  - modify it under the terms of the GNU Lesser General Public
-  - License as published by the Free Software Foundation; either
-  - version 2.1 of the License, or any later version.
-  -
-  - This library is distributed in the hope that it will be useful,
-  - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  - Lesser General Public License for more details.
-  -
-  - You should have received a copy of the GNU Lesser General Public
-  - License along with this library; if not, write to the Free Software
-  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
-  - USA
-  -
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id$
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - JASMINe
+     - Copyright (C) 2009 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<!---
-    A help window with pages and a flat menu
-    
-    @example How to use it ? This component must be extended the following way:
-    <listing version="3.0">
-        <HelpWindow xmlns="org.ow2.jasmine.monitoring.eos.common.controls.*"
-                    xmlns:mx="http://www.adobe.com/2006/mxml"
-                    title="The window title">
-    
-            <pages>
-                <mx:HBox label="The default page">
-                    <mx:Text text="Some content"/>
-                </mx:HBox>
-                <mx:HBox label="Another page">
-                    <mx:Text text="Some content too"/>
-                </mx:HBox>
-            </pages>
-            
-        </HelpWindow>
-    </listing>
-    
-    @example It can then by instantiated like every TitleWindow:
-    <listing version="3.0">
-        var helpWindow : MyHelpWindow = new MyHelpWindow();
-        PopUpManager.addPopUp(helpWindow,
-                              Application.application as DisplayObject,
-                              false);
-        PopUpManager.centerPopUp(helpWindow);
-    </listing>
+<mx:TitleWindow xmlns:mx = "http://www.adobe.com/2006/mxml"
+                width = "700"
+                height = "450"
+                showCloseButton = "true"
+                close = "close();"
+                titleIcon = "@Embed(source='/../assets/help16.png')"
+                creationComplete = "initializeComponent()"
+                verticalScrollPolicy = "off"
+                horizontalScrollPolicy = "off"
+                paddingBottom = "0"
+                paddingLeft = "0"
+                paddingRight = "0"
+                paddingTop = "0"
+                borderAlpha = "1.0"
+                borderColor = "#EEEEEE"
+                backgroundAlpha = "1.0"
+                backgroundColor = "#EEEEEE">
 
-    @author Julien Nicoulaud
--->
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-                width="700"
-                height="450"
-                showCloseButton="true"
-                close="close();"
-                titleIcon="@Embed(source='/../assets/help16.png')"
-                creationComplete="initializeComponent()"
-                verticalScrollPolicy="off"
-                horizontalScrollPolicy="off"
-                paddingBottom="0"
-                paddingLeft="0"
-                paddingRight="0"
-                paddingTop="0"
-                borderAlpha="1.0"
-                borderColor="#EEEEEE"
-                backgroundAlpha="1.0"
-                backgroundColor="#EEEEEE">
-                
-                
-    <!--========================================================================
-    | SCRIPT
-    =========================================================================-->
-    
+    <mx:Metadata>
+        <![CDATA[
+        /**
+         * A help window with pages and a flat menu.
+         *
+         * @example How to use it ? This component must be extended the following way:
+         * <listing version = "3.0">
+         *    &lt;HelpWindow xmlns = "org.ow2.jasmine.monitoring.eos.common.controls.*"
+         *                xmlns:mx = "http://www.adobe.com/2006/mxml"
+         *                title = "The window title"&gt;
+         *
+         *        &lt;pages&gt;
+         *            &lt;mx:HBox label = "The default page"&gt;
+         *                &lt;mx:Text text = "Some content" /&gt;
+         *            &lt;/mx:HBox&gt;
+         *            &lt;mx:HBox label = "Another page"&gt;
+         *                &lt;mx:Text text = "Some content too" /&gt;
+         *            &lt;/mx:HBox&gt;
+         *        &lt;/pages&gt;
+         *
+         *    &lt;/HelpWindow&gt;
+         * </listing>
+         *
+         * @example It can then by instantiated like every TitleWindow:
+         * <listing version = "3.0">
+         *     var helpWindow : MyHelpWindow = new MyHelpWindow();
+         *     PopUpManager.addPopUp(helpWindow,
+         *     Application.application as DisplayObject,
+         *     false);
+         *     PopUpManager.centerPopUp(helpWindow);
+         * </listing>
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
+    </mx:Metadata>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- SCRIPT                                                                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <mx:Script>
-    <![CDATA[
-       
-    import mx.managers.PopUpManager;
-    import mx.controls.Text;
-    import flash.events.Event;
-    
-    // =========================================================================
-    // Variables
-    // =========================================================================
-        
-    /**
-    * The array where external children are stored before creation is complete
-    */
-    private var _pagesChildrenHolder : Array;
-    
-    
-    // =========================================================================
-    // Constructors & initialization
-    // =========================================================================
-    
-    /**
-    * Initialize the component
-    */
-    private function initializeComponent(event:Event=null):void
-    {
-        // Add pages components
-        addExternalChildren();
-        
-        // Set the first page as the selected one
-        menuButtonBar.selectedIndex = 0;
-    }
-    
-    /**
-    * Add content children to their container
-    */
-    private function addExternalChildren(event:Event=null):void
-    {
-        if(this._pagesChildrenHolder){
-            this.pagesContainer.removeAllChildren();
-            for(var i:int=0; i < this._pagesChildrenHolder.length; i++){
-                pagesContainer.addChild(this._pagesChildrenHolder[i]);
+        <![CDATA[
+            import mx.managers.PopUpManager;
+            import mx.controls.Text;
+            import flash.events.Event;
+
+            // =====================================================================================
+            // Variables
+            // =====================================================================================
+
+            /**
+             * The array where external children are stored before creation is complete
+             */
+            private var _pagesChildrenHolder : Array;
+
+
+
+            // =====================================================================================
+            // Constructors & initialization
+            // =====================================================================================
+
+            /**
+             * Initialize the component
+             */
+            private function initializeComponent(event : Event = null) : void
+            {
+                // Add pages components
+                addExternalChildren();
+
+                // Set the first page as the selected one
+                menuButtonBar.selectedIndex = 0;
             }
-        }
-    }    
-    
-    
-    // =========================================================================
-    // Public methods
-    // =========================================================================
-    
-    /**
-    * Close the window
-    */
-    public function close(e:Event=null):void
-    {
-        PopUpManager.removePopUp(this);
-    }
-        
-    /**
-    * Set the pages
-    */
-    public function set pages(value:Array):void
-    {
-        _pagesChildrenHolder = value;
-    }
-        
-    ]]>
+
+
+
+            /**
+             * Add content children to their container
+             */
+            private function addExternalChildren(event : Event = null) : void
+            {
+                if (this._pagesChildrenHolder)
+                {
+                    this.pagesContainer.removeAllChildren();
+
+                    for (var i : int = 0; i < this._pagesChildrenHolder.length; i++)
+                    {
+                        pagesContainer.addChild(this._pagesChildrenHolder[i]);
+                    }
+                }
+            }
+
+
+
+            // =====================================================================================
+            // Public methods
+            // =====================================================================================
+
+            /**
+             * Close the window
+             */
+            public function close(e : Event = null) : void
+            {
+                PopUpManager.removePopUp(this);
+            }
+
+
+
+            /**
+             * Set the pages
+             */
+            public function set pages(value : Array) : void
+            {
+                _pagesChildrenHolder = value;
+            }
+        ]]>
     </mx:Script>
-    
-    
-    <!--========================================================================
-    | Style
-    =========================================================================-->
-        
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Style                                                                                   -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <mx:Style>
-    
+
         .menuContainer {
             padding-bottom: 5px;
             padding-left: 5px;
@@ -167,44 +178,44 @@
             fillColors: #DEDEDE, #EEEEEE;
             fillAlphas: 1.0,1.0;
         }
-        
+
         .menuButtonBar {
             textSelectedColor: #2b333c;
         }
-        
+
         .pagesContainer {
             padding-bottom: 5px;
             padding-left: 5px;
             padding-right: 5px;
             padding-top: 5px;
         }
-        
+
     </mx:Style>
-    
-    
-    <!--========================================================================
-    | GUI Components
-    =========================================================================-->
-    
-    <mx:HBox width="100%"
-             height="100%"
-             horizontalGap="0">
-        
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- GUI Components                                                                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <mx:HBox width = "100%"
+             height = "100%"
+             horizontalGap = "0">
+
         <!-- The menu -->
-        <mx:VBox height="100%"
-                 styleName="menuContainer"
-                 backgroundColor="#EEEEEE">
-            <mx:LinkBar id="menuButtonBar"
-                        dataProvider="{pagesContainer}"
-                        direction="vertical"
-                        styleName="menuButtonBar"/>
+        <mx:VBox height = "100%"
+                 styleName = "menuContainer"
+                 backgroundColor = "#EEEEEE">
+            <mx:LinkBar id = "menuButtonBar"
+                        dataProvider = "{pagesContainer}"
+                        direction = "vertical"
+                        styleName = "menuButtonBar" />
         </mx:VBox>
-        
+
         <!-- The content -->
-        <mx:ViewStack id="pagesContainer"
-                      width="100%"
-                      height="100%"
-                      styleName="pagesContainer"/>
+        <mx:ViewStack id = "pagesContainer"
+                      width = "100%"
+                      height = "100%"
+                      styleName = "pagesContainer" />
     </mx:HBox>
 
 </mx:TitleWindow>
