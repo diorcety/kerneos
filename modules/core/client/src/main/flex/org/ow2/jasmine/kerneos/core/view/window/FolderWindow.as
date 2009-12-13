@@ -33,35 +33,35 @@ import mx.states.SetStyle;
 
 import org.ow2.jasmine.kerneos.core.view.ListModuleRenderer;
 import org.ow2.jasmine.kerneos.core.vo.FolderVO;
-    
+
 
 /**
  * A window hosting a folder of modules.
- * 
+ *
  * @author Julien Nicoulaud
  */
 [Bindable]
 public class FolderWindow extends ModuleWindow
 {
-        
+
     // =========================================================================
     // Variables
     // =========================================================================
-    
+
     private var descriptionLabel : Text;
     private var descriptionBox : Box;
-    
+
     /**
      * The modules list displayed
      */
     private var modulesList : TileList;
 
-    
-    
+
+
     // =========================================================================
     // Constructor & initialization
     // =========================================================================
-    
+
     /**
      * Build a new folder window.
      */
@@ -70,7 +70,7 @@ public class FolderWindow extends ModuleWindow
         // Call super classe constructor
         super(module);
     }
-    
+
     /**
      * Create UI children.
      */
@@ -78,21 +78,21 @@ public class FolderWindow extends ModuleWindow
     {
         // Call super class method
         super.createChildren();
-        
+
         // Create the description box
         if (descriptionBox == null)
         {
             descriptionBox = new Box();
             addChild(descriptionBox);
         }
-        
+
         // Create the description label
         if (descriptionLabel == null)
         {
             descriptionLabel = new Text();
             descriptionBox.addChild(descriptionLabel);
         }
-        
+
         // Create the modules list
         if (modulesList == null)
         {
@@ -100,7 +100,7 @@ public class FolderWindow extends ModuleWindow
             addChild(modulesList);
         }
     }
-    
+
     /**
      * Commit the component properties.
      */
@@ -108,24 +108,24 @@ public class FolderWindow extends ModuleWindow
     {
         // Call super class function
         super.commitProperties();
-        
+
         // Set some window properties
         setStyle("paddingTop",5);
         setStyle("paddingBottom",5);
         setStyle("paddingLeft",5);
         setStyle("paddingRight",5);
         //setStyle("verticalGap",0);
-        
+
         // Set the properties for the description box
         descriptionBox.percentWidth = 100;
         descriptionBox.setStyle("styleName","folderWindowDescriptionBox");
-        
+
         // Set the properties for the description label
         descriptionLabel.text = module.description;
         descriptionLabel.percentWidth = 100;
         descriptionLabel.selectable = false;
         descriptionLabel.setStyle("styleName","folderWindowDescriptionLabel");
-        
+
         // Set the properties for the modules list
         modulesList.percentHeight = 100;
         modulesList.percentWidth = 100;
@@ -133,7 +133,7 @@ public class FolderWindow extends ModuleWindow
         modulesList.horizontalScrollPolicy = "none";
         modulesList.setStyle("styleName","folderWindowModulesList");
         modulesList.selectable = false;
-        modulesList.dataProvider = (module as FolderVO).modules.allModules;
+        modulesList.dataProvider = (module as FolderVO).modules.modulesList;
         modulesList.itemRenderer = new ClassFactory(ListModuleRenderer);
     }
 }

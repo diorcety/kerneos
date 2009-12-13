@@ -82,13 +82,12 @@
     <xs:element name="modules">
         <xs:complexType>
             <xs:sequence>
-              <xs:element ref="k:folder" maxOccurs="unbounded" minOccurs="0" />
-              <xs:element ref="k:swf-module" maxOccurs="unbounded" minOccurs="0" />
-              <xs:element ref="k:iframe-module" maxOccurs="unbounded" minOccurs="0" />
-              <xs:element ref="k:link" maxOccurs="unbounded" minOccurs="0" />
+                <xs:element ref="k:modules-list" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
+    <xs:element name="modules-list" type="k:module" />
 
     <!-- Module main structure -->
 
@@ -122,7 +121,7 @@
 
     <!-- Modules types -->
 
-    <xs:element name="iframe-module">
+    <xs:element name="iframe-module" substitutionGroup="k:modules-list">
       <xs:complexType>
         <xs:complexContent>
           <xs:extension base="k:module-with-window">
@@ -136,7 +135,7 @@
       </xs:complexType>
     </xs:element>
 
-    <xs:element name="swf-module">
+    <xs:element name="swf-module" substitutionGroup="k:modules-list">
       <xs:complexType>
         <xs:complexContent>
           <xs:extension base="k:module-with-window">
@@ -149,7 +148,7 @@
       </xs:complexType>
     </xs:element>
 
-    <xs:element name="link">
+    <xs:element name="link" substitutionGroup="k:modules-list">
       <xs:complexType>
         <xs:complexContent>
           <xs:extension base="k:module">
@@ -161,7 +160,7 @@
       </xs:complexType>
     </xs:element>
 
-    <xs:element name="folder">
+    <xs:element name="folder" substitutionGroup="k:modules-list">
       <xs:complexType>
         <xs:complexContent>
           <xs:extension base="k:module-with-window">

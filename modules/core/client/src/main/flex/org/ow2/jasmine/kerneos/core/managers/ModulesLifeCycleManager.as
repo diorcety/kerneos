@@ -68,11 +68,11 @@ import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
  */
 public class ModulesLifeCycleManager
 {
-    
+
     // =========================================================================
     // Properties
     // =========================================================================
-    
+
     /**
      * The desktop view on which operations are done.
      *
@@ -80,39 +80,39 @@ public class ModulesLifeCycleManager
      */
     [Bindable]
     public static var desktop : DesktopView = null;
-    
+
     /**
      * The IFrame  objects
      */
     public static var frames : Dictionary = new Dictionary();
-    
-    
-    
+
+
+
     // =========================================================================
     // Public static methods
     // =========================================================================
-    
+
     /**
      * Setup the modules.
      */
     public static function setupModulesServicesAndIcons(e : Event = null) : void
     {
         // Setup the modules services and icons
-        setupModulesCollection(KerneosModelLocator.getInstance().config.modules.allModules);
+        setupModulesCollection(KerneosModelLocator.getInstance().config.modules.modulesList);
     }
-    
-    
-    
+
+
+
     /**
      * Start the modules that have the "loadOnStartup" option.
      */
     public static function doLoadOnStartup(e : Event = null) : void
     {
-        doLoadOnStartupModules(KerneosModelLocator.getInstance().config.modules.allModules);
+        doLoadOnStartupModules(KerneosModelLocator.getInstance().config.modules.modulesList);
     }
-    
-    
-    
+
+
+
     /**
      * Launch a module.
      */
@@ -120,19 +120,19 @@ public class ModulesLifeCycleManager
     {
         // Check that desktop is not null
         checkDesktopNotNull();
-        
+
         // Show a busy cursor
         desktop.cursorManager.setBusyCursor();
-		
+
         // If this is a module with its own window
         if (module is ModuleWithWindowVO)
         {
             // Update the module status
             module.loaded = true;
-            
+
             // Declare a new window
             var window : ModuleWindow;
-            
+
             // If this is a swf module
             if (module is SWFModuleVO)
             {
@@ -140,7 +140,7 @@ public class ModulesLifeCycleManager
                 window = new SwfModuleWindow(module as SWFModuleVO);
                 window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, NotificationsManager.handleNotificationEvent);
             }
-            
+
             // Else if this is an IFrame module
             else if (module is IFrameModuleVO)
             {
@@ -149,36 +149,36 @@ public class ModulesLifeCycleManager
                 var frame : IFrame = frames[module.name] as IFrame;
                 window = new IFrameModuleWindow(module as IFrameModuleVO, frame);
             }
-            
+
             // Else if this is a folder
             else if (module is FolderVO)
             {
                 window = new FolderWindow(module as FolderVO);
             }
-            
+
             // Create the button in the taskbar
             var minimizedModuleWindow : MinimizedModuleWindow = new MinimizedModuleWindow(window);
             desktop.minimizedWindowsButtonsContainer.addChild(minimizedModuleWindow);
             window.minimizedModuleWindow = minimizedModuleWindow;
-            
+
             // Add it to the windows manager
             desktop.windowContainer.windowManager.add(window);
-            
+
         }
-        
+
         // Else if this is a simple link
         else if (module is LinkVO)
         {
             // Open it
             navigateToURL(new URLRequest((module as LinkVO).url), "_blank");
         }
-        
+
         // Remove the busy cursor
         desktop.cursorManager.removeBusyCursor();
     }
-    
-    
-    
+
+
+
     /**
      * Unload a module by its window.
      */
@@ -186,41 +186,41 @@ public class ModulesLifeCycleManager
     {
         // Check that desktop is not null
         checkDesktopNotNull();
-        
+
         if (window is SwfModuleWindow)
         {
             // Retrieve the module loader
             var moduleLoader : ModuleLoader = (window as SwfModuleWindow).moduleLoader;
-            
+
             // If the module implements the interface KerneosModule,
             // trigger the closeModule() method
             if (moduleLoader.child is KerneosModule)
             {
                 (moduleLoader.child as KerneosModule).closeModule();
             }
-            
+
             // Unload the module
             moduleLoader.unloadModule();
-            
+
         }
         else if (window is IFrameModuleWindow)
         {
             // Delete the IFrame
             (window as IFrameModuleWindow).removeIFrame();
         }
-        
+
         // Update the module state
         window.module.loaded = false;
-        
+
         // Force garbage collection
         System.gc();
-        
+
         // Remove the tasbar button
         desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow);
     }
-    
-    
-    
+
+
+
     /**
      * Bring a module window to front
      */
@@ -228,10 +228,10 @@ public class ModulesLifeCycleManager
     {
         // Check that desktop is not null
         checkDesktopNotNull();
-        
+
         // look for the window are give it the focus
         var allWindows : Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-        
+
         for each (var window : MDIWindow in allWindows)
         {
             if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name)
@@ -241,9 +241,9 @@ public class ModulesLifeCycleManager
             }
         }
     }
-    
-    
-    
+
+
+
     /**
      * Unload all the active modules.
      */
@@ -251,10 +251,10 @@ public class ModulesLifeCycleManager
     {
         // Check that desktop is not null
         checkDesktopNotNull();
-        
+
         // Unload all modules and close windows
         var allWindows : Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-        
+
         for each (var window : MDIWindow in allWindows)
         {
             if (window is ModuleWindow)
@@ -264,9 +264,9 @@ public class ModulesLifeCycleManager
             }
         }
     }
-    
-    
-    
+
+
+
     /**
      * Load the icon at the url and put it in the icon cache.
      */
@@ -274,13 +274,13 @@ public class ModulesLifeCycleManager
     {
         IconUtility.getClass(Application.application as UIComponent, url);
     }
-    
-    
-    
+
+
+
     // =========================================================================
     // Private methods
     // =========================================================================
-    
+
     /**
      * Check that the desktop view is referenced.
      */
@@ -291,9 +291,9 @@ public class ModulesLifeCycleManager
             throw new Error('the "desktop" property must be assigned before calling the modules' + ' life cycle manager methods.');
         }
     }
-    
-    
-    
+
+
+
     /**
      * Setup the modules.
      */
@@ -301,7 +301,7 @@ public class ModulesLifeCycleManager
     {
         var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
         var serviceIds : ArrayCollection = new ArrayCollection();
-        
+
         // For each module
         for each (var module : ModuleVO in modules)
         {
@@ -310,17 +310,17 @@ public class ModulesLifeCycleManager
             {
                 cacheIcon(module.smallIcon);
             }
-            
+
             if (module.bigIcon != null)
             {
                 cacheIcon(module.bigIcon);
             }
-            
+
             // Initialize each SWF module services
             if (module is SWFModuleVO && ((module as SWFModuleVO).services != null))
             {
                 var services : ArrayCollection = (module as SWFModuleVO).services.service;
-                
+
                 for (var l : int = 0; l < services.length; l++)
                 {
                     var service : ServiceVO = services.getItemAt(l) as ServiceVO;
@@ -328,23 +328,23 @@ public class ModulesLifeCycleManager
                     serviceIds.addItem(service.id);
                 }
             }
-            
+
             // Call the function recursively for folders
             else if (module is FolderVO && ((module as FolderVO).modules != null) )
             {
-                setupModulesCollection((module as FolderVO).modules.allModules);
+                setupModulesCollection((module as FolderVO).modules.modulesList);
             }
         }
-        
+
         // Overload all AMF channels
         for each (var id : String in serviceIds)
         {
             serviceLocator.getRemoteObject(id).channelSet = KerneosLifeCycleManager.amfChannelSet;
         }
     }
-    
-    
-    
+
+
+
     /**
      * Start the modules that have the "loadOnStartup" option.
      */
@@ -352,16 +352,16 @@ public class ModulesLifeCycleManager
     {
         // Check that desktop is not null
         checkDesktopNotNull();
-        
+
         // For each module
         for each (var module : ModuleVO in modules)
         {
             // Call the function recursively for folders
             if (module is FolderVO)
             {
-                doLoadOnStartupModules((module as FolderVO).modules.allModules);
+                doLoadOnStartupModules((module as FolderVO).modules.modulesList);
             }
-            
+
             // If "load on startup", load it
             if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup)
             {
