@@ -172,6 +172,9 @@
 
                 // Setup the active language and the language selector component.
                 setupActiveLanguage();
+
+                // Load the modules that have the "load-on-startup" flag
+                ModulesLifeCycleManager.doLoadOnStartup();
             }
 
 
