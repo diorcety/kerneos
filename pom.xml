@@ -44,6 +44,8 @@
   </url>
 
   <properties>
+
+    <!-- Dependencies version numbers -->
     <flex.home>${env.FLEX_HOME}</flex.home>
     <flexlib.version>r169</flexlib.version>
     <flexiframe.version>1.4.2</flexiframe.version>
@@ -51,6 +53,10 @@
     <graniteds.version>2.0.0.SP1</graniteds.version>
     <flexmojos.version>3.2.0</flexmojos.version>
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
+
+    <!-- Settings -->
+    <asdoc.aggregate>true</asdoc.aggregate>
+
   </properties>
 
   <scm>
@@ -67,7 +73,7 @@
         <enabled>true</enabled>
       </releases>
       <snapshots>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
@@ -91,7 +97,7 @@
       <name>FlexMojos repository on Sonatype.org</name>
       <url>http://repository.sonatype.org/content/groups/public/</url>
       <snapshots>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
       </snapshots>
       <releases>
         <enabled>true</enabled>
@@ -100,6 +106,23 @@
   </pluginRepositories>
 
   <profiles>
+
+    <!-- Default build profile -->
+    <profile>
+      <id>install</id>
+      <activation>
+          <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <defaultGoal>install</defaultGoal>
+      </build>
+      <modules>
+        <module>modules</module>
+        <module>assemblies</module>
+      </modules>
+    </profile>
+
+    <!-- WTP configuration profile -->
     <profile>
       <id>initWTP</id>
       <dependencies>
@@ -324,19 +347,101 @@
         </plugins>
       </build>
     </profile>
+
+    <!-- Asdoc generation profile -->
     <profile>
-      <id>install</id>
-      <activation>
-          <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
-        <defaultGoal>install</defaultGoal>
-      </build>
+      <id>asdoc</id>
+      <dependencies>
+        <dependency>
+          <groupId>com.adobe.flex.framework</groupId>
+          <artifactId>flex-framework</artifactId>
+          <version>${flex.version}</version>
+          <type>pom</type>
+        </dependency>
+        <dependency>
+          <groupId>com.adobe.cairngorm</groupId>
+          <artifactId>cairngorm-bin</artifactId>
+          <version>2.2.2-Beta</version>
+          <type>swc</type>
+          <classifier>kerneos</classifier>
+        </dependency>
+        <dependency>
+          <groupId>flexlib</groupId>
+          <artifactId>flexlib-bin</artifactId>
+          <type>swc</type>
+          <version>${flexlib.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.google.code</groupId>
+          <artifactId>flex-iframe</artifactId>
+          <version>${flexiframe.version}</version>
+          <type>swc</type>
+        </dependency>
+        <dependency>
+          <groupId>org.graniteds</groupId>
+          <artifactId>granite-swc</artifactId>
+          <version>${graniteds.version}</version>
+          <type>swc</type>
+        </dependency>
+      </dependencies>
       <modules>
         <module>modules</module>
-        <module>assemblies</module>
       </modules>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.flexmojos</groupId>
+            <artifactId>flexmojos-maven-plugin</artifactId>
+            <version>${flexmojos.version}</version>
+            <configuration>
+              <windowTitle>JASMINe-Kerneos Asdoc</windowTitle>
+              <mainTitle>JASMINe-Kerneos Asdoc - http://jasmine.ow2.org</mainTitle>
+              <leftFramesetWidth>300</leftFramesetWidth>
+              <footer>OW2 JASMINe Kerneos - http://jasmine.ow2.org</footer>
+              <outputDirectory>${project.build.directory}/asdoc-all</outputDirectory>
+              <packageDescriptions>
+                <org.ow2.jasmine.kerneos.common.business>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.business>
+                <org.ow2.jasmine.kerneos.common.containers>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.containers>
+                <org.ow2.jasmine.kerneos.common.controls>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.controls>
+                <org.ow2.jasmine.kerneos.common.event>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.event>
+                <org.ow2.jasmine.kerneos.common.renderers>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.renderers>
+                <org.ow2.jasmine.kerneos.common.skins>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.skins>
+                <org.ow2.jasmine.kerneos.common.util>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.util>
+                <org.ow2.jasmine.kerneos.common.view>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.view>
+                <org.ow2.jasmine.kerneos.common.vo>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.vo>
+                <org.ow2.jasmine.kerneos.core.api>Kerneos API.</org.ow2.jasmine.kerneos.core.api>
+                <org.ow2.jasmine.kerneos.core.business>Kerneos core.</org.ow2.jasmine.kerneos.core.business>
+                <org.ow2.jasmine.kerneos.core.command>Kerneos core.</org.ow2.jasmine.kerneos.core.command>
+                <org.ow2.jasmine.kerneos.core.control>Kerneos core.</org.ow2.jasmine.kerneos.core.control>
+                <org.ow2.jasmine.kerneos.core.event>Kerneos core.</org.ow2.jasmine.kerneos.core.event>
+                <org.ow2.jasmine.kerneos.core.managers>Kerneos core.</org.ow2.jasmine.kerneos.core.managers>
+                <org.ow2.jasmine.kerneos.core.model>Kerneos core.</org.ow2.jasmine.kerneos.core.model>
+                <org.ow2.jasmine.kerneos.core.view>Kerneos core.</org.ow2.jasmine.kerneos.core.view>
+                <org.ow2.jasmine.kerneos.core.view.notification>Kerneos core.</org.ow2.jasmine.kerneos.core.view.notification>
+                <org.ow2.jasmine.kerneos.core.view.preloader>Kerneos core.</org.ow2.jasmine.kerneos.core.view.preloader>
+                <org.ow2.jasmine.kerneos.core.view.window>Kerneos core.</org.ow2.jasmine.kerneos.core.view.window>
+                <org.ow2.jasmine.kerneos.core.vo>Kerneos core.</org.ow2.jasmine.kerneos.core.vo>
+                <org.ow2.jasmine.kerneos.login.business>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.business>
+                <org.ow2.jasmine.kerneos.login.command>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.command>
+                <org.ow2.jasmine.kerneos.login.control>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.control>
+                <org.ow2.jasmine.kerneos.login.event>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.event>
+                <org.ow2.jasmine.kerneos.login.model>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.model>
+                <org.ow2.jasmine.kerneos.login.view>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.view>
+              </packageDescriptions>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>install</phase>
+                <goals>
+                  <goal>asdoc</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
+
   </profiles>
 
   <build>
