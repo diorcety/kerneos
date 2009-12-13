@@ -3,7 +3,7 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      - JASMINe
      - Copyright (C) 2009 Bull S.A.S.
-     - Contact: jasmine@ow2.org
+     - Contact: jasmine AT ow2.org
      -
      - This library is free software; you can redistribute it and/or
      - modify it under the terms of the GNU Lesser General Public
@@ -24,11 +24,6 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<!---
-     A custom ToolTip meant to display the snapshot of a window.
-
-     @author Julien Nicoulaud
--->
 <mx:Box xmlns:mx = "http://www.adobe.com/2006/mxml"
         xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
         implements = "mx.core.IToolTip"
@@ -38,42 +33,52 @@
         verticalAlign = "middle"
         showEffect = "{fadeIn}">
 
+    <mx:Metadata>
+        <![CDATA[
+        /**
+         * A custom ToolTip meant to display the snapshot of a window.
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
+    </mx:Metadata>
+
     <mx:Script>
         <![CDATA[
             // =========================================================================
             // Variables
             // =========================================================================
-            
+
             /**
              * The bytes of the snapshot image displayed.
              */
             [Bindable]
             public var bitmapData : ByteArray;
-            
+
             /**
              * The width of the snapshot image.
              */
             [Bindable]
             public var snapshotWidth : Number = 180;
-            
+
             /**
              * The height of the snapshot image.
              */
             [Bindable]
             public var snapshotHeight : Number = 180;
-            
+
             /**
              * The tooltip text.
              */
             [Bindable]
             private var _text : String;
-            
-            
-            
+
+
+
             // =========================================================================
             // Implementation of IToolTip
             // =========================================================================
-            
+
             /**
              * The tooltip text (not displayed).
              */
@@ -81,9 +86,9 @@
             {
                 return text;
             }
-            
-            
-            
+
+
+
             /**
              * Set the tooltip text.
              */

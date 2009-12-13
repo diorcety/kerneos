@@ -3,7 +3,7 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      - JASMINe
      - Copyright (C) 2008 Bull S.A.S.
-     - Contact: jasmine@ow2.org
+     - Contact: jasmine AT ow2.org
      -
      - This library is free software; you can redistribute it and/or
      - modify it under the terms of the GNU Lesser General Public
@@ -24,46 +24,51 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<!---
-     The main view of Kerneos.
-
-     Switches between children views depending on the state of the application.
-
-     @author Julien Nicoulaud
-     @author Guillaume Renault
--->
 <mx:Canvas xmlns:mx = "http://www.adobe.com/2006/mxml"
            xmlns:view = "org.ow2.jasmine.kerneos.core.view.*"
            width = "100%"
            height = "100%"
            currentState = "{KerneosModelLocator.getInstance().state}">
 
+    <mx:Metadata>
+        <![CDATA[
+        /**
+         * The main view of Kerneos.
+         *
+         * Switches between children views depending on the state of the application.
+         *
+         * @author Julien Nicoulaud
+         * @author Guillaume Renault
+         */
+        ]]>
+    </mx:Metadata>
+
     <mx:Script>
         <![CDATA[
             import mx.managers.DragManager;
             import mx.managers.HistoryManager;
-            
+
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
-            
+
             import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
             import org.ow2.jasmine.kerneos.core.model.KerneosState;
             import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
             import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
-            
+
             // =========================================================================
             // Variables
             // =========================================================================
-            
+
             // Dummy: flex SDK bugs workarounds
-            
+
             /**
              * The application drag&drop manager
              * Dummy: workaround for a bug with module loaders and drag&drop
              * @see http://bugs.adobe.com/jira/browse/SDK-12061
              */
             private var dragManager : DragManager;
-            
+
             /**
              * The flash player history manager.
              * Dummy: workaround for a bug with modules loaders and modules using
@@ -71,13 +76,13 @@
              * @see http://bugs.adobe.com/jira/browse/SDK-15249
              */
             private var hist : HistoryManager;
-            
-            
-            
+
+
+
             // =========================================================================
             // Initialization
             // =========================================================================
-            
+
             /**
              * On component creation complete.
              */
@@ -85,20 +90,20 @@
             {
                 // Listen to server side exceptions events
                 CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
-                
+
                 // Listen to keyboards events at the "application" level
                 parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
-                
+
                 // Switch to the "loading" state
                 KerneosModelLocator.getInstance().state = KerneosState.LOADING;
             }
-            
-            
-            
+
+
+
             // =========================================================================
             // Keyboard shortcuts handling
             // =========================================================================
-            
+
             /**
              * Handles keyboard events
              */

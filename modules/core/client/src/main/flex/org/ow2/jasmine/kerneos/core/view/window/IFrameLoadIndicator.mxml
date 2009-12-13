@@ -3,7 +3,7 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      - JASMINe
      - Copyright (C) 2009 Bull S.A.S.
-     - Contact: jasmine@ow2.org
+     - Contact: jasmine AT ow2.org
      -
      - This library is free software; you can redistribute it and/or
      - modify it under the terms of the GNU Lesser General Public
@@ -24,19 +24,24 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<!---
-     The component displayed while iframes are loading.
-
-     @author Julien Nicoulaud
--->
 <mx:HBox xmlns:mx = "http://www.adobe.com/2006/mxml"
          xmlns:commonControls = "org.ow2.jasmine.kerneos.common.controls.*">
-         
+
+    <mx:Metadata>
+        <![CDATA[
+        /**
+         * The component displayed while iframes are loading.
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
+    </mx:Metadata>
+
     <mx:Script>
-    	<![CDATA[
-    		import mx.resources.ResourceManager;
-    		import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
-    	]]>
+        <![CDATA[
+            import mx.resources.ResourceManager;
+            import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
+        ]]>
     </mx:Script>
 
     <commonControls:KerneosProgressBar id = "iFrameProgressBar"

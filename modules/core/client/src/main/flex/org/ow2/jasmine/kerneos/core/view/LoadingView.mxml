@@ -3,7 +3,7 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      - JASMINe
      - Copyright (C) 2009 Bull S.A.S.
-     - Contact: jasmine@ow2.org
+     - Contact: jasmine AT ow2.org
      -
      - This library is free software; you can redistribute it and/or
      - modify it under the terms of the GNU Lesser General Public
@@ -24,14 +24,6 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<!---
-     The view displayed while loading and parsing the application configuration.
-
-     @author Julien Nicoulaud
-     @internal Some styles are hardcoded to fit the preloader ones and make sure a smooth transition
-     is done.
-     @see org.ow2.jasmine.kerneos.core.view.preloader.KerneosPreloader
--->
 <mx:Box xmlns:mx = "http://www.adobe.com/2006/mxml"
         xmlns:commonControls = "org.ow2.jasmine.kerneos.common.controls.*"
         horizontalAlign = "center"
@@ -40,53 +32,66 @@
         hideEffect = "{viewHideEffect}"
         removedEffect = "{viewHideEffect}">
 
+    <mx:Metadata>
+        <![CDATA[
+        /**
+         * The view displayed while loading and parsing the application configuration.
+         *
+         * @author Julien Nicoulaud
+         * @internal Some styles are hardcoded to fit the preloader ones and make
+         * sure a smooth transition is done.
+         * @see org.ow2.jasmine.kerneos.core.view.preloader.KerneosPreloader
+         */
+        ]]>
+    </mx:Metadata>
+
     <mx:Script>
         <![CDATA[
-        	import mx.resources.ResourceManager;
-        	import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
+            import mx.resources.ResourceManager;
+            import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
             import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
-            
+
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
-            
+
             import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
             import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
             import org.ow2.jasmine.kerneos.core.model.KerneosState;
             import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
             import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-            
-            
-            
+
+
+
             // =========================================================================
             // Initialization
             // =========================================================================
-            
+
             /**
              * On component creation complete.
              */
             private function initializeView(e : Event = null) : void
             {
                 // Update the displayed label
-                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.setup-server-communication');
-                
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.setup-server-communication');
+
                 // Setup the AMF channel and Kerneos services
                 KerneosLifeCycleManager.setupKerneosServices();
-                
+
                 // Update the displayed label
-                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.loading-saved-settings');
-                
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.loading-saved-settings');
+
                 // Load the user's shared object
                 SharedObjectManager.load();
-                
+
                 // Update the displayed label
-                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.loading-application-configuration');
-                
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.loading-application-configuration');
+
                 // Load the Kerneos configuration
                 KerneosLifeCycleManager.loadKerneosConfig();
             }
-            
-            
-            
+
+
+
             /**
              * When the application config has been loaded.
              */
@@ -94,22 +99,22 @@
             {
                 if (conf != null)
                 {
-                    
+
                     // Update the displayed label
-                    progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.setup-modules-icon-cache');
-                    
+                    progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.setup-modules-icon-cache');
+
                     // Load the application logo if one
                     if (conf.applicationLogo != null)
                     {
                         ModulesLifeCycleManager.cacheIcon(conf.applicationLogo);
                     }
-                    
+
                     // Setup the modules
                     ModulesLifeCycleManager.setupModulesServicesAndIcons();
-                    
+
                     // Update the displayed label
-                    progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.ready');
-                    
+                    progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.ready');
+
                     // Switch state
                     KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
                 }
