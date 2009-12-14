@@ -149,7 +149,7 @@
           <args>
             <arg>-Xcollection-setter-injector</arg>
             <arg>-Xboolean-getter</arg>
-<!--            <arg>-Xdefault-value</arg>-->
+            <arg>-Xdefault-value</arg>
           </args>
           <plugins>
             <plugin>
@@ -167,11 +167,11 @@
               <artifactId>gettersetter</artifactId>
               <version>0.4.1.5</version>
             </plugin>
-<!--            <plugin>-->
-<!--              <groupId>org.jvnet.jaxb2_commons</groupId>-->
-<!--              <artifactId>defaultvalue</artifactId>-->
-<!--              <version>1.0</version>-->
-<!--            </plugin>-->
+            <plugin>
+              <groupId>org.jvnet.jaxb2_commons</groupId>
+              <artifactId>defaultvalue</artifactId>
+              <version>1.0</version>
+            </plugin>
           </plugins>
         </configuration>
       </plugin>
