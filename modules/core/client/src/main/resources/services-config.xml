@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - JASMINe
+  - Copyright (C) 2010 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<services-config>
+
+  <services>
+
+    <service id="messaging-service" 
+      class="flex.messaging.services.MessagingService" 
+      messageTypes="flex.messaging.messages.AsyncMessage">
+      <adapters>
+        <adapter-definition id="jms" class="org.granite.gravity.adapters.JMSServiceAdapter" />
+      </adapters>
+
+      <destination id="gravity">   
+        <channels>
+          <channel ref="my-gravityamf-kerneos" />
+        </channels>
+
+        <properties>
+          <jms>
+            <destination-type>Topic</destination-type>
+            <connection-factory>JTCF</connection-factory>
+            <destination-jndi-name>jasminePurgeTask</destination-jndi-name>
+            <destination-name>jasminePurgeTask</destination-name>
+            <acknowledge-mode>AUTO_ACKNOWLEDGE</acknowledge-mode>
+            <transacted-sessions>false</transacted-sessions>
+          </jms>
+        </properties>
+        
+        <adapter ref="jms"/>
+        
+      </destination>
+    </service>
+
+  </services>
+
+  <channels>
+    <channel-definition id="my-gravityamf-kerneos" 
+      class="org.granite.gravity.channels.GravityChannel">
+      <endpoint 
+        uri="http://{server.name}:{server.port}/{context.root}/gravity/amf" 
+        class="flex.messaging.endpoints.AMFEndpoint" />
+    </channel-definition>
+  </channels>
+
+</services-config>
