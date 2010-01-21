@@ -37,6 +37,8 @@ import mx.messaging.ChannelSet;
 import mx.messaging.channels.AMFChannel;
 import mx.utils.URLUtil;
 
+import org.granite.gravity.channels.GravityChannel;
+
 import org.ow2.jasmine.kerneos.common.util.StringUtils;
 import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
@@ -103,6 +105,9 @@ public class KerneosLifeCycleManager
         
         // ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
         ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
+        
+        // Overload the Gravity channel
+        new GravityChannel("my-gravityamf-kerneos", "http://" + urlServer + "/" + context + "/gravity/amf");
     }
     
     
