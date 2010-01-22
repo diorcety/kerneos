@@ -208,20 +208,22 @@ Before using Kerneos :
     This file must be added in the META-INF directory of the war archive of your
     application. See the example below :
 
-    <modules xmlns="org.ow2.jasmine.kerneos:KerneosConfig"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <kerneos-config xmlns="org.ow2.jasmine.kerneos:kerneos-config"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="org.ow2.jasmine.kerneos:kerneos-config ../resources/kerneos-config.xsd">
 
-    <!-- Examples on how to set this file. An XSD file to come. -->
-
-      <module swfFile="test.swf" loadOnStartup="false" loadMaximized="false">
-        <name>TestModule</name>
-        <description>Does absolutely nothing, it even doesn't exist</description>
+      <!-- Examples on how to set this file. An XSD file to come. -->
+    
+      <swf-module>
+        <name>Test</name>
+        <description>>Does absolutely nothing, it even doesn't exist</description>
+        <file>test.swf</file>
         <services>
           <service id="testService1" destination="test1"/>
           <service id="testService2" destination="test2"/>
           <service id="testService3" destination="test2"/>
         </services>
-      </module>
+      </swf-module>
 
     </modules>
 
@@ -242,10 +244,11 @@ Before using Kerneos :
     Instead of specify the swfFile attribute, you can specify the url one as the following
     example :
 
-      <module url="http://www.yahoo.fr" loadOnStartup="true" loadMaximized="false">
+      <link>
         <name>Yahoo</name>
         <description>Yahoo search engine.</description>
-      </module>
+        <url>http://www.yahoo.fr</url>
+      </link>
 
     The goal is to be allowed to load any web page in as a module.
 
