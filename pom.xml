@@ -49,8 +49,8 @@
     <flex.home>${env.FLEX_HOME}</flex.home>
     <flexlib.version>r169</flexlib.version>
     <flexiframe.version>1.4.3</flexiframe.version>
-    <flex.version>3.0.0.477</flex.version>
-    <graniteds.version>2.1.0.RC1</graniteds.version>
+    <flex.version>3.5.0.12683</flex.version>
+    <graniteds.version>2.0.0.SP1</graniteds.version>
     <flexmojos.version>3.2.0</flexmojos.version>
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
 
