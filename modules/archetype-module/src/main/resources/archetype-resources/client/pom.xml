@@ -89,20 +89,10 @@
       <type>pom</type>
     </dependency>
 
-
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>flexmojos-repository</id>
-      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-    </repository>
-  </repositories>
-
   <build>
-
-    <sourceDirectory>src/main/flex</sourceDirectory>
-
+    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -124,12 +114,17 @@
       </plugin>
 
       <plugin>
-
         <dependencies>
           <dependency>
             <groupId>com.adobe.flex</groupId>
             <artifactId>license</artifactId>
             <version>${flex.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
           </dependency>
         </dependencies>
 
@@ -138,28 +133,18 @@
         <version>${flexmojos.version}</version>
         <extensions>true</extensions>
 
-
-
         <configuration>
-          <resourceBundlePath>${project.build.directory}/../src/main/locales/{locale}</resourceBundlePath>
           <compiledLocales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
-
-
           <mergeResourceBundle>true</mergeResourceBundle>
-
           <licenses>
             <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
           </licenses>
-
           <contextRoot>moduleContextRoot</contextRoot>
-
           <sourceFile>MyModule.mxml</sourceFile>
-
           <optimize>false</optimize>
-
         </configuration>
       </plugin>
 

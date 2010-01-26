@@ -105,14 +105,21 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/main/flex</sourceDirectory>
+    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
     <plugins>
+    
       <plugin>
         <dependencies>
           <dependency>
             <groupId>com.adobe.flex</groupId>
             <artifactId>license</artifactId>
             <version>${flex.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
           </dependency>
         </dependencies>
 
@@ -126,22 +133,15 @@
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
-
           <mergeResourceBundle>true</mergeResourceBundle>
-
           <licenses>
             <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
           </licenses>
-
           <contextRoot>kerneos</contextRoot>
-
           <sourceFile>Kerneos.mxml</sourceFile>
-
-          <optimize>true</optimize>
-
         </configuration>
-
       </plugin>
+      
     </plugins>
     <finalName>Kerneos</finalName>
   </build>

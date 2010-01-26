@@ -64,7 +64,7 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src/main/flex</sourceDirectory>
+    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
     <plugins>
       <plugin>
         <dependencies>
@@ -72,6 +72,12 @@
             <groupId>com.adobe.flex</groupId>
             <artifactId>license</artifactId>
             <version>${flex.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
           </dependency>
         </dependencies>
 
@@ -82,20 +88,15 @@
 
         <configuration>
           <!--
-          <resourceBundlePath>${basedir}/src/main/locales/{locale}</resourceBundlePath>
-
           <compiledLocales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
           -->
+          <mergeResourceBundle>true</mergeResourceBundle>
           <licenses>
             <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
           </licenses>
-
-          <includeSources>
-            <sources>src/main/flex</sources>
-          </includeSources>
         </configuration>
       </plugin>
     </plugins>
