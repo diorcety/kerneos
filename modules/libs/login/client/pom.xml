@@ -85,25 +85,8 @@
     <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
     <plugins>
       <plugin>
-        <dependencies>
-          <dependency>
-            <groupId>com.adobe.flex</groupId>
-            <artifactId>license</artifactId>
-            <version>${flex.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.adobe.flex</groupId>
-            <artifactId>compiler</artifactId>
-            <version>${flex.version}</version>
-            <type>pom</type>
-          </dependency>
-        </dependencies>
-
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>${flexmojos.version}</version>
-        <extensions>true</extensions>
-
         <configuration>
           <!--
           <compiledLocales>
