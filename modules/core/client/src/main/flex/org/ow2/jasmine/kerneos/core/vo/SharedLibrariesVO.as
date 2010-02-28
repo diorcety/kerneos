@@ -18,41 +18,48 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * $Id$
+ * $Id: ServicesVO.as 5737 2009-12-13 17:04:13Z nicoulaj $
  */
+
 package org.ow2.jasmine.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
+import mx.collections.ArrayCollection;
+
 
 /**
- * A SWF module deployed in Kerneos.
+ * Shared libraries to load in the main Application Domain.
  *
  * @author Guillaume Renault
- * @author Julien Nicoulaud
+ * @see ServiceVO
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.SwfModule")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.SharedLibraries")]
 [Bindable]
-public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
+public class SharedLibrariesVO implements IValueObject
 {
 
-    // =========================================================================
-    // Properties
-    // =========================================================================
-
     /**
-    * The SWF file path.
-    */
-    public var file : String = null;
+     * The shared libraries to load.
+     */
+    [ArrayElementType('String')]
+    private var m_sharedLibrary : ArrayCollection;
 
-    /**
-    * The module services.
-    */
-    public var services : ServicesVO = null;
+    public function set sharedLibrary(p_sharedLibrary : ArrayCollection) : void
+    {
+        this.m_sharedLibrary = p_sharedLibrary;
+    }
 
-    /**
-    * The associated shared libraries.
-    */
-    public var sharedLibraries : SharedLibrariesVO = null
+
+
+    public function get sharedLibrary() : ArrayCollection
+    {
+        if (this.m_sharedLibrary == null)
+        {
+            this.m_sharedLibrary = new ArrayCollection();
+        }
+        return this.m_sharedLibrary;
+    }
+
 }
 }

@@ -31,6 +31,7 @@ import com.google.code.flexiframe.IFrame;
 import flash.events.Event;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
+import flash.system.ApplicationDomain;
 import flash.system.System;
 import flash.utils.Dictionary;
 
@@ -86,7 +87,19 @@ public class ModulesLifeCycleManager
      */
     public static var frames : Dictionary = new Dictionary();
 
+    /**
+    * The list of all loaded shared libraries. Store the number of modules that are using it.<br/>
+    * Structure :<br/>
+    * library module names -> number of loaded module using this library
+    */
+    private static var s_loadedSharedLibrariesNumber : Dictionary = new Dictionary();
 
+    /**
+     * The list of all loaded shared libraries. Store the associated module loader.<br/>
+     * Structure :<br/>
+     * library module name -> ModuleLoader
+     */
+    private static var s_loadedSharedLibrariesModuleLoaders : Dictionary = new Dictionary();
 
     // =========================================================================
     // Public static methods
@@ -139,6 +152,37 @@ public class ModulesLifeCycleManager
                 // Create a window
                 window = new SwfModuleWindow(module as SWFModuleVO);
                 window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, NotificationsManager.handleNotificationEvent);
+
+                // Initialize each shared libraries associated to the module.
+                if ((module as SWFModuleVO).sharedLibraries != null)
+                {
+                    var sharedLibraries : ArrayCollection = (module as SWFModuleVO).sharedLibraries.sharedLibrary;
+
+                    for each (var shared : String in sharedLibraries)
+                    {
+                        // Increments the number of modules that are using this shared library.
+                        // THe library is loaded only if it's not already done.
+                        if (s_loadedSharedLibrariesNumber[shared] == null)
+                        {
+                            var moduleLoader : ModuleLoader = new ModuleLoader();
+                            moduleLoader.url = shared;
+                            moduleLoader.applicationDomain = ApplicationDomain.currentDomain;
+                            moduleLoader.loadModule();
+
+                            s_loadedSharedLibrariesNumber[shared] = 1;
+
+                            // store the module loader
+                            s_loadedSharedLibrariesModuleLoaders[shared] = moduleLoader;
+
+                            // add the library's name to the used shared modules of the SWFModule
+                            (window as SwfModuleWindow).addSharedLibrary(shared);
+                        }
+                        else
+                        {
+                            s_loadedSharedLibrariesNumber[shared]++;
+                        }
+                    }
+                }
             }
 
             // Else if this is an IFrame module
@@ -191,12 +235,37 @@ public class ModulesLifeCycleManager
         {
             // Retrieve the module loader
             var moduleLoader : ModuleLoader = (window as SwfModuleWindow).moduleLoader;
+            // retrieve the list of shared libraries
+            var sharedLibraries : ArrayCollection = (window as SwfModuleWindow).sharedLibraries;
 
             // If the module implements the interface KerneosModule,
             // trigger the closeModule() method
             if (moduleLoader.child is KerneosModule)
             {
                 (moduleLoader.child as KerneosModule).closeModule();
+            }
+
+            // Unload shared libraries if needed
+            if (sharedLibraries != null)
+            {
+                for each (var libName : String in sharedLibraries)
+                {
+                    // decrease the number of modules using this library
+                    s_loadedSharedLibrariesNumber[libName]--;
+
+                    // Unload it if this number equals 0
+                    if (s_loadedSharedLibrariesNumber[libName] == 0)
+                    {
+                        // Get the module loader
+                        var libModuleLoader : ModuleLoader = s_loadedSharedLibrariesModuleLoaders[libName] as ModuleLoader;
+                        // unload
+                        libModuleLoader.unloadModule();
+
+                        // Delete the entry from the two dictionaries.
+                        delete s_loadedSharedLibrariesNumber[libName];
+                        delete s_loadedSharedLibrariesModuleLoaders[libName];
+                    }
+                }
             }
 
             // Unload the module
