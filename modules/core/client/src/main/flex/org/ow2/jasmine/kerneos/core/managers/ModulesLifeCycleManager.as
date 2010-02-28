@@ -174,13 +174,14 @@ public class ModulesLifeCycleManager
                             // store the module loader
                             s_loadedSharedLibrariesModuleLoaders[shared] = moduleLoader;
 
-                            // add the library's name to the used shared modules of the SWFModule
-                            (window as SwfModuleWindow).addSharedLibrary(shared);
                         }
                         else
                         {
                             s_loadedSharedLibrariesNumber[shared]++;
                         }
+
+                        // add the library's name to the used shared modules of the SWFModule
+                        (window as SwfModuleWindow).addSharedLibrary(shared);
                     }
                 }
             }
