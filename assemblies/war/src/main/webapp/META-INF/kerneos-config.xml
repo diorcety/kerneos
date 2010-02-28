@@ -54,15 +54,15 @@
 
     <!--
       - Show the "Minimize all" button in the taskbar ?
-      - 
+      -
       - * Optional
       - * Default value: true
       -->
     <!--<show-minimize-all-button>true</show-minimize-all-button>-->
 
-    <!-- 
+    <!--
       - Show the "Cascade windows" button in the taskbar ?
-      - 
+      -
       - * Optional
       - * Default value: true
       -->
@@ -70,7 +70,7 @@
 
     <!--
       - Show the "Tile windows" button in the taskbar ?
-      - 
+      -
       - * Optional
       - * Default value: true
       -->
@@ -78,7 +78,7 @@
 
     <!--
       - Show popups on modules notifications ?
-      - 
+      -
       - * Optional
       - * Default value: true
       -->
@@ -86,7 +86,7 @@
 
     <!--
       - Show notifications popups, even on windows that have the focus ?
-      - 
+      -
       - * Optional
       - * Default value: true
       -->
@@ -94,7 +94,7 @@
 
     <!--
       - Enable modules notifications logging ?
-      - 
+      -
       - * Optional
       - * Default value: true
       -->
@@ -102,7 +102,7 @@
 
     <!--
       - Show a "confirm close" dialog  when the user tries to close the window/tab ?
-      - 
+      -
       - * Optional
       - * Default value: true
       -->
@@ -110,13 +110,13 @@
 
     <!--
       - The default language of the application.
-      - 
+      -
       - * Optional
       - * Allowed values: "fr_FR", "en_US"
       - * Default value: en_US
       -->
     <!--<default-language>en_US</default-language>-->
-    
+
 
     <!--##################################################################################
     # Modules
@@ -126,7 +126,7 @@
 
         <!--
           - An example of SWF module.
-          - 
+          -
           - * The SWF file must be embedded in the application war.
           - * Only the "name", "description" and "file" parameters are mandatory.
           -->
@@ -147,12 +147,15 @@
             <services>
                 <service id="quickvisuService" destination="quickvisu" />
             </services>
+            <shared-libraries>
+                <shared-library>mySharedModuleTest.swf</shared-library>
+            </shared-libraries>
         </swf-module>
         -->
-        
+
         <!--
           - An example of a web page embedded as a Kerneos module.
-          - 
+          -
           - * Only the "name", "description" and "url" parameters are mandatory.
           -->
         <!--
@@ -173,10 +176,10 @@
             <show-history-navigation-buttons>false</show-history-navigation-buttons>
         </iframe-module>
         -->
-        
+
         <!--
           - An example of simple link displayed in the list of modules.
-          - 
+          -
           - * Only the "name", "description" and "url" parameters are mandatory.
           -->
         <!--
@@ -188,10 +191,10 @@
             <big-icon>resources/icons/icon64.png</big-icon>
         </link>
         -->
-        
+
         <!--
           - An example of folder, which is a group of modules.
-          - 
+          -
           - * Only the "name", "description" and "modules" parameters are mandatory.
           -->
         <!--
@@ -214,5 +217,5 @@
         -->
 
     </modules>
-    
+
 </kerneos-config>
