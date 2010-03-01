@@ -65,7 +65,13 @@ import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
 /**
  * Manages the modules life cycle: setup, start, stop, give focus to a module...
  *
+ * Also manage the shared libraries module loaders. Everything is kept in this class,
+ * even if this kind of module is never unloaded. It may be helpful in case of some
+ * monitoring features, like the number of shared libraries loaded, and how many
+ * modules are using them.
+ *
  * @author Julien Nicoulaud
+ * @author Guillaume Renault
  */
 public class ModulesLifeCycleManager
 {
@@ -246,7 +252,7 @@ public class ModulesLifeCycleManager
                 (moduleLoader.child as KerneosModule).closeModule();
             }
 
-            // Unload shared libraries if needed
+            // Shared libraries must not be unloaded, but datas are kept consistent
             if (sharedLibraries != null)
             {
                 for each (var libName : String in sharedLibraries)
@@ -254,18 +260,9 @@ public class ModulesLifeCycleManager
                     // decrease the number of modules using this library
                     s_loadedSharedLibrariesNumber[libName]--;
 
-                    // Unload it if this number equals 0
-                    if (s_loadedSharedLibrariesNumber[libName] == 0)
-                    {
-                        // Get the module loader
-                        var libModuleLoader : ModuleLoader = s_loadedSharedLibrariesModuleLoaders[libName] as ModuleLoader;
-                        // unload
-                        libModuleLoader.unloadModule();
+                    // NOTA : The shared module must not be unloaded, refering to the
+                    // JASMINe issue MONITORING-171
 
-                        // Delete the entry from the two dictionaries.
-                        delete s_loadedSharedLibrariesNumber[libName];
-                        delete s_loadedSharedLibrariesModuleLoaders[libName];
-                    }
                 }
             }
 
