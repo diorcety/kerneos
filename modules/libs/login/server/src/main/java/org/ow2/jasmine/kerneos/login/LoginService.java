@@ -33,8 +33,10 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.granite.messaging.service.annotations.RemoteDestination;
 import org.ow2.jonas.security.auth.callback.NoInputCallbackHandler;
 
+@RemoteDestination(id="logIn")
 public class LoginService implements Serializable {
 
     /**

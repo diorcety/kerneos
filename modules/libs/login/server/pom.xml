@@ -64,5 +64,10 @@
       <version>5.1.0</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.graniteds</groupId>
+      <artifactId>granite-core</artifactId>
+      <version>${graniteds.version}</version>
+    </dependency>
   </dependencies>
 </project>
