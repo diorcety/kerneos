@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * $Id: ServicesVO.as 5737 2009-12-13 17:04:13Z nicoulaj $
+ * $Id$
  */
 
 package org.ow2.jasmine.kerneos.core.vo
