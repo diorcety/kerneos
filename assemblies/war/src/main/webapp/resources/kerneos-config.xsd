@@ -185,6 +185,13 @@
     </xs:element>
 
     <xs:element name="service">
+        <xs:annotation>
+            <xs:documentation>
+                A service allow to declare a JAVA remote service used by the module.
+                destination and id attributes stand for the same meaning as the
+                remote object in the cairngorm flex model.
+            </xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:attribute name="destination" use="required" type="xs:string" />
             <xs:attribute name="id" use="required" type="xs:string" />
@@ -196,7 +203,15 @@
     <xs:element name="shared-libraries">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="shared-library" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="shared-library" type="xs:string" minOccurs="1" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A shared library is loaded only once, even if declared in more
+                            than one Kerneos module. THe flex library is loaded in the same
+                            Application Domain as Kerneos, it doesn't own its own domain.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -204,10 +219,18 @@
     <!-- Module options types -->
 
     <xs:simpleType name="prompt-before-close">
+        <xs:annotation>
+            <xs:documentation>
+                Whether to prompt the user before closing the window containing the datas.
+                If default, the it is the module itself that knows the default behavior,
+                always means always prompt, and never stands for never prompt. This two
+                behaviors override the default module one.
+            </xs:documentation>
+        </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:enumeration value="default"/>
-            <xs:enumeration value="always"/>
-            <xs:enumeration value="never"/>
+            <xs:enumeration value="default" />
+            <xs:enumeration value="always" />
+            <xs:enumeration value="never" />
         </xs:restriction>
     </xs:simpleType>
 
