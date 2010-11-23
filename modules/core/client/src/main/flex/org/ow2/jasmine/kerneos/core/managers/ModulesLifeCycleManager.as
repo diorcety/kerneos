@@ -175,6 +175,10 @@ public class ModulesLifeCycleManager
                             moduleLoader.applicationDomain = ApplicationDomain.currentDomain;
                             moduleLoader.loadModule();
 
+                            // FIXME We should block/wait here for the loader to complete before adding the window to the stage and therefore
+                            // starting the module (see SwfModuleWindow#createChildren()). If the module happens to get loaded before its shared
+                            // librairies it will fail.
+
                             s_loadedSharedLibrariesNumber[shared] = 1;
 
                             // store the module loader
