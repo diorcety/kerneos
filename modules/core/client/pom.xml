@@ -76,7 +76,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.code</groupId>
+      <groupId>com.google.code.flex-iframe</groupId>
       <artifactId>flex-iframe</artifactId>
       <version>${flexiframe.version}</version>
       <type>swc</type>
