@@ -60,7 +60,7 @@
 
   <scm>
     <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
+    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
     <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/trunk</url>
   </scm>
 
