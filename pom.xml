@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2008-2009 Bull S.A.S.
+  - Copyright (C) 2008-2011 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -60,8 +60,8 @@
 
   <scm>
     <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://benoitf@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
-    <url>http://fisheye.jasmine.objectweb.org/browse/JASMINe/kerneos/trunk</url>
+    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
+    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/trunk</url>
   </scm>
 
   <repositories>
