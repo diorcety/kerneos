@@ -30,7 +30,7 @@
   <parent>
     <groupId>org.ow2.jasmine.kerneos</groupId>
     <artifactId>kerneos-core</artifactId>
-    <version>1.3.1-M2-SNAPSHOT</version>
+    <version>1.3.1-M2</version>
   </parent>
 
   <artifactId>kerneos-core-server</artifactId>
