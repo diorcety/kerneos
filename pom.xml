@@ -34,7 +34,7 @@
   </parent>
   <groupId>org.ow2.jasmine.kerneos</groupId>
   <artifactId>kerneos</artifactId>
-  <version>1.3.1-M2</version>
+  <version>1.3.1-M3-SNAPSHOT</version>
 
   <name>Kerneos</name>
   <packaging>pom</packaging>
@@ -59,9 +59,9 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/tags/KERNEOS_1_3_1_M2</connection>
-    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/tags/KERNEOS_1_3_1_M2</developerConnection>
-    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/tags/KERNEOS_1_3_1_M2?repname=jasmine&amp;path=/kerneos/trunk</url>
+    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
+    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
+    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/trunk</url>
   </scm>
 
   <repositories>
