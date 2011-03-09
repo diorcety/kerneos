@@ -26,7 +26,8 @@
 -->
 <mx:VBox xmlns:mx = "http://www.adobe.com/2006/mxml"
          xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
-         implements = "mx.controls.listClasses.IListItemRenderer"
+		 xmlns:coreView = "org.ow2.jasmine.kerneos.core.view.*"
+		 implements = "mx.controls.listClasses.IListItemRenderer"
          horizontalAlign = "center"
          verticalAlign = "middle"
          width = "140"
@@ -190,7 +191,9 @@
                             height = "64" />
 
     <!-- The module name -->
-    <mx:LinkButton id = "moduleName"
+    <coreView:MultiLineLinkButton
+		           width="130"
+		           id = "moduleName"
                    color = "#111111"
                    label = "{_module.name}"
                    filters = "{[nameShadow]}" />
