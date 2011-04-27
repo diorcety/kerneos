@@ -61,7 +61,7 @@
   <scm>
     <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/branches/KERNEOS_1_3_x</connection>
     <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.forge.objectweb.org/svnroot/jasmine/kerneos/branches/KERNEOS_1_3_x</developerConnection>
-    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/branches/KERNEOS_1_3_x?repname=jasmine&amp;path=/kerneos/trunk</url>
+    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/branches/KERNEOS_1_3_x?repname=jasmine&amp;path=/kerneos/branches/KERNEOS_1_3_x?repname=jasmine&amp;path=/kerneos/branches/KERNEOS_1_3_x?repname=jasmine&amp;path=/kerneos/trunk</url>
   </scm>
 
   <repositories>
