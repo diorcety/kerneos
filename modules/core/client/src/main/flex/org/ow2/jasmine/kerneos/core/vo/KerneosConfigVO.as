@@ -95,13 +95,6 @@ public class KerneosConfigVO implements IValueObject
      * Set the default language used in Kerneos when loading.
      */
     public var defaultLanguage : String = "en_US";
-    
-    // Modules
-    
-    /**
-     * The modules.
-     */
-    public var modules : ModulesVO;
 
 }
 }

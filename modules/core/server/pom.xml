@@ -145,7 +145,7 @@
         </executions>
         <configuration>
           <extension>true</extension>
-          <schemaDirectory>src/main/resources/</schemaDirectory>
+          <schemaDirectory>src/main/schemas/</schemaDirectory>
           <generatePackage>org.ow2.jasmine.kerneos.config.generated</generatePackage>
           <strict>true</strict>
           <verbose>true</verbose>

@@ -32,7 +32,7 @@ import mx.rpc.events.ResultEvent;
 
 import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.jasmine.kerneos.common.view.ServerSideException;
-import org.ow2.jasmine.kerneos.core.business.ILoadKerneosConfigDelegate;
+import org.ow2.jasmine.kerneos.core.business.IGetKerneosConfigDelegate;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 
@@ -42,16 +42,16 @@ import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 * @author Guillaume Renault, Julien Nicoulaud
 */ 
 [Event(name="serverSideException", type="org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent")] 
-public class LoadKerneosConfigCommand implements ICommand, IResponder{
+public class GetKerneosConfigCommand implements ICommand, IResponder{
     
     /**
     * Send the event to the java side, using the business layer of the pattern
     */
     public function execute( e:CairngormEvent ):void {
         
-        var delegate:ILoadKerneosConfigDelegate = KerneosModelLocator.getInstance().getLoadKerneosConfigDelegate();
+        var delegate:IGetKerneosConfigDelegate = KerneosModelLocator.getInstance().getGetKerneosConfigDelegate();
         delegate.responder = this;
-        delegate.loadKerneosConfig();
+        delegate.getKerneosConfig();
     }
 
     /**

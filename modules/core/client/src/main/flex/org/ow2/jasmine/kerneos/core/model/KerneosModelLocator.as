@@ -31,6 +31,7 @@ import mx.utils.UIDUtil;
 
 import org.ow2.jasmine.kerneos.core.business.*;
 import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
+import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 
 /**
@@ -63,6 +64,13 @@ public class KerneosModelLocator implements ModelLocator
      */
     [Bindable]
     public var config : KerneosConfigVO;
+
+    /**
+     * The module list.
+     */
+    [Bindable]
+    public var modules : ModulesVO;
+
     
     /**
      * The state of the application.
@@ -87,11 +95,14 @@ public class KerneosModelLocator implements ModelLocator
     // Delegates unique instances
     
     /**
-     * "Load Kerneos config file" delegate unique instance
+     * "Get Kerneos config file" delegate unique instance
      */
-    private var loadKerneosConfigDelegate : ILoadKerneosConfigDelegate = null;
+    private var getKerneosConfigDelegate : IGetKerneosConfigDelegate = null;
     
-    
+    /**
+     * "GetM odules" delegate unique instance
+     */
+    private var getModulesDelegate : IGetModulesDelegate = null;
     
     // =========================================================================
     // Construction
@@ -131,15 +142,27 @@ public class KerneosModelLocator implements ModelLocator
     // =========================================================================
     
     /**
-     * Get the "Load Kerneos config file" delegate unique instance.
+     * Get the "Get Kerneos config file" delegate unique instance.
      */
-    public function getLoadKerneosConfigDelegate() : ILoadKerneosConfigDelegate
+    public function getGetKerneosConfigDelegate() : IGetKerneosConfigDelegate
     {
-        if (this.loadKerneosConfigDelegate == null)
+        if (this.getKerneosConfigDelegate == null)
         {
-            this.loadKerneosConfigDelegate = new LoadKerneosConfigDelegate();
+            this.getKerneosConfigDelegate = new GetKerneosConfigDelegate();
         }
-        return this.loadKerneosConfigDelegate;
+        return this.getKerneosConfigDelegate;
+    }
+
+    /**
+     * Get the "Get Kerneos config file" delegate unique instance.
+     */
+    public function getGetModulesDelegate() : IGetModulesDelegate
+    {
+        if (this.getModulesDelegate == null)
+        {
+            this.getModulesDelegate = new GetModulesDelegate();
+        }
+        return this.getModulesDelegate;
     }
 }
 }

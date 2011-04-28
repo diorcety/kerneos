@@ -34,7 +34,9 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.ConfigurationException;
@@ -59,6 +61,7 @@ import org.osgi.service.http.NamespaceException;
 import org.ow2.jasmine.kerneos.config.generated.KerneosConfig;
 import org.ow2.jasmine.kerneos.config.generated.KerneosModule;
 import org.ow2.jasmine.kerneos.config.generated.Module;
+import org.ow2.jasmine.kerneos.config.generated.Modules;
 import org.ow2.jasmine.kerneos.config.generated.ObjectFactory;
 import org.ow2.jasmine.kerneos.service.ModuleEvent;
 import org.ow2.util.log.Log;
@@ -263,8 +266,13 @@ public class KerneosConfigService implements GraniteDestination {
         return kerneosCore.getKerneosConfig();
     }
 
-    public Collection<Module> getModules() {
-        return moduleMap.values();
+    public Modules getModules() {
+        Modules modules = new Modules();
+        for (Module module : moduleMap.values()) {
+            JAXBElement<Module> jaxbElement = new JAXBElement<Module>(new QName("module"), Module.class, module);
+            modules.getModulesList().add(jaxbElement);
+        }
+        return modules;
     }
 
     public String getId() {

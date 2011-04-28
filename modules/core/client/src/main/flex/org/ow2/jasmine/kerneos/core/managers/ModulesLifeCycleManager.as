@@ -117,7 +117,7 @@ public class ModulesLifeCycleManager
     public static function setupModulesServicesAndIcons(e : Event = null) : void
     {
         // Setup the modules services and icons
-        setupModulesCollection(KerneosModelLocator.getInstance().config.modules.modulesList);
+        setupModulesCollection(KerneosModelLocator.getInstance().modules.modulesList);
     }
 
 
@@ -127,7 +127,7 @@ public class ModulesLifeCycleManager
      */
     public static function doLoadOnStartup(e : Event = null) : void
     {
-        doLoadOnStartupModules(KerneosModelLocator.getInstance().config.modules.modulesList);
+        doLoadOnStartupModules(KerneosModelLocator.getInstance().modules.modulesList);
     }
 
 

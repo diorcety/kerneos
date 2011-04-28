@@ -29,11 +29,11 @@ import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
 * 
 * @author Julien Nicoulaud
 */
-public interface ILoadKerneosConfigDelegate extends IDelegateResponder{
+public interface IGetKerneosConfigDelegate extends IDelegateResponder{
     
     /**
     * Load the Kerneos config file
     */
-    function loadKerneosConfig():void;
+    function getKerneosConfig():void;
 }
 }

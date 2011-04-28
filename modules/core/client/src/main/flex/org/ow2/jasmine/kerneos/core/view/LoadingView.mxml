@@ -87,7 +87,7 @@
                 progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.loading-application-configuration');
 
                 // Load the Kerneos configuration
-                KerneosLifeCycleManager.loadKerneosConfig();
+                KerneosLifeCycleManager.getKerneosConfig();
             }
 
 
@@ -110,7 +110,7 @@
                     }
 
                     // Setup the modules
-                    ModulesLifeCycleManager.setupModulesServicesAndIcons();
+                    //ModulesLifeCycleManager.setupModulesServicesAndIcons();
 
                     // Update the displayed label
                     progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.ready');

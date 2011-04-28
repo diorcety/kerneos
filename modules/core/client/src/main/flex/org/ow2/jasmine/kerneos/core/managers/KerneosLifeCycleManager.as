@@ -115,11 +115,11 @@ public class KerneosLifeCycleManager
     /**
      * Launch the command to load the application configuration.
      */
-    public static function loadKerneosConfig() : void
+    public static function getKerneosConfig() : void
     {
         try
         {
-            var event_module : KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.LOAD_KERNEOS_CONFIG);
+            var event_module : KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_KERNEOS_CONFIG);
             CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
         }
         catch (e : Error)
