@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<<<<<<< HEAD:assemblies/pom.xml
   - Kerneos
   - Copyright (C) 2008-2011 Bull S.A.S.
+=======
+  - JASMINe
+  - Copyright (C) 2009-2010 Bull S.A.S.
+>>>>>>> Add example for testing:modules/examples/example1/server/src/main/resources/META-INF/kerneos-module.xml
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -24,27 +29,23 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<kerneos-module xmlns="org.ow2.jasmine.kerneos:kerneos-module"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="org.ow2.jasmine.kerneos:kerneos-module">
 
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.ow2.jasmine.kerneos</groupId>
-    <artifactId>kerneos</artifactId>
-    <version>2.0.0-M1-SNAPSHOT</version>
-  </parent>
+    <!-- Module settings -->
+    <swf-module>
+        <name>Example1</name>
+        <description>This is a example</description>
+        <small-icon>icons/quickvisu16.png</small-icon>
+        <big-icon>icons/quickvisu64.png</big-icon>
+        <file>example1.swf</file>
+        <services>
+            <service id="quickvisuService" destination="quickvisu"/>
+        </services>
+        <shared-libraries>
+            <shared-library>quickvisu-shared.swf</shared-library>
+        </shared-libraries>
+    </swf-module>
 
-  <groupId>org.ow2.jasmine.kerneos</groupId>
-  <artifactId>kerneos-modules</artifactId>
-  <packaging>pom</packaging>
-
-  <name>Kerneos :: Modules</name>
-
-  <modules>
-    <!--<module>cairngorm</module>-->
-    <module>archetype-module</module>
-    <module>libs</module>
-    <module>core</module>
-    <module>examples</module>
-  </modules>
-
-</project>
+</kerneos-module>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - JASMINe
+  - Copyright (C) 2009 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="org.ow2.jasmine.kerneos:kerneos-config"
+    xmlns:k="org.ow2.jasmine.kerneos:kerneos-config">
+
+
+    <!--##################################################################################
+    # kerneos-config
+    ###################################################################################-->
+
+    <xs:element name="kerneos-config">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="k:base-url" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:application-project" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:application-name" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:application-logo" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-minimize-all-button" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-cascade-button" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-tile-button" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-notification-popups" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-popups-from-active-window" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:enable-notifications-log" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:show-confirm-close-dialog" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:default-language" maxOccurs="1" minOccurs="0" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--##################################################################################
+    # Options
+    ###################################################################################-->
+
+    <xs:element name="base-url" type="xs:string" default="/kerneos" />
+    <xs:element name="application-project" type="xs:string" default="JASMINe" />
+    <xs:element name="application-name" type="xs:string" default="Kerneos" />
+    <xs:element name="application-logo" type="xs:string" />
+    <xs:element name="show-minimize-all-button" type="xs:boolean" default="true" />
+    <xs:element name="show-cascade-button" type="xs:boolean" default="true" />
+    <xs:element name="show-tile-button" type="xs:boolean" default="true" />
+    <xs:element name="show-notification-popups" type="xs:boolean" default="true" />
+    <xs:element name="show-popups-from-active-window" type="xs:boolean" default="false" />
+    <xs:element name="enable-notifications-log" type="xs:boolean" default="true" />
+    <xs:element name="show-confirm-close-dialog" type="xs:boolean" default="true" />
+    <xs:element name="default-language" type="xs:string" default="en_US" />
+
+</xs:schema>

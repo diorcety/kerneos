@@ -1,0 +1,71 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - JASMINe
+     - Copyright (C) 2009 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<mx:Module xmlns:mx = "http://www.adobe.com/2006/mxml"
+           xmlns:view = "view.*"
+           xmlns:control = "control.*"
+           implements = "org.ow2.jasmine.kerneos.core.api.KerneosModule"
+           width = "100%"
+           height = "100%">
+
+    <mx:Script>
+        <![CDATA[
+            
+            // =========================================================================
+            // Implementation of KerneosModule
+            // =========================================================================
+            
+            /**
+             * When the module is closed, cut off all client-server communications
+             */
+            public function closeModule() : void
+            {
+                ////////////////////////////////////////////////////////////////
+                //                                                            //
+                //             Action to do when the module is closed         //
+                //                                                            //
+                ////////////////////////////////////////////////////////////////
+            }
+            
+            public function canBeClosedWithoutPrompt() : Boolean {
+            
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+                //                                                                                            //
+                //             return whether or not a prompt should be shown when closing the module         //
+                //                                                                                            //
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+            
+                return true;
+            }
+
+        ]]>
+    </mx:Script>
+
+    <!-- Instantiate the controller. A controller a module -->
+    <control:Controller id = "controller" />
+
+    <!-- Instantiate the main view -->
+    <view:MainView />
+
+</mx:Module>

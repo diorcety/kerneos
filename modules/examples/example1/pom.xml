@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>kerneos-examples</artifactId>
+        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <version>2.0.0-M1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>kerneos-examples-example1</artifactId>
+
+    <packaging>pom</packaging>
+
+    <name>Kerneos :: Modules :: Examples :: Example1</name>
+
+    <properties>
+        <flex.version>3.5.0.12683</flex.version>
+        <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
+        <cairngorm.version>2.2.2-Beta</cairngorm.version>
+        <kerneos.version>2.0.0-M1-SNAPSHOT</kerneos.version>
+    </properties>
+
+    <modules>
+        <module>client</module>
+        <module>server</module>
+    </modules>
+</project>
