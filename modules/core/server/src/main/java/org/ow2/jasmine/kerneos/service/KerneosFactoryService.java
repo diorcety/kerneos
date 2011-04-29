@@ -25,26 +25,7 @@
 
 package org.ow2.jasmine.kerneos.service;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface KerneosFactoryProperties {
-    enum SCOPE {
-        REQUEST("request"),
-        SESSION("session"),
-        APPLICATION("application");
-        private final String value;
-
-        SCOPE(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
-
-    SCOPE scope();
+public interface KerneosFactoryService<T> {
+    public T newInstance();
 }

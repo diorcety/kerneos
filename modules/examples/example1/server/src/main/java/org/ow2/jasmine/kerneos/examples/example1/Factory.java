@@ -6,8 +6,9 @@ import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.ow2.jasmine.kerneos.service.KerneosFactory;
+import org.ow2.jasmine.kerneos.service.KerneosFactoryService;
 import org.ow2.jasmine.kerneos.service.KerneosFactoryProperties;
+import org.ow2.jasmine.kerneos.service.KerneosService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -15,8 +16,12 @@ import org.ow2.util.log.LogFactory;
 @Component
 @Instantiate
 @Provides
-@KerneosFactoryProperties(scope = KerneosFactory.SCOPE.REQUEST)
-public class Factory implements KerneosFactory<String> {
+
+
+@KerneosService(destination = "ObjectService")
+@KerneosFactoryProperties(scope = KerneosFactoryProperties.SCOPE.SESSION)
+
+public class Factory implements KerneosFactoryService<MyService> {
     /**
      * The logger.
      */
@@ -32,15 +37,7 @@ public class Factory implements KerneosFactory<String> {
         logger.info("Stop Factory");
     }
 
-    public String getId() {
-        return "Factory";
-    }
-
-    public String newInstance() {
-        return "Hi!";
-    }
-
-    public Class<String> getInstanceClass() {
-        return String.class;
+    public MyService newInstance() {
+        return new MyService();
     }
 }

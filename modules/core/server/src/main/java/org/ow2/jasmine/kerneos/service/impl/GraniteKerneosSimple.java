@@ -23,28 +23,28 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.jasmine.kerneos.service;
+package org.ow2.jasmine.kerneos.service.impl;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.granite.osgi.service.GraniteFactory;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface KerneosFactoryProperties {
-    enum SCOPE {
-        REQUEST("request"),
-        SESSION("session"),
-        APPLICATION("application");
-        private final String value;
+import org.ow2.jasmine.kerneos.service.KerneosSimpleService;
 
-        SCOPE(String value) {
-            this.value = value;
-        }
 
-        @Override
-        public String toString() {
-            return value;
-        }
+public class GraniteKerneosSimple implements GraniteFactory {
+
+    private final KerneosSimpleService service;
+    private final String id;
+
+    GraniteKerneosSimple(KerneosSimpleService service, String id) {
+        this.service = service;
+        this.id = id;
     }
 
-    SCOPE scope();
+    public String getId() {
+        return id;
+    }
+
+    public Object newInstance() {
+        return service;
+    }
 }

@@ -37,8 +37,9 @@ public class ModuleEvent extends CairngormEvent
     //             Event Type         //
     //                                //
     ////////////////////////////////////
-    public static var OBJECT : String = "Object";
-
+    public static var HELLO : String = "Hello";
+ 
+    private var message: String = "";
     /**
      * Creates a new ModuleEvent.
      */
@@ -47,13 +48,24 @@ public class ModuleEvent extends CairngormEvent
         super(type);
     }
 
+    public function setMessage(message:String):void {
+        this.message = message;
+    }
+
+    public function getMessage(): String
+    {
+        return message;
+    }
+
     /**
      * Overrides the clone function of the CairngormEvent class.
      * returns a new ModuleEvent
      */
     override public function clone() : Event
     {
-        return new ModuleEvent(this.type);
+        var ev:ModuleEvent = new ModuleEvent(this.type);
+        ev.setMessage(this.message);
+        return ev;
     }
 
 }

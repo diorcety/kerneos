@@ -36,18 +36,13 @@ import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.apache.felix.ipojo.api.Dependency;
-import org.apache.felix.ipojo.api.PrimitiveComponentType;
-import org.apache.felix.ipojo.api.SingletonComponentType;
 import org.granite.osgi.GraniteClassRegistry;
 
 import org.granite.osgi.service.GraniteDestination;
 import org.granite.osgi.service.GraniteFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.ow2.jasmine.kerneos.service.KerneosFactory;
-import org.ow2.jasmine.kerneos.service.KerneosFactoryProperties;
-import org.ow2.jasmine.kerneos.service.KerneosService;
+import org.ow2.jasmine.kerneos.service.*;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -113,36 +108,41 @@ public class KerneosServices {
     }
 
     @Bind(aggregate = true, optional = true)
-    private final void bindService(final KerneosService service) {
+    private final void bindService(final KerneosSimpleService service) {
         addService(service);
     }
 
     @Unbind
-    private final void unbindService(final KerneosService service) {
-        removeService(service.getId());
+    private final void unbindService(final KerneosSimpleService service) {
+        removeService(service);
     }
 
     @Bind(aggregate = true, optional = true)
-    private final void bindFactory(final KerneosFactory factory) {
-     //   gcr.registerClass(factory.getId(), factory.getClass(), true);
-        addFactory(factory);
+    private final void bindFactory(final KerneosFactoryService factory) {
+        addService(factory);
     }
 
     @Unbind
-    private final void unbindFactory(final KerneosFactory factory) {
-        removeFactory(factory.getId());
-    //    gcr.unregisterClass(factory.getId(), factory.getClass(), true);
+    private final void unbindFactory(final KerneosFactoryService factory) {
+        removeService(factory);
     }
 
-    private final void addService(KerneosService service) {
-        String serviceId = service.getId();
-        logger.info("New Service: " + serviceId);
-        try {
-            ServiceRegistration instance = null;
-            {
-                instance = bundleContext.registerService(GraniteFactory.class.getName(), new GraniteKerneosService(service), null);
+    private final void addService(final KerneosSimpleService service) {
+        KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
+        if (ks == null) {
+            logger.info("Invalid Kerneos service (no service id): " + service);
+        }
 
-            }
+        String serviceId = ks.destination();
+        logger.info("New Kerneos service: " + serviceId);
+
+        registerClasses(serviceId, service);
+
+        try {
+            ServiceRegistration instance = bundleContext.registerService(
+                    GraniteFactory.class.getName(),
+                    new GraniteKerneosSimple(service, serviceId + KerneosConstants.FACTORY_SUFFIX),
+                    null);
 
             ComponentInstance factoryConfiguration = null;
             {
@@ -173,29 +173,47 @@ public class KerneosServices {
         }
     }
 
-    private final void removeService(String serviceId) {
-        logger.info("Remove service: " + serviceId);
+    private final void removeService(final KerneosSimpleService service) {
+
+        KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
+        if (ks == null) {
+            logger.info("Invalid Kerneos service (no service id): " + service);
+        }
+
+        String serviceId = ks.destination();
+
+        logger.info("Remove Kerneos service: " + serviceId);
 
         KerneosInstance ksi = null;
         synchronized (serviceMap) {
             ksi = serviceMap.get(serviceId);
         }
         if (ksi == null) {
-            logger.warn("Try to remove an invalid KerneosService: " + serviceId);
+            logger.warn("Try to remove an invalid Kerneos Service: " + serviceId);
             return;
         }
+
+        unregisterClasses(serviceId);
 
         ksi.dispose();
     }
 
-    private final void addFactory(KerneosFactory factory) {
-        String serviceId = factory.getId();
-        logger.info("New factory: " + serviceId);
+    private final void addService(final KerneosFactoryService factory) {
+        KerneosService ks = factory.getClass().getAnnotation(KerneosService.class);
+        if (ks == null) {
+            logger.info("Invalid Kerneos factory (no service id): " + factory);
+        }
+
+        String serviceId = ks.destination();
+        logger.info("New Kerneos factory: " + serviceId);
+
+        registerClasses(serviceId, factory);
+
         try {
-            ServiceRegistration instance = null;
-            {
-                instance = bundleContext.registerService(GraniteFactory.class.getName(), new GraniteKerneosFactory(factory), null);
-            }
+            ServiceRegistration instance = bundleContext.registerService(
+                    GraniteFactory.class.getName(),
+                    new GraniteKerneosFactory(factory, serviceId + KerneosConstants.FACTORY_SUFFIX),
+                    null);
 
             ComponentInstance factoryConfiguration = null;
             {
@@ -223,6 +241,7 @@ public class KerneosServices {
                             break;
                         case SESSION:
                             properties.put("SCOPE", GraniteDestination.SCOPE.SESSION);
+                            break;
                         default:
                             properties.put("SCOPE", GraniteDestination.SCOPE.REQUEST);
 
@@ -243,18 +262,44 @@ public class KerneosServices {
         }
     }
 
-    private final void removeFactory(String factoryId) {
-        logger.info("Remove factory: " + factoryId);
+    private final void removeService(final KerneosFactoryService factory) {
+        KerneosService ks = factory.getClass().getAnnotation(KerneosService.class);
+        if (ks == null) {
+            logger.info("Invalid Kerneos factory (no service id): " + factory);
+        }
+
+        String serviceId = ks.destination();
+
+        logger.info("Remove Kerneos factory: " + serviceId);
 
         KerneosInstance kfi = null;
         synchronized (factoryMap) {
-            kfi = factoryMap.get(factoryId);
+            kfi = factoryMap.get(serviceId);
         }
         if (kfi == null) {
-            logger.warn("Try to remove an invalid KerneosFactory: " + factoryId);
+            logger.warn("Try to remove an invalid Kerneos Factory: " + serviceId);
             return;
         }
 
+        unregisterClasses(serviceId);
+
         kfi.dispose();
+    }
+
+    private final void registerClasses(String serviceId, Object service) {
+        KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
+        if (ks != null) {
+            ClassAnalyzer ca = new ClassAnalyzer();
+            if (ks.analyze())
+                ca.analyze(service.getClass());
+            for (Class cls : ks.classes()) {
+                ca.add(cls);
+            }
+            gcr.registerClass(serviceId, ca.compile());
+        }
+    }
+
+    private final void unregisterClasses(String serviceId) {
+        gcr.unregisterClass(serviceId);
     }
 }

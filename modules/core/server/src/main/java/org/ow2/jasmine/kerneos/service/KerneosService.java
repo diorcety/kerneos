@@ -25,6 +25,14 @@
 
 package org.ow2.jasmine.kerneos.service;
 
-public interface KerneosService {
-     public String getId();
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface KerneosService {
+    String destination();
+
+    boolean analyze() default true;
+
+    Class[] classes() default {};
 }

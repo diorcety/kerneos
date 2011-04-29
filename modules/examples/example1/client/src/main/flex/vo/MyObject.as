@@ -1,7 +1,7 @@
 /**
  * JASMINe
  * Copyright (C) 2009 Bull S.A.S.
- * Contact: jasmine@ow2.org
+ * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,33 +18,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * --------------------------------------------------------------------------
  * $Id$
- * --------------------------------------------------------------------------
  */
 
-package org.ow2.jasmine.kerneos.service;
+package vo {
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Retention(RetentionPolicy.RUNTIME)
-public @interface KerneosFactoryProperties {
-    enum SCOPE {
-        REQUEST("request"),
-        SESSION("session"),
-        APPLICATION("application");
-        private final String value;
-
-        SCOPE(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
+[RemoteClass(alias="org.ow2.jasmine.kerneos.examples.example1.MyObject")]
+[Bindable]
+public class MyObject {
+    public function MyObject() {
     }
 
-    SCOPE scope();
+    public var field1:String;
+    public var field2:MySubObject;
+}
+
 }

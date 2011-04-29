@@ -1,4 +1,4 @@
-package org.ow2.jasmine.kerneos.examples.example1;
+package org.ow2.jasmine.kerneos.examples.example2;
 
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -7,34 +7,32 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.ow2.jasmine.kerneos.service.KerneosService;
+import org.ow2.jasmine.kerneos.service.KerneosSimpleService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
 @Component
 @Instantiate
 @Provides
-public class Service implements KerneosService {
+@KerneosService(destination = "HelloService")
+public class HelloService implements KerneosSimpleService {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(Service.class);
+    private static Log logger = LogFactory.getLog(HelloService.class);
 
 
     @Validate
     private void start() {
-        logger.info("Start Service");
+        logger.info("Start HelloService");
     }
 
     @Invalidate
     private void stop() {
-        logger.info("Stop Service");
+        logger.info("Stop HelloService");
     }
 
-    public void sayHello(String name) {
-        System.out.println("Hello " + name);
-    }
-
-    public String getId() {
-        return "Service";
+    public String sayHello(String name) {
+        return "Hello " + name;
     }
 }

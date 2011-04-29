@@ -15,6 +15,7 @@
 
   <modules>
     <module>example1</module>
+    <module>example2</module>
     <module>test</module>
   </modules>
 
@@ -24,15 +25,7 @@
       <build>
         <pluginManagement>
           <plugins>
-            <plugin>
-              <groupId>org.sonatype.flexmojos</groupId>
-              <artifactId>flexmojos-maven-plugin</artifactId>
-              <configuration>
-                <debug>true</debug>
-              </configuration>
-            </plugin>
-
-            <plugin>
+             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-dependency-plugin</artifactId>
               <executions>

@@ -36,26 +36,30 @@
 
     import model.ModuleModelLocator;
 
+    import mx.controls.Alert;
 
+    private function set newMessage(message:String):void {
+      if (message != null)
+        Alert.show(message);
+    }
 
     private function send():void {
-      var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.OBJECT);
+      var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.HELLO);
+      event_module.setMessage(nameInput.text);
       CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
     }
     ]]>
     </mx:Script>
 
-  <mx:Label text="Object Service" fontSize="50"/>
+  <mx:Label text="Hello world" fontSize="50"/>
 
   <mx:Form>
-    <mx:FormItem label="MyObject :">
-      <mx:Label text="{ModuleModelLocator.getInstance().myData.field1}"/>
+    <mx:FormItem label="Name :">
+      <mx:TextInput id="nameInput"/>
     </mx:FormItem>
-    <mx:FormItem label="MySubObject :">
-      <mx:Label text="{ModuleModelLocator.getInstance().myData.field2.field1}"/>
-      <mx:Label text="{ModuleModelLocator.getInstance().myData.field2.field2}"/>
-    </mx:FormItem>
-    <mx:Button id="sendButton" label="Get" click="send();"/>
+    <mx:Button id="sendButton" label="Send" click="send();"/>
   </mx:Form>
+
+  <mx:Binding source="ModuleModelLocator.getInstance().myData" destination="newMessage"/>
 
 </mx:VBox>

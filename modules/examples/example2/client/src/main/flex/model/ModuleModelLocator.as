@@ -30,8 +30,6 @@ import com.adobe.cairngorm.model.ModelLocator;
 
 import mx.utils.UIDUtil;
 
-import vo.MyObject;
-
 /**
   * The model locator for the Module.
   */
@@ -83,7 +81,7 @@ public class ModuleModelLocator implements ModelLocator
     Put here all the variables of the model
     Example :   */
         [Bindable]
-        public var myData : MyObject;
+        public var myData : String;
 
     
     ////////////////////////////////////

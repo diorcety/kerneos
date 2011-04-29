@@ -25,26 +25,5 @@
 
 package org.ow2.jasmine.kerneos.service;
 
-
-public interface KerneosFactory<T> {
-    public enum SCOPE {
-        REQUEST("request"),
-        SESSION("session"),
-        APPLICATION("application");
-        private final String value;
-
-        SCOPE(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
-
-
-    public String getId();
-
-    public T newInstance();
+public interface KerneosSimpleService {
 }

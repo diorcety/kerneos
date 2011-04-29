@@ -109,6 +109,22 @@
   </modules>
 
   <profiles>
+    <profile>
+      <id>kerneos-debug</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.sonatype.flexmojos</groupId>
+              <artifactId>flexmojos-maven-plugin</artifactId>
+              <configuration>
+                <debug>true</debug>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
 
     <!-- WTP configuration profile -->
     <profile>

@@ -7,11 +7,11 @@
     <version>2.0.0-M1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>kerneos-examples-example1</artifactId>
+  <artifactId>kerneos-examples-example2</artifactId>
 
   <packaging>pom</packaging>
 
-  <name>Kerneos :: Modules :: Examples :: Example1</name>
+  <name>Kerneos :: Modules :: Examples :: Example2</name>
 
   <properties>
     <flex.version>3.5.0.12683</flex.version>

@@ -41,11 +41,11 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
      */
     public function callServerSide(parameters:Object):void {
         // find service
-        var service:Object = ServiceLocator.getInstance().getRemoteObject("object_service");
+        var service:Object = ServiceLocator.getInstance().getRemoteObject("hello_service");
 
         // Make the service call. The method called on service is the method name
         // of the java class bound with the remote object, with its parameters.
-        var call:Object = service.getObject();
+        var call:Object = service.sayHello(parameters);
 
         // add responder to handle the callback
         call.addResponder(this.responder);

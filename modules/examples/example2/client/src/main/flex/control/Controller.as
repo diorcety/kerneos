@@ -64,7 +64,7 @@ public class Controller extends FrontController {
         /*
             Add the events to the controler with the associated command
             Example :        */
-                this.addCommand(ModuleEvent.OBJECT, ModuleCommand);
+                this.addCommand(ModuleEvent.HELLO, ModuleCommand);
 
     }
 
