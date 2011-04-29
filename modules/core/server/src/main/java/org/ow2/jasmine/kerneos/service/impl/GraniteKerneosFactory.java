@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -35,15 +35,31 @@ public class GraniteKerneosFactory implements GraniteFactory {
     private final KerneosFactoryService service;
     private final String id;
 
-    GraniteKerneosFactory(KerneosFactoryService service, String id) {
+    /**
+     * Create a interface between KerneosFactory and GraniteFactory
+     *
+     * @param service the service to interface
+     * @param id      the id of the GraniteFactory
+     */
+    GraniteKerneosFactory(final KerneosFactoryService service, final String id) {
         this.service = service;
         this.id = id;
     }
 
+    /**
+     * Get the GraniteFactory's
+     *
+     * @return the GraniteFactory's id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Called when GraniteDS ask for a new instance of the service provided by this factory
+     *
+     * @return the new instance of the service
+     */
     public Object newInstance() {
         return service.newInstance();
     }

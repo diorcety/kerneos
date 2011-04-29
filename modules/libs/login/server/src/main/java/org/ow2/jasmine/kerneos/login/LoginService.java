@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2008 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -36,7 +36,7 @@ import javax.security.auth.login.LoginException;
 import org.granite.messaging.service.annotations.RemoteDestination;
 import org.ow2.jonas.security.auth.callback.NoInputCallbackHandler;
 
-@RemoteDestination(id="logIn")
+@RemoteDestination(id = "logIn")
 public class LoginService implements Serializable {
 
     /**
@@ -57,7 +57,7 @@ public class LoginService implements Serializable {
     /**
      * Login method. Use JOnAS JAAS configuration.
      *
-     * @param user user name
+     * @param user     user name
      * @param password password
      * @return true if the user successfully logged in, false otherwise.
      */
@@ -67,13 +67,15 @@ public class LoginService implements Serializable {
 
         try {
             // try for Jonas 4.X first
-            Class noInputCallbackHandler = Class.forName("org.objectweb.jonas.security.auth.callback.NoInputCallbackHandler");
-            Constructor constructor = noInputCallbackHandler.getDeclaredConstructor(new Class[] {String.class, String.class});
-            this.handler = (CallbackHandler) constructor.newInstance(new Object[] {user, password});
+            Class noInputCallbackHandler =
+                    Class.forName("org.objectweb.jonas.security.auth.callback.NoInputCallbackHandler");
+            Constructor constructor =
+                    noInputCallbackHandler.getDeclaredConstructor(new Class[]{String.class, String.class});
+            this.handler = (CallbackHandler) constructor.newInstance(new Object[]{user, password});
 
         } catch (Exception e) {
             // try for Jonas 5.X then
-            Logger.getLogger(getClass().getName()).log(Level.INFO,"Login on JOnAS 5");
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "Login on JOnAS 5");
             this.handler = new NoInputCallbackHandler(user, password);
         }
 

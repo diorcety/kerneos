@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *

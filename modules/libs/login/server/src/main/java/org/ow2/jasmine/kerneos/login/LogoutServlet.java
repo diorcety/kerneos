@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -48,7 +48,8 @@ public class LogoutServlet extends HttpServlet {
      * Handle GET requests
      */
     @Override
-    protected void doGet(final HttpServletRequest req, final HttpServletResponse res) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse res) throws
+            ServletException, IOException {
         HttpSession session = req.getSession(false);
         if (session != null) {
             session.invalidate();

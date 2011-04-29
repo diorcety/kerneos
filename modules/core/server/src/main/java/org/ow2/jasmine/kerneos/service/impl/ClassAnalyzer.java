@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -26,8 +26,11 @@
 package org.ow2.jasmine.kerneos.service.impl;
 
 import java.io.Serializable;
-import java.lang.Class;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +38,12 @@ public class ClassAnalyzer {
 
     private List<Class> classList = new LinkedList<Class>();
 
-    public ClassAnalyzer add(Class cls) {
+    /**
+     * Add a class to the list
+     * @param cls The class to add to the list
+     * @return The ClassAnalyzer object itself
+     */
+    public ClassAnalyzer add(final Class cls) {
         // No already registred class
         if (!classList.contains(cls)) {
             classList.add(cls);
@@ -43,17 +51,30 @@ public class ClassAnalyzer {
         return this;
     }
 
-    public ClassAnalyzer analyze(Class cls) {
-        _analyzeClass(cls);
+    /**
+     * Analyze recursively the classes used by the public methods and fields
+     * @param cls The class to analyze
+     * @return The ClassAnalyzer object itself
+     */
+    public ClassAnalyzer analyze(final Class cls) {
+        analyzeClass(cls);
         return this;
     }
 
+    /**
+     * Compile the list to a class array
+     * @return An array containing the class list
+     */
     public Class[] compile() {
         Class[] ret = new Class[classList.size()];
         return classList.toArray(ret);
     }
 
-    private void _analyzeClass(Class cls) {
+    /**
+     * Analyze recursively the classes used by the public methods and fields
+     * @param cls The class to analyze
+     */
+    private void analyzeClass(final Class cls) {
         List<Class> list = new LinkedList<Class>();
 
         // Get Methods
@@ -86,16 +107,27 @@ public class ClassAnalyzer {
 
         // Recursive class discovery
         for (Class clazz : list) {
-            _analyzeClass(clazz);
+            analyzeClass(clazz);
         }
     }
 
-    private void getClasses(List<Class> list, Class cls) {
-        if (isUsefull(list, cls))
+    /**
+     * Add the class to the list if it is usefull
+     * @param list The list where the class will be added
+     * @param cls The class to add
+     */
+    private void getClasses(final List<Class> list, final Class cls) {
+        if (isUsefull(list, cls)) {
             list.add(cls);
+        }
     }
 
-    private void getClasses(List<Class> list, Type type) {
+    /**
+     * Explore the type for finding used classes
+     * @param list The list where the classes will be added
+     * @param type The type to explore
+     */
+    private void getClasses(final List<Class> list, final Type type) {
         if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             if (pt.getRawType() instanceof Class) {
@@ -119,8 +151,13 @@ public class ClassAnalyzer {
         }
     }
 
-    // Used during analyze for filter
-    private boolean isUsefull(List<Class> list, Class cls) {
+    /**
+     * Add the class to the list if it is usefull
+     * @param list The list where the classes will be added
+     * @param cls The class to add
+     * @return True if the class is usefull
+     */
+    private boolean isUsefull(final List<Class> list, final Class cls) {
 
         // No already registred class
         if (classList.contains(cls)) {
@@ -131,12 +168,14 @@ public class ClassAnalyzer {
         }
 
         // No class from the RT
-        if (cls.getClassLoader() == null)
+        if (cls.getClassLoader() == null) {
             return false;
+        }
 
         // Only class
-        if (cls.isInterface())
+        if (cls.isInterface()) {
             return false;
+        }
 
         // Only serializable
         boolean serializable = false;
@@ -145,8 +184,9 @@ public class ClassAnalyzer {
                 serializable = true;
             }
         }
-        if (!serializable)
+        if (!serializable) {
             return false;
+        }
 
         return true;
     }

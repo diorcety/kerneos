@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -42,15 +42,15 @@ public class ModuleEvent {
     /**
      * Load value.
      */
-    public final static String LOAD = "load";
+    public static final String LOAD = "load";
 
     /**
      * Unload value.
      */
-    public final static String UNLOAD = "unload";
+    public static final String UNLOAD = "unload";
 
 
-    public ModuleEvent(Module module, String eventType) {
+    public ModuleEvent(final Module module, final String eventType) {
         this.module = module;
         this.eventType = eventType;
     }

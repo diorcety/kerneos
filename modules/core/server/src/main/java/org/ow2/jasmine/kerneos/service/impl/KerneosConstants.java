@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -25,8 +25,14 @@
 
 package org.ow2.jasmine.kerneos.service.impl;
 
-public class KerneosConstants {
+public final class KerneosConstants {
 
+    /**
+     *
+     */
+    private KerneosConstants() {
+
+    }
 
     /**
      * Suffix used for the factory of an service
@@ -54,16 +60,16 @@ public class KerneosConstants {
     /*
         Granite Configuration
      */
-    public final static String GRANITE_SERVICE = "granite-service";
-    public final static String GRANITE_CHANNEL = "my-graniteamf-kerneos";
-    public final static String GRANITE_CHANNEL_URI = "/graniteamf/amf";
+    public static final String GRANITE_SERVICE = "granite-service";
+    public static final String GRANITE_CHANNEL = "my-graniteamf-kerneos";
+    public static final String GRANITE_CHANNEL_URI = "/graniteamf/amf";
 
     /*
         Gravity Configuration
      */
-    public final static String GRAVITY_DESTINATION = "kerneos-gravity";
-    public final static String GRAVITY_SERVICE = "messaging-service";
-    public final static String GRAVITY_CHANNEL = "my-gravityamf-kerneos";
-    public final static String GRAVITY_CHANNEL_URI = "/gravity/amf";
-    public final static String GRAVITY_ADAPTER = "kerneos-gravity-adapter";
+    public static final String GRAVITY_DESTINATION = "kerneos-gravity";
+    public static final String GRAVITY_SERVICE = "messaging-service";
+    public static final String GRAVITY_CHANNEL = "my-gravityamf-kerneos";
+    public static final String GRAVITY_CHANNEL_URI = "/gravity/amf";
+    public static final String GRAVITY_ADAPTER = "kerneos-gravity-adapter";
 }

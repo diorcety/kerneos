@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -60,7 +60,7 @@ import java.util.LinkedList;
 @Component
 @Instantiate
 @Provides
-public class KerneosCore implements IKerneosCore {
+public final class KerneosCore implements IKerneosCore {
 
     /**
      * The logger.
@@ -94,8 +94,8 @@ public class KerneosCore implements IKerneosCore {
     /**
      * Configuration component instances
      */
-    private ComponentInstance gravity_service, gravity_destination, gravity_adapter, gravity_channel;
-    private ComponentInstance granite_service, granite_channel;
+    private ComponentInstance gravityService, gravityDestination, gravityAdapter, gravityChannel;
+    private ComponentInstance graniteService, graniteChannel;
 
     @Requires(from = "org.granite.config.flex.Service")
     private Factory serviceFactory;
@@ -110,14 +110,17 @@ public class KerneosCore implements IKerneosCore {
     private Factory adapterFactory;
 
 
-    KerneosCore(BundleContext bundleContext) throws Exception {
-        jaxbContext = JAXBContext.newInstance(ObjectFactory.class.getPackage().getName(), ObjectFactory.class.getClassLoader());
+    private KerneosCore(final BundleContext bundleContext) throws Exception {
+        jaxbContext = JAXBContext.newInstance(
+                ObjectFactory.class.getPackage().getName(),
+                ObjectFactory.class.getClassLoader());
         loadKerneosConfig(bundleContext);
 
     }
 
     @Validate
-    private void start() throws MissingHandlerException, ConfigurationException, UnacceptableConfiguration, NamespaceException {
+    private void start() throws MissingHandlerException, ConfigurationException,
+            UnacceptableConfiguration, NamespaceException {
         logger.info("Start KerneosCore");
         httpContext = new KerneosHttpContext();
 
@@ -129,21 +132,21 @@ public class KerneosCore implements IKerneosCore {
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRAVITY_ADAPTER);
-            gravity_adapter = adapterFactory.createComponentInstance(properties);
+            gravityAdapter = adapterFactory.createComponentInstance(properties);
         }
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRAVITY_SERVICE);
             properties.put("MESSAGETYPES", "flex.messaging.messages.AsyncMessage");
             properties.put("DEFAULT_ADAPTER", KerneosConstants.GRAVITY_ADAPTER);
-            gravity_service = serviceFactory.createComponentInstance(properties);
+            gravityService = serviceFactory.createComponentInstance(properties);
         }
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRAVITY_CHANNEL);
             properties.put("CLASS", "org.granite.gravity.channels.GravityChannel");
             properties.put("ENDPOINT_URI", kerneosConfig.getBaseUrl() + KerneosConstants.GRAVITY_CHANNEL_URI);
-            gravity_channel = channelFactory.createComponentInstance(properties);
+            gravityChannel = channelFactory.createComponentInstance(properties);
         }
         {
             Collection<String> channels = new LinkedList<String>();
@@ -152,20 +155,20 @@ public class KerneosCore implements IKerneosCore {
             properties.put("ID", KerneosConstants.GRAVITY_DESTINATION);
             properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
             properties.put("CHANNELS", channels);
-            gravity_destination = destinationFactory.createComponentInstance(properties);
+            gravityDestination = destinationFactory.createComponentInstance(properties);
         }
 
         // Granite Configuration Instances
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRANITE_SERVICE);
-            granite_service = serviceFactory.createComponentInstance(properties);
+            graniteService = serviceFactory.createComponentInstance(properties);
         }
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRANITE_CHANNEL);
             properties.put("ENDPOINT_URI", kerneosConfig.getBaseUrl() + KerneosConstants.GRANITE_CHANNEL_URI);
-            granite_channel = channelFactory.createComponentInstance(properties);
+            graniteChannel = channelFactory.createComponentInstance(properties);
         }
     }
 
@@ -178,20 +181,20 @@ public class KerneosCore implements IKerneosCore {
         logger.info("Unregister Kerneos' resources: " + kerneosConfig.getBaseUrl());
 
         // Dispose gravity configuration instances
-        gravity_destination.dispose();
-        gravity_service.dispose();
-        gravity_adapter.dispose();
-        gravity_channel.dispose();
+        gravityDestination.dispose();
+        gravityService.dispose();
+        gravityAdapter.dispose();
+        gravityChannel.dispose();
 
         // Dispose granite configuration instances
-        granite_service.dispose();
-        granite_channel.dispose();
+        graniteService.dispose();
+        graniteChannel.dispose();
     }
 
     /**
      * Load the Kerneos config file and build the configuration object
      */
-    private void loadKerneosConfig(BundleContext bundleContext) throws Exception {
+    private void loadKerneosConfig(final BundleContext bundleContext) throws Exception {
 
         // Retrieve the kerneos config file
         URL url = bundleContext.getBundle().getResource(KerneosConstants.KERNEOS_CONFIG_FILE);
@@ -221,11 +224,11 @@ public class KerneosCore implements IKerneosCore {
     }
 
 
-    public void register(String alias, String name) throws NamespaceException {
+    public  void register(final String alias, final String name) throws NamespaceException {
         httpService.registerResources(kerneosConfig.getBaseUrl() + "/" + alias, name, httpContext);
     }
 
-    public void unregister(String alias) {
+    public void unregister(final String alias) {
         httpService.unregister(kerneosConfig.getBaseUrl() + "/" + alias);
     }
 

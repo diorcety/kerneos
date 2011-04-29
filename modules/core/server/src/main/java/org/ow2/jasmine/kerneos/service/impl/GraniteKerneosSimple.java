@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -35,15 +35,28 @@ public class GraniteKerneosSimple implements GraniteFactory {
     private final KerneosSimpleService service;
     private final String id;
 
-    GraniteKerneosSimple(KerneosSimpleService service, String id) {
+    /**
+     *
+     * @param service
+     * @param id
+     */
+    GraniteKerneosSimple(final KerneosSimpleService service, final String id) {
         this.service = service;
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     *
+     * @return
+     */
     public Object newInstance() {
         return service;
     }

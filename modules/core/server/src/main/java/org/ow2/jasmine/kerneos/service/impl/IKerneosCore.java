@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -36,17 +36,17 @@ public interface IKerneosCore {
      * @param path the path to the resource
      * @throws NamespaceException
      */
-    public void register(String alias, String path) throws NamespaceException;
+    void register(String alias, String path) throws NamespaceException;
 
     /**
      * Unregister a resource
      * @param alias the alias used in the Http URL
      */
-    public void unregister(String alias);
+    void unregister(String alias);
 
     /**
      * Get the kerneos configuration
-     * @return return the kernes configuration
+     * @return the kernes configuration
      */
-    public KerneosConfig getKerneosConfig();
+    KerneosConfig getKerneosConfig();
 }

@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -34,5 +34,5 @@ public @interface KerneosService {
 
     boolean analyze() default true;
 
-    Class[] classes() default {};
+    Class[] classes() default { };
 }

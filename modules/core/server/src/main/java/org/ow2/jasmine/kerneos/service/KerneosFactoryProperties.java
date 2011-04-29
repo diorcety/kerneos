@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -36,7 +36,7 @@ public @interface KerneosFactoryProperties {
         APPLICATION("application");
         private final String value;
 
-        SCOPE(String value) {
+        SCOPE(final String value) {
             this.value = value;
         }
 

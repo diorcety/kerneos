@@ -1,5 +1,5 @@
 /**
- * JASMINe
+ * Kerneos
  * Copyright (C) 2009 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
@@ -35,16 +35,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class KerneosHttpContext implements HttpContext {
-    public String getMimeType(String name) {
+    private static final String PREFIX = "bundle:/";
+
+    public String getMimeType(final String name) {
         return null;
     }
 
-    public URL getResource(String name) {
-        if (name.startsWith("bundle:/")) {
+    public URL getResource(final String name) {
+        if (name.startsWith(PREFIX)) {
             try {
                 // Fix bug
-                name = "bundle://" + name.substring(8);
-                return new URL(name);
+                return new URL("bundle://" + name.substring(PREFIX.length()));
             } catch (MalformedURLException e) {
                 return null;
             }
@@ -53,7 +54,8 @@ public class KerneosHttpContext implements HttpContext {
         }
     }
 
-    public boolean handleSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public boolean handleSecurity(final HttpServletRequest request,
+                                        final HttpServletResponse response) throws IOException {
         return true;
     }
 }
