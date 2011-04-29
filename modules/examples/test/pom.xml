@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>kerneos-examples</artifactId>
+    <groupId>org.ow2.jasmine.kerneos</groupId>
+    <version>2.0.0-M1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>kerneos-examples-test</artifactId>
+  <name>Kerneos :: Modules :: Examples :: Test</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <artifactId>kerneos-core-server</artifactId>
+      <version>2.0.0-M1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>${project.build.directory}/resources</directory>
+        <targetPath>.</targetPath>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <targetPath>.</targetPath>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/main/kerneos</directory>
+        <targetPath>./KERNEOS</targetPath>
+      </resource>
+    </resources>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.directory}/resources/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.ow2.jasmine.kerneos</groupId>
+                  <artifactId>kerneos-core-server</artifactId>
+                  <version>2.0.0-M1-SNAPSHOT</version>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/resources</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>kerneos-debug</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

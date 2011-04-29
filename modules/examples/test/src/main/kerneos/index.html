@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="history/history.css" />
 <!--  END Browser History required section -->
 
-<title>JASMINe-EoS - A world of monitoring</title>
+<title>Kerneos - Test</title>
 <link type="image/x-icon" href="resources/icons/favicon.ico" rel="icon" />
 <link type="image/x-icon" href="resources/icons/favicon.ico" rel="shortcut icon" />
 <script src="AC_OETags.js" language="javascript"></script>
@@ -39,7 +39,7 @@ var requiredRevision = 28;
 
 <!-- Window close confirmation system -->
 window.onbeforeunload = function () {
-    if (!document.getElementById('EoS').canBeClosed())
+    if (!document.getElementById('kerneos').canBeClosed())
     {
         return ""
     }
@@ -66,10 +66,10 @@ if ( hasProductInstall && !hasRequestedVersion ) {
         "width", "100%",
         "height", "100%",
         "align", "middle",
-        "id", "EoS",
+        "id", "kerneos",
         "quality", "high",
         "bgcolor", "#ebf6ff",
-        "name", "EoS",
+        "name", "kerneos",
         "allowScriptAccess","sameDomain",
         "type", "application/x-shockwave-flash",
         "pluginspage", "http://www.adobe.com/go/getflashplayer",
@@ -80,14 +80,14 @@ if ( hasProductInstall && !hasRequestedVersion ) {
     // if we've detected an acceptable version
     // embed the Flash Content SWF when all tests are passed
     AC_FL_RunContent(
-            "src", "EoS",
+            "src", "kerneos",
             "width", "100%",
             "height", "100%",
             "align", "middle",
-            "id", "EoS",
+            "id", "kerneos",
             "quality", "high",
             "bgcolor", "#ebf6ff",
-            "name", "EoS",
+            "name", "kerneos",
             "allowScriptAccess","sameDomain",
             "type", "application/x-shockwave-flash",
             "pluginspage", "http://www.adobe.com/go/getflashplayer",
@@ -103,14 +103,14 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 </script>
 <noscript>
       <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-            id="EoS" width="100%" height="100%"
+            id="kerneos" width="100%" height="100%"
             codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-            <param name="movie" value="EoS.swf" />
+            <param name="movie" value="kerneos.swf" />
             <param name="quality" value="high" />
             <param name="bgcolor" value="#ebf6ff" />
             <param name="allowScriptAccess" value="sameDomain" />
-            <embed src="EoS.swf" quality="high" bgcolor="#ebf6ff"
-                width="100%" height="100%" name="EoS" align="middle"
+            <embed src="kerneos.swf" quality="high" bgcolor="#ebf6ff"
+                width="100%" height="100%" name="kerneos" align="middle"
                 play="true"
                 loop="false"
                 quality="high"

@@ -2,19 +2,67 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>kerneos-modules</artifactId>
-        <groupId>org.ow2.jasmine.kerneos</groupId>
-        <version>2.0.0-M1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>kerneos-modules</artifactId>
+    <groupId>org.ow2.jasmine.kerneos</groupId>
+    <version>2.0.0-M1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>kerneos-examples</artifactId>
-    <packaging>pom</packaging>
-    <name>Kerneos :: Modules :: Examples</name>
+  <artifactId>kerneos-examples</artifactId>
+  <packaging>pom</packaging>
+  <name>Kerneos :: Modules :: Examples</name>
 
-    <modules>
-        <module>example1</module>
-    </modules>
+  <modules>
+    <module>example1</module>
+    <module>test</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>kerneos-debug</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.sonatype.flexmojos</groupId>
+              <artifactId>flexmojos-maven-plugin</artifactId>
+              <configuration>
+                <debug>true</debug>
+              </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>copy-bundles</id>
+                  <phase>install</phase>
+                  <goals>
+                    <goal>copy</goal>
+                  </goals>
+                  <configuration>
+                    <artifactItems>
+                      <artifactItem>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>${project.artifactId}</artifactId>
+                        <version>${project.version}</version>
+                        <type>${project.packaging}</type>
+                      </artifactItem>
+                    </artifactItems>
+                    <outputDirectory>${felix.kerneos}/load
+                    </outputDirectory>
+                    <overWriteReleases>true</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

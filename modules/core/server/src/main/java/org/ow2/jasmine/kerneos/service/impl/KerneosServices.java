@@ -124,14 +124,14 @@ public class KerneosServices {
 
     @Bind(aggregate = true, optional = true)
     private final void bindFactory(final KerneosFactory factory) {
-        gcr.registerClass(factory.getId(), factory.getClass(), true);
+     //   gcr.registerClass(factory.getId(), factory.getClass(), true);
         addFactory(factory);
     }
 
     @Unbind
     private final void unbindFactory(final KerneosFactory factory) {
         removeFactory(factory.getId());
-        gcr.unregisterClass(factory.getId(), factory.getClass(), true);
+    //    gcr.unregisterClass(factory.getId(), factory.getClass(), true);
     }
 
     private final void addService(KerneosService service) {

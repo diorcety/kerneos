@@ -26,6 +26,7 @@ package org.ow2.jasmine.kerneos.core.managers
 {
 
 import com.adobe.cairngorm.business.ServiceLocator;
+import com.adobe.cairngorm.control.CairngormEventDispatcher;
 import com.google.code.flexiframe.IFrame;
 
 import flash.events.Event;
@@ -46,6 +47,7 @@ import mx.utils.UIDUtil;
 import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
 import org.ow2.jasmine.kerneos.common.util.IconUtility;
 import org.ow2.jasmine.kerneos.core.api.KerneosModule;
+import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 import org.ow2.jasmine.kerneos.core.view.DesktopView;
 import org.ow2.jasmine.kerneos.core.view.window.FolderWindow;
@@ -130,7 +132,21 @@ public class ModulesLifeCycleManager
         doLoadOnStartupModules(KerneosModelLocator.getInstance().modules.modulesList);
     }
 
-
+    /**
+     * Launch the command to load the application configuration.
+     */
+    public static function getModules() : void
+    {
+        try
+        {
+            var event_module : KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_MODULES);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+        }
+        catch (e : Error)
+        {
+            trace("An error occurred while loading module list: " + e.message);
+        }
+    }
 
     /**
      * Launch a module.

@@ -37,8 +37,8 @@
     <swf-module>
         <name>Example1</name>
         <description>This is a example</description>
-        <small-icon>icons/quickvisu16.png</small-icon>
-        <big-icon>icons/quickvisu64.png</big-icon>
+        <small-icon>icons/icon16.png</small-icon>
+        <big-icon>icons/icon64.png</big-icon>
         <file>example1.swf</file>
         <services>
             <service id="quickvisuService" destination="quickvisu"/>

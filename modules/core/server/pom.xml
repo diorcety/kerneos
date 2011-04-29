@@ -145,7 +145,7 @@
         </executions>
         <configuration>
           <extension>true</extension>
-          <schemaDirectory>src/main/schemas/</schemaDirectory>
+          <schemaDirectory>src/main/resources/</schemaDirectory>
           <generatePackage>org.ow2.jasmine.kerneos.config.generated</generatePackage>
           <strict>true</strict>
           <verbose>true</verbose>
@@ -214,7 +214,7 @@
                   <version>${project.version}</version>
                   <type>swf</type>
                   <overWrite>true</overWrite>
-                  <destFileName>EoS.swf</destFileName>
+                  <destFileName>kerneos.swf</destFileName>
                 </artifactItem>
               </artifactItems>
               <outputDirectory>${project.build.directory}/resources</outputDirectory>
@@ -231,8 +231,6 @@
         <configuration>
           <instructions>
             <Include-Resource>
-              src/main/resources,
-              KERNEOS=src/main/kerneos,
               KERNEOS=${project.build.directory}/resources
             </Include-Resource>
             <Embed-Transitive>true</Embed-Transitive>
@@ -266,18 +264,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>kerneos-debug</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

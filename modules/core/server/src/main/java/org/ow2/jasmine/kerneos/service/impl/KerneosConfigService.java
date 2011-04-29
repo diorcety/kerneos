@@ -52,17 +52,14 @@ import org.apache.felix.ipojo.annotations.Validate;
 import org.apache.felix.ipojo.handler.extender.BundleTracker;
 import org.apache.felix.ipojo.handlers.event.publisher.Publisher;
 
+import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.service.GraniteDestination;
 
 import org.osgi.framework.Bundle;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.NamespaceException;
-import org.ow2.jasmine.kerneos.config.generated.KerneosConfig;
-import org.ow2.jasmine.kerneos.config.generated.KerneosModule;
-import org.ow2.jasmine.kerneos.config.generated.Module;
-import org.ow2.jasmine.kerneos.config.generated.Modules;
-import org.ow2.jasmine.kerneos.config.generated.ObjectFactory;
+import org.ow2.jasmine.kerneos.config.generated.*;
 import org.ow2.jasmine.kerneos.service.ModuleEvent;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -97,6 +94,12 @@ public class KerneosConfigService implements GraniteDestination {
 
     private Publisher publisher;
 
+    /**
+     * Granite Class Registry
+     */
+    @Requires
+    GraniteClassRegistry gcr;
+
     @Requires
     IKerneosCore kerneosCore;
 
@@ -105,8 +108,6 @@ public class KerneosConfigService implements GraniteDestination {
 
     @Requires(from = "org.granite.config.flex.Destination")
     private Factory destinationFactory;
-
-    private BundleContext bundleContext;
 
     private ComponentInstance gravity_service_adapter, destination;
     private BundleTracker bundleTracker;
@@ -142,6 +143,12 @@ public class KerneosConfigService implements GraniteDestination {
         }
     }
 
+    /**
+     * Constructor
+     *
+     * @param bundleContext
+     * @throws Exception
+     */
     private KerneosConfigService(BundleContext bundleContext) throws Exception {
         bundleTracker = new KerneosBundleTracker(bundleContext);
         jaxbContext = JAXBContext.newInstance(ObjectFactory.class.getPackage().getName(), ObjectFactory.class.getClassLoader());
@@ -149,6 +156,19 @@ public class KerneosConfigService implements GraniteDestination {
 
     @Validate
     private void start() throws MissingHandlerException, ConfigurationException, UnacceptableConfiguration, NamespaceException {
+        gcr.registerClass(getId(), new Class[]{
+                Services.class,
+                Service.class,
+                KerneosConfig.class,
+                Module.class,
+                Modules.class,
+                IframeModule.class,
+                SwfModule.class,
+                PromptBeforeClose.class,
+                JAXBElement.class,
+                SharedLibraries.class
+        });
+
         logger.info("Start KerneosConfigService");
         {
             Dictionary properties = new Hashtable();
@@ -174,27 +194,44 @@ public class KerneosConfigService implements GraniteDestination {
     @Invalidate
     private void stop() {
         logger.info("Stop KerneosConfigService");
+
         bundleTracker.close();
 
         moduleMap.clear();
 
         gravity_service_adapter.dispose();
+
+        gcr.unregisterClass(getId());
     }
 
-    private void onModuleArrival(Bundle bundle, String header) {
-        logger.info("Add Kerneos Module: " + header);
+    /**
+     * Call when a new Kerneos Module is arrived
+     *
+     * @param bundle The Bundle corresponding to the module
+     * @param name   The name of the module
+     */
+    private void onModuleArrival(Bundle bundle, String name) {
+        logger.info("Add Kerneos Module: " + name);
 
         try {
             Module module = loadModuleConfig(bundle);
 
+            // Fix Paths
+            module.setBigIcon(name + "/" + module.getBigIcon());
+            module.setSmallIcon(name + "/" + module.getSmallIcon());
+            if (module instanceof SwfModule) {
+                SwfModule swfModule = (SwfModule) module;
+                swfModule.setFile(name + "/" + swfModule.getFile());
+            }
+
             // Get the url used for resources of the bundle
             String url = bundle.getResource(KerneosConstants.KERNEOS_PATH).toString();
-            kerneosCore.register(header, url);
-            logger.info("Register \"" + header + "\" resources");
+            kerneosCore.register(name, url);
+            logger.info("Register \"" + name + "\" resources");
 
             // Add to the list
             synchronized (moduleMap) {
-                moduleMap.put(header, module);
+                moduleMap.put(name, module);
             }
 
             ModuleEvent me = new ModuleEvent(module, ModuleEvent.LOAD);
@@ -206,25 +243,31 @@ public class KerneosConfigService implements GraniteDestination {
             prop.put("message.data", me);
             publisher.send(prop);
         } catch (Exception e) {
-            logger.warn(e, "Invalid module: " + header);
+            logger.warn(e, "Invalid module: " + name);
             return;
         }
     }
 
-    private void onModuleDeparture(Bundle bundle, String header) {
+    /**
+     * Call when a new Kerneos Module is gone
+     *
+     * @param bundle The Bundle corresponding to the module
+     * @param name   The name of the module
+     */
+    private void onModuleDeparture(Bundle bundle, String name) {
 
         Module module = null;
         synchronized (moduleMap) {
-            module = moduleMap.remove(header);
+            module = moduleMap.remove(name);
         }
 
         if (module == null) {
-            logger.warn("Try to remove an invalid bundle: " + header);
+            logger.warn("Try to remove an invalid bundle: " + name);
             return;
         }
 
-        kerneosCore.unregister(header);
-        logger.info("Unregister \"" + header + "\" resources");
+        kerneosCore.unregister(name);
+        logger.info("Unregister \"" + name + "\" resources");
 
         ModuleEvent me = new ModuleEvent(module, ModuleEvent.UNLOAD);
 
@@ -236,6 +279,14 @@ public class KerneosConfigService implements GraniteDestination {
         publisher.send(prop);
     }
 
+
+    /**
+     * Load the module information
+     *
+     * @param bundle the bundle corresponding to the module
+     * @return return the information corresponding to the module
+     * @throws Exception
+     */
     private Module loadModuleConfig(Bundle bundle) throws Exception {
         // Get bundle kerneos module xml file
         URL url = bundle.getResource(KerneosConstants.KERNEOS_MODULE_FILE);
@@ -261,11 +312,20 @@ public class KerneosConfigService implements GraniteDestination {
         }
     }
 
-
+    /**
+     * Get the Kerneos configuration
+     *
+     * @return return the Kerneos configuration
+     */
     public KerneosConfig getKerneosConfig() {
         return kerneosCore.getKerneosConfig();
     }
 
+    /**
+     * Get the module list
+     *
+     * @return return the module list
+     */
     public Modules getModules() {
         Modules modules = new Modules();
         for (Module module : moduleMap.values()) {
@@ -275,6 +335,11 @@ public class KerneosConfigService implements GraniteDestination {
         return modules;
     }
 
+    /**
+     * Get the service id
+     *
+     * @return return the service id
+     */
     public String getId() {
         return "kerneosConfig";
     }

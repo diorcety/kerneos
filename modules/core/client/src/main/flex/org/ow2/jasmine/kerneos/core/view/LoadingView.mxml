@@ -59,7 +59,7 @@
             import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
             import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-
+            import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 
             // =========================================================================
@@ -109,11 +109,25 @@
                         ModulesLifeCycleManager.cacheIcon(conf.applicationLogo);
                     }
 
-                    // Setup the modules
-                    //ModulesLifeCycleManager.setupModulesServicesAndIcons();
-
                     // Update the displayed label
                     progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.ready');
+
+                    // Load the modules
+                    ModulesLifeCycleManager.getModules();
+                }
+            }
+
+
+
+            /**
+             * When the module list has been loaded.
+             */
+            private function set modulesLoaded(modules : ModulesVO) : void
+            {
+                if (modules != null)
+                {
+                    // Setup the modules
+                    ModulesLifeCycleManager.setupModulesServicesAndIcons();
 
                     // Switch state
                     KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
@@ -129,6 +143,10 @@
     <!-- The binding triggered when the config is loaded. -->
     <mx:Binding source = "KerneosModelLocator.getInstance().config"
                 destination = "kerneosConfigLoaded" />
+
+    <!-- The binding triggered when the module list is loaded. -->
+    <mx:Binding source = "KerneosModelLocator.getInstance().modules"
+                destination = "modulesLoaded" />
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

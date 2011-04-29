@@ -55,7 +55,7 @@ public class KerneosConstants {
         Granite Configuration
      */
     public final static String GRANITE_SERVICE = "granite-service";
-    public final static String GRANITE_CHANNEL = "my-graniteamf";
+    public final static String GRANITE_CHANNEL = "my-graniteamf-kerneos";
     public final static String GRANITE_CHANNEL_URI = "/graniteamf/amf";
 
     /*

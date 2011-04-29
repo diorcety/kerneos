@@ -104,59 +104,11 @@
     </pluginRepository>
   </pluginRepositories>
 
+  <modules>
+    <module>modules</module>
+  </modules>
+
   <profiles>
-
-    <!-- Kerneos Debug -->
-    <profile>
-      <id>kerneos-debug</id>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-dependency-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>copy-bundles</id>
-                  <phase>install</phase>
-                  <goals>
-                    <goal>copy</goal>
-                  </goals>
-                  <configuration>
-                    <artifactItems>
-                      <artifactItem>
-                        <groupId>${project.groupId}</groupId>
-                        <artifactId>${project.artifactId}</artifactId>
-                        <version>${project.version}</version>
-                        <type>${project.packaging}</type>
-                      </artifactItem>
-                    </artifactItems>
-                    <outputDirectory>${felix.kerneos}/load
-                    </outputDirectory>
-                    <overWriteReleases>true</overWriteReleases>
-                    <overWriteSnapshots>true</overWriteSnapshots>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-
-    <!-- Default build profile -->
-    <profile>
-      <id>install</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
-        <defaultGoal>install</defaultGoal>
-      </build>
-      <modules>
-        <module>modules</module>
-      </modules>
-    </profile>
 
     <!-- WTP configuration profile -->
     <profile>
