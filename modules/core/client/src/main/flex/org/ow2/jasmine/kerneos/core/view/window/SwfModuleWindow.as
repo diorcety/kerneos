@@ -24,6 +24,7 @@
  */
 package org.ow2.jasmine.kerneos.core.view.window
 {
+import flash.events.Event;
 import flash.events.ProgressEvent;
 
 import mx.collections.ArrayCollection;
@@ -76,6 +77,17 @@ public class SwfModuleWindow extends ModuleWindow
     {
         // Call super classe constructor
         super(module);
+    }
+
+
+    /**
+     * Call on close
+     */
+    override protected function onClose(e:Event = null):void {
+        super.onClose(e);
+
+        // Unload module
+        _loader.unloadModule();
     }
 
     /**

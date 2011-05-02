@@ -121,7 +121,7 @@ public final class KerneosCore implements IKerneosCore {
     @Validate
     private void start() throws MissingHandlerException, ConfigurationException,
             UnacceptableConfiguration, NamespaceException {
-        logger.info("Start KerneosCore");
+        logger.debug("Start KerneosCore");
         httpContext = new KerneosHttpContext();
 
         // Register Kerneos resources
@@ -174,7 +174,7 @@ public final class KerneosCore implements IKerneosCore {
 
     @Invalidate
     private void stop() {
-        logger.info("Stop KerneosCore");
+        logger.debug("Stop KerneosCore");
 
         // Unregister kerneos resources
         httpService.unregister(kerneosConfig.getBaseUrl());
@@ -202,7 +202,7 @@ public final class KerneosCore implements IKerneosCore {
         if (url != null) {
 
             // Load the file
-            logger.info("loading file : {0}", url.getFile());
+            logger.info("Loading file : {0}", url.getFile());
             InputStream resource = url.openStream();
 
             // Unmarshall it

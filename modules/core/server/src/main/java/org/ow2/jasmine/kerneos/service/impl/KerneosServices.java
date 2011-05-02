@@ -118,7 +118,7 @@ public final class KerneosServices {
      */
     @Validate
     private void start() {
-        logger.info("Start KereosServices");
+        logger.debug("Start KereosServices");
     }
 
     /**
@@ -126,7 +126,7 @@ public final class KerneosServices {
      */
     @Invalidate
     private void stop() {
-        logger.info("Stop KereosServices");
+        logger.debug("Stop KereosServices");
     }
 
     /**
@@ -167,11 +167,11 @@ public final class KerneosServices {
     private void addService(final KerneosSimpleService service) {
         KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
         if (ks == null) {
-            logger.info("Invalid Kerneos service (no service id): " + service);
+            logger.warn("Invalid Kerneos service (no service id): " + service);
         }
 
         String serviceId = ks.destination();
-        logger.info("New Kerneos service: " + serviceId);
+        logger.debug("New Kerneos service: " + serviceId);
 
         registerClasses(serviceId, service);
 
@@ -218,12 +218,12 @@ public final class KerneosServices {
 
         KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
         if (ks == null) {
-            logger.info("Invalid Kerneos service (no service id): " + service);
+            logger.warn("Invalid Kerneos service (no service id): " + service);
         }
 
         String serviceId = ks.destination();
 
-        logger.info("Remove Kerneos service: " + serviceId);
+        logger.debug("Remove Kerneos service: " + serviceId);
 
         KerneosInstance ksi = null;
         synchronized (serviceMap) {
@@ -245,11 +245,11 @@ public final class KerneosServices {
     private void addService(final KerneosFactoryService factory) {
         KerneosService ks = factory.getClass().getAnnotation(KerneosService.class);
         if (ks == null) {
-            logger.info("Invalid Kerneos factory (no service id): " + factory);
+            logger.warn("Invalid Kerneos factory (no service id): " + factory);
         }
 
         String serviceId = ks.destination();
-        logger.info("New Kerneos factory: " + serviceId);
+        logger.debug("New Kerneos factory: " + serviceId);
 
         registerClasses(serviceId, factory);
 
@@ -313,12 +313,12 @@ public final class KerneosServices {
     private void removeService(final KerneosFactoryService factory) {
         KerneosService ks = factory.getClass().getAnnotation(KerneosService.class);
         if (ks == null) {
-            logger.info("Invalid Kerneos factory (no service id): " + factory);
+            logger.warn("Invalid Kerneos factory (no service id): " + factory);
         }
 
         String serviceId = ks.destination();
 
-        logger.info("Remove Kerneos factory: " + serviceId);
+        logger.debug("Remove Kerneos factory: " + serviceId);
 
         KerneosInstance kfi = null;
         synchronized (factoryMap) {

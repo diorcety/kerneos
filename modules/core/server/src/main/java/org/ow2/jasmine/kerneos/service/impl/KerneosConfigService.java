@@ -113,7 +113,7 @@ public final class KerneosConfigService implements GraniteDestination {
     @Requires
     private IKerneosCore kerneosCore;
 
-    @Requires(from = "org.granite.gravity.osgi.OSGiEventAdminAdapter")
+    @Requires(from = "org.granite.gravity.osgi.adapters.EventAdmin")
     private Factory osgiAdapterFactory;
 
     @Requires(from = "org.granite.config.flex.Destination")
@@ -182,7 +182,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 SharedLibraries.class
         });
 
-        logger.info("Start KerneosConfigService");
+        logger.debug("Start KerneosConfigService");
         {
             Dictionary properties = new Hashtable();
             Dictionary prop = new Hashtable();
@@ -206,7 +206,7 @@ public final class KerneosConfigService implements GraniteDestination {
 
     @Invalidate
     private void stop() {
-        logger.info("Stop KerneosConfigService");
+        logger.debug("Stop KerneosConfigService");
 
         bundleTracker.close();
 
@@ -224,7 +224,7 @@ public final class KerneosConfigService implements GraniteDestination {
      * @param name   The name of the module
      */
     private void onModuleArrival(final Bundle bundle, final String name) {
-        logger.info("Add Kerneos Module: " + name);
+        logger.debug("Add Kerneos Module: " + name);
 
         try {
             Module module = loadModuleConfig(bundle);
