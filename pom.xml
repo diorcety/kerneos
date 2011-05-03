@@ -50,6 +50,7 @@
     <flexiframe.version>1.4.3</flexiframe.version>
     <flex.version>3.5.0.12683</flex.version>
     <graniteds.version>2.1.0.RC1</graniteds.version>
+    <graniteds-core-osgi.version>1.0.0-SNAPSHOT</graniteds-core-osgi.version>
     <flexmojos.version>3.5.0</flexmojos.version>
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
 
