@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2009-2011 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -27,8 +27,9 @@ package org.ow2.jasmine.kerneos.service;
 
 import org.ow2.jasmine.kerneos.config.generated.Module;
 
-public class ModuleEvent {
+import java.io.Serializable;
 
+public class ModuleEvent implements Serializable{
     /**
      * Module Object
      */
@@ -49,6 +50,10 @@ public class ModuleEvent {
      */
     public static final String UNLOAD = "unload";
 
+    /**
+     * Empty contructor.
+     */
+    public ModuleEvent() {}
 
     public ModuleEvent(final Module module, final String eventType) {
         this.module = module;
@@ -67,5 +72,19 @@ public class ModuleEvent {
      */
     public Module getModule() {
         return module;
+    }
+
+    /**
+     * @param module the module to set
+     */
+    public void setModule(Module module) {
+        this.module = module;
+    }
+
+    /**
+     * @param eventType the event type to set
+     */
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 }

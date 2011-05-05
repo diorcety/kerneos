@@ -68,5 +68,15 @@ public class Controller extends FrontController {
 
     }
 
+    public function removeCommands() : void
+    {
+        // Retrieve the component model
+        var moduleModele : ModuleModelLocator = ModuleModelLocator.getInstance();
+
+        /*
+            Remove the events to the controler with the associated command
+            Example :        */
+                this.removeCommand(ModuleEvent.OBJECT);
+    }
 }
 }

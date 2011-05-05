@@ -237,5 +237,37 @@ public class IconUtility extends BitmapAsset
         }
     }
 
+    /**
+     * Used to disassociate run-time graphics with a target.
+     *
+     * @param target A reference to the component associated with this icon.
+     * @param source A url to a JPG, PNG or GIF file you wish to be loaded and displayed.
+     * @return A reference to the IconUtility class which may be treated as a BitmapAsset.
+     */
+    public static function deleteSource(target : UIComponent, source : String) : Class
+    {
+        // Check if dictionaries exists.
+        if (!dictionary)
+        {
+            // if the dictionary contains the target we delete it
+            if (dictionary[target])
+            {
+                delete dictionary[target];
+            }
+        }
+
+        if (!dictionaryByURL)
+        {
+            // if the dictionary contains the source we delete it
+            if (dictionaryByURL[source])
+            {
+                delete dictionaryByURL[source];
+            }
+        }
+
+        // Return this
+        return IconUtility;
+    }
+
 }
 }

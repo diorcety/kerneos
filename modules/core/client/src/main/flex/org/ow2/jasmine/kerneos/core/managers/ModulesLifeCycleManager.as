@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2009-2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -122,6 +122,23 @@ public class ModulesLifeCycleManager
         setupModulesCollection(KerneosModelLocator.getInstance().modules.modulesList);
     }
 
+    /**
+     * Setup one module services and icons
+     */
+    public static function setupOneModuleServicesAndIcons(module : ModuleVO) : void
+    {
+        // Setup the module services and icons
+        setupModule(module);
+    }
+
+    /**
+     *  Delete one module setup services and icons
+     */
+    public static function deleteSetupModuleServicesAndIcons(module : ModuleVO) : void
+    {
+        // Delete the modules setup services and icons
+        deleteSetupModule(module);
+    }
 
 
     /**
@@ -352,7 +369,23 @@ public class ModulesLifeCycleManager
         }
     }
 
+    public static function unloadModule(module : ModuleVO) : void
+    {
+        // Check that desktop is not null
+        checkDesktopNotNull();
 
+        // Unload module and close it window
+        var allWindows : Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+
+        for each (var window : MDIWindow in allWindows)
+        {
+            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name)
+            {
+                stopModuleByWindow(window as ModuleWindow);
+                desktop.windowContainer.windowManager.remove(window);
+            }
+        }
+    }
 
     /**
      * Load the icon at the url and put it in the icon cache.
@@ -362,6 +395,13 @@ public class ModulesLifeCycleManager
         IconUtility.getClass(Application.application as UIComponent, url);
     }
 
+     /**
+     * Erase the icon from the icon cache.
+     */
+    public static function deleteCacheIcon(url : String) : void
+    {
+        IconUtility.deleteSource(Application.application as UIComponent, url);
+    }
 
 
     // =========================================================================
@@ -392,41 +432,106 @@ public class ModulesLifeCycleManager
         // For each module
         for each (var module : ModuleVO in modules)
         {
-            // Cache the icons
-            if (module.smallIcon != null)
-            {
-                cacheIcon(module.smallIcon);
-            }
+            setupModule(module);
+        }
 
-            if (module.bigIcon != null)
-            {
-                cacheIcon(module.bigIcon);
-            }
+    }
 
-            // Initialize each SWF module services
-            if (module is SWFModuleVO && ((module as SWFModuleVO).services != null))
-            {
-                var services : ArrayCollection = (module as SWFModuleVO).services.service;
+    /**
+     * Delete the modules setup
+     */
+    private static function deleteSetupModulesCollection(modules : ArrayCollection) : void
+    {
+        var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
+        var serviceIds : ArrayCollection = new ArrayCollection();
 
-                for (var l : int = 0; l < services.length; l++)
-                {
-                    var service : ServiceVO = services.getItemAt(l) as ServiceVO;
-                    serviceLocator.setServiceForId(service.id, service.destination);
-                    serviceIds.addItem(service.id);
-                }
-            }
+        // For each module
+        for each (var module : ModuleVO in modules)
+        {
+            deleteSetupModule(module);
+        }
+    }
 
-            // Call the function recursively for folders
-            else if (module is FolderVO && ((module as FolderVO).modules != null) )
+    /**
+     * Setup one module
+     */
+    private static function setupModule(module : ModuleVO) : void
+    {
+
+        var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
+        var serviceIds : ArrayCollection = new ArrayCollection();
+
+        // Cache the icons
+        if (module.smallIcon != null)
+        {
+            cacheIcon(module.smallIcon);
+        }
+
+        if (module.bigIcon != null)
+        {
+            cacheIcon(module.bigIcon);
+        }
+
+        // Initialize each SWF module services
+        if (module is SWFModuleVO && ((module as SWFModuleVO).services != null))
+        {
+            var services : ArrayCollection = (module as SWFModuleVO).services.service;
+
+            for (var l : int = 0; l < services.length; l++)
             {
-                setupModulesCollection((module as FolderVO).modules.modulesList);
+                var service : ServiceVO = services.getItemAt(l) as ServiceVO;
+                serviceLocator.setServiceForId(service.id, service.destination);
+                serviceIds.addItem(service.id);
             }
+        }
+
+        // Call the function recursively for folders
+        else if (module is FolderVO && ((module as FolderVO).modules != null) )
+        {
+            setupModulesCollection((module as FolderVO).modules.modulesList);
         }
 
         // Overload all AMF channels
         for each (var id : String in serviceIds)
         {
             serviceLocator.getRemoteObject(id).channelSet = KerneosLifeCycleManager.amfChannelSet;
+        }
+    }
+
+    /**
+     * Delete module setup
+     */
+    private static function deleteSetupModule(module : ModuleVO) : void
+    {
+        var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
+
+        // Cache the icons
+        if (module.smallIcon != null)
+        {
+            deleteCacheIcon(module.smallIcon);
+        }
+
+        if (module.bigIcon != null)
+        {
+            deleteCacheIcon(module.bigIcon);
+        }
+
+        // Initialize each SWF module services
+        if (module is SWFModuleVO && ((module as SWFModuleVO).services != null))
+        {
+            var services : ArrayCollection = (module as SWFModuleVO).services.service;
+
+            for (var l : int = 0; l < services.length; l++)
+            {
+                var service : ServiceVO = services.getItemAt(l) as ServiceVO;
+                serviceLocator.removeServiceForId(service.id);
+            }
+        }
+
+        // Call the function recursively for folders
+        else if (module is FolderVO && ((module as FolderVO).modules != null) )
+        {
+            deleteSetupModulesCollection((module as FolderVO).modules.modulesList);
         }
     }
 

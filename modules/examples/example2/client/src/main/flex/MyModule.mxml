@@ -46,6 +46,7 @@
                 //             Action to do when the module is closed         //
                 //                                                            //
                 ////////////////////////////////////////////////////////////////
+                controller.removeCommands();
             }
             
             public function canBeClosedWithoutPrompt() : Boolean {
