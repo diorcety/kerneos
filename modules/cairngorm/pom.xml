@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2008-2009 Bull S.A.S.
+  - Copyright (C) 2008-2011 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -30,58 +30,197 @@
   <parent>
     <groupId>org.ow2.jasmine.kerneos</groupId>
     <artifactId>kerneos-modules</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>2.0.0-M1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>cairngorm-kerneos</artifactId>
+  <version>2.2.3-Beta</version>
 
   <name>Kerneos :: Modules :: Cairngorm</name>
 
   <packaging>swc</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>net.israfil.mojo</groupId>
-      <artifactId>maven-flex2-plugin</artifactId>
-      <version>1.3</version>
-    </dependency>
+    <properties>
+        <flex-mojos.version>3.7.1</flex-mojos.version>
+    </properties>
 
-    <dependency>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-enforcer-plugin</artifactId>
-      <version>1.0-alpha-3</version>
-    </dependency>
-  </dependencies>
+    <profiles>
+        <profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<maven.test.failure.ignore>true</maven.test.failure.ignore>
+				<maven.test.skip>true</maven.test.skip>
+				<flex-debug>true</flex-debug>
+				<flex-optimize>true</flex-optimize>
+				<flex-verbose-stacktraces>true</flex-verbose-stacktraces>
+			</properties>
+		</profile>
+		<profile>
+			<id>production</id>
+			<properties>
+				<flex-debug>false</flex-debug>
+				<flex-optimize>true</flex-optimize>
+				<flex-verbose-stacktraces>false</flex-verbose-stacktraces>
+			</properties>
+		</profile>
+        <profile>
+			<id>flex4</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<flex.sdk.version>4.1.0.16076</flex.sdk.version>
+				<player.version>10.0</player.version>
+				<isFlex4>true</isFlex4>
+				<isFlex3>false</isFlex3>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>spark</artifactId>
+					<version>${flex.sdk.version}</version>
+					<type>swc</type>
+					<scope>external</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>spark</artifactId>
+					<version>${flex.sdk.version}</version>
+					<type>rb.swc</type>
+					<classifier>en_US</classifier>
+					<scope>external</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>flex3</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<flex.sdk.version>3.5.0.12683</flex.sdk.version>
+				<player.version>9</player.version>
+				<isFlex4>false</isFlex4>
+				<isFlex3>true</isFlex3>
+				<maven.test.failure.ignore>true</maven.test.failure.ignore>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>framework</artifactId>
+					<version>${flex.sdk.version}</version>
+					<type>rb.swc</type>
+					<scope>external</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+    </profiles>
+
+  <dependencies>
+		<!-- flex sdk dependencies -->
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>flex</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>swc</type>
+			<scope>external</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>playerglobal</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>framework</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>swc</type>
+			<scope>external</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>rpc</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>swc</type>
+			<scope>external</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>playerglobal</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>swc</type>
+			<classifier>${player.version}</classifier>
+			<scope>external</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>rpc</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>rb.swc</type>
+			<scope>external</scope>
+		</dependency>
+	</dependencies>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>net.israfil.mojo</groupId>
-        <artifactId>maven-flex2-plugin</artifactId>
-        <version>1.3</version>
-        <extensions>true</extensions>
+		<sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
 
-        <configuration>
-          <flexHome>${flex.home}</flexHome>
-                    <extraParameters>
-            <parameter>
-              <name>include-resource-bundles</name>
-              <values>
-                <value>CairngormMessages</value>
-              </values>
-            </parameter>
-            <parameter>
-              <name>namespace</name>
-              <values>
-                <value>http://www.adobe.com/2006/cairngorm</value>
-                <value>cairngorm-manifest.xml</value>
-              </values>
-            </parameter>
-          </extraParameters>
-        </configuration>
-      </plugin>
-    </plugins>
-    <finalName>Cairngorm-kerneos</finalName>
-  </build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>${flex-mojos.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.adobe.flex</groupId>
+						<artifactId>compiler</artifactId>
+						<version>${flex.sdk.version}</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+				<extensions>true</extensions>
+				<configuration>
+					<debug>${flex-debug}</debug>
+					<optimize>${flex-optimize}</optimize>
+					<verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
+					<definesDeclaration>
+						<property>
+							<name>CONFIG::Flex4</name>
+							<value>${isFlex4}</value>
+						</property>
+						<property>
+							<name>CONFIG::Flex3</name>
+							<value>${isFlex3}</value>
+						</property>
+					</definesDeclaration>
+					<targetPlayer>${player.version}</targetPlayer>
+					<compiledLocales>
+						<locale>en_US</locale>
+					</compiledLocales>
+					<resourceBundlePath>${basedir}/locale/{locale}</resourceBundlePath>
+					<allowSourcePathOverlap>true</allowSourcePathOverlap>
+					<namespaces>
+						<namespace>
+							<uri>http://www.adobe.com/2006/cairngorm</uri>
+							<manifest>${basedir}/src/main/flex/cairngorm-manifest.xml</manifest>
+						</namespace>
+					</namespaces>
+					<includeSources>
+						<param>${project.build.sourceDirectory}</param>
+					</includeSources>
+					<showWarnings>true</showWarnings>
+					<useResourceBundleMetadata>false</useResourceBundleMetadata>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
 </project>
