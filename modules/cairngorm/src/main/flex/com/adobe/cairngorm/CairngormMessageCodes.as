@@ -29,6 +29,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 @ignore
 modified 2009-04-09 15:03 : Jean-Pierre
+modified 2011-05-05 14:49 : riverapj
 */
 package com.adobe.cairngorm
 {
@@ -68,5 +69,6 @@ package com.adobe.cairngorm
        
        /*     Error message if a service id is already registred   */
        public static const SERVICE_ID_ALREADY_REGISTERED : String = "C0019E";
+       public static const SERVICE_ID_NOT_REGISTERED : String = "C0020E";
     }
 }

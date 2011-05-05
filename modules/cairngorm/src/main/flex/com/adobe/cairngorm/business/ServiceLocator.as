@@ -30,6 +30,7 @@ POSSIBILITY OF SUCH DAMAGE.
 @ignore
 
 modified 2009-04-09 14:53 : Jean-Pierre
+modified 2011-05-05 14:49 : riverapj
 */
 
 package com.adobe.cairngorm.business
@@ -284,7 +285,20 @@ package com.adobe.cairngorm.business
             _remoteObjects.registerRemoteObject(serviceId, remote);
              remote.requestTimeout = timeout;
         }
-       
-      
+
+        /**
+       * Delete a service name.
+       * @param serviceId the service name.
+       */
+      public function removeServiceForId(serviceId : String) : void
+      {
+            var remote:RemoteObject = new RemoteObject();
+
+            if (_remoteObjects != null)
+            {
+                _remoteObjects.unRegisterRemoteObject(serviceId);
+            }
+      }
+
    }
 }

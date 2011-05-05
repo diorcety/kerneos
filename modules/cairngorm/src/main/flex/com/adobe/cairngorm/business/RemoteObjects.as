@@ -29,6 +29,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 @ignore
 modified 2009-04-09 14:59 : Jean-Pierre
+modified 2011-05-05 14:49 : riverapj
 */
 package com.adobe.cairngorm.business
 {
@@ -162,6 +163,23 @@ package com.adobe.cairngorm.business
           {
                throw new CairngormError(
                CairngormMessageCodes.SERVICE_ID_ALREADY_REGISTERED, name );
+          }
+      }
+
+      /**
+       * Unregister a remote object
+       * @param name the module name to unregister.
+       */
+      public function unRegisterRemoteObject(name : String) : void
+      {
+          if (services[ name ] != null)
+          {
+              delete services[ name ];
+          }
+          else
+          {
+               throw new CairngormError(
+               CairngormMessageCodes.SERVICE_ID_NOT_REGISTERED, name );
           }
       }
       
