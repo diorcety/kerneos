@@ -24,9 +24,7 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<cairngorm:ServiceLocator
-    xmlns:mx="http://www.adobe.com/2006/mxml"
-    xmlns:cairngorm="http://www.adobe.com/2006/cairngorm"> 
+<cairngorm:ServiceLocator xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cairngorm="com.adobe.cairngorm.business.*">
     
     <!-- List of services to provide to the modules. This list is static for the moment. --> 
     
@@ -36,5 +34,5 @@
  
     <mx:RemoteObject id="kerneosConfigService" destination="kerneosConfig" showBusyCursor="true">
     </mx:RemoteObject>
-    -->   
+    -->
 </cairngorm:ServiceLocator>
