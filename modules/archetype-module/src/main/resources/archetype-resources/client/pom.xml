@@ -44,11 +44,10 @@
   <dependencies>
 
       <dependency>
-      <groupId>com.adobe.cairngorm</groupId>
-      <artifactId>cairngorm-bin</artifactId>
+      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <artifactId>cairngorm-kerneos</artifactId>
       <version>${cairngorm.version}</version>
       <type>swc</type>
-      <classifier>kerneos</classifier>
     </dependency>
 
     <!-- Common classes form JASMINe-EoS -->

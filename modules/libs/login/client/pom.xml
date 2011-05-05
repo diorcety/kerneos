@@ -45,11 +45,10 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.adobe.cairngorm</groupId>
-      <artifactId>cairngorm-bin</artifactId>
-      <version>2.2.2-Beta</version>
+      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <artifactId>cairngorm-kerneos</artifactId>
+      <version>2.2.3-Beta</version>
       <type>swc</type>
-      <classifier>kerneos</classifier>
     </dependency>
 
     <dependency>

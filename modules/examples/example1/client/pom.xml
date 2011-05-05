@@ -21,7 +21,7 @@
   - USA
   -
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id: pom.xml 6018 2010-01-27 08:17:00Z fornacif $
+  - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -44,11 +44,10 @@
   <dependencies>
 
       <dependency>
-      <groupId>com.adobe.cairngorm</groupId>
-      <artifactId>cairngorm-bin</artifactId>
+      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <artifactId>cairngorm-kerneos</artifactId>
       <version>${cairngorm.version}</version>
       <type>swc</type>
-      <classifier>kerneos</classifier>
     </dependency>
 
     <!-- Common classes form JASMINe-EoS -->

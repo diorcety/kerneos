@@ -12,7 +12,7 @@
   <properties>
     <flex.version>3.0.0.477</flex.version>
     <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
-    <cairngorm.version>2.2.2-Beta</cairngorm.version>
+    <cairngorm.version>2.2.3-Beta</cairngorm.version>
     <kerneos.version>$kerneos-version</kerneos.version>
     <graniteds.version>$graniteds-version</graniteds.version>
   </properties>

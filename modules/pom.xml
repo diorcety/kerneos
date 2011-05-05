@@ -40,7 +40,7 @@
   <name>Kerneos :: Modules</name>
 
   <modules>
-    <!--<module>cairngorm</module>-->
+    <module>cairngorm</module>
     <module>archetype-module</module>
     <module>libs</module>
     <module>core</module>
