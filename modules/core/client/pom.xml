@@ -70,8 +70,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.code.flexlib</groupId>
-      <artifactId>flexlib</artifactId>
+      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <artifactId>flexlib-kerneos</artifactId>
       <type>swc</type>
       <version>${flexlib.version}</version>
     </dependency>

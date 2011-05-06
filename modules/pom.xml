@@ -41,6 +41,7 @@
 
   <modules>
     <module>cairngorm</module>
+    <module>flexlib</module>
     <module>archetype-module</module>
     <module>libs</module>
     <module>core</module>

@@ -63,7 +63,8 @@
 
   <scm>
     <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</developerConnection>
+    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk
+    </developerConnection>
     <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/trunk</url>
   </scm>
 
@@ -139,8 +140,8 @@
       <id>initWTP</id>
       <dependencies>
         <dependency>
-          <groupId>com.google.code.flexlib</groupId>
-          <artifactId>flexlib</artifactId>
+          <groupId>org.ow2.jasmine.kerneos</groupId>
+          <artifactId>flexlib-kerneos</artifactId>
           <version>${flexlib.version}</version>
           <type>swc</type>
         </dependency>
@@ -329,8 +330,8 @@
                     </artifactItem>
 
                     <artifactItem>
-                      <groupId>com.google.code.flexlib</groupId>
-                      <artifactId>flexlib</artifactId>
+                      <groupId>org.ow2.jasmine.kerneos</groupId>
+                      <artifactId>flexlib-kerneos</artifactId>
                       <version>${flexlib.version}</version>
                       <type>swc</type>
                       <overWrite>true</overWrite>
@@ -376,8 +377,8 @@
           <type>swc</type>
         </dependency>
         <dependency>
-          <groupId>com.google.code.flexlib</groupId>
-          <artifactId>flexlib</artifactId>
+          <groupId>org.ow2.jasmine.kerneos</groupId>
+          <artifactId>flexlib-kerneos</artifactId>
           <type>swc</type>
           <version>${flexlib.version}</version>
         </dependency>
@@ -410,11 +411,15 @@
               <footer>OW2 JASMINe Kerneos - http://jasmine.ow2.org</footer>
               <outputDirectory>${project.build.directory}/asdoc-all</outputDirectory>
               <packageDescriptions>
-                <org.ow2.jasmine.kerneos.common.business>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.business>
-                <org.ow2.jasmine.kerneos.common.containers>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.containers>
-                <org.ow2.jasmine.kerneos.common.controls>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.controls>
+                <org.ow2.jasmine.kerneos.common.business>Kerneos common libraries.
+                </org.ow2.jasmine.kerneos.common.business>
+                <org.ow2.jasmine.kerneos.common.containers>Kerneos common libraries.
+                </org.ow2.jasmine.kerneos.common.containers>
+                <org.ow2.jasmine.kerneos.common.controls>Kerneos common libraries.
+                </org.ow2.jasmine.kerneos.common.controls>
                 <org.ow2.jasmine.kerneos.common.event>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.event>
-                <org.ow2.jasmine.kerneos.common.renderers>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.renderers>
+                <org.ow2.jasmine.kerneos.common.renderers>Kerneos common libraries.
+                </org.ow2.jasmine.kerneos.common.renderers>
                 <org.ow2.jasmine.kerneos.common.skins>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.skins>
                 <org.ow2.jasmine.kerneos.common.util>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.util>
                 <org.ow2.jasmine.kerneos.common.view>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.view>
@@ -427,11 +432,13 @@
                 <org.ow2.jasmine.kerneos.core.managers>Kerneos core.</org.ow2.jasmine.kerneos.core.managers>
                 <org.ow2.jasmine.kerneos.core.model>Kerneos core.</org.ow2.jasmine.kerneos.core.model>
                 <org.ow2.jasmine.kerneos.core.view>Kerneos core.</org.ow2.jasmine.kerneos.core.view>
-                <org.ow2.jasmine.kerneos.core.view.notification>Kerneos core.</org.ow2.jasmine.kerneos.core.view.notification>
+                <org.ow2.jasmine.kerneos.core.view.notification>Kerneos core.
+                </org.ow2.jasmine.kerneos.core.view.notification>
                 <org.ow2.jasmine.kerneos.core.view.preloader>Kerneos core.</org.ow2.jasmine.kerneos.core.view.preloader>
                 <org.ow2.jasmine.kerneos.core.view.window>Kerneos core.</org.ow2.jasmine.kerneos.core.view.window>
                 <org.ow2.jasmine.kerneos.core.vo>Kerneos core.</org.ow2.jasmine.kerneos.core.vo>
-                <org.ow2.jasmine.kerneos.login.business>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.business>
+                <org.ow2.jasmine.kerneos.login.business>Kerneos login libraries.
+                </org.ow2.jasmine.kerneos.login.business>
                 <org.ow2.jasmine.kerneos.login.command>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.command>
                 <org.ow2.jasmine.kerneos.login.control>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.control>
                 <org.ow2.jasmine.kerneos.login.event>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.event>
@@ -462,6 +469,12 @@
           <artifactId>flexmojos-maven-plugin</artifactId>
           <version>${flexmojos.version}</version>
           <extensions>true</extensions>
+          <configuration>
+            <debug>${flex-debug}</debug>
+            <optimize>${flex-optimize}</optimize>
+            <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
+            <targetPlayer>${player.version}</targetPlayer>
+          </configuration>
           <dependencies>
             <dependency>
               <groupId>com.adobe.flex</groupId>
