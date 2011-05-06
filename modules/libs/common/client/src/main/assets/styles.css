@@ -53,40 +53,6 @@ TabBar
     color:                    #003399;
 }
 
-Pod
-{
-    padding-top: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    rounded-bottom-corners: false;
-    border-thickness: 1px;
-    border-style: solid;
-    border-color: #999999;
-    header-colors: #cccccc, #999999;
-    highlight-alphas: .9, 0;
-    background-color: #ffffff;
-    corner-radius: 6px;
-    header-height: 22px;
-    shadow-direction: right;
-    drop-shadow-color: #999999;
-}
-
-.podTitle
-{
-    font-size: 11px;
-    font-family: arial;
-    font-weight: bold;
-}
-
-DragHighlight
-{
-    border-color: #CCCCCC;
-    border-thickness: 3px;
-    border-style: solid;
-    background-color: #F3F3F3;
-}
-
 .leftArrowButton
 {
     up-skin:        Embed("./left_arrow_up.gif");

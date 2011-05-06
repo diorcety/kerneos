@@ -22,12 +22,15 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
- 
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace kerneosNotification "org.ow2.jasmine.kerneos.core.view.notification.*";
+@namespace kerneosWindow "org.ow2.jasmine.kerneos.core.view.window.*";
+@namespace kerneos "org.ow2.jasmine.kerneos.core.view.*";
 /*******************************************************************************
  * Application
  ******************************************************************************/
  
-Application {
+mx|Application {
    background-gradient-colors: #FFFFFF, #666666;
    backgroundColor: #FFFFFF;
    color: #000000;
@@ -39,7 +42,7 @@ Application {
  * Kerneos desktop
  ******************************************************************************/
  
-ListModuleRenderer {
+kerneos|ListModuleRenderer {
     border-color: #555555;
     border-thickness: 2px;
     corner-radius: 3px;
@@ -69,7 +72,7 @@ global {
  * Windows
  ******************************************************************************/
 
-KerneosWindow {
+kerneosWindow|KerneosWindow {
     titleStyleName: moduleWindowTitle;
     dropShadowEnabled: true;
     dropShadowColor: #000000;
@@ -119,7 +122,7 @@ KerneosWindow {
     paddingTop: 0px;
 }
 
-IFrameModuleWindow {
+kerneosWindow|IFrameModuleWindow {
     backgroundColor: #666666;
     style-name-no-focus: noFocusIFrameModuleWindow;
 }
@@ -134,7 +137,7 @@ IFrameModuleWindow {
     paddingTop: 0px;
 }
 
-FolderWindow {
+kerneosWindow|FolderWindow {
     backgroundImage: ClassReference("org.ow2.jasmine.kerneos.common.view.GradientBackground");
     backgroundSize: "100%";
     fillColors: #666666, #EEEEEE;
@@ -179,7 +182,7 @@ FolderWindow {
 }
 
 .moduleWindowTitleNoFocus {
-    font-weight: bold;   
+    font-weight: bold;
 }
 
 .moduleWindowMinimizeButton {
@@ -247,7 +250,7 @@ FolderWindow {
     borderColor: #666666;
 }
 
-MinimizedModuleWindow {
+kerneosWindow|MinimizedModuleWindow {
     cornerRadius: 1;
     color: #EFEFEF;
     roll-over-color: #000000;
@@ -277,7 +280,7 @@ MinimizedModuleWindow {
     borderColor: #666666;
 }
 
-ModuleSnapshotTooltip {
+kerneosWindow|ModuleSnapshotTooltip {
    backgroundAlpha: 0.8;
    borderAlpha: 1.0;
    backgroundColor: #454545;
@@ -304,7 +307,7 @@ ModuleSnapshotTooltip {
  * Notifications
  ******************************************************************************/
  
-NotificationPopUp {
+kerneosNotification|NotificationPopUp {
     background-image: Embed("./notification_background.png", scaleGridTop="42", scaleGridBottom="138", scaleGridLeft="11", scaleGridRight="118");
     background-size: "100%";
     padding-bottom: 5px;
@@ -324,14 +327,14 @@ NotificationPopUp {
  * Base components
  ******************************************************************************/
 
-ToolTip {
+mx|ToolTip {
    backgroundAlpha: 0.9;
    cornerRadius: 2;
    backgroundColor: #454545;
    color: #FFFFFF;
 }
 
-Alert {
+mx|Alert {
     titleStyleName: "alertTitle";
     messageStyleName: "alertMessage";
     buttonStyleName: "alertButton";
@@ -395,7 +398,7 @@ Alert {
 }
 
 
-TabBar {
+mx|TabBar {
     selected-tab-text-style-name:     tabBarButtonSelected;
     tab-style-name:                 tabBarButton;
 }
@@ -420,37 +423,6 @@ TabBar {
 .tabBarButtonSelected {
     text-roll-over-color:    #003399;
     color:                    #003399;
-}
-
-Pod {
-    padding-top: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    rounded-bottom-corners: false;
-    border-thickness: 1px;
-    border-style: solid;
-    border-color: #999999;
-    header-colors: #cccccc, #999999;
-    highlight-alphas: .9, 0;
-    background-color: #ffffff;
-    corner-radius: 6px;
-    header-height: 22px;
-    shadow-direction: right;
-    drop-shadow-color: #999999;
-}
-
-.podTitle {
-    font-size: 11px;
-    font-family: arial;
-    font-weight: bold;
-}
-
-DragHighlight {
-    border-color: #CCCCCC;
-    border-thickness: 3px;
-    border-style: solid;
-    background-color: #F3F3F3;
 }
 
 .leftArrowButton {
