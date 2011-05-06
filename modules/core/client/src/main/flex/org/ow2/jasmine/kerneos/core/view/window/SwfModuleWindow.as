@@ -27,6 +27,8 @@ package org.ow2.jasmine.kerneos.core.view.window
 import flash.events.Event;
 import flash.events.ProgressEvent;
 
+import flash.system.ApplicationDomain;
+
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.events.ModuleEvent;
@@ -79,17 +81,6 @@ public class SwfModuleWindow extends ModuleWindow
         super(module);
     }
 
-
-    /**
-     * Call on close
-     */
-    override protected function onClose(e:Event = null):void {
-        super.onClose(e);
-
-        // Unload module
-        _loader.unloadModule();
-    }
-
     /**
     * Create UI children
     */
@@ -98,9 +89,13 @@ public class SwfModuleWindow extends ModuleWindow
         // Call super class method
         super.createChildren();
 
+        var currentDate: Date = new Date();
+        var params: String = new Number(currentDate.getTime()).toString();
+
         // Setup the SWF module loader
         _loader = new ModuleLoader();
-        _loader.url = (module as SWFModuleVO).file;
+        _loader.url = (module as SWFModuleVO).file + "?" +params;
+        _loader.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
         _loader.percentWidth = 100;
         _loader.percentHeight = 100;
         _loader.addEventListener(ModuleEvent.READY,onLoaderReady);

@@ -305,7 +305,8 @@ public class ModulesLifeCycleManager
 
             // Unload the module
             moduleLoader.unloadModule();
-
+            moduleLoader.applicationDomain = null;
+            System.gc()
         }
         else if (window is IFrameModuleWindow)
         {
