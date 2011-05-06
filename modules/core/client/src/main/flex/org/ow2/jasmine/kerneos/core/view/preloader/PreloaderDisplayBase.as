@@ -125,7 +125,7 @@ public class PreloaderDisplayBase extends Sprite implements IPreloaderDisplay
     virtual public function initialize() : void
     {
         _timer = new Timer(1);
-        _timer.addEventListener(TimerEvent.TIMER, timerHandler);
+        _timer.addEventListener(TimerEvent.TIMER, timerHandler, false, 0, true);
         _timer.start();
     }
     
@@ -137,8 +137,8 @@ public class PreloaderDisplayBase extends Sprite implements IPreloaderDisplay
     {
         _preloader = value;
         
-        value.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-        value.addEventListener(Event.COMPLETE, completeHandler);
+        value.addEventListener(ProgressEvent.PROGRESS, progressHandler, false, 0, true);
+        value.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
         
         // value.addEventListener(RSLEvent.RSL_PROGRESS, rslProgressHandler);
         // value.addEventListener(RSLEvent.RSL_COMPLETE, rslCompleteHandler);

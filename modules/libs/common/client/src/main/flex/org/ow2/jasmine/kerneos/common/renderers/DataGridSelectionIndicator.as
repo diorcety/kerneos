@@ -125,8 +125,8 @@ public class DataGridSelectionIndicator extends CheckBox
 
         var grid : DataGrid = DataGrid(value.owner);
 
-        grid.addEventListener(FlexEvent.VALUE_COMMIT, onItemClick);
-        grid.addEventListener(ListEvent.ITEM_CLICK, onItemClick);
+        grid.addEventListener(FlexEvent.VALUE_COMMIT, onItemClick, false, 0, true);
+        grid.addEventListener(ListEvent.ITEM_CLICK, onItemClick, false, 0, true);
         //grid.addEventListener(ListEvent.CHANGE, onItemClick)
         selected = false;
     }

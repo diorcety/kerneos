@@ -193,7 +193,7 @@ public class ModulesLifeCycleManager
             {
                 // Create a window
                 window = new SwfModuleWindow(module as SWFModuleVO);
-                window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, NotificationsManager.handleNotificationEvent);
+                window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, NotificationsManager.handleNotificationEvent, false, 0, true);
 
                 // Initialize each shared libraries associated to the module.
                 if ((module as SWFModuleVO).sharedLibraries != null)

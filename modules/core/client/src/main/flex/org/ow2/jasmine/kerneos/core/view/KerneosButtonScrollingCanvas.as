@@ -491,11 +491,11 @@ public class KerneosButtonScrollingCanvas extends Canvas
     {
         if (_stopScrollingEvent == MouseEvent.MOUSE_UP)
         {
-            stage.addEventListener(_stopScrollingEvent, stopScrolling);
+            stage.addEventListener(_stopScrollingEvent, stopScrolling, false, 0, true);
         }
         else
         {
-            button.addEventListener(_stopScrollingEvent, stopScrolling);
+            button.addEventListener(_stopScrollingEvent, stopScrolling, false, 0, true);
         }
         
         if (timer.running)
@@ -504,7 +504,7 @@ public class KerneosButtonScrollingCanvas extends Canvas
         }
         
         timer = new Timer(this.scrollSpeed);
-        timer.addEventListener(TimerEvent.TIMER, scrollFunction);
+        timer.addEventListener(TimerEvent.TIMER, scrollFunction, false, 0, true);
         
         timer.start();
     }

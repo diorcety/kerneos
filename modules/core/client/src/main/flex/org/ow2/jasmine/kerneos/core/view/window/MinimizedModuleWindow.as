@@ -106,10 +106,10 @@ public class MinimizedModuleWindow extends Button
         this.addEventListener(MouseEvent.MOUSE_OVER, updateSnapshot);
         
         // Intercept window events
-        _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler);
-        _moduleWindow.addEventListener(MDIWindowEvent.RESTORE, windowRestoreHandler);
-        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START, windowFocusStartHandler);
-        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END, windowFocusEndHandler);
+        _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler, false, 0, true);
+        _moduleWindow.addEventListener(MDIWindowEvent.RESTORE, windowRestoreHandler, false, 0, true);
+        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START, windowFocusStartHandler, false, 0, true);
+        _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END, windowFocusEndHandler, false, 0, true);
     }
     
     

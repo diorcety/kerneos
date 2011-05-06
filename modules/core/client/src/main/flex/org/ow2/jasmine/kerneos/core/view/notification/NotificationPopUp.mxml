@@ -147,7 +147,7 @@
         }
         
         // Then start it
-        timer.addEventListener(TimerEvent.TIMER,timerHandler);
+        timer.addEventListener(TimerEvent.TIMER,timerHandler, false, 0, true);
         timer.start();
     }
     

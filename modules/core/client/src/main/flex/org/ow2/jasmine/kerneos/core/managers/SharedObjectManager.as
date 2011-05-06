@@ -82,7 +82,7 @@ public class SharedObjectManager
             // If status is "pending", something went wrong...
             if (status == SharedObjectFlushStatus.PENDING)
             {
-                _sharedObject.addEventListener(NetStatusEvent.NET_STATUS, flushStatusHandler);
+                _sharedObject.addEventListener(NetStatusEvent.NET_STATUS, flushStatusHandler, false, 0, true);
             }
         }
         catch (error : Error)

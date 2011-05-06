@@ -90,10 +90,10 @@
             public function initializeView(e : Event = null) : void
             {
                 // Listen to server side exceptions events
-                CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+                CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show, false, 0, true);
 
                 // Listen to keyboards events at the "application" level
-                parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
+                parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler, false, 0, true);
 
                 // Switch to the "loading" state
                 KerneosModelLocator.getInstance().state = KerneosState.LOADING;

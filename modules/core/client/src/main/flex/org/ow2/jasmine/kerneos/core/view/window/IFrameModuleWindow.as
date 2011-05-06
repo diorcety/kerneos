@@ -124,8 +124,8 @@ public class IFrameModuleWindow extends ModuleWindow
 
         if ((module as IFrameModuleVO).showHistoryNavigationButtons)
         {
-            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.addEventListener(MouseEvent.CLICK, historyBack);
-            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.addEventListener(MouseEvent.CLICK, historyForward);
+            (windowControls as IFrameModuleWindowControlsContainer).previousPageButton.addEventListener(MouseEvent.CLICK, historyBack, false, 0, true);
+            (windowControls as IFrameModuleWindowControlsContainer).nextPageButton.addEventListener(MouseEvent.CLICK, historyForward, false, 0, true);
             showSeparator = true;
         }
         else

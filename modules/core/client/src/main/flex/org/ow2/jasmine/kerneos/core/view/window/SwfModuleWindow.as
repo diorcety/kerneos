@@ -98,8 +98,8 @@ public class SwfModuleWindow extends ModuleWindow
         _loader.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
         _loader.percentWidth = 100;
         _loader.percentHeight = 100;
-        _loader.addEventListener(ModuleEvent.READY,onLoaderReady);
-        _loader.addEventListener(ModuleEvent.ERROR,onLoaderError);
+        _loader.addEventListener(ModuleEvent.READY,onLoaderReady, false, 0, true);
+        _loader.addEventListener(ModuleEvent.ERROR,onLoaderError, false, 0, true);
 
         // Setup the progress bar
         _progressBar = new KerneosProgressBar();

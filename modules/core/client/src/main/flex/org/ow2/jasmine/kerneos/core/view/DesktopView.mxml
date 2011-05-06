@@ -169,7 +169,7 @@
                 ModulesLifeCycleManager.desktop = KerneosLifeCycleManager.desktop = NotificationsManager.desktop = this;
 
                 // Set windows events listeners.
-                windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow);
+                windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow, false, 0, true);
 
                 // Setup the active language and the language selector component.
                 setupActiveLanguage();
@@ -319,7 +319,7 @@
                     notificationsLogWindow.addChild(new NotificationsLog());
                     notificationsLog.percentHeight = 100;
                     notificationsLog.percentWidth = 100;
-                    notificationsLogWindow.addEventListener(MDIWindowEvent.CLOSE, notificationsLogWindowCloseHandler);
+                    notificationsLogWindow.addEventListener(MDIWindowEvent.CLOSE, notificationsLogWindowCloseHandler, false, 0, true);
                     notificationsLogWindow.minimizeBtn.visible = false;
                     windowContainer.windowManager.add(notificationsLogWindow);
                 }

@@ -83,7 +83,7 @@ public class CollapsiblePanel extends Panel
         _openAnim.duration = 300;
         _openAnim.property = "height";
         
-        titleBar.addEventListener(MouseEvent.CLICK, headerClickHandler);
+        titleBar.addEventListener(MouseEvent.CLICK, headerClickHandler, false, 0, true);
         
         _creationComplete = true;
     }

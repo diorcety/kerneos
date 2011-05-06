@@ -126,12 +126,12 @@ public class IFrameModuleWindowControlsContainer extends MDIWindowControlsContai
         super.createChildren();
         
         // Redefine tooltips positioning
-        minimizeBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
-        maximizeRestoreBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
-        closeBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
-        navigateExternallyButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
-        previousPageButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
-        nextPageButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip);
+        minimizeBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip, false, 0, true);
+        maximizeRestoreBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip, false, 0, true);
+        closeBtn.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip, false, 0, true);
+        navigateExternallyButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip, false, 0, true);
+        previousPageButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip, false, 0, true);
+        nextPageButton.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, positionToolTip, false, 0, true);
     }
     
     
