@@ -41,8 +41,6 @@ package com.adobe.cairngorm
      */
     public class CairngormError extends Error
     {
-        [ResourceBundle("CairngormMessages")] 
-         private static var rb : ResourceBundle;
         
         public function CairngormError( errorCode : String, ... rest )
         {
@@ -57,11 +55,6 @@ package com.adobe.cairngorm
             var message : String = StringUtil.substitute( formatString, rest ); 
             
             return StringUtil.substitute( "{0}: {1}", errorCode, message);
-        }
-        
-        protected function get resourceBundle() : ResourceBundle
-        {
-            return rb;
         }
     }
 }

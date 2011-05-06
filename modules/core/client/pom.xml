@@ -24,7 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -54,7 +56,7 @@
     </dependency>
 
     <dependency>
-     <groupId>org.ow2.jasmine.kerneos</groupId>
+      <groupId>org.ow2.jasmine.kerneos</groupId>
       <artifactId>kerneos-login-client</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
@@ -87,6 +89,13 @@
       <version>1.0-alpha-3</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.graniteds</groupId>
+      <artifactId>granite-swc</artifactId>
+      <version>${graniteds.version}</version>
+      <type>swc</type>
+    </dependency>
+
     <!-- Flex -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
@@ -96,17 +105,21 @@
     </dependency>
 
     <dependency>
-      <groupId>org.graniteds</groupId>
-      <artifactId>granite-swc</artifactId>
-      <version>${graniteds.version}</version>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
       <type>swc</type>
+      <scope>theme</scope>
     </dependency>
+
   </dependencies>
 
   <build>
-    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+    <finalName>Kerneos</finalName>
+    <sourceDirectory>src/main/flex</sourceDirectory>
+
     <plugins>
-    
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
@@ -116,16 +129,11 @@
             <locale>fr_FR</locale>
           </compiledLocales>
           <mergeResourceBundle>true</mergeResourceBundle>
-          <licenses>
-            <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
-          </licenses>
           <contextRoot>kerneos</contextRoot>
           <sourceFile>Kerneos.mxml</sourceFile>
           <linkReport>true</linkReport>
         </configuration>
       </plugin>
-      
     </plugins>
-    <finalName>Kerneos</finalName>
   </build>
 </project>

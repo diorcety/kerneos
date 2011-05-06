@@ -24,7 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -43,7 +45,7 @@
 
   <dependencies>
 
-      <dependency>
+    <dependency>
       <groupId>org.ow2.jasmine.kerneos</groupId>
       <artifactId>cairngorm-kerneos</artifactId>
       <version>${cairngorm.version}</version>
@@ -91,36 +93,32 @@
   </dependencies>
 
   <build>
+    <finalName>myModule</finalName>
     <sourceDirectory>src/main/flex</sourceDirectory>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
 
+    <plugins>
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
+        <version>${flexmojos.version}</version>
         <configuration>
           <compiledLocales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
-          <mergeResourceBundle>true</mergeResourceBundle>
-          <licenses>
-            <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
-          </licenses>
           <contextRoot>moduleContextRoot</contextRoot>
           <sourceFile>MyModule.mxml</sourceFile>
           <optimize>false</optimize>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
+          </dependency>
+        </dependencies>
       </plugin>
-
     </plugins>
-
-    <finalName>myModule</finalName>
   </build>
 </project>

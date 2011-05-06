@@ -24,7 +24,8 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:TitleWindow xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:mx = "library://ns.adobe.com/flex/mx"
                 width = "700"
                 height = "450"
                 showCloseButton = "true"
@@ -42,7 +43,7 @@
                 backgroundAlpha = "1.0"
                 backgroundColor = "#EEEEEE">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * A help window with pages and a flat menu.
@@ -50,7 +51,7 @@
          * @example How to use it ? This component must be extended the following way:
          * <listing version = "3.0">
          *    &lt;HelpWindow xmlns = "org.ow2.jasmine.monitoring.eos.common.controls.*"
-         *                xmlns:mx = "http://www.adobe.com/2006/mxml"
+         *                xmlns:mx = "library://ns.adobe.com/flex/mx"
          *                title = "The window title"&gt;
          *
          *        &lt;pages&gt;
@@ -69,7 +70,7 @@
          * <listing version = "3.0">
          *     var helpWindow : MyHelpWindow = new MyHelpWindow();
          *     PopUpManager.addPopUp(helpWindow,
-         *     Application.application as DisplayObject,
+         *     FlexGlobals.topLevelApplication as DisplayObject,
          *     false);
          *     PopUpManager.centerPopUp(helpWindow);
          * </listing>
@@ -77,13 +78,13 @@
          * @author Julien Nicoulaud
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- SCRIPT                                                                                  -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             import mx.managers.PopUpManager;
             import mx.controls.Text;
@@ -158,14 +159,14 @@
                 _pagesChildrenHolder = value;
             }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- Style                                                                                   -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <mx:Style>
+    <fx:Style>
 
         .menuContainer {
             padding-bottom: 5px;
@@ -190,7 +191,7 @@
             padding-top: 5px;
         }
 
-    </mx:Style>
+    </fx:Style>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

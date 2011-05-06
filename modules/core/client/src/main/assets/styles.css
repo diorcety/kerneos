@@ -233,7 +233,7 @@ FolderWindow {
 
 .taskBar {
     vertical-align: middle;
-    border-style: applicationControlBar;
+    border-style: outset;
     fill-colors: #777777,#000000;
 }
 

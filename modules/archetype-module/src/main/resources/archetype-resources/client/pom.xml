@@ -91,7 +91,7 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+    <sourceDirectory>src/main/flex</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

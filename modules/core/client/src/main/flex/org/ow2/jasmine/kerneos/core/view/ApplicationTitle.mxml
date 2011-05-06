@@ -24,7 +24,8 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:HBox xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:HBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
          xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
          verticalAlign = "middle"
          horizontalAlign = "right"
@@ -32,7 +33,7 @@
          horizontalScrollPolicy = "off"
          creationComplete = "creationCompleteHandler()">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * The application logo & title.
@@ -40,9 +41,9 @@
          * @author Julien Nicoulaud
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             import org.ow2.jasmine.kerneos.common.util.IconUtility;
             import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
@@ -76,21 +77,21 @@
                 }
             }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- Graphical filters                                                       -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-    <mx:GlowFilter id = "applicationTitleShadow"
-                   blurX = "3"
-                   blurY = "3"
-                   quality = "15"
-                   alpha = "0.2"
-                   strength = "3"
-                   color = "#000000" />
-
+    <fx:Declarations>
+        <mx:GlowFilter id="applicationTitleShadow"
+                       blurX="3"
+                       blurY="3"
+                       quality="15"
+                       alpha="0.2"
+                       strength="3"
+                       color="#000000"/>
+    </fx:Declarations>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- UI children                                                             -->

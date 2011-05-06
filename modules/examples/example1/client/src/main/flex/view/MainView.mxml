@@ -22,13 +22,14 @@
      -
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
          width="100%"
          height="100%"
          verticalAlign="middle"
          horizontalAlign="center">
 
-  <mx:Script>
+  <fx:Script>
       <![CDATA[
     import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
@@ -43,7 +44,7 @@
       CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
     }
     ]]>
-    </mx:Script>
+    </fx:Script>
 
   <mx:Label text="Object Service" fontSize="50"/>
 

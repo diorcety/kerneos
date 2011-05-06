@@ -24,7 +24,8 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:VBox xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
          xmlns:view = "org.ow2.jasmine.kerneos.core.view.*"
          xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
          xmlns:flexlibContainers = "flexlib.containers.*"
@@ -32,7 +33,7 @@
          creationComplete = "creationCompleteHandler()"
          verticalGap = "1">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * The desktop view displayed when everything is loaded and OK.
@@ -41,9 +42,9 @@
          * @author Guillaume Renault
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             import org.ow2.jasmine.kerneos.core.vo.PromptBeforeCloseVO;
             import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
@@ -413,7 +414,7 @@
                 return null;
             }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -427,10 +428,6 @@
                                     height = "100%"
                                     backgroundColor = "#FFFFFF"
                                     backgroundAlpha = "0"
-                                    paddingLeft = "0"
-                                    paddingRight = "0"
-                                    paddingBottom = "0"
-                                    paddingTop = "0"
                                     snapDistance = "15"
                                     tilePadding = "5">
         <mx:TileList id = "modulesList"

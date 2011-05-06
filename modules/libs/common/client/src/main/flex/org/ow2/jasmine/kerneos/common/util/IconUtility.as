@@ -244,18 +244,8 @@ public class IconUtility extends BitmapAsset
      * @param source A url to a JPG, PNG or GIF file you wish to be loaded and displayed.
      * @return A reference to the IconUtility class which may be treated as a BitmapAsset.
      */
-    public static function deleteSource(target : UIComponent, source : String) : Class
+    public static function deleteSource(source : String) : void
     {
-        // Check if dictionaries exists.
-        if (!dictionary)
-        {
-            // if the dictionary contains the target we delete it
-            if (dictionary[target])
-            {
-                delete dictionary[target];
-            }
-        }
-
         if (!dictionaryByURL)
         {
             // if the dictionary contains the source we delete it
@@ -264,9 +254,6 @@ public class IconUtility extends BitmapAsset
                 delete dictionaryByURL[source];
             }
         }
-
-        // Return this
-        return IconUtility;
     }
 
 }

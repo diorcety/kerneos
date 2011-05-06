@@ -33,6 +33,7 @@ import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
 import mx.core.Application;
+import mx.core.FlexGlobals;
 import mx.messaging.ChannelSet;
 import mx.messaging.channels.AMFChannel;
 import mx.utils.URLUtil;
@@ -92,8 +93,8 @@ public class KerneosLifeCycleManager
         var model : KerneosModelLocator = KerneosModelLocator.getInstance();
         
         // Init client-server communications channels properties
-        var urlServer : String = URLUtil.getServerNameWithPort(Application.application.loaderInfo.url);
-        var context : String = StringUtils.parseURLContext(Application.application.loaderInfo.url);
+        var urlServer : String = URLUtil.getServerNameWithPort(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
+        var context : String = StringUtils.parseURLContext(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
         
         amfChannelSet = new ChannelSet();
         var amfChannel : AMFChannel = new AMFChannel("my-graniteamf-kerneos", "http://" + urlServer + "/" + context + "/graniteamf/amf");

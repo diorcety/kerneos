@@ -24,7 +24,8 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Box xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:Box xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         xmlns:commonControls = "org.ow2.jasmine.kerneos.common.controls.*"
         horizontalAlign = "center"
         verticalAlign = "middle"
@@ -32,7 +33,7 @@
         hideEffect = "{viewHideEffect}"
         removedEffect = "{viewHideEffect}">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * The view displayed while loading and parsing the application configuration.
@@ -43,9 +44,9 @@
          * @see org.ow2.jasmine.kerneos.core.view.preloader.KerneosPreloader
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             import mx.resources.ResourceManager;
             import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
@@ -134,36 +135,37 @@
                 }
             }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- Bindings                                                                -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <!-- The binding triggered when the config is loaded. -->
-    <mx:Binding source = "KerneosModelLocator.getInstance().config"
+    <fx:Binding source = "KerneosModelLocator.getInstance().config"
                 destination = "kerneosConfigLoaded" />
 
     <!-- The binding triggered when the module list is loaded. -->
-    <mx:Binding source = "KerneosModelLocator.getInstance().modules"
+    <fx:Binding source = "KerneosModelLocator.getInstance().modules"
                 destination = "modulesLoaded" />
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- Graphical filters & effects                                             -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <fx:Declarations>
+        <mx:DropShadowFilter id="progressBarShadow"
+                             distance="2"
+                             angle="45"
+                             color="#000000"
+                             alpha="0.5"/>
 
-    <mx:DropShadowFilter id = "progressBarShadow"
-                         distance = "2"
-                         angle = "45"
-                         color = "#000000"
-                         alpha = "0.5" />
-
-    <mx:Fade id = "viewHideEffect"
-             target = "{this}"
-             duration = "1000"
-             alphaFrom = "1.0"
-             alphaTo = "0.0" />
+        <mx:Fade id="viewHideEffect"
+                 target="{this}"
+                 duration="1000"
+                 alphaFrom="1.0"
+                 alphaTo="0.0"/>
+    </fx:Declarations>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- UI children                                                             -->

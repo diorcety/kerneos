@@ -30,6 +30,7 @@ import com.adobe.cairngorm.control.CairngormEventDispatcher;
 import com.google.code.flexiframe.IFrame;
 
 import flash.events.Event;
+import flash.net.LocalConnection;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 import flash.system.ApplicationDomain;
@@ -40,6 +41,7 @@ import flexlib.mdi.containers.MDIWindow;
 
 import mx.collections.ArrayCollection;
 import mx.core.Application;
+import mx.core.FlexGlobals;
 import mx.core.UIComponent;
 import mx.modules.ModuleLoader;
 import mx.utils.UIDUtil;
@@ -50,6 +52,7 @@ import org.ow2.jasmine.kerneos.core.api.KerneosModule;
 import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 import org.ow2.jasmine.kerneos.core.view.DesktopView;
+import org.ow2.jasmine.kerneos.core.view.KerneosMainView;
 import org.ow2.jasmine.kerneos.core.view.window.FolderWindow;
 import org.ow2.jasmine.kerneos.core.view.window.IFrameModuleWindow;
 import org.ow2.jasmine.kerneos.core.view.window.MinimizedModuleWindow;
@@ -304,9 +307,18 @@ public class ModulesLifeCycleManager
             }
 
             // Unload the module
+            KerneosLifeCycleManager.desktop.setFocus();
             moduleLoader.unloadModule();
             moduleLoader.applicationDomain = null;
-            System.gc()
+            System.gc();
+            try
+            {
+                new LocalConnection().connect("anything");
+                new LocalConnection().connect("anything");
+            }
+            catch (e:*) {} // ignore intentionally
+
+
         }
         else if (window is IFrameModuleWindow)
         {
@@ -393,7 +405,7 @@ public class ModulesLifeCycleManager
      */
     public static function cacheIcon(url : String) : void
     {
-        IconUtility.getClass(Application.application as UIComponent, url);
+        IconUtility.getClass(FlexGlobals.topLevelApplication as UIComponent, url);
     }
 
      /**
@@ -401,7 +413,7 @@ public class ModulesLifeCycleManager
      */
     public static function deleteCacheIcon(url : String) : void
     {
-        IconUtility.deleteSource(Application.application as UIComponent, url);
+        IconUtility.deleteSource(url);
     }
 
 

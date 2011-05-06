@@ -24,7 +24,8 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
          width="180"
          height="120"
          horizontalAlign="center"
@@ -37,7 +38,7 @@
          horizontalScrollPolicy="off"
          verticalScrollPolicy="off">
     
-    <mx:Script>
+    <fx:Script>
     <![CDATA[
     
     import mx.core.Container;
@@ -179,17 +180,19 @@
 
     
     ]]>
-    </mx:Script>
-    
-    <!-- Effects -->
-    <mx:Fade id="fadeIn"
-             alphaFrom="0.0"
-             alphaTo="1.0"
-             duration="400"/>
-    <mx:Fade id="fadeOut"
-             alphaFrom="1.0"
-             alphaTo="0.0"
-             duration="100"/>
+    </fx:Script>
+
+    <fx:Declarations>
+        <!-- Effects -->
+        <mx:Fade id="fadeIn"
+                 alphaFrom="0.0"
+                 alphaTo="1.0"
+                 duration="400"/>
+        <mx:Fade id="fadeOut"
+                 alphaFrom="1.0"
+                 alphaTo="0.0"
+                 duration="100"/>
+    </fx:Declarations>
    
     <!-- UI -->  
     <mx:HBox width="100%"

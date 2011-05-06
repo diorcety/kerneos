@@ -24,13 +24,14 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Canvas xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:mx="library://ns.adobe.com/flex/mx"
            xmlns:view = "org.ow2.jasmine.kerneos.core.view.*"
            width = "100%"
            height = "100%"
            currentState = "{KerneosModelLocator.getInstance().state}">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * The main view of Kerneos.
@@ -41,9 +42,9 @@
          * @author Guillaume Renault
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             import mx.managers.DragManager;
             import mx.managers.HistoryManager;
@@ -117,9 +118,27 @@
                 }
             }
         ]]>
-    </mx:Script>
+    </fx:Script>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Views                                                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+    <view:LoadingView includeIn="loading"
+                      id="loadingView"
+                      width="100%"
+                      height="100%"/>
 
+    <view:ApplicationTitle includeIn="configLoaded"
+                           id="applicationTitle"
+                           width="1000"
+                           height="80"
+                           top="10"
+                           right="10"/>
+
+    <view:DesktopView includeIn="configLoaded"
+                      id="desktopView"
+                      width="100%"
+                      height="100%"/>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- States                                                                  -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -127,46 +146,18 @@
     <mx:states>
 
         <!-- When loading -->
-        <mx:State name = "{KerneosState.LOADING}">
-            <mx:AddChild relativeTo = "{this}">
-                <mx:target>
-                    <view:LoadingView id = "loadingView"
-                                      width = "100%"
-                                      height = "100%" />
-                </mx:target>
-            </mx:AddChild>
-        </mx:State>
+        <mx:State name = "loading" />
 
         <!-- When the config is loaded -->
-        <mx:State name = "{KerneosState.CONFIG_LOADED}">
-            <mx:AddChild relativeTo = "{this}">
-                <mx:target>
-                    <view:ApplicationTitle id = "applicationTitle"
-                                           width = "1000"
-                                           height = "80"
-                                           top = "10"
-                                           right = "10" />
-                </mx:target>
-            </mx:AddChild>
-        </mx:State>
+        <mx:State name = "configLoaded"/>
 
         <!-- Working view -->
-        <mx:State name = "{KerneosState.DESKTOP}"
-                  basedOn = "{KerneosState.CONFIG_LOADED}">
-            <mx:AddChild relativeTo = "{this}">
-                <mx:target>
-                    <view:DesktopView id = "desktopView"
-                                      width = "100%"
-                                      height = "100%" />
-                </mx:target>
-            </mx:AddChild>
-        </mx:State>
+        <mx:State name = "desktop"
+                  basedOn = "configLoaded" />
 
         <!-- When server connexion lost -->
-        <mx:State name = "{KerneosState.DISCONNECTED}"
-                  basedOn = "{KerneosState.CONFIG_LOADED}">
-            <!-- TODO (KERNEOS-26) -->
-        </mx:State>
+        <mx:State name = "disconnected"
+                  basedOn = "configLoaded" />
 
     </mx:states>
 
@@ -176,8 +167,8 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <mx:transitions>
-        <mx:Transition fromState = "{KerneosState.LOADING}"
-                       toState = "{KerneosState.DESKTOP}">
+        <mx:Transition fromState = "loading"
+                       toState = "desktop">
             <mx:Parallel>
                 <mx:Fade target = "{applicationTitle}"
                          duration = "3000"

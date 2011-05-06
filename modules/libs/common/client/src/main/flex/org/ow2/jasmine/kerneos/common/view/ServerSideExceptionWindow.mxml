@@ -24,19 +24,22 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:TitleWindow xmlns:mx = "http://www.adobe.com/2006/mxml"
-                width = "350"
-                height = "150"
-                showCloseButton = "true"
-                close = "close();"
-                titleIcon = "@Embed(source='/../assets/exception.png')"
-                title = "{exception.name}"
-                borderAlpha = "1.0"
-                backgroundAlpha = "1.0"
-                borderColor = "#CCCCCC"
-                backgroundColor = "#CCCCCC">
+<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:mx="library://ns.adobe.com/flex/mx"
+                width="350"
+                height="150"
+                showCloseButton="true"
+                close="close();"
+                titleIcon="@Embed(source='/../assets/exception.png')"
+                title="{exception.name}"
+                borderAlpha="1.0"
+                backgroundAlpha="1.0"
+                borderColor="#CCCCCC"
+                width.detailedView="700"
+                height.detailedView="450"
+                backgroundColor="#CCCCCC">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * A window that displays a ServerSideException.
@@ -44,147 +47,129 @@
          * @author Julien Nicoulaud
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- SCRIPT                                                                                  -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
-            import mx.managers.PopUpManager;
-            import mx.controls.Text;
-            import flash.events.Event;
+        import mx.managers.PopUpManager;
+        import mx.controls.Text;
 
-            // =====================================================================================
-            // Variables
-            // =====================================================================================
+        import flash.events.Event;
 
-            /**
-             * The exception
-             */
-            [Bindable]
-            public var exception : ServerSideException;
+        // =====================================================================================
+        // Variables
+        // =====================================================================================
 
-            // Assets
+        /**
+         * The exception
+         */
+        [Bindable]
+        public var exception:ServerSideException;
 
-            /**
-             * Close icon (16 pixels)
-             */
-            [Embed(source='/../assets/close16.png')]
-            [Bindable]
-            public var closeIcon16 : Class;
+        // Assets
 
-            /**
-             * Copy icon (16 pixels)
-             */
-            [Embed(source='/../assets/copy16.png')]
-            [Bindable]
-            public var copyIcon16 : Class;
+        /**
+         * Close icon (16 pixels)
+         */
+        [Embed(source='/../assets/close16.png')]
+        [Bindable]
+        public var closeIcon16:Class;
 
-            /**
-             * Details icon (16 pixels)
-             */
-            [Embed(source='/../assets/details16.png')]
-            [Bindable]
-            public var detailsIcon16 : Class;
+        /**
+         * Copy icon (16 pixels)
+         */
+        [Embed(source='/../assets/copy16.png')]
+        [Bindable]
+        public var copyIcon16:Class;
+
+        /**
+         * Details icon (16 pixels)
+         */
+        [Embed(source='/../assets/details16.png')]
+        [Bindable]
+        public var detailsIcon16:Class;
 
 
+        // =====================================================================================
+        // Public methods
+        // =====================================================================================
 
-            // =====================================================================================
-            // Public methods
-            // =====================================================================================
+        /**
+         * Close the window
+         */
+        public function close(e:Event = null):void {
+            PopUpManager.removePopUp(this);
+        }
 
-            /**
-             * Close the window
-             */
-            public function close(e : Event = null) : void
-            {
-                PopUpManager.removePopUp(this);
+
+        /**
+         * Copy the content to the system clipboard
+         */
+        public function copyToClipboard(e:Event = null):void {
+            System.setClipboard(exception.stackTrace);
+        }
+
+
+        /**
+         * Show/hide details button handler
+         */
+        public function toggleDetails(e:Event = null):void {
+            if (this.currentState == null) {
+                this.currentState = "detailedView";
+                detailsButton.label = "Hide details";
             }
-
-
-
-            /**
-             * Copy the content to the system clipboard
-             */
-            public function copyToClipboard(e : Event = null) : void
-            {
-                System.setClipboard(exception.stackTrace);
+            else if (this.currentState == "detailedView") {
+                this.currentState = null;
+                detailsButton.label = "Show details";
             }
-
-
-
-            /**
-             * Show/hide details button handler
-             */
-            public function toggleDetails(e : Event = null) : void
-            {
-                if (this.currentState == null)
-                {
-                    this.currentState = "detailedView";
-                    detailsButton.label = "Hide details";
-                }
-                else if (this.currentState == "detailedView")
-                {
-                    this.currentState = null;
-                    detailsButton.label = "Show details";
-                }
-                PopUpManager.centerPopUp(this);
-            }
+            PopUpManager.centerPopUp(this);
+        }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- GUI Components                                                                          -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <mx:VBox id = "content"
-             width = "100%"
-             height = "100%">
-        <mx:Text id = "descriptionDisplay"
-                 width = "100%"
-                 text = "{(exception.hasDescription())?exception.description:'The following exception has been raised: ' + exception.name}" />
+    <mx:VBox id="content"
+             width="100%"
+             height="100%">
+        <mx:Text id="descriptionDisplay"
+                 width="100%"
+                 text="{(exception.hasDescription())?exception.description:'The following exception has been raised: ' + exception.name}"/>
+        <mx:TextArea includeIn="detailedView"
+                     id="stackTraceDisplay"
+                     text="{exception.stackTrace}"
+                     width="100%"
+                     height="100%"
+                     editable="false"/>
     </mx:VBox>
-    <mx:ControlBar id = "theControlBar"
-                   width = "100%"
-                   horizontalAlign = "center">
-        <mx:Button id = "CloseButton"
-                   label = "Close"
-                   click = "close();"
-                   icon = "{closeIcon16}" />
-        <mx:Button id = "detailsButton"
-                   label = "Show details"
-                   visible = "{exception.hasStackTrace()}"
-                   includeInLayout = "{exception.hasStackTrace()}"
-                   click = "toggleDetails()"
-                   icon = "{detailsIcon16}" />
+    <mx:ControlBar id="theControlBar"
+                   width="100%"
+                   horizontalAlign="center">
+        <mx:Button id="CloseButton"
+                   label="Close"
+                   click="close();"
+                   icon="{closeIcon16}"/>
+        <mx:Button id="detailsButton"
+                   label="Show details"
+                   visible="{exception.hasStackTrace()}"
+                   includeInLayout="{exception.hasStackTrace()}"
+                   click="toggleDetails()"
+                   icon="{detailsIcon16}"/>
+        <mx:Button includeIn="detailedView"
+                   label="Copy to clipboard"
+                   click="copyToClipboard();"
+                   icon="{copyIcon16}"/>
     </mx:ControlBar>
 
     <mx:states>
-        <mx:State name = "detailedView">
-            <mx:AddChild relativeTo = "{content}"
-                         position = "lastChild">
-                <mx:TextArea id = "stackTraceDisplay"
-                             text = "{exception.stackTrace}"
-                             width = "100%"
-                             height = "100%"
-                             editable = "false" />
-            </mx:AddChild>
-            <mx:AddChild relativeTo = "{theControlBar}"
-                         position = "lastChild">
-                <mx:Button label = "Copy to clipboard"
-                           click = "copyToClipboard();"
-                           icon = "{copyIcon16}" />
-            </mx:AddChild>
-            <mx:SetProperty target = "{this}"
-                            name = "width"
-                            value = "700" />
-            <mx:SetProperty target = "{this}"
-                            name = "height"
-                            value = "450" />
-        </mx:State>
+        <mx:State name="detailedView"/>
     </mx:states>
 
 </mx:TitleWindow>

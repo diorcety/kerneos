@@ -24,14 +24,15 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
          xmlns:local="*"
          xmlns:flexlibControls="flexlib.controls.*"
          backgroundAlpha="0.0"
          horizontalAlign="center"
          verticalAlign="middle">
     
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             import org.ow2.jasmine.kerneos.login.event.LogOutEvent;
             import mx.controls.Alert;
@@ -56,7 +57,7 @@
             
             
         ]]>
-    </mx:Script>
+    </fx:Script>
     
     <mx:Text width="100%"
              textAlign="center"

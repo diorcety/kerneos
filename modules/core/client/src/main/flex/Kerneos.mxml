@@ -24,18 +24,19 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Application xmlns:mx = "http://www.adobe.com/2006/mxml" 
-                xmlns:view = "org.ow2.jasmine.kerneos.core.view.*" 
-                xmlns:control = "org.ow2.jasmine.kerneos.core.control.*" 
-                xmlns:business = "org.ow2.jasmine.kerneos.core.business.*"
-                paddingLeft = "0" paddingRight = "0" paddingBottom = "0" paddingTop = "0"
-                pageTitle = "Kerneos"
+<mx:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:mx="library://ns.adobe.com/flex/mx"
+                xmlns:view="org.ow2.jasmine.kerneos.core.view.*"
+                xmlns:control="org.ow2.jasmine.kerneos.core.control.*"
+                xmlns:business="org.ow2.jasmine.kerneos.core.business.*"
+                paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"
+                pageTitle="Kerneos"
                 preloader="org.ow2.jasmine.kerneos.core.view.preloader.KerneosPreloader"
-                scriptTimeLimit = "60"
-                applicationComplete = "applicationCompleteHandler()"
+                scriptTimeLimit="60"
+                applicationComplete="applicationCompleteHandler()"
                 frameRate="60">
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
         import mx.controls.Alert;
         import mx.messaging.ChannelSet;
@@ -120,21 +121,23 @@
             }
 
         ]]>
-    </mx:Script>
+    </fx:Script>
     
     <!-- The locales resource bundles -->
-    <mx:Metadata>
+    <fx:Metadata>
         [ResourceBundle("kerneosLocales")]
-    </mx:Metadata>
+    </fx:Metadata>
 
-    <!-- The business layer -->
-    <business:Services id="services" />
+    <fx:Declarations>
+        <!-- The business layer -->
+        <business:Services id="services"/>
 
-    <!-- The controller -->
-    <control:Controller id="controller"/>
+        <!-- The controller -->
+        <control:Controller id="controller"/>
+    </fx:Declarations>
 
     <!-- The style sheet -->
-    <mx:Style source="/../assets/styles.css" />
+    <fx:Style source="/../assets/styles.css" />
 
     <!-- The main view that contains the complete app -->
     <view:KerneosMainView id="mainView"/>

@@ -24,33 +24,35 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
-        pageTitle="EoS" 
-        xmlns:view="org.ow2.jasmine.kerneos.login.view.*" 
-        xmlns:control="org.ow2.jasmine.kerneos.login.control.*" 
-        xmlns:business="org.ow2.jasmine.kerneos.login.business.*"
-        backgroundAlpha="0.0">
+<mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:mx="library://ns.adobe.com/flex/mx"
+           pageTitle="EoS"
+           xmlns:view="org.ow2.jasmine.kerneos.login.view.*"
+           xmlns:control="org.ow2.jasmine.kerneos.login.control.*"
+           xmlns:business="org.ow2.jasmine.kerneos.login.business.*"
+           backgroundAlpha="0.0">
 
-    <!--business:Services id="services" /-->
-    <control:Controller id="controller" /> 
+    <fx:Declarations>
+        <!--business:Services id="services" /-->
+        <control:Controller id="controller"/>
+    </fx:Declarations>
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
-            public function logIn():void {
-                loginpanel.logIn();
-            }
-            
-            public function reset():void {
-                loginpanel.user.text = "";
-                loginpanel.password.text = "";
-            }
-            
-            public function logout():void {
-                loginpanel.logOut();
-            }
-            
+        public function logIn():void {
+            loginpanel.logIn();
+        }
+
+        public function reset():void {
+            loginpanel.user.text = "";
+            loginpanel.password.text = "";
+        }
+
+        public function logout():void {
+            loginpanel.logOut();
+        }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
     <!-- Main view -->
     <view:LoginPanelMain id="loginpanel"

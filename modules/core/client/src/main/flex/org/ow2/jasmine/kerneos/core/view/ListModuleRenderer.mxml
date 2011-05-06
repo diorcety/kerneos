@@ -24,7 +24,8 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:VBox xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
          xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
 		 xmlns:coreView = "org.ow2.jasmine.kerneos.core.view.*"
 		 implements = "mx.controls.listClasses.IListItemRenderer"
@@ -42,7 +43,7 @@
          click = "startModule(event)"
          creationComplete = "initRenderer()">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * Renders a module as a list icon.
@@ -50,9 +51,9 @@
          * @author Julien Nicoulaud
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             import mx.events.FlexEvent;
             import mx.controls.Alert;
@@ -173,16 +174,18 @@
                 }
             }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
-    <!-- The shadow -->
-    <mx:GlowFilter id = "nameShadow"
-                   blurX = "10"
-                   blurY = "4"
-                   quality = "15"
-                   alpha = "0.9"
-                   strength = "4"
-                   color = "#FFFFFF" />
+    <fx:Declarations>
+        <!-- The shadow -->
+        <mx:GlowFilter id="nameShadow"
+                       blurX="10"
+                       blurY="4"
+                       quality="15"
+                       alpha="0.9"
+                       strength="4"
+                       color="#FFFFFF"/>
+    </fx:Declarations>
 
     <!-- The module thumbnail -->
     <commonView:SmoothImage id = "moduleThumb"

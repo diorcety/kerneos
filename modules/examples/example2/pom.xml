@@ -14,8 +14,8 @@
   <name>Kerneos :: Modules :: Examples :: Example2</name>
 
   <properties>
-    <flex.version>3.5.0.12683</flex.version>
-    <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
+    <flex.version>4.1.0.16076</flex.version>
+    <flexmojos.version>3.7.1</flexmojos.version>
     <cairngorm.version>2.2.3-Beta</cairngorm.version>
     <kerneos.version>2.0.0-M1-SNAPSHOT</kerneos.version>
   </properties>

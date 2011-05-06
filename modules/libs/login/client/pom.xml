@@ -24,7 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -81,7 +83,7 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+    <sourceDirectory>src/main/flex</sourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
@@ -94,9 +96,6 @@
           </compiledLocales>
           -->
           <mergeResourceBundle>true</mergeResourceBundle>
-          <licenses>
-            <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
-          </licenses>
           <sourceFile>LogInPanel.mxml</sourceFile>
         </configuration>
       </plugin>

@@ -24,7 +24,8 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Box xmlns:mx = "http://www.adobe.com/2006/mxml"
+<mx:Box xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         xmlns:commonView = "org.ow2.jasmine.kerneos.common.view.*"
         implements = "mx.core.IToolTip"
         width = "{snapshotWidth+20}"
@@ -33,7 +34,7 @@
         verticalAlign = "middle"
         showEffect = "{fadeIn}">
 
-    <mx:Metadata>
+    <fx:Metadata>
         <![CDATA[
         /**
          * A custom ToolTip meant to display the snapshot of a window.
@@ -41,9 +42,9 @@
          * @author Julien Nicoulaud
          */
         ]]>
-    </mx:Metadata>
+    </fx:Metadata>
 
-    <mx:Script>
+    <fx:Script>
         <![CDATA[
             // =========================================================================
             // Variables
@@ -97,24 +98,26 @@
                 _text = value;
             }
         ]]>
-    </mx:Script>
+    </fx:Script>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- Graphical effects & filters                                             -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <mx:GlowFilter id = "snapshotGlowFilter"
-                   color = "#000000"
-                   blurX = "15"
-                   blurY = "15"
-                   alpha = "0.4"
-                   quality = "5" />
+    <fx:Declarations>
+        <mx:GlowFilter id="snapshotGlowFilter"
+                       color="#000000"
+                       blurX="15"
+                       blurY="15"
+                       alpha="0.4"
+                       quality="5"/>
 
-    <mx:Fade id = "fadeIn"
-             duration = "200"
-             alphaFrom = "0.0"
-             alphaTo = "1.0" />
+        <mx:Fade id="fadeIn"
+                 duration="200"
+                 alphaFrom="0.0"
+                 alphaTo="1.0"/>
+    </fx:Declarations>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

@@ -63,7 +63,7 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+    <sourceDirectory>src/main/flex</sourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
@@ -73,9 +73,6 @@
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
-          <licenses>
-            <flexbuilder3>${licence.flexbuilder3}</flexbuilder3>
-          </licenses>
           <mergeResourceBundle>true</mergeResourceBundle>
         </configuration>
 

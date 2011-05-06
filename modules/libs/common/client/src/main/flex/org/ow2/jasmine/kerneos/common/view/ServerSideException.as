@@ -28,6 +28,7 @@ package org.ow2.jasmine.kerneos.common.view
 import flash.display.DisplayObject;
 
 import mx.core.Application;
+import mx.core.FlexGlobals;
 import mx.managers.PopUpManager;
 
 
@@ -122,7 +123,7 @@ public class ServerSideException
         // Draw a window and display the message
         var window : ServerSideExceptionWindow = new ServerSideExceptionWindow();
         window.exception = this;
-        PopUpManager.addPopUp(window, Application.application as DisplayObject, false);
+        PopUpManager.addPopUp(window, FlexGlobals.topLevelApplication as DisplayObject, false);
         PopUpManager.centerPopUp(window);
     }
 
