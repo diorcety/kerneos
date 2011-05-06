@@ -99,7 +99,7 @@
     <pluginRepository>
       <id>flexmojos-repository-plugin</id>
       <name>FlexMojos repository on Sonatype.org</name>
-      <url>http://repository.sonatype.org/content/groups/public/</url>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
