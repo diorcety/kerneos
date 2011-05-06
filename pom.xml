@@ -55,6 +55,7 @@
     <isFlex4>true</isFlex4>
     <isFlex3>false</isFlex3>
     <flexmojos.version>3.7.1</flexmojos.version>
+    <maven.compiler>2.3.2</maven.compiler>
 
     <!-- Settings -->
     <asdoc.aggregate>true</asdoc.aggregate>
@@ -96,7 +97,7 @@
   </repositories>
   <pluginRepositories>
     <pluginRepository>
-      <id>flexmojos-repository</id>
+      <id>flexmojos-repository-plugin</id>
       <name>FlexMojos repository on Sonatype.org</name>
       <url>http://repository.sonatype.org/content/groups/public/</url>
       <snapshots>
@@ -490,6 +491,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler}</version>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
