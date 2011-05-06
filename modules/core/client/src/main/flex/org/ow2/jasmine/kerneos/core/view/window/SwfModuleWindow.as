@@ -22,138 +22,125 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.core.view.window
-{
+package org.ow2.jasmine.kerneos.core.view.window {
 import flash.events.Event;
-import flash.events.ProgressEvent;
-
 import flash.system.ApplicationDomain;
 
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
+import mx.controls.ProgressBarMode;
 import mx.events.ModuleEvent;
-import mx.modules.ModuleLoader;
+import mx.modules.IModuleInfo;
+import mx.modules.Module;
+
+import mx.modules.ModuleManager;
 import mx.resources.ResourceManager;
 
 import org.ow2.jasmine.kerneos.common.controls.KerneosProgressBar;
+import org.ow2.jasmine.kerneos.core.api.KerneosModule;
 import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
 
 
 /**
-* A window hosting a Swf ModuleLoader
-*
-* @author Julien Nicoulaud
-*/
+ * A window hosting a Swf ModuleLoader
+ *
+ * @author Julien Nicoulaud
+ */
 [Bindable]
-public class SwfModuleWindow extends ModuleWindow
-{
+public class SwfModuleWindow extends ModuleWindow {
 
     // =========================================================================
     // Variables
     // =========================================================================
 
     /**
-    * The SWF module loader
-    */
-    private var _loader : ModuleLoader;
+     * The SWF module loader
+     */
+    private var _moduleInfo:IModuleInfo;
+    private var _child:Module;
 
     /**
-    * The progress bar
-    */
-    private var _progressBar : KerneosProgressBar;
-
-    /**
-    * The list of associated shared libraries.
-    */
-    private var _sharedLibraries : ArrayCollection;
+     * The progress bar
+     */
+    private var _progressBar:KerneosProgressBar;
 
     // =========================================================================
     // Constructor & initialization
     // =========================================================================
 
     /**
-    * Build a new Swf module hosting window
-    */
-    public function SwfModuleWindow(module:SWFModuleVO)
-    {
+     * Build a new Swf module hosting window
+     */
+    public function SwfModuleWindow(module:SWFModuleVO) {
         // Call super classe constructor
         super(module);
     }
 
     /**
-    * Create UI children
-    */
-    override protected function createChildren():void
-    {
+     * Create UI children
+     */
+    override protected function createChildren():void {
         // Call super class method
         super.createChildren();
 
-        var currentDate: Date = new Date();
-        var params: String = new Number(currentDate.getTime()).toString();
+        if (!_child) {
+            // Setup the progress bar
+            _progressBar = new KerneosProgressBar();
+            _progressBar.setStyle("trackHeight", 20);
+            _progressBar.setStyle("barColor", 0x444444);
+            _progressBar.setStyle("color", 0xEFEFEF);
+            _progressBar.setStyle("borderColor", 0xFFFFFF);
+            _progressBar.conversion = 1024;
+            _progressBar.mode = ProgressBarMode.MANUAL;
+            _progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                                                                         'kerneos.windows.swf.loading-bar.label') + " %3%% (%1/%2 kb)";
+            addChild(_progressBar);
+
+            // Start loading
+            this.setStyle("backgroundColor", 0x666666);
+        }
+    }
+
+    /**
+     * Get the KerneosModule object associated with this SwfModule
+     * @return null if there is not KerneosModule
+     */
+    public function getKerneosModule():KerneosModule {
+        if (_child is KerneosModule) {
+            return _child as KerneosModule;
+        }
+        return null;
+    }
+
+    public function load():void {
+        var currentDate:Date = new Date();
+        var params:String = new Number(currentDate.getTime()).toString();
 
         // Setup the SWF module loader
-        _loader = new ModuleLoader();
-        _loader.url = (module as SWFModuleVO).file + "?" +params;
-        _loader.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
-        _loader.percentWidth = 100;
-        _loader.percentHeight = 100;
-        _loader.addEventListener(ModuleEvent.READY,onLoaderReady, false, 0, true);
-        _loader.addEventListener(ModuleEvent.ERROR,onLoaderError, false, 0, true);
-
-        // Setup the progress bar
-        _progressBar = new KerneosProgressBar();
-        _progressBar.setStyle("trackHeight",20);
-        _progressBar.setStyle("barColor",0x444444);
-        _progressBar.setStyle("color",0xEFEFEF);
-        _progressBar.setStyle("borderColor",0xFFFFFF);
-        _progressBar.source = _loader;
-        _progressBar.conversion = 1024;
-        _progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-bar.label') + " %3%% (%1/%2 kb)";
-        addChild(_progressBar);
-
-        // Start loading
-        this.setStyle("backgroundColor",0x666666);
-        _loader.loadModule();
-
-    }
-
-
-    // =========================================================================
-    // Getter & setters
-    // =========================================================================
-
-    /**
-    * Get the hosted module loader
-    */
-    public function get moduleLoader():ModuleLoader
-    {
-        return _loader;
+        _moduleInfo = ModuleManager.getModule((module as SWFModuleVO).file + "?" + params);
+        _moduleInfo.addEventListener(ModuleEvent.READY, onLoaderReady, false, 0, true);
+        _moduleInfo.addEventListener(ModuleEvent.ERROR, onLoaderError, false, 0, true);
+        _moduleInfo.addEventListener(ModuleEvent.PROGRESS, onProgress, false, 0, true);
+        _moduleInfo.load(new ApplicationDomain(ApplicationDomain.currentDomain));
     }
 
     /**
-    * Get the list of shared libraries associated with this module.
-    */
-    public function get sharedLibraries():ArrayCollection
-    {
-        return this._sharedLibraries;
-    }
-
-    // =========================================================================
-    // Public methods
-    // =========================================================================
-
-    /**
-    * Add a shared library name so it can be associated with the module, and declared as
-    * beeing used by this module.
-    */
-    public function addSharedLibrary(p_sharedLibraryName:String):void
-    {
-        if (this._sharedLibraries == null)
-        {
-            this._sharedLibraries = new ArrayCollection();
+     * Unload the module
+     */
+    public function unload() : void {
+        // If the module implements the interface KerneosModule,
+        // trigger the closeModule() method
+        if (_child is KerneosModule) {
+            (_child as KerneosModule).closeModule();
         }
-        this._sharedLibraries.addItem(p_sharedLibraryName);
+
+        // Remove module
+        removeChild(_child);
+        _child = null;
+
+        _moduleInfo.unload();
+        _moduleInfo = null;
     }
 
     // =========================================================================
@@ -161,21 +148,32 @@ public class SwfModuleWindow extends ModuleWindow
     // =========================================================================
 
     /**
-    * When the module has finished loading
-    */
-    private function onLoaderReady(event:ProgressEvent):void
-    {
-        removeChild(_progressBar);
-        addChild(_loader);
-        this.setStyle("backgroundColor",0xCCCCCC);
+     * When the module loading
+     */
+    private function onProgress(event:ModuleEvent):void {
+        _progressBar.setProgress(event.bytesLoaded, event.bytesTotal);
     }
 
     /**
-    * If there was an error while loading the module
-    */
-    private function onLoaderError(event:ModuleEvent):void
-    {
-        Alert.show(event.errorText + '\n' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-failed-dialog.body'),ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-failed-dialog.title',[module.name]));
+     * When the module has finished loading
+     */
+    private function onLoaderReady(event:ModuleEvent):void {
+        _child = _moduleInfo.factory.create() as Module;
+
+        if (_progressBar)
+            removeChild(_progressBar);
+
+        addChild(_child);
+
+        this.setStyle("backgroundColor", 0xCCCCCC);
+    }
+
+    /**
+     * If there was an error while loading the module
+     */
+    private function onLoaderError(event:ModuleEvent):void {
+        Alert.show(event.errorText + '\n' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.windows.swf.loading-failed-dialog.body'),
+                   ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.windows.swf.loading-failed-dialog.title', [module.name]));
     }
 
 }

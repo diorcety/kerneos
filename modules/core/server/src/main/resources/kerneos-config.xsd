@@ -38,9 +38,9 @@
     <xs:element name="kerneos-config">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="k:base-url" maxOccurs="1" minOccurs="0" />
                 <xs:element ref="k:application-project" maxOccurs="1" minOccurs="0" />
                 <xs:element ref="k:application-name" maxOccurs="1" minOccurs="0" />
+                <xs:element ref="k:application-url" maxOccurs="1" minOccurs="0" />
                 <xs:element ref="k:application-logo" maxOccurs="1" minOccurs="0" />
                 <xs:element ref="k:show-minimize-all-button" maxOccurs="1" minOccurs="0" />
                 <xs:element ref="k:show-cascade-button" maxOccurs="1" minOccurs="0" />
@@ -59,9 +59,9 @@
     # Options
     ###################################################################################-->
 
-    <xs:element name="base-url" type="xs:string" default="/kerneos" />
     <xs:element name="application-project" type="xs:string" default="JASMINe" />
     <xs:element name="application-name" type="xs:string" default="Kerneos" />
+    <xs:element name="application-url" type="xs:string" default="/kerneos" />
     <xs:element name="application-logo" type="xs:string" />
     <xs:element name="show-minimize-all-button" type="xs:boolean" default="true" />
     <xs:element name="show-cascade-button" type="xs:boolean" default="true" />

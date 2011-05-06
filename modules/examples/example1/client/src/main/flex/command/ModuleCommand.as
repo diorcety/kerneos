@@ -82,9 +82,9 @@ public class ModuleCommand implements ICommand, IResponder
             Handle the result of the call. Usely, the model is updated.
             Example :   */
                 var moduleModele:ModuleModelLocator = ModuleModelLocator.getInstance();
-                moduleModele.myData = (data as ResultEvent).result as MyObject;
-            
-
+                var object : Object = (data as ResultEvent).result;
+                var myobject: MyObject = object as MyObject
+                moduleModele.myData = myobject;
     }
 
     /**

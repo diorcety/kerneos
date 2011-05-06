@@ -125,8 +125,8 @@ public final class KerneosCore implements IKerneosCore {
         httpContext = new KerneosHttpContext();
 
         // Register Kerneos resources
-        httpService.registerResources(kerneosConfig.getBaseUrl(), KerneosConstants.KERNEOS_PATH, httpContext);
-        logger.info("Register Kerneos' resources: " + kerneosConfig.getBaseUrl());
+        httpService.registerResources(kerneosConfig.getApplicationUrl(), KerneosConstants.KERNEOS_PATH, httpContext);
+        logger.info("Register Kerneos' resources: " + kerneosConfig.getApplicationUrl());
 
         // Gravity Configuration Instances
         {
@@ -145,7 +145,7 @@ public final class KerneosCore implements IKerneosCore {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRAVITY_CHANNEL);
             properties.put("CLASS", "org.granite.gravity.channels.GravityChannel");
-            properties.put("ENDPOINT_URI", kerneosConfig.getBaseUrl() + KerneosConstants.GRAVITY_CHANNEL_URI);
+            properties.put("ENDPOINT_URI", kerneosConfig.getApplicationUrl() + KerneosConstants.GRAVITY_CHANNEL_URI);
             gravityChannel = channelFactory.createComponentInstance(properties);
         }
         {
@@ -167,7 +167,7 @@ public final class KerneosCore implements IKerneosCore {
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRANITE_CHANNEL);
-            properties.put("ENDPOINT_URI", kerneosConfig.getBaseUrl() + KerneosConstants.GRANITE_CHANNEL_URI);
+            properties.put("ENDPOINT_URI", kerneosConfig.getApplicationUrl() + KerneosConstants.GRANITE_CHANNEL_URI);
             graniteChannel = channelFactory.createComponentInstance(properties);
         }
     }
@@ -177,8 +177,8 @@ public final class KerneosCore implements IKerneosCore {
         logger.debug("Stop KerneosCore");
 
         // Unregister kerneos resources
-        httpService.unregister(kerneosConfig.getBaseUrl());
-        logger.info("Unregister Kerneos' resources: " + kerneosConfig.getBaseUrl());
+        httpService.unregister(kerneosConfig.getApplicationUrl());
+        logger.info("Unregister Kerneos' resources: " + kerneosConfig.getApplicationUrl());
 
         // Dispose gravity configuration instances
         gravityDestination.dispose();
@@ -225,11 +225,11 @@ public final class KerneosCore implements IKerneosCore {
 
 
     public  void register(final String alias, final String name) throws NamespaceException {
-        httpService.registerResources(kerneosConfig.getBaseUrl() + "/" + alias, name, httpContext);
+        httpService.registerResources(kerneosConfig.getApplicationUrl() + "/" + alias, name, httpContext);
     }
 
     public void unregister(final String alias) {
-        httpService.unregister(kerneosConfig.getBaseUrl() + "/" + alias);
+        httpService.unregister(kerneosConfig.getApplicationUrl() + "/" + alias);
     }
 
     public KerneosConfig getKerneosConfig() {

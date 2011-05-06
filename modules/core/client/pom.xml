@@ -70,8 +70,8 @@
     </dependency>
 
     <dependency>
-      <groupId>flexlib</groupId>
-      <artifactId>flexlib-bin</artifactId>
+      <groupId>com.google.code.flexlib</groupId>
+      <artifactId>flexlib</artifactId>
       <type>swc</type>
       <version>${flexlib.version}</version>
     </dependency>

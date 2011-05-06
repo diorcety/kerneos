@@ -126,6 +126,7 @@
     <!-- The locales resource bundles -->
     <fx:Metadata>
         [ResourceBundle("kerneosLocales")]
+        [ResourceBundle("controls")]
     </fx:Metadata>
 
     <fx:Declarations>

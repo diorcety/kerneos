@@ -30,12 +30,12 @@
 
     <!-- Kerneos settings -->
 
-    <!-- Base URL used -->
-    <base-url>/kerneos</base-url>
-
     <!-- The two parts of the mark displayed on the top right corner -->
     <application-project>Test</application-project>
     <application-name>TeSt</application-name>
+
+    <!-- Base URL used -->
+    <application-url>/kerneos</application-url>
 
     <!-- The path to the console logo (64x64 image) -->
     <application-logo>icons/icon.png</application-logo>

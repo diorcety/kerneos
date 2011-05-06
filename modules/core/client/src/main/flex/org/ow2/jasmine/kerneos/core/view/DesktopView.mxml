@@ -239,12 +239,11 @@
                             if (window is SwfModuleWindow)
                             {
 
-                                // Retrieve the module loader
-                                var moduleLoader : ModuleLoader = (window as SwfModuleWindow).moduleLoader;
+                                var kerneosModule: KerneosModule = (window as SwfModuleWindow).getKerneosModule();
 
-                                if (moduleLoader.child is KerneosModule)
+                                if (kerneosModule)
                                 {
-                                    prompt = !(moduleLoader.child as KerneosModule).canBeClosedWithoutPrompt();
+                                    prompt = !kerneosModule.canBeClosedWithoutPrompt();
                                 }
                             }
                         }
@@ -279,6 +278,8 @@
                     // Close the window component
                     windowContainer.windowManager.executeDefaultBehavior(queuedEvent);
                 }
+
+                queuedEvent = null;
             }
 
 

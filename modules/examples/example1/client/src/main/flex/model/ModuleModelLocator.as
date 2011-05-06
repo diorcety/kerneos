@@ -129,8 +129,5 @@ public class ModuleModelLocator implements ModelLocator
             }
             return this.moduleDelegate;
         }
-    
-
-
 }
 }

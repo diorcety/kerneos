@@ -50,6 +50,11 @@ public class KerneosConfigVO implements IValueObject
      * The name of the application.
      */
     public var applicationName : String = "Kerneos";
+
+    /**
+     * The url of the application
+     */
+    public var applicationUrl : String = "/kerneos";
     
     /**
      * The path to the application logo (64x64 image).

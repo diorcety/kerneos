@@ -40,10 +40,8 @@ import flash.utils.Dictionary;
 import flexlib.mdi.containers.MDIWindow;
 
 import mx.collections.ArrayCollection;
-import mx.core.Application;
 import mx.core.FlexGlobals;
 import mx.core.UIComponent;
-import mx.modules.ModuleLoader;
 import mx.utils.UIDUtil;
 
 import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
@@ -97,20 +95,6 @@ public class ModulesLifeCycleManager
      * The IFrame  objects
      */
     public static var frames : Dictionary = new Dictionary();
-
-    /**
-    * The list of all loaded shared libraries. Store the number of modules that are using it.<br/>
-    * Structure :<br/>
-    * library module names -> number of loaded module using this library
-    */
-    private static var s_loadedSharedLibrariesNumber : Dictionary = new Dictionary();
-
-    /**
-     * The list of all loaded shared libraries. Store the associated module loader.<br/>
-     * Structure :<br/>
-     * library module name -> ModuleLoader
-     */
-    private static var s_loadedSharedLibrariesModuleLoaders : Dictionary = new Dictionary();
 
     // =========================================================================
     // Public static methods
@@ -193,43 +177,12 @@ public class ModulesLifeCycleManager
             {
                 // Create a window
                 window = new SwfModuleWindow(module as SWFModuleVO);
+
+                // Load Module
+                (window as SwfModuleWindow).load();
+
+                // Add Notification listener
                 window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, NotificationsManager.handleNotificationEvent, false, 0, true);
-
-                // Initialize each shared libraries associated to the module.
-                if ((module as SWFModuleVO).sharedLibraries != null)
-                {
-                    var sharedLibraries : ArrayCollection = (module as SWFModuleVO).sharedLibraries.sharedLibrary;
-
-                    for each (var shared : String in sharedLibraries)
-                    {
-                        // Increments the number of modules that are using this shared library.
-                        // THe library is loaded only if it's not already done.
-                        if (s_loadedSharedLibrariesNumber[shared] == null)
-                        {
-                            var moduleLoader : ModuleLoader = new ModuleLoader();
-                            moduleLoader.url = shared;
-                            moduleLoader.applicationDomain = ApplicationDomain.currentDomain;
-                            moduleLoader.loadModule();
-
-                            // FIXME We should block/wait here for the loader to complete before adding the window to the stage and therefore
-                            // starting the module (see SwfModuleWindow#createChildren()). If the module happens to get loaded before its shared
-                            // librairies it will fail.
-
-                            s_loadedSharedLibrariesNumber[shared] = 1;
-
-                            // store the module loader
-                            s_loadedSharedLibrariesModuleLoaders[shared] = moduleLoader;
-
-                        }
-                        else
-                        {
-                            s_loadedSharedLibrariesNumber[shared]++;
-                        }
-
-                        // add the library's name to the used shared modules of the SWFModule
-                        (window as SwfModuleWindow).addSharedLibrary(shared);
-                    }
-                }
             }
 
             // Else if this is an IFrame module
@@ -254,7 +207,6 @@ public class ModulesLifeCycleManager
 
             // Add it to the windows manager
             desktop.windowContainer.windowManager.add(window);
-
         }
 
         // Else if this is a simple link
@@ -278,47 +230,16 @@ public class ModulesLifeCycleManager
         // Check that desktop is not null
         checkDesktopNotNull();
 
+        // Remove the tasbar button
+        desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow)
+
         if (window is SwfModuleWindow)
         {
-            // Retrieve the module loader
-            var moduleLoader : ModuleLoader = (window as SwfModuleWindow).moduleLoader;
-            // retrieve the list of shared libraries
-            var sharedLibraries : ArrayCollection = (window as SwfModuleWindow).sharedLibraries;
-
-            // If the module implements the interface KerneosModule,
-            // trigger the closeModule() method
-            if (moduleLoader.child is KerneosModule)
-            {
-                (moduleLoader.child as KerneosModule).closeModule();
-            }
-
-            // Shared libraries must not be unloaded, but datas are kept consistent
-            if (sharedLibraries != null)
-            {
-                for each (var libName : String in sharedLibraries)
-                {
-                    // decrease the number of modules using this library
-                    s_loadedSharedLibrariesNumber[libName]--;
-
-                    // NOTA : The shared module must not be unloaded, refering to the
-                    // JASMINe issue MONITORING-171
-
-                }
-            }
+            // Unload module
+            (window as SwfModuleWindow).unload();
 
             // Unload the module
             KerneosLifeCycleManager.desktop.setFocus();
-            moduleLoader.unloadModule();
-            moduleLoader.applicationDomain = null;
-            System.gc();
-            try
-            {
-                new LocalConnection().connect("anything");
-                new LocalConnection().connect("anything");
-            }
-            catch (e:*) {} // ignore intentionally
-
-
         }
         else if (window is IFrameModuleWindow)
         {
@@ -331,9 +252,6 @@ public class ModulesLifeCycleManager
 
         // Force garbage collection
         System.gc();
-
-        // Remove the tasbar button
-        desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow);
     }
 
 

@@ -21,7 +21,6 @@ import flash.display.Loader;
 import flash.display.LoaderInfo;
 import flash.errors.IOError;
 import flash.events.Event;
-import flash.events.IOErrorEvent;
 import flash.geom.Matrix;
 import flash.net.URLRequest;
 import flash.system.LoaderContext;
@@ -168,6 +167,7 @@ public class IconUtility extends BitmapAsset
     {
         // Get the stored data for this Object.
         var data : Object = dictionary[object];
+        delete dictionary[object];
 
         if (data)
         {
