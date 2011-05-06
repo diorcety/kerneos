@@ -38,28 +38,12 @@
 
     <fx:Script>
         <![CDATA[
-        import mx.controls.Alert;
-        import mx.messaging.ChannelSet;
 
-        import mx.messaging.events.ChannelFaultEvent;
-
-
-        import mx.messaging.events.MessageEvent;
-
-        import mx.utils.URLUtil;
-
-        import org.granite.gravity.Consumer;
-        import org.granite.gravity.channels.GravityChannel;
-        import org.ow2.jasmine.kerneos.common.util.StringUtils;
         import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
         import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
-        import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-        import org.ow2.jasmine.kerneos.core.vo.ModuleEventVO;
-        import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
 
-        private var consumer:Consumer = null;
 
-            /**
+        /**
             * On application creation complete.
             */
             private function applicationCompleteHandler():void
@@ -71,53 +55,8 @@
                 ExternalInterface.addCallback("canBeClosed",
                                               KerneosLifeCycleManager.canBeClosed);
 
-                // Init client-server communications channels properties
-                var urlServer : String = URLUtil.getServerNameWithPort(Application.application.loaderInfo.url);
-                var context : String = StringUtils.parseURLContext(Application.application.loaderInfo.url);
+                ModulesLifeCycleManager.subscribeConsumer();
 
-                var channelSet:ChannelSet = new ChannelSet();
-                var channel:GravityChannel = new GravityChannel("my-gravityamf-kerneos", "http://" + urlServer + "/" + context + "/gravity/amf");
-                channelSet.addChannel(channel);
-
-                consumer = new Consumer();
-                consumer.channelSet = channelSet;
-                consumer.destination = "kerneos-gravity";
-                consumer.topic = "kerneos/config";
-                consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
-                consumer.addEventListener(MessageEvent.MESSAGE, onConsumerMessage);
-                consumer.subscribe();
-            }
-
-            private function onFault(event:Event):void {
-                Alert.show(event.toString());
-            }
-
-            private function onConsumerMessage(event:MessageEvent):void {
-                var moduleEvent:ModuleEventVO = event.message.body as ModuleEventVO;
-                if (moduleEvent) {
-                    var model:KerneosModelLocator = KerneosModelLocator.getInstance();
-                    if (moduleEvent.eventType == ModuleEventVO.LOAD && moduleEvent.module) {
-                        model.modules.modulesList.addItem(moduleEvent.module as ModuleVO);
-                        //ModulesLifeCycleManager.startModule(moduleEvent.module);
-                        ModulesLifeCycleManager.setupOneModuleServicesAndIcons(moduleEvent.module);
-                    } else {
-                        ModulesLifeCycleManager.unloadModule(moduleEvent.module);
-                        ModulesLifeCycleManager.deleteSetupModuleServicesAndIcons(moduleEvent.module);
-
-                        var moduleLoop:ModuleVO;
-                        var moduleToDelete:ModuleVO;
-                        //TODO compare by module ID
-                        for each(moduleLoop in model.modules.modulesList) {
-                            if (moduleLoop.name == moduleEvent.module.name) {
-                                moduleToDelete = moduleLoop;
-                            }
-                        }
-
-                        var moduleIndex:int = model.modules.modulesList.getItemIndex(moduleToDelete);
-                        model.modules.modulesList.removeItemAt(moduleIndex);
-
-                    }
-                }
             }
 
         ]]>

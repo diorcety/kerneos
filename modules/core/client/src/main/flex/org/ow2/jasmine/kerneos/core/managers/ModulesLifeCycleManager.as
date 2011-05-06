@@ -30,27 +30,30 @@ import com.adobe.cairngorm.control.CairngormEventDispatcher;
 import com.google.code.flexiframe.IFrame;
 
 import flash.events.Event;
-import flash.net.LocalConnection;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
-import flash.system.ApplicationDomain;
 import flash.system.System;
 import flash.utils.Dictionary;
 
 import flexlib.mdi.containers.MDIWindow;
 
 import mx.collections.ArrayCollection;
+import mx.controls.Alert;
 import mx.core.FlexGlobals;
 import mx.core.UIComponent;
+import mx.messaging.ChannelSet;
+import mx.messaging.events.ChannelFaultEvent;
+import mx.messaging.events.MessageEvent;
 import mx.utils.UIDUtil;
+import mx.utils.URLUtil;
 
+import org.granite.gravity.channels.GravityChannel;
+import org.granite.gravity.Consumer;
 import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
 import org.ow2.jasmine.kerneos.common.util.IconUtility;
-import org.ow2.jasmine.kerneos.core.api.KerneosModule;
 import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 import org.ow2.jasmine.kerneos.core.view.DesktopView;
-import org.ow2.jasmine.kerneos.core.view.KerneosMainView;
 import org.ow2.jasmine.kerneos.core.view.window.FolderWindow;
 import org.ow2.jasmine.kerneos.core.view.window.IFrameModuleWindow;
 import org.ow2.jasmine.kerneos.core.view.window.MinimizedModuleWindow;
@@ -59,10 +62,12 @@ import org.ow2.jasmine.kerneos.core.view.window.SwfModuleWindow;
 import org.ow2.jasmine.kerneos.core.vo.FolderVO;
 import org.ow2.jasmine.kerneos.core.vo.IFrameModuleVO;
 import org.ow2.jasmine.kerneos.core.vo.LinkVO;
+import org.ow2.jasmine.kerneos.core.vo.ModuleEventVO;
 import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
 import org.ow2.jasmine.kerneos.core.vo.ModuleWithWindowVO;
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
 import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
+import org.ow2.jasmine.kerneos.common.util.StringUtils;
 
 
 /**
@@ -95,6 +100,11 @@ public class ModulesLifeCycleManager
      * The IFrame  objects
      */
     public static var frames : Dictionary = new Dictionary();
+
+    /**
+     * The gravity consumer for asynchronous OSGi communication
+     */
+    private static var consumer:Consumer = null;
 
     // =========================================================================
     // Public static methods
@@ -334,6 +344,27 @@ public class ModulesLifeCycleManager
         IconUtility.deleteSource(url);
     }
 
+    /**
+     * Subscribe a gravity consumer to the kerneos topic
+     */
+    public static function subscribeConsumer() : void
+    {
+        // Init client-server communications channels properties
+        var urlServer : String = URLUtil.getServerNameWithPort(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
+        var context : String = StringUtils.parseURLContext(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
+
+        var channelSet:ChannelSet = new ChannelSet();
+        var channel:GravityChannel = new GravityChannel("my-gravityamf-kerneos", "http://" + urlServer + "/" + context + "/gravity/amf");
+        channelSet.addChannel(channel);
+
+        consumer = new Consumer();
+        consumer.channelSet = channelSet;
+        consumer.destination = "kerneos-gravity";
+        consumer.topic = "kerneos/config";
+        consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
+        consumer.addEventListener(MessageEvent.MESSAGE, onConsumerMessage);
+        consumer.subscribe();
+    }
 
     // =========================================================================
     // Private methods
@@ -489,6 +520,45 @@ public class ModulesLifeCycleManager
             if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup)
             {
                 desktop.callLater(startModule, [module]);
+            }
+        }
+    }
+
+    /**
+     * Message showed when there is a communication problem from gravity consumer
+     */
+    private static function onFault(event:Event) : void
+    {
+        Alert.show(event.toString());
+    }
+
+    /**
+     * Receive the message from gravity consumer and load or unload the modules
+     * @param event ModuleEventVO
+     */
+    private static function onConsumerMessage(event:MessageEvent) : void {
+        var moduleEvent:ModuleEventVO = event.message.body as ModuleEventVO;
+        if (moduleEvent) {
+            var model:KerneosModelLocator = KerneosModelLocator.getInstance();
+            if (moduleEvent.eventType == ModuleEventVO.LOAD && moduleEvent.module) {
+                model.modules.modulesList.addItem(moduleEvent.module as ModuleVO);
+                //ModulesLifeCycleManager.startModule(moduleEvent.module);
+                setupOneModuleServicesAndIcons(moduleEvent.module);
+            } else {
+                unloadModule(moduleEvent.module);
+                deleteSetupModuleServicesAndIcons(moduleEvent.module);
+
+                var moduleLoop:ModuleVO;
+                var moduleToDelete:ModuleVO;
+                //TODO compare by module ID
+                for each(moduleLoop in model.modules.modulesList) {
+                    if (moduleLoop.name == moduleEvent.module.name) {
+                        moduleToDelete = moduleLoop;
+                    }
+                }
+
+                var moduleIndex:int = model.modules.modulesList.getItemIndex(moduleToDelete);
+                model.modules.modulesList.removeItemAt(moduleIndex);
             }
         }
     }
