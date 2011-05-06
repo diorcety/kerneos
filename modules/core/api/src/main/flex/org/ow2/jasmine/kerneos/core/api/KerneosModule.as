@@ -39,6 +39,11 @@ public interface KerneosModule
     function canBeClosedWithoutPrompt():Boolean;
 
     /**
+     * Returns the list of classes used as remote classes
+     */
+    function getRemoteClasses(): Array;
+
+    /**
     * Method called before the module is unloaded. Use it to close client-server
     * connexions for example.
     */

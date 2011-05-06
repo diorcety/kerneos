@@ -32,11 +32,15 @@
 
     <fx:Script>
         <![CDATA[
+        import vo.MyObject;
+        import vo.MySubObject;
 
-            // =========================================================================
+        // =========================================================================
             // Implementation of KerneosModule
             // =========================================================================
-            
+            public function getRemoteClasses(): Array{
+                 return [MyObject, MySubObject];
+            }
             /**
              * When the module is closed, cut off all client-server communications
              */

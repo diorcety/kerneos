@@ -37,7 +37,9 @@
         // =========================================================================
             // Implementation of KerneosModule
             // =========================================================================
-            
+                   public function getRemoteClasses(): Array{
+                 return [];
+            }
             /**
              * When the module is closed, cut off all client-server communications
              */
