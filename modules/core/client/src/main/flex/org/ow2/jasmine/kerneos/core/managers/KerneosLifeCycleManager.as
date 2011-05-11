@@ -33,28 +33,16 @@ import flash.net.navigateToURL;
 
 import mx.core.FlexGlobals;
 import mx.messaging.ChannelSet;
-import mx.messaging.channels.AMFChannel;
 import mx.utils.URLUtil;
 
 import org.granite.channels.GraniteChannel;
 import org.granite.gravity.channels.GravityChannel;
 
-import org.granite.util.GraniteClassRegistry;
 import org.ow2.jasmine.kerneos.common.util.StringUtils;
 import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
 import org.ow2.jasmine.kerneos.core.model.KerneosState;
 import org.ow2.jasmine.kerneos.core.view.DesktopView;
-import org.ow2.jasmine.kerneos.core.vo.IFrameModuleVO;
-import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
-import org.ow2.jasmine.kerneos.core.vo.ModuleEventVO;
-import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
-import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
-import org.ow2.jasmine.kerneos.core.vo.PromptBeforeCloseVO;
-import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
-import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
-import org.ow2.jasmine.kerneos.core.vo.ServicesVO;
-import org.ow2.jasmine.kerneos.core.vo.SharedLibrariesVO;
 
 
 /**

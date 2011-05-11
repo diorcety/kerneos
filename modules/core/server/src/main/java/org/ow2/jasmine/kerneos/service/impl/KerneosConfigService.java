@@ -27,10 +27,8 @@ package org.ow2.jasmine.kerneos.service.impl;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -68,7 +66,6 @@ import org.ow2.jasmine.kerneos.config.generated.ObjectFactory;
 import org.ow2.jasmine.kerneos.config.generated.PromptBeforeClose;
 import org.ow2.jasmine.kerneos.config.generated.Service;
 import org.ow2.jasmine.kerneos.config.generated.Services;
-import org.ow2.jasmine.kerneos.config.generated.SharedLibraries;
 import org.ow2.jasmine.kerneos.config.generated.SwfModule;
 import org.ow2.jasmine.kerneos.service.ModuleEvent;
 import org.ow2.util.log.Log;
@@ -113,13 +110,13 @@ public final class KerneosConfigService implements GraniteDestination {
     @Requires
     private IKerneosCore kerneosCore;
 
-    @Requires(from = "org.granite.gravity.osgi.adapters.EventAdmin")
-    private Factory osgiAdapterFactory;
+    @Requires(from = "org.granite.gravity.osgi.adapters.ea.configuration")
+    private Factory eaFactory;
 
     @Requires(from = "org.granite.config.flex.Destination")
     private Factory destinationFactory;
 
-    private ComponentInstance eaAdapter, destination;
+    private ComponentInstance eaConfig, graniteDestination, gravityDestination;
     private BundleTracker bundleTracker;
 
     private class KerneosBundleTracker extends BundleTracker {
@@ -135,7 +132,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 try {
                     onModuleArrival(bundle, header);
                 } catch (Exception e) {
-                  logger.error(e);
+                    logger.error(e);
                 }
             }
         }
@@ -147,7 +144,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 try {
                     onModuleDeparture(bundle, header);
                 } catch (Exception e) {
-                   logger.error(e);
+                    logger.error(e);
                 }
             }
         }
@@ -169,6 +166,8 @@ public final class KerneosConfigService implements GraniteDestination {
     @Validate
     private void start() throws MissingHandlerException, ConfigurationException,
             UnacceptableConfiguration, NamespaceException {
+        logger.debug("Start KerneosConfigService");
+
         gcr.registerClasses(KerneosConstants.GRAVITY_DESTINATION, new Class[]{
                 ModuleEvent.class,
                 Services.class,
@@ -179,8 +178,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 IframeModule.class,
                 SwfModule.class,
                 PromptBeforeClose.class,
-                JAXBElement.class,
-                SharedLibraries.class});
+                JAXBElement.class});
         gcr.registerClasses(getId(), new Class[]{
                 Services.class,
                 Service.class,
@@ -190,28 +188,27 @@ public final class KerneosConfigService implements GraniteDestination {
                 IframeModule.class,
                 SwfModule.class,
                 PromptBeforeClose.class,
-                JAXBElement.class,
-                SharedLibraries.class
+                JAXBElement.class
         });
 
-        logger.debug("Start KerneosConfigService");
         {
             Dictionary properties = new Hashtable();
-            Dictionary prop = new Hashtable();
-            prop.put("GravitySubscriber", KerneosConstants.KERNEOS_CONFIG_TOPIC);
-            prop.put("GravityPublisher", KerneosConstants.KERNEOS_CONFIG_TOPIC);
-            properties.put("ID", KerneosConstants.GRAVITY_ADAPTER);
-            properties.put("event.topics", prop);
-            eaAdapter = osgiAdapterFactory.createComponentInstance(properties);
+            properties.put("ID", KerneosConstants.GRAVITY_DESTINATION);
+            properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
+            properties.put("CHANNELS", new String[]{KerneosConstants.GRAVITY_CHANNEL});
+            gravityDestination = destinationFactory.createComponentInstance(properties);
         }
         {
-            Collection<String> channels = new LinkedList<String>();
-            channels.add(KerneosConstants.GRANITE_CHANNEL);
+            Dictionary properties = new Hashtable();
+            properties.put("destination", KerneosConstants.GRAVITY_DESTINATION);
+            eaConfig = eaFactory.createComponentInstance(properties);
+        }
+        {
             Dictionary properties = new Hashtable();
             properties.put("ID", getId());
             properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-            properties.put("CHANNELS", channels);
-            destination = destinationFactory.createComponentInstance(properties);
+            properties.put("CHANNELS", new String[]{KerneosConstants.GRANITE_CHANNEL});
+            graniteDestination = destinationFactory.createComponentInstance(properties);
         }
         bundleTracker.open();
     }
@@ -224,7 +221,9 @@ public final class KerneosConfigService implements GraniteDestination {
 
         moduleMap.clear();
 
-        eaAdapter.dispose();
+        eaConfig.dispose();
+        gravityDestination.dispose();
+        graniteDestination.dispose();
 
         gcr.unregisterClasses(getId());
         gcr.unregisterClasses(KerneosConstants.GRAVITY_DESTINATION);
@@ -263,11 +262,7 @@ public final class KerneosConfigService implements GraniteDestination {
             ModuleEvent me = new ModuleEvent(module, ModuleEvent.LOAD);
 
             // Post event
-            Dictionary<String, Object> prop = new Hashtable<String, Object>();
-            prop.put("message.topic", KerneosConstants.KERNEOS_CONFIG_TOPIC);
-            prop.put("message.destination", KerneosConstants.GRAVITY_DESTINATION);
-            prop.put("message.data", me);
-            publisher.send(prop);
+            publisher.sendData(me);
         } catch (Exception e) {
             logger.warn(e, "Invalid module: " + name);
             return;
@@ -298,11 +293,7 @@ public final class KerneosConfigService implements GraniteDestination {
         ModuleEvent me = new ModuleEvent(module, ModuleEvent.UNLOAD);
 
         // Post event
-        Dictionary<String, Object> prop = new Hashtable<String, Object>();
-        prop.put("message.topic", KerneosConstants.KERNEOS_CONFIG_TOPIC);
-        prop.put("message.destination", KerneosConstants.GRAVITY_DESTINATION);
-        prop.put("message.data", me);
-        publisher.send(prop);
+        publisher.sendData(me);
     }
 
 

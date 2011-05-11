@@ -32,7 +32,6 @@
 
     <fx:Script>
         <![CDATA[
-        import model.ModuleModelLocator;
             /**
              * When the module is closed, cut off all client-server communications
              */

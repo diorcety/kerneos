@@ -51,10 +51,8 @@ import org.ow2.jasmine.kerneos.service.KerneosSimpleService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Map;
 
 @Component
@@ -190,12 +188,10 @@ public final class KerneosServices {
 
             ComponentInstance destinationConfiguration = null;
             {
-                Collection<String> channels = new LinkedList<String>();
-                channels.add(KerneosConstants.GRANITE_CHANNEL);
                 Dictionary properties = new Hashtable();
                 properties.put("ID", serviceId);
                 properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-                properties.put("CHANNELS", channels);
+                properties.put("CHANNELS", new String[]{KerneosConstants.GRANITE_CHANNEL});
                 properties.put("FACTORY", serviceId + KerneosConstants.FACTORY_SUFFIX);
                 properties.put("SCOPE", GraniteDestination.SCOPE.APPLICATION);
                 destinationConfiguration = destinationService.createComponentInstance(properties);
@@ -268,12 +264,10 @@ public final class KerneosServices {
 
             ComponentInstance destinationConfiguration = null;
             {
-                Collection<String> channels = new LinkedList<String>();
-                channels.add(KerneosConstants.GRANITE_CHANNEL);
                 Dictionary properties = new Hashtable();
                 properties.put("ID", serviceId);
                 properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-                properties.put("CHANNELS", channels);
+                properties.put("CHANNELS", new String[]{KerneosConstants.GRANITE_CHANNEL});
                 properties.put("FACTORY", serviceId + KerneosConstants.FACTORY_SUFFIX);
 
                 // Get Properties

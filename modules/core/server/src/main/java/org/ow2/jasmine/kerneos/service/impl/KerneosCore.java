@@ -37,6 +37,7 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
 
+import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
@@ -52,10 +53,8 @@ import javax.xml.bind.Unmarshaller;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.LinkedList;
 
 @Component
 @Instantiate
@@ -94,7 +93,7 @@ public final class KerneosCore implements IKerneosCore {
     /**
      * Configuration component instances
      */
-    private ComponentInstance gravityService, gravityDestination, gravityAdapter, gravityChannel;
+    private ComponentInstance gravityService, gravityChannel;
     private ComponentInstance graniteService, graniteChannel;
 
     @Requires(from = "org.granite.config.flex.Service")
@@ -105,9 +104,6 @@ public final class KerneosCore implements IKerneosCore {
 
     @Requires(from = "org.granite.config.flex.Destination")
     private Factory destinationFactory;
-
-    @Requires(from = "org.granite.config.flex.Adapter")
-    private Factory adapterFactory;
 
 
     private KerneosCore(final BundleContext bundleContext) throws Exception {
@@ -131,14 +127,9 @@ public final class KerneosCore implements IKerneosCore {
         // Gravity Configuration Instances
         {
             Dictionary properties = new Hashtable();
-            properties.put("ID", KerneosConstants.GRAVITY_ADAPTER);
-            gravityAdapter = adapterFactory.createComponentInstance(properties);
-        }
-        {
-            Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRAVITY_SERVICE);
             properties.put("MESSAGETYPES", "flex.messaging.messages.AsyncMessage");
-            properties.put("DEFAULT_ADAPTER", KerneosConstants.GRAVITY_ADAPTER);
+            properties.put("DEFAULT_ADAPTER", EAConstants.ADAPTER_ID);
             gravityService = serviceFactory.createComponentInstance(properties);
         }
         {
@@ -147,15 +138,6 @@ public final class KerneosCore implements IKerneosCore {
             properties.put("CLASS", "org.granite.gravity.channels.GravityChannel");
             properties.put("ENDPOINT_URI", kerneosConfig.getApplicationUrl() + KerneosConstants.GRAVITY_CHANNEL_URI);
             gravityChannel = channelFactory.createComponentInstance(properties);
-        }
-        {
-            Collection<String> channels = new LinkedList<String>();
-            channels.add(KerneosConstants.GRAVITY_CHANNEL);
-            Dictionary properties = new Hashtable();
-            properties.put("ID", KerneosConstants.GRAVITY_DESTINATION);
-            properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
-            properties.put("CHANNELS", channels);
-            gravityDestination = destinationFactory.createComponentInstance(properties);
         }
 
         // Granite Configuration Instances
@@ -181,9 +163,7 @@ public final class KerneosCore implements IKerneosCore {
         logger.info("Unregister Kerneos' resources: " + kerneosConfig.getApplicationUrl());
 
         // Dispose gravity configuration instances
-        gravityDestination.dispose();
         gravityService.dispose();
-        gravityAdapter.dispose();
         gravityChannel.dispose();
 
         // Dispose granite configuration instances

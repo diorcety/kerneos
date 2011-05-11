@@ -50,9 +50,5 @@ public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
     */
     public var services : ServicesVO = null;
 
-    /**
-    * The associated shared libraries.
-    */
-    public var sharedLibraries : SharedLibrariesVO = null
 }
 }

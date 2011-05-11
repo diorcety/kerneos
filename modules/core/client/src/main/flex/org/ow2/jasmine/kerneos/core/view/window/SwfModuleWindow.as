@@ -148,13 +148,13 @@ public class SwfModuleWindow extends ModuleWindow {
             (_child as KerneosModule).closeModule();
         }
 
-        // Unregister classes used by the services
-        var dic : Dictionary = getKerneosModule().servicesClasses();
-        if(dic != null)
-        {
-            for(var key: String in dic)
-            {
-                GraniteClassRegistry.unregisterClasses(key);
+        // Unregister classes used by the services if the module is a Kerneos module type
+        if (getKerneosModule()) {
+            var dic:Dictionary = getKerneosModule().servicesClasses();
+            if (dic != null) {
+                for (var key:String in dic) {
+                    GraniteClassRegistry.unregisterClasses(key);
+                }
             }
         }
 
@@ -184,16 +184,15 @@ public class SwfModuleWindow extends ModuleWindow {
     private function onLoaderReady(event:ModuleEvent):void {
         _child = _moduleInfo.factory.create() as Module;
 
-        // Register classes used by the services
-        var dic : Dictionary  =getKerneosModule().servicesClasses() ;
-        if(dic != null)
-        {
-            for(var key: String in dic)
-            {
-                for each(var service: ServiceVO in (module as SWFModuleVO).services.service)
-                {
-                    if(service.id == key)
-                        GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
+        // Register classes used by the services if the module is a Kerneos module type
+        if (getKerneosModule()) {
+            var dic:Dictionary = getKerneosModule().servicesClasses();
+            if (dic != null) {
+                for (var key:String in dic) {
+                    for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
+                        if (service.id == key)
+                            GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
+                    }
                 }
             }
         }

@@ -82,45 +82,47 @@
       <version>1.1.0</version>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <version>4.2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <version>4.2.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.annotations</artifactId>
       <version>1.8.0</version>
+       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
       <version>1.6.0</version>
+       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
       <version>1.4.0</version>
+       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo</artifactId>
       <version>1.8.0</version>
+       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.api</artifactId>
       <version>1.6.0</version>
+       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-core</artifactId>
       <version>${graniteds-core-osgi.version}</version>
+       <scope>provided</scope>
     </dependency>
+           <dependency>
+            <groupId>org.graniteds-osgi</groupId>
+            <artifactId>granite-gravity-ea</artifactId>
+            <version>${graniteds-core-osgi.version}</version>
+            <scope>provided</scope>
+        </dependency>
   </dependencies>
 
   <build>
@@ -258,7 +260,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-ipojo-plugin</artifactId>
-        <version>1.8.0</version>
+        <version>1.6.0</version>
         <executions>
           <execution>
             <goals>

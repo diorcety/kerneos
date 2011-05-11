@@ -45,9 +45,7 @@ import mx.messaging.ChannelSet;
 import mx.messaging.events.ChannelFaultEvent;
 import mx.messaging.events.MessageEvent;
 import mx.utils.UIDUtil;
-import mx.utils.URLUtil;
 
-import org.granite.gravity.channels.GravityChannel;
 import org.granite.gravity.Consumer;
 import org.ow2.jasmine.kerneos.common.event.KerneosNotificationEvent;
 import org.ow2.jasmine.kerneos.common.util.IconUtility;

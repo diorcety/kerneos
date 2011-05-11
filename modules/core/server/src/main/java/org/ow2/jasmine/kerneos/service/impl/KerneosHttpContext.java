@@ -36,6 +36,7 @@ import java.net.URL;
 
 public class KerneosHttpContext implements HttpContext {
     private static final String PREFIX = "bundle:/";
+    private static final String PREFIX2 = "bundle://";
 
     public String getMimeType(final String name) {
         return null;
@@ -44,8 +45,12 @@ public class KerneosHttpContext implements HttpContext {
     public URL getResource(final String name) {
         if (name.startsWith(PREFIX)) {
             try {
-                // Fix bug
-                return new URL("bundle://" + name.substring(PREFIX.length()));
+                // Fix Jetty bug
+                if (!name.startsWith(PREFIX2)) {
+                    return new URL("bundle://" + name.substring(PREFIX.length()));
+                } else {
+                    return new URL(name);
+                }
             } catch (MalformedURLException e) {
                 return null;
             }
@@ -55,7 +60,7 @@ public class KerneosHttpContext implements HttpContext {
     }
 
     public boolean handleSecurity(final HttpServletRequest request,
-                                        final HttpServletResponse response) throws IOException {
+                                  final HttpServletResponse response) throws IOException {
         return true;
     }
 }
