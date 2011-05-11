@@ -24,6 +24,7 @@
  */
 package org.ow2.jasmine.kerneos.core.api
 {
+import flash.utils.Dictionary;
 
 /**
 * Any Kerneos module can implement this interface in order to have the member
@@ -39,9 +40,9 @@ public interface KerneosModule
     function canBeClosedWithoutPrompt():Boolean;
 
     /**
-     * Returns the list of classes used as remote classes
+     * Returns the mapping between service and classes used
      */
-    function getRemoteClasses(): Array;
+    function servicesClasses(): Dictionary;
 
     /**
     * Method called before the module is unloaded. Use it to close client-server

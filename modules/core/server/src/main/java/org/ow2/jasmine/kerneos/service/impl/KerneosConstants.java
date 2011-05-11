@@ -62,7 +62,7 @@ public final class KerneosConstants {
      */
     public static final String GRANITE_SERVICE = "granite-service";
     public static final String GRANITE_CHANNEL = "my-graniteamf-kerneos";
-    public static final String GRANITE_CHANNEL_URI = "/graniteamf/amf";
+    public static final String GRANITE_CHANNEL_URI = "/granite/amf";
 
     /*
         Gravity Configuration

@@ -35,12 +35,7 @@
         import vo.MyObject;
         import vo.MySubObject;
 
-        // =========================================================================
-            // Implementation of KerneosModule
-            // =========================================================================
-            public function getRemoteClasses(): Array{
-                 return [MyObject, MySubObject];
-            }
+            var _servicesClasses: Dictionary;
             /**
              * When the module is closed, cut off all client-server communications
              */
@@ -54,15 +49,24 @@
                 controller.removeCommands();
                 controller = null;
             }
-            
+
+            public function servicesClasses(): Dictionary {
+                if(_servicesClasses == null)
+                {
+                    _servicesClasses = new Dictionary();
+                    _servicesClasses["object_service"]= [MyObject, MySubObject];
+                }
+                return _servicesClasses;
+            }
+
             public function canBeClosedWithoutPrompt() : Boolean {
-            
+
                 ////////////////////////////////////////////////////////////////////////////////////////////////
                 //                                                                                            //
                 //             return whether or not a prompt should be shown when closing the module         //
                 //                                                                                            //
                 ////////////////////////////////////////////////////////////////////////////////////////////////
-            
+
                 return true;
             }
 

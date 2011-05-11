@@ -38,28 +38,24 @@
 
     <fx:Script>
         <![CDATA[
+      import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
+      import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
 
-        import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
-        import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
 
+      /**
+       * On application creation complete.
+       */
+      private function applicationCompleteHandler():void {
+        // Initialize the main view
+        mainView.initializeView();
 
-        /**
-            * On application creation complete.
-            */
-            private function applicationCompleteHandler():void
-            {
-                // Initialize the main view
-                mainView.initializeView();
+        // Register methods that can be called externally from the Javascript.
+        ExternalInterface.addCallback("canBeClosed", KerneosLifeCycleManager.canBeClosed);
 
-                // Register methods that can be called externally from the Javascript.
-                ExternalInterface.addCallback("canBeClosed",
-                                              KerneosLifeCycleManager.canBeClosed);
+        ModulesLifeCycleManager.subscribe();
 
-                ModulesLifeCycleManager.subscribeConsumer();
-
-            }
-
-        ]]>
+      }
+      ]]>
     </fx:Script>
     
     <!-- The locales resource bundles -->

@@ -23,14 +23,12 @@
  * --------------------------------------------------------------------------
  */
 package org.ow2.jasmine.kerneos.core.view.window {
-import flash.events.Event;
-import flash.net.registerClassAlias;
+import com.adobe.cairngorm.business.ServiceLocator;
+
 import flash.system.ApplicationDomain;
 
-import flash.utils.describeType;
-import flash.utils.getQualifiedClassName;
+import flash.utils.Dictionary;
 
-import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.controls.ProgressBarMode;
 import mx.events.ModuleEvent;
@@ -40,10 +38,14 @@ import mx.modules.Module;
 import mx.modules.ModuleManager;
 import mx.resources.ResourceManager;
 
+import org.granite.channels.GraniteChannel;
+import org.granite.util.GraniteClassRegistry;
 import org.ow2.jasmine.kerneos.common.controls.KerneosProgressBar;
 import org.ow2.jasmine.kerneos.core.api.KerneosModule;
 import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
+import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
+import org.ow2.jasmine.kerneos.core.vo.ServicesVO;
 
 
 /**
@@ -146,6 +148,16 @@ public class SwfModuleWindow extends ModuleWindow {
             (_child as KerneosModule).closeModule();
         }
 
+        // Unregister classes used by the services
+        var dic : Dictionary = getKerneosModule().servicesClasses();
+        if(dic != null)
+        {
+            for(var key: String in dic)
+            {
+                GraniteClassRegistry.unregisterClasses(key);
+            }
+        }
+
         // Remove module
         removeChild(_child);
         _child = null;
@@ -160,38 +172,6 @@ public class SwfModuleWindow extends ModuleWindow {
     // =========================================================================
 
     /**
-     * Force registering of module classes
-     * @param classes to register
-     */
-    private function registerClasses(classes:Array): void {
-        var clazz:Class;
-
-        for each (clazz in classes) {
-            var classInfo:XML = describeType(clazz);
-            var remoteClass:XMLList = classInfo.factory.metadata.(@name = "RemoteClass");
-            var remoteClassTag:XML;
-            var remoteClassAlias:String;
-            for each (remoteClassTag in remoteClass) {
-                if (remoteClassTag.elements("arg").length() == 1) {
-                    remoteClassAlias = remoteClassTag.arg.(@key = "alias").@value.toString();
-                }
-            }
-
-            // If a remote class alias was found use it as a registration name, otherwise use its full qualified class name.
-            var registrationName:String;
-            if (remoteClassAlias) {
-                registrationName = remoteClassAlias;
-            }
-            else {
-                registrationName = getQualifiedClassName(clazz);
-            }
-
-            // (Re)register the class alias
-            registerClassAlias(registrationName, clazz);
-        }
-    }
-
-    /**
      * When the module loading
      */
     private function onProgress(event:ModuleEvent):void {
@@ -204,9 +184,18 @@ public class SwfModuleWindow extends ModuleWindow {
     private function onLoaderReady(event:ModuleEvent):void {
         _child = _moduleInfo.factory.create() as Module;
 
-        // Force RemoteClasses registering
-        if (_child is KerneosModule) {
-            registerClasses((_child as KerneosModule).getRemoteClasses());
+        // Register classes used by the services
+        var dic : Dictionary  =getKerneosModule().servicesClasses() ;
+        if(dic != null)
+        {
+            for(var key: String in dic)
+            {
+                for each(var service: ServiceVO in (module as SWFModuleVO).services.service)
+                {
+                    if(service.id == key)
+                        GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
+                }
+            }
         }
 
         if (_progressBar)

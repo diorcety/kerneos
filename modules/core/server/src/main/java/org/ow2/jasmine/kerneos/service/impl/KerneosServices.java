@@ -173,7 +173,7 @@ public final class KerneosServices {
         String serviceId = ks.destination();
         logger.debug("New Kerneos service: " + serviceId);
 
-        registerClasses(serviceId, service);
+        registerClasseses(serviceId, service);
 
         try {
             ServiceRegistration instance = bundleContext.registerService(
@@ -234,7 +234,7 @@ public final class KerneosServices {
             return;
         }
 
-        unregisterClasses(serviceId);
+        unregisterClasseses(serviceId);
 
         ksi.dispose();
     }
@@ -251,7 +251,7 @@ public final class KerneosServices {
         String serviceId = ks.destination();
         logger.debug("New Kerneos factory: " + serviceId);
 
-        registerClasses(serviceId, factory);
+        registerClasseses(serviceId, factory);
 
         try {
             ServiceRegistration instance = bundleContext.registerService(
@@ -329,7 +329,7 @@ public final class KerneosServices {
             return;
         }
 
-        unregisterClasses(serviceId);
+        unregisterClasseses(serviceId);
 
         kfi.dispose();
     }
@@ -338,7 +338,7 @@ public final class KerneosServices {
      * @param serviceId
      * @param service
      */
-    private void registerClasses(final String serviceId, final Object service) {
+    private void registerClasseses(final String serviceId, final Object service) {
         KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
         if (ks != null) {
             ClassAnalyzer ca = new ClassAnalyzer();
@@ -348,14 +348,14 @@ public final class KerneosServices {
             for (Class cls : ks.classes()) {
                 ca.add(cls);
             }
-            gcr.registerClass(serviceId, ca.compile());
+            gcr.registerClasses(serviceId, ca.compile());
         }
     }
 
     /**
      * @param serviceId
      */
-    private void unregisterClasses(final String serviceId) {
-        gcr.unregisterClass(serviceId);
+    private void unregisterClasseses(final String serviceId) {
+        gcr.unregisterClasses(serviceId);
     }
 }

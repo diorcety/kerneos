@@ -113,37 +113,10 @@ public class ModulesLifeCycleManager
     /**
      * Setup the modules.
      */
-    public static function setupModulesServicesAndIcons(e : Event = null) : void
+    public static function installModules(e : Event = null) : void
     {
         // Setup the modules services and icons
-        setupModulesCollection(KerneosModelLocator.getInstance().modules.modulesList);
-    }
-
-    /**
-     * Setup one module services and icons
-     */
-    public static function setupOneModuleServicesAndIcons(module : ModuleVO) : void
-    {
-        // Setup the module services and icons
-        setupModule(module);
-    }
-
-    /**
-     *  Delete one module setup services and icons
-     */
-    public static function deleteSetupModuleServicesAndIcons(module : ModuleVO) : void
-    {
-        // Delete the modules setup services and icons
-        deleteSetupModule(module);
-    }
-
-
-    /**
-     * Start the modules that have the "loadOnStartup" option.
-     */
-    public static function doLoadOnStartup(e : Event = null) : void
-    {
-        doLoadOnStartupModules(KerneosModelLocator.getInstance().modules.modulesList);
+        installModulesCollection(KerneosModelLocator.getInstance().modules.modulesList);
     }
 
     /**
@@ -347,22 +320,14 @@ public class ModulesLifeCycleManager
     /**
      * Subscribe a gravity consumer to the kerneos topic
      */
-    public static function subscribeConsumer() : void
+    public static function subscribe() : void
     {
-        // Init client-server communications channels properties
-        var urlServer : String = URLUtil.getServerNameWithPort(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
-        var context : String = StringUtils.parseURLContext(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
-
-        var channelSet:ChannelSet = new ChannelSet();
-        var channel:GravityChannel = new GravityChannel("my-gravityamf-kerneos", "http://" + urlServer + "/" + context + "/gravity/amf");
-        channelSet.addChannel(channel);
-
         consumer = new Consumer();
-        consumer.channelSet = channelSet;
+        consumer.channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
         consumer.destination = "kerneos-gravity";
         consumer.topic = "kerneos/config";
         consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
-        consumer.addEventListener(MessageEvent.MESSAGE, onConsumerMessage);
+        consumer.addEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
         consumer.subscribe();
     }
 
@@ -386,7 +351,7 @@ public class ModulesLifeCycleManager
     /**
      * Setup the modules.
      */
-    private static function setupModulesCollection(modules : ArrayCollection) : void
+    private static function installModulesCollection(modules : ArrayCollection) : void
     {
         var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
         var serviceIds : ArrayCollection = new ArrayCollection();
@@ -394,7 +359,7 @@ public class ModulesLifeCycleManager
         // For each module
         for each (var module : ModuleVO in modules)
         {
-            setupModule(module);
+            installModule(module);
         }
 
     }
@@ -402,7 +367,7 @@ public class ModulesLifeCycleManager
     /**
      * Delete the modules setup
      */
-    private static function deleteSetupModulesCollection(modules : ArrayCollection) : void
+    private static function uninstallModulesCollection(modules : ArrayCollection) : void
     {
         var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
         var serviceIds : ArrayCollection = new ArrayCollection();
@@ -410,14 +375,14 @@ public class ModulesLifeCycleManager
         // For each module
         for each (var module : ModuleVO in modules)
         {
-            deleteSetupModule(module);
+            uninstallModule(module);
         }
     }
 
     /**
      * Setup one module
      */
-    private static function setupModule(module : ModuleVO) : void
+    private static function installModule(module : ModuleVO) : void
     {
 
         var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
@@ -450,7 +415,7 @@ public class ModulesLifeCycleManager
         // Call the function recursively for folders
         else if (module is FolderVO && ((module as FolderVO).modules != null) )
         {
-            setupModulesCollection((module as FolderVO).modules.modulesList);
+            installModulesCollection((module as FolderVO).modules.modulesList);
         }
 
         // Overload all AMF channels
@@ -463,7 +428,7 @@ public class ModulesLifeCycleManager
     /**
      * Delete module setup
      */
-    private static function deleteSetupModule(module : ModuleVO) : void
+    private static function uninstallModule(module : ModuleVO) : void
     {
         var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
 
@@ -493,7 +458,7 @@ public class ModulesLifeCycleManager
         // Call the function recursively for folders
         else if (module is FolderVO && ((module as FolderVO).modules != null) )
         {
-            deleteSetupModulesCollection((module as FolderVO).modules.modulesList);
+            uninstallModulesCollection((module as FolderVO).modules.modulesList);
         }
     }
 
@@ -502,25 +467,22 @@ public class ModulesLifeCycleManager
     /**
      * Start the modules that have the "loadOnStartup" option.
      */
-    private static function doLoadOnStartupModules(modules : ArrayCollection) : void
+    private static function doLoadOnStartupModules(module : ModuleVO) : void
     {
         // Check that desktop is not null
         checkDesktopNotNull();
 
-        // For each module
-        for each (var module : ModuleVO in modules)
+        // Call the function recursively for folders
+        if (module is FolderVO)
         {
-            // Call the function recursively for folders
-            if (module is FolderVO)
-            {
-                doLoadOnStartupModules((module as FolderVO).modules.modulesList);
-            }
+            for each(var submodule: ModuleVO in (module as FolderVO).modules.modulesList)
+                doLoadOnStartupModules(submodule);
+        }
 
-            // If "load on startup", load it
-            if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup)
-            {
-                desktop.callLater(startModule, [module]);
-            }
+        // If "load on startup", load it
+        if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup)
+        {
+            desktop.callLater(startModule, [module]);
         }
     }
 
@@ -536,17 +498,16 @@ public class ModulesLifeCycleManager
      * Receive the message from gravity consumer and load or unload the modules
      * @param event ModuleEventVO
      */
-    private static function onConsumerMessage(event:MessageEvent) : void {
+    private static function onModuleEventMessage(event:MessageEvent) : void {
         var moduleEvent:ModuleEventVO = event.message.body as ModuleEventVO;
         if (moduleEvent) {
             var model:KerneosModelLocator = KerneosModelLocator.getInstance();
             if (moduleEvent.eventType == ModuleEventVO.LOAD && moduleEvent.module) {
                 model.modules.modulesList.addItem(moduleEvent.module as ModuleVO);
-                //ModulesLifeCycleManager.startModule(moduleEvent.module);
-                setupOneModuleServicesAndIcons(moduleEvent.module);
+                installModule(moduleEvent.module);
             } else {
                 unloadModule(moduleEvent.module);
-                deleteSetupModuleServicesAndIcons(moduleEvent.module);
+                uninstallModule(moduleEvent.module);
 
                 var moduleLoop:ModuleVO;
                 var moduleToDelete:ModuleVO;

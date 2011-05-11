@@ -169,7 +169,7 @@ public final class KerneosConfigService implements GraniteDestination {
     @Validate
     private void start() throws MissingHandlerException, ConfigurationException,
             UnacceptableConfiguration, NamespaceException {
-        gcr.registerClass(KerneosConstants.GRAVITY_DESTINATION, new Class[]{
+        gcr.registerClasses(KerneosConstants.GRAVITY_DESTINATION, new Class[]{
                 ModuleEvent.class,
                 Services.class,
                 Service.class,
@@ -181,7 +181,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 PromptBeforeClose.class,
                 JAXBElement.class,
                 SharedLibraries.class});
-        gcr.registerClass(getId(), new Class[]{
+        gcr.registerClasses(getId(), new Class[]{
                 Services.class,
                 Service.class,
                 KerneosConfig.class,
@@ -226,8 +226,8 @@ public final class KerneosConfigService implements GraniteDestination {
 
         eaAdapter.dispose();
 
-        gcr.unregisterClass(getId());
-        gcr.unregisterClass(KerneosConstants.GRAVITY_DESTINATION);
+        gcr.unregisterClasses(getId());
+        gcr.unregisterClasses(KerneosConstants.GRAVITY_DESTINATION);
     }
 
     /**
