@@ -98,7 +98,7 @@ public class NotificationsManager
             }
             
             // If a PopUp should be shown and the window does not have the focus
-            if (model.config.showNotificationPopUps && event.showPopup && (model.config.showPopupsFromActiveWindow || (!model.config.showPopupsFromActiveWindow && !window.hasFocus)))
+            if (model.config.showNotificationPopups && event.showPopup && (model.config.showPopupsFromActiveWindow || (!model.config.showPopupsFromActiveWindow && !window.hasFocus)))
             {
                 // Check that desktop is not null
                 checkDesktopNotNull();

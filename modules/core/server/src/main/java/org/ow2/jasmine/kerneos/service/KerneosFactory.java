@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -32,11 +32,12 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface KerneosFactoryProperties {
+public @interface KerneosFactory {
     enum SCOPE {
         REQUEST("request"),
         SESSION("session"),
         APPLICATION("application");
+
         private final String value;
 
         SCOPE(final String value) {

@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -24,6 +24,8 @@
  */
 
 package org.ow2.jasmine.kerneos.service.impl;
+
+import java.util.HashMap;
 
 public final class KerneosConstants {
 
@@ -67,9 +69,8 @@ public final class KerneosConstants {
     /*
         Gravity Configuration
      */
-    public static final String GRAVITY_DESTINATION = "kerneos-gravity";
     public static final String GRAVITY_SERVICE = "messaging-service";
     public static final String GRAVITY_CHANNEL = "my-gravityamf-kerneos";
     public static final String GRAVITY_CHANNEL_URI = "/gravity/amf";
-    public static final String GRAVITY_ADAPTER = "kerneos-gravity-adapter";
+
 }

@@ -160,8 +160,9 @@
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:attribute name="destination" use="required" type="xs:string"/>
             <xs:attribute name="id" use="required" type="xs:string"/>
+            <xs:attribute name="destination" use="required" type="xs:string"/>
+            <xs:attribute name="asynchronous" type="xs:boolean"/>
         </xs:complexType>
     </xs:element>
 

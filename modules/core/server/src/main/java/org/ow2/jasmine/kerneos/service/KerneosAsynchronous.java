@@ -23,41 +23,40 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.jasmine.kerneos.service.impl;
+package org.ow2.jasmine.kerneos.service;
 
-import org.granite.osgi.service.GraniteFactory;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.ow2.jasmine.kerneos.service.KerneosSimpleService;
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface KerneosAsynchronous {
 
+    enum TYPE {
+        EVENTADMIN("event-admin"),
+        JMS("java-message-service");
 
-public class GraniteKerneosSimple implements GraniteFactory {
+        private final String value;
 
-    private final KerneosSimpleService service;
-    private final String id;
+        TYPE(final String value) {
+            this.value = value;
+        }
 
-    /**
-     *
-     * @param service
-     * @param id
-     */
-    GraniteKerneosSimple(final KerneosSimpleService service, final String id) {
-        this.service = service;
-        this.id = id;
+        @Override
+        public String toString() {
+            return value;
+        }
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getId() {
-        return id;
+    @interface Property {
+        String name();
+
+        String value();
     }
 
-    /**
-     *
-     * @return
-     */
-    public Object newInstance() {
-        return service;
-    }
+    TYPE type();
+
+    Property[] properties() default {};
 }

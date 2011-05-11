@@ -4,9 +4,9 @@
               version="1.0">
 
   <jxb:bindings>
-      <jxb:globalBindings>
-          <jxb:serializable/>
-      </jxb:globalBindings>
+    <jxb:globalBindings>
+      <jxb:serializable/>
+    </jxb:globalBindings>
   </jxb:bindings>
- 
+
 </jxb:bindings>

@@ -79,7 +79,7 @@ public class KerneosConfigVO implements IValueObject
     /**
      * Allow to show notification popups.
      */
-    public var showNotificationPopUps : Boolean = true;
+    public var showNotificationPopups : Boolean = true;
     
     /**
      * Allow to show notification popups, even on windows that have the focus.

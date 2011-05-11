@@ -47,5 +47,10 @@ public class ServiceVO implements IValueObject
      */
     public var destination : String = null;
 
+    /**
+     *  Asynchronous service.
+     */
+    public var asynchronous: Boolean = false;
+
 }
 }

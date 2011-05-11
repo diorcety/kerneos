@@ -122,6 +122,12 @@
       <type>rb.swc</type>
       <scope>external</scope>
     </dependency>
+    <dependency>
+      <groupId>org.graniteds</groupId>
+      <artifactId>granite-swc</artifactId>
+      <version>${graniteds.version}</version>
+      <type>swc</type>
+    </dependency>
   </dependencies>
 
   <build>

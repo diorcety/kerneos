@@ -160,8 +160,14 @@ public class SwfModuleWindow extends ModuleWindow {
 
         // Register services
         for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
-            serviceLocator.setServiceForId(service.id, service.destination);
-            serviceLocator.getRemoteObject(service.id).channelSet = KerneosLifeCycleManager.amfChannelSet;
+            serviceLocator.setServiceForId(service.id, service.destination, service.asynchronous);
+            if (service.asynchronous) {
+                serviceLocator.getConsumer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
+                serviceLocator.getProducer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
+            }
+            else {
+                serviceLocator.getRemoteObject(service.id).channelSet = KerneosLifeCycleManager.amfChannelSet;
+            }
         }
     }
 
@@ -203,8 +209,15 @@ public class SwfModuleWindow extends ModuleWindow {
         var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
 
         for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
-            serviceLocator.getRemoteObject(service.id).disconnect();
-            serviceLocator.removeServiceForId(service.id);
+            if (service.asynchronous) {
+                serviceLocator.getConsumer(service.id).disconnect();
+                serviceLocator.getProducer(service.id).disconnect();
+            }
+            else {
+                serviceLocator.getRemoteObject(service.id).disconnect();
+            }
+
+            serviceLocator.removeServiceForId(service.id, service.asynchronous);
         }
     }
 

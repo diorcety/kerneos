@@ -31,8 +31,8 @@ import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Validate;
 
+import org.ow2.jasmine.kerneos.service.KerneosFactory;
 import org.ow2.jasmine.kerneos.service.KerneosFactoryService;
-import org.ow2.jasmine.kerneos.service.KerneosFactoryProperties;
 import org.ow2.jasmine.kerneos.service.KerneosService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -43,7 +43,7 @@ import org.ow2.util.log.LogFactory;
 @Provides
 
 @KerneosService(destination = "ObjectService")
-@KerneosFactoryProperties(scope = KerneosFactoryProperties.SCOPE.SESSION)
+@KerneosFactory(scope = KerneosFactory.SCOPE.SESSION)
 public class Factory implements KerneosFactoryService<MyService> {
     /**
      * The logger.

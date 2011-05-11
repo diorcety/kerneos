@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -79,6 +79,8 @@ public final class KerneosConfigService implements GraniteDestination {
      * The logger.
      */
     private static Log logger = LogFactory.getLog(KerneosConfigService.class);
+
+    private static final String GRAVITY_DESTINATION = "kerneos-gravity";
 
     /**
      * The JAXB context for rules packages serialization/deserialization. Must
@@ -168,7 +170,7 @@ public final class KerneosConfigService implements GraniteDestination {
             UnacceptableConfiguration, NamespaceException {
         logger.debug("Start KerneosConfigService");
 
-        gcr.registerClasses(KerneosConstants.GRAVITY_DESTINATION, new Class[]{
+        gcr.registerClasses(GRAVITY_DESTINATION, new Class[]{
                 ModuleEvent.class,
                 Services.class,
                 Service.class,
@@ -193,14 +195,14 @@ public final class KerneosConfigService implements GraniteDestination {
 
         {
             Dictionary properties = new Hashtable();
-            properties.put("ID", KerneosConstants.GRAVITY_DESTINATION);
+            properties.put("ID", GRAVITY_DESTINATION);
             properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
             properties.put("CHANNELS", new String[]{KerneosConstants.GRAVITY_CHANNEL});
             gravityDestination = destinationFactory.createComponentInstance(properties);
         }
         {
             Dictionary properties = new Hashtable();
-            properties.put("destination", KerneosConstants.GRAVITY_DESTINATION);
+            properties.put("destination", GRAVITY_DESTINATION);
             eaConfig = eaFactory.createComponentInstance(properties);
         }
         {
@@ -226,7 +228,7 @@ public final class KerneosConfigService implements GraniteDestination {
         graniteDestination.dispose();
 
         gcr.unregisterClasses(getId());
-        gcr.unregisterClasses(KerneosConstants.GRAVITY_DESTINATION);
+        gcr.unregisterClasses(GRAVITY_DESTINATION);
     }
 
     /**
