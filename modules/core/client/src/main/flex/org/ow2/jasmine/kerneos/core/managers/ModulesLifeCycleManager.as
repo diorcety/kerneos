@@ -41,7 +41,6 @@ import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.core.FlexGlobals;
 import mx.core.UIComponent;
-import mx.messaging.ChannelSet;
 import mx.messaging.events.ChannelFaultEvent;
 import mx.messaging.events.MessageEvent;
 import mx.utils.UIDUtil;
@@ -64,8 +63,6 @@ import org.ow2.jasmine.kerneos.core.vo.ModuleEventVO;
 import org.ow2.jasmine.kerneos.core.vo.ModuleVO;
 import org.ow2.jasmine.kerneos.core.vo.ModuleWithWindowVO;
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
-import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
-import org.ow2.jasmine.kerneos.common.util.StringUtils;
 
 
 /**
@@ -201,8 +198,6 @@ public class ModulesLifeCycleManager
         desktop.cursorManager.removeBusyCursor();
     }
 
-
-
     /**
      * Unload a module by its window.
      */
@@ -235,8 +230,6 @@ public class ModulesLifeCycleManager
         System.gc();
     }
 
-
-
     /**
      * Bring a module window to front
      */
@@ -257,8 +250,6 @@ public class ModulesLifeCycleManager
             }
         }
     }
-
-
 
     /**
      * Unload all the active modules.
@@ -281,6 +272,9 @@ public class ModulesLifeCycleManager
         }
     }
 
+    /**
+     * Unload a module.
+     */
     public static function unloadModule(module : ModuleVO) : void
     {
         // Check that desktop is not null
@@ -344,8 +338,6 @@ public class ModulesLifeCycleManager
         }
     }
 
-
-
     /**
      * Setup the modules.
      */
@@ -382,10 +374,6 @@ public class ModulesLifeCycleManager
      */
     private static function installModule(module : ModuleVO) : void
     {
-
-        var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
-        var serviceIds : ArrayCollection = new ArrayCollection();
-
         // Cache the icons
         if (module.smallIcon != null)
         {
@@ -397,29 +385,10 @@ public class ModulesLifeCycleManager
             cacheIcon(module.bigIcon);
         }
 
-        // Initialize each SWF module services
-        if (module is SWFModuleVO && ((module as SWFModuleVO).services != null))
-        {
-            var services : ArrayCollection = (module as SWFModuleVO).services.service;
-
-            for (var l : int = 0; l < services.length; l++)
-            {
-                var service : ServiceVO = services.getItemAt(l) as ServiceVO;
-                serviceLocator.setServiceForId(service.id, service.destination);
-                serviceIds.addItem(service.id);
-            }
-        }
-
         // Call the function recursively for folders
-        else if (module is FolderVO && ((module as FolderVO).modules != null) )
+        if (module is FolderVO && ((module as FolderVO).modules != null) )
         {
             installModulesCollection((module as FolderVO).modules.modulesList);
-        }
-
-        // Overload all AMF channels
-        for each (var id : String in serviceIds)
-        {
-            serviceLocator.getRemoteObject(id).channelSet = KerneosLifeCycleManager.amfChannelSet;
         }
     }
 
@@ -428,8 +397,6 @@ public class ModulesLifeCycleManager
      */
     private static function uninstallModule(module : ModuleVO) : void
     {
-        var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
-
         // Cache the icons
         if (module.smallIcon != null)
         {
@@ -441,26 +408,12 @@ public class ModulesLifeCycleManager
             deleteCacheIcon(module.bigIcon);
         }
 
-        // Initialize each SWF module services
-        if (module is SWFModuleVO && ((module as SWFModuleVO).services != null))
-        {
-            var services : ArrayCollection = (module as SWFModuleVO).services.service;
-
-            for (var l : int = 0; l < services.length; l++)
-            {
-                var service : ServiceVO = services.getItemAt(l) as ServiceVO;
-                serviceLocator.removeServiceForId(service.id);
-            }
-        }
-
         // Call the function recursively for folders
-        else if (module is FolderVO && ((module as FolderVO).modules != null) )
+        if (module is FolderVO && ((module as FolderVO).modules != null) )
         {
             uninstallModulesCollection((module as FolderVO).modules.modulesList);
         }
     }
-
-
 
     /**
      * Start the modules that have the "loadOnStartup" option.

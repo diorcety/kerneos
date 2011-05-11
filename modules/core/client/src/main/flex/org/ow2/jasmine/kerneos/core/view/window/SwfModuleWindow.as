@@ -38,14 +38,13 @@ import mx.modules.Module;
 import mx.modules.ModuleManager;
 import mx.resources.ResourceManager;
 
-import org.granite.channels.GraniteChannel;
 import org.granite.util.GraniteClassRegistry;
 import org.ow2.jasmine.kerneos.common.controls.KerneosProgressBar;
 import org.ow2.jasmine.kerneos.core.api.KerneosModule;
+import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
 import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
 import org.ow2.jasmine.kerneos.core.vo.SWFModuleVO;
 import org.ow2.jasmine.kerneos.core.vo.ServiceVO;
-import org.ow2.jasmine.kerneos.core.vo.ServicesVO;
 
 
 /**
@@ -130,12 +129,40 @@ public class SwfModuleWindow extends ModuleWindow {
         var currentDate:Date = new Date();
         var params:String = new Number(currentDate.getTime()).toString();
 
+        registerServices();
+
         // Setup the SWF module loader
         _moduleInfo = ModuleManager.getModule((module as SWFModuleVO).file + "?" + params);
         _moduleInfo.addEventListener(ModuleEvent.READY, onLoaderReady, false, 0, true);
         _moduleInfo.addEventListener(ModuleEvent.ERROR, onLoaderError, false, 0, true);
         _moduleInfo.addEventListener(ModuleEvent.PROGRESS, onProgress, false, 0, true);
         _moduleInfo.load(new ApplicationDomain(ApplicationDomain.currentDomain));
+    }
+
+    private function registerClasses():void {
+
+        // Register classes used by the services if the module is a Kerneos module type
+        if (getKerneosModule()) {
+            var dic:Dictionary = getKerneosModule().servicesClasses();
+            if (dic != null) {
+                for (var key:String in dic) {
+                    for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
+                        if (service.id == key)
+                            GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
+                    }
+                }
+            }
+        }
+    }
+
+    private function registerServices():void {
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+
+        // Register services
+        for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
+            serviceLocator.setServiceForId(service.id, service.destination);
+            serviceLocator.getRemoteObject(service.id).channelSet = KerneosLifeCycleManager.amfChannelSet;
+        }
     }
 
     /**
@@ -148,15 +175,8 @@ public class SwfModuleWindow extends ModuleWindow {
             (_child as KerneosModule).closeModule();
         }
 
-        // Unregister classes used by the services if the module is a Kerneos module type
-        if (getKerneosModule()) {
-            var dic:Dictionary = getKerneosModule().servicesClasses();
-            if (dic != null) {
-                for (var key:String in dic) {
-                    GraniteClassRegistry.unregisterClasses(key);
-                }
-            }
-        }
+        unregisterServices();
+        unregisterClasses();
 
         // Remove module
         removeChild(_child);
@@ -166,6 +186,27 @@ public class SwfModuleWindow extends ModuleWindow {
         _moduleInfo = null;
     }
 
+    private function unregisterClasses():void {
+
+        // Unregister classes used by the services if the module is a Kerneos module type
+        if (getKerneosModule()) {
+            var dic:Dictionary = getKerneosModule().servicesClasses();
+            if (dic != null) {
+                for (var key:String in dic) {
+                    GraniteClassRegistry.unregisterClasses(key);
+                }
+            }
+        }
+    }
+
+    private function unregisterServices():void {
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+
+        for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
+            serviceLocator.getRemoteObject(service.id).disconnect();
+            serviceLocator.removeServiceForId(service.id);
+        }
+    }
 
     // =========================================================================
     // Private methods
@@ -184,18 +225,7 @@ public class SwfModuleWindow extends ModuleWindow {
     private function onLoaderReady(event:ModuleEvent):void {
         _child = _moduleInfo.factory.create() as Module;
 
-        // Register classes used by the services if the module is a Kerneos module type
-        if (getKerneosModule()) {
-            var dic:Dictionary = getKerneosModule().servicesClasses();
-            if (dic != null) {
-                for (var key:String in dic) {
-                    for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
-                        if (service.id == key)
-                            GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
-                    }
-                }
-            }
-        }
+        registerClasses();
 
         if (_progressBar)
             removeChild(_progressBar);

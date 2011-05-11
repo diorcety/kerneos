@@ -16,6 +16,7 @@
   <modules>
     <module>example1</module>
     <module>example2</module>
+    <module>probemanager</module>
     <module>test</module>
   </modules>
 
