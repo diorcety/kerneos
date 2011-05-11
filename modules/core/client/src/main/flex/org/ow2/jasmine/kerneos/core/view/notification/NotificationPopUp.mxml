@@ -200,7 +200,7 @@
         <mx:Image id="moduleIcon"
                   width="16" 
                   height="16"
-                  source="{window.module.getSmallIconClass(moduleIcon)}"/>
+                  source="{window.module.getSmallIcon(moduleIcon, true)}"/>
         <mx:Text text="{window.module.name}"
                  fontWeight="bold"
                  selectable="false"

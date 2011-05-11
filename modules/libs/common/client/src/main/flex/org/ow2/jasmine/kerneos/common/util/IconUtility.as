@@ -14,8 +14,7 @@
  * $Id$
  * -------------------------------------------------------------------------------------------------
  */
-package org.ow2.jasmine.kerneos.common.util
-{
+package org.ow2.jasmine.kerneos.common.util {
 import flash.display.BitmapData;
 import flash.display.Loader;
 import flash.display.LoaderInfo;
@@ -44,18 +43,21 @@ import mx.core.UIComponent;
  * @author Ben Stucki
  * @author Julien Nicoulaud
  */
-public class IconUtility extends BitmapAsset
-{
+public class IconUtility extends BitmapAsset {
     /**
      * The association UIComponent => Loader.
      */
-    private static var dictionary : Dictionary;
+    private static var dictionary:Dictionary = new Dictionary(false);
 
     /**
      * The association URL => Loader.
      */
-    private static var dictionaryByURL : Dictionary;
+    private static var dictionaryByURL:Dictionary = new Dictionary(false);
 
+    /**
+     * Data associated with the icon
+     */
+    private var data:Object;
 
 
     /**
@@ -71,44 +73,29 @@ public class IconUtility extends BitmapAsset
      * &lt;mx:Button id="button" icon="{IconUtility.getClass(button, 'http://www.yourdomain.com/images/test.jpg')}" /&gt;
      * </listing>
      */
-    public static function getClass(target : UIComponent, source : String, width : Number = NaN, height : Number = NaN) : Class
-    {
-        // Initialize the dictionnaries if needed.
-        if (!dictionary)
-        {
-            dictionary = new Dictionary(false);
-        }
-
-        if (!dictionaryByURL)
-        {
-            dictionaryByURL = new Dictionary(false);
-        }
+    public static function getClass(target:UIComponent, source:String, width:Number = NaN, height:Number = NaN):Class {
 
         // Prepare to create or locate a Loader for the asset.
-        var loader : Loader;
+        var loader:Loader;
 
         // If a Loader is already associated to this URL, choose it.
-        if (dictionaryByURL[source] != null)
-        {
+        if (dictionaryByURL[source] != null) {
             loader = dictionaryByURL[source];
         }
 
         // Else
-        else
-        {
+        else {
             // Create a new one.
             loader = new Loader();
 
-            try
-            {
+            try {
                 // Start loading
                 loader.load(new URLRequest(source as String), new LoaderContext(true));
 
                 // Store the reference to the new Loader.
                 dictionaryByURL[source] = loader;
             }
-            catch (e : IOError)
-            {
+            catch (e:IOError) {
                 // Do nothing
             }
         }
@@ -120,79 +107,106 @@ public class IconUtility extends BitmapAsset
         return IconUtility;
     }
 
+    public static function getObject(target:UIComponent, source:String, width:Number = NaN,
+                                     height:Number = NaN):Object {
 
+        // Prepare to create or locate a Loader for the asset.
+        var loader:Loader;
+
+        // If a Loader is already associated to this URL, choose it.
+        if (dictionaryByURL[source] != null) {
+            loader = dictionaryByURL[source];
+        }
+
+        // Else
+        else {
+            // Create a new one.
+            loader = new Loader();
+
+            try {
+                // Start loading
+                loader.load(new URLRequest(source as String), new LoaderContext(true));
+
+                // Store the reference to the new Loader.
+                dictionaryByURL[source] = loader;
+            }
+            catch (e:IOError) {
+                // Do nothing
+            }
+        }
+
+        // Return this
+        return new IconUtility({source: loader, width: width, height: height});
+    }
 
     /**
      * Build a new IconUtility.
      */
-    public function IconUtility() : void
-    {
-        // Wait to be added to the stage.
-        addEventListener(Event.ADDED, addedHandler, false, 0, true);
+    public function IconUtility(data:Object = null):void {
+        if (data) {
+            this.data = data;
+            load();
+        }
+        else {
+            // Wait to be added to the stage.
+            addEventListener(Event.ADDED, addedHandler, false, 0, true);
+        }
     }
-
 
 
     /**
      * Triggered when this class is added to the stage.
      */
-    private function addedHandler(event : Event) : void
-    {
+    private function addedHandler(event:Event):void {
         // Resolve the parent component to serve the data to.
-        if (parent)
-        {
-            if (parent is AccordionHeader)
-            {
-                var header : AccordionHeader = parent as AccordionHeader;
-                getData(header.data);
+        if (parent) {
+            if (parent is AccordionHeader) {
+                var header:AccordionHeader = parent as AccordionHeader;
+                data = dictionary[header.data];
+                delete dictionary[header.data];
+
             }
-            else if (parent is Tab)
-            {
-                var tab : Tab = parent as Tab;
-                getData(tab.data);
+            else if (parent is Tab) {
+                var tab:Tab = parent as Tab;
+                data = dictionary[tab.data];
+                delete dictionary[tab.data];
+
             }
-            else
-            {
-                getData(parent);
+            else {
+                data = dictionary[parent];
+                delete dictionary[parent];
+
             }
+            load();
         }
     }
-
 
 
     /**
      * Get data bytes for an Object.
      */
-    private function getData(object : Object) : void
-    {
+    private function load():void {
         // Get the stored data for this Object.
-        var data : Object = dictionary[object];
-        delete dictionary[object];
 
-        if (data)
-        {
+        if (data) {
             // Get the loader.
-            var source : Object = data.source;
+            var source:Object = data.source;
 
             // Init a BitmapData with the specified width and height if specified.
-            if (data.width > 0 && data.height > 0)
-            {
+            if (data.width > 0 && data.height > 0) {
                 bitmapData = new BitmapData(data.width, data.height, true, 0x00FFFFFF);
             }
 
-            if (source is Loader)
-            {
-                var loader : Loader = source as Loader;
+            if (source is Loader) {
+                var loader:Loader = source as Loader;
 
                 // If loader not ready, wait for the completion.
-                if (!loader.content)
-                {
+                if (!loader.content) {
                     loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
                 }
 
                 // Else directly display it.
-                else
-                {
+                else {
                     displayLoader(loader);
                 }
             }
@@ -200,29 +214,23 @@ public class IconUtility extends BitmapAsset
     }
 
 
-
     /**
      * Triggered when the Loader has finished loading.
      */
-    private function completeHandler(event : Event) : void
-    {
-        if (event && event.target && event.target is LoaderInfo)
-        {
+    private function completeHandler(event:Event):void {
+        if (event && event.target && event.target is LoaderInfo) {
             // Display the loaded content.
             displayLoader(event.target.loader as Loader);
         }
     }
 
 
-
     /**
      * Display a Loader's content.
      */
-    private function displayLoader(loader : Loader) : void
-    {
+    private function displayLoader(loader:Loader):void {
         // If the Bitmap data is no initialized, do it now.
-        if (!bitmapData)
-        {
+        if (!bitmapData) {
             bitmapData = new BitmapData(loader.content.width, loader.content.height, true, 0x00FFFFFF);
         }
 
@@ -230,9 +238,8 @@ public class IconUtility extends BitmapAsset
         bitmapData.draw(loader, new Matrix(bitmapData.width / loader.width, 0, 0, bitmapData.height / loader.height, 0, 0));
 
         // Force the parent component to recalculate its size.
-        if (parent is UIComponent)
-        {
-            var component : UIComponent = parent as UIComponent;
+        if (parent is UIComponent) {
+            var component:UIComponent = parent as UIComponent;
             component.invalidateSize();
         }
     }
@@ -244,13 +251,10 @@ public class IconUtility extends BitmapAsset
      * @param source A url to a JPG, PNG or GIF file you wish to be loaded and displayed.
      * @return A reference to the IconUtility class which may be treated as a BitmapAsset.
      */
-    public static function deleteSource(source : String) : void
-    {
-        if (!dictionaryByURL)
-        {
+    public static function deleteSource(source:String):void {
+        if (!dictionaryByURL) {
             // if the dictionary contains the source we delete it
-            if (dictionaryByURL[source])
-            {
+            if (dictionaryByURL[source]) {
                 delete dictionaryByURL[source];
             }
         }

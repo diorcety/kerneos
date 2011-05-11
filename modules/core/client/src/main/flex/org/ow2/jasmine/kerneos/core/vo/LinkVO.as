@@ -20,8 +20,7 @@
  *
  * $Id$
  */
-package org.ow2.jasmine.kerneos.core.vo
-{
+package org.ow2.jasmine.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.core.UIComponent;
@@ -36,49 +35,43 @@ import org.ow2.jasmine.kerneos.common.util.IconUtility;
  */
 [RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.Link")]
 [Bindable]
-public class LinkVO extends ModuleVO implements IValueObject
-{
-    
+public class LinkVO extends ModuleVO implements IValueObject {
+
     // =========================================================================
     // Properties
     // =========================================================================
-    
+
     // Assets
-         
+
     /**
-    * Default link big icon (64x64).
-    */
+     * Default link big icon (64x64).
+     */
     [Transient]
     [Embed(source="/../assets/link64.png")]
-    public static var defaultLinkBigIcon : Class;
+    public static var defaultLinkBigIcon:Class;
 
     // Fields
 
     /**
      * The web page URL.
      */
-    public var url : String = null;
-    
-    
+    public var url:String = null;
+
+
     // =========================================================================
     // Public methods
     // =========================================================================
-    
+
     /**
-    * Get the the big icon asset.
-    */
-    override public function getBigIconClass(target:UIComponent):Class
-    {
+     * Get the the big icon asset.
+     */
+    override public function getBigIcon(target:UIComponent, obj:Boolean = false):Object {
         // If no icon specified, return the default one
-        if (bigIcon == null)
-        {
+        if (bigIcon == null) {
             return defaultLinkBigIcon;
         }
-        
-        // Else load the given URL
-        else
-        {
-            return IconUtility.getClass(target,bigIcon,64,64);
+        else {
+            return super.getBigIcon(target, obj);
         }
     }
 }

@@ -102,7 +102,7 @@ public class ModuleWindow extends KerneosWindow
      */
     private function onCreationComplete(e : Event = null) : void
     {
-        this.titleIcon = module.getSmallIconClass(this.titleBar);
+        this.titleIcon = module.getSmallIcon(this.titleBar) as Class;
     }
     
     

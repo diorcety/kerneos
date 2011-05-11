@@ -20,8 +20,7 @@
  *
  * $Id$
  */
-package org.ow2.jasmine.kerneos.core.vo
-{
+package org.ow2.jasmine.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.core.UIComponent;
@@ -36,75 +35,63 @@ import org.ow2.jasmine.kerneos.common.util.IconUtility;
  */
 [RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.Folder")]
 [Bindable]
-public class FolderVO extends ModuleWithWindowVO
-                      implements IValueObject
-{
-    
+public class FolderVO extends ModuleWithWindowVO implements IValueObject {
+
     // =========================================================================
     // Properties
     // =========================================================================
-    
+
     // Assets
-         
+
     /**
-    * Default folder small icon (16x16).
-    */
+     * Default folder small icon (16x16).
+     */
     [Transient]
     [Embed(source="/../assets/folder16.png")]
-    public static const defaultFolderSmallIcon : Class;
-    
+    public static const defaultFolderSmallIcon:Class;
+
     /**
-    * Default folder big icon (64x64).
-    */
+     * Default folder big icon (64x64).
+     */
     [Transient]
     [Embed(source="/../assets/folder64.png")]
-    public static const defaultFolderBigIcon : Class;
-    
-    
+    public static const defaultFolderBigIcon:Class;
+
+
     // Fields
-    
+
     /**
      * The modules.
      */
-    public var modules : ModulesVO;
-    
+    public var modules:ModulesVO;
+
     // =========================================================================
     // Public methods
     // =========================================================================
-    
+
     /**
-    * Get the the small icon asset.
-    */
-    override public function getSmallIconClass(target:UIComponent):Class
-    {
+     * Get the the small icon asset.
+     */
+    override public function getSmallIcon(target:UIComponent, obj:Boolean = false):Object {
         // If no icon specified, return the default one
-        if (smallIcon == null)
-        {
+        if (smallIcon == null) {
             return defaultFolderSmallIcon;
         }
-        
-        // Else load the given URL
-        else
-        {
-            return IconUtility.getClass(target,bigIcon,16,16);
+        else {
+            return super.getSmallIcon(target, obj);
         }
     }
-    
+
     /**
-    * Get the the big icon asset.
-    */
-    override public function getBigIconClass(target:UIComponent):Class
-    {
+     * Get the the big icon asset.
+     */
+    override public function getBigIcon(target:UIComponent, obj:Boolean = false):Object {
         // If no icon specified, return the default one
-        if (bigIcon == null)
-        {
+        if (bigIcon == null) {
             return defaultFolderBigIcon;
         }
-        
-        // Else load the given URL
-        else
-        {
-            return IconUtility.getClass(target,bigIcon,64,64);
+        else {
+            return super.getBigIcon(target, obj);
         }
     }
 }
