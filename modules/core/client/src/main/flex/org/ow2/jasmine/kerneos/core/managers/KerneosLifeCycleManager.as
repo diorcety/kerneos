@@ -35,8 +35,8 @@ import mx.core.FlexGlobals;
 import mx.messaging.ChannelSet;
 import mx.utils.URLUtil;
 
-import org.granite.channels.GraniteChannel;
-import org.granite.gravity.channels.GravityChannel;
+import org.granite.channels.GraniteOSGiChannel;
+import org.granite.gravity.channels.GravityOSGiChannel;
 
 import org.ow2.jasmine.kerneos.common.util.StringUtils;
 import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
@@ -96,12 +96,12 @@ public class KerneosLifeCycleManager {
 
         // Granite ChannelSet
         amfChannelSet = new ChannelSet();
-        var amfChannel:GraniteChannel = new GraniteChannel("my-graniteamf-kerneos", "http://" + urlServer + "/" + context + "/granite/amf");
+        var amfChannel:GraniteOSGiChannel = new GraniteOSGiChannel("my-graniteamf-kerneos", "http://" + urlServer + "/" + context + "/granite/amf");
         amfChannelSet.addChannel(amfChannel);
 
         // Gravity ChannelSet
         amfGravityChannelSet = new ChannelSet();
-        var amfGravityChannel:GravityChannel = new GravityChannel("my-gravityamf-kerneos", "http://" + urlServer + "/" + context + "/gravity/amf");
+        var amfGravityChannel:GravityOSGiChannel = new GravityOSGiChannel("my-gravityamf-kerneos", "http://" + urlServer + "/" + context + "/gravity/amf");
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
         // Set the kerneosConfigService. Done this way because of the @remoteDestination on the JAVA service

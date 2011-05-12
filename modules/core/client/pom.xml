@@ -90,9 +90,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.graniteds</groupId>
+      <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-swc</artifactId>
-      <version>${graniteds.version}</version>
+      <version>${graniteds-osgi.version}</version>
       <type>swc</type>
     </dependency>
 

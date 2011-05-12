@@ -46,8 +46,7 @@
   </url>
 
   <properties>
-    <graniteds.version>2.2.0.SP2</graniteds.version>
-    <graniteds-core-osgi.version>1.0.0-SNAPSHOT</graniteds-core-osgi.version>
+    <graniteds-osgi.version>1.0.0-SNAPSHOT</graniteds-osgi.version>
     <flexlib.version>2.5-SNAPSHOT</flexlib.version>
     <flexiframe.version>1.4.3</flexiframe.version>
     <flex.version>4.1.0.16076</flex.version>
@@ -173,9 +172,9 @@
           <version>1.1</version>
         </dependency>
         <dependency>
-          <groupId>org.graniteds</groupId>
+          <groupId>org.graniteds-osgi</groupId>
           <artifactId>granite-core</artifactId>
-          <version>${graniteds.version}</version>
+          <version>${graniteds-osgi.version}</version>
         </dependency>
         <dependency>
           <groupId>org.objectweb.monolog</groupId>
@@ -198,9 +197,9 @@
           <version>1.0.17</version>
         </dependency>
         <dependency>
-          <groupId>org.graniteds</groupId>
+          <groupId>org.graniteds-osgi</groupId>
           <artifactId>granite-swc</artifactId>
-          <version>${graniteds.version}</version>
+          <version>${graniteds-osgi.version}</version>
           <type>swc</type>
         </dependency>
       </dependencies>
@@ -254,9 +253,9 @@
                     </artifactItem>
 
                     <artifactItem>
-                      <groupId>org.graniteds</groupId>
+                      <groupId>org.graniteds-osgi</groupId>
                       <artifactId>granite-core</artifactId>
-                      <version>${graniteds.version}</version>
+                      <version>${graniteds-osgi.version}</version>
                       <type>jar</type>
                       <overWrite>true</overWrite>
                       <outputDirectory>
@@ -320,9 +319,9 @@
                     </artifactItem>
 
                     <artifactItem>
-                      <groupId>org.graniteds</groupId>
+                      <groupId>org.graniteds-osgi</groupId>
                       <artifactId>granite-swc</artifactId>
-                      <version>${graniteds.version}</version>
+                      <version>${graniteds-osgi.version}</version>
                       <type>swc</type>
                       <overWrite>true</overWrite>
                       <outputDirectory>
@@ -390,9 +389,9 @@
           <type>swc</type>
         </dependency>
         <dependency>
-          <groupId>org.graniteds</groupId>
+          <groupId>org.graniteds-osgi</groupId>
           <artifactId>granite-swc</artifactId>
-          <version>${graniteds.version}</version>
+          <version>${graniteds-osgi.version}</version>
           <type>swc</type>
         </dependency>
       </dependencies>

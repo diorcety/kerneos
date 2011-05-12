@@ -114,19 +114,19 @@
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-core</artifactId>
-      <version>${graniteds-core-osgi.version}</version>
+      <version>${graniteds-osgi.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity-ea</artifactId>
-      <version>${graniteds-core-osgi.version}</version>
+      <version>${graniteds-osgi.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity-jms</artifactId>
-      <version>${graniteds-core-osgi.version}</version>
+      <version>${graniteds-osgi.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

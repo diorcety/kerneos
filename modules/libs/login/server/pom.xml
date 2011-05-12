@@ -65,9 +65,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.graniteds</groupId>
+      <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-core</artifactId>
-      <version>${graniteds.version}</version>
+      <version>${graniteds-osgi.version}</version>
     </dependency>
   </dependencies>
 </project>

@@ -123,9 +123,9 @@
       <scope>external</scope>
     </dependency>
     <dependency>
-      <groupId>org.graniteds</groupId>
+      <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-swc</artifactId>
-      <version>${graniteds.version}</version>
+      <version>1.0.0-SNAPSHOT</version>
       <type>swc</type>
     </dependency>
   </dependencies>
