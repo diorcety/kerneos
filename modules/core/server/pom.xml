@@ -209,57 +209,11 @@
       </plugin>
 
       <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.1</version>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>kerneos-core-client</artifactId>
-                  <version>${project.version}</version>
-                  <type>swf</type>
-                  <overWrite>true</overWrite>
-                  <destFileName>kerneos.swf</destFileName>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.build.directory}/resources</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <version>2.3.4</version>
         <extensions>true</extensions>
         <configuration>
-          <instructions>
-            <Include-Resource>
-              KERNEOS=${project.build.directory}/resources
-            </Include-Resource>
-            <Embed-Transitive>true</Embed-Transitive>
-            <Embed-Dependency>
-              util-log;inline=true,
-              util-i18n;inline=true,
-              ow2-bundles-externals-jaxb2;inline=true,
-            </Embed-Dependency>
-            <Export-Package>
-              org.ow2.jasmine.kerneos.service,
-              org.ow2.util.log
-            </Export-Package>
-            <Private-Package>
-              org.ow2.jasmine.kerneos.service.impl,
-              org.ow2.jasmine.kerneos.config.generated
-            </Private-Package>
-          </instructions>
         </configuration>
       </plugin>
 

@@ -45,7 +45,6 @@
     <module>archetype-module</module>
     <module>libs</module>
     <module>core</module>
-    <module>examples</module>
   </modules>
 
 </project>

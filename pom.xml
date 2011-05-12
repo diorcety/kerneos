@@ -34,6 +34,7 @@
     <artifactId>ow2</artifactId>
     <version>1.1</version>
   </parent>
+
   <groupId>org.ow2.jasmine.kerneos</groupId>
   <artifactId>kerneos</artifactId>
   <version>2.0.0-M1-SNAPSHOT</version>
@@ -432,13 +433,11 @@
                 <org.ow2.jasmine.kerneos.core.managers>Kerneos core.</org.ow2.jasmine.kerneos.core.managers>
                 <org.ow2.jasmine.kerneos.core.model>Kerneos core.</org.ow2.jasmine.kerneos.core.model>
                 <org.ow2.jasmine.kerneos.core.view>Kerneos core.</org.ow2.jasmine.kerneos.core.view>
-                <org.ow2.jasmine.kerneos.core.view.notification>Kerneos core.
-                </org.ow2.jasmine.kerneos.core.view.notification>
+                <org.ow2.jasmine.kerneos.core.view.notification>Kerneos core.</org.ow2.jasmine.kerneos.core.view.notification>
                 <org.ow2.jasmine.kerneos.core.view.preloader>Kerneos core.</org.ow2.jasmine.kerneos.core.view.preloader>
                 <org.ow2.jasmine.kerneos.core.view.window>Kerneos core.</org.ow2.jasmine.kerneos.core.view.window>
                 <org.ow2.jasmine.kerneos.core.vo>Kerneos core.</org.ow2.jasmine.kerneos.core.vo>
-                <org.ow2.jasmine.kerneos.login.business>Kerneos login libraries.
-                </org.ow2.jasmine.kerneos.login.business>
+                <org.ow2.jasmine.kerneos.login.business>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.business>
                 <org.ow2.jasmine.kerneos.login.command>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.command>
                 <org.ow2.jasmine.kerneos.login.control>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.control>
                 <org.ow2.jasmine.kerneos.login.event>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.event>

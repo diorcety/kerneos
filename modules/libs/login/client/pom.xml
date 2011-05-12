@@ -47,6 +47,7 @@
       <artifactId>cairngorm-kerneos</artifactId>
       <version>2.2.3-Beta</version>
       <type>swc</type>
+      <scope>external</scope>
     </dependency>
 
     <dependency>
@@ -54,6 +55,7 @@
       <artifactId>kerneos-common-client</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
+      <scope>external</scope>
     </dependency>
 
     <dependency>
@@ -61,6 +63,7 @@
       <artifactId>flexlib-kerneos</artifactId>
       <type>swc</type>
       <version>${flexlib.version}</version>
+      <scope>external</scope>
      </dependency>
 
     <dependency>
@@ -69,12 +72,48 @@
       <version>1.0-alpha-3</version>
     </dependency>
 
-    <!-- Flex -->
+    <!-- flex sdk dependencies -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
+      <artifactId>flex</artifactId>
       <version>${flex.version}</version>
-      <type>pom</type>
+      <type>swc</type>
+      <scope>external</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.adobe.flex.framework</groupId>
+          <artifactId>playerglobal</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>framework</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>rpc</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>playerglobal</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <classifier>${player.version}</classifier>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>rpc</artifactId>
+      <version>${flex.version}</version>
+      <type>rb.swc</type>
+      <scope>external</scope>
     </dependency>
   </dependencies>
 
