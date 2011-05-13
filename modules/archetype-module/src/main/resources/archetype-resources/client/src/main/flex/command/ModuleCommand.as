@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2009-2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -30,8 +30,10 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-// import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
-// import org.ow2.jasmine.kerneos.common.view.ServerSideException;
+/*Server Exceptions imports
+import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
+import org.ow2.jasmine.kerneos.common.view.ServerSideException;
+*/
 import business.*;
 import event.ModuleEvent;
 import model.ModuleModelLocator;
@@ -60,6 +62,7 @@ public class ModuleCommand implements ICommand, IResponder
             Example :
                 var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();       
                 delegate.responder = this;
+                var parameters : String = (event as ModuleEvent).getMessage();
                 delegate.callServerSide(parameters);
         */
     }
@@ -78,8 +81,8 @@ public class ModuleCommand implements ICommand, IResponder
         /*
             Handle the result of the call. Usely, the model is updated.
             Example :
-                var model:ModuleModelLocator = ModuleModelLocator.getInstance();
-                model.myData = (data as ResultEvent).result as String;
+                var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
+                moduleModel.myDataObj = (data as ResultEvent).result as String;
             
         */
     }

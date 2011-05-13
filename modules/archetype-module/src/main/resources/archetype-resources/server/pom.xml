@@ -12,19 +12,95 @@
 
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}-server</artifactId>
+  <version>${version}</version>
+
+  <packaging>bundle</packaging>
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
     </dependency>
-    
+
     <dependency>
-      <groupId>org.graniteds</groupId>
-      <artifactId>granite-core</artifactId>
-      <version>${graniteds.version}</version>
+      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <artifactId>kerneos-core-server</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+         <version>${maven-dependency.version}</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${groupId}</groupId>
+                  <artifactId>${artifactId}-client</artifactId>
+                  <version>${version}</version>
+                  <type>swf</type>
+                  <overWrite>true</overWrite>
+                  <destFileName>example.swf</destFileName>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/resources</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${maven-bundle.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Kerneos-Module>exampleArchetype</Kerneos-Module>
+            <Include-Resource>
+              src/main/resources,
+              KERNEOS=src/main/kerneos,
+              KERNEOS=${project.build.directory}/resources
+            </Include-Resource>
+          </instructions>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-ipojo-plugin</artifactId>
+        <version>${ipojo.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>ipojo-bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler.version}</version>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>

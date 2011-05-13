@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2009-2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -40,8 +40,10 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         in the cairngorm architecture.
         Example :
             public function callServerSide(parameters : Object) : void {
-                // find service
-                var service : Object = ServiceLocator.getInstance().getRemoteObject("service");
+                // find the service
+                // "hello_service" is defined in kerneos-module.xml as
+                // <service id="hello_service" destination="HelloService"/>
+                var service : Object = ServiceLocator.getInstance().getRemoteObject("hello_service");
                 
                 // Make the service call. The method called on service is the method name
                 // of the java class bound with the remote object, with its parameters.

@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2009-2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -23,7 +23,13 @@
 package model
 {
 
+import business.IModuleDelegate;
+
+import business.ModuleDelegate;
+
 import com.adobe.cairngorm.model.ModelLocator;
+
+import mx.utils.UIDUtil;
 
  /**
   * The model locator for the Module.
@@ -54,7 +60,7 @@ public class ModuleModelLocator implements ModelLocator
     /**
     * Unique instance of this locator.
     */
-    private static var model : ModuleModelLocator = null;
+    private static var moduleModel : ModuleModelLocator = null;
     
     ////////////////////////////////////////////
     //                                        //
@@ -64,7 +70,7 @@ public class ModuleModelLocator implements ModelLocator
     /*
     Put here the delegate instances of your model.
     Example :
-        private var myDelegate : IMyDelegate = null;
+        private var myDelegate : IModuleDelegate = null;
     */
 
     ////////////////////////////////////////////////
@@ -76,7 +82,7 @@ public class ModuleModelLocator implements ModelLocator
     /*
     Put here all the variables of the model
     Example :
-        private var myDataObj : String = null;
+        private var _myDataObj : String = null;
     */
     
     ////////////////////////////////////
@@ -89,7 +95,7 @@ public class ModuleModelLocator implements ModelLocator
     {
         super();
         
-        if (model != null)
+        if (moduleModel != null)
         {
             throw new Error("Only one ModelLocator has to be set");
         }
@@ -99,12 +105,12 @@ public class ModuleModelLocator implements ModelLocator
     
     public static function getInstance() : ModuleModelLocator
     {
-        if (ModuleModelLocator.model == null)
+        if (ModuleModelLocator.moduleModel == null)
         {
-            ModuleModelLocator.model = new ModuleModelLocator();
+            ModuleModelLocator.moduleModel = new ModuleModelLocator();
         }
         
-        return ModuleModelLocator.model;
+        return ModuleModelLocator.moduleModel;
     }
 
     ////////////////////////////////////
@@ -116,8 +122,8 @@ public class ModuleModelLocator implements ModelLocator
     /*
     Put here all the setters for the model update.
     Example :
-        public function set myData(_myData : String) : void {
-            this.myDataObj = _myData;
+        public function set myDataObj(_myData : String) : void {
+            this._myDataObj = _myData;
         }
     */
 
@@ -130,8 +136,8 @@ public class ModuleModelLocator implements ModelLocator
     /*
     Put here all the getters to access the model variables
     Example :
-        public function get myData() : String {
-            return this.myDataObj;
+        public function get myDataObj() : String {
+            return this._myDataObj;
         }
     */
 
@@ -145,9 +151,9 @@ public class ModuleModelLocator implements ModelLocator
     /*
     Put here the getters to access all the delegates of the created module
     Example :
-        public function getMyDelegate() : IMyDelegate {
+        public function getMyDelegate() : IModuleDelegate {
             if (this.myDelegate == null) {
-                this.myDelegate = new MyDelegate();
+                this.myDelegate = new ModuleDelegate();
             }
             return this.myDelegate;
         }

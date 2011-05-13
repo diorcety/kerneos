@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2009-2011 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -23,19 +23,52 @@
  * --------------------------------------------------------------------------
  */
 
-import org.granite.messaging.service.annotations.RemoteDestination;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Validate;
+
+import org.ow2.jasmine.kerneos.service.KerneosService;
+import org.ow2.jasmine.kerneos.service.KerneosSimpleService;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
 
 /**
- * Hello world!
+ * HelloService
  */
-@RemoteDestination(id = "myJavaService")
-public class Service {
+@Component
+@Instantiate
+@Provides
+@KerneosService(destination = "HelloService")
+public class Service implements KerneosSimpleService{
 
-    public Service() {
+     /**
+     * The logger
+     */
+    private static Log logger = LogFactory.getLog(Service.class);
 
+    /**
+     * Start
+     */
+    @Validate
+    private void start() {
+        logger.info("Start HelloService");
     }
 
-    public void sayHello(final String name) {
-        System.out.println("Hello " + name);
+    /**
+     * Stop
+     */
+    @Invalidate
+    private void stop() {
+        logger.info("Stop HelloService");
+    }
+
+    /**
+     * @param name the name of the user
+     * @return a welcome message
+     */
+    public String sayHello(final String name) {
+        return "Hello " + name;
     }
 }

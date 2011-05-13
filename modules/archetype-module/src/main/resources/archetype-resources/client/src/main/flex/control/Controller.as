@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2009-2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -58,13 +58,28 @@ public class Controller extends FrontController {
     
     public function initialiseCommands() : void
     {
-        // Retrieve the component model
-        var model : ModuleModelLocator = ModuleModelLocator.getInstance();
-        
         /*
+        // Retrieve the component model
+        var moduleModel : ModuleModelLocator = ModuleModelLocator.getInstance();
+
             Add the events to the controler with the associated command
             Example :
-                this.addCommand(ModuleEvent.MY_ACTION + model.componentID, ModuleCommand);
+                this.addCommand(ModuleEvent.MY_ACTION + moduleModel.componentID, ModuleCommand);
+        */
+    }
+
+    /**
+     * Remove all the commands to the pool of commands
+     *
+     */
+    public function removeCommands() : void
+    {
+
+        /*
+            Remove the events to the controller with the associated command
+            Example :
+
+                this.removeCommand(ModuleEvent.MY_ACTION);
         */
     }
 

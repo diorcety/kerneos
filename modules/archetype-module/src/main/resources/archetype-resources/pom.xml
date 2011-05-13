@@ -1,3 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Kerneos
+  - Copyright (C) 2008-2011 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -10,24 +36,79 @@
   <name>${groupId} :: ${artifactId}</name>
   
   <properties>
-    <flex.version>3.0.0.477</flex.version>
-    <licence.flexbuilder3>${env.FLEX_LICENSE}</licence.flexbuilder3>
     <cairngorm.version>2.2.3-Beta</cairngorm.version>
-    <kerneos.version>$kerneos-version</kerneos.version>
-    <graniteds.version>$graniteds-version</graniteds.version>
+    <flexmojos.version>3.7.1</flexmojos.version>
+    <flex.version>4.1.0.16076</flex.version>
+    <ipojo.version>1.8.0</ipojo.version>
+    <junit.version>3.8.1</junit.version>
+    <kerneos.version>2.0.0-M1-SNAPSHOT</kerneos.version>
+    <maven-bundle.version>2.3.4</maven-bundle.version>
+    <maven-compiler.version>2.3.2</maven-compiler.version>
+    <maven-dependency.version>2.0</maven-dependency.version>
+    <maven-enforcer.version>1.0-alpha-3</maven-enforcer.version>
   </properties>
   
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  
   <modules>
-    <module>server</module>
     <module>client</module>
+    <module>server</module>
   </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <artifactId>kerneos-api</artifactId>
+        <version>${kerneos.version}</version>
+        <type>swc</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <artifactId>cairngorm-kerneos</artifactId>
+        <version>${cairngorm.version}</version>
+        <type>swc</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <artifactId>kerneos-common-client</artifactId>
+        <version>${kerneos.version}</version>
+        <type>swc</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <artifactId>kerneos-core-server</artifactId>
+        <version>${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+        <version>${ipojo.version}</version>
+      </dependency>
+
+      <!-- Flex -->
+      <dependency>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>flex-framework</artifactId>
+        <version>${flex.version}</version>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
