@@ -17,23 +17,42 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- *
+ * 
  * $Id$
  */
 package org.ow2.jasmine.kerneos.core.business
 {
-import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
+import com.adobe.cairngorm.business.ServiceLocator;
+
+import mx.core.FlexGlobals;
+
+import org.ow2.jasmine.kerneos.common.business.AbsDelegateResponder;
+import org.ow2.jasmine.kerneos.common.util.StringUtils;
 
 /**
 * Load the Kerneos config file
 * 
 * @author Julien Nicoulaud
 */
-public interface IGetKerneosConfigDelegate extends IDelegateResponder{
+public class GetApplicationDelegate extends AbsDelegateResponder
+                                       implements IGetApplicationConfigDelegate {
     
     /**
     * Load the Kerneos config file
     */
-    function getKerneosConfig():void;
+    public function getKerneosConfig():void
+    {
+            // find service
+            var service : Object = ServiceLocator.getInstance().getRemoteObject("kerneosConfigService");
+
+            // Get Application context
+            var context:String = StringUtils.parseURLContext(FlexGlobals.topLevelApplication.systemManager.loaderInfo.url);
+
+            // call service
+            var call : Object = service.getApplication(context);
+    
+            // add the responder as a listener for the answer of the java side
+            call.addResponder(this.responder);
+    }
 }
 }

@@ -27,21 +27,13 @@
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified"
-        targetNamespace="org.ow2.jasmine.kerneos:kerneos-module"
-        xmlns:k="org.ow2.jasmine.kerneos:kerneos-module">
+        targetNamespace="org.ow2.jasmine.kerneos:module"
+        xmlns:k="org.ow2.jasmine.kerneos:module">
 
 
     <!--##################################################################################
     # Modules
     ###################################################################################-->
-
-    <xs:element name="kerneos-module">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="k:modules-list" maxOccurs="1" minOccurs="1"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
 
     <!-- The modules list -->
 

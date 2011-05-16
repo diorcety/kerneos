@@ -43,17 +43,22 @@ public final class KerneosConstants {
     public static final String FACTORY_SUFFIX = "_FaCtOry";
 
     /*
-     * Manifest entry for a Kerneos Module
+     * Manifest entry for a Kerneos entities
      */
     public static final String KERNEOS_MODULE_MANIFEST = "Kerneos-Module";
+    public static final String KERNEOS_APPLICATION_MANIFEST = "Kerneos-Application";
     public static final String KERNEOS_PATH = "/KERNEOS";
 
     /*
      * The path to the Kerneos files
      */
-    public static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";
+    public static final String KERNEOS_APPLICATION_FILE = "META-INF/kerneos-application.xml";
     public static final String KERNEOS_MODULE_FILE = "META-INF/kerneos-module.xml";
 
+    /*
+     * Modules related constants
+     */
+    public static final String KERNEOS_MODULE_PREFIX = "modules";
     /*
         Topics
      */

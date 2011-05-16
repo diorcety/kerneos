@@ -45,7 +45,7 @@ public class Controller extends FrontController {
     * Add all of the commands to the pool of commands.
     */
     public function initialiseCommands() : void {
-        addCommand(KerneosConfigEvent.GET_KERNEOS_CONFIG,GetKerneosConfigCommand);
+        addCommand(KerneosConfigEvent.GET_KERNEOS_CONFIG,GetApplicationCommand);
         addCommand(KerneosConfigEvent.GET_MODULES,GetModulesCommand);
     }
 }

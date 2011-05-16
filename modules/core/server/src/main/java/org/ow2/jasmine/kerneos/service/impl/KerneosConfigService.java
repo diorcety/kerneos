@@ -27,14 +27,13 @@ package org.ow2.jasmine.kerneos.service.impl;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
 
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.ConfigurationException;
@@ -55,11 +54,9 @@ import org.granite.osgi.service.GraniteDestination;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.http.NamespaceException;
 
 import org.ow2.jasmine.kerneos.config.generated.IframeModule;
-import org.ow2.jasmine.kerneos.config.generated.KerneosConfig;
-import org.ow2.jasmine.kerneos.config.generated.KerneosModule;
+import org.ow2.jasmine.kerneos.config.generated.Application;
 import org.ow2.jasmine.kerneos.config.generated.Module;
 import org.ow2.jasmine.kerneos.config.generated.Modules;
 import org.ow2.jasmine.kerneos.config.generated.ObjectFactory;
@@ -90,11 +87,6 @@ public final class KerneosConfigService implements GraniteDestination {
      * be declared with all the potentially involved classes.
      */
     private JAXBContext jaxbContext;
-
-    /**
-     * List of registered modules.
-     */
-    private Map<String, Module> moduleMap = new Hashtable<String, Module>();
 
     /**
      * Async Event Publisher.
@@ -145,10 +137,19 @@ public final class KerneosConfigService implements GraniteDestination {
          */
         @Override
         protected void addedBundle(final Bundle bundle) {
-            String header = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
-            if (header != null) {
+            String moduleHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
+            String applicationHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_APPLICATION_MANIFEST);
+
+            if (moduleHeader != null) {
                 try {
-                    onModuleArrival(bundle, header);
+                    onModuleArrival(bundle, moduleHeader);
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            }
+            if (applicationHeader != null) {
+                try {
+                    onApplicationArrival(bundle, applicationHeader);
                 } catch (Exception e) {
                     logger.error(e);
                 }
@@ -162,10 +163,19 @@ public final class KerneosConfigService implements GraniteDestination {
          */
         @Override
         protected void removedBundle(final Bundle bundle) {
-            String header = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
-            if (header != null) {
+            String moduleHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
+            String applicationHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_APPLICATION_MANIFEST);
+
+            if (moduleHeader != null) {
                 try {
-                    onModuleDeparture(bundle, header);
+                    onModuleDeparture(bundle, moduleHeader);
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            }
+            if (applicationHeader != null) {
+                try {
+                    onApplicationDeparture(bundle, applicationHeader);
                 } catch (Exception e) {
                     logger.error(e);
                 }
@@ -203,7 +213,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 ModuleEvent.class,
                 Services.class,
                 Service.class,
-                KerneosConfig.class,
+                Application.class,
                 Module.class,
                 Modules.class,
                 IframeModule.class,
@@ -215,7 +225,7 @@ public final class KerneosConfigService implements GraniteDestination {
         gcr.registerClasses(getId(), new Class[]{
                 Services.class,
                 Service.class,
-                KerneosConfig.class,
+                Application.class,
                 Module.class,
                 Modules.class,
                 IframeModule.class,
@@ -259,15 +269,6 @@ public final class KerneosConfigService implements GraniteDestination {
         // Stop the tracking of bundles
         bundleTracker.close();
 
-        synchronized (moduleMap) {
-            // Unregister all handled modules
-            for (String moduleName : moduleMap.keySet()) {
-                kerneosCore.unregister(moduleName);
-            }
-            // Remove all handled modules
-            moduleMap.clear();
-        }
-
         // Remove the configurations
         eaConfig.dispose();
         gravityDestination.dispose();
@@ -284,35 +285,58 @@ public final class KerneosConfigService implements GraniteDestination {
      * @param bundle The Bundle corresponding to the module.
      * @param name   The name of the module.
      */
+    private void onApplicationArrival(final Bundle bundle, final String name) {
+        logger.debug("Add Kerneos Application: " + name);
+
+        try {
+            // Get the url used for resources of the bundle
+            Application module = loadApplicationConfig(bundle);
+
+            kerneosCore.registerApplication(name, module, bundle);
+
+        } catch (Exception e) {
+            logger.error(e, "Can't add the Kerneos Application: " + name);
+            return;
+        }
+    }
+
+    /**
+     * Call when a new Kerneos Module is gone.
+     *
+     * @param bundle The Bundle corresponding to the module.
+     * @param name   The name of the module.
+     */
+    private void onApplicationDeparture(final Bundle bundle, final String name) {
+        logger.debug("Remove Application Module: " + name);
+        try {
+            kerneosCore.unregisterApplication(name);
+
+        } catch (Exception e) {
+            logger.error(e, "Can't remove the Kerneos Application: " + name);
+        }
+
+    }
+
+    /**
+     * Call when a new Kerneos Module is arrived.
+     *
+     * @param bundle The Bundle corresponding to the module.
+     * @param name   The name of the module.
+     */
     private void onModuleArrival(final Bundle bundle, final String name) {
         logger.debug("Add Kerneos Module: " + name);
 
         try {
+            // Get the url used for resources of the bundle
             Module module = loadModuleConfig(bundle);
 
-            // Fix Paths
-            module.setBigIcon(name + "/" + module.getBigIcon());
-            module.setSmallIcon(name + "/" + module.getSmallIcon());
-            if (module instanceof SwfModule) {
-                SwfModule swfModule = (SwfModule) module;
-                swfModule.setFile(name + "/" + swfModule.getFile());
-            }
-
-            // Get the url used for resources of the bundle
-            String url = bundle.getResource(KerneosConstants.KERNEOS_PATH).toString();
-            kerneosCore.register(name, url);
-            logger.info("Register \"" + name + "\" resources");
-
-            // Add to the list
-            synchronized (moduleMap) {
-                moduleMap.put(name, module);
-            }
+            kerneosCore.registerModule(name, module, bundle);
 
             // Post an event
             ModuleEvent me = new ModuleEvent(module, ModuleEvent.LOAD);
             publisher.sendData(me);
         } catch (Exception e) {
-            logger.warn(e, "Invalid module: " + name);
+            logger.error(e, "Can't add the Kerneos Module: " + name);
             return;
         }
     }
@@ -324,23 +348,16 @@ public final class KerneosConfigService implements GraniteDestination {
      * @param name   The name of the module.
      */
     private void onModuleDeparture(final Bundle bundle, final String name) {
+        logger.debug("Remove Kerneos Module: " + name);
+        try {
+            Module module = kerneosCore.unregisterModule(name);
 
-        Module module = null;
-        synchronized (moduleMap) {
-            module = moduleMap.remove(name);
+            // Post an event
+            ModuleEvent me = new ModuleEvent(module, ModuleEvent.UNLOAD);
+            publisher.sendData(me);
+        } catch (Exception e) {
+            logger.error(e, "Can't remove the Kerneos Module: " + name);
         }
-
-        if (module == null) {
-            logger.warn("Try to remove an invalid bundle: " + name);
-            return;
-        }
-
-        kerneosCore.unregister(name);
-        logger.info("Unregister \"" + name + "\" resources");
-
-        // Post an event
-        ModuleEvent me = new ModuleEvent(module, ModuleEvent.UNLOAD);
-        publisher.sendData(me);
     }
 
 
@@ -352,7 +369,8 @@ public final class KerneosConfigService implements GraniteDestination {
      * @throws Exception the kerneos module configuration file is not found are is invalid.
      */
     private Module loadModuleConfig(final Bundle bundle) throws Exception {
-        // Get bundle kerneos module xml file
+
+        // Retrieve the Kerneos module file
         URL url = bundle.getResource(KerneosConstants.KERNEOS_MODULE_FILE);
         if (url != null) {
             InputStream resource = url.openStream();
@@ -362,9 +380,8 @@ public final class KerneosConfigService implements GraniteDestination {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
                 // Deserialize the configuration file
-                KerneosModule module = (KerneosModule) unmarshaller.unmarshal(resource);
-                return module.getModulesList().getValue();
-
+                JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
+                return (Module) element.getValue();
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -377,12 +394,59 @@ public final class KerneosConfigService implements GraniteDestination {
     }
 
     /**
-     * Get the Kerneos configuration.
+     * Load the Kerneos config file and build the configuration object.
+     *
+     * @param bundle the bundle corresponding to the module.
+     * @throws Exception the Kerneos application configuration file is not found are is invalid.
+     */
+    private Application loadApplicationConfig(final Bundle bundle) throws Exception {
+
+        // Retrieve the Kerneos application file
+        URL url = bundle.getResource(KerneosConstants.KERNEOS_APPLICATION_FILE);
+
+        if (url != null) {
+
+            // Load the file
+            logger.info("Loading file : {0}", url.getFile());
+            InputStream resource = url.openStream();
+
+            // Unmarshall it
+            try {
+                // Create an unmarshaller
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+                // Deserialize the configuration file
+                //JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
+                //return (Application) element.getValue();
+                return (Application) unmarshaller.unmarshal(resource);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            } finally {
+                resource.close();
+            }
+        } else {
+            throw new Exception("No configuration file available at " + KerneosConstants.KERNEOS_APPLICATION_FILE);
+        }
+    }
+
+    /**
+     * Get the an application.
      *
      * @return the Kerneos configuration.
      */
-    public KerneosConfig getKerneosConfig() {
-        return kerneosCore.getKerneosConfig();
+    public Application getApplication(String context) {
+        for (Application application : kerneosCore.getApplicationList()) {
+            String url = application.getApplicationUrl();
+
+            // Format url
+            if (url.charAt(0) == '/')
+                url = url.substring(1);
+
+            if (url.equals(context))
+                return application;
+        }
+        return null;
     }
 
     /**
@@ -390,15 +454,8 @@ public final class KerneosConfigService implements GraniteDestination {
      *
      * @return the module list.
      */
-    public Modules getModules() {
-        synchronized (moduleMap) {
-            Modules modules = new Modules();
-            for (Module module : moduleMap.values()) {
-                JAXBElement<Module> jaxbElement = new JAXBElement<Module>(new QName("module"), Module.class, module);
-                modules.getModulesList().add(jaxbElement);
-            }
-            return modules;
-        }
+    public Collection<Module> getModules() {
+        return kerneosCore.getModuleList();
     }
 
     /**

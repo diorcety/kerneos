@@ -31,9 +31,9 @@ import com.adobe.cairngorm.vo.IValueObject;
  *
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.KerneosConfig")]
+[RemoteClass(alias="org.ow2.jasmine.kerneos.config.generated.Application")]
 [Bindable]
-public class KerneosConfigVO implements IValueObject
+public class ApplicationVO implements IValueObject
 {
     // =========================================================================
     // Properties

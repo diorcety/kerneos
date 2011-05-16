@@ -30,7 +30,7 @@ import mx.messaging.ChannelSet;
 import mx.utils.UIDUtil;
 
 import org.ow2.jasmine.kerneos.core.business.*;
-import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
+import org.ow2.jasmine.kerneos.core.vo.ApplicationVO;
 import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 
@@ -63,7 +63,7 @@ public class KerneosModelLocator implements ModelLocator
      * The config of Kerneos.
      */
     [Bindable]
-    public var config : KerneosConfigVO;
+    public var config : ApplicationVO;
 
     /**
      * The module list.
@@ -97,7 +97,7 @@ public class KerneosModelLocator implements ModelLocator
     /**
      * "Get Kerneos config file" delegate unique instance
      */
-    private var getKerneosConfigDelegate : IGetKerneosConfigDelegate = null;
+    private var getKerneosConfigDelegate : IGetApplicationConfigDelegate = null;
     
     /**
      * "Get Modules" delegate unique instance
@@ -144,11 +144,11 @@ public class KerneosModelLocator implements ModelLocator
     /**
      * Get the "Get Kerneos config file" delegate unique instance.
      */
-    public function getGetKerneosConfigDelegate() : IGetKerneosConfigDelegate
+    public function getGetKerneosConfigDelegate() : IGetApplicationConfigDelegate
     {
         if (this.getKerneosConfigDelegate == null)
         {
-            this.getKerneosConfigDelegate = new GetKerneosConfigDelegate();
+            this.getKerneosConfigDelegate = new GetApplicationDelegate();
         }
         return this.getKerneosConfigDelegate;
     }

@@ -62,7 +62,7 @@ public class ModulesVO implements IValueObject
         {
             // Each member is wrapped in a JAXBElement object and accessible
             // with JAXBElement.getValue()
-            this._modulesList.addItem(module["value"] as ModuleVO);
+            this._modulesList.addItem(module as ModuleVO);
         }
     }
 

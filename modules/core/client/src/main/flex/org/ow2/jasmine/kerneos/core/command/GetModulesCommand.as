@@ -26,16 +26,17 @@ import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
+import mx.collections.ArrayCollection;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
 import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.jasmine.kerneos.common.view.ServerSideException;
-import org.ow2.jasmine.kerneos.core.business.IGetKerneosConfigDelegate;
+import org.ow2.jasmine.kerneos.core.business.IGetApplicationConfigDelegate;
 import org.ow2.jasmine.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
+import org.ow2.jasmine.kerneos.core.vo.ApplicationVO;
 import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 /**
@@ -66,10 +67,11 @@ public class GetModulesCommand implements ICommand, IResponder{
         var model:KerneosModelLocator = KerneosModelLocator.getInstance();
         
         // Retrieve the result
-        var result:ModulesVO = (event as ResultEvent).result as ModulesVO;
-
+        var result:ArrayCollection = (event as ResultEvent).result as ArrayCollection;
+        var modules: ModulesVO = new ModulesVO();
+        modules.modulesList = result;
         // Extract the data and update the model
-        model.modules = result;
+        model.modules = modules;
     }
     
     /**

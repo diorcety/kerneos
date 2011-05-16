@@ -72,7 +72,7 @@ public final class KerneosServiceFactory {
     /**
      * Used for holding the different configuration/service associated with a Kerneos service.
      */
-    private class KerneosInstance {
+    private class ServiceInstance {
         private ComponentInstance conf1;
         private ComponentInstance conf2;
         private ServiceRegistration instance;
@@ -83,7 +83,7 @@ public final class KerneosServiceFactory {
          * @param conf1 is an iPojo component instance.
          * @param conf2 is an iPojo component instance.
          */
-        public KerneosInstance(final ServiceRegistration instance,
+        public ServiceInstance(final ServiceRegistration instance,
                                final ComponentInstance conf1,
                                final ComponentInstance conf2) {
             this.conf1 = conf1;
@@ -107,7 +107,7 @@ public final class KerneosServiceFactory {
         }
     }
 
-    private Map<String, KerneosInstance> servicesMap = new Hashtable<String, KerneosInstance>();
+    private Map<String, ServiceInstance> servicesMap = new Hashtable<String, ServiceInstance>();
 
     @Requires(from = "org.granite.config.flex.Destination")
     private Factory destinationService;
@@ -195,7 +195,7 @@ public final class KerneosServiceFactory {
 
             synchronized (factoryService) {
                 servicesMap.put(serviceId,
-                                new KerneosInstance(instance, destinationConfiguration, factoryConfiguration));
+                                new ServiceInstance(instance, destinationConfiguration, factoryConfiguration));
             }
 
         } catch (Exception e) {
@@ -220,7 +220,7 @@ public final class KerneosServiceFactory {
 
         logger.debug("Remove Kerneos Simple Service: " + serviceId);
 
-        KerneosInstance ksi = null;
+        ServiceInstance ksi = null;
         synchronized (servicesMap) {
             ksi = servicesMap.get(serviceId);
         }
@@ -295,7 +295,7 @@ public final class KerneosServiceFactory {
 
             synchronized (factoryService) {
                 servicesMap.put(serviceId,
-                                new KerneosInstance(instance, destinationConfiguration, factoryConfiguration));
+                                new ServiceInstance(instance, destinationConfiguration, factoryConfiguration));
             }
 
         } catch (Exception e) {
@@ -319,7 +319,7 @@ public final class KerneosServiceFactory {
 
         logger.debug("Remove Kerneos Factory Service: " + serviceId);
 
-        KerneosInstance kfi = null;
+        ServiceInstance kfi = null;
         synchronized (servicesMap) {
             kfi = servicesMap.get(serviceId);
         }
@@ -394,7 +394,7 @@ public final class KerneosServiceFactory {
             }
 
             synchronized (factoryService) {
-                servicesMap.put(serviceId, new KerneosInstance(null, destinationConfiguration, factoryConfiguration));
+                servicesMap.put(serviceId, new ServiceInstance(null, destinationConfiguration, factoryConfiguration));
             }
 
         } catch (Exception e) {
@@ -417,7 +417,7 @@ public final class KerneosServiceFactory {
 
         logger.debug("Remove Kerneos Asynchronous Service: " + serviceId);
 
-        KerneosInstance ksi = null;
+        ServiceInstance ksi = null;
         synchronized (servicesMap) {
             ksi = servicesMap.get(serviceId);
         }

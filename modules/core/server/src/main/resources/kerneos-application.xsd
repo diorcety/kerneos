@@ -27,15 +27,15 @@
 <xs:schema
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
-    targetNamespace="org.ow2.jasmine.kerneos:kerneos-config"
-    xmlns:k="org.ow2.jasmine.kerneos:kerneos-config">
+    targetNamespace="org.ow2.jasmine.kerneos:application"
+    xmlns:k="org.ow2.jasmine.kerneos:application">
 
 
     <!--##################################################################################
     # kerneos-config
     ###################################################################################-->
 
-    <xs:element name="kerneos-config">
+    <xs:element name="application">
         <xs:complexType>
             <xs:all>
                 <xs:element ref="k:application-project" maxOccurs="1" minOccurs="0" />

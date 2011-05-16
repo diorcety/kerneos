@@ -25,8 +25,11 @@
 
 package org.ow2.jasmine.kerneos.service.impl;
 
-import org.osgi.service.http.NamespaceException;
-import org.ow2.jasmine.kerneos.config.generated.KerneosConfig;
+import org.osgi.framework.Bundle;
+import org.ow2.jasmine.kerneos.config.generated.Application;
+import org.ow2.jasmine.kerneos.config.generated.Module;
+
+import java.util.Collection;
 
 /**
  * Interface of the Kerneos' core.
@@ -34,22 +37,32 @@ import org.ow2.jasmine.kerneos.config.generated.KerneosConfig;
 public interface IKerneosCore {
 
     /**
-     * Register a resource.
-     * @param alias the alias used in the Http URL.
-     * @param path the path to the resource.
-     * @throws NamespaceException invalid URL.
+     * Register a module.
      */
-    void register(String alias, String path) throws NamespaceException;
+    public void registerModule(String name, Module module, Bundle bundle) throws Exception;
 
     /**
-     * Unregister a resource.
-     * @param alias the alias used in the Http URL.
+     * Unregister a module.
      */
-    void unregister(String alias);
+    public Module unregisterModule(String name) throws Exception;
 
     /**
-     * Get the kerneos configuration.
-     * @return the kernes configuration.
+     * Get Module list.
      */
-    KerneosConfig getKerneosConfig();
+    public Collection<Module> getModuleList();
+
+    /**
+     * Register a application.
+     */
+    public void registerApplication(String name, Application application, Bundle bundle) throws Exception;
+
+    /**
+     * Unregister a application.
+     */
+    public Application unregisterApplication(String name) throws Exception;
+
+    /**
+     * Get Application list.
+     */
+    public Collection<Application> getApplicationList();
 }
