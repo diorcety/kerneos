@@ -31,54 +31,47 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos-modules</artifactId>
+    <artifactId>kerneos-login</artifactId>
     <version>2.0.0-M1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>cairngorm-kerneos</artifactId>
-  <version>2.2.3-Beta</version>
-
-  <name>Kerneos :: Modules :: Cairngorm</name>
+  <artifactId>kerneos-login-client</artifactId>
+  <name>Kerneos :: Libraries :: Login :: Client</name>
 
   <packaging>swc</packaging>
 
-  <profiles>
-    <profile>
-      <id>flex4</id>
-      <dependencies>
-        <dependency>
-          <groupId>com.adobe.flex.framework</groupId>
-          <artifactId>spark</artifactId>
-          <version>${flex.version}</version>
-          <type>swc</type>
-          <scope>external</scope>
-        </dependency>
-        <dependency>
-          <groupId>com.adobe.flex.framework</groupId>
-          <artifactId>spark</artifactId>
-          <version>${flex.version}</version>
-          <type>rb.swc</type>
-          <classifier>en_US</classifier>
-          <scope>external</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>flex3</id>
-      <dependencies>
-        <dependency>
-          <groupId>com.adobe.flex.framework</groupId>
-          <artifactId>framework</artifactId>
-          <version>${flex.version}</version>
-          <type>rb.swc</type>
-          <scope>external</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
-
   <dependencies>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>cairngorm-kerneos</artifactId>
+      <version>2.2.3-Beta</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-common-client</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>flexlib-kerneos</artifactId>
+      <type>swc</type>
+      <version>${flexlib.version}</version>
+      <scope>external</scope>
+     </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-enforcer-plugin</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
+
     <!-- flex sdk dependencies -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
@@ -122,57 +115,26 @@
       <type>rb.swc</type>
       <scope>external</scope>
     </dependency>
-
-    <!-- GraniteDS OSGi -->
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-swc</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
   </dependencies>
 
   <build>
     <sourceDirectory>src/main/flex</sourceDirectory>
-
     <plugins>
-
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <extensions>true</extensions>
         <configuration>
-          <definesDeclaration>
-            <property>
-              <name>CONFIG::Flex4</name>
-              <value>${isFlex4}</value>
-            </property>
-            <property>
-              <name>CONFIG::Flex3</name>
-              <value>${isFlex3}</value>
-            </property>
-          </definesDeclaration>
+          <!--
           <compiledLocales>
             <locale>en_US</locale>
+            <locale>fr_FR</locale>
           </compiledLocales>
-          <resourceBundlePath>locale/{locale}</resourceBundlePath>
-          <allowSourcePathOverlap>true</allowSourcePathOverlap>
-          <namespaces>
-            <namespace>
-              <uri>http://www.adobe.com/2006/cairngorm</uri>
-              <manifest>src/main/flex/cairngorm-manifest.xml</manifest>
-            </namespace>
-          </namespaces>
-          <includeSources>
-            <param>${project.build.sourceDirectory}</param>
-          </includeSources>
-          <showWarnings>true</showWarnings>
-          <useResourceBundleMetadata>false</useResourceBundleMetadata>
+          -->
+          <mergeResourceBundle>true</mergeResourceBundle>
+          <sourceFile>LogInPanel.mxml</sourceFile>
         </configuration>
       </plugin>
-
     </plugins>
+    <finalName>login</finalName>
   </build>
-
 </project>

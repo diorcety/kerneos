@@ -110,7 +110,9 @@
   </pluginRepositories>
 
   <modules>
-    <module>modules</module>
+    <module>archetypes</module>
+    <module>core</module>
+    <module>libs</module>
   </modules>
 
   <profiles>
@@ -397,7 +399,9 @@
         </dependency>
       </dependencies>
       <modules>
-        <module>modules</module>
+        <module>archetypes</module>
+        <module>core</module>
+        <module>libs</module>
       </modules>
       <build>
         <plugins>

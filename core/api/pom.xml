@@ -29,18 +29,55 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos-libraries</artifactId>
+    <artifactId>kerneos-core</artifactId>
     <version>2.0.0-M1-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>kerneos-common</artifactId>
-  <name>Kerneos :: Modules :: Libraries :: Common</name>
+  <artifactId>kerneos-api</artifactId>
+  <name>Kerneos :: Core :: API</name>
 
-  <packaging>pom</packaging>
+  <packaging>swc</packaging>
 
-  <modules>
-    <module>client</module>
-  </modules>
+  <dependencies>
 
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-enforcer-plugin</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>cairngorm-kerneos</artifactId>
+      <version>2.2.3-Beta</version>
+      <type>swc</type>
+    </dependency>
+
+    <!-- Flex -->
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>src/main/flex</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <configuration>
+          <compiledLocales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+          </compiledLocales>
+          <mergeResourceBundle>true</mergeResourceBundle>
+        </configuration>
+
+      </plugin>
+    </plugins>
+    <finalName>Kerneos-API</finalName>
+  </build>
 </project>

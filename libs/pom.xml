@@ -24,7 +24,8 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -34,17 +35,16 @@
   </parent>
 
   <groupId>org.ow2.kerneos</groupId>
-  <artifactId>kerneos-modules</artifactId>
+  <artifactId>kerneos-libraries</artifactId>
   <packaging>pom</packaging>
 
-  <name>Kerneos :: Modules</name>
+  <name>Kerneos :: Libraries</name>
 
   <modules>
     <module>cairngorm</module>
     <module>flexlib</module>
-    <module>archetype-module</module>
-    <module>libs</module>
-    <module>core</module>
+    <module>common</module>
+    <module>login</module>
   </modules>
 
 </project>
