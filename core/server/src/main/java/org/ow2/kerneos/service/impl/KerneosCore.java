@@ -82,6 +82,8 @@ public final class KerneosCore implements IKerneosCore {
 
     private Map<String, ApplicationInstance> applicationInstanceMap = new HashMap<String, ApplicationInstance>();
 
+    private ComponentInstance granite, gravity;
+
     private class ModuleInstance {
         private String name;
         private Module module;
@@ -119,7 +121,7 @@ public final class KerneosCore implements IKerneosCore {
         private String name;
         private Application application;
         private Bundle bundle;
-        private ComponentInstance conf1, conf2, conf3, conf4;
+        private ComponentInstance gavityChannel, graniteChannel;
 
         /**
          * Constructor
@@ -131,39 +133,25 @@ public final class KerneosCore implements IKerneosCore {
 
             String applicationURL = application.getApplicationUrl();
 
-            // Gravity Configuration Instances
-            ComponentInstance gravityService, gravityChannel;
+            // Register channels
             {
                 Dictionary properties = new Hashtable();
-                properties.put("ID", KerneosConstants.GRAVITY_SERVICE);
-                properties.put("MESSAGETYPES", "flex.messaging.messages.AsyncMessage");
-                properties.put("DEFAULT_ADAPTER", EAConstants.ADAPTER_ID);
-                gravityService = serviceFactory.createComponentInstance(properties);
-            }
-            {
-                Dictionary properties = new Hashtable();
-                properties.put("ID", KerneosConstants.GRAVITY_CHANNEL);
+                properties.put("ID",  KerneosConstants.GRAVITY_CHANNEL + name);
                 properties.put("CLASS", "org.granite.gravity.channels.GravityChannel");
                 properties.put("ENDPOINT_URI", applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
-                gravityChannel = channelFactory.createComponentInstance(properties);
-            }
-
-            // Granite Configuration Instances
-            ComponentInstance graniteService, graniteChannel;
-            {
-                Dictionary properties = new Hashtable();
-                properties.put("ID", KerneosConstants.GRANITE_SERVICE);
-                graniteService = serviceFactory.createComponentInstance(properties);
+                gavityChannel = channelFactory.createComponentInstance(properties);
             }
             {
                 Dictionary properties = new Hashtable();
-                properties.put("ID", KerneosConstants.GRANITE_CHANNEL);
+                properties.put("ID", KerneosConstants.GRANITE_CHANNEL + name);
                 properties.put("ENDPOINT_URI", applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
                 graniteChannel = channelFactory.createComponentInstance(properties);
             }
 
             // Register Kerneos Application resources
-            httpService.registerResources(applicationURL, bundle.getResource(KerneosConstants.KERNEOS_PATH).toString(), httpContext);
+            httpService.registerResources(applicationURL, bundle.getResource(KerneosConstants.KERNEOS_PATH).toString(),
+                                          httpContext);
+
             logger.info("Register \"" + name + "\" resources: " + applicationURL);
         }
 
@@ -184,22 +172,12 @@ public final class KerneosCore implements IKerneosCore {
         public void dispose() {
             String applicationURL = application.getApplicationUrl();
 
+            gavityChannel.dispose();
+            granite.dispose();
+
             // Unregister Kerneos resources
             logger.info("Unregister \"" + name + "\" resources: " + applicationURL);
             httpService.unregister(applicationURL);
-
-            if (conf1 != null) {
-                conf1.dispose();
-            }
-            if (conf2 != null) {
-                conf2.dispose();
-            }
-            if (conf3 != null) {
-                conf3.dispose();
-            }
-            if (conf4 != null) {
-                conf4.dispose();
-            }
         }
     }
 
@@ -240,6 +218,22 @@ public final class KerneosCore implements IKerneosCore {
             UnacceptableConfiguration, NamespaceException {
         logger.debug("Start KerneosCore");
         httpContext = new KerneosHttpContext();
+
+        // Gravity Configuration Instances
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("ID", KerneosConstants.GRAVITY_SERVICE);
+            properties.put("MESSAGETYPES", "flex.messaging.messages.AsyncMessage");
+            properties.put("DEFAULT_ADAPTER", EAConstants.ADAPTER_ID);
+            gravity = serviceFactory.createComponentInstance(properties);
+        }
+
+        // Granite Configuration Instances
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("ID", KerneosConstants.GRANITE_SERVICE);
+            granite = serviceFactory.createComponentInstance(properties);
+        }
     }
 
     /**
@@ -248,6 +242,11 @@ public final class KerneosCore implements IKerneosCore {
     @Invalidate
     private void stop() {
         logger.debug("Stop KerneosCore");
+
+
+        // Dispose configuration
+        gravity.dispose();
+        granite.dispose();
 
         for (String name : moduleInstanceMap.keySet())
             unregisterModule(name);

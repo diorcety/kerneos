@@ -95,16 +95,17 @@ public class KerneosLifeCycleManager {
         // Init client-server communications channels properties
         var urlServer:String = URLUtil.getServerNameWithPort(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
         var context:String = StringUtils.parseURLContext(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
+        var name:String = FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.parameters.name;
 
 
         // Granite ChannelSet
         amfChannelSet = new ChannelSet();
-        var amfChannel:GraniteOSGiChannel = new GraniteOSGiChannel("my-graniteamf-kerneos", "http://" + urlServer + "/" + context + "/granite/amf");
+        var amfChannel:GraniteOSGiChannel = new GraniteOSGiChannel("kerneos-graniteamf-" + name, "http://" + urlServer + "/" + context + "/granite/amf");
         amfChannelSet.addChannel(amfChannel);
 
         // Gravity ChannelSet
         amfGravityChannelSet = new ChannelSet();
-        var amfGravityChannel:GravityOSGiChannel = new GravityOSGiChannel("my-gravityamf-kerneos", "http://" + urlServer + "/" + context + "/gravity/amf");
+        var amfGravityChannel:GravityOSGiChannel = new GravityOSGiChannel("kerneos-gravityamf-" + name, "http://" + urlServer + "/" + context + "/gravity/amf");
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
         // Set the kerneosConfigService. Done this way because of the @remoteDestination on the JAVA service

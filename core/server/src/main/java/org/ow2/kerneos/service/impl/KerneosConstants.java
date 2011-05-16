@@ -69,14 +69,14 @@ public final class KerneosConstants {
         Granite Configuration
      */
     public static final String GRANITE_SERVICE = "granite-service";
-    public static final String GRANITE_CHANNEL = "my-graniteamf-kerneos";
+    public static final String GRANITE_CHANNEL = "kerneos-graniteamf-";
     public static final String GRANITE_CHANNEL_URI = "/granite/amf";
 
     /*
         Gravity Configuration
      */
     public static final String GRAVITY_SERVICE = "messaging-service";
-    public static final String GRAVITY_CHANNEL = "my-gravityamf-kerneos";
+    public static final String GRAVITY_CHANNEL = "kerneos-gravityamf-";
     public static final String GRAVITY_CHANNEL_URI = "/gravity/amf";
 
 }
