@@ -26,12 +26,10 @@ package org.ow2.jasmine.kerneos.core.model
 import com.adobe.cairngorm.model.ModelLocator;
 
 import mx.collections.ArrayCollection;
-import mx.messaging.ChannelSet;
 import mx.utils.UIDUtil;
 
 import org.ow2.jasmine.kerneos.core.business.*;
 import org.ow2.jasmine.kerneos.core.vo.ApplicationVO;
-import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 
 /**
@@ -69,7 +67,7 @@ public class KerneosModelLocator implements ModelLocator
      * The module list.
      */
     [Bindable]
-    public var modules : ModulesVO;
+    public var modules : ArrayCollection;
 
     
     /**

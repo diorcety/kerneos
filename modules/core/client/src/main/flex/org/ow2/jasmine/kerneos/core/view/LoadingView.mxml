@@ -48,20 +48,17 @@
 
     <fx:Script>
         <![CDATA[
+      import mx.collections.ArrayCollection;
       import mx.resources.ResourceManager;
 
       import org.ow2.jasmine.kerneos.core.managers.LanguagesManager;
       import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
 
-      import com.adobe.cairngorm.control.CairngormEventDispatcher;
-
       import org.ow2.jasmine.kerneos.core.managers.SharedObjectManager;
-      import org.ow2.jasmine.kerneos.core.event.KerneosConfigEvent;
       import org.ow2.jasmine.kerneos.core.model.KerneosState;
       import org.ow2.jasmine.kerneos.core.vo.ApplicationVO;
       import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
       import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-      import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 
       // =========================================================================
@@ -123,7 +120,7 @@
       /**
        * When the module list has been loaded.
        */
-      private function set modulesLoaded(modules:ModulesVO):void {
+      private function set modulesLoaded(modules:ArrayCollection):void {
         if (modules != null) {
           // Setup the modules
           ModulesLifeCycleManager.installModules();

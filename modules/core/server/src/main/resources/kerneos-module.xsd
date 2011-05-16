@@ -35,17 +35,7 @@
     # Modules
     ###################################################################################-->
 
-    <!-- The modules list -->
-
-    <xs:element name="modules">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="k:modules-list" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="modules-list" type="k:module"/>
+    <xs:element name="module" type="k:module"/>
 
     <!-- Module main structure -->
 
@@ -79,7 +69,7 @@
 
     <!-- Modules types -->
 
-    <xs:element name="iframe-module" substitutionGroup="k:modules-list">
+    <xs:element name="iframe-module" substitutionGroup="k:module">
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="k:module-with-window">
@@ -95,7 +85,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="swf-module" substitutionGroup="k:modules-list">
+    <xs:element name="swf-module" substitutionGroup="k:module">
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="k:module-with-window">
@@ -108,7 +98,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="link" substitutionGroup="k:modules-list">
+    <xs:element name="link" substitutionGroup="k:module">
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="k:module">
@@ -120,12 +110,12 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="folder" substitutionGroup="k:modules-list">
+    <xs:element name="folder" substitutionGroup="k:module">
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="k:module-with-window">
                     <xs:sequence>
-                        <xs:element ref="k:modules" maxOccurs="1" minOccurs="1"/>
+                        <xs:element name="modules" type="k:module" maxOccurs="unbounded" minOccurs="1"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>

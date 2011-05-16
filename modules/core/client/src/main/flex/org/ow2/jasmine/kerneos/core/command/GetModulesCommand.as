@@ -33,11 +33,8 @@ import mx.rpc.events.ResultEvent;
 
 import org.ow2.jasmine.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.jasmine.kerneos.common.view.ServerSideException;
-import org.ow2.jasmine.kerneos.core.business.IGetApplicationConfigDelegate;
 import org.ow2.jasmine.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.jasmine.kerneos.core.model.KerneosModelLocator;
-import org.ow2.jasmine.kerneos.core.vo.ApplicationVO;
-import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 /**
 * Get the module list
@@ -68,10 +65,9 @@ public class GetModulesCommand implements ICommand, IResponder{
         
         // Retrieve the result
         var result:ArrayCollection = (event as ResultEvent).result as ArrayCollection;
-        var modules: ModulesVO = new ModulesVO();
-        modules.modulesList = result;
+
         // Extract the data and update the model
-        model.modules = modules;
+        model.modules = result;
     }
     
     /**

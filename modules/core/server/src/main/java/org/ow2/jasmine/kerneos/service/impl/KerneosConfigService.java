@@ -58,7 +58,6 @@ import org.osgi.framework.BundleContext;
 import org.ow2.jasmine.kerneos.config.generated.IframeModule;
 import org.ow2.jasmine.kerneos.config.generated.Application;
 import org.ow2.jasmine.kerneos.config.generated.Module;
-import org.ow2.jasmine.kerneos.config.generated.Modules;
 import org.ow2.jasmine.kerneos.config.generated.ObjectFactory;
 import org.ow2.jasmine.kerneos.config.generated.PromptBeforeClose;
 import org.ow2.jasmine.kerneos.config.generated.Service;
@@ -215,11 +214,10 @@ public final class KerneosConfigService implements GraniteDestination {
                 Service.class,
                 Application.class,
                 Module.class,
-                Modules.class,
                 IframeModule.class,
                 SwfModule.class,
-                PromptBeforeClose.class,
-                JAXBElement.class});
+                PromptBeforeClose.class
+        });
 
         // Register the classes used with "kerneosConfig" service
         gcr.registerClasses(getId(), new Class[]{
@@ -227,11 +225,9 @@ public final class KerneosConfigService implements GraniteDestination {
                 Service.class,
                 Application.class,
                 Module.class,
-                Modules.class,
                 IframeModule.class,
                 SwfModule.class,
-                PromptBeforeClose.class,
-                JAXBElement.class
+                PromptBeforeClose.class
         });
 
         // Register the few configurations used with KerneosConfigService

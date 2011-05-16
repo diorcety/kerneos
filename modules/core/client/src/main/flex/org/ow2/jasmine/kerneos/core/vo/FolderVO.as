@@ -23,6 +23,7 @@
 package org.ow2.jasmine.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
+import mx.collections.ArrayCollection;
 import mx.core.UIComponent;
 
 import org.ow2.jasmine.kerneos.common.util.IconUtility;
@@ -63,7 +64,7 @@ public class FolderVO extends ModuleWithWindowVO implements IValueObject {
     /**
      * The modules.
      */
-    public var modules:ModulesVO;
+    public var modules: ArrayCollection;
 
     // =========================================================================
     // Public methods

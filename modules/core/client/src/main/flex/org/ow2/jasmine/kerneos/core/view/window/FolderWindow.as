@@ -133,7 +133,7 @@ public class FolderWindow extends ModuleWindow
         modulesList.horizontalScrollPolicy = "none";
         modulesList.setStyle("styleName","folderWindowModulesList");
         modulesList.selectable = false;
-        modulesList.dataProvider = (module as FolderVO).modules.modulesList;
+        modulesList.dataProvider = (module as FolderVO).modules;
         modulesList.itemRenderer = new ClassFactory(ListModuleRenderer);
     }
 }

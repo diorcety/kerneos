@@ -436,7 +436,7 @@
                      x = "5"
                      y = "5"
                      direction = "vertical"
-                     dataProvider = "{model.modules.modulesList}"
+                     dataProvider = "{model.modules}"
                      backgroundAlpha = "0.0"
                      borderStyle = "none"
                      useRollOver = "false"

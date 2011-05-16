@@ -111,7 +111,7 @@ public class ModulesLifeCycleManager
     public static function installModules(e : Event = null) : void
     {
         // Setup the modules services and icons
-        installModulesCollection(KerneosModelLocator.getInstance().modules.modulesList);
+        installModulesCollection(KerneosModelLocator.getInstance().modules);
     }
 
     /**
@@ -302,7 +302,7 @@ public class ModulesLifeCycleManager
     }
 
      /**
-     * Delete the icon from the icon cache.
+     * Erase the icon from the icon cache.
      */
     public static function deleteCacheIcon(url : String) : void
     {
@@ -388,7 +388,7 @@ public class ModulesLifeCycleManager
         // Call the function recursively for folders
         if (module is FolderVO && ((module as FolderVO).modules != null) )
         {
-            installModulesCollection((module as FolderVO).modules.modulesList);
+            installModulesCollection((module as FolderVO).modules);
         }
     }
 
@@ -411,7 +411,7 @@ public class ModulesLifeCycleManager
         // Call the function recursively for folders
         if (module is FolderVO && ((module as FolderVO).modules != null) )
         {
-            uninstallModulesCollection((module as FolderVO).modules.modulesList);
+            uninstallModulesCollection((module as FolderVO).modules);
         }
     }
 
@@ -426,7 +426,7 @@ public class ModulesLifeCycleManager
         // Call the function recursively for folders
         if (module is FolderVO)
         {
-            for each(var submodule: ModuleVO in (module as FolderVO).modules.modulesList)
+            for each(var submodule: ModuleVO in (module as FolderVO).modules)
                 doLoadOnStartupModules(submodule);
         }
 
@@ -457,7 +457,7 @@ public class ModulesLifeCycleManager
             var model:KerneosModelLocator = KerneosModelLocator.getInstance();
             //if the action is LOAD, the module is installed otherwise it is uninstalled
             if (moduleEvent.eventType == ModuleEventVO.LOAD) {
-                model.modules.modulesList.addItem(moduleEvent.module as ModuleVO);
+                model.modules.addItem(moduleEvent.module as ModuleVO);
                 installModule(moduleEvent.module);
             } else {
                 unloadModule(moduleEvent.module);
@@ -467,15 +467,15 @@ public class ModulesLifeCycleManager
                 var moduleLoop:ModuleVO;
                 var moduleToDelete:ModuleVO;
                 //TODO compare by module ID
-                for each(moduleLoop in model.modules.modulesList) {
+                for each(moduleLoop in model.modules) {
                     if (moduleLoop.name == moduleEvent.module.name) {
                         moduleToDelete = moduleLoop;
                     }
                 }
 
                 //Delete the module from the modules list
-                var moduleIndex:int = model.modules.modulesList.getItemIndex(moduleToDelete);
-                model.modules.modulesList.removeItemAt(moduleIndex);
+                var moduleIndex:int = model.modules.getItemIndex(moduleToDelete);
+                model.modules.removeItemAt(moduleIndex);
             }
         }
     }
