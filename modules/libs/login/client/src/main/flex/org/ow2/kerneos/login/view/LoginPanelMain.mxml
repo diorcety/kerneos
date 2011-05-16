@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - JASMINe
+  - Copyright (C) 2008 Bull S.A.S.
+  - Contact: jasmine AT ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:local="*"
+         xmlns:flexlibControls="flexlib.controls.*"
+         backgroundAlpha="0.0"
+         horizontalAlign="center"
+         verticalAlign="middle">
+    
+    <fx:Script>
+        <![CDATA[
+            import org.ow2.kerneos.login.event.LogOutEvent;
+            import mx.controls.Alert;
+            import org.ow2.kerneos.login.model.LogInModelLocator;
+            import com.adobe.cairngorm.control.CairngormEventDispatcher;
+            import org.ow2.kerneos.login.event.LogInEvent;
+            
+            public function logIn():void {
+                var event:LogInEvent = new LogInEvent(LogInEvent.LOG_IN);
+                event.user = user.text;
+                event.password = password.text;
+                CairngormEventDispatcher.getInstance().dispatchEvent(event);
+                
+                return ;
+            }
+            
+            public function logOut():void {
+                var event:LogOutEvent = new LogOutEvent(LogOutEvent.LOG_OUT);
+                CairngormEventDispatcher.getInstance().dispatchEvent(event);
+                return;
+            }
+            
+            
+        ]]>
+    </fx:Script>
+    
+    <mx:Text width="100%"
+             textAlign="center"
+             text="Please enter your username and password to log in."
+             selectable="false"/>
+
+    <flexlibControls:PromptingTextInput
+        prompt="Username"
+        id="user"
+        width="100%"
+        toolTip="Please enter your username"/>
+
+    <flexlibControls:PromptingTextInput
+        prompt="Password"
+        id="password"
+        width="100%"
+        toolTip="Please enter your password"
+        displayAsPassword="true"/>
+            
+</mx:VBox>

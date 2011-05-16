@@ -24,7 +24,7 @@ package business
 {
 import com.adobe.cairngorm.business.ServiceLocator;
 
-import org.ow2.jasmine.kerneos.common.business.AbsDelegateResponder;
+import org.ow2.kerneos.common.business.AbsDelegateResponder;
 
 public class ModuleDelegate extends AbsDelegateResponder implements IModuleDelegate
 {

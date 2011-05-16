@@ -61,7 +61,7 @@
               - create the war structure by executing the following command line
 
                      mvn archetype:generate \
-                         -DarchetypeGroupId=org.ow2.jasmine.kerneos \
+                         -DarchetypeGroupId=org.ow2.kerneos \
                          -DarchetypeArtifactId=kerneos-war-archetype \
                          -DarchetypeVersion=1.3.1-SNAPSHOT \
                          -DgroupId=your.group.id \
@@ -71,7 +71,7 @@
             - create a kerneos module structure with a similar command line
 
                     mvn archetype:generate \
-                         -DarchetypeGroupId=org.ow2.jasmine.kerneos \
+                         -DarchetypeGroupId=org.ow2.kerneos \
                          -DarchetypeArtifactId=kerneos-module-archetype \
                          -DarchetypeVersion=1.3.1-SNAPSHOT \
                          -DgroupId=your.group.id \
@@ -208,9 +208,9 @@ Before using Kerneos :
     This file must be added in the META-INF directory of the war archive of your
     application. See the example below :
 
-    <kerneos-config xmlns="org.ow2.jasmine.kerneos:kerneos-config"
+    <kerneos-config xmlns="org.ow2.kerneos:kerneos-config"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="org.ow2.jasmine.kerneos:kerneos-config ../resources/kerneos-config.xsd">
+               xsi:schemaLocation="org.ow2.kerneos:kerneos-config ../resources/kerneos-config.xsd">
 
       <!-- Examples on how to set this file. An XSD file to come. -->
     

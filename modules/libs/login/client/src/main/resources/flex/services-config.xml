@@ -39,7 +39,7 @@
         </channels>
         <properties>
           <scope>session</scope>
-          <source>org.ow2.jasmine.kerneos.login.LoginService</source>
+          <source>org.ow2.kerneos.login.LoginService</source>
         </properties>
       </destination>
 

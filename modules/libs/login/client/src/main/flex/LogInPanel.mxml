@@ -27,9 +27,9 @@
 <mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
            xmlns:mx="library://ns.adobe.com/flex/mx"
            pageTitle="EoS"
-           xmlns:view="org.ow2.jasmine.kerneos.login.view.*"
-           xmlns:control="org.ow2.jasmine.kerneos.login.control.*"
-           xmlns:business="org.ow2.jasmine.kerneos.login.business.*"
+           xmlns:view="org.ow2.kerneos.login.view.*"
+           xmlns:control="org.ow2.kerneos.login.control.*"
+           xmlns:business="org.ow2.kerneos.login.business.*"
            backgroundAlpha="0.0">
 
     <fx:Declarations>

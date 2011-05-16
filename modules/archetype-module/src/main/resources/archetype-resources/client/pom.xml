@@ -44,7 +44,7 @@
 
   <dependencies>
       <dependency>
-      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <groupId>org.ow2.kerneos</groupId>
       <artifactId>cairngorm-kerneos</artifactId>
       <type>swc</type>
     </dependency>
@@ -60,13 +60,13 @@
     -->
 
     <dependency>
-      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-common-client</artifactId>
       <type>swc</type>
     </dependency>
 
     <dependency>
-      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-api</artifactId>
       <type>swc</type>
     </dependency>

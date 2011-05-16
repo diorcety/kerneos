@@ -26,20 +26,20 @@
 -->
 <mx:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:mx="library://ns.adobe.com/flex/mx"
-                xmlns:view="org.ow2.jasmine.kerneos.core.view.*"
-                xmlns:control="org.ow2.jasmine.kerneos.core.control.*"
-                xmlns:business="org.ow2.jasmine.kerneos.core.business.*"
+                xmlns:view="org.ow2.kerneos.core.view.*"
+                xmlns:control="org.ow2.kerneos.core.control.*"
+                xmlns:business="org.ow2.kerneos.core.business.*"
                 paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"
                 pageTitle="Kerneos"
-                preloader="org.ow2.jasmine.kerneos.core.view.preloader.KerneosPreloader"
+                preloader="org.ow2.kerneos.core.view.preloader.KerneosPreloader"
                 scriptTimeLimit="60"
                 applicationComplete="applicationCompleteHandler()"
                 frameRate="60">
 
     <fx:Script>
         <![CDATA[
-      import org.ow2.jasmine.kerneos.core.managers.KerneosLifeCycleManager;
-      import org.ow2.jasmine.kerneos.core.managers.ModulesLifeCycleManager;
+      import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+      import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
 
 
       /**

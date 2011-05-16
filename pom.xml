@@ -35,7 +35,7 @@
     <version>1.1</version>
   </parent>
 
-  <groupId>org.ow2.jasmine.kerneos</groupId>
+  <groupId>org.ow2.kerneos</groupId>
   <artifactId>kerneos</artifactId>
   <version>2.0.0-M1-SNAPSHOT</version>
 
@@ -141,7 +141,7 @@
       <id>initWTP</id>
       <dependencies>
         <dependency>
-          <groupId>org.ow2.jasmine.kerneos</groupId>
+          <groupId>org.ow2.kerneos</groupId>
           <artifactId>flexlib-kerneos</artifactId>
           <version>${flexlib.version}</version>
           <type>swc</type>
@@ -309,7 +309,7 @@
                     </artifactItem>
 
                     <artifactItem>
-                      <groupId>org.ow2.jasmine.kerneos</groupId>
+                      <groupId>org.ow2.kerneos</groupId>
                       <artifactId>cairngorm-kerneos</artifactId>
                       <version>2.2.3-Beta</version>
                       <type>swc</type>
@@ -331,7 +331,7 @@
                     </artifactItem>
 
                     <artifactItem>
-                      <groupId>org.ow2.jasmine.kerneos</groupId>
+                      <groupId>org.ow2.kerneos</groupId>
                       <artifactId>flexlib-kerneos</artifactId>
                       <version>${flexlib.version}</version>
                       <type>swc</type>
@@ -372,13 +372,13 @@
           <type>pom</type>
         </dependency>
         <dependency>
-          <groupId>org.ow2.jasmine.kerneos</groupId>
+          <groupId>org.ow2.kerneos</groupId>
           <artifactId>cairngorm-kerneos</artifactId>
           <version>2.2.3-Beta</version>
           <type>swc</type>
         </dependency>
         <dependency>
-          <groupId>org.ow2.jasmine.kerneos</groupId>
+          <groupId>org.ow2.kerneos</groupId>
           <artifactId>flexlib-kerneos</artifactId>
           <type>swc</type>
           <version>${flexlib.version}</version>
@@ -412,37 +412,37 @@
               <footer>OW2 JASMINe Kerneos - http://jasmine.ow2.org</footer>
               <outputDirectory>${project.build.directory}/asdoc-all</outputDirectory>
               <packageDescriptions>
-                <org.ow2.jasmine.kerneos.common.business>Kerneos common libraries.
-                </org.ow2.jasmine.kerneos.common.business>
-                <org.ow2.jasmine.kerneos.common.containers>Kerneos common libraries.
-                </org.ow2.jasmine.kerneos.common.containers>
-                <org.ow2.jasmine.kerneos.common.controls>Kerneos common libraries.
-                </org.ow2.jasmine.kerneos.common.controls>
-                <org.ow2.jasmine.kerneos.common.event>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.event>
-                <org.ow2.jasmine.kerneos.common.renderers>Kerneos common libraries.
-                </org.ow2.jasmine.kerneos.common.renderers>
-                <org.ow2.jasmine.kerneos.common.skins>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.skins>
-                <org.ow2.jasmine.kerneos.common.util>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.util>
-                <org.ow2.jasmine.kerneos.common.view>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.view>
-                <org.ow2.jasmine.kerneos.common.vo>Kerneos common libraries.</org.ow2.jasmine.kerneos.common.vo>
-                <org.ow2.jasmine.kerneos.core.api>Kerneos API.</org.ow2.jasmine.kerneos.core.api>
-                <org.ow2.jasmine.kerneos.core.business>Kerneos core.</org.ow2.jasmine.kerneos.core.business>
-                <org.ow2.jasmine.kerneos.core.command>Kerneos core.</org.ow2.jasmine.kerneos.core.command>
-                <org.ow2.jasmine.kerneos.core.control>Kerneos core.</org.ow2.jasmine.kerneos.core.control>
-                <org.ow2.jasmine.kerneos.core.event>Kerneos core.</org.ow2.jasmine.kerneos.core.event>
-                <org.ow2.jasmine.kerneos.core.managers>Kerneos core.</org.ow2.jasmine.kerneos.core.managers>
-                <org.ow2.jasmine.kerneos.core.model>Kerneos core.</org.ow2.jasmine.kerneos.core.model>
-                <org.ow2.jasmine.kerneos.core.view>Kerneos core.</org.ow2.jasmine.kerneos.core.view>
-                <org.ow2.jasmine.kerneos.core.view.notification>Kerneos core.</org.ow2.jasmine.kerneos.core.view.notification>
-                <org.ow2.jasmine.kerneos.core.view.preloader>Kerneos core.</org.ow2.jasmine.kerneos.core.view.preloader>
-                <org.ow2.jasmine.kerneos.core.view.window>Kerneos core.</org.ow2.jasmine.kerneos.core.view.window>
-                <org.ow2.jasmine.kerneos.core.vo>Kerneos core.</org.ow2.jasmine.kerneos.core.vo>
-                <org.ow2.jasmine.kerneos.login.business>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.business>
-                <org.ow2.jasmine.kerneos.login.command>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.command>
-                <org.ow2.jasmine.kerneos.login.control>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.control>
-                <org.ow2.jasmine.kerneos.login.event>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.event>
-                <org.ow2.jasmine.kerneos.login.model>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.model>
-                <org.ow2.jasmine.kerneos.login.view>Kerneos login libraries.</org.ow2.jasmine.kerneos.login.view>
+                <org.ow2.kerneos.common.business>Kerneos common libraries.
+                </org.ow2.kerneos.common.business>
+                <org.ow2.kerneos.common.containers>Kerneos common libraries.
+                </org.ow2.kerneos.common.containers>
+                <org.ow2.kerneos.common.controls>Kerneos common libraries.
+                </org.ow2.kerneos.common.controls>
+                <org.ow2.kerneos.common.event>Kerneos common libraries.</org.ow2.kerneos.common.event>
+                <org.ow2.kerneos.common.renderers>Kerneos common libraries.
+                </org.ow2.kerneos.common.renderers>
+                <org.ow2.kerneos.common.skins>Kerneos common libraries.</org.ow2.kerneos.common.skins>
+                <org.ow2.kerneos.common.util>Kerneos common libraries.</org.ow2.kerneos.common.util>
+                <org.ow2.kerneos.common.view>Kerneos common libraries.</org.ow2.kerneos.common.view>
+                <org.ow2.kerneos.common.vo>Kerneos common libraries.</org.ow2.kerneos.common.vo>
+                <org.ow2.kerneos.core.api>Kerneos API.</org.ow2.kerneos.core.api>
+                <org.ow2.kerneos.core.business>Kerneos core.</org.ow2.kerneos.core.business>
+                <org.ow2.kerneos.core.command>Kerneos core.</org.ow2.kerneos.core.command>
+                <org.ow2.kerneos.core.control>Kerneos core.</org.ow2.kerneos.core.control>
+                <org.ow2.kerneos.core.event>Kerneos core.</org.ow2.kerneos.core.event>
+                <org.ow2.kerneos.core.managers>Kerneos core.</org.ow2.kerneos.core.managers>
+                <org.ow2.kerneos.core.model>Kerneos core.</org.ow2.kerneos.core.model>
+                <org.ow2.kerneos.core.view>Kerneos core.</org.ow2.kerneos.core.view>
+                <org.ow2.kerneos.core.view.notification>Kerneos core.</org.ow2.kerneos.core.view.notification>
+                <org.ow2.kerneos.core.view.preloader>Kerneos core.</org.ow2.kerneos.core.view.preloader>
+                <org.ow2.kerneos.core.view.window>Kerneos core.</org.ow2.kerneos.core.view.window>
+                <org.ow2.kerneos.core.vo>Kerneos core.</org.ow2.kerneos.core.vo>
+                <org.ow2.kerneos.login.business>Kerneos login libraries.</org.ow2.kerneos.login.business>
+                <org.ow2.kerneos.login.command>Kerneos login libraries.</org.ow2.kerneos.login.command>
+                <org.ow2.kerneos.login.control>Kerneos login libraries.</org.ow2.kerneos.login.control>
+                <org.ow2.kerneos.login.event>Kerneos login libraries.</org.ow2.kerneos.login.event>
+                <org.ow2.kerneos.login.model>Kerneos login libraries.</org.ow2.kerneos.login.model>
+                <org.ow2.kerneos.login.view>Kerneos login libraries.</org.ow2.kerneos.login.view>
               </packageDescriptions>
             </configuration>
             <executions>

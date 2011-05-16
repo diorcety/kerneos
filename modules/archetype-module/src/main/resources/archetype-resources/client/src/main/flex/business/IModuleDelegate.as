@@ -22,7 +22,7 @@
  */
 package business
 {
-import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
+import org.ow2.kerneos.common.business.IDelegateResponder;
 
 public interface IModuleDelegate extends IDelegateResponder
 {
