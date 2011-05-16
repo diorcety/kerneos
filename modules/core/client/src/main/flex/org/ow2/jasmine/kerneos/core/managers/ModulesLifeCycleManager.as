@@ -453,10 +453,10 @@ public class ModulesLifeCycleManager
         var moduleEvent:ModuleEventVO = event.message.body as ModuleEventVO;
 
         //if the event is a ModuleEvent type and it has a moduleVO
-        if (moduleEvent) {
+        if (moduleEvent && moduleEvent.module) {
             var model:KerneosModelLocator = KerneosModelLocator.getInstance();
             //if the action is LOAD, the module is installed otherwise it is uninstalled
-            if (moduleEvent.eventType == ModuleEventVO.LOAD && moduleEvent.module) {
+            if (moduleEvent.eventType == ModuleEventVO.LOAD) {
                 model.modules.modulesList.addItem(moduleEvent.module as ModuleVO);
                 installModule(moduleEvent.module);
             } else {
