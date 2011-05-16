@@ -187,7 +187,6 @@ public final class KerneosServiceFactory {
                 Dictionary properties = new Hashtable();
                 properties.put("ID", serviceId);
                 properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-                properties.put("CHANNELS", new String[]{KerneosConstants.GRANITE_CHANNEL});
                 properties.put("FACTORY", serviceId + KerneosConstants.FACTORY_SUFFIX);
                 properties.put("SCOPE", GraniteDestination.SCOPE.APPLICATION);
                 destinationConfiguration = destinationService.createComponentInstance(properties);
@@ -269,7 +268,6 @@ public final class KerneosServiceFactory {
                 Dictionary properties = new Hashtable();
                 properties.put("ID", serviceId);
                 properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-                properties.put("CHANNELS", new String[]{KerneosConstants.GRANITE_CHANNEL});
                 properties.put("FACTORY", serviceId + KerneosConstants.FACTORY_SUFFIX);
 
                 // Get Properties
@@ -379,7 +377,6 @@ public final class KerneosServiceFactory {
                 Dictionary properties = new Hashtable();
                 properties.put("ID", serviceId);
                 properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
-                properties.put("CHANNELS", new String[]{KerneosConstants.GRAVITY_CHANNEL});
                 switch (ka.type()) {
                     case JMS:
                         properties.put("ADAPTER", JMSConstants.ADAPTER_ID);

@@ -235,7 +235,6 @@ public final class KerneosConfigService implements GraniteDestination {
             Dictionary properties = new Hashtable();
             properties.put("ID", GRAVITY_DESTINATION);
             properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
-            properties.put("CHANNELS", new String[]{KerneosConstants.GRAVITY_CHANNEL});
             gravityDestination = destinationFactory.createComponentInstance(properties);
         }
         {
@@ -247,7 +246,6 @@ public final class KerneosConfigService implements GraniteDestination {
             Dictionary properties = new Hashtable();
             properties.put("ID", getId());
             properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-            properties.put("CHANNELS", new String[]{KerneosConstants.GRANITE_CHANNEL});
             graniteDestination = destinationFactory.createComponentInstance(properties);
         }
 
