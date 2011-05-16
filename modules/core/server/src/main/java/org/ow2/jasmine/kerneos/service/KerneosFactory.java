@@ -30,25 +30,53 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Set the kerneos Factory Service.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface KerneosFactory {
+    /**
+     * Differents scope of a kerneos factory.
+     */
     enum SCOPE {
+        /**
+         * Create an instance by request.
+         */
         REQUEST("request"),
+        /**
+         * Create an instance http session.
+         */
         SESSION("session"),
+        /**
+         * Create on instance.
+         */
         APPLICATION("application");
 
         private final String value;
 
+        /**
+         * Constructor.
+         *
+         * @param value the string corresponding.
+         */
         SCOPE(final String value) {
             this.value = value;
         }
 
+        /**
+         * Convert the type to String.
+         *
+         * @return the string corresponding.
+         */
         @Override
         public String toString() {
             return value;
         }
     }
 
+    /**
+     * The scope used with this factory.
+     */
     SCOPE scope();
 }

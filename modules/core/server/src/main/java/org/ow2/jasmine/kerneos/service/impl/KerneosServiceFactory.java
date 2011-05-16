@@ -60,21 +60,28 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
+/**
+ * This is the component which handles the arrival/departure of the Kerneos services.
+ */
 @Component
 @Instantiate
 public final class KerneosServiceFactory {
 
     private static Log logger = LogFactory.getLog(KerneosServiceFactory.class);
 
+    /**
+     * Used for holding the different configuration/service associated with a Kerneos service.
+     */
     private class KerneosInstance {
         private ComponentInstance conf1;
         private ComponentInstance conf2;
         private ServiceRegistration instance;
 
         /**
-         * @param instance
-         * @param conf1
-         * @param conf2
+         * Constructor
+         * @param instance is an OSGi service instance.
+         * @param conf1 is an iPojo component instance.
+         * @param conf2 is an iPojo component instance.
          */
         public KerneosInstance(final ServiceRegistration instance,
                                final ComponentInstance conf1,
@@ -85,15 +92,18 @@ public final class KerneosServiceFactory {
         }
 
         /**
-         *
+         * Dispose all the service and the configuration associated with this instance.
          */
         public void dispose() {
-            if (conf1 != null)
+            if (conf1 != null) {
                 conf1.dispose();
-            if (conf2 != null)
+            }
+            if (conf2 != null) {
                 conf2.dispose();
-            if (instance != null)
+            }
+            if (instance != null) {
                 instance.unregister();
+            }
         }
     }
 
@@ -118,14 +128,16 @@ public final class KerneosServiceFactory {
 
 
     /**
-     * @param bundleContext
+     * Constructor used by iPojo.
+     *
+     * @param bundleContext is the current bundle context.
      */
     private KerneosServiceFactory(final BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
 
     /**
-     *
+     * Called when all the component dependencies are met.
      */
     @Validate
     private void start() {
@@ -133,7 +145,7 @@ public final class KerneosServiceFactory {
     }
 
     /**
-     *
+     * Called when all the component dependencies aren't met anymore.
      */
     @Invalidate
     private void stop() {
@@ -141,7 +153,8 @@ public final class KerneosServiceFactory {
     }
 
     /**
-     * @param service
+     * Called when a new Kerneos Simple Service is registered.
+     * @param service the instance of the service
      */
     @Bind(aggregate = true, optional = true)
     private void bindSimple(final KerneosSimpleService service) {
@@ -191,7 +204,8 @@ public final class KerneosServiceFactory {
     }
 
     /**
-     * @param service
+     * Called when a Kerneos Simple Service isn't registered anymore.
+     * @param service the instance of the service
      */
     @Unbind
     private void unbindSimple(final KerneosSimpleService service) {
@@ -221,7 +235,8 @@ public final class KerneosServiceFactory {
     }
 
     /**
-     * @param service
+     * Called when a Kerneos Factory Service is registered.
+     * @param service the instance of the service
      */
     @Bind(aggregate = true, optional = true)
     private void bindFactory(final KerneosFactoryService service) {
@@ -289,7 +304,8 @@ public final class KerneosServiceFactory {
     }
 
     /**
-     * @param service
+     * Called when a Kerneos Factory Service isn't registered anymore.
+     * @param service the instance of the service
      */
     @Unbind
     private void unbindFactory(final KerneosFactoryService service) {
@@ -319,7 +335,8 @@ public final class KerneosServiceFactory {
 
 
     /**
-     * @param service
+     * Called when a Kerneos Asynchronous Service is registered.
+     * @param service the instance of the service
      */
     @Bind(aggregate = true, optional = true)
     private void bindAsynchronous(final KerneosAsynchronousService service) {
@@ -352,6 +369,8 @@ public final class KerneosServiceFactory {
                         properties.put("destination", serviceId);
                         factoryConfiguration = eaFactory.createComponentInstance(properties);
                         break;
+                    default:
+                        break;
                 }
             }
 
@@ -368,6 +387,8 @@ public final class KerneosServiceFactory {
                     case EVENTADMIN:
                         properties.put("ADAPTER", EAConstants.ADAPTER_ID);
                         break;
+                    default:
+                        break;
                 }
                 destinationConfiguration = destinationService.createComponentInstance(properties);
             }
@@ -382,7 +403,8 @@ public final class KerneosServiceFactory {
     }
 
     /**
-     * @param service
+     * Called when a Kerneos Asynchronous Service isn't registered anymore.
+     * @param service the instance of the service
      */
     @Unbind
     private void unbindAsynchronous(final KerneosAsynchronousService service) {
@@ -411,8 +433,9 @@ public final class KerneosServiceFactory {
 
 
     /**
-     * @param serviceId
-     * @param service
+     * Register the classes associated to a service
+     * @param serviceId the service id
+     * @param service the instance of the service
      */
     private void registerClasses(final String serviceId, final Object service) {
         KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
@@ -429,7 +452,8 @@ public final class KerneosServiceFactory {
     }
 
     /**
-     * @param serviceId
+     * Unregister the classes associated to a service
+     * @param serviceId the service id
      */
     private void unregisterClasses(final String serviceId) {
         gcr.unregisterClasses(serviceId);

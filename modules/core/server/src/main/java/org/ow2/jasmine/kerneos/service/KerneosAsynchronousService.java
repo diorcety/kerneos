@@ -25,5 +25,8 @@
 
 package org.ow2.jasmine.kerneos.service;
 
+/**
+ * Interface corresponding to a declaration of asynchronous service.
+ */
 public interface KerneosAsynchronousService {
 }

@@ -29,7 +29,10 @@ import org.ow2.jasmine.kerneos.config.generated.Module;
 
 import java.io.Serializable;
 
-public class ModuleEvent implements Serializable{
+/**
+ * Module event used for communicate the arrival/departure of a module.
+ */
+public class ModuleEvent implements Serializable {
     /**
      * Module Object
      */
@@ -51,23 +54,32 @@ public class ModuleEvent implements Serializable{
     public static final String UNLOAD = "unload";
 
     /**
-     * Empty contructor.
+     * Create an empty module event.
      */
-    public ModuleEvent() {}
+    public ModuleEvent() {
 
+    }
+
+    /**
+     * Create a module event.
+     * @param module is the module associated with the event.
+     * @param eventType is the type of event associated with the module.
+     */
     public ModuleEvent(final Module module, final String eventType) {
         this.module = module;
         this.eventType = eventType;
     }
 
     /**
-     * @return the eventType
+     * Get the type of event.
+     * @return the eventType.
      */
     public String getEventType() {
         return eventType;
     }
 
     /**
+     * Get the module associated with the event.
      * @return the module
      */
     public Module getModule() {
@@ -75,16 +87,18 @@ public class ModuleEvent implements Serializable{
     }
 
     /**
-     * @param module the module to set
+     * Set the module associated with the event.
+     * @param module is the module associated with the event.
      */
     public void setModule(Module module) {
         this.module = module;
     }
 
     /**
-     * @param eventType the event type to set
+     * Set the type of event.
+     * @param type is the type of event.
      */
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
+    public void setEventType(String type) {
+        this.eventType = type;
     }
 }

@@ -30,9 +30,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Set the kerneos Asynchronous Service.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface KerneosAsynchronous {
+    /**
+     * Different types of asynchronous service.
+     */
 
     enum TYPE {
         EVENTADMIN("event-admin"),
@@ -40,23 +46,49 @@ public @interface KerneosAsynchronous {
 
         private final String value;
 
+        /**
+         * Constructor.
+         *
+         * @param value the string corresponding.
+         */
         TYPE(final String value) {
             this.value = value;
         }
 
+        /**
+         * Convert the type to String.
+         *
+         * @return the string corresponding.
+         */
         @Override
         public String toString() {
             return value;
         }
     }
 
+    /**
+     * A property to provide to the asynchronous service.
+     */
+
     @interface Property {
+        /**
+         * The name of the property.
+         */
         String name();
 
+        /**
+         * The value of the property.
+         */
         String value();
     }
 
+    /**
+     * The type of asynchronous service.
+     */
     TYPE type();
 
+    /**
+     * An array of property provided to the asynchronous service.
+     */
     Property[] properties() default {};
 }

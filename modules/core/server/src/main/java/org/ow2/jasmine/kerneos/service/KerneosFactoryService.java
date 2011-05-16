@@ -26,6 +26,14 @@
 package org.ow2.jasmine.kerneos.service;
 
 
+/**
+ * Interface corresponding to a OSGi service used like a factory.
+ * @param <T> is the class returned by the factory.
+ */
 public interface KerneosFactoryService<T> {
+    /**
+     * Create a new instance of the service.
+     * @return the new instance.
+     */
     T newInstance();
 }

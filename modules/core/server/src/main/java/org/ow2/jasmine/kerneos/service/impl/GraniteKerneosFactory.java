@@ -30,16 +30,25 @@ import org.granite.osgi.service.GraniteFactory;
 import org.ow2.jasmine.kerneos.service.KerneosFactoryService;
 
 
+/**
+ * Used for interfacing Granite and Kerneos factories.
+ */
 public class GraniteKerneosFactory implements GraniteFactory {
 
+    /**
+     * The corresponding Kerneos factory.
+     */
     private final KerneosFactoryService service;
+    /**
+     * The id of the GraniteFactory.
+     */
     private final String id;
 
     /**
-     * Create a interface between KerneosFactory and GraniteFactory
+     * Create a interface between KerneosFactory and GraniteFactory.
      *
-     * @param service the service to interface
-     * @param id      the id of the GraniteFactory
+     * @param service the service to interface.
+     * @param id      the id of the GraniteFactory.
      */
     GraniteKerneosFactory(final KerneosFactoryService service, final String id) {
         this.service = service;
@@ -47,18 +56,18 @@ public class GraniteKerneosFactory implements GraniteFactory {
     }
 
     /**
-     * Get the GraniteFactory's
+     * Get the GraniteFactory's id.
      *
-     * @return the GraniteFactory's id
+     * @return the GraniteFactory's id.
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Called when GraniteDS ask for a new instance of the service provided by this factory
+     * Called when GraniteDS ask for a new instance of the service provided by this factory.
      *
-     * @return the new instance of the service
+     * @return the new instance of the service.
      */
     public Object newInstance() {
         return service.newInstance();

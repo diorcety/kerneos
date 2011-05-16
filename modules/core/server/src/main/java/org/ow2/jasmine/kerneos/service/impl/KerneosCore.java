@@ -56,6 +56,10 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+
+/**
+ * The core of Kerneos.
+ */
 @Component
 @Instantiate
 @Provides
@@ -67,13 +71,13 @@ public final class KerneosCore implements IKerneosCore {
     private static Log logger = LogFactory.getLog(KerneosConfigService.class);
 
     /**
-     * OSGi HTTPService
+     * OSGi HTTPService.
      */
     @Requires
     private HttpService httpService;
 
     /**
-     * Current HTTP Context
+     * Current HTTP Context.
      */
     private HttpContext httpContext;
 
@@ -85,13 +89,13 @@ public final class KerneosCore implements IKerneosCore {
     private JAXBContext jaxbContext;
 
     /**
-     * KerneosConfig
+     * KerneosConfig.
      */
     private KerneosConfig kerneosConfig;
 
 
     /**
-     * Configuration component instances
+     * Configuration component instances.
      */
     private ComponentInstance gravityService, gravityChannel;
     private ComponentInstance graniteService, graniteChannel;
@@ -106,6 +110,12 @@ public final class KerneosCore implements IKerneosCore {
     private Factory destinationFactory;
 
 
+    /**
+     * Constructor used by iPojo.
+     *
+     * @param bundleContext the current bundle context.
+     * @throws Exception can't load the JAXBContext.
+     */
     private KerneosCore(final BundleContext bundleContext) throws Exception {
         jaxbContext = JAXBContext.newInstance(
                 ObjectFactory.class.getPackage().getName(),
@@ -114,6 +124,14 @@ public final class KerneosCore implements IKerneosCore {
 
     }
 
+    /**
+     * Called when all the component dependencies are met.
+     *
+     * @throws MissingHandlerException   issue during GraniteDS configuration.
+     * @throws ConfigurationException    issue during GraniteDS configuration.
+     * @throws UnacceptableConfiguration issue during GraniteDS configuration.
+     * @throws NamespaceException        an invalid application url.
+     */
     @Validate
     private void start() throws MissingHandlerException, ConfigurationException,
             UnacceptableConfiguration, NamespaceException {
@@ -154,6 +172,9 @@ public final class KerneosCore implements IKerneosCore {
         }
     }
 
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
     @Invalidate
     private void stop() {
         logger.debug("Stop KerneosCore");
@@ -172,7 +193,10 @@ public final class KerneosCore implements IKerneosCore {
     }
 
     /**
-     * Load the Kerneos config file and build the configuration object
+     * Load the Kerneos config file and build the configuration object.
+     *
+     * @param bundleContext is the bundle context containing the application configuration.
+     * @throws Exception the kerneos application configuration file is not found are is invalid.
      */
     private void loadKerneosConfig(final BundleContext bundleContext) throws Exception {
 
@@ -203,15 +227,31 @@ public final class KerneosCore implements IKerneosCore {
         }
     }
 
-
-    public  void register(final String alias, final String name) throws NamespaceException {
-        httpService.registerResources(kerneosConfig.getApplicationUrl() + "/" + alias, name, httpContext);
+    /**
+     * Register an alias of a resource.
+     *
+     * @param alias is the alias used in the Http URL.
+     * @param path  is the path in order to access to the resource.
+     * @throws NamespaceException an invalid application url.
+     */
+    public void register(final String alias, final String path) throws NamespaceException {
+        httpService.registerResources(kerneosConfig.getApplicationUrl() + "/" + alias, path, httpContext);
     }
 
+    /**
+     * Unregister an alias of a resource.
+     *
+     * @param alias is the alias used in the Http URL.
+     */
     public void unregister(final String alias) {
         httpService.unregister(kerneosConfig.getApplicationUrl() + "/" + alias);
     }
 
+    /**
+     * Get the application configuration.
+     *
+     * @return the application configuration.
+     */
     public KerneosConfig getKerneosConfig() {
         return kerneosConfig;
     }

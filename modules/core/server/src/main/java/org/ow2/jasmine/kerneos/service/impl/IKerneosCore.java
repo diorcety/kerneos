@@ -28,25 +28,28 @@ package org.ow2.jasmine.kerneos.service.impl;
 import org.osgi.service.http.NamespaceException;
 import org.ow2.jasmine.kerneos.config.generated.KerneosConfig;
 
+/**
+ * Interface of the Kerneos' core.
+ */
 public interface IKerneosCore {
 
     /**
-     * Register a resource
-     * @param alias the alias used in the Http URL
-     * @param path the path to the resource
-     * @throws NamespaceException
+     * Register a resource.
+     * @param alias the alias used in the Http URL.
+     * @param path the path to the resource.
+     * @throws NamespaceException invalid URL.
      */
     void register(String alias, String path) throws NamespaceException;
 
     /**
-     * Unregister a resource
-     * @param alias the alias used in the Http URL
+     * Unregister a resource.
+     * @param alias the alias used in the Http URL.
      */
     void unregister(String alias);
 
     /**
-     * Get the kerneos configuration
-     * @return the kernes configuration
+     * Get the kerneos configuration.
+     * @return the kernes configuration.
      */
     KerneosConfig getKerneosConfig();
 }

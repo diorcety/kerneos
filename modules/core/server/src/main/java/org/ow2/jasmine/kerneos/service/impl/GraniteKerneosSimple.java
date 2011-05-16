@@ -30,15 +30,19 @@ import org.granite.osgi.service.GraniteFactory;
 import org.ow2.jasmine.kerneos.service.KerneosSimpleService;
 
 
+/**
+ * Used for interfacing Granite and Kerneos services.
+ */
 public class GraniteKerneosSimple implements GraniteFactory {
 
     private final KerneosSimpleService service;
     private final String id;
 
     /**
+     * Create a interface between KerneosFactory and GraniteFactory.
      *
-     * @param service
-     * @param id
+     * @param service the service to interface.
+     * @param id      the id of the GraniteFactory.
      */
     GraniteKerneosSimple(final KerneosSimpleService service, final String id) {
         this.service = service;
@@ -46,16 +50,18 @@ public class GraniteKerneosSimple implements GraniteFactory {
     }
 
     /**
+     * Get the GraniteFactory's id.
      *
-     * @return
+     * @return the GraniteFactory's id.
      */
     public String getId() {
         return id;
     }
 
     /**
+     * Called when GraniteDS ask for a new instance of the service provided by this factory.
      *
-     * @return
+     * @return the new instance of the service.
      */
     public Object newInstance() {
         return service;

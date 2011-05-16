@@ -25,8 +25,9 @@
 
 package org.ow2.jasmine.kerneos.service.impl;
 
-import java.util.HashMap;
-
+/**
+ * Contains the different constants used by Kerneos.
+ */
 public final class KerneosConstants {
 
     /**
@@ -36,18 +37,18 @@ public final class KerneosConstants {
 
     }
 
-    /**
+    /*
      * Suffix used for the factory of an service
      */
     public static final String FACTORY_SUFFIX = "_FaCtOry";
 
-    /**
+    /*
      * Manifest entry for a Kerneos Module
      */
     public static final String KERNEOS_MODULE_MANIFEST = "Kerneos-Module";
     public static final String KERNEOS_PATH = "/KERNEOS";
 
-    /**
+    /*
      * The path to the Kerneos files
      */
     public static final String KERNEOS_CONFIG_FILE = "META-INF/kerneos-config.xml";

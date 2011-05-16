@@ -30,12 +30,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Set the kerneos Service.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface KerneosService {
+    /**
+     * The name of the destination.
+     */
     String destination();
 
+    /**
+     * Analyze the class for finding classes used by the service.
+     */
     boolean analyze() default true;
 
-    Class[] classes() default { };
+    /**
+     * Specify additional classes used by the service.
+     */
+    Class[] classes() default {};
 }

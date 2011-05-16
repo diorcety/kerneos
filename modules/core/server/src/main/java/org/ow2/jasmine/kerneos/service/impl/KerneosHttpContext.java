@@ -34,14 +34,29 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * The specific http context used by Kerneos.
+ */
 public class KerneosHttpContext implements HttpContext {
     private static final String PREFIX = "bundle:/";
     private static final String PREFIX2 = "bundle://";
 
-    public String getMimeType(final String name) {
+    /**
+     * Return the Mine corresponding to the url.
+     *
+     * @param url is the string corresponding to the url request.
+     * @return the Mine string.
+     */
+    public String getMimeType(final String url) {
         return null;
     }
 
+    /**
+     * Get the URL of the resource corresponding to a URL string.
+     *
+     * @param name url is the string corresponding to the url request.
+     * @return the URL type which permits to acced to the resource.
+     */
     public URL getResource(final String name) {
         if (name.startsWith(PREFIX)) {
             try {
@@ -59,6 +74,14 @@ public class KerneosHttpContext implements HttpContext {
         }
     }
 
+    /**
+     * Called for allow or deny an access.
+     *
+     * @param request  is the object containing the request information.
+     * @param response is the object containing the response information.
+     * @return return always true.
+     * @throws IOException neven happen.
+     */
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
         return true;

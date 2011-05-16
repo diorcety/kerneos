@@ -34,14 +34,21 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Analyzer of classes used by a class.
+ * Keep only serializable class of functions and fields (recursively).
+ */
 public class ClassAnalyzer {
 
+    /**
+     * Contains all the classes added manual or with the class analyzer.
+     */
     private List<Class> classList = new LinkedList<Class>();
 
     /**
-     * Add a class to the list
-     * @param cls The class to add to the list
-     * @return The ClassAnalyzer object itself
+     * Add a class to the list.
+     * @param cls The class to add to the list.
+     * @return The ClassAnalyzer object itself.
      */
     public ClassAnalyzer add(final Class cls) {
         // No already registred class
@@ -52,9 +59,9 @@ public class ClassAnalyzer {
     }
 
     /**
-     * Analyze recursively the classes used by the public methods and fields
-     * @param cls The class to analyze
-     * @return The ClassAnalyzer object itself
+     * Analyze recursively the classes used by the public methods and fields.
+     * @param cls The class to analyze.
+     * @return The ClassAnalyzer object itself.
      */
     public ClassAnalyzer analyze(final Class cls) {
         analyzeClass(cls);
@@ -62,8 +69,8 @@ public class ClassAnalyzer {
     }
 
     /**
-     * Compile the list to a class array
-     * @return An array containing the class list
+     * Compile the list to a class array.
+     * @return An array containing the class list.
      */
     public Class[] compile() {
         Class[] ret = new Class[classList.size()];
@@ -71,8 +78,8 @@ public class ClassAnalyzer {
     }
 
     /**
-     * Analyze recursively the classes used by the public methods and fields
-     * @param cls The class to analyze
+     * Analyze recursively the classes used by the public methods and fields.
+     * @param cls The class to analyze.
      */
     private void analyzeClass(final Class cls) {
         List<Class> list = new LinkedList<Class>();
@@ -112,9 +119,9 @@ public class ClassAnalyzer {
     }
 
     /**
-     * Add the class to the list if it is usefull
-     * @param list The list where the class will be added
-     * @param cls The class to add
+     * Add the class to the list if it is usefull.
+     * @param list The list where the class will be added.
+     * @param cls The class to add.
      */
     private void getClasses(final List<Class> list, final Class cls) {
         if (isUsefull(list, cls)) {
@@ -123,9 +130,9 @@ public class ClassAnalyzer {
     }
 
     /**
-     * Explore the type for finding used classes
-     * @param list The list where the classes will be added
-     * @param type The type to explore
+     * Explore the type for finding used classes.
+     * @param list The list where the classes will be added.
+     * @param type The type to explore.
      */
     private void getClasses(final List<Class> list, final Type type) {
         if (type instanceof ParameterizedType) {
@@ -152,10 +159,10 @@ public class ClassAnalyzer {
     }
 
     /**
-     * Add the class to the list if it is usefull
-     * @param list The list where the classes will be added
-     * @param cls The class to add
-     * @return True if the class is usefull
+     * Add the class to the list if it is usefull.
+     * @param list The list where the classes will be added.
+     * @param cls The class to add.
+     * @return True if the class is usefull.
      */
     private boolean isUsefull(final List<Class> list, final Class cls) {
 

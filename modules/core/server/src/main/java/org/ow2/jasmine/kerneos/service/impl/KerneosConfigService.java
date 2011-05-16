@@ -71,6 +71,9 @@ import org.ow2.jasmine.kerneos.service.ModuleEvent;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
+/**
+ * This is the component which handles the arrival/departure of the Kerneos' modules.
+ */
 @Component
 @Instantiate
 @Provides
@@ -89,12 +92,12 @@ public final class KerneosConfigService implements GraniteDestination {
     private JAXBContext jaxbContext;
 
     /**
-     * List of registered modules
+     * List of registered modules.
      */
     private Map<String, Module> moduleMap = new Hashtable<String, Module>();
 
     /**
-     * Async Event Publisher
+     * Async Event Publisher.
      */
     @org.apache.felix.ipojo.handlers.event.Publisher(
             name = "KerneosConfigService",
@@ -104,7 +107,7 @@ public final class KerneosConfigService implements GraniteDestination {
     private Publisher publisher;
 
     /**
-     * Granite Class Registry
+     * Granite Class Registry.
      */
     @Requires
     private GraniteClassRegistry gcr;
@@ -121,12 +124,25 @@ public final class KerneosConfigService implements GraniteDestination {
     private ComponentInstance eaConfig, graniteDestination, gravityDestination;
     private BundleTracker bundleTracker;
 
+    /**
+     * Class used for tracking Kerneos' modules.
+     */
     private class KerneosBundleTracker extends BundleTracker {
 
+        /**
+         * Constructor of the Kerneos bundle tracker.
+         *
+         * @param bundleContext the current bundle context.
+         */
         KerneosBundleTracker(final BundleContext bundleContext) {
             super(bundleContext);
         }
 
+        /**
+         * Called by the OSGi Framework when a new bundle arrived.
+         *
+         * @param bundle is the new bundle.
+         */
         @Override
         protected void addedBundle(final Bundle bundle) {
             String header = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
@@ -139,6 +155,11 @@ public final class KerneosConfigService implements GraniteDestination {
             }
         }
 
+        /**
+         * Called by the OSGi Framework on a bundle departure.
+         *
+         * @param bundle is the bundle which is gone.
+         */
         @Override
         protected void removedBundle(final Bundle bundle) {
             String header = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
@@ -153,10 +174,10 @@ public final class KerneosConfigService implements GraniteDestination {
     }
 
     /**
-     * Constructor
+     * Constructor used by iPojo.
      *
-     * @param bundleContext
-     * @throws Exception
+     * @param bundleContext is the current bundle context.
+     * @throws Exception can't load the JAXBContext.
      */
     private KerneosConfigService(final BundleContext bundleContext) throws Exception {
         bundleTracker = new KerneosBundleTracker(bundleContext);
@@ -165,11 +186,19 @@ public final class KerneosConfigService implements GraniteDestination {
                 ObjectFactory.class.getClassLoader());
     }
 
+    /**
+     * Called when all the component dependencies are met.
+     *
+     * @throws MissingHandlerException   issue during GraniteDS configuration.
+     * @throws ConfigurationException    issue during GraniteDS configuration.
+     * @throws UnacceptableConfiguration issue during GraniteDS configuration.
+     */
     @Validate
     private void start() throws MissingHandlerException, ConfigurationException,
-            UnacceptableConfiguration, NamespaceException {
+            UnacceptableConfiguration {
         logger.debug("Start KerneosConfigService");
 
+        // Register the classes used with event admin
         gcr.registerClasses(GRAVITY_DESTINATION, new Class[]{
                 ModuleEvent.class,
                 Services.class,
@@ -181,6 +210,8 @@ public final class KerneosConfigService implements GraniteDestination {
                 SwfModule.class,
                 PromptBeforeClose.class,
                 JAXBElement.class});
+
+        // Register the classes used with "kerneosConfig" service
         gcr.registerClasses(getId(), new Class[]{
                 Services.class,
                 Service.class,
@@ -193,6 +224,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 JAXBElement.class
         });
 
+        // Register the few configurations used with KerneosConfigService
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", GRAVITY_DESTINATION);
@@ -212,30 +244,45 @@ public final class KerneosConfigService implements GraniteDestination {
             properties.put("CHANNELS", new String[]{KerneosConstants.GRANITE_CHANNEL});
             graniteDestination = destinationFactory.createComponentInstance(properties);
         }
+
+        // Start to track bundles
         bundleTracker.open();
     }
 
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
     @Invalidate
     private void stop() {
         logger.debug("Stop KerneosConfigService");
 
+        // Stop the tracking of bundles
         bundleTracker.close();
 
-        moduleMap.clear();
+        synchronized (moduleMap) {
+            // Unregister all handled modules
+            for (String moduleName : moduleMap.keySet()) {
+                kerneosCore.unregister(moduleName);
+            }
+            // Remove all handled modules
+            moduleMap.clear();
+        }
 
+        // Remove the configurations
         eaConfig.dispose();
         gravityDestination.dispose();
         graniteDestination.dispose();
 
+        // Unregister the different used classes
         gcr.unregisterClasses(getId());
         gcr.unregisterClasses(GRAVITY_DESTINATION);
     }
 
     /**
-     * Call when a new Kerneos Module is arrived
+     * Call when a new Kerneos Module is arrived.
      *
-     * @param bundle The Bundle corresponding to the module
-     * @param name   The name of the module
+     * @param bundle The Bundle corresponding to the module.
+     * @param name   The name of the module.
      */
     private void onModuleArrival(final Bundle bundle, final String name) {
         logger.debug("Add Kerneos Module: " + name);
@@ -261,9 +308,8 @@ public final class KerneosConfigService implements GraniteDestination {
                 moduleMap.put(name, module);
             }
 
+            // Post an event
             ModuleEvent me = new ModuleEvent(module, ModuleEvent.LOAD);
-
-            // Post event
             publisher.sendData(me);
         } catch (Exception e) {
             logger.warn(e, "Invalid module: " + name);
@@ -272,10 +318,10 @@ public final class KerneosConfigService implements GraniteDestination {
     }
 
     /**
-     * Call when a new Kerneos Module is gone
+     * Call when a new Kerneos Module is gone.
      *
-     * @param bundle The Bundle corresponding to the module
-     * @param name   The name of the module
+     * @param bundle The Bundle corresponding to the module.
+     * @param name   The name of the module.
      */
     private void onModuleDeparture(final Bundle bundle, final String name) {
 
@@ -292,19 +338,18 @@ public final class KerneosConfigService implements GraniteDestination {
         kerneosCore.unregister(name);
         logger.info("Unregister \"" + name + "\" resources");
 
+        // Post an event
         ModuleEvent me = new ModuleEvent(module, ModuleEvent.UNLOAD);
-
-        // Post event
         publisher.sendData(me);
     }
 
 
     /**
-     * Load the module information
+     * Load the module information.
      *
-     * @param bundle the bundle corresponding to the module
-     * @return the information corresponding to the module
-     * @throws Exception
+     * @param bundle the bundle corresponding to the module.
+     * @return the information corresponding to the module.
+     * @throws Exception the kerneos module configuration file is not found are is invalid.
      */
     private Module loadModuleConfig(final Bundle bundle) throws Exception {
         // Get bundle kerneos module xml file
@@ -332,32 +377,34 @@ public final class KerneosConfigService implements GraniteDestination {
     }
 
     /**
-     * Get the Kerneos configuration
+     * Get the Kerneos configuration.
      *
-     * @return the Kerneos configuration
+     * @return the Kerneos configuration.
      */
     public KerneosConfig getKerneosConfig() {
         return kerneosCore.getKerneosConfig();
     }
 
     /**
-     * Get the module list
+     * Get the module list.
      *
-     * @return the module list
+     * @return the module list.
      */
     public Modules getModules() {
-        Modules modules = new Modules();
-        for (Module module : moduleMap.values()) {
-            JAXBElement<Module> jaxbElement = new JAXBElement<Module>(new QName("module"), Module.class, module);
-            modules.getModulesList().add(jaxbElement);
+        synchronized (moduleMap) {
+            Modules modules = new Modules();
+            for (Module module : moduleMap.values()) {
+                JAXBElement<Module> jaxbElement = new JAXBElement<Module>(new QName("module"), Module.class, module);
+                modules.getModulesList().add(jaxbElement);
+            }
+            return modules;
         }
-        return modules;
     }
 
     /**
-     * Get the service id
+     * Get the service id.
      *
-     * @return the service id
+     * @return the service id.
      */
     public String getId() {
         return "kerneosConfig";
