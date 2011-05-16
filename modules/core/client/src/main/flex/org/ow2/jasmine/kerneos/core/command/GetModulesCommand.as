@@ -39,7 +39,7 @@ import org.ow2.jasmine.kerneos.core.vo.KerneosConfigVO;
 import org.ow2.jasmine.kerneos.core.vo.ModulesVO;
 
 /**
-* Load the Kerneos configuration
+* Get the module list
 * 
 * @author Guillaume Renault, Julien Nicoulaud
 */ 

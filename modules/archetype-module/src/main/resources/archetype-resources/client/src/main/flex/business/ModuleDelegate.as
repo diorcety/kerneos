@@ -39,7 +39,8 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         Put here the method that will trigger the code to execute following a dispatched event
         in the cairngorm architecture.
         Example :
-            public function callServerSide(parameters : Object) : void {
+            public function callServerSide(parameters : Object) : void
+            {
                 // find the service
                 // "hello_service" is defined in kerneos-module.xml as
                 // <service id="hello_service" destination="HelloService"/>
@@ -49,11 +50,10 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
                 // of the java class bound with the remote object, with its parameters.
                 var call : Object = service.sayHello(parameters);
                 
-                   // add responder to handle the callback
+                // add responder to handle the callback
                 call.addResponder(this.responder);
             }
     */
-
 
 }
 }

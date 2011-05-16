@@ -75,6 +75,9 @@ public class KerneosLifeCycleManager {
     [Bindable]
     public static var amfChannelSet:ChannelSet = null;
 
+    /**
+     * AMF Gravity Channel set
+     */
     public static var amfGravityChannelSet:ChannelSet = null;
 
 

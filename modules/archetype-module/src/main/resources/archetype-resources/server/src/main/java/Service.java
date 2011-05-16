@@ -37,9 +37,15 @@ import org.ow2.util.log.LogFactory;
 /**
  * HelloService
  */
+//ipojo annotations Component, Instantiate and Provides
 @Component
 @Instantiate
 @Provides
+/*
+ * Annotation that defines a KerneosService with the
+ * "HelloService" destination.
+ * It is the same destination defined in kerneos-module.xml
+ */
 @KerneosService(destination = "HelloService")
 public class Service implements KerneosSimpleService{
 

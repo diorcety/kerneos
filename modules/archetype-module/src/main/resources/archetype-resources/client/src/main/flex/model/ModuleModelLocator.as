@@ -100,9 +100,11 @@ public class ModuleModelLocator implements ModelLocator
             throw new Error("Only one ModelLocator has to be set");
         }
     }
-    
-    
-    
+
+
+     /**
+      * Get the only created instance of the ModuleModelLocator
+      */
     public static function getInstance() : ModuleModelLocator
     {
         if (ModuleModelLocator.moduleModel == null)

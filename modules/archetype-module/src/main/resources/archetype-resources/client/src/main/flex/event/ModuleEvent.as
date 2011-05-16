@@ -24,7 +24,7 @@ package event
 {
 import com.adobe.cairngorm.control.CairngormEvent;
 
-/**
+/*
  * Example import:
  import flash.events.Event;
  */

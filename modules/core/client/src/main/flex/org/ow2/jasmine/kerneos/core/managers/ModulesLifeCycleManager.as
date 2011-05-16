@@ -115,7 +115,7 @@ public class ModulesLifeCycleManager
     }
 
     /**
-     * Launch the command to load the application configuration.
+     * Launch the command to load the application modules.
      */
     public static function getModules() : void
     {
@@ -302,7 +302,7 @@ public class ModulesLifeCycleManager
     }
 
      /**
-     * Erase the icon from the icon cache.
+     * Delete the icon from the icon cache.
      */
     public static function deleteCacheIcon(url : String) : void
     {
@@ -451,8 +451,11 @@ public class ModulesLifeCycleManager
      */
     private static function onModuleEventMessage(event:MessageEvent) : void {
         var moduleEvent:ModuleEventVO = event.message.body as ModuleEventVO;
+
+        //if the event is a ModuleEvent type and it has a moduleVO
         if (moduleEvent) {
             var model:KerneosModelLocator = KerneosModelLocator.getInstance();
+            //if the action is LOAD, the module is installed otherwise it is uninstalled
             if (moduleEvent.eventType == ModuleEventVO.LOAD && moduleEvent.module) {
                 model.modules.modulesList.addItem(moduleEvent.module as ModuleVO);
                 installModule(moduleEvent.module);
@@ -460,6 +463,7 @@ public class ModulesLifeCycleManager
                 unloadModule(moduleEvent.module);
                 uninstallModule(moduleEvent.module);
 
+                //Find the module to delete in the modules list
                 var moduleLoop:ModuleVO;
                 var moduleToDelete:ModuleVO;
                 //TODO compare by module ID
@@ -469,6 +473,7 @@ public class ModulesLifeCycleManager
                     }
                 }
 
+                //Delete the module from the modules list
                 var moduleIndex:int = model.modules.modulesList.getItemIndex(moduleToDelete);
                 model.modules.modulesList.removeItemAt(moduleIndex);
             }

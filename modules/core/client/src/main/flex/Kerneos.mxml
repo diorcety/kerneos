@@ -52,6 +52,7 @@
         // Register methods that can be called externally from the Javascript.
         ExternalInterface.addCallback("canBeClosed", KerneosLifeCycleManager.canBeClosed);
 
+        // Subscribe a gravity consumer to the kerneos topic
         ModulesLifeCycleManager.subscribe();
 
       }

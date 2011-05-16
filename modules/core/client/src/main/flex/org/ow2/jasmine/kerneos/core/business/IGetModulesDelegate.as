@@ -25,14 +25,14 @@ package org.ow2.jasmine.kerneos.core.business
 import org.ow2.jasmine.kerneos.common.business.IDelegateResponder;
 
 /**
-* Load the Kerneos config file
+* Get the module list
 * 
 * @author Julien Nicoulaud
 */
 public interface IGetModulesDelegate extends IDelegateResponder{
     
     /**
-    * Load the Kerneos config file
+    * Get the module list
     */
     function getModules():void;
 }

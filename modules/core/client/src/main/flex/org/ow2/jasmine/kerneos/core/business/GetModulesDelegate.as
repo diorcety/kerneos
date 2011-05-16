@@ -27,7 +27,7 @@ import com.adobe.cairngorm.business.ServiceLocator;
 import org.ow2.jasmine.kerneos.common.business.AbsDelegateResponder;
 
 /**
-* Load the Kerneos config file
+* Get the module list
 * 
 * @author Julien Nicoulaud
 */
@@ -35,7 +35,7 @@ public class GetModulesDelegate extends AbsDelegateResponder
                                        implements IGetModulesDelegate {
     
     /**
-    * Load the Kerneos config file
+    * Get the module list
     */
     public function getModules():void
     {

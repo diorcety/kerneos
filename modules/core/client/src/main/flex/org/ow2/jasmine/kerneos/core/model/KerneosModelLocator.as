@@ -100,7 +100,7 @@ public class KerneosModelLocator implements ModelLocator
     private var getKerneosConfigDelegate : IGetKerneosConfigDelegate = null;
     
     /**
-     * "GetM odules" delegate unique instance
+     * "Get Modules" delegate unique instance
      */
     private var getModulesDelegate : IGetModulesDelegate = null;
     
@@ -154,7 +154,7 @@ public class KerneosModelLocator implements ModelLocator
     }
 
     /**
-     * Get the "Get Kerneos config file" delegate unique instance.
+     * Get the "Get Modules" delegate unique instance.
      */
     public function getGetModulesDelegate() : IGetModulesDelegate
     {
