@@ -63,28 +63,28 @@
       </dependency>
 
       <dependency>
-        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-api</artifactId>
         <version>${kerneos.version}</version>
         <type>swc</type>
       </dependency>
 
       <dependency>
-        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <groupId>org.ow2.kerneos</groupId>
         <artifactId>cairngorm-kerneos</artifactId>
         <version>${cairngorm.version}</version>
         <type>swc</type>
       </dependency>
 
       <dependency>
-        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-common-client</artifactId>
         <version>${kerneos.version}</version>
         <type>swc</type>
       </dependency>
 
       <dependency>
-        <groupId>org.ow2.jasmine.kerneos</groupId>
+        <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-core-server</artifactId>
         <version>${kerneos.version}</version>
         <scope>provided</scope>

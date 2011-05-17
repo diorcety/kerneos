@@ -23,7 +23,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.ow2.jasmine.kerneos</groupId>
+      <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-core-server</artifactId>
     </dependency>
 
@@ -69,7 +69,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Kerneos-Module>exampleArchetype</Kerneos-Module>
+            <Kerneos-Module>${artifactId}-bundle</Kerneos-Module>
             <Include-Resource>
               src/main/resources,
               KERNEOS=src/main/kerneos,

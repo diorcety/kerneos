@@ -24,13 +24,11 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<kerneos-module xmlns="org.ow2.jasmine.kerneos:kerneos-module"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="org.ow2.jasmine.kerneos:kerneos-module">
-
     <!-- Module settings -->
     <!-- Example :-->
-    <swf-module>
+    <swf-module xmlns="org.ow2.kerneos:module"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="org.ow2.kerneos:module">
         <name>Hello Service</name>
         <description>This is a example</description>
         <small-icon>icons/icon16.png</small-icon>
@@ -44,7 +42,3 @@
     <!-- Note:
     The file name "example.swf" has to be replaced into the server pom.xml
     <destFileName>example.swf</destFileName> -->
-
-
-
-</kerneos-module>
