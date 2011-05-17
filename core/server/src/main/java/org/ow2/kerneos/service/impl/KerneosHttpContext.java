@@ -70,8 +70,11 @@ public class KerneosHttpContext implements HttpContext {
                 return null;
             }
         } else {
-            return this.getClass().getClassLoader().getResource(name);
+            if (name.startsWith(KerneosConstants.KERNEOS_SWF_NAME)) {
+                return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_SWF_NAME);
+            }
         }
+        return null;
     }
 
     /**

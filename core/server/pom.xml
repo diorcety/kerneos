@@ -190,6 +190,32 @@
       </plugin>
 
       <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>kerneos-core-client</artifactId>
+                  <version>${project.version}</version>
+                  <type>swf</type>
+                  <overWrite>true</overWrite>
+                  <destFileName>kerneos.swf</destFileName>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/kerneos</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.2</version>
@@ -214,6 +240,11 @@
         <version>2.3.4</version>
         <extensions>true</extensions>
         <configuration>
+          <instructions>
+            <Include-Resource>
+              ${project.build.directory}/kerneos
+            </Include-Resource>
+          </instructions>
         </configuration>
       </plugin>
 

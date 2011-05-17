@@ -40,16 +40,13 @@ public class GetApplicationDelegate extends AbsDelegateResponder
     /**
     * Load the Kerneos config file
     */
-    public function getKerneosConfig():void
+    public function getApplication(application: String):void
     {
             // find service
             var service : Object = ServiceLocator.getInstance().getRemoteObject("kerneosConfigService");
 
-            // Get Application context
-            var context:String = StringUtils.parseURLContext(FlexGlobals.topLevelApplication.systemManager.loaderInfo.url);
-
             // call service
-            var call : Object = service.getApplication(context);
+            var call : Object = service.getApplication(application);
     
             // add the responder as a listener for the answer of the java side
             call.addResponder(this.responder);

@@ -128,6 +128,7 @@ public final class KerneosCore implements IKerneosCore {
          */
         public ApplicationInstance(String name, Application application,
                                    Bundle bundle) throws MissingHandlerException, ConfigurationException, UnacceptableConfiguration, NamespaceException {
+            this.name = name;
             this.application = application;
             this.bundle = bundle;
 
@@ -136,7 +137,7 @@ public final class KerneosCore implements IKerneosCore {
             // Register channels
             {
                 Dictionary properties = new Hashtable();
-                properties.put("ID",  KerneosConstants.GRAVITY_CHANNEL + name);
+                properties.put("ID", KerneosConstants.GRAVITY_CHANNEL + name);
                 properties.put("CLASS", "org.granite.gravity.channels.GravityChannel");
                 properties.put("ENDPOINT_URI", applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
                 gavityChannel = channelFactory.createComponentInstance(properties);
@@ -149,8 +150,11 @@ public final class KerneosCore implements IKerneosCore {
             }
 
             // Register Kerneos Application resources
-            httpService.registerResources(applicationURL, bundle.getResource(KerneosConstants.KERNEOS_PATH).toString(),
+            httpService.registerResources(applicationURL,
+                                          bundle.getResource(KerneosConstants.KERNEOS_PATH).toString(),
                                           httpContext);
+            httpService.registerResources(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME,
+                                          KerneosConstants.KERNEOS_SWF_NAME, httpContext);
 
             logger.info("Register \"" + name + "\" resources: " + applicationURL);
         }
@@ -177,7 +181,9 @@ public final class KerneosCore implements IKerneosCore {
 
             // Unregister Kerneos resources
             logger.info("Unregister \"" + name + "\" resources: " + applicationURL);
+
             httpService.unregister(applicationURL);
+            httpService.unregister(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME);
         }
     }
 
@@ -292,10 +298,10 @@ public final class KerneosCore implements IKerneosCore {
     /**
      * Get Module list.
      */
-    public Collection<Module> getModuleList() {
-        List<Module> modules = new LinkedList<Module>();
+    public Map<String, Module> getModules() {
+        Map<String, Module> modules = new HashMap<String, Module>();
         for (ModuleInstance moduleInstance : moduleInstanceMap.values()) {
-            modules.add(moduleInstance.module);
+            modules.put(moduleInstance.name, moduleInstance.module);
         }
         return modules;
     }
@@ -335,10 +341,10 @@ public final class KerneosCore implements IKerneosCore {
     /**
      * Get Application list.
      */
-    public Collection<Application> getApplicationList() {
-        List<Application> applications = new LinkedList<Application>();
+    public Map<String, Application> getApplications() {
+        Map<String, Application> applications = new HashMap<String, Application>();
         for (ApplicationInstance applicationInstance : applicationInstanceMap.values()) {
-            applications.add(applicationInstance.application);
+            applications.put(applicationInstance.name, applicationInstance.application);
         }
         return applications;
     }

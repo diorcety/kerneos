@@ -30,6 +30,7 @@ import org.ow2.kerneos.config.generated.Application;
 import org.ow2.kerneos.config.generated.Module;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Interface of the Kerneos' core.
@@ -49,7 +50,7 @@ public interface IKerneosCore {
     /**
      * Get Module list.
      */
-    public Collection<Module> getModuleList();
+    public Map<String, Module> getModules();
 
     /**
      * Register a application.
@@ -64,5 +65,5 @@ public interface IKerneosCore {
     /**
      * Get Application list.
      */
-    public Collection<Application> getApplicationList();
+    public Map<String, Application> getApplications();
 }

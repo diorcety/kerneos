@@ -34,6 +34,6 @@ public interface IGetApplicationConfigDelegate extends IDelegateResponder{
     /**
     * Load the Kerneos config file
     */
-    function getKerneosConfig():void;
+    function getApplication(application: String):void;
 }
 }

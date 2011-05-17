@@ -26,6 +26,7 @@ package org.ow2.kerneos.core.model
 import com.adobe.cairngorm.model.ModelLocator;
 
 import mx.collections.ArrayCollection;
+import mx.core.FlexGlobals;
 import mx.utils.UIDUtil;
 
 import org.ow2.kerneos.core.business.*;
@@ -56,7 +57,13 @@ public class KerneosModelLocator implements ModelLocator
      * postfixed with this unique ID.
      */
     public var componentID : String = UIDUtil.createUID();
-    
+
+    /**
+     * Application name
+     */
+    [Bindable]
+    public var name : String;
+
     /**
      * The config of Kerneos.
      */
@@ -67,6 +74,7 @@ public class KerneosModelLocator implements ModelLocator
      * The module list.
      */
     [Bindable]
+    [ArrayElementType('org.ow2.kerneos.common.vo.ModuleVO')]
     public var modules : ArrayCollection;
 
     
@@ -112,6 +120,7 @@ public class KerneosModelLocator implements ModelLocator
     public function KerneosModelLocator()
     {
         super();
+        name = FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.parameters.application;
         
         if (model != null)
         {

@@ -429,18 +429,8 @@ public final class KerneosConfigService implements GraniteDestination {
      *
      * @return the Kerneos configuration.
      */
-    public Application getApplication(String context) {
-        for (Application application : kerneosCore.getApplicationList()) {
-            String url = application.getApplicationUrl();
-
-            // Format url
-            if (url.charAt(0) == '/')
-                url = url.substring(1);
-
-            if (url.equals(context))
-                return application;
-        }
-        return null;
+    public Application getApplication(String application) {
+        return kerneosCore.getApplications().get(application);
     }
 
     /**
@@ -449,7 +439,7 @@ public final class KerneosConfigService implements GraniteDestination {
      * @return the module list.
      */
     public Collection<Module> getModules() {
-        return kerneosCore.getModuleList();
+        return kerneosCore.getModules().values();
     }
 
     /**

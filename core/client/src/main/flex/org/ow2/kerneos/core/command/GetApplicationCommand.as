@@ -51,7 +51,7 @@ public class GetApplicationCommand implements ICommand, IResponder{
         
         var delegate:IGetApplicationConfigDelegate = KerneosModelLocator.getInstance().getGetKerneosConfigDelegate();
         delegate.responder = this;
-        delegate.getKerneosConfig();
+        delegate.getApplication(KerneosModelLocator.getInstance().name);
     }
 
     /**

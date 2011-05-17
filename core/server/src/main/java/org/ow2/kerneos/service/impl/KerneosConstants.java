@@ -48,6 +48,7 @@ public final class KerneosConstants {
     public static final String KERNEOS_MODULE_MANIFEST = "Kerneos-Module";
     public static final String KERNEOS_APPLICATION_MANIFEST = "Kerneos-Application";
     public static final String KERNEOS_PATH = "/KERNEOS";
+    public static final String KERNEOS_SWF_NAME = "kerneos.swf";
 
     /*
      * The path to the Kerneos files
