@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2008-2011 Bull S.A.S.
+  - Copyright (C) 2011 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -24,26 +24,25 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<archetype xmlns="http://maven.apache.org/Archetype/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/Archetype/1.0.0 http://jira.codehaus.org/secure/attachment/21696/archetype-v1_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos</artifactId>
-    <version>2.0.0-M1-SNAPSHOT</version>
-  </parent>
+  <id>kerneos-application-artifact</id>
 
-  <groupId>org.ow2.kerneos</groupId>
-  <artifactId>kerneos-archetypes</artifactId>
-  <packaging>pom</packaging>
+  <!-- Kerneos resources -->
+  <resources>
+    <!-- History resources -->
+    <resource>src/main/kerneos/history/history.css</resource>
+    <resource>src/main/kerneos/history/history.js</resource>
+    <resource>src/main/kerneos/history/historyFrame.html</resource>
+    <!-- Icons -->
+    <resource filtered="false">src/main/kerneos/icons/icon.png</resource>
+    <!-- Html resources -->
+    <resource>src/main/kerneos/AC_OETags.js</resource>
+    <resource>src/main/kerneos/index.html</resource>
+    <!-- Kerneos xml configuration -->
+    <resource>src/main/resources/META-INF/kerneos-application.xml</resource>
+  </resources>
 
-  <name>Kerneos :: Archetypes</name>
-
-  <modules>
-    <module>application</module>
-    <module>module</module>
-  </modules>
-
-</project>
+</archetype>
