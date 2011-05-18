@@ -146,7 +146,7 @@ public class SwfModuleWindow extends ModuleWindow {
             var dic:Dictionary = getKerneosModule().servicesClasses();
             if (dic != null) {
                 for (var key:String in dic) {
-                    for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
+                    for each(var service:ServiceVO in (module as SWFModuleVO).services) {
                         if (service.id == key)
                             GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
                     }
@@ -159,7 +159,7 @@ public class SwfModuleWindow extends ModuleWindow {
         var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
 
         // Register services
-        for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
+        for each(var service:ServiceVO in (module as SWFModuleVO).services) {
             serviceLocator.setServiceForId(service.id, service.destination, service.asynchronous);
             if (service.asynchronous) {
                 serviceLocator.getConsumer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
@@ -208,7 +208,7 @@ public class SwfModuleWindow extends ModuleWindow {
     private function unregisterServices():void {
         var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
 
-        for each(var service:ServiceVO in (module as SWFModuleVO).services.service) {
+        for each(var service:ServiceVO in (module as SWFModuleVO).services) {
             if (service.asynchronous) {
                 serviceLocator.getConsumer(service.id).disconnect();
                 serviceLocator.getProducer(service.id).disconnect();

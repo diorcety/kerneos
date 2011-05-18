@@ -35,6 +35,7 @@ import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
+import org.ow2.kerneos.core.vo.ModuleVO;
 
 /**
 * Get the module list

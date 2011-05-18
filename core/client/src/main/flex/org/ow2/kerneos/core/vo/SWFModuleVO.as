@@ -24,6 +24,8 @@ package org.ow2.kerneos.core.vo
 {
 import com.adobe.cairngorm.vo.IValueObject;
 
+import mx.collections.ArrayCollection;
+
 
 /**
  * A SWF module deployed in Kerneos.
@@ -48,7 +50,7 @@ public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
     /**
     * The module services.
     */
-    public var services : ServicesVO = null;
-
+    [ArrayElementType('org.ow2.kerneos.core.vo.ServiceVO')]
+    public var services : ArrayCollection = null;
 }
 }

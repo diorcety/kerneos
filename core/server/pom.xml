@@ -154,15 +154,18 @@
           </execution>
         </executions>
         <configuration>
-          <extension>true</extension>
           <schemaDirectory>src/main/resources/</schemaDirectory>
           <generatePackage>org.ow2.kerneos.config.generated</generatePackage>
           <strict>true</strict>
           <verbose>true</verbose>
+          <extension>true</extension>
           <args>
             <arg>-Xcollection-setter-injector</arg>
             <arg>-Xboolean-getter</arg>
             <arg>-Xdefault-value</arg>
+            <arg>-Xxew</arg>
+            <arg>-delete</arg>
+            <arg>-setter</arg>
           </args>
           <plugins>
             <plugin>
@@ -183,6 +186,11 @@
             <plugin>
               <groupId>org.jvnet.jaxb2_commons</groupId>
               <artifactId>defaultvalue</artifactId>
+              <version>1.0</version>
+            </plugin>
+            <plugin>
+              <groupId>dk.conspicio</groupId>
+              <artifactId>jaxb-xew</artifactId>
               <version>1.0</version>
             </plugin>
           </plugins>

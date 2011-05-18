@@ -25,51 +25,51 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <xs:schema
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    elementFormDefault="qualified"
-    targetNamespace="org.ow2.kerneos:application"
-    xmlns:k="org.ow2.kerneos:application">
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  targetNamespace="org.ow2.kerneos:application"
+  xmlns:k="org.ow2.kerneos:application">
 
 
-    <!--##################################################################################
-    # kerneos-config
-    ###################################################################################-->
+  <!--##################################################################################
+  # kerneos-config
+  ###################################################################################-->
 
-    <xs:element name="application">
-        <xs:complexType>
-            <xs:all>
-                <xs:element ref="k:application-project" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:application-name" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:application-url" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:application-logo" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:show-minimize-all-button" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:show-cascade-button" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:show-tile-button" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:show-notification-popups" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:show-popups-from-active-window" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:enable-notifications-log" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:show-confirm-close-dialog" maxOccurs="1" minOccurs="0" />
-                <xs:element ref="k:default-language" maxOccurs="1" minOccurs="0" />
-            </xs:all>
-        </xs:complexType>
-    </xs:element>
+  <xs:element name="application">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="k:application-project" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:application-name" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:application-url" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:application-logo" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:show-minimize-all-button" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:show-cascade-button" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:show-tile-button" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:show-notification-popups" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:show-popups-from-active-window" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:enable-notifications-log" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:show-confirm-close-dialog" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:default-language" maxOccurs="1" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
 
 
-    <!--##################################################################################
-    # Options
-    ###################################################################################-->
+  <!--##################################################################################
+  # Options
+  ###################################################################################-->
 
-    <xs:element name="application-project" type="xs:string" default="JASMINe" />
-    <xs:element name="application-name" type="xs:string" default="Kerneos" />
-    <xs:element name="application-url" type="xs:string" default="/kerneos" />
-    <xs:element name="application-logo" type="xs:string" />
-    <xs:element name="show-minimize-all-button" type="xs:boolean" default="true" />
-    <xs:element name="show-cascade-button" type="xs:boolean" default="true" />
-    <xs:element name="show-tile-button" type="xs:boolean" default="true" />
-    <xs:element name="show-notification-popups" type="xs:boolean" default="true" />
-    <xs:element name="show-popups-from-active-window" type="xs:boolean" default="false" />
-    <xs:element name="enable-notifications-log" type="xs:boolean" default="true" />
-    <xs:element name="show-confirm-close-dialog" type="xs:boolean" default="true" />
-    <xs:element name="default-language" type="xs:string" default="en_US" />
+  <xs:element name="application-project" type="xs:string" default="JASMINe"/>
+  <xs:element name="application-name" type="xs:string" default="Kerneos"/>
+  <xs:element name="application-url" type="xs:string" default="/kerneos"/>
+  <xs:element name="application-logo" type="xs:string"/>
+  <xs:element name="show-minimize-all-button" type="xs:boolean" default="true"/>
+  <xs:element name="show-cascade-button" type="xs:boolean" default="true"/>
+  <xs:element name="show-tile-button" type="xs:boolean" default="true"/>
+  <xs:element name="show-notification-popups" type="xs:boolean" default="true"/>
+  <xs:element name="show-popups-from-active-window" type="xs:boolean" default="false"/>
+  <xs:element name="enable-notifications-log" type="xs:boolean" default="true"/>
+  <xs:element name="show-confirm-close-dialog" type="xs:boolean" default="true"/>
+  <xs:element name="default-language" type="xs:string" default="en_US"/>
 
 </xs:schema>

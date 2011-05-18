@@ -26,6 +26,7 @@ package org.ow2.kerneos.core.model
 import com.adobe.cairngorm.model.ModelLocator;
 
 import mx.collections.ArrayCollection;
+import mx.collections.ArrayList;
 import mx.core.FlexGlobals;
 import mx.utils.UIDUtil;
 
@@ -74,7 +75,7 @@ public class KerneosModelLocator implements ModelLocator
      * The module list.
      */
     [Bindable]
-    [ArrayElementType('org.ow2.kerneos.common.vo.ModuleVO')]
+    [ArrayElementType('org.ow2.kerneos.core.vo.ModuleVO')]
     public var modules : ArrayCollection;
 
     
@@ -88,7 +89,7 @@ public class KerneosModelLocator implements ModelLocator
      * The stored notifications.
      */
     [Bindable]
-    [ArrayElementType('org.ow2.kerneos.common.vo.KerneosNotification')]
+    [ArrayElementType('org.ow2.kerneos.core.vo.KerneosNotification')]
     public var notifications : ArrayCollection = new ArrayCollection();
     
     // Singleton class unique instance

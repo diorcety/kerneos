@@ -61,7 +61,6 @@ import org.ow2.kerneos.config.generated.Module;
 import org.ow2.kerneos.config.generated.ObjectFactory;
 import org.ow2.kerneos.config.generated.PromptBeforeClose;
 import org.ow2.kerneos.config.generated.Service;
-import org.ow2.kerneos.config.generated.Services;
 import org.ow2.kerneos.config.generated.SwfModule;
 import org.ow2.kerneos.service.ModuleEvent;
 import org.ow2.util.log.Log;
@@ -210,7 +209,6 @@ public final class KerneosConfigService implements GraniteDestination {
         // Register the classes used with event admin
         gcr.registerClasses(GRAVITY_DESTINATION, new Class[]{
                 ModuleEvent.class,
-                Services.class,
                 Service.class,
                 Application.class,
                 Module.class,
@@ -221,7 +219,6 @@ public final class KerneosConfigService implements GraniteDestination {
 
         // Register the classes used with "kerneosConfig" service
         gcr.registerClasses(getId(), new Class[]{
-                Services.class,
                 Service.class,
                 Application.class,
                 Module.class,

@@ -24,6 +24,7 @@ package org.ow2.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
+import mx.collections.ArrayList;
 import mx.core.UIComponent;
 
 import org.ow2.kerneos.common.util.IconUtility;
@@ -64,7 +65,8 @@ public class FolderVO extends ModuleWithWindowVO implements IValueObject {
     /**
      * The modules.
      */
-    public var modules: ArrayCollection;
+    [ArrayElementType('org.ow2.kerneos.core.vo.ModuleVO')]
+    public var modules: ArrayCollection = null;
 
     // =========================================================================
     // Public methods
