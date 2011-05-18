@@ -21,42 +21,24 @@
  * $Id: ModulesVO.as 5743 2009-12-13 21:59:24Z nicoulaj $
  */
 package org.ow2.kerneos.core.vo {
-import org.ow2.kerneos.core.vo.ModuleInstanceVO;
 
-/**
- * An event
- *
- * @author Julian Rivera
- */
-
-[RemoteClass(alias="org.ow2.kerneos.service.ModuleEvent")]
+[RemoteClass(alias="org.ow2.kerneos.service.ApplicationInstance")]
 [Bindable]
-public class ModuleEventVO {
+public class ApplicationInstanceVO {
+    /**
+     * Module's id
+     */
+    public var id:String;
 
     /**
      * Module Object
      */
-    public var moduleInstance:ModuleInstanceVO;
-
-    /**
-     * Module's event type (load or unload).
-     */
-    public var eventType:String;
-
-    /**
-     * Load value.
-     */
-    public static const LOAD:String = "load";
-
-    /**
-     * Unload value.
-     */
-    public static const UNLOAD:String = "unload";
+    public var configuration:ApplicationVO;
 
     /**
      * Empty constructor
      */
-    public function ModuleEventVO() {
+    public function ApplicationInstanceVO() {
     }
 }
 }

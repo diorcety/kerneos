@@ -35,6 +35,7 @@ import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
+import org.ow2.kerneos.core.vo.ModuleInstanceVO;
 import org.ow2.kerneos.core.vo.ModuleVO;
 
 /**
@@ -68,7 +69,7 @@ public class GetModulesCommand implements ICommand, IResponder{
         var result:ArrayCollection = (event as ResultEvent).result as ArrayCollection;
 
         // Extract the data and update the model
-        model.modules = result;
+        model.moduleInstances = result;
     }
     
     /**

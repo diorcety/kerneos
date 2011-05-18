@@ -34,7 +34,7 @@
          width="140"
          height="100"
          verticalGap="0"
-         toolTip="{_module.description}"
+         toolTip="{_moduleInstance.configuration.description}"
          buttonMode="true"
          useHandCursor="true"
          mouseChildren="false"
@@ -43,143 +43,143 @@
          click="startModule(event)"
          creationComplete="initRenderer()">
 
-  <fx:Metadata>
+    <fx:Metadata>
         <![CDATA[
-    /**
-     * Renders a module as a list icon.
-     *
-     * @author Julien Nicoulaud
-     */
-    ]]>
+        /**
+         * Renders a module as a list icon.
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
     </fx:Metadata>
 
-  <fx:Script>
+    <fx:Script>
         <![CDATA[
-    import org.ow2.kerneos.core.vo.ModuleVO;
-    import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
+        import org.ow2.kerneos.core.vo.ModuleInstanceVO;
+        import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
 
-    // =========================================================================
-    // Variables
-    // =========================================================================
+        // =========================================================================
+        // Variables
+        // =========================================================================
 
-    // The item renderer stored data
+        // The item renderer stored data
 
-    /**
-     * The data displayed by the renderer
-     */
-    [Bindable]
-    private var _module:ModuleVO;
-
-
-    // =========================================================================
-    // Initialization
-    // =========================================================================
-
-    /**
-     * Init the component
-     */
-    public function initRenderer(event:Event = null):void {
-      // Listen to mouse events
-      addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-      addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
-    }
+        /**
+         * The data displayed by the renderer
+         */
+        [Bindable]
+        private var _moduleInstance:ModuleInstanceVO;
 
 
-    // =========================================================================
-    // Events handlers
-    // =========================================================================
+        // =========================================================================
+        // Initialization
+        // =========================================================================
 
-    /**
-     * On mouse over
-     */
-    public function mouseOverHandler(event:Event = null):void {
-      this.setStyle('borderStyle', 'solid');
-    }
-
-
-    /**
-     * On mouse out
-     */
-    public function mouseOutHandler(event:Event = null):void {
-      if (!_module.loaded) {
-        this.setStyle('borderStyle', 'none');
-      }
-    }
+        /**
+         * Init the component
+         */
+        public function initRenderer(event:Event = null):void {
+            // Listen to mouse events
+            addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+            addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+        }
 
 
-    // =========================================================================
-    // Data object handling
-    // =========================================================================
+        // =========================================================================
+        // Events handlers
+        // =========================================================================
 
-    /**
-     * Get the item renderer data object
-     */
-    [Bindable("dataChange")]
-    override public function get data():Object {
-      return _module;
-    }
-
-
-    /**
-     * Set the item renderer data object
-     */
-    override public function set data(value:Object):void {
-      _module = value as ModuleVO;
-
-      if (_module.loaded) {
-        this.setStyle('borderStyle', 'solid');
-      }
-      else {
-        this.setStyle('borderStyle', 'none');
-      }
-
-      invalidateProperties();
-      moduleThumb.invalidateProperties();
-      dispatchEvent(new Event("dataChange"));
-    }
+        /**
+         * On mouse over
+         */
+        public function mouseOverHandler(event:Event = null):void {
+            this.setStyle('borderStyle', 'solid');
+        }
 
 
-    // =========================================================================
-    // Private methods
-    // =========================================================================
+        /**
+         * On mouse out
+         */
+        public function mouseOutHandler(event:Event = null):void {
+            if (!_moduleInstance.configuration.loaded) {
+                this.setStyle('borderStyle', 'none');
+            }
+        }
 
-    /**
-     * Start the module
-     */
-    private function startModule(e:Event):void {
-      if (!_module.loaded) {
-        ModulesLifeCycleManager.startModule(_module);
-      }
-      else {
-        ModulesLifeCycleManager.bringToFront(_module);
-      }
-    }
-    ]]>
+
+        // =========================================================================
+        // Data object handling
+        // =========================================================================
+
+        /**
+         * Get the item renderer data object
+         */
+        [Bindable("dataChange")]
+        override public function get data():Object {
+            return _moduleInstance;
+        }
+
+
+        /**
+         * Set the item renderer data object
+         */
+        override public function set data(value:Object):void {
+            _moduleInstance = value as ModuleInstanceVO;
+
+            if (_moduleInstance.configuration.loaded) {
+                this.setStyle('borderStyle', 'solid');
+            }
+            else {
+                this.setStyle('borderStyle', 'none');
+            }
+
+            invalidateProperties();
+            moduleThumb.invalidateProperties();
+            dispatchEvent(new Event("dataChange"));
+        }
+
+
+        // =========================================================================
+        // Private methods
+        // =========================================================================
+
+        /**
+         * Start the module
+         */
+        private function startModule(e:Event):void {
+            if (!_moduleInstance.configuration.loaded) {
+                ModulesLifeCycleManager.startModule(_moduleInstance.configuration);
+            }
+            else {
+                ModulesLifeCycleManager.bringToFront(_moduleInstance.configuration);
+            }
+        }
+        ]]>
     </fx:Script>
 
-  <fx:Declarations>
-    <!-- The shadow -->
-    <mx:GlowFilter id="nameShadow"
-                   blurX="10"
-                   blurY="4"
-                   quality="15"
-                   alpha="0.9"
-                   strength="4"
-                   color="#FFFFFF"/>
-  </fx:Declarations>
+    <fx:Declarations>
+        <!-- The shadow -->
+        <mx:GlowFilter id="nameShadow"
+                       blurX="10"
+                       blurY="4"
+                       quality="15"
+                       alpha="0.9"
+                       strength="4"
+                       color="#FFFFFF"/>
+    </fx:Declarations>
 
-  <!-- The module thumbnail -->
-  <commonView:SmoothImage id="moduleThumb"
-                          source="{_module.getBigIcon(moduleThumb, true)}"
-                          width="64"
-                          height="64"/>
+    <!-- The module thumbnail -->
+    <commonView:SmoothImage id="moduleThumb"
+                            source="{_moduleInstance.configuration.getBigIcon(moduleThumb, true)}"
+                            width="64"
+                            height="64"/>
 
-  <!-- The module name -->
-  <coreView:MultiLineLinkButton
-    width="130"
-    id="moduleName"
-    color="#111111"
-    label="{_module.name}"
-    filters="{[nameShadow]}"/>
+    <!-- The module name -->
+    <coreView:MultiLineLinkButton
+            width="130"
+            id="moduleName"
+            color="#111111"
+            label="{_moduleInstance.configuration.name}"
+            filters="{[nameShadow]}"/>
 
 </mx:VBox>

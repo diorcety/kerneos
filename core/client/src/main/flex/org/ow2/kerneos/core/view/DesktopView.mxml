@@ -363,7 +363,7 @@
                 // Else apply the default setting specified in kerneos-config.
                 else
                 {
-                    resourceManager.localeChain = [this.model.config.defaultLanguage];
+                    resourceManager.localeChain = [this.model.applicationInstance.configuration.defaultLanguage];
                 }
 
                 // Setup the language selection component.
@@ -436,7 +436,7 @@
                      x = "5"
                      y = "5"
                      direction = "vertical"
-                     dataProvider = "{model.modules}"
+                     dataProvider = "{model.moduleInstances}"
                      backgroundAlpha = "0.0"
                      borderStyle = "none"
                      useRollOver = "false"
@@ -459,12 +459,12 @@
                    click = "{minimizeAllWindows()}"
                    toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.minimizeButton.tooltip')}"
                    styleName = "taskBarSmallButton"
-                   visible = "{model.config.showMinimizeAllButton}"
-                   includeInLayout = "{model.config.showMinimizeAllButton}" />
+                   visible = "{model.applicationInstance.configuration.showMinimizeAllButton}"
+                   includeInLayout = "{model.applicationInstance.configuration.showMinimizeAllButton}" />
         <mx:VRule height = "70%"
                   alpha = "0.25"
-                  visible = "{model.config.showMinimizeAllButton}"
-                  includeInLayout = "{model.config.showMinimizeAllButton}" />
+                  visible = "{model.applicationInstance.configuration.showMinimizeAllButton}"
+                  includeInLayout = "{model.applicationInstance.configuration.showMinimizeAllButton}" />
         <view:KerneosButtonScrollingCanvas id = "scrollabeTaskBarZone"
                                            width = "100%"
                                            height = "100%"
@@ -500,24 +500,24 @@
                    click = "windowContainer.windowManager.cascade()"
                    toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.cascadeButton.tooltip')}"
                    styleName = "taskBarSmallButton"
-                   visible = "{model.config.showCascadeButton}"
-                   includeInLayout = "{model.config.showCascadeButton}" />
+                   visible = "{model.applicationInstance.configuration.showCascadeButton}"
+                   includeInLayout = "{model.applicationInstance.configuration.showCascadeButton}" />
         <mx:Button width = "22"
                    height = "22"
                    icon = "{tileIcon}"
                    click = "windowContainer.windowManager.tile(true,3)"
                    toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.tileButton.tooltip')}"
                    styleName = "taskBarSmallButton"
-                   visible = "{model.config.showTileButton}"
-                   includeInLayout = "{model.config.showTileButton}" />
+                   visible = "{model.applicationInstance.configuration.showTileButton}"
+                   includeInLayout = "{model.applicationInstance.configuration.showTileButton}" />
         <mx:Button width = "22"
                    height = "22"
                    icon = "{eventsIcon}"
                    click = "{showNotificationsLog()}"
                    toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.notificationsLogButton.tooltip')}"
                    styleName = "taskBarSmallButton"
-                   visible = "{model.config.enableNotificationsLog}"
-                   includeInLayout = "{model.config.enableNotificationsLog}" />
+                   visible = "{model.applicationInstance.configuration.enableNotificationsLog}"
+                   includeInLayout = "{model.applicationInstance.configuration.enableNotificationsLog}" />
         <mx:Button width = "22"
                    height = "22"
                    icon = "{logoutIcon}"

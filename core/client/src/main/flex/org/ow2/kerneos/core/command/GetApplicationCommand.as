@@ -26,6 +26,8 @@ import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
+import mx.core.FlexGlobals;
+
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
@@ -34,6 +36,7 @@ import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.core.business.IGetApplicationConfigDelegate;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
+import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
 import org.ow2.kerneos.core.vo.ApplicationVO;
 
 /**
@@ -51,7 +54,7 @@ public class GetApplicationCommand implements ICommand, IResponder{
         
         var delegate:IGetApplicationConfigDelegate = KerneosModelLocator.getInstance().getGetKerneosConfigDelegate();
         delegate.responder = this;
-        delegate.getApplication(KerneosModelLocator.getInstance().name);
+        delegate.getApplication(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.parameters.application);
     }
 
     /**
@@ -64,10 +67,10 @@ public class GetApplicationCommand implements ICommand, IResponder{
         var model:KerneosModelLocator = KerneosModelLocator.getInstance();
         
         // Retrieve the result
-        var result:ApplicationVO = (event as ResultEvent).result as ApplicationVO;
+        var result:ApplicationInstanceVO = (event as ResultEvent).result as ApplicationInstanceVO;
         
         // Extract the data and update the model
-        model.config = result;
+        model.applicationInstance = result;
     }
     
     /**

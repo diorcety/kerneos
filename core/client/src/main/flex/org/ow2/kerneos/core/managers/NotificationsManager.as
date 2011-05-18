@@ -22,8 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.core.managers
-{
+package org.ow2.kerneos.core.managers {
 
 import flash.events.Event;
 
@@ -33,78 +32,69 @@ import org.ow2.kerneos.core.view.DesktopView;
 import org.ow2.kerneos.core.view.notification.NotificationPopUp;
 import org.ow2.kerneos.core.view.window.ModuleWindow;
 import org.ow2.kerneos.core.vo.KerneosNotification;
-    
+
 
 /**
  * Manages the notifications sent from modules to Kerneos.
  *
  * @author Julien Nicoulaud
  */
-public class NotificationsManager
-{
-    
+public class NotificationsManager {
+
     // =========================================================================
     // Properties
     // =========================================================================
-    
+
     /**
      * The desktop view on which operations are done.
      *
      * Must be set before calling the static functions.
      */
     [Bindable]
-    public static var desktop : DesktopView = null;
-    
-    
-    
+    public static var desktop:DesktopView = null;
+
+
     // =========================================================================
     // Public static methods
     // =========================================================================
-    
+
     /**
      * Receive notification events from modules
      */
-    public static function handleNotificationEvent(event : KerneosNotificationEvent) : void
-    {
+    public static function handleNotificationEvent(event:KerneosNotificationEvent):void {
         // Identify the module that sent the notification
-        var window : ModuleWindow = event.currentTarget as ModuleWindow;
-        
+        var window:ModuleWindow = event.currentTarget as ModuleWindow;
+
         // Retrieve the model
-        var model : KerneosModelLocator = KerneosModelLocator.getInstance();
-        
+        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
+
         // Store the notification, if notifications log activated
-        if (model.config.enableNotificationsLog)
-        {
+        if (model.applicationInstance.configuration.enableNotificationsLog) {
             model.notifications.addItem(new KerneosNotification(window.module, event.message, event.level));
         }
-        
+
         // If this is not a debug notif, display visual notifications
-        if (event.level !== KerneosNotificationEvent.DEBUG)
-        {
-            
+        if (event.level !== KerneosNotificationEvent.DEBUG) {
+
             // Flash the taskbar button
             // It could also blink with window.minimizedModuleWindow.blink();
-            if (event.level == KerneosNotificationEvent.WARNING)
-            {
+            if (event.level == KerneosNotificationEvent.WARNING) {
                 window.minimizedModuleWindow.flash(0xCC6600);
             }
-            else if (event.level == KerneosNotificationEvent.ERROR)
-            {
+            else if (event.level == KerneosNotificationEvent.ERROR) {
                 window.minimizedModuleWindow.flash(0xD34328);
             }
-            else
-            {
+            else {
                 window.minimizedModuleWindow.blink();
             }
-            
+
             // If a PopUp should be shown and the window does not have the focus
-            if (model.config.showNotificationPopups && event.showPopup && (model.config.showPopupsFromActiveWindow || (!model.config.showPopupsFromActiveWindow && !window.hasFocus)))
-            {
+            if (model.applicationInstance.configuration.showNotificationPopups && event.showPopup && (model.applicationInstance.configuration.showPopupsFromActiveWindow || (!model.applicationInstance.configuration.showPopupsFromActiveWindow && !window.hasFocus))) {
                 // Check that desktop is not null
                 checkDesktopNotNull();
-                
+
                 // Build and display the popup
-                var notifPopUp : NotificationPopUp = new NotificationPopUp();
+                var notifPopUp:NotificationPopUp = new NotificationPopUp();
                 notifPopUp.message = event.message;
                 notifPopUp.level = event.level;
                 notifPopUp.window = window;
@@ -114,20 +104,17 @@ public class NotificationsManager
             }
         }
     }
-    
-    
-    
+
+
     // =========================================================================
     // Private methods
     // =========================================================================
-    
+
     /**
      * Check that the desktop view is referenced.
      */
-    private static function checkDesktopNotNull(e : Event = null) : void
-    {
-        if (desktop == null)
-        {
+    private static function checkDesktopNotNull(e:Event = null):void {
+        if (desktop == null) {
             throw new Error('the "desktop" property must be assigned before calling the modules' + ' life cycle manager methods.');
         }
     }

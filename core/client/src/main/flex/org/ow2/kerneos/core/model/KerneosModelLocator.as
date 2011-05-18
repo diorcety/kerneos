@@ -31,6 +31,7 @@ import mx.core.FlexGlobals;
 import mx.utils.UIDUtil;
 
 import org.ow2.kerneos.core.business.*;
+import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
 import org.ow2.kerneos.core.vo.ApplicationVO;
 
 
@@ -60,24 +61,17 @@ public class KerneosModelLocator implements ModelLocator
     public var componentID : String = UIDUtil.createUID();
 
     /**
-     * Application name
-     */
-    [Bindable]
-    public var name : String;
-
-    /**
      * The config of Kerneos.
      */
     [Bindable]
-    public var config : ApplicationVO;
+    public var applicationInstance : ApplicationInstanceVO;
 
     /**
      * The module list.
      */
     [Bindable]
-    [ArrayElementType('org.ow2.kerneos.core.vo.ModuleVO')]
-    public var modules : ArrayCollection;
-
+    [ArrayElementType('org.ow2.kerneos.core.vo.ModuleInstanceVO')]
+    public var moduleInstances : ArrayCollection;
     
     /**
      * The state of the application.
@@ -121,7 +115,6 @@ public class KerneosModelLocator implements ModelLocator
     public function KerneosModelLocator()
     {
         super();
-        name = FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.parameters.application;
         
         if (model != null)
         {

@@ -22,8 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.core.managers
-{
+package org.ow2.kerneos.core.managers {
 
 import com.adobe.cairngorm.business.ServiceLocator;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -60,6 +59,7 @@ import org.ow2.kerneos.core.vo.FolderVO;
 import org.ow2.kerneos.core.vo.IFrameModuleVO;
 import org.ow2.kerneos.core.vo.LinkVO;
 import org.ow2.kerneos.core.vo.ModuleEventVO;
+import org.ow2.kerneos.core.vo.ModuleInstanceVO;
 import org.ow2.kerneos.core.vo.ModuleVO;
 import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
 import org.ow2.kerneos.core.vo.SWFModuleVO;
@@ -76,8 +76,7 @@ import org.ow2.kerneos.core.vo.SWFModuleVO;
  * @author Julien Nicoulaud
  * @author Guillaume Renault
  */
-public class ModulesLifeCycleManager
-{
+public class ModulesLifeCycleManager {
 
     // =========================================================================
     // Properties
@@ -89,12 +88,12 @@ public class ModulesLifeCycleManager
      * Must be set before calling the static functions.
      */
     [Bindable]
-    public static var desktop : DesktopView = null;
+    public static var desktop:DesktopView = null;
 
     /**
      * The IFrame  objects
      */
-    public static var frames : Dictionary = new Dictionary();
+    public static var frames:Dictionary = new Dictionary();
 
     /**
      * The gravity consumer for asynchronous OSGi communication
@@ -106,26 +105,24 @@ public class ModulesLifeCycleManager
     // =========================================================================
 
     /**
-     * Setup the modules.
+     * Initialization of the modules.
      */
-    public static function installModules(e : Event = null) : void
-    {
-        // Setup the modules services and icons
-        installModulesCollection(KerneosModelLocator.getInstance().modules);
+    public static function initModules(e:Event = null):void {
+
+        for each(var moduleInstance:ModuleInstanceVO in KerneosModelLocator.getInstance().moduleInstances) {
+            installModule(moduleInstance.configuration);
+        }
     }
 
     /**
      * Launch the command to load the application modules.
      */
-    public static function getModules() : void
-    {
-        try
-        {
-            var event_module : KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_MODULES);
+    public static function getModules():void {
+        try {
+            var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_MODULES);
             CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
         }
-        catch (e : Error)
-        {
+        catch (e:Error) {
             trace("An error occurred while loading module list: " + e.message);
         }
     }
@@ -133,8 +130,7 @@ public class ModulesLifeCycleManager
     /**
      * Launch a module.
      */
-    public static function startModule(module : ModuleVO) : void
-    {
+    public static function startModule(module:ModuleVO):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
@@ -142,17 +138,15 @@ public class ModulesLifeCycleManager
         desktop.cursorManager.setBusyCursor();
 
         // If this is a module with its own window
-        if (module is ModuleWithWindowVO)
-        {
+        if (module is ModuleWithWindowVO) {
             // Update the module status
             module.loaded = true;
 
             // Declare a new window
-            var window : ModuleWindow;
+            var window:ModuleWindow;
 
             // If this is a swf module
-            if (module is SWFModuleVO)
-            {
+            if (module is SWFModuleVO) {
                 // Create a window
                 window = new SwfModuleWindow(module as SWFModuleVO);
 
@@ -160,26 +154,25 @@ public class ModulesLifeCycleManager
                 (window as SwfModuleWindow).load();
 
                 // Add Notification listener
-                window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION, NotificationsManager.handleNotificationEvent, false, 0, true);
+                window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
+                                        NotificationsManager.handleNotificationEvent, false, 0, true);
             }
 
             // Else if this is an IFrame module
-            else if (module is IFrameModuleVO)
-            {
+            else if (module is IFrameModuleVO) {
                 // Create an IFrame (with a unique Id)
                 frames[module.name] = new IFrame("KerneosIFrame" + UIDUtil.createUID().split("-").join(""));
-                var frame : IFrame = frames[module.name] as IFrame;
+                var frame:IFrame = frames[module.name] as IFrame;
                 window = new IFrameModuleWindow(module as IFrameModuleVO, frame);
             }
 
             // Else if this is a folder
-            else if (module is FolderVO)
-            {
+            else if (module is FolderVO) {
                 window = new FolderWindow(module as FolderVO);
             }
 
             // Create the button in the taskbar
-            var minimizedModuleWindow : MinimizedModuleWindow = new MinimizedModuleWindow(window);
+            var minimizedModuleWindow:MinimizedModuleWindow = new MinimizedModuleWindow(window);
             desktop.minimizedWindowsButtonsContainer.addChild(minimizedModuleWindow);
             window.minimizedModuleWindow = minimizedModuleWindow;
 
@@ -188,8 +181,7 @@ public class ModulesLifeCycleManager
         }
 
         // Else if this is a simple link
-        else if (module is LinkVO)
-        {
+        else if (module is LinkVO) {
             // Open it
             navigateToURL(new URLRequest((module as LinkVO).url), "_blank");
         }
@@ -201,24 +193,21 @@ public class ModulesLifeCycleManager
     /**
      * Unload a module by its window.
      */
-    public static function stopModuleByWindow(window : ModuleWindow) : void
-    {
+    public static function stopModuleByWindow(window:ModuleWindow):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
         // Remove the tasbar button
         desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow)
 
-        if (window is SwfModuleWindow)
-        {
+        if (window is SwfModuleWindow) {
             // Unload module
             (window as SwfModuleWindow).unload();
 
             // Unload the module
             KerneosLifeCycleManager.desktop.setFocus();
         }
-        else if (window is IFrameModuleWindow)
-        {
+        else if (window is IFrameModuleWindow) {
             // Delete the IFrame
             (window as IFrameModuleWindow).removeIFrame();
         }
@@ -233,18 +222,15 @@ public class ModulesLifeCycleManager
     /**
      * Bring a module window to front
      */
-    public static function bringToFront(module : ModuleVO) : void
-    {
+    public static function bringToFront(module:ModuleVO):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
         // look for the window are give it the focus
-        var allWindows : Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
 
-        for each (var window : MDIWindow in allWindows)
-        {
-            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name)
-            {
+        for each (var window:MDIWindow in allWindows) {
+            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
                 (window as ModuleWindow).bringToFront();
                 return;
             }
@@ -254,18 +240,15 @@ public class ModulesLifeCycleManager
     /**
      * Unload all the active modules.
      */
-    public static function unloadAllModules(e : Event = null) : void
-    {
+    public static function unloadAllModules(e:Event = null):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
         // Unload all modules and close windows
-        var allWindows : Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
 
-        for each (var window : MDIWindow in allWindows)
-        {
-            if (window is ModuleWindow)
-            {
+        for each (var window:MDIWindow in allWindows) {
+            if (window is ModuleWindow) {
                 stopModuleByWindow(window as ModuleWindow);
                 desktop.windowContainer.windowManager.remove(window);
             }
@@ -275,18 +258,15 @@ public class ModulesLifeCycleManager
     /**
      * Unload a module.
      */
-    public static function unloadModule(module : ModuleVO) : void
-    {
+    public static function unloadModule(module:ModuleVO):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
         // Unload module and close it window
-        var allWindows : Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
 
-        for each (var window : MDIWindow in allWindows)
-        {
-            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name)
-            {
+        for each (var window:MDIWindow in allWindows) {
+            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
                 stopModuleByWindow(window as ModuleWindow);
                 desktop.windowContainer.windowManager.remove(window);
             }
@@ -296,24 +276,21 @@ public class ModulesLifeCycleManager
     /**
      * Load the icon at the url and put it in the icon cache.
      */
-    public static function cacheIcon(url : String) : void
-    {
+    public static function cacheIcon(url:String):void {
         IconUtility.getClass(FlexGlobals.topLevelApplication as UIComponent, url);
     }
 
-     /**
+    /**
      * Erase the icon from the icon cache.
      */
-    public static function deleteCacheIcon(url : String) : void
-    {
+    public static function deleteCacheIcon(url:String):void {
         IconUtility.deleteSource(url);
     }
 
     /**
      * Subscribe a gravity consumer to the kerneos topic
      */
-    public static function subscribe() : void
-    {
+    public static function subscribe():void {
         consumer = new Consumer();
         consumer.channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
         consumer.destination = "kerneos-gravity";
@@ -330,10 +307,8 @@ public class ModulesLifeCycleManager
     /**
      * Check that the desktop view is referenced.
      */
-    private static function checkDesktopNotNull(e : Event = null) : void
-    {
-        if (desktop == null)
-        {
+    private static function checkDesktopNotNull(e:Event = null):void {
+        if (desktop == null) {
             throw new Error('the "desktop" property must be assigned before calling the modules' + ' life cycle manager methods.');
         }
     }
@@ -341,14 +316,12 @@ public class ModulesLifeCycleManager
     /**
      * Setup the modules.
      */
-    private static function installModulesCollection(modules : ArrayCollection) : void
-    {
-        var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
-        var serviceIds : ArrayCollection = new ArrayCollection();
+    private static function installModules(modules:ArrayCollection):void {
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+        var serviceIds:ArrayCollection = new ArrayCollection();
 
         // For each module
-        for each (var module : ModuleVO in modules)
-        {
+        for each (var module:ModuleVO in modules) {
             installModule(module);
         }
 
@@ -357,14 +330,12 @@ public class ModulesLifeCycleManager
     /**
      * Delete the modules setup
      */
-    private static function uninstallModulesCollection(modules : ArrayCollection) : void
-    {
-        var serviceLocator : ServiceLocator = ServiceLocator.getInstance();
-        var serviceIds : ArrayCollection = new ArrayCollection();
+    private static function uninstallModules(modules:ArrayCollection):void {
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+        var serviceIds:ArrayCollection = new ArrayCollection();
 
         // For each module
-        for each (var module : ModuleVO in modules)
-        {
+        for each (var module:ModuleVO in modules) {
             uninstallModule(module);
         }
     }
@@ -372,67 +343,56 @@ public class ModulesLifeCycleManager
     /**
      * Setup one module
      */
-    private static function installModule(module : ModuleVO) : void
-    {
+    private static function installModule(module:ModuleVO):void {
         // Cache the icons
-        if (module.smallIcon != null)
-        {
+        if (module.smallIcon != null) {
             cacheIcon(module.smallIcon);
         }
 
-        if (module.bigIcon != null)
-        {
+        if (module.bigIcon != null) {
             cacheIcon(module.bigIcon);
         }
 
         // Call the function recursively for folders
-        if (module is FolderVO && ((module as FolderVO).modules != null) )
-        {
-            installModulesCollection((module as FolderVO).modules);
+        if (module is FolderVO && ((module as FolderVO).modules != null)) {
+            installModules((module as FolderVO).modules);
         }
     }
 
     /**
      * Delete module setup
      */
-    private static function uninstallModule(module : ModuleVO) : void
-    {
+    private static function uninstallModule(module:ModuleVO):void {
         // Cache the icons
-        if (module.smallIcon != null)
-        {
+        if (module.smallIcon != null) {
             deleteCacheIcon(module.smallIcon);
         }
 
-        if (module.bigIcon != null)
-        {
+        if (module.bigIcon != null) {
             deleteCacheIcon(module.bigIcon);
         }
 
         // Call the function recursively for folders
-        if (module is FolderVO && ((module as FolderVO).modules != null) )
-        {
-            uninstallModulesCollection((module as FolderVO).modules);
+        if (module is FolderVO && ((module as FolderVO).modules != null)) {
+            uninstallModules((module as FolderVO).modules);
         }
     }
 
     /**
      * Start the modules that have the "loadOnStartup" option.
      */
-    private static function doLoadOnStartupModules(module : ModuleVO) : void
-    {
+    private static function doLoadOnStartupModules(module:ModuleVO):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
         // Call the function recursively for folders
-        if (module is FolderVO)
-        {
-            for each(var submodule: ModuleVO in (module as FolderVO).modules)
+        if (module is FolderVO) {
+            for each(var submodule:ModuleVO in (module as FolderVO).modules)
                 doLoadOnStartupModules(submodule);
         }
 
         // If "load on startup", load it
-        if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup)
-        {
+        if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup) {
             desktop.callLater(startModule, [module]);
         }
     }
@@ -440,8 +400,7 @@ public class ModulesLifeCycleManager
     /**
      * Message showed when there is a communication problem from gravity consumer
      */
-    private static function onFault(event:Event) : void
-    {
+    private static function onFault(event:Event):void {
         Alert.show(event.toString());
     }
 
@@ -449,33 +408,32 @@ public class ModulesLifeCycleManager
      * Receive the message from gravity consumer and load or unload the modules
      * @param event ModuleEventVO
      */
-    private static function onModuleEventMessage(event:MessageEvent) : void {
+    private static function onModuleEventMessage(event:MessageEvent):void {
         var moduleEvent:ModuleEventVO = event.message.body as ModuleEventVO;
 
         //if the event is a ModuleEvent type and it has a moduleVO
-        if (moduleEvent && moduleEvent.module) {
+        if (moduleEvent && moduleEvent.moduleInstance) {
             var model:KerneosModelLocator = KerneosModelLocator.getInstance();
+
             //if the action is LOAD, the module is installed otherwise it is uninstalled
             if (moduleEvent.eventType == ModuleEventVO.LOAD) {
-                model.modules.addItem(moduleEvent.module as ModuleVO);
-                installModule(moduleEvent.module);
+                var moduleInstance:ModuleInstanceVO = moduleEvent.moduleInstance;
+                model.moduleInstances.addItem(moduleInstance);
+                installModule(moduleInstance.configuration);
             } else {
-                unloadModule(moduleEvent.module);
-                uninstallModule(moduleEvent.module);
-
-                //Find the module to delete in the modules list
-                var moduleLoop:ModuleVO;
-                var moduleToDelete:ModuleVO;
-                //TODO compare by module ID
-                for each(moduleLoop in model.modules) {
-                    if (moduleLoop.name == moduleEvent.module.name) {
-                        moduleToDelete = moduleLoop;
+                var moduleInstance:ModuleInstanceVO = null;
+                for (var index:int = 0; index < model.moduleInstances.length; index++) {
+                    var ami:ModuleInstanceVO = model.moduleInstances[index] as ModuleInstanceVO;
+                    if (ami.id == moduleEvent.moduleInstance.id) {
+                        moduleInstance = ami;
+                        model.moduleInstances.removeItemAt(index);
+                        break;
                     }
                 }
-
-                //Delete the module from the modules list
-                var moduleIndex:int = model.modules.getItemIndex(moduleToDelete);
-                model.modules.removeItemAt(moduleIndex);
+                if (moduleInstance) {
+                    unloadModule(moduleInstance.configuration);
+                    uninstallModule(moduleInstance.configuration);
+                }
             }
         }
     }

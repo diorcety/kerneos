@@ -27,9 +27,7 @@ package org.ow2.kerneos.service.impl;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -62,7 +60,9 @@ import org.ow2.kerneos.config.generated.ObjectFactory;
 import org.ow2.kerneos.config.generated.PromptBeforeClose;
 import org.ow2.kerneos.config.generated.Service;
 import org.ow2.kerneos.config.generated.SwfModule;
+import org.ow2.kerneos.service.ApplicationInstance;
 import org.ow2.kerneos.service.ModuleEvent;
+import org.ow2.kerneos.service.ModuleInstance;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -211,7 +211,9 @@ public final class KerneosConfigService implements GraniteDestination {
                 ModuleEvent.class,
                 Service.class,
                 Application.class,
+                ApplicationInstance.class,
                 Module.class,
+                ModuleInstance.class,
                 IframeModule.class,
                 SwfModule.class,
                 PromptBeforeClose.class
@@ -221,7 +223,9 @@ public final class KerneosConfigService implements GraniteDestination {
         gcr.registerClasses(getId(), new Class[]{
                 Service.class,
                 Application.class,
+                ApplicationInstance.class,
                 Module.class,
+                ModuleInstance.class,
                 IframeModule.class,
                 SwfModule.class,
                 PromptBeforeClose.class
@@ -321,10 +325,10 @@ public final class KerneosConfigService implements GraniteDestination {
             // Get the url used for resources of the bundle
             Module module = loadModuleConfig(bundle);
 
-            kerneosCore.registerModule(name, module, bundle);
+            ModuleInstance moduleInstance = kerneosCore.registerModule(name, module, bundle);
 
             // Post an event
-            ModuleEvent me = new ModuleEvent(module, ModuleEvent.LOAD);
+            ModuleEvent me = new ModuleEvent(new ModuleInstance(moduleInstance), ModuleEvent.LOAD);
             publisher.sendData(me);
         } catch (Exception e) {
             logger.error(e, "Can't add the Kerneos Module: " + name);
@@ -341,10 +345,10 @@ public final class KerneosConfigService implements GraniteDestination {
     private void onModuleDeparture(final Bundle bundle, final String name) {
         logger.debug("Remove Kerneos Module: " + name);
         try {
-            Module module = kerneosCore.unregisterModule(name);
+            ModuleInstance moduleInstance = kerneosCore.unregisterModule(name);
 
             // Post an event
-            ModuleEvent me = new ModuleEvent(module, ModuleEvent.UNLOAD);
+            ModuleEvent me = new ModuleEvent(new ModuleInstance(moduleInstance), ModuleEvent.UNLOAD);
             publisher.sendData(me);
         } catch (Exception e) {
             logger.error(e, "Can't remove the Kerneos Module: " + name);
@@ -426,8 +430,12 @@ public final class KerneosConfigService implements GraniteDestination {
      *
      * @return the Kerneos configuration.
      */
-    public Application getApplication(String application) {
-        return kerneosCore.getApplications().get(application);
+    public ApplicationInstance getApplication(String application) {
+        for (ApplicationInstance applicationInstance : kerneosCore.getApplications()) {
+            if (applicationInstance.getId().equals(application))
+                return new ApplicationInstance(applicationInstance);
+        }
+        return null;
     }
 
     /**
@@ -435,8 +443,14 @@ public final class KerneosConfigService implements GraniteDestination {
      *
      * @return the module list.
      */
-    public Collection<Module> getModules() {
-        return kerneosCore.getModules().values();
+    public Collection<ModuleInstance> getModules() {
+        List<ModuleInstance> moduleInstanceList = new LinkedList<ModuleInstance>();
+
+        for (ModuleInstance moduleInstance : kerneosCore.getModules()) {
+            moduleInstanceList.add(new ModuleInstance(moduleInstance));
+        }
+
+        return moduleInstanceList;
     }
 
     /**

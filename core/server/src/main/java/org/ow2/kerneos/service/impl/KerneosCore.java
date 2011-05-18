@@ -46,6 +46,8 @@ import org.osgi.service.http.NamespaceException;
 import org.ow2.kerneos.config.generated.Application;
 import org.ow2.kerneos.config.generated.Module;
 import org.ow2.kerneos.config.generated.SwfModule;
+import org.ow2.kerneos.service.ApplicationInstance;
+import org.ow2.kerneos.service.ModuleInstance;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -78,23 +80,20 @@ public final class KerneosCore implements IKerneosCore {
      */
     private HttpContext httpContext;
 
-    private Map<String, ModuleInstance> moduleInstanceMap = new HashMap<String, ModuleInstance>();
+    private Map<String, ModuleInstanceImpl> moduleInstanceMap = new HashMap<String, ModuleInstanceImpl>();
 
-    private Map<String, ApplicationInstance> applicationInstanceMap = new HashMap<String, ApplicationInstance>();
+    private Map<String, ApplicationInstanceImpl> applicationInstanceMap = new HashMap<String, ApplicationInstanceImpl>();
 
     private ComponentInstance granite, gravity;
 
-    private class ModuleInstance {
-        private String name;
-        private Module module;
+    private class ModuleInstanceImpl extends ModuleInstance {
         private Bundle bundle;
 
         /**
          * Constructor
          */
-        ModuleInstance(String name, Module module, Bundle bundle) {
-            this.name = name;
-            this.module = module;
+        ModuleInstanceImpl(String name, Module module, Bundle bundle) {
+            super(name, module);
             this.bundle = bundle;
 
             // Fix Paths with module name
@@ -117,19 +116,16 @@ public final class KerneosCore implements IKerneosCore {
     /**
      * Used for holding the different configuration/service associated with a Kerneos service.
      */
-    private class ApplicationInstance {
-        private String name;
-        private Application application;
+    private class ApplicationInstanceImpl extends ApplicationInstance {
         private Bundle bundle;
         private ComponentInstance gavityChannel, graniteChannel;
 
         /**
          * Constructor
          */
-        public ApplicationInstance(String name, Application application,
-                                   Bundle bundle) throws MissingHandlerException, ConfigurationException, UnacceptableConfiguration, NamespaceException {
-            this.name = name;
-            this.application = application;
+        public ApplicationInstanceImpl(String name, Application application,
+                                       Bundle bundle) throws MissingHandlerException, ConfigurationException, UnacceptableConfiguration, NamespaceException {
+            super(name, application);
             this.bundle = bundle;
 
             String applicationURL = application.getApplicationUrl();
@@ -159,28 +155,28 @@ public final class KerneosCore implements IKerneosCore {
             logger.info("Register \"" + name + "\" resources: " + applicationURL);
         }
 
-        public void registerModule(ModuleInstance moduleInstance) throws NamespaceException {
+        public void registerModule(ModuleInstanceImpl moduleInstance) throws NamespaceException {
             httpService.registerResources(
-                    application.getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.name,
+                    configuration.getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId(),
                     moduleInstance.bundle.getResource(KerneosConstants.KERNEOS_PATH).toString(), httpContext);
         }
 
-        public void unregisterModule(ModuleInstance moduleInstance) {
+        public void unregisterModule(ModuleInstanceImpl moduleInstance) {
             httpService.unregister(
-                    application.getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.name);
+                    configuration.getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId());
         }
 
         /**
          * Dispose all the service and the configuration associated with this instance.
          */
         public void dispose() {
-            String applicationURL = application.getApplicationUrl();
+            String applicationURL = configuration.getApplicationUrl();
 
             gavityChannel.dispose();
             granite.dispose();
 
             // Unregister Kerneos resources
-            logger.info("Unregister \"" + name + "\" resources: " + applicationURL);
+            logger.info("Unregister \"" + id + "\" resources: " + applicationURL);
 
             httpService.unregister(applicationURL);
             httpService.unregister(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME);
@@ -266,86 +262,83 @@ public final class KerneosCore implements IKerneosCore {
     /**
      * Register a module.
      */
-    public synchronized void registerModule(String name, Module module, Bundle bundle) throws Exception {
-        ModuleInstance moduleInstance = new ModuleInstance(name, module, bundle);
+    public synchronized ModuleInstance registerModule(String name, Module module, Bundle bundle) throws Exception {
+        ModuleInstanceImpl moduleInstance = new ModuleInstanceImpl(name, module, bundle);
 
         // Register Kerneos Module resources for the applications
-        for (ApplicationInstance applicationInstance : applicationInstanceMap.values()) {
+        for (ApplicationInstanceImpl applicationInstance : applicationInstanceMap.values()) {
             applicationInstance.registerModule(moduleInstance);
         }
 
         // Add the module to the handled module list
         moduleInstanceMap.put(name, moduleInstance);
+
+        return moduleInstance;
     }
 
     /**
      * Unregister a module.
      */
-    public synchronized Module unregisterModule(String name) {
-        ModuleInstance moduleInstance = moduleInstanceMap.remove(name);
+    public synchronized ModuleInstance unregisterModule(String name) {
+        ModuleInstanceImpl moduleInstance = moduleInstanceMap.remove(name);
 
         // Register Kerneos Module resources for the applications
-        for (ApplicationInstance applicationInstance : applicationInstanceMap.values()) {
+        for (ApplicationInstanceImpl applicationInstance : applicationInstanceMap.values()) {
             applicationInstance.unregisterModule(moduleInstance);
         }
 
         //Dispose configurations
         moduleInstance.dispose();
 
-        return moduleInstance.module;
+        return moduleInstance;
     }
 
     /**
      * Get Module list.
      */
-    public Map<String, Module> getModules() {
-        Map<String, Module> modules = new HashMap<String, Module>();
-        for (ModuleInstance moduleInstance : moduleInstanceMap.values()) {
-            modules.put(moduleInstance.name, moduleInstance.module);
-        }
-        return modules;
+    public synchronized Collection<ModuleInstance> getModules() {
+        return new LinkedList<ModuleInstance>(moduleInstanceMap.values());
     }
 
     /**
      * Register a module.
      */
-    public synchronized void registerApplication(String name, Application application, Bundle bundle) throws Exception {
-        ApplicationInstance applicationInstance = new ApplicationInstance(name, application, bundle);
+    public synchronized ApplicationInstance registerApplication(String name, Application application,
+                                                                Bundle bundle) throws Exception {
+        ApplicationInstanceImpl applicationInstance = new ApplicationInstanceImpl(name, application, bundle);
 
         // Register Kerneos Module resources for this application
-        for (ModuleInstance moduleInstance : moduleInstanceMap.values()) {
+        for (ModuleInstanceImpl moduleInstance : moduleInstanceMap.values()) {
             applicationInstance.registerModule(moduleInstance);
         }
 
         // Add the application to the handled application list
         applicationInstanceMap.put(name, applicationInstance);
+
+        return applicationInstance;
     }
 
     /**
      * Unregister a module.
      */
-    public synchronized Application unregisterApplication(String name) {
-        ApplicationInstance applicationInstance = applicationInstanceMap.remove(name);
+    public synchronized ApplicationInstance unregisterApplication(String name) {
+        ApplicationInstanceImpl applicationInstance = applicationInstanceMap.remove(name);
 
         // UnRegister Kerneos Module resources for this application
-        for (ModuleInstance moduleInstance : moduleInstanceMap.values()) {
+        for (ModuleInstanceImpl moduleInstance : moduleInstanceMap.values()) {
             applicationInstance.unregisterModule(moduleInstance);
         }
 
         //Dispose configurations
         applicationInstance.dispose();
 
-        return applicationInstance.application;
+        return applicationInstance;
     }
 
     /**
      * Get Application list.
      */
-    public Map<String, Application> getApplications() {
-        Map<String, Application> applications = new HashMap<String, Application>();
-        for (ApplicationInstance applicationInstance : applicationInstanceMap.values()) {
-            applications.put(applicationInstance.name, applicationInstance.application);
-        }
-        return applications;
+    public Collection<ApplicationInstance> getApplications() {
+        return new LinkedList<ApplicationInstance>(applicationInstanceMap.values());
     }
 }

@@ -25,8 +25,6 @@
 
 package org.ow2.kerneos.service;
 
-import org.ow2.kerneos.config.generated.Module;
-
 import java.io.Serializable;
 
 /**
@@ -36,7 +34,7 @@ public class ModuleEvent implements Serializable {
     /**
      * Module Object
      */
-    private Module module;
+    private ModuleInstance moduleInstance;
 
     /**
      * Module's event type (load or unload).
@@ -62,11 +60,11 @@ public class ModuleEvent implements Serializable {
 
     /**
      * Create a module event.
-     * @param module is the module associated with the event.
+     * @param moduleInstance is an instance of module associated with the event.
      * @param eventType is the type of event associated with the module.
      */
-    public ModuleEvent(final Module module, final String eventType) {
-        this.module = module;
+    public ModuleEvent(final ModuleInstance moduleInstance, final String eventType) {
+        this.moduleInstance = moduleInstance;
         this.eventType = eventType;
     }
 
@@ -79,19 +77,19 @@ public class ModuleEvent implements Serializable {
     }
 
     /**
-     * Get the module associated with the event.
-     * @return the module
+     * Get the  instance of module associated with the event.
+     * @return the instance of module
      */
-    public Module getModule() {
-        return module;
+    public ModuleInstance getModuleInstance() {
+        return moduleInstance;
     }
 
     /**
-     * Set the module associated with the event.
-     * @param module is the module associated with the event.
+     * Set the instance of module associated with the event.
+     * @param moduleInstance is an instance of module associated with the event.
      */
-    public void setModule(Module module) {
-        this.module = module;
+    public void setModuleInstance(ModuleInstance moduleInstance) {
+        this.moduleInstance = moduleInstance;
     }
 
     /**

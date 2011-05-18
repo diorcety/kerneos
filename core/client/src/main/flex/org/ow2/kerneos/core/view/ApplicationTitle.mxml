@@ -45,37 +45,36 @@
 
     <fx:Script>
         <![CDATA[
-            import org.ow2.kerneos.common.util.IconUtility;
-            import org.ow2.kerneos.core.model.KerneosModelLocator;
+        import org.ow2.kerneos.common.util.IconUtility;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
 
-            // =========================================================================
-            // Variables
-            // =========================================================================
+        // =========================================================================
+        // Variables
+        // =========================================================================
 
-            /**
-             * The displayed logo.
-             */
-            [Bindable]
-            private var applicationLogoIcon : Class = null;
+        /**
+         * The displayed logo.
+         */
+        [Bindable]
+        private var applicationLogoIcon:Class = null;
 
 
+        // =========================================================================
+        // Initialization
+        // =========================================================================
 
-            // =========================================================================
-            // Initialization
-            // =========================================================================
-
-            /**
-             * When the component is created.
-             *
-             * Loads the application logo.
-             */
-            private function creationCompleteHandler(e : Event = null) : void
-            {
-                if (KerneosModelLocator.getInstance().config.applicationLogo !== null)
-                {
-                    applicationLogoIcon = IconUtility.getClass(applicationLogo, KerneosModelLocator.getInstance().config.applicationLogo, 64, 64);
-                }
+        /**
+         * When the component is created.
+         *
+         * Loads the application logo.
+         */
+        private function creationCompleteHandler(e:Event = null):void {
+            if (KerneosModelLocator.getInstance().applicationInstance.configuration.applicationLogo !== null) {
+                applicationLogoIcon = IconUtility.getClass(applicationLogo,
+                                                           KerneosModelLocator.getInstance().applicationInstance.configuration.applicationLogo, 64,
+                                                           64);
             }
+        }
         ]]>
     </fx:Script>
 
@@ -104,13 +103,13 @@
                             height = "64" />
 
     <mx:Text id = "applicationProjectTitle"
-             text = "{KerneosModelLocator.getInstance().config.applicationProject}"
+             text = "{KerneosModelLocator.getInstance().applicationInstance.configuration.applicationProject}"
              styleName = "consoleMark1"
              filters = "{[applicationTitleShadow]}"
              selectable = "false" />
 
     <mx:Text id = "applicationNameTitle"
-             text = "{KerneosModelLocator.getInstance().config.applicationName}"
+             text = "{KerneosModelLocator.getInstance().applicationInstance.configuration.applicationName}"
              styleName = "consoleMark2"
              filters = "{[applicationTitleShadow]}"
              selectable = "false" />

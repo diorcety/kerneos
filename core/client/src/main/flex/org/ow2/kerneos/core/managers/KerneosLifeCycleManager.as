@@ -95,15 +95,18 @@ public class KerneosLifeCycleManager {
         // Init client-server communications channels properties
         var urlServer:String = URLUtil.getServerNameWithPort(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
         var context:String = StringUtils.parseURLContext(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
+        var application:String = FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.parameters.application;
 
         // Granite ChannelSet
         amfChannelSet = new ChannelSet();
-        var amfChannel:GraniteOSGiChannel = new GraniteOSGiChannel("kerneos-graniteamf-" + model.name, "http://" + urlServer + "/" + context + "/granite/amf");
+        var amfChannel:GraniteOSGiChannel = new GraniteOSGiChannel("kerneos-graniteamf-" + application,
+                                                                   "http://" + urlServer + "/" + context + "/granite/amf");
         amfChannelSet.addChannel(amfChannel);
 
         // Gravity ChannelSet
         amfGravityChannelSet = new ChannelSet();
-        var amfGravityChannel:GravityOSGiChannel = new GravityOSGiChannel("kerneos-gravityamf-" + model.name, "http://" + urlServer + "/" + context + "/gravity/amf");
+        var amfGravityChannel:GravityOSGiChannel = new GravityOSGiChannel("kerneos-gravityamf-" + application,
+                                                                          "http://" + urlServer + "/" + context + "/gravity/amf");
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
         // Set the kerneosConfigService. Done this way because of the @remoteDestination on the JAVA service
@@ -144,7 +147,7 @@ public class KerneosLifeCycleManager {
             // Save the user settings
             SharedObjectManager.save();
 
-            return (loggingOut || !KerneosModelLocator.getInstance().config.showConfirmCloseDialog);
+            return (loggingOut || !KerneosModelLocator.getInstance().applicationInstance.configuration.showConfirmCloseDialog);
         }
         return true;
     }

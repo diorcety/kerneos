@@ -56,7 +56,7 @@
 
       import org.ow2.kerneos.core.managers.SharedObjectManager;
       import org.ow2.kerneos.core.model.KerneosState;
-      import org.ow2.kerneos.core.vo.ApplicationVO;
+      import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
       import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
       import org.ow2.kerneos.core.model.KerneosModelLocator;
 
@@ -95,16 +95,16 @@
       /**
        * When the application config has been loaded.
        */
-      private function set kerneosConfigLoaded(conf:ApplicationVO):void {
-        if (conf != null) {
+      private function set kerneosConfigLoaded(applicationInstance:ApplicationInstanceVO):void {
+        if (applicationInstance != null) {
 
           // Update the displayed label
           progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
                                                                       'kerneos.startup.setup-modules-icon-cache');
 
           // Load the application logo if one
-          if (conf.applicationLogo != null) {
-            ModulesLifeCycleManager.cacheIcon(conf.applicationLogo);
+          if (applicationInstance.configuration.applicationLogo != null) {
+            ModulesLifeCycleManager.cacheIcon(applicationInstance.configuration.applicationLogo);
           }
 
           // Update the displayed label
@@ -123,7 +123,7 @@
       private function set modulesLoaded(modules:ArrayCollection):void {
         if (modules != null) {
           // Setup the modules
-          ModulesLifeCycleManager.installModules();
+          ModulesLifeCycleManager.initModules();
 
           // Switch state
           KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
@@ -137,11 +137,11 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <!-- The binding triggered when the config is loaded. -->
-    <fx:Binding source = "KerneosModelLocator.getInstance().config"
+    <fx:Binding source = "KerneosModelLocator.getInstance().applicationInstance"
                 destination = "kerneosConfigLoaded" />
 
     <!-- The binding triggered when the module list is loaded. -->
-    <fx:Binding source = "KerneosModelLocator.getInstance().modules"
+    <fx:Binding source = "KerneosModelLocator.getInstance().moduleInstances"
                 destination = "modulesLoaded" />
 
 

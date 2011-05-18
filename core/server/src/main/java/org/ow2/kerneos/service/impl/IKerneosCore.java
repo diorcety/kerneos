@@ -28,6 +28,8 @@ package org.ow2.kerneos.service.impl;
 import org.osgi.framework.Bundle;
 import org.ow2.kerneos.config.generated.Application;
 import org.ow2.kerneos.config.generated.Module;
+import org.ow2.kerneos.service.ApplicationInstance;
+import org.ow2.kerneos.service.ModuleInstance;
 
 import java.util.Collection;
 import java.util.Map;
@@ -40,30 +42,30 @@ public interface IKerneosCore {
     /**
      * Register a module.
      */
-    public void registerModule(String name, Module module, Bundle bundle) throws Exception;
+    public ModuleInstance registerModule(String name, Module module, Bundle bundle) throws Exception;
 
     /**
      * Unregister a module.
      */
-    public Module unregisterModule(String name) throws Exception;
+    public ModuleInstance unregisterModule(String name) throws Exception;
 
     /**
      * Get Module list.
      */
-    public Map<String, Module> getModules();
+    public Collection<ModuleInstance> getModules();
 
     /**
      * Register a application.
      */
-    public void registerApplication(String name, Application application, Bundle bundle) throws Exception;
+    public ApplicationInstance registerApplication(String name, Application application, Bundle bundle) throws Exception;
 
     /**
      * Unregister a application.
      */
-    public Application unregisterApplication(String name) throws Exception;
+    public ApplicationInstance unregisterApplication(String name) throws Exception;
 
     /**
      * Get Application list.
      */
-    public Map<String, Application> getApplications();
+    public Collection<ApplicationInstance> getApplications();
 }
