@@ -28,58 +28,188 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
 
-   <name>${groupId} :: ${artifactId}</name>
-  <packaging>bundle</packaging>
+  <packaging>pom</packaging>
 
-   <properties>
-    <ipojo.version>1.8.0</ipojo.version>
-    <kerneos.version>2.0.0-M1-SNAPSHOT</kerneos.version>
-    <maven-bundle.version>2.3.4</maven-bundle.version>
-    <maven-dependency.version>2.0</maven-dependency.version>
+  <name>${groupId} :: ${artifactId}</name>
+
+  <modules>
+    <module>kerneos</module>
+    <module>packaging</module>
+  </modules>
+
+  <properties>
+    <application.artifactId>${artifactId}-kerneos</application.artifactId>
+    <graniteds-osgi.version>1.0.0-SNAPSHOT</graniteds-osgi.version>
+    <ow2-util-log.version>1.0.23</ow2-util-log.version>
+    <org.apache.felix.main.version>3.0.8</org.apache.felix.main.version>
+    <pax-confman-propsloader.version>0.2.2</pax-confman-propsloader.version>
+    <pax-logging-api.version>1.6.0</pax-logging-api.version>
+    <pax-logging-service.version>1.6.0</pax-logging-service.version>
+    <org.apache.felix.bundlerepository.version>1.6.2</org.apache.felix.bundlerepository.version>
+    <org.apache.felix.configadmin.version>1.2.8</org.apache.felix.configadmin.version>
+    <org.apache.felix.eventadmin.version>1.2.8</org.apache.felix.eventadmin.version>
+    <org.apache.felix.fileinstall.version>3.1.10</org.apache.felix.fileinstall.version>
+    <org.apache.felix.gogo.command.version>0.8.0</org.apache.felix.gogo.command.version>
+    <org.apache.felix.gogo.runtime.version>0.8.0</org.apache.felix.gogo.runtime.version>
+    <org.apache.felix.gogo.shell.version>0.8.0</org.apache.felix.gogo.shell.version>
+    <org.apache.felix.http.jetty.version>2.2.0</org.apache.felix.http.jetty.version>
+    <org.apache.felix.ipojo.handler.eventadmin.version>1.6.0</org.apache.felix.ipojo.handler.eventadmin.version>
+    <org.apache.felix.ipojo.handler.extender.version>1.4.0</org.apache.felix.ipojo.handler.extender.version>
+    <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
+    <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
+    <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
+    <kerneos-core-server.version>2.0.0-M1-SNAPSHOT</kerneos-core-server.version>
+    <maven-assembly-plugin.version>2.2.1</maven-assembly-plugin.version>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-core-server</artifactId>
-      <version>${kerneos.version}</version>
-    </dependency>
-  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <!--Felix Packaging Dependencies-->
+      <dependency>
+        <groupId>org.ow2.bundles</groupId>
+        <artifactId>ow2-util-log</artifactId>
+        <version>${ow2-util-log.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.main</artifactId>
+        <version>${org.apache.felix.main.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.confman</groupId>
+        <artifactId>pax-confman-propsloader</artifactId>
+        <version>${pax-confman-propsloader.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.logging</groupId>
+        <artifactId>pax-logging-api</artifactId>
+        <version>${pax-logging-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.logging</groupId>
+        <artifactId>pax-logging-service</artifactId>
+        <version>${pax-logging-service.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.bundlerepository</artifactId>
+        <version>${org.apache.felix.bundlerepository.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.configadmin</artifactId>
+        <version>${org.apache.felix.configadmin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.eventadmin</artifactId>
+        <version>${org.apache.felix.eventadmin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.fileinstall</artifactId>
+        <version>${org.apache.felix.fileinstall.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.gogo.command</artifactId>
+        <version>${org.apache.felix.gogo.command.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.gogo.runtime</artifactId>
+        <version>${org.apache.felix.gogo.runtime.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.gogo.shell</artifactId>
+        <version>${org.apache.felix.gogo.shell.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.http.jetty</artifactId>
+        <version>${org.apache.felix.http.jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+        <version>${org.apache.felix.ipojo.handler.eventadmin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
+        <version>${org.apache.felix.ipojo.handler.extender.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo</artifactId>
+        <version>${org.apache.felix.ipojo.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.compendium</artifactId>
+        <version>${org.osgi.compendium.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.bundles</groupId>
+        <artifactId>ow2-util-i18n</artifactId>
+        <version>${ow2-util-i18n.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-core</artifactId>
+        <version>${graniteds-osgi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-gravity-ea</artifactId>
+        <version>${graniteds-osgi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-gravity-jms</artifactId>
+        <version>${graniteds-osgi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-gravity</artifactId>
+        <version>${graniteds-osgi.version}</version>
+      </dependency>
+      <!--Kerneos Core Dependency-->
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-core-server</artifactId>
+        <version>${kerneos-core-server.version}</version>
+      </dependency>
+      <!--Application Dependency-->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${application.artifactId}</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${maven-bundle.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Kerneos-Application>kerneos-application</Kerneos-Application>
-            <Include-Resource>
-              src/main/resources,
-              KERNEOS=src/main/kerneos
-            </Include-Resource>
-          </instructions>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-ipojo-plugin</artifactId>
-        <version>${ipojo.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>ipojo-bundle</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven-assembly-plugin.version}</version>
+          <configuration>
+            <descriptors>
+              <descriptor>src/main/assembly.xml</descriptor>
+            </descriptors>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
 </project>

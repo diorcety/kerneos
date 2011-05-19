@@ -30,19 +30,35 @@
 
   <id>kerneos-application-artifact</id>
 
-  <!-- Kerneos resources -->
   <resources>
+    <!-- Kerneos resources -->
+    <resource>kerneos/pom.xml</resource>
     <!-- History resources -->
-    <resource>src/main/kerneos/history/history.css</resource>
-    <resource>src/main/kerneos/history/history.js</resource>
-    <resource>src/main/kerneos/history/historyFrame.html</resource>
+    <resource>kerneos/src/main/kerneos/history/history.css</resource>
+    <resource>kerneos/src/main/kerneos/history/history.js</resource>
+    <resource>kerneos/src/main/kerneos/history/historyFrame.html</resource>
     <!-- Icons -->
-    <resource filtered="false">src/main/kerneos/icons/icon.png</resource>
+    <resource filtered="false">kerneos/src/main/kerneos/icons/icon.png</resource>
     <!-- Html resources -->
-    <resource>src/main/kerneos/AC_OETags.js</resource>
-    <resource>src/main/kerneos/index.html</resource>
+    <resource>kerneos/src/main/kerneos/AC_OETags.js</resource>
+    <resource>kerneos/src/main/kerneos/index.html</resource>
     <!-- Kerneos xml configuration -->
-    <resource>src/main/resources/META-INF/kerneos-application.xml</resource>
+    <resource>kerneos/src/main/resources/META-INF/kerneos-application.xml</resource>
+
+    <!-- Packaging resources -->
+    <!-- Felix resources -->
+    <resource>packaging/felix/src/main/resources/conf/services/org.ops4j.pax.logging.properties</resource>
+    <resource>packaging/felix/src/main/resources/conf/config.properties</resource>
+    <resource>packaging/felix/src/main/resources/DEPENDENCIES</resource>
+    <resource>packaging/felix/src/main/resources/LICENSE</resource>
+    <resource>packaging/felix/src/main/resources/LICENSE.kxml2</resource>
+    <resource>packaging/felix/src/main/resources/NOTICE</resource>
+    <resource>packaging/felix/src/main/resources/start.bat</resource>
+    <resource>packaging/felix/src/main/resources/start.sh</resource>
+    <resource>packaging/felix/src/main/assembly.xml</resource>
+    <resource>packaging/felix/pom.xml</resource>
+    <resource>packaging/pom.xml</resource>
+
   </resources>
 
 </archetype>
