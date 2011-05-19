@@ -44,7 +44,6 @@
   <properties>
     <ipojo.version>1.8.0</ipojo.version>
     <maven-bundle.version>2.3.4</maven-bundle.version>
-    <maven-dependency.version>2.0</maven-dependency.version>
   </properties>
 
   <dependencies>
