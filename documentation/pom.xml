@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - JASMINe
+ - Copyright (C) 2011 Bull S.A.S.
+ - Contact: jasmine@ow2.org
+ -
+ - This library is free software; you can redistribute it and/or
+ - modify it under the terms of the GNU Lesser General Public
+ - License as published by the Free Software Foundation; either
+ - version 2.1 of the License, or any later version.
+ -
+ - This library is distributed in the hope that it will be useful,
+ - but WITHOUT ANY WARRANTY; without even the implied warranty of
+ - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ - Lesser General Public License for more details.
+ -
+ - You should have received a copy of the GNU Lesser General Public
+ - License along with this library; if not, write to the Free Software
+ - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ - USA
+ -
+ -
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ - $Id$
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <groupId>org.ow2.kerneos</groupId>
+    <artifactId>kerneos</artifactId>
+    <version>2.0.0-M1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>kerneos-doc</artifactId>
+  <name>Kerneos :: Documentation</name>
+  <packaging>pom</packaging>
+
+  <properties>
+    <docbook.version>5.0-all</docbook.version>
+    <docbkx.html.dir>${project.build.directory}/docbkx/html</docbkx.html.dir>
+    <docbkx.pdf.dir>${project.build.directory}/docbkx/pdf</docbkx.pdf.dir>
+  </properties>
+  
+  <distributionManagement>
+    <site>
+      <id>kerneos-doc.website</id>
+      <url>scp://${maven.username}@jupiter.objectweb.org/var/lib/gforge/chroot/home/groups/jasmine/htdocs/doc/docbkx/${artifactId}/${project.version}</url>
+    </site>
+  </distributionManagement>
+  
+  <build>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.agilejava.docbkx</groupId>
+          <artifactId>docbkx-maven-plugin</artifactId>
+          <version>2.0.10</version>
+          <dependencies>
+            <dependency>
+              <groupId>net.sf.docbook</groupId>
+              <artifactId>docbook-xml</artifactId>
+              <version>${docbook.version}</version>
+              <classifier>resources</classifier>
+              <type>zip</type>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <xincludeSupported>true</xincludeSupported>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.3</version>
+        </plugin>
+
+        <!--<plugin>
+          <groupId>org.ow2.maven</groupId>
+          <artifactId>forgeow2-maven-plugin</artifactId>
+          <version>1.0-SNAPSHOT</version>
+        </plugin>-->
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-resources-plugin</artifactId>
+      <executions>
+        <execution>
+          <goals>
+            <goal>copy-resources</goal>
+          </goals>
+          <phase>process-resources</phase>
+        </execution>
+      </executions>
+      <configuration>
+        <outputDirectory>${docbkx.html.dir}</outputDirectory>
+        <resources>
+          <resource>
+            <directory>${project.basedir}/src/resources</directory>
+          </resource>
+          <resource>
+            <directory>${project.basedir}/src/xslt</directory>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
+      </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>pack-mbeancmd-doc-pdf</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/assembly.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <profiles>
+
+    <profile>
+      <id>pdf</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>generate-pdf</goal>
+                </goals>
+                <phase>compile</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <foCustomization>${docbkx.html.dir}/fo.xsl</foCustomization>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-staging-area</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <tasks>
+                    <delete>
+                      <fileset dir="${docbkx.pdf.dir}" includes="*.fo" />
+                      <fileset dir="${docbkx.html.dir}" includes="*.xsl" />
+                    </delete>
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>html</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>generate-html</goal>
+                </goals>
+                <phase>compile</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <htmlCustomization>${project.basedir}/src/xslt/html.xsl</htmlCustomization>
+              <htmlStylesheet>jasmine.css</htmlStylesheet>
+            </configuration>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>chunk-html</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <phase>process-resources</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <outputDirectory>${docbkx.html.dir}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>generate-html</goal>
+                </goals>
+                <phase>compile</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <htmlCustomization>${project.basedir}/src/xslt/html.xsl</htmlCustomization>
+              <htmlStylesheet>jasmine.css</htmlStylesheet>
+              <chunkedOutput>true</chunkedOutput>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!--<profile>
+      <id>titlepage</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>xml-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>transform</goal>
+                </goals>
+                <phase>process-sources</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <transformationSets>
+                <transformationSet>
+                  <dir>${project.basedir}/src/xml</dir>
+                  <stylesheet>titlepage.xsl</stylesheet>
+                  <outputDir>${dir.docbook.staging}</outputDir>
+                </transformationSet>
+              </transformationSets>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>-->
+
+    <profile>
+      <id>deploy-site</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+            <plugin>
+            <artifactId>maven-site-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>deploy</goal>
+                </goals>
+                <phase>deploy</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <inputDirectory>${project.build.directory}/docbkx</inputDirectory>
+            </configuration>
+          </plugin>
+
+          <!-- <plugin>
+            <artifactId>forgeow2-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>push</goal>
+                </goals>
+                <phase>site-deploy</phase>
+                <configuration>
+                  <projectName>jasmine</projectName>
+                  <user>xxx</user>
+                  <pwd>xxx</pwd>
+                  <doIt>true</doIt>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin> -->
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
+</project>

@@ -1,0 +1,274 @@
+/*
+ * Author : Vctor Dez
+ * JASMINe  2007
+ */
+body {
+	text-align: justify;
+    background-color: #f8f5cf;
+    color: #000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+select,input {
+    font-size: 10px;
+}
+
+form {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 3px 0px;
+}
+
+.contenu {
+    padding: 0px 30px 0px 0px;
+}
+
+a:link {
+    color: #3F3975;
+    background-color: transparent;
+}
+
+a:visited {
+    color: #9898CB;
+    background-color: transparent;
+}
+
+h1 {
+    color: #024182;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    line-height: 27px;
+    font-weight: bold;
+    border-color: #99C;
+    border-width: 0 0 4px 0;
+    border-style: none none solid none;
+    margin: 10px 0px 5px 0px;
+}
+
+h2 {
+    color: #3e80a2;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    line-height: 27px;
+    font-weight: normal;
+    border-color: #E06611;
+    margin: 50px 0px 20px 0px;
+}
+
+h3 {
+    color: #9DB2E4;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 27px;
+    font-weight: bold;
+    border-color: #E8EAF0;
+    border-width: 0 0 2px 0;
+    border-style: none none solid none;
+    margin: 30px 0px 5px 0px;
+}
+
+h4 {
+    color: #3e80a2;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: normal;
+    border-color: #E8EAF0;
+    border-width: 0 0 2px 0;
+    border-style: none none solid none;
+    margin: 10px 0px 5px 0px;
+}
+
+h5 {
+    color: #E06611;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: normal;
+    border-color: #E8EAF0;
+    border-width: 0 0 2px 0;
+    border-style: none none solid none;
+    margin: 10px 0px 5px 0px;
+}
+
+h6 {
+    color: #99C;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: normal;
+    border-color: #E8EAF0;
+    border-width: 0 0 2px 0;
+    border-style: none none solid none;
+    margin: 10px 0px 5px 0px;
+}
+
+p {
+    color: black;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: normal;
+    margin: 10px 10px 5px 0px;
+}
+
+p.error {
+    color: red;
+}
+
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9em;
+  border: none;
+}
+
+blockquote {
+    color: black;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 15px;
+    font-weight: normal;
+    margin: 20px 0px 5px 0px;
+}
+
+ul,ol,dl {
+    color: black;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: normal;
+}
+
+dt {
+    color: black;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+dd {
+    color: black;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: normal;
+    margin: 0px 0px 0px 20px
+}
+
+address {
+    color: black;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 16px;
+    border-width: 4px 0 0 0;
+    border-style: solid none none none;
+    border-color: #E06611;
+    margin: 30px 0px 20px 0px;
+    padding: 10px 0px 0px 0px;
+}
+
+.note {
+    border: 1px solid #000000;
+    background-color: #cddaeb;
+    padding: 0.5em;
+    margin: 1em;
+}
+
+.tip {
+    border: 1px solid #000000;
+    background-color: #cddaeb;
+    padding: 0.5em;
+    margin: 1em;
+}
+
+.caution {
+    border: 1px solid #000000;
+    background-color: #cddaeb;
+    padding: 0.5em;
+    margin: 1em;
+}
+
+.warning {
+    border: 1px solid #000000;
+    background-color: #cddaeb;
+    padding: 0.5em;
+    margin: 1em;
+}
+
+.book {
+    width: 80%;
+    background-color: #FFFFFF;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    border:1px solid #DDD;
+    padding: 10px;
+}
+
+.article {
+    width: 80%;
+    background-color: #FFFFFF;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    border:1px solid #DDD;
+    padding: 10px;
+}
+
+.screen {
+    overflow: auto;
+    font-family: "Courier New";
+    font-size: 15px;
+    background-color: #EEEEEE;
+    border: 1px solid #cddaeb;
+    padding: 0.5em;
+    margin: 2em;
+}
+
+.programlisting {
+    overflow: auto;
+    font-family: "Courier New";
+    font-size: 15px;
+    border: 1px solid #AAAAAA;
+    background-color: #EEEEEE;
+    padding: 0.5em;
+    margin: 2em;
+}
+
+.mediaobject {
+  /*border-top: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;*/
+  border-color: #EAEDF2;
+  margin: 20px;
+  padding: 10px;
+}
+
+/*
+* Version of the pages.
+*/
+#version {
+  margin:1em;
+  background: inherit;
+  color: #000000;
+  font-size: 8pt;
+  text-align: center;
+}
+
+#version a:link {
+  background: inherit;
+  color: #000000;
+}
+#version a:visited {
+  background: inherit;
+  color: #000000;
+}
+
+#version a:hover {
+  background: inherit;
+  color: #000000;
+}
+
+#version img {
+  border : 0px;
+ }
