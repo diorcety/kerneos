@@ -35,6 +35,7 @@
   <includeBaseDirectory>false</includeBaseDirectory>
 
   <moduleSets>
+   <!--Kerneos application module-->
    <moduleSet>
     <useAllReactorProjects>true</useAllReactorProjects>
     <includes>
@@ -53,6 +54,7 @@
      <outputFileNameMapping>${artifact.file.name}</outputFileNameMapping>
     </binaries>
    </moduleSet>
+   <!-- Add your kerneos modules here -->
   </moduleSets>
 
   <fileSets>

@@ -193,6 +193,7 @@
         <artifactId>${application.artifactId}</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <!-- Add your kerneos modules dependencies here-->
     </dependencies>
   </dependencyManagement>
 

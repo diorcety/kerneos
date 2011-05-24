@@ -67,6 +67,7 @@
   </repositories>
 
   <dependencies>
+    <!-- Add your kerneos modules dependencies here-->
     <!--Application Dependency-->
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -167,7 +168,6 @@
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-core-server</artifactId>
     </dependency>
-    <!--Your Kerneos Modules Dependencies-->
   </dependencies>
 
   <build>

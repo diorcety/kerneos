@@ -1,1 +1,1 @@
-#Test
+java -jar bin/felix.jar
