@@ -37,12 +37,6 @@
             // Implementation of KerneosModule
             // =========================================================================
 
-            /**
-             * Register of all the classes used by the services
-             * Example2:
-             * var _servicesClasses: Dictionary;
-             * /
-
 
             /**
              * When the module is closed, cut off all client-server communications
@@ -55,8 +49,8 @@
                 //                                                            //
                 ////////////////////////////////////////////////////////////////
                 /**
-                 * Remove all the commands to the pool of commands
-                 * Example:
+                 // Remove all the commands to the pool of commands
+                 // Example:
                  controller.removeCommands();
                  controller = null;
                  */
@@ -87,7 +81,6 @@
                  *
                  * The variable _servicesClasses is defined as a class variable on the top of the class
                  *
-                 * Example2:
                  *
                  * if(_servicesClasses == null)
                  * {

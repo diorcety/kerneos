@@ -25,9 +25,9 @@ package event
 import com.adobe.cairngorm.control.CairngormEvent;
 
 /*
- * Example import:
+ // Example import:
  import flash.events.Event;
- */
+*/
 
 /**
  * A ModuleEvent is dispatched when the associated action is triggered from the view.
@@ -43,8 +43,8 @@ public class ModuleEvent extends CairngormEvent
     public static var MY_ACTION : String = "My action to be done";
 
     /**
-     * Example :
-     * Message send in the event
+     // Example :
+     // Message send in the event
      private var message: String = "";
      */
 
@@ -57,8 +57,8 @@ public class ModuleEvent extends CairngormEvent
     }
 
     /**
-     * Event message setting and getting
-     * Example :
+     // Event message setting and getting
+     // Example :
      public function setMessage(message:String):void 
      {
          this.message = message;
@@ -78,8 +78,8 @@ public class ModuleEvent extends CairngormEvent
     {
         var ev:ModuleEvent = new ModuleEvent(this.type);
         /**
-         * Example:
-         * Add the event message
+         // Example:
+         // Add the event message
          ev.setMessage(this.message);
          */
         return ev;

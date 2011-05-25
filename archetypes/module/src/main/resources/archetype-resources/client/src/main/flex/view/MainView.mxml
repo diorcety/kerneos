@@ -30,7 +30,8 @@
          verticalAlign = "middle"
          horizontalAlign = "center">
 
-  <!-- Example:
+  <!--Example:-->
+  <!--
   <fx:Script>
       <![CDATA[
     import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -66,7 +67,8 @@
   <mx:Label text = "Hello world"
             fontSize = "50" />
 
-  <!--Example:
+  <!--Example:-->
+  <!--
   <mx:Form>
     <mx:FormItem label="Name :">
       <mx:TextInput id="nameInput"/>

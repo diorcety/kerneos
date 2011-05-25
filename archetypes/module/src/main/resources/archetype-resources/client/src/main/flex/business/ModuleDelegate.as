@@ -36,9 +36,9 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
     
     
     /*
-        Put here the method that will trigger the code to execute following a dispatched event
-        in the cairngorm architecture.
-        Example :
+        // Put here the method that will trigger the code to execute following a dispatched event
+        // in the cairngorm architecture.
+        // Example :
             public function callServerSide(parameters : Object) : void
             {
                 // find the service

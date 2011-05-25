@@ -68,8 +68,8 @@ public class ModuleModelLocator implements ModelLocator
     //                                        //
     ////////////////////////////////////////////
     /*
-    Put here the delegate instances of your model.
-    Example :
+    // Put here the delegate instances of your model.
+    // Example :
         private var myDelegate : IModuleDelegate = null;
     */
 
@@ -80,8 +80,8 @@ public class ModuleModelLocator implements ModelLocator
     ////////////////////////////////////////////////
     
     /*
-    Put here all the variables of the model
-    Example :
+    // Put here all the variables of the model
+    // Example :
         private var _myDataObj : String = null;
     */
     
@@ -122,8 +122,8 @@ public class ModuleModelLocator implements ModelLocator
     ////////////////////////////////////
 
     /*
-    Put here all the setters for the model update.
-    Example :
+    // Put here all the setters for the model update.
+    // Example :
         public function set myDataObj(_myData : String) : void {
             this._myDataObj = _myData;
         }
@@ -136,8 +136,8 @@ public class ModuleModelLocator implements ModelLocator
     ////////////////////////////////////
     
     /*
-    Put here all the getters to access the model variables
-    Example :
+    // Put here all the getters to access the model variables
+    // Example :
         public function get myDataObj() : String {
             return this._myDataObj;
         }
@@ -151,8 +151,8 @@ public class ModuleModelLocator implements ModelLocator
     ////////////////////////////////////////////
 
     /*
-    Put here the getters to access all the delegates of the created module
-    Example :
+    // Put here the getters to access all the delegates of the created module
+    // Example :
         public function getMyDelegate() : IModuleDelegate {
             if (this.myDelegate == null) {
                 this.myDelegate = new ModuleDelegate();

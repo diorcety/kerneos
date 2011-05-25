@@ -33,8 +33,8 @@ public interface IModuleDelegate extends IDelegateResponder
     ////////////////////////////////////////////////////////////////////
     
     /*
-        The interface of the delegate.    
-        Example :
+        // The interface of the delegate.
+        // Example :
             function callServerSide(parameters : Object) : void;
     */
     

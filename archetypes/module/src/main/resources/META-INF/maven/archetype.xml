@@ -32,7 +32,7 @@
 
   <resources>
     <!-- Server side sources -->
-    <resource>server/src/main/java/Service.java</resource>
+    <resource>server/src/main/java/service/Service.java</resource>
 
     <!-- Server side test sources -->
     <resource>server/src/test/java/ServiceTest.java</resource>

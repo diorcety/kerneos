@@ -30,7 +30,7 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-/*Server Exceptions imports
+/*// Server Exceptions imports
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 */
@@ -56,10 +56,10 @@ public class ModuleCommand implements ICommand, IResponder
         ////////////////////////////////////////////////
         
         /*
-            - Get the delegate
-            - Register the responder
-            - Make the call
-            Example :
+            // - Get the delegate
+            // - Register the responder
+            // - Make the call
+            // Example :
                 var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();       
                 delegate.responder = this;
                 var parameters : String = (event as ModuleEvent).getMessage();
@@ -79,8 +79,8 @@ public class ModuleCommand implements ICommand, IResponder
         ////////////////////////////////////////////////
         
         /*
-            Handle the result of the call. Usely, the model is updated.
-            Example :
+            // Handle the result of the call. Usely, the model is updated.
+            // Example :
                 var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
                 moduleModel.myDataObj = (data as ResultEvent).result as String;
             
@@ -100,11 +100,11 @@ public class ModuleCommand implements ICommand, IResponder
         ////////////////////////////////////////
         
         /*
-            The following code generates a formated panel that contains
-            the fault. However, librairies from jasmine-eos should be included
-            to get the common and util classes
+            // The following code generates a formated panel that contains
+            // the fault. However, librairies from jasmine-eos should be included
+            // to get the common and util classes
             
-            Code :
+            // Code :
             
                  // Retrieve the fault event
                 var faultEvent : FaultEvent = FaultEvent(info);
