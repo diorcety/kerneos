@@ -177,6 +177,7 @@
     <!-- The module name -->
     <coreView:MultiLineLinkButton
             width="130"
+            height="36"
             id="moduleName"
             color="#111111"
             label="{_moduleInstance.configuration.name}"

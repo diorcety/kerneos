@@ -27,9 +27,9 @@ package org.ow2.kerneos.core.api
 import flash.utils.Dictionary;
 
 /**
-* Any Kerneos module can implement this interface in order to have the member
+* Any Kerneos 2 module have to implement this interface in order to have the member
 * methods triggered.
-* 
+*
 * @author Julien Nicoulaud
 */
 public interface KerneosModule
@@ -49,6 +49,6 @@ public interface KerneosModule
     * connexions for example.
     */
     function closeModule():void;
-    
+
 }
 }

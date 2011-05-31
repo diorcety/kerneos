@@ -183,14 +183,6 @@ public final class KerneosCore implements IKerneosCore {
         }
     }
 
-
-    /**
-     * The JAXB context for rules packages serialization/deserialization. Must
-     * be declared with all the potentially involved classes.
-     */
-    private JAXBContext jaxbContext;
-
-
     @Requires(from = "org.granite.config.flex.Service")
     private Factory serviceFactory;
 
@@ -338,7 +330,7 @@ public final class KerneosCore implements IKerneosCore {
     /**
      * Get Application list.
      */
-    public Collection<ApplicationInstance> getApplications() {
+    public synchronized Collection<ApplicationInstance> getApplications() {
         return new LinkedList<ApplicationInstance>(applicationInstanceMap.values());
     }
 }

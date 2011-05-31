@@ -110,11 +110,12 @@ public class KerneosLifeCycleManager {
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
         // Set the kerneosConfigService. Done this way because of the @remoteDestination on the JAVA service
-        ServiceLocator.getInstance().setServiceForId("kerneosConfigService", "kerneosConfig");
+        ServiceLocator.getInstance().setServiceForId("kerneosConfigService", "kerneos-configuration", false);
+        ServiceLocator.getInstance().setServiceForId("kerneosAsyncConfigService", "kerneos-async-configuration", true);
 
         // ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
         ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
-
+        ServiceLocator.getInstance().getConsumer("kerneosAsyncConfigService").channelSet = amfGravityChannelSet;
     }
 
 

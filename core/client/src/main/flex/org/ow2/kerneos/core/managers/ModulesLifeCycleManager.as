@@ -291,9 +291,7 @@ public class ModulesLifeCycleManager {
      * Subscribe a gravity consumer to the kerneos topic
      */
     public static function subscribe():void {
-        consumer = new Consumer();
-        consumer.channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
-        consumer.destination = "kerneos-gravity";
+        consumer = ServiceLocator.getInstance().getConsumer("kerneosAsyncConfigService");
         consumer.topic = "kerneos/config";
         consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
         consumer.addEventListener(MessageEvent.MESSAGE, onModuleEventMessage);

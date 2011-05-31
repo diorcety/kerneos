@@ -78,7 +78,7 @@ public final class KerneosConfigService implements GraniteDestination {
      */
     private static Log logger = LogFactory.getLog(KerneosConfigService.class);
 
-    private static final String GRAVITY_DESTINATION = "kerneos-gravity";
+    private static final String GRAVITY_DESTINATION = "kerneos-async-configuration";
 
     /**
      * The JAXB context for rules packages serialization/deserialization. Must
@@ -459,6 +459,6 @@ public final class KerneosConfigService implements GraniteDestination {
      * @return the service id.
      */
     public String getId() {
-        return "kerneosConfig";
+        return "kerneos-configuration";
     }
 }
