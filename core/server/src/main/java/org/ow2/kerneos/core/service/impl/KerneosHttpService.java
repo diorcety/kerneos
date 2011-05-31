@@ -28,21 +28,18 @@ package org.ow2.kerneos.core.service.impl;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
-
 import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import org.apache.felix.ipojo.annotations.Unbind;
-import org.osgi.service.http.HttpContext;
 
+import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
-import org.ow2.kerneos.core.service.KerneosSimpleService;
+import org.ow2.kerneos.core.service.util.Base64;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
-import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -174,9 +171,6 @@ public class KerneosHttpService implements HttpContext {
                 applicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId());
     }
 
-
-    private BASE64Decoder decoder = new BASE64Decoder();
-
     /**
      * Return the Mine corresponding to the url.
      *
@@ -234,13 +228,14 @@ public class KerneosHttpService implements HttpContext {
 
                 // Get Login/Password
                 String userpassword = authHeader.substring(6);
-                userpassword = new String(decoder.decodeBuffer(userpassword));
+                userpassword = new String(Base64.decode(userpassword));
                 String[] data = userpassword.split("\\:");
+                String user = (data.length >= 1) ? data[0] : null;
+                String password = (data.length >= 2) ? data[1] : null;
 
                 // Auth
-                if (data.length == 2)
-                    if (kerneosSecurityService.login(data[0], data[1]))
-                        return true;
+                if (kerneosSecurityService.login(user, password))
+                    return true;
             }
 
             response.setHeader("WWW-Authenticate", "Basic");
