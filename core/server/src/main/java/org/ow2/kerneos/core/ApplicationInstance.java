@@ -25,14 +25,18 @@
 
 package org.ow2.kerneos.core;
 
+import org.osgi.framework.Bundle;
+
 import org.ow2.kerneos.core.config.generated.Application;
+
 
 /**
  * An instance of Application.
  */
-public class ApplicationInstance {
+public class ApplicationInstance implements IApplicationInstance {
     protected String id;
     protected Application configuration;
+    protected transient Bundle bundle;
 
     /**
      * Empty constructor.
@@ -41,24 +45,15 @@ public class ApplicationInstance {
     }
 
     /**
-     * Copy constructor.
-     *
-     * @param applicationInstance the instance of application to copy.
-     */
-    public ApplicationInstance(ApplicationInstance applicationInstance) {
-        this.id = applicationInstance.getId();
-        this.configuration = applicationInstance.getConfiguration();
-    }
-
-    /**
      * Construct a module instance using an id and a application.
      *
-     * @param id          the id of the instance.
+     * @param id            the id of the instance.
      * @param configuration the application of the instance.
      */
-    public ApplicationInstance(String id, Application configuration) {
+    public ApplicationInstance(String id, Application configuration, Bundle bundle) {
         this.id = id;
         this.configuration = configuration;
+        this.bundle = bundle;
     }
 
     /**
@@ -97,4 +92,12 @@ public class ApplicationInstance {
         this.configuration = configuration;
     }
 
+    /**
+     * Get the bundle associated with this instance.
+     *
+     * @return the bundle.
+     */
+    public Bundle getBundle() {
+        return bundle;
+    }
 }

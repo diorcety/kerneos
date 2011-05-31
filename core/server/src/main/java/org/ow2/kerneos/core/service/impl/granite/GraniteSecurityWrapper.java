@@ -38,7 +38,7 @@ import org.granite.messaging.service.security.SecurityServiceException;
 import org.granite.osgi.HttpGraniteContext;
 import org.granite.osgi.service.GraniteSecurity;
 import org.ow2.kerneos.core.service.impl.IKerneosSecurityService;
-import org.ow2.kerneos.core.service.impl.KerneosHttpContext;
+import org.ow2.kerneos.core.service.impl.KerneosHttpService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -79,7 +79,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
         if (GraniteManager.getCurrentInstance() instanceof HttpGraniteContext) {
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            KerneosHttpContext.setCurrentHttpRequest(httpGraniteContext.getRequest());
+            KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
 
             boolean logged = kerneosSecurityService.login(user, password);
             if (!logged)
@@ -91,7 +91,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
         if (GraniteManager.getCurrentInstance() instanceof HttpGraniteContext) {
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            KerneosHttpContext.setCurrentHttpRequest(httpGraniteContext.getRequest());
+            KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
 
             switch (kerneosSecurityService.authorize(destination, message)) {
                 case SESSION_EXPIRED:
@@ -108,7 +108,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
 
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            KerneosHttpContext.setCurrentHttpRequest(httpGraniteContext.getRequest());
+            KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
 
             boolean logged_out = kerneosSecurityService.logout();
             if (!logged_out)

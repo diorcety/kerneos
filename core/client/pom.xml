@@ -129,7 +129,6 @@
             <locale>fr_FR</locale>
           </compiledLocales>
           <mergeResourceBundle>true</mergeResourceBundle>
-          <contextRoot>kerneos</contextRoot>
           <sourceFile>Kerneos.mxml</sourceFile>
           <linkReport>true</linkReport>
         </configuration>

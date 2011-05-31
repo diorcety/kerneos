@@ -99,7 +99,6 @@
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
-          <contextRoot>moduleContextRoot</contextRoot>
           <sourceFile>MyModule.mxml</sourceFile>
           <optimize>false</optimize>
         </configuration>

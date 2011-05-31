@@ -25,14 +25,17 @@
 
 package org.ow2.kerneos.core;
 
+import org.osgi.framework.Bundle;
+
 import org.ow2.kerneos.core.config.generated.Module;
 
 /**
  * An instance of Module.
  */
-public class ModuleInstance {
+public class ModuleInstance implements IModuleInstance {
     private String id;
     private Module configuration;
+    protected transient Bundle bundle;
 
     /**
      * Empty constructor.
@@ -42,24 +45,15 @@ public class ModuleInstance {
     }
 
     /**
-     * Copy constructor.
-     *
-     * @param moduleInstance the instance of module to copy.
-     */
-    public ModuleInstance(ModuleInstance moduleInstance) {
-        this.id = moduleInstance.getId();
-        this.configuration = moduleInstance.getConfiguration();
-    }
-
-    /**
      * Construct a module instance using an id and a module.
      *
-     * @param id     the id of the instance.
+     * @param id            the id of the instance.
      * @param configuration the module of the instance.
      */
-    public ModuleInstance(String id, Module configuration) {
+    public ModuleInstance(String id, Module configuration, Bundle bundle) {
         this.id = id;
         this.configuration = configuration;
+        this.bundle = bundle;
     }
 
     /**
@@ -96,5 +90,14 @@ public class ModuleInstance {
      */
     public void setConfiguration(Module configuration) {
         this.configuration = configuration;
+    }
+
+    /**
+     * Get the bundle associated with this instance.
+     *
+     * @return the bundle.
+     */
+    public Bundle getBundle() {
+        return bundle;
     }
 }

@@ -251,8 +251,16 @@
             <Include-Resource>
               ${project.build.directory}/kerneos
             </Include-Resource>
+            <Export-Package>
+              org.ow2.kerneos.core;version=${project.version},
+              org.ow2.kerneos.core.config;version=${project.version},
+              org.ow2.kerneos.core.config.*;version=${project.version},
+              org.ow2.kerneos.core.service;version=${project.version},
+              org.ow2.kerneos.core.service.util;version=${project.version}
+            </Export-Package>
             <Private-Package>
-              org.ow2.kerneos.core.impl
+              org.ow2.kerneos.core.service.impl,
+              org.ow2.kerneos.core.service.impl.*
             </Private-Package>
           </instructions>
         </configuration>

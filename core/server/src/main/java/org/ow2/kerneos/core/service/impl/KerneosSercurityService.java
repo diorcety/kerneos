@@ -48,7 +48,7 @@ public class KerneosSercurityService implements IKerneosSecurityService {
     KerneosLogin kerneosLogin;
 
     private static KerneosContext getKerneosContext() {
-        HttpServletRequest request = KerneosHttpContext.getCurrentHttpRequest();
+        HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
         Object obj = request.getSession().getAttribute(KERNEOS_SECURITY_KEY);
         if (obj == null || !(obj instanceof KerneosContext))
             return null;
@@ -56,14 +56,13 @@ public class KerneosSercurityService implements IKerneosSecurityService {
     }
 
     private static void setKerneosContext(KerneosContext kerneosContext) {
-        HttpServletRequest request = KerneosHttpContext.getCurrentHttpRequest();
+        HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
         request.getSession().setAttribute(KERNEOS_SECURITY_KEY, kerneosContext);
     }
 
     public boolean isLogged() {
-        return true;
-        /*KerneosContext kerneosContext = getKerneosContext();
-        return kerneosContext != null;       */
+        KerneosContext kerneosContext = getKerneosContext();
+        return kerneosContext != null;
     }
 
     public boolean login(String user, String password) {
