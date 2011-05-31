@@ -83,9 +83,9 @@ public class KerneosCore {
             String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
 
             gavityChannel = confHelper.newGravityChannel(KerneosConstants.GRAVITY_CHANNEL + applicationInstance.getId(),
-                    applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
+                    applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI, KerneosConstants.KERNEOS_CONTEXT_NAME);
             graniteChannel = confHelper.newGraniteChannel(KerneosConstants.GRANITE_CHANNEL + applicationInstance.getId(),
-                    applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
+                    applicationURL + KerneosConstants.GRANITE_CHANNEL_URI, KerneosConstants.KERNEOS_CONTEXT_NAME);
         }
 
         /**

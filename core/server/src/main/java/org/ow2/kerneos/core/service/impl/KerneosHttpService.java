@@ -28,7 +28,10 @@ package org.ow2.kerneos.core.service.impl;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import org.apache.felix.ipojo.annotations.Unbind;
 
 import org.osgi.service.http.HttpContext;
@@ -55,8 +58,12 @@ import java.util.Map;
  */
 @Component
 @Instantiate
+@Provides(properties = @StaticServiceProperty(name = "ID", value = KerneosConstants.KERNEOS_CONTEXT_NAME, type = "string"))
 public class KerneosHttpService implements HttpContext {
 
+
+    @ServiceProperty(name = "ID")
+    String id;
     /**
      * The logger.
      */

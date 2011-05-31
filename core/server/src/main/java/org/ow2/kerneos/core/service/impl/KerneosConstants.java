@@ -42,6 +42,8 @@ public final class KerneosConstants {
      */
     public static final String FACTORY_SUFFIX = "_FaCtOry";
 
+    public static final String KERNEOS_CONTEXT_NAME = "KerneosContext";
+
     /*
      * Manifest entry for a Kerneos entities
      */
@@ -60,21 +62,22 @@ public final class KerneosConstants {
      * Modules related constants
      */
     public static final String KERNEOS_MODULE_PREFIX = "modules";
+
     /*
-        Topics
+     *  Topics
      */
     public static final String KERNEOS_TOPIC = "kerneos";
     public static final String KERNEOS_CONFIG_TOPIC = KERNEOS_TOPIC + "/config";
 
     /*
-        Granite Configuration
+     *  Granite Configuration
      */
     public static final String GRANITE_SERVICE = "granite-service";
     public static final String GRANITE_CHANNEL = "kerneos-graniteamf-";
     public static final String GRANITE_CHANNEL_URI = "/granite/amf";
 
     /*
-        Gravity Configuration
+     *  Gravity Configuration
      */
     public static final String GRAVITY_SERVICE = "messaging-service";
     public static final String GRAVITY_CHANNEL = "kerneos-gravityamf-";
