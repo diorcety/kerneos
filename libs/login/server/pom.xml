@@ -37,37 +37,46 @@
   <artifactId>kerneos-login-server</artifactId>
   <name>Kerneos :: Libraries :: Login :: Server</name>
 
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
 
-  <dependencies>
+   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>apache-log4j-extras</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>5.1</version>
-      <classifier>jdk15</classifier>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.jonas</groupId>
-      <artifactId>jonas-security</artifactId>
-      <version>5.1.0</version>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+      <version>1.8.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-core</artifactId>
-      <version>${graniteds-osgi.version}</version>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-core-server</artifactId>
+      <version>2.0.0-M1-SNAPSHOT</version>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <DynamicImport-Package>*</DynamicImport-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-ipojo-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>ipojo-bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

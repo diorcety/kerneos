@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -22,37 +22,29 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login;
 
-import java.io.IOException;
+package org.ow2.kerneos.service.impl;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import flex.messaging.messages.Message;
+import org.granite.config.flex.Destination;
 
-/**
- * A servlet that ends the user session
- *
- * @author Julien Nicoulaud
- */
-public class LogoutServlet extends HttpServlet {
+import java.util.Collection;
 
-    /**
-     * Class version ID
-     */
-    private static final long serialVersionUID = -4729955174780787192L;
+public interface IKerneosSecurityService {
 
-    /**
-     * Handle GET requests
-     */
-    @Override
-    protected void doGet(final HttpServletRequest req, final HttpServletResponse res) throws
-            ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+    enum SecurityError {
+        NO_ERROR,
+        SESSION_EXPIRED,
+        INVALID_CREDENTIALS
     }
+
+    public boolean isLogged();
+
+    public boolean login(String user, String password);
+
+    public SecurityError authorize(Destination destination, Message message);
+
+    public boolean logout();
+
+    public Collection<String> getRoles();
 }

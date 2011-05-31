@@ -323,8 +323,6 @@ public class ServiceLocator implements IServiceLocator {
             }
         }
         else {
-            var remote:RemoteObject = new RemoteObject();
-
             if (_remoteObjects != null) {
                 _remoteObjects.unRegisterRemoteObject(serviceId);
             }

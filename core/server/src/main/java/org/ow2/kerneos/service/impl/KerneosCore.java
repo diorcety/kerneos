@@ -70,7 +70,7 @@ public final class KerneosCore implements IKerneosCore {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(KerneosConfigService.class);
+    private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
 
     /**
      * OSGi HTTPService.
@@ -88,7 +88,7 @@ public final class KerneosCore implements IKerneosCore {
 
     private Map<String, ApplicationInstanceImpl> applicationInstanceMap = new HashMap<String, ApplicationInstanceImpl>();
 
-    private ComponentInstance granite, gravity;
+    private ComponentInstance granite, gravity, graniteSecurity, gravitySecurity;
 
     private class ModuleInstanceImpl extends ModuleInstance {
         private Bundle bundle;
@@ -177,6 +177,7 @@ public final class KerneosCore implements IKerneosCore {
             String applicationURL = configuration.getApplicationUrl();
 
             gavityChannel.dispose();
+            graniteChannel.dispose();
             granite.dispose();
 
             // Unregister Kerneos resources
@@ -196,6 +197,8 @@ public final class KerneosCore implements IKerneosCore {
     @Requires(from = "org.granite.config.flex.Destination")
     private Factory destinationFactory;
 
+    @Requires(from = "org.ow2.kerneos.service.impl.GraniteKerneosSecurity")
+    private Factory securityFactory;
 
     /**
      * Constructor used by iPojo.
@@ -219,18 +222,30 @@ public final class KerneosCore implements IKerneosCore {
         // Gravity Configuration Instances
         {
             Dictionary properties = new Hashtable();
+            properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
+            gravitySecurity = securityFactory.createComponentInstance(properties);
+        }
+        {
+            Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRAVITY_SERVICE);
             properties.put("MESSAGETYPES", "flex.messaging.messages.AsyncMessage");
             properties.put("DEFAULT_ADAPTER", EAConstants.ADAPTER_ID);
             gravity = serviceFactory.createComponentInstance(properties);
         }
 
+
         // Granite Configuration Instances
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
+            graniteSecurity = securityFactory.createComponentInstance(properties);
+        }
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", KerneosConstants.GRANITE_SERVICE);
             granite = serviceFactory.createComponentInstance(properties);
         }
+
     }
 
     /**
@@ -243,7 +258,9 @@ public final class KerneosCore implements IKerneosCore {
 
         // Dispose configuration
         gravity.dispose();
+        gravitySecurity.dispose();
         granite.dispose();
+        graniteSecurity.dispose();
 
         for (String name : moduleInstanceMap.keySet())
             unregisterModule(name);

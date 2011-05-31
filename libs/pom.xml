@@ -46,7 +46,6 @@
     <module>flexlib</module>
     <module>common</module>
     <module>login</module>
-    <module>jonaslogin</module>
   </modules>
 
 </project>

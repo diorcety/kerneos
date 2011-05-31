@@ -30,11 +30,9 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 
 import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import org.osgi.service.http.HttpContext;
 
-import org.ow2.kerneos.service.KerneosLogin;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 import sun.misc.BASE64Decoder;
@@ -61,8 +59,24 @@ public class KerneosHttpContext implements HttpContext {
     private static final String PREFIX = "bundle:/";
     private static final String PREFIX2 = "bundle://";
 
-    @Requires(optional = true)
-    private KerneosLogin kerneosLogin;
+
+    private static ThreadLocal<HttpServletRequest> httpServletRequestThreadLocal = new ThreadLocal<HttpServletRequest>() {
+        @Override
+        protected HttpServletRequest initialValue() {
+            return (null);
+        }
+    };
+
+    public static void setCurrentHttpRequest(HttpServletRequest httpServletRequest) {
+        httpServletRequestThreadLocal.set(httpServletRequest);
+    }
+
+    public static HttpServletRequest getCurrentHttpRequest() {
+        return httpServletRequestThreadLocal.get();
+    }
+
+    @Requires
+    IKerneosSecurityService kerneosSecurityService;
 
     private BASE64Decoder decoder = new BASE64Decoder();
 
@@ -112,7 +126,9 @@ public class KerneosHttpContext implements HttpContext {
      */
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
-        if (kerneosLogin != null) {
+        setCurrentHttpRequest(request);
+
+        if (!kerneosSecurityService.isLogged()) {
             String authHeader = request.getHeader("Authorization");
             if (authHeader != null) {
                 // Check AUTH type
@@ -126,7 +142,7 @@ public class KerneosHttpContext implements HttpContext {
 
                 // Auth
                 if (data.length == 2)
-                    if (kerneosLogin.login(data[0], data[1]))
+                    if (kerneosSecurityService.login(data[0], data[1]))
                         return true;
             }
 

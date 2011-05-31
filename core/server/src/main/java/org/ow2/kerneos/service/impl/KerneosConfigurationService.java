@@ -72,11 +72,11 @@ import org.ow2.util.log.LogFactory;
 @Component
 @Instantiate
 @Provides
-public final class KerneosConfigService implements GraniteDestination {
+public final class KerneosConfigurationService implements GraniteDestination {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(KerneosConfigService.class);
+    private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
 
     private static final String GRAVITY_DESTINATION = "kerneos-async-configuration";
 
@@ -90,7 +90,7 @@ public final class KerneosConfigService implements GraniteDestination {
      * Async Event Publisher.
      */
     @org.apache.felix.ipojo.handlers.event.Publisher(
-            name = "KerneosConfigService",
+            name = "KerneosConfigurationService",
             topics = KerneosConstants.KERNEOS_CONFIG_TOPIC
     )
 
@@ -187,7 +187,7 @@ public final class KerneosConfigService implements GraniteDestination {
      * @param bundleContext is the current bundle context.
      * @throws Exception can't load the JAXBContext.
      */
-    private KerneosConfigService(final BundleContext bundleContext) throws Exception {
+    private KerneosConfigurationService(final BundleContext bundleContext) throws Exception {
         bundleTracker = new KerneosBundleTracker(bundleContext);
         jaxbContext = JAXBContext.newInstance(
                 ObjectFactory.class.getPackage().getName(),
@@ -204,7 +204,7 @@ public final class KerneosConfigService implements GraniteDestination {
     @Validate
     private void start() throws MissingHandlerException, ConfigurationException,
             UnacceptableConfiguration {
-        logger.debug("Start KerneosConfigService");
+        logger.debug("Start KerneosConfigurationService");
 
         // Register the classes used with event admin
         gcr.registerClasses(GRAVITY_DESTINATION, new Class[]{
@@ -231,7 +231,7 @@ public final class KerneosConfigService implements GraniteDestination {
                 PromptBeforeClose.class
         });
 
-        // Register the few configurations used with KerneosConfigService
+        // Register the few configurations used with KerneosConfigurationService
         {
             Dictionary properties = new Hashtable();
             properties.put("ID", GRAVITY_DESTINATION);
@@ -259,7 +259,7 @@ public final class KerneosConfigService implements GraniteDestination {
      */
     @Invalidate
     private void stop() {
-        logger.debug("Stop KerneosConfigService");
+        logger.debug("Stop KerneosConfigurationService");
 
         // Stop the tracking of bundles
         bundleTracker.close();
