@@ -42,6 +42,9 @@ public final class KerneosConstants {
      */
     public static final String FACTORY_SUFFIX = "_FaCtOry";
 
+    /*
+     * The name of the Kerneos HttpContext
+     */
     public static final String KERNEOS_CONTEXT_NAME = "KerneosContext";
 
     /*

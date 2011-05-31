@@ -30,21 +30,56 @@ import org.granite.config.flex.Destination;
 
 import java.util.Collection;
 
+/**
+ * Interface of the Kerneos Security Service.
+ */
 public interface IKerneosSecurityService {
 
+    /**
+     * The different status associated to the session.
+     */
     enum SecurityError {
         NO_ERROR,
         SESSION_EXPIRED,
         INVALID_CREDENTIALS
     }
 
+    /**
+     * Check if there is the user is logged.
+     *
+     * @return True if the user is logged.
+     */
     public boolean isLogged();
 
-    public boolean login(String user, String password);
+    /**
+     * Login to Kerneos.
+     *
+     * @param username The username used for login.
+     * @param password The password used for login.
+     * @return True if the login is successful.
+     */
+    public boolean login(String username, String password);
 
+    /**
+     * Check the authorisation associated to the request.
+     *
+     * @param destination The destination of the request.
+     * @param message     The message of the request.
+     * @return The status associated to the authorisation.
+     */
     public SecurityError authorize(Destination destination, Message message);
 
+    /**
+     * Logout of Kerneos.
+     *
+     * @return True if the logout is successful.
+     */
     public boolean logout();
 
+    /**
+     * Get the roles of the logged user.
+     *
+     * @return An array containing the roles associated to the logged user.
+     */
     public Collection<String> getRoles();
 }

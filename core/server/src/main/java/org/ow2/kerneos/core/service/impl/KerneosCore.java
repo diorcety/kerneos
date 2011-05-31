@@ -76,7 +76,7 @@ public class KerneosCore {
         private ComponentInstance gavityChannel, graniteChannel;
 
         /**
-         * Create all  the configuration associated with this instance.
+         * Create all the configuration associated with this instance.
          */
         public ApplicationInstanceImpl(IApplicationInstance applicationInstance) throws MissingHandlerException, ConfigurationException, UnacceptableConfiguration, NamespaceException {
 
@@ -154,6 +154,11 @@ public class KerneosCore {
         graniteSecurity.dispose();
     }
 
+    /**
+     * Called when an Application instance is registered.
+     *
+     * @param applicationInstance the instance of an application
+     */
     @Bind(aggregate = true, optional = true)
     private void bindApplicationInstance(final IApplicationInstance applicationInstance) throws MissingHandlerException, NamespaceException, ConfigurationException, UnacceptableConfiguration {
         ApplicationInstanceImpl applicationImpl = new ApplicationInstanceImpl(applicationInstance);
@@ -163,6 +168,11 @@ public class KerneosCore {
         }
     }
 
+    /**
+     * Called when an Application instance is unregistered.
+     *
+     * @param applicationInstance the instance of an application
+     */
     @Unbind
     private void unbindApplicationInstance(final IApplicationInstance applicationInstance) {
         synchronized (applicationInstanceMap) {

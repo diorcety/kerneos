@@ -99,6 +99,11 @@ public class KerneosHttpService implements HttpContext {
     private Map<String, IApplicationInstance> applicationInstanceMap = new HashMap<String, IApplicationInstance>();
     private Map<String, IModuleInstance> moduleInstanceMap = new HashMap<String, IModuleInstance>();
 
+    /**
+     * Called when an Application Instance is registered.
+     *
+     * @param applicationInstance The instance of application.
+     */
     @Bind(aggregate = true, optional = true)
     private void bindApplicationInstance(final IApplicationInstance applicationInstance) throws NamespaceException {
         String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
@@ -123,6 +128,11 @@ public class KerneosHttpService implements HttpContext {
         logger.info("Register \"" + applicationInstance.getId() + "\" resources: " + applicationURL);
     }
 
+    /**
+     * Called when an Application Instance is unregistered.
+     *
+     * @param applicationInstance The instance of application.
+     */
     @Unbind
     private void unbindApplicationInstance(final IApplicationInstance applicationInstance) {
         String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
@@ -143,6 +153,12 @@ public class KerneosHttpService implements HttpContext {
         }
     }
 
+    /**
+     * Called when an Module Instance is registered.
+     *
+     * @param moduleInstance The instance of module.
+     * @throws NamespaceException Never thrown.
+     */
     @Bind(aggregate = true, optional = true)
     private void bindModuleInstance(final IModuleInstance moduleInstance) throws NamespaceException {
         synchronized (moduleInstanceMap) {
@@ -155,6 +171,11 @@ public class KerneosHttpService implements HttpContext {
         }
     }
 
+    /**
+     * Called when an Module Instance is unregistered.
+     *
+     * @param moduleInstance The instance of module.
+     */
     @Unbind
     private void unbindModuleInstance(final IModuleInstance moduleInstance) {
         // UnRegister Kerneos Module resources for the applications
@@ -167,12 +188,25 @@ public class KerneosHttpService implements HttpContext {
         }
     }
 
+
+    /**
+     * Add a module to an application.
+     *
+     * @param applicationInstance The application.
+     * @param moduleInstance      The module to add.
+     */
     public void registerApplicationModule(IApplicationInstance applicationInstance, IModuleInstance moduleInstance) throws NamespaceException {
         httpService.registerResources(
                 applicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId(),
                 moduleInstance.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString(), this);
     }
 
+    /**
+     * Remove a module from an application.
+     *
+     * @param applicationInstance The application.
+     * @param moduleInstance      The module to remove.
+     */
     public void unregisterApplicationModule(IApplicationInstance applicationInstance, IModuleInstance moduleInstance) {
         httpService.unregister(
                 applicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId());
