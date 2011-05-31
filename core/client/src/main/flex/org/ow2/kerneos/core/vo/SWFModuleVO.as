@@ -33,7 +33,7 @@ import mx.collections.ArrayCollection;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.kerneos.config.generated.SwfModule")]
+[RemoteClass(alias="org.ow2.kerneos.core.config.generated.SwfModule")]
 [Bindable]
 public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
 {

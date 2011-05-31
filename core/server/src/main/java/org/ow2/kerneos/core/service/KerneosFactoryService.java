@@ -23,12 +23,17 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service;
+package org.ow2.kerneos.core.service;
 
-import java.util.Collection;
 
-public interface KerneosLogin {
-    public Collection<String> login(final String user, final String password);
-
-    public boolean logout();
+/**
+ * Interface corresponding to a OSGi service used like a factory.
+ * @param <T> is the class returned by the factory.
+ */
+public interface KerneosFactoryService<T> {
+    /**
+     * Create a new instance of the service.
+     * @return the new instance.
+     */
+    T newInstance();
 }

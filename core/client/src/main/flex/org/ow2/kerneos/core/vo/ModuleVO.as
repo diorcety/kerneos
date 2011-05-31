@@ -34,7 +34,7 @@ import org.ow2.kerneos.common.util.IconUtility;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.kerneos.config.generated.Module")]
+[RemoteClass(alias="org.ow2.kerneos.core.config.generated.Module")]
 [Bindable]
 public class ModuleVO implements IValueObject {
 

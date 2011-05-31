@@ -23,10 +23,28 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service;
+package org.ow2.kerneos.core.service.impl;
 
-/**
- * Interface corresponding to a simple OSGi service.
- */
-public interface KerneosSimpleService {
+import flex.messaging.messages.Message;
+import org.granite.config.flex.Destination;
+
+import java.util.Collection;
+
+public interface IKerneosSecurityService {
+
+    enum SecurityError {
+        NO_ERROR,
+        SESSION_EXPIRED,
+        INVALID_CREDENTIALS
+    }
+
+    public boolean isLogged();
+
+    public boolean login(String user, String password);
+
+    public SecurityError authorize(Destination destination, Message message);
+
+    public boolean logout();
+
+    public Collection<String> getRoles();
 }

@@ -23,16 +23,15 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl;
 
 import org.osgi.framework.Bundle;
-import org.ow2.kerneos.config.generated.Application;
-import org.ow2.kerneos.config.generated.Module;
-import org.ow2.kerneos.service.ApplicationInstance;
-import org.ow2.kerneos.service.ModuleInstance;
+import org.ow2.kerneos.core.ApplicationInstance;
+import org.ow2.kerneos.core.ModuleInstance;
+import org.ow2.kerneos.core.config.generated.Application;
+import org.ow2.kerneos.core.config.generated.Module;
 
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Interface of the Kerneos' core.

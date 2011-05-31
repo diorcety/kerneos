@@ -23,17 +23,17 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl.granite;
 
 import org.granite.osgi.service.GraniteFactory;
 
-import org.ow2.kerneos.service.KerneosFactoryService;
+import org.ow2.kerneos.core.service.KerneosFactoryService;
 
 
 /**
  * Used for interfacing Granite and Kerneos factories.
  */
-public class GraniteKerneosFactory implements GraniteFactory {
+public class GraniteFactoryWrapper implements GraniteFactory {
 
     /**
      * The corresponding Kerneos factory.
@@ -50,7 +50,7 @@ public class GraniteKerneosFactory implements GraniteFactory {
      * @param service the service to interface.
      * @param id      the id of the GraniteFactory.
      */
-    GraniteKerneosFactory(final KerneosFactoryService service, final String id) {
+    public GraniteFactoryWrapper(final KerneosFactoryService service, final String id) {
         this.service = service;
         this.id = id;
     }

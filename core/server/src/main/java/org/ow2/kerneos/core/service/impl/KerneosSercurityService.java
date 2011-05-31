@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl;
 
 import flex.messaging.messages.Message;
 import org.apache.felix.ipojo.annotations.Component;
@@ -31,8 +31,8 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.granite.config.flex.Destination;
-import org.ow2.kerneos.service.DefaultKerneosLogin;
-import org.ow2.kerneos.service.KerneosLogin;
+import org.ow2.kerneos.core.service.DefaultKerneosLogin;
+import org.ow2.kerneos.core.service.KerneosLogin;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -61,8 +61,9 @@ public class KerneosSercurityService implements IKerneosSecurityService {
     }
 
     public boolean isLogged() {
-        KerneosContext kerneosContext = getKerneosContext();
-        return kerneosContext != null;
+        return true;
+        /*KerneosContext kerneosContext = getKerneosContext();
+        return kerneosContext != null;       */
     }
 
     public boolean login(String user, String password) {

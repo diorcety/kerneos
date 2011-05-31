@@ -31,7 +31,7 @@ import com.adobe.cairngorm.vo.IValueObject;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.kerneos.config.generated.ModuleWithWindow")]
+[RemoteClass(alias="org.ow2.kerneos.core.config.generated.ModuleWithWindow")]
 [Bindable]
 public class ModuleWithWindowVO extends ModuleVO
                                 implements IValueObject

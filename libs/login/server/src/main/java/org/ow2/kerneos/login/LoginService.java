@@ -5,7 +5,7 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 
-import org.ow2.kerneos.service.KerneosLogin;
+import org.ow2.kerneos.core.service.KerneosLogin;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;

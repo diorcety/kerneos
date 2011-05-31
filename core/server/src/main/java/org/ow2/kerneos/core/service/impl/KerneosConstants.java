@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl;
 
 /**
  * Contains the different constants used by Kerneos.

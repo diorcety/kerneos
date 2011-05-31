@@ -23,41 +23,40 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service;
+package org.ow2.kerneos.core;
 
-import org.ow2.kerneos.config.generated.Module;
+import org.ow2.kerneos.core.config.generated.Application;
 
 /**
- * An instance of Module.
+ * An instance of Application.
  */
-public class ModuleInstance {
-    private String id;
-    private Module configuration;
+public class ApplicationInstance {
+    protected String id;
+    protected Application configuration;
 
     /**
      * Empty constructor.
      */
-    public ModuleInstance() {
-
+    public ApplicationInstance() {
     }
 
     /**
      * Copy constructor.
      *
-     * @param moduleInstance the instance of module to copy.
+     * @param applicationInstance the instance of application to copy.
      */
-    public ModuleInstance(ModuleInstance moduleInstance) {
-        this.id = moduleInstance.getId();
-        this.configuration = moduleInstance.getConfiguration();
+    public ApplicationInstance(ApplicationInstance applicationInstance) {
+        this.id = applicationInstance.getId();
+        this.configuration = applicationInstance.getConfiguration();
     }
 
     /**
-     * Construct a module instance using an id and a module.
+     * Construct a module instance using an id and a application.
      *
-     * @param id     the id of the instance.
-     * @param configuration the module of the instance.
+     * @param id          the id of the instance.
+     * @param configuration the application of the instance.
      */
-    public ModuleInstance(String id, Module configuration) {
+    public ApplicationInstance(String id, Application configuration) {
         this.id = id;
         this.configuration = configuration;
     }
@@ -81,20 +80,21 @@ public class ModuleInstance {
     }
 
     /**
-     * Get the module of the instance.
+     * Get the application of the instance.
      *
-     * @return the module.
+     * @return the application.
      */
-    public Module getConfiguration() {
+    public Application getConfiguration() {
         return configuration;
     }
 
     /**
-     * Set the module of the instance.
+     * Set the application of the instance.
      *
-     * @param configuration the module of the instance.
+     * @param configuration the application of the instance.
      */
-    public void setConfiguration(Module configuration) {
+    public void setConfiguration(Application configuration) {
         this.configuration = configuration;
     }
+
 }

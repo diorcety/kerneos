@@ -22,7 +22,7 @@
  */
 package org.ow2.kerneos.core.vo {
 
-[RemoteClass(alias="org.ow2.kerneos.service.ApplicationInstance")]
+[RemoteClass(alias="org.ow2.kerneos.core.ApplicationInstance")]
 [Bindable]
 public class ApplicationInstanceVO {
     /**

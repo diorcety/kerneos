@@ -155,7 +155,7 @@
         </executions>
         <configuration>
           <schemaDirectory>src/main/resources/</schemaDirectory>
-          <generatePackage>org.ow2.kerneos.config.generated</generatePackage>
+          <generatePackage>org.ow2.kerneos.core.config.generated</generatePackage>
           <strict>true</strict>
           <verbose>true</verbose>
           <extension>true</extension>
@@ -251,6 +251,9 @@
             <Include-Resource>
               ${project.build.directory}/kerneos
             </Include-Resource>
+            <Private-Package>
+              org.ow2.kerneos.core.impl
+            </Private-Package>
           </instructions>
         </configuration>
       </plugin>

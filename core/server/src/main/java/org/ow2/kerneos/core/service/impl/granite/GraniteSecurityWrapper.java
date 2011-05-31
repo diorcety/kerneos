@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl.granite;
 
 import flex.messaging.messages.Message;
 import org.apache.felix.ipojo.annotations.Component;
@@ -37,16 +37,18 @@ import org.granite.context.GraniteManager;
 import org.granite.messaging.service.security.SecurityServiceException;
 import org.granite.osgi.HttpGraniteContext;
 import org.granite.osgi.service.GraniteSecurity;
+import org.ow2.kerneos.core.service.impl.IKerneosSecurityService;
+import org.ow2.kerneos.core.service.impl.KerneosHttpContext;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
 @Component
 @Provides
-public class GraniteKerneosSecurity implements GraniteSecurity {
+public class GraniteSecurityWrapper implements GraniteSecurity {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(GraniteKerneosSecurity.class);
+    private static Log logger = LogFactory.getLog(GraniteSecurityWrapper.class);
 
     @Property(name = "SERVICE")
     String service;
@@ -56,12 +58,17 @@ public class GraniteKerneosSecurity implements GraniteSecurity {
 
     @Validate
     private void start() {
-        logger.debug("Start GraniteKerneosSecurity: " + service);
+        logger.debug("Start GraniteSecurityWrapper: " + service);
     }
 
     @Invalidate
     private void stop() {
-        logger.debug("Stop GraniteKerneosSecurity: " + service);
+        logger.debug("Stop GraniteSecurityWrapper: " + service);
+    }
+
+    private GraniteSecurityWrapper()
+    {
+
     }
 
     public String getService() {

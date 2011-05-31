@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service;
+package org.ow2.kerneos.core.service;
 
 /**
  * Interface corresponding to a declaration of asynchronous service.

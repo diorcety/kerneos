@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl;
 
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.ConfigurationException;
@@ -43,11 +43,11 @@ import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
-import org.ow2.kerneos.config.generated.Application;
-import org.ow2.kerneos.config.generated.Module;
-import org.ow2.kerneos.config.generated.SwfModule;
-import org.ow2.kerneos.service.ApplicationInstance;
-import org.ow2.kerneos.service.ModuleInstance;
+import org.ow2.kerneos.core.ApplicationInstance;
+import org.ow2.kerneos.core.ModuleInstance;
+import org.ow2.kerneos.core.config.generated.Application;
+import org.ow2.kerneos.core.config.generated.Module;
+import org.ow2.kerneos.core.config.generated.SwfModule;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -197,7 +197,7 @@ public final class KerneosCore implements IKerneosCore {
     @Requires(from = "org.granite.config.flex.Destination")
     private Factory destinationFactory;
 
-    @Requires(from = "org.ow2.kerneos.service.impl.GraniteKerneosSecurity")
+    @Requires(from = "org.ow2.kerneos.core.service.impl.granite.GraniteSecurityWrapper")
     private Factory securityFactory;
 
     /**

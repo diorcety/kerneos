@@ -33,7 +33,7 @@ import org.ow2.kerneos.common.util.IconUtility;
  *
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.kerneos.config.generated.Link")]
+[RemoteClass(alias="org.ow2.kerneos.core.config.generated.Link")]
 [Bindable]
 public class LinkVO extends ModuleVO implements IValueObject {
 

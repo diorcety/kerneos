@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -53,16 +53,16 @@ import org.granite.osgi.service.GraniteDestination;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import org.ow2.kerneos.config.generated.IframeModule;
-import org.ow2.kerneos.config.generated.Application;
-import org.ow2.kerneos.config.generated.Module;
-import org.ow2.kerneos.config.generated.ObjectFactory;
-import org.ow2.kerneos.config.generated.PromptBeforeClose;
-import org.ow2.kerneos.config.generated.Service;
-import org.ow2.kerneos.config.generated.SwfModule;
-import org.ow2.kerneos.service.ApplicationInstance;
-import org.ow2.kerneos.service.ModuleEvent;
-import org.ow2.kerneos.service.ModuleInstance;
+import org.ow2.kerneos.core.ApplicationInstance;
+import org.ow2.kerneos.core.ModuleEvent;
+import org.ow2.kerneos.core.ModuleInstance;
+import org.ow2.kerneos.core.config.generated.IframeModule;
+import org.ow2.kerneos.core.config.generated.Application;
+import org.ow2.kerneos.core.config.generated.Module;
+import org.ow2.kerneos.core.config.generated.ObjectFactory;
+import org.ow2.kerneos.core.config.generated.PromptBeforeClose;
+import org.ow2.kerneos.core.config.generated.Service;
+import org.ow2.kerneos.core.config.generated.SwfModule;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 

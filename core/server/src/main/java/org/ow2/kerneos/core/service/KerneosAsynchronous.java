@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service;
+package org.ow2.kerneos.core.service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

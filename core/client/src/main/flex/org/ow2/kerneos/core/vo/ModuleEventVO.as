@@ -29,7 +29,7 @@ import org.ow2.kerneos.core.vo.ModuleInstanceVO;
  * @author Julian Rivera
  */
 
-[RemoteClass(alias="org.ow2.kerneos.service.ModuleEvent")]
+[RemoteClass(alias="org.ow2.kerneos.core.ModuleEvent")]
 [Bindable]
 public class ModuleEventVO {
 

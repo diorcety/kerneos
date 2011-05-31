@@ -1,6 +1,4 @@
-package org.ow2.kerneos.service;
-
-import org.ow2.kerneos.service.KerneosLogin;
+package org.ow2.kerneos.core.service;
 
 import java.util.Collection;
 import java.util.LinkedList;

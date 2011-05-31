@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.util;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

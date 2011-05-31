@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.service.impl;
+package org.ow2.kerneos.core.service.impl;
 
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.Factory;
@@ -46,13 +46,16 @@ import org.granite.osgi.service.GraniteFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import org.ow2.kerneos.service.KerneosAsynchronous;
-import org.ow2.kerneos.service.KerneosAsynchronousService;
-import org.ow2.kerneos.service.KerneosFactory;
-import org.ow2.kerneos.service.KerneosFactoryService;
-import org.ow2.kerneos.service.KerneosService;
-import org.ow2.kerneos.service.KerneosSimpleService;
+import org.ow2.kerneos.core.service.KerneosAsynchronous;
+import org.ow2.kerneos.core.service.KerneosAsynchronousService;
+import org.ow2.kerneos.core.service.KerneosFactory;
+import org.ow2.kerneos.core.service.KerneosFactoryService;
+import org.ow2.kerneos.core.service.KerneosService;
+import org.ow2.kerneos.core.service.KerneosSimpleService;
 
+import org.ow2.kerneos.core.service.impl.granite.GraniteFactoryWrapper;
+import org.ow2.kerneos.core.service.impl.granite.GraniteSimpleWrapper;
+import org.ow2.kerneos.core.service.util.ClassAnalyzer;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -172,7 +175,7 @@ public final class KerneosServiceFactory {
         try {
             ServiceRegistration instance = bundleContext.registerService(
                     GraniteFactory.class.getName(),
-                    new GraniteKerneosSimple(service, serviceId + KerneosConstants.FACTORY_SUFFIX),
+                    new GraniteSimpleWrapper(service, serviceId + KerneosConstants.FACTORY_SUFFIX),
                     null);
 
             ComponentInstance factoryConfiguration = null;
@@ -253,7 +256,7 @@ public final class KerneosServiceFactory {
         try {
             ServiceRegistration instance = bundleContext.registerService(
                     GraniteFactory.class.getName(),
-                    new GraniteKerneosFactory(service, serviceId + KerneosConstants.FACTORY_SUFFIX),
+                    new GraniteFactoryWrapper(service, serviceId + KerneosConstants.FACTORY_SUFFIX),
                     null);
 
             ComponentInstance factoryConfiguration = null;

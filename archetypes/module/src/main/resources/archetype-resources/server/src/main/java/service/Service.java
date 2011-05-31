@@ -31,8 +31,8 @@ import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.ow2.kerneos.service.KerneosService;
-import org.ow2.kerneos.service.KerneosSimpleService;
+import org.ow2.kerneos.core.service.KerneosService;
+import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 

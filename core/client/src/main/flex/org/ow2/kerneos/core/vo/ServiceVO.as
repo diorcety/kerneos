@@ -33,7 +33,7 @@ import com.adobe.cairngorm.vo.IValueObject;
  * @author Julien Nicoulaud
  * @see SWFModuleVO
  */
-[RemoteClass(alias="org.ow2.kerneos.config.generated.Service")]
+[RemoteClass(alias="org.ow2.kerneos.core.config.generated.Service")]
 [Bindable]
 public class ServiceVO implements IValueObject
 {
