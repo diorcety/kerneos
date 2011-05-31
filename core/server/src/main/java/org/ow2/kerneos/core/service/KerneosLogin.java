@@ -28,7 +28,7 @@ package org.ow2.kerneos.core.service;
 import java.util.Collection;
 
 public interface KerneosLogin {
-    public Collection<String> login(final String user, final String password);
+    public Collection<String> login(final String application, final String user, final String password);
 
     public boolean logout();
 }

@@ -23,11 +23,11 @@ public class LoginService implements KerneosLogin {
      */
     private CallbackHandler handler = null;
 
-    public Collection<String> login(String user, String password) {
+    public Collection<String> login(final String application, final String user, final String password) {
         this.handler = new NoInputCallbackHandler(user, password);
         try {
             // Obtain a LoginContext
-            LoginContext lc = new LoginContext("eos", this.handler);
+            LoginContext lc = new LoginContext("kerneos-" + application, this.handler);
 
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             lc.login();

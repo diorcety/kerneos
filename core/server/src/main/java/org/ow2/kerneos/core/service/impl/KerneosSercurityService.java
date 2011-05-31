@@ -31,6 +31,8 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.granite.config.flex.Destination;
+import org.ow2.kerneos.core.IApplicationInstance;
+import org.ow2.kerneos.core.IModuleInstance;
 import org.ow2.kerneos.core.service.DefaultKerneosLogin;
 import org.ow2.kerneos.core.service.KerneosLogin;
 
@@ -47,6 +49,9 @@ public class KerneosSercurityService implements IKerneosSecurityService {
     @Requires(optional = true, defaultimplementation = DefaultKerneosLogin.class)
     KerneosLogin kerneosLogin;
 
+    @Requires(optional = true, specification = "org.ow2.kerneos.core.IApplicationInstance")
+    Collection<IApplicationInstance> applicationInstances;
+
     private static KerneosContext getKerneosContext() {
         HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
         Object obj = request.getSession().getAttribute(KERNEOS_SECURITY_KEY);
@@ -60,20 +65,30 @@ public class KerneosSercurityService implements IKerneosSecurityService {
         request.getSession().setAttribute(KERNEOS_SECURITY_KEY, kerneosContext);
     }
 
+    private IApplicationInstance getApplicationInstance() {
+        HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
+        for (IApplicationInstance applicationInstance : applicationInstances) {
+            if (request.getRequestURI().startsWith(applicationInstance.getConfiguration().getApplicationUrl()))
+                return applicationInstance;
+        }
+
+        return null;
+    }
+
     public boolean isLogged() {
         KerneosContext kerneosContext = getKerneosContext();
         return kerneosContext != null;
     }
 
     public boolean login(String user, String password) {
-        Collection<String> roles = kerneosLogin.login(user, password);
+        IApplicationInstance applicationInstance = getApplicationInstance();
+        Collection<String> roles = kerneosLogin.login(applicationInstance.getId(), user, password);
         if (roles == null)
             return false;
 
         KerneosContext kerneosContext = new KerneosContext(user, roles);
         setKerneosContext(kerneosContext);
         return true;
-
     }
 
     public SecurityError authorize(Destination destination, Message message) {
