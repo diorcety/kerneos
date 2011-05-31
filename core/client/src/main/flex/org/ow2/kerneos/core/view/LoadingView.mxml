@@ -48,88 +48,88 @@
 
     <fx:Script>
         <![CDATA[
-      import mx.collections.ArrayCollection;
-      import mx.resources.ResourceManager;
+        import mx.collections.ArrayCollection;
+        import mx.resources.ResourceManager;
 
-      import org.ow2.kerneos.core.managers.LanguagesManager;
-      import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.core.managers.LanguagesManager;
+        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
 
-      import org.ow2.kerneos.core.managers.SharedObjectManager;
-      import org.ow2.kerneos.core.model.KerneosState;
-      import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
-      import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
-      import org.ow2.kerneos.core.model.KerneosModelLocator;
-
-
-      // =========================================================================
-      // Initialization
-      // =========================================================================
-
-      /**
-       * On component creation complete.
-       */
-      private function initializeView(e:Event = null):void {
-        // Update the displayed label
-        progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                                    'kerneos.startup.setup-server-communication');
-
-        // Setup the AMF channel and Kerneos services
-        KerneosLifeCycleManager.setupKerneosServices();
-
-        // Update the displayed label
-        progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                                    'kerneos.startup.loading-saved-settings');
-
-        // Load the user's shared object
-        SharedObjectManager.load();
-
-        // Update the displayed label
-        progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                                    'kerneos.startup.loading-application-configuration');
-
-        // Load the Kerneos configuration
-        KerneosLifeCycleManager.getKerneosConfig();
-      }
+        import org.ow2.kerneos.core.managers.SharedObjectManager;
+        import org.ow2.kerneos.core.model.KerneosState;
+        import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
+        import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
 
 
-      /**
-       * When the application config has been loaded.
-       */
-      private function set kerneosConfigLoaded(applicationInstance:ApplicationInstanceVO):void {
-        if (applicationInstance != null) {
+        // =========================================================================
+        // Initialization
+        // =========================================================================
 
-          // Update the displayed label
-          progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                                      'kerneos.startup.setup-modules-icon-cache');
+        /**
+         * On component creation complete.
+         */
+        private function initializeView(e:Event = null):void {
+            // Update the displayed label
+            progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                    'kerneos.startup.setup-server-communication');
 
-          // Load the application logo if one
-          if (applicationInstance.configuration.applicationLogo != null) {
-            ModulesLifeCycleManager.cacheIcon(applicationInstance.configuration.applicationLogo);
-          }
+            // Setup the AMF channel and Kerneos services
+            KerneosLifeCycleManager.setupKerneosServices();
 
-          // Update the displayed label
-          progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                                      'kerneos.startup.ready');
+            // Update the displayed label
+            progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                    'kerneos.startup.loading-saved-settings');
 
-          // Load the modules
-          ModulesLifeCycleManager.getModules();
+            // Load the user's shared object
+            SharedObjectManager.load();
+
+            // Update the displayed label
+            progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                    'kerneos.startup.loading-application-configuration');
+
+            // Load the Kerneos configuration
+            KerneosLifeCycleManager.getApplication();
         }
-      }
 
 
-      /**
-       * When the module list has been loaded.
-       */
-      private function set modulesLoaded(modules:ArrayCollection):void {
-        if (modules != null) {
-          // Setup the modules
-          ModulesLifeCycleManager.initModules();
+        /**
+         * When the application config has been loaded.
+         */
+        private function set kerneosConfigLoaded(applicationInstance:ApplicationInstanceVO):void {
+            if (applicationInstance != null) {
 
-          // Switch state
-          KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+                // Update the displayed label
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                        'kerneos.startup.setup-modules-icon-cache');
+
+                // Load the application logo if one
+                if (applicationInstance.configuration.applicationLogo != null) {
+                    ModulesLifeCycleManager.cacheIcon(applicationInstance.configuration.applicationLogo);
+                }
+
+                // Update the displayed label
+                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                        'kerneos.startup.ready');
+
+                // Load the modules
+                ModulesLifeCycleManager.getModules();
+            }
         }
-      }
-      ]]>
+
+
+        /**
+         * When the module list has been loaded.
+         */
+        private function set modulesLoaded(modules:ArrayCollection):void {
+            if (modules != null) {
+                // Setup the modules
+                ModulesLifeCycleManager.initModules();
+
+                // Switch state
+                KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+            }
+        }
+        ]]>
     </fx:Script>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

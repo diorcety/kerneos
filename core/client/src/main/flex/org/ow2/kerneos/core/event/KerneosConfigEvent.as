@@ -38,7 +38,7 @@ public class KerneosConfigEvent extends CairngormEvent {
     /**
     * Type of the event
     */
-    public static var GET_KERNEOS_CONFIG:String = "getKerneosConfig";
+    public static var GET_APPLICATION:String = "getApplication";
     public static var GET_MODULES:String = "getModules";
 
     /**

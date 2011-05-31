@@ -63,6 +63,7 @@ public class SwfModuleWindow extends ModuleWindow {
      * The SWF module loader
      */
     private var _moduleInfo:IModuleInfo;
+    private var _applicationDomain:ApplicationDomain;
     private var _child:Module;
 
     /**
@@ -99,7 +100,7 @@ public class SwfModuleWindow extends ModuleWindow {
             _progressBar.conversion = 1024;
             _progressBar.mode = ProgressBarMode.MANUAL;
             _progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                                         'kerneos.windows.swf.loading-bar.label') + " %3%% (%1/%2 kb)";
+                    'kerneos.windows.swf.loading-bar.label') + " %3%% (%1/%2 kb)";
             addChild(_progressBar);
 
             // Start loading
@@ -123,6 +124,14 @@ public class SwfModuleWindow extends ModuleWindow {
     }
 
     /**
+     * Check if this module is the current module.
+     * @return true if this module is the current module.
+     */
+    public function isCurrentModule():Boolean {
+        return ApplicationDomain.currentDomain == _applicationDomain;
+    }
+
+    /**
      * Load the module
      */
     public function load():void {
@@ -136,7 +145,12 @@ public class SwfModuleWindow extends ModuleWindow {
         _moduleInfo.addEventListener(ModuleEvent.READY, onLoaderReady, false, 0, true);
         _moduleInfo.addEventListener(ModuleEvent.ERROR, onLoaderError, false, 0, true);
         _moduleInfo.addEventListener(ModuleEvent.PROGRESS, onProgress, false, 0, true);
-        _moduleInfo.load(new ApplicationDomain(ApplicationDomain.currentDomain));
+
+        // Create the application domain
+        _applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
+
+        // Load
+        _moduleInfo.load(_applicationDomain);
     }
 
     private function registerClasses():void {
@@ -253,10 +267,10 @@ public class SwfModuleWindow extends ModuleWindow {
      */
     private function onLoaderError(event:ModuleEvent):void {
         Alert.show(event.errorText + '\n' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                                                    'kerneos.windows.swf.loading-failed-dialog.body'),
-                   ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                                                           'kerneos.windows.swf.loading-failed-dialog.title',
-                                                           [module.name]));
+                'kerneos.windows.swf.loading-failed-dialog.body'),
+                ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                        'kerneos.windows.swf.loading-failed-dialog.title',
+                        [module.name]));
     }
 
 }
