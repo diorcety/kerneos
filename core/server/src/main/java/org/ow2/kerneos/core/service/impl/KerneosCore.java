@@ -40,6 +40,7 @@ import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
+import org.granite.osgi.ConfigurationHelper;
 import org.osgi.service.http.NamespaceException;
 
 import org.ow2.kerneos.core.IApplicationInstance;
@@ -81,20 +82,10 @@ public class KerneosCore {
 
             String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
 
-            {
-                Dictionary properties = new Hashtable();
-                properties.put("ID", KerneosConstants.GRAVITY_CHANNEL + applicationInstance.getId());
-                properties.put("CLASS", "org.granite.gravity.channels.GravityChannel");
-                properties.put("ENDPOINT_URI", applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
-                gavityChannel = channelFactory.createComponentInstance(properties);
-            }
-            {
-                Dictionary properties = new Hashtable();
-                properties.put("ID", KerneosConstants.GRANITE_CHANNEL + applicationInstance.getId());
-                properties.put("ENDPOINT_URI", applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
-                graniteChannel = channelFactory.createComponentInstance(properties);
-            }
-
+            gavityChannel = confHelper.newGravityChannel(KerneosConstants.GRAVITY_CHANNEL + applicationInstance.getId(),
+                    applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
+            graniteChannel = confHelper.newGraniteChannel(KerneosConstants.GRANITE_CHANNEL + applicationInstance.getId(),
+                    applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
         }
 
         /**
@@ -106,14 +97,8 @@ public class KerneosCore {
         }
     }
 
-    @Requires(from = "org.granite.config.flex.Service")
-    private Factory serviceFactory;
-
-    @Requires(from = "org.granite.config.flex.Channel")
-    private Factory channelFactory;
-
-    @Requires(from = "org.granite.config.flex.Destination")
-    private Factory destinationFactory;
+    @Requires
+    ConfigurationHelper confHelper;
 
     @Requires(from = "org.ow2.kerneos.core.service.impl.granite.GraniteSecurityWrapper")
     private Factory securityFactory;
@@ -143,13 +128,7 @@ public class KerneosCore {
             properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
             gravitySecurity = securityFactory.createComponentInstance(properties);
         }
-        {
-            Dictionary properties = new Hashtable();
-            properties.put("ID", KerneosConstants.GRAVITY_SERVICE);
-            properties.put("MESSAGETYPES", "flex.messaging.messages.AsyncMessage");
-            properties.put("DEFAULT_ADAPTER", EAConstants.ADAPTER_ID);
-            gravity = serviceFactory.createComponentInstance(properties);
-        }
+        gravity = confHelper.newGravityService(KerneosConstants.GRAVITY_SERVICE, EAConstants.ADAPTER_ID);
 
 
         // Granite Configuration Instances
@@ -158,12 +137,7 @@ public class KerneosCore {
             properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
             graniteSecurity = securityFactory.createComponentInstance(properties);
         }
-        {
-            Dictionary properties = new Hashtable();
-            properties.put("ID", KerneosConstants.GRANITE_SERVICE);
-            granite = serviceFactory.createComponentInstance(properties);
-        }
-
+        granite = confHelper.newGraniteService(KerneosConstants.GRANITE_SERVICE);
     }
 
     /**

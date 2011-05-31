@@ -47,6 +47,7 @@ import org.apache.felix.ipojo.annotations.Validate;
 import org.apache.felix.ipojo.handler.extender.BundleTracker;
 import org.apache.felix.ipojo.handlers.event.publisher.Publisher;
 
+import org.granite.osgi.ConfigurationHelper;
 import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.service.GraniteDestination;
 
@@ -108,8 +109,8 @@ public final class KerneosConfigurationService implements GraniteDestination {
     @Requires(from = "org.granite.gravity.osgi.adapters.ea.configuration")
     private Factory eaFactory;
 
-    @Requires(from = "org.granite.config.flex.Destination")
-    private Factory destinationFactory;
+    @Requires
+    ConfigurationHelper confHelper;
 
     private ComponentInstance eaConfig, graniteDestination, gravityDestination;
 
@@ -240,23 +241,11 @@ public final class KerneosConfigurationService implements GraniteDestination {
         });
 
         // Register the few configurations used with KerneosConfigurationService
-        {
-            Dictionary properties = new Hashtable();
-            properties.put("ID", GRAVITY_DESTINATION);
-            properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
-            gravityDestination = destinationFactory.createComponentInstance(properties);
-        }
-        {
-            Dictionary properties = new Hashtable();
-            properties.put("destination", GRAVITY_DESTINATION);
-            eaConfig = eaFactory.createComponentInstance(properties);
-        }
-        {
-            Dictionary properties = new Hashtable();
-            properties.put("ID", getId());
-            properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-            graniteDestination = destinationFactory.createComponentInstance(properties);
-        }
+        gravityDestination = confHelper.newGravityDestination(GRAVITY_DESTINATION, KerneosConstants.GRAVITY_SERVICE);
+        gravityDestination = confHelper.newGravityDestination(getId(), KerneosConstants.GRANITE_SERVICE);
+        Dictionary properties = new Hashtable();
+        properties.put("destination", GRAVITY_DESTINATION);
+        eaConfig = eaFactory.createComponentInstance(properties);
 
         // Start to track bundles
         bundleTracker.open();
