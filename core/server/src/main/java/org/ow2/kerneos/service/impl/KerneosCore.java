@@ -51,9 +51,12 @@ import org.ow2.kerneos.service.ModuleInstance;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import javax.xml.bind.JAXBContext;
-
-import java.util.*;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Map;
 
 
 /**
@@ -76,8 +79,9 @@ public final class KerneosCore implements IKerneosCore {
     private HttpService httpService;
 
     /**
-     * Current HTTP Context.
+     * Kerneos HTTP Context.
      */
+    @Requires(filter = "(id=kerneos)")
     private HttpContext httpContext;
 
     private Map<String, ModuleInstanceImpl> moduleInstanceMap = new HashMap<String, ModuleInstanceImpl>();
@@ -147,10 +151,10 @@ public final class KerneosCore implements IKerneosCore {
 
             // Register Kerneos Application resources
             httpService.registerResources(applicationURL,
-                                          bundle.getResource(KerneosConstants.KERNEOS_PATH).toString(),
-                                          httpContext);
+                    bundle.getResource(KerneosConstants.KERNEOS_PATH).toString(),
+                    httpContext);
             httpService.registerResources(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME,
-                                          KerneosConstants.KERNEOS_SWF_NAME, httpContext);
+                    KerneosConstants.KERNEOS_SWF_NAME, httpContext);
 
             logger.info("Register \"" + name + "\" resources: " + applicationURL);
         }
@@ -211,7 +215,6 @@ public final class KerneosCore implements IKerneosCore {
     private void start() throws MissingHandlerException, ConfigurationException,
             UnacceptableConfiguration, NamespaceException {
         logger.debug("Start KerneosCore");
-        httpContext = new KerneosHttpContext();
 
         // Gravity Configuration Instances
         {

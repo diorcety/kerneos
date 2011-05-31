@@ -25,7 +25,19 @@
 
 package org.ow2.kerneos.service.impl;
 
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
+
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import org.osgi.service.http.HttpContext;
+
+import org.ow2.kerneos.service.KerneosLogin;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,9 +49,22 @@ import java.net.URL;
 /**
  * The specific http context used by Kerneos.
  */
+@Component
+@Instantiate
+@Provides(properties = @StaticServiceProperty(name = "id", value = "kerneos", type = "java.lang.String"))
 public class KerneosHttpContext implements HttpContext {
+
+    /**
+     * The logger.
+     */
+    private static Log logger = LogFactory.getLog(KerneosHttpContext.class);
     private static final String PREFIX = "bundle:/";
     private static final String PREFIX2 = "bundle://";
+
+    @Requires(optional = true)
+    private KerneosLogin kerneosLogin;
+
+    private BASE64Decoder decoder = new BASE64Decoder();
 
     /**
      * Return the Mine corresponding to the url.
@@ -82,11 +107,36 @@ public class KerneosHttpContext implements HttpContext {
      *
      * @param request  is the object containing the request information.
      * @param response is the object containing the response information.
-     * @return return always true.
+     * @return return true if the user have the credential.
      * @throws IOException neven happen.
      */
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
-        return true;
+        if (kerneosLogin != null) {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null) {
+                // Check AUTH type
+                if (!authHeader.toUpperCase().startsWith("BASIC "))
+                    return false;
+
+                // Get Login/Password
+                String userpassword = authHeader.substring(6);
+                userpassword = new String(decoder.decodeBuffer(userpassword));
+                String[] data = userpassword.split("\\:");
+
+                // Auth
+                if (data.length == 2)
+                    if (kerneosLogin.login(data[0], data[1]))
+                        return true;
+            }
+
+            response.setHeader("WWW-Authenticate", "Basic");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentLength(0);
+            response.flushBuffer();
+            return false;
+        } else {
+            return true;
+        }
     }
 }
