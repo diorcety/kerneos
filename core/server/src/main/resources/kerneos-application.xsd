@@ -50,6 +50,7 @@
         <xs:element ref="k:enable-notifications-log" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="k:show-confirm-close-dialog" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="k:default-language" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:authentication" maxOccurs="1" minOccurs="0"/>
       </xs:all>
     </xs:complexType>
   </xs:element>
@@ -71,5 +72,15 @@
   <xs:element name="enable-notifications-log" type="xs:boolean" default="true"/>
   <xs:element name="show-confirm-close-dialog" type="xs:boolean" default="true"/>
   <xs:element name="default-language" type="xs:string" default="en_US"/>
+  <xs:element name="authentication" type="k:authentication" default="flex"/>
+
+  <!-- Security type -->
+  <xs:simpleType name="authentication">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="flex"/>
+      <xs:enumeration value="www"/>
+    </xs:restriction>
+  </xs:simpleType>
 
 </xs:schema>

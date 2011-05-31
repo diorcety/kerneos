@@ -27,6 +27,8 @@ package org.ow2.kerneos.core.service.impl;
 
 import flex.messaging.messages.Message;
 import org.granite.config.flex.Destination;
+import org.ow2.kerneos.core.ApplicationInstance;
+import org.ow2.kerneos.core.ModuleInstance;
 
 import java.util.Collection;
 
@@ -43,6 +45,11 @@ public interface IKerneosSecurityService {
         SESSION_EXPIRED,
         INVALID_CREDENTIALS
     }
+
+    /**
+     * Have to be called for updating the KerneosContext according to the request.
+     */
+    public void updateContext();
 
     /**
      * Check if there is the user is logged.

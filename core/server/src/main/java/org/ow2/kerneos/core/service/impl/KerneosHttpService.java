@@ -40,6 +40,7 @@ import org.osgi.service.http.NamespaceException;
 
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
+import org.ow2.kerneos.core.config.generated.Authentication;
 import org.ow2.kerneos.core.service.util.Base64;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -259,27 +260,35 @@ public class KerneosHttpService implements HttpContext {
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
         setCurrentHttpRequest(request);
+        kerneosSecurityService.updateContext();
 
         if (!kerneosSecurityService.isLogged()) {
-            String authHeader = request.getHeader("Authorization");
-            if (authHeader != null) {
-                // Check AUTH type
-                if (!authHeader.toUpperCase().startsWith("BASIC "))
-                    return false;
+            if (KerneosContext.get().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.WWW) {
+                // Show WWW Authentication box of the web browser
+                String authHeader = request.getHeader("Authorization");
+                if (authHeader != null) {
+                    // Check AUTH type
+                    if (!authHeader.toUpperCase().startsWith("BASIC "))
+                        return false;
 
-                // Get Login/Password
-                String userpassword = authHeader.substring(6);
-                userpassword = new String(Base64.decode(userpassword));
-                String[] data = userpassword.split("\\:");
-                String user = (data.length >= 1) ? data[0] : null;
-                String password = (data.length >= 2) ? data[1] : null;
+                    // Get Login/Password
+                    String userpassword = authHeader.substring(6);
+                    userpassword = new String(Base64.decode(userpassword));
+                    String[] data = userpassword.split("\\:");
+                    String user = (data.length >= 1) ? data[0] : null;
+                    String password = (data.length >= 2) ? data[1] : null;
 
-                // Auth
-                if (kerneosSecurityService.login(user, password))
-                    return true;
+                    // Auth
+                    if (kerneosSecurityService.login(user, password))
+                        return true;
+                }
+
+                response.setHeader("WWW-Authenticate", "Basic");
+            } else if (KerneosContext.get().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.FLEX &&
+                    KerneosContext.get().getModuleInstance() == null) {
+                // Don't allow access to modules
+                return true;
             }
-
-            response.setHeader("WWW-Authenticate", "Basic");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentLength(0);
             response.flushBuffer();

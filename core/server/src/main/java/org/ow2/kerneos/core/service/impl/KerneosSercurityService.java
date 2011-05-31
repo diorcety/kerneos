@@ -33,11 +33,13 @@ import org.apache.felix.ipojo.annotations.Requires;
 import org.granite.config.flex.Destination;
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
+import org.ow2.kerneos.core.config.generated.Authentication;
 import org.ow2.kerneos.core.service.DefaultKerneosLogin;
 import org.ow2.kerneos.core.service.KerneosLogin;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 
 /**
  * The security service used by Kerneos.
@@ -47,7 +49,7 @@ import java.util.Collection;
 @Provides
 public class KerneosSercurityService implements IKerneosSecurityService {
 
-    private static final String KERNEOS_SECURITY_KEY = "KERNEOS-SECURITY-CONTEXT";
+    private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION";
 
     @Requires(optional = true, defaultimplementation = DefaultKerneosLogin.class)
     KerneosLogin kerneosLogin;
@@ -55,42 +57,55 @@ public class KerneosSercurityService implements IKerneosSecurityService {
     @Requires(optional = true, specification = "org.ow2.kerneos.core.IApplicationInstance")
     Collection<IApplicationInstance> applicationInstances;
 
+    @Requires(optional = true, specification = "org.ow2.kerneos.core.IModuleInstance")
+    Collection<IModuleInstance> moduleInstances;
+
     /**
-     * Get the Kerneos context of the session.
+     * Get the information about Kerneos session.
      *
-     * @return The KerneosContext if it is present in the session.
+     * @return The KerneosSession if it is present in the session.
      */
-    private KerneosContext getKerneosContext() {
+    private KerneosSession getKerneosSession() {
         HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
-        Object obj = request.getSession().getAttribute(KERNEOS_SECURITY_KEY);
-        if (obj == null || !(obj instanceof KerneosContext))
+        Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
+        if (obj == null || !(obj instanceof KerneosSession))
             return null;
-        return (KerneosContext) obj;
+        return (KerneosSession) obj;
     }
 
     /**
-     * Set the Kerneos context of the session.
+     * Set the information about Kerneos session.
      *
-     * @param kerneosContext The KerneosContext.
+     * @param kerneosSession The KerneosSession.
      */
-    private void setKerneosContext(KerneosContext kerneosContext) {
+    private void setKerneosSession(KerneosSession kerneosSession) {
         HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
-        request.getSession().setAttribute(KERNEOS_SECURITY_KEY, kerneosContext);
+        request.getSession().setAttribute(KERNEOS_SESSION_KEY, kerneosSession);
     }
 
-    /**
-     * Get the application associated to the current handled request.
-     *
-     * @return The application instance associated to the request.
-     */
-    private IApplicationInstance getApplicationInstance() {
+    public void updateContext() {
         HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
+        IApplicationInstance currentApplicationInstance = null;
+        IModuleInstance currentModuleInstance = null;
         for (IApplicationInstance applicationInstance : applicationInstances) {
-            if (request.getRequestURI().startsWith(applicationInstance.getConfiguration().getApplicationUrl()))
-                return applicationInstance;
+            if (request.getRequestURI().startsWith(applicationInstance.getConfiguration().getApplicationUrl())) {
+                currentApplicationInstance = applicationInstance;
+                break;
+            }
         }
 
-        return null;
+        if (currentApplicationInstance == null)
+            throw new RuntimeException("Invalid Kerneos Application");
+
+
+        for (IModuleInstance moduleInstance : moduleInstances) {
+            if (request.getRequestURI().startsWith(currentApplicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId())) {
+                currentModuleInstance = moduleInstance;
+                break;
+            }
+        }
+
+        KerneosContext.set(new KerneosContext(currentApplicationInstance, currentModuleInstance));
     }
 
     /**
@@ -99,8 +114,17 @@ public class KerneosSercurityService implements IKerneosSecurityService {
      * @return True if the user is logged.
      */
     public boolean isLogged() {
-        KerneosContext kerneosContext = getKerneosContext();
-        return kerneosContext != null;
+        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
+        switch (applicationInstance.getConfiguration().getAuthentication()) {
+            case NONE:
+                break;
+
+            default:
+                KerneosSession kerneosSession = getKerneosSession();
+
+                return kerneosSession != null;
+        }
+        return true;
     }
 
     /**
@@ -111,13 +135,19 @@ public class KerneosSercurityService implements IKerneosSecurityService {
      * @return True if the login is successful.
      */
     public boolean login(String username, String password) {
-        IApplicationInstance applicationInstance = getApplicationInstance();
-        Collection<String> roles = kerneosLogin.login(applicationInstance.getId(), username, password);
-        if (roles == null)
-            return false;
+        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
+        switch (applicationInstance.getConfiguration().getAuthentication()) {
+            case NONE:
+                break;
 
-        KerneosContext kerneosContext = new KerneosContext(username, roles);
-        setKerneosContext(kerneosContext);
+            default:
+                Collection<String> roles = kerneosLogin.login(applicationInstance.getId(), username, password);
+                if (roles == null)
+                    return false;
+
+                KerneosSession kerneosSession = new KerneosSession(username, roles);
+                setKerneosSession(kerneosSession);
+        }
         return true;
     }
 
@@ -129,8 +159,16 @@ public class KerneosSercurityService implements IKerneosSecurityService {
      * @return The status associated to the authorisation.
      */
     public SecurityError authorize(Destination destination, Message message) {
-        if (!isLogged()) {
-            return SecurityError.SESSION_EXPIRED;
+        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
+        switch (applicationInstance.getConfiguration().getAuthentication()) {
+            case NONE:
+                break;
+
+            default:
+                if (!isLogged()) {
+                    return SecurityError.SESSION_EXPIRED;
+                }
+                break;
         }
         return SecurityError.NO_ERROR;
     }
@@ -141,11 +179,17 @@ public class KerneosSercurityService implements IKerneosSecurityService {
      * @return True if the logout is successful.
      */
     public boolean logout() {
-        boolean logged_out = kerneosLogin.logout();
-        if (!logged_out)
-            return false;
+        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
+        switch (applicationInstance.getConfiguration().getAuthentication()) {
+            case NONE:
+                break;
 
-        setKerneosContext(null);
+            default:
+                boolean logged_out = kerneosLogin.logout();
+                if (!logged_out)
+                    return false;
+                setKerneosSession(null);
+        }
         return true;
     }
 
@@ -155,17 +199,18 @@ public class KerneosSercurityService implements IKerneosSecurityService {
      * @return An array containing the roles associated to the logged user.
      */
     public Collection<String> getRoles() {
-        return null;
+        KerneosSession kerneosSession = getKerneosSession();
+        return (kerneosSession != null) ? kerneosSession.getRoles() : null;
     }
 
     /**
      * The Object used to store the session information.
      */
-    class KerneosContext {
-        String user;
-        Collection<String> roles;
+    class KerneosSession {
+        private String user;
+        private Collection<String> roles;
 
-        KerneosContext(String user, Collection<String> roles) {
+        KerneosSession(String user, Collection<String> roles) {
             this.user = user;
             this.roles = roles;
         }

@@ -66,8 +66,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
         logger.debug("Stop GraniteSecurityWrapper: " + service);
     }
 
-    private GraniteSecurityWrapper()
-    {
+    private GraniteSecurityWrapper() {
 
     }
 
@@ -80,6 +79,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
             KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
+            kerneosSecurityService.updateContext();
 
             boolean logged = kerneosSecurityService.login(user, password);
             if (!logged)
@@ -92,6 +92,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
             KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
+            kerneosSecurityService.updateContext();
 
             switch (kerneosSecurityService.authorize(destination, message)) {
                 case SESSION_EXPIRED:
@@ -109,6 +110,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
             KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
+            kerneosSecurityService.updateContext();
 
             boolean logged_out = kerneosSecurityService.logout();
             if (!logged_out)

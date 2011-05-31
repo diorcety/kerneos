@@ -37,12 +37,27 @@ import mx.utils.URLUtil;
 
 import org.granite.channels.GraniteOSGiChannel;
 import org.granite.gravity.channels.GravityOSGiChannel;
+import org.granite.util.GraniteClassRegistry;
 
 import org.ow2.kerneos.common.util.StringUtils;
 import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
 import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
+import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
+import org.ow2.kerneos.core.vo.ApplicationVO;
+import org.ow2.kerneos.core.vo.AuthenticationVO;
+import org.ow2.kerneos.core.vo.FolderVO;
+import org.ow2.kerneos.core.vo.IFrameModuleVO;
+import org.ow2.kerneos.core.vo.KerneosNotification;
+import org.ow2.kerneos.core.vo.LinkVO;
+import org.ow2.kerneos.core.vo.ModuleEventVO;
+import org.ow2.kerneos.core.vo.ModuleInstanceVO;
+import org.ow2.kerneos.core.vo.ModuleVO;
+import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
+import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
+import org.ow2.kerneos.core.vo.SWFModuleVO;
+import org.ow2.kerneos.core.vo.ServiceVO;
 
 
 /**
@@ -109,9 +124,17 @@ public class KerneosLifeCycleManager {
                                                                           "http://" + urlServer + "/" + context + "/gravity/amf");
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
-        // Set the kerneosConfigService. Done this way because of the @remoteDestination on the JAVA service
+        var kerneosClasses = [ApplicationInstanceVO, ApplicationVO, AuthenticationVO, FolderVO, IFrameModuleVO,
+            KerneosNotification, LinkVO, ModuleEventVO, ModuleInstanceVO, ModuleVO, ModuleWithWindowVO,
+            PromptBeforeCloseVO, ServiceVO, SWFModuleVO];
+
+        // Set the kerneosConfigService.
         ServiceLocator.getInstance().setServiceForId("kerneosConfigService", "kerneos-configuration", false);
+        GraniteClassRegistry.registerClasses("kerneos-configuration", kerneosClasses);
+
+        // Set the kerneosAsyncConfigService.
         ServiceLocator.getInstance().setServiceForId("kerneosAsyncConfigService", "kerneos-async-configuration", true);
+        GraniteClassRegistry.registerClasses("kerneos-async-configuration", kerneosClasses);
 
         // ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
         ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;

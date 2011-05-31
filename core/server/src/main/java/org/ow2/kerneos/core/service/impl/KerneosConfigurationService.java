@@ -60,6 +60,7 @@ import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
 import org.ow2.kerneos.core.ModuleEvent;
 import org.ow2.kerneos.core.ModuleInstance;
+import org.ow2.kerneos.core.config.generated.Authentication;
 import org.ow2.kerneos.core.config.generated.IframeModule;
 import org.ow2.kerneos.core.config.generated.Application;
 import org.ow2.kerneos.core.config.generated.Module;
@@ -225,7 +226,8 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 ModuleInstance.class,
                 IframeModule.class,
                 SwfModule.class,
-                PromptBeforeClose.class
+                PromptBeforeClose.class,
+                Authentication.class
         });
 
         // Register the classes used with "kerneosConfig" service
@@ -237,7 +239,8 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 ModuleInstance.class,
                 IframeModule.class,
                 SwfModule.class,
-                PromptBeforeClose.class
+                PromptBeforeClose.class,
+                Authentication.class
         });
 
         // Register the few configurations used with KerneosConfigurationService
