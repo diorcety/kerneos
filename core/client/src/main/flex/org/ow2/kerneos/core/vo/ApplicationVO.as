@@ -101,5 +101,9 @@ public class ApplicationVO implements IValueObject
      */
     public var defaultLanguage : String = "en_US";
 
+    /**
+     * Set the default language used in Kerneos when loading.
+     */
+    public var authentication : AuthenticationVO;
 }
 }
