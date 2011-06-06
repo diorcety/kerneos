@@ -26,6 +26,8 @@
 @namespace kerneosNotification "org.ow2.kerneos.core.view.notification.*";
 @namespace kerneosWindow "org.ow2.kerneos.core.view.window.*";
 @namespace kerneos "org.ow2.kerneos.core.view.*";
+@namespace kerneosLogin "org.ow2.kerneos.login.view.*";
+
 /*******************************************************************************
  * Application
  ******************************************************************************/
@@ -66,6 +68,22 @@ kerneos|ListModuleRenderer {
 
 global {
     font-size: 12px;
+}
+/*******************************************************************************
+ * Login
+ ******************************************************************************/
+kerneosLogin|LoginPanelMain {
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    borderColor: #666666;
+    borderAlpha: 1;
+    borderThicknessRight: 4;
+    borderThicknessLeft: 4;
+    borderThicknessTop: 2;
+    borderThicknessBottom: 3;
+    rounded-bottom-corners: true;
+    cornerRadius: 3;
+    backgroundColor: #CCCCCC;
 }
 
 /*******************************************************************************

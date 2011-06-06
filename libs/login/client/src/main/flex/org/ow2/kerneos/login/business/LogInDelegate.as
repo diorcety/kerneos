@@ -38,10 +38,10 @@ import org.ow2.kerneos.common.business.AbsDelegateResponder;
         public function logIn(user:String,password:String) : void {
     
             // find service
-            var service : Object = ServiceLocator.getInstance().getRemoteObject( "logInService" );
+            var service : Object = ServiceLocator.getInstance().getRemoteObject( "kerneosSecurityService" );
     
             // call service
-            var call : Object = service.login(user,password);
+            var call : Object = service.logIn(user,password);
     
             // add the responder as a listener for the answer of the java side
             call.addResponder( this.responder );

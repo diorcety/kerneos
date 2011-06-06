@@ -26,20 +26,25 @@
 package org.ow2.kerneos.core.service.impl;
 
 import flex.messaging.messages.Message;
+import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Validate;
 import org.granite.config.flex.Destination;
+import org.granite.osgi.ConfigurationHelper;
+import org.granite.osgi.service.GraniteDestination;
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
-import org.ow2.kerneos.core.config.generated.Authentication;
 import org.ow2.kerneos.core.service.DefaultKerneosLogin;
 import org.ow2.kerneos.core.service.KerneosLogin;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 
 /**
  * The security service used by Kerneos.
@@ -47,18 +52,42 @@ import java.util.concurrent.ExecutionException;
 @Component
 @Instantiate
 @Provides
-public class KerneosSercurityService implements IKerneosSecurityService {
+public class KerneosSercurityService implements IKerneosSecurityService, GraniteDestination {
+    /**
+     * The logger.
+     */
+    private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
 
     private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION";
 
     @Requires(optional = true, defaultimplementation = DefaultKerneosLogin.class)
-    KerneosLogin kerneosLogin;
+    private KerneosLogin kerneosLogin;
+
+    @Requires
+    private ConfigurationHelper confHelper;
 
     @Requires(optional = true, specification = "org.ow2.kerneos.core.IApplicationInstance")
-    Collection<IApplicationInstance> applicationInstances;
+    private Collection<IApplicationInstance> applicationInstances;
 
     @Requires(optional = true, specification = "org.ow2.kerneos.core.IModuleInstance")
-    Collection<IModuleInstance> moduleInstances;
+    private Collection<IModuleInstance> moduleInstances;
+
+    private ComponentInstance graniteDestination;
+
+    @Validate
+    private void start() {
+        logger.debug("Start KerneosSecurityService");
+
+        // Register the synchronous service used with KerneosSecurityService
+        graniteDestination = confHelper.newGraniteDestination(KerneosConstants.KERNEOS_SERVICE_SECURITY, KerneosConstants.GRANITE_SERVICE);
+    }
+
+    @Invalidate
+    private void stop() {
+        logger.debug("Stop KerneosSecurityService");
+
+        graniteDestination.dispose();
+    }
 
     /**
      * Get the information about Kerneos session.
@@ -134,7 +163,7 @@ public class KerneosSercurityService implements IKerneosSecurityService {
      * @param password The password used for login.
      * @return True if the login is successful.
      */
-    public boolean login(String username, String password) {
+    public boolean logIn(String username, String password) {
         IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
         switch (applicationInstance.getConfiguration().getAuthentication()) {
             case NONE:
@@ -163,6 +192,13 @@ public class KerneosSercurityService implements IKerneosSecurityService {
         switch (applicationInstance.getConfiguration().getAuthentication()) {
             case NONE:
                 break;
+            case FLEX:
+                if (!isLogged()) {
+                    for (String service : KerneosConstants.KERNEOS_SERVICES) {
+                        if (service.equalsIgnoreCase(destination.getId()))
+                            return SecurityError.NO_ERROR;
+                    }
+                }
 
             default:
                 if (!isLogged()) {
@@ -178,7 +214,7 @@ public class KerneosSercurityService implements IKerneosSecurityService {
      *
      * @return True if the logout is successful.
      */
-    public boolean logout() {
+    public boolean logOut() {
         IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
         switch (applicationInstance.getConfiguration().getAuthentication()) {
             case NONE:
@@ -201,6 +237,10 @@ public class KerneosSercurityService implements IKerneosSecurityService {
     public Collection<String> getRoles() {
         KerneosSession kerneosSession = getKerneosSession();
         return (kerneosSession != null) ? kerneosSession.getRoles() : null;
+    }
+
+    public String getId() {
+        return KerneosConstants.KERNEOS_SERVICE_SECURITY;
     }
 
     /**

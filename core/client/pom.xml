@@ -116,7 +116,6 @@
   </dependencies>
 
   <build>
-    <finalName>Kerneos</finalName>
     <sourceDirectory>src/main/flex</sourceDirectory>
 
     <plugins>

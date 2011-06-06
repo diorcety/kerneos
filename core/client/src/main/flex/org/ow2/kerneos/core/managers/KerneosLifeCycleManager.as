@@ -44,6 +44,7 @@ import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
 import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
+import org.ow2.kerneos.core.view.KerneosMainView;
 import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
 import org.ow2.kerneos.core.vo.ApplicationVO;
 import org.ow2.kerneos.core.vo.AuthenticationVO;
@@ -58,6 +59,8 @@ import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
 import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
 import org.ow2.kerneos.core.vo.SWFModuleVO;
 import org.ow2.kerneos.core.vo.ServiceVO;
+import org.ow2.kerneos.login.LoginPanel;
+import org.ow2.kerneos.login.event.LogOutEvent;
 
 
 /**
@@ -115,28 +118,32 @@ public class KerneosLifeCycleManager {
         // Granite ChannelSet
         amfChannelSet = new ChannelSet();
         var amfChannel:GraniteOSGiChannel = new GraniteOSGiChannel("kerneos-graniteamf-" + application,
-                                                                   "http://" + urlServer + "/" + context + "/granite/amf");
+                "http://" + urlServer + "/" + context + "/granite/amf");
         amfChannelSet.addChannel(amfChannel);
 
         // Gravity ChannelSet
         amfGravityChannelSet = new ChannelSet();
         var amfGravityChannel:GravityOSGiChannel = new GravityOSGiChannel("kerneos-gravityamf-" + application,
-                                                                          "http://" + urlServer + "/" + context + "/gravity/amf");
+                "http://" + urlServer + "/" + context + "/gravity/amf");
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
-        var kerneosClasses = [ApplicationInstanceVO, ApplicationVO, AuthenticationVO, FolderVO, IFrameModuleVO,
-            KerneosNotification, LinkVO, ModuleEventVO, ModuleInstanceVO, ModuleVO, ModuleWithWindowVO,
+        // Set the kerneosSecurityService.
+        ServiceLocator.getInstance().setServiceForId("kerneosSecurityService", "kerneos-security", false);
+        GraniteClassRegistry.registerClasses("security", []);
+
+        var kerneosConfigurationClasses = [ApplicationInstanceVO, ApplicationVO, AuthenticationVO, FolderVO,
+            IFrameModuleVO, KerneosNotification, LinkVO, ModuleEventVO, ModuleInstanceVO, ModuleVO, ModuleWithWindowVO,
             PromptBeforeCloseVO, ServiceVO, SWFModuleVO];
 
         // Set the kerneosConfigService.
         ServiceLocator.getInstance().setServiceForId("kerneosConfigService", "kerneos-configuration", false);
-        GraniteClassRegistry.registerClasses("kerneos-configuration", kerneosClasses);
+        GraniteClassRegistry.registerClasses("kerneos-configuration", kerneosConfigurationClasses);
 
         // Set the kerneosAsyncConfigService.
         ServiceLocator.getInstance().setServiceForId("kerneosAsyncConfigService", "kerneos-async-configuration", true);
-        GraniteClassRegistry.registerClasses("kerneos-async-configuration", kerneosClasses);
+        GraniteClassRegistry.registerClasses("kerneos-async-configuration", kerneosConfigurationClasses);
 
-        // ServiceLocator.getInstance().getRemoteObject("logInService").channelSet = amfChannelSet;
+        ServiceLocator.getInstance().getRemoteObject("kerneosSecurityService").channelSet = amfChannelSet;
         ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
         ServiceLocator.getInstance().getConsumer("kerneosAsyncConfigService").channelSet = amfGravityChannelSet;
     }
@@ -181,17 +188,9 @@ public class KerneosLifeCycleManager {
      * Logout from the application.
      */
     public static function logout(event:Event = null):void {
-        // Call the logout servlet
-        var req:URLRequest = new URLRequest("./LogoutServlet");
-        var loader:URLLoader = new URLLoader();
-        loader.addEventListener(Event.COMPLETE, function():void {
-            // Mark this as logging out
-            loggingOut = true;
-
-            // Reload the page
-            reloadPage();
-        });
-        loader.load(req);
+        var event2:LogOutEvent = new LogOutEvent(LogOutEvent.LOG_OUT);
+        CairngormEventDispatcher.getInstance().dispatchEvent(event2);
+        KerneosModelLocator.getInstance().state = KerneosState.LOGIN;
     }
 
 

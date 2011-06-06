@@ -75,9 +75,7 @@
           </compiledLocales>
           <mergeResourceBundle>true</mergeResourceBundle>
         </configuration>
-
       </plugin>
     </plugins>
-    <finalName>Kerneos-API</finalName>
   </build>
 </project>

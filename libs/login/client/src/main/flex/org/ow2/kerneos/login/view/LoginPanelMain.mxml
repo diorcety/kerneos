@@ -26,55 +26,53 @@
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:mx="library://ns.adobe.com/flex/mx"
-         xmlns:local="*"
          xmlns:flexlibControls="flexlib.controls.*"
-         backgroundAlpha="0.0"
          horizontalAlign="center"
          verticalAlign="middle">
     
     <fx:Script>
         <![CDATA[
-            import org.ow2.kerneos.login.event.LogOutEvent;
-            import mx.controls.Alert;
-            import org.ow2.kerneos.login.model.LogInModelLocator;
-            import com.adobe.cairngorm.control.CairngormEventDispatcher;
-            import org.ow2.kerneos.login.event.LogInEvent;
-            
-            public function logIn():void {
-                var event:LogInEvent = new LogInEvent(LogInEvent.LOG_IN);
-                event.user = user.text;
-                event.password = password.text;
-                CairngormEventDispatcher.getInstance().dispatchEvent(event);
-                
-                return ;
-            }
-            
-            public function logOut():void {
-                var event:LogOutEvent = new LogOutEvent(LogOutEvent.LOG_OUT);
-                CairngormEventDispatcher.getInstance().dispatchEvent(event);
-                return;
-            }
-            
-            
+        import mx.resources.ResourceManager;
+
+        import org.ow2.kerneos.login.event.LogInEvent;
+
+        import com.adobe.cairngorm.control.CairngormEventDispatcher;
+
+        import org.ow2.kerneos.login.manager.LanguagesManager;
+
+        private function login():void {
+            var event:LogInEvent = new LogInEvent(LogInEvent.LOG_IN);
+            event.user = username.text;
+            username.text = "";
+            event.password = password.text;
+            password.text = "";
+            CairngormEventDispatcher.getInstance().dispatchEvent(event);
+
+            return;
+        }
         ]]>
     </fx:Script>
-    
+
     <mx:Text width="100%"
              textAlign="center"
-             text="Please enter your username and password to log in."
+             text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.label')}"
              selectable="false"/>
 
     <flexlibControls:PromptingTextInput
-        prompt="Username"
-        id="user"
+        prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
+        id="username"
         width="100%"
-        toolTip="Please enter your username"/>
+        toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username.tooltip')}"/>
 
     <flexlibControls:PromptingTextInput
-        prompt="Password"
+        prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password')}"
         id="password"
         width="100%"
-        toolTip="Please enter your password"
+        toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password.tooltip')}"
         displayAsPassword="true"/>
-            
+
+    <mx:Button
+            id="validate"
+            label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.validate')}"
+            click="login();" />
 </mx:VBox>

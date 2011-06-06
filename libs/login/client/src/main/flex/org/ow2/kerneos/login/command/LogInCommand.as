@@ -22,52 +22,55 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
- 
-package org.ow2.kerneos.login.command
-{
+
+package org.ow2.kerneos.login.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 
 import mx.controls.Alert;
+import mx.resources.ResourceManager;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.login.business.ILogInDelegate;
 import org.ow2.kerneos.login.event.LogInEvent;
-import org.ow2.kerneos.login.model.LogInModelLocator;
+import org.ow2.kerneos.login.manager.LanguagesManager;
+import org.ow2.kerneos.login.model.LoginModelLocator;
 
 
 /**
  * @author Guillaume Renault
  */
-public class LogInCommand implements ICommand, IResponder
-{
+public class LogInCommand implements ICommand, IResponder {
     /**
-    * Send the event to the java side, using the business layer of the pattern
-    */
-    public function execute( event:CairngormEvent ):void {
-        var delegate:ILogInDelegate = LogInModelLocator.getInstance().getLogInDelegate();
+     * Send the event to the java side, using the business layer of the pattern
+     */
+    public function execute(event:CairngormEvent):void {
+        var delegate:ILogInDelegate = LoginModelLocator.getInstance().getLogInDelegate();
         delegate.responder = this;
-        delegate.logIn((event as LogInEvent).user,(event as LogInEvent).password);
+        delegate.logIn((event as LogInEvent).user, (event as LogInEvent).password);
     }
 
     /**
-    * Get the result of the java side. this method is called on each event from
-    * Java.
-    */
-    public function result( event : Object ):void {
-        var model:LogInModelLocator = LogInModelLocator.getInstance();        
-        var logged:Boolean = (event as ResultEvent).result as Boolean;        
+     * Get the result of the java side. this method is called on each event from
+     * Java.
+     */
+    public function result(event:Object):void {
+        var model:LoginModelLocator = LoginModelLocator.getInstance();
+        var logged:Boolean = (event as ResultEvent).result as Boolean;
         model.loggedIn = logged;
+        if (!logged) {
+            Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.failed'), "Error");
+        }
     }
 
     /**
-    * Handle fault messages
-    */
-    public function fault( event : Object ) : void {
-        var faultEvent : FaultEvent = FaultEvent( event );
-        Alert.show( "Log In failed : Unhandled error","Error" );
+     * Handle fault messages
+     */
+    public function fault(event:Object):void {
+        var faultEvent:FaultEvent = FaultEvent(event);
+        Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.exception'), "Error")
     }
 }
 }

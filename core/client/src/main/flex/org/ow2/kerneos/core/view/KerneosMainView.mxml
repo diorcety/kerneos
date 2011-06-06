@@ -26,10 +26,10 @@
 -->
 <mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
            xmlns:mx="library://ns.adobe.com/flex/mx"
-           xmlns:view = "org.ow2.kerneos.core.view.*"
-           width = "100%"
-           height = "100%"
-           currentState = "{KerneosModelLocator.getInstance().state}">
+           xmlns:view="org.ow2.kerneos.core.view.*"
+           width="100%"
+           height="100%"
+           currentState="{KerneosModelLocator.getInstance().state}">
 
     <fx:Metadata>
         <![CDATA[
@@ -46,79 +46,74 @@
 
     <fx:Script>
         <![CDATA[
-            import mx.managers.DragManager;
-            import mx.managers.HistoryManager;
+        import mx.managers.DragManager;
+        import mx.managers.HistoryManager;
 
-            import com.adobe.cairngorm.control.CairngormEventDispatcher;
+        import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
-            import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
-            import org.ow2.kerneos.core.model.KerneosState;
-            import org.ow2.kerneos.core.managers.SharedObjectManager;
-            import org.ow2.kerneos.core.model.KerneosModelLocator;
-            import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
+        import org.ow2.kerneos.core.model.KerneosState;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
+        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
 
-            // =========================================================================
-            // Variables
-            // =========================================================================
+        // =========================================================================
+        // Variables
+        // =========================================================================
 
-            // Dummy: flex SDK bugs workarounds
+        // Dummy: flex SDK bugs workarounds
 
-            /**
-             * The application drag&drop manager
-             * Dummy: workaround for a bug with module loaders and drag&drop
-             * @see http://bugs.adobe.com/jira/browse/SDK-12061
-             */
-            private var dragManager : DragManager;
+        /**
+         * The application drag&drop manager
+         * Dummy: workaround for a bug with module loaders and drag&drop
+         * @see http://bugs.adobe.com/jira/browse/SDK-12061
+         */
+        private var dragManager:DragManager;
 
-            /**
-             * The flash player history manager.
-             * Dummy: workaround for a bug with modules loaders and modules using
-             * ViewStacks (=> TabNavigators too)
-             * @see http://bugs.adobe.com/jira/browse/SDK-15249
-             */
-            private var hist : HistoryManager;
-
+        /**
+         * The flash player history manager.
+         * Dummy: workaround for a bug with modules loaders and modules using
+         * ViewStacks (=> TabNavigators too)
+         * @see http://bugs.adobe.com/jira/browse/SDK-15249
+         */
+        private var hist:HistoryManager;
 
 
-            // =========================================================================
-            // Initialization
-            // =========================================================================
+        // =========================================================================
+        // Initialization
+        // =========================================================================
 
-            /**
-             * On component creation complete.
-             */
-            public function initializeView(e : Event = null) : void
-            {
-                // Listen to server side exceptions events
-                CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show, false, 0, true);
+        /**
+         * On component creation complete.
+         */
+        public function initializeView(e:Event = null):void {
+            // Listen to server side exceptions events
+            CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show, false, 0, true);
 
-                // Listen to keyboards events at the "application" level
-                parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler, false, 0, true);
+            // Listen to keyboards events at the "application" level
+            parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler, false, 0, true);
 
-                // Switch to the "loading" state
-                KerneosModelLocator.getInstance().state = KerneosState.LOADING;
+            // Switch to the "loading" state
+            KerneosModelLocator.getInstance().state = KerneosState.LOADING;
+        }
+
+
+        // =========================================================================
+        // Keyboard shortcuts handling
+        // =========================================================================
+
+        /**
+         * Handles keyboard events
+         */
+        private function keyHandler(event:KeyboardEvent):void {
+            switch (event.keyCode) {
+                case 116: // keycode for F5
+                    KerneosLifeCycleManager.reloadPage();
+                    break;
             }
-
-
-
-            // =========================================================================
-            // Keyboard shortcuts handling
-            // =========================================================================
-
-            /**
-             * Handles keyboard events
-             */
-            private function keyHandler(event : KeyboardEvent) : void
-            {
-                switch (event.keyCode)
-                {
-                    case 116: // keycode for F5
-                        KerneosLifeCycleManager.reloadPage();
-                        break;
-                }
-            }
+        }
         ]]>
     </fx:Script>
+
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- Views                                                                  -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -128,17 +123,24 @@
                       width="100%"
                       height="100%"/>
 
-    <view:ApplicationTitle includeIn="configLoaded"
+    <view:ApplicationTitle includeIn="applicationLoaded"
                            id="applicationTitle"
                            width="1000"
                            height="80"
                            top="10"
                            right="10"/>
 
-    <view:DesktopView includeIn="configLoaded"
+    <view:DesktopView includeIn="desktop"
                       id="desktopView"
                       width="100%"
                       height="100%"/>
+
+    <view:LoginView includeIn="login"
+                      id="loginView"
+                      horizontalCenter="0"
+                      verticalCenter="0"
+                      width="50%"
+                      height="50%"/>
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- States                                                                  -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -146,18 +148,22 @@
     <mx:states>
 
         <!-- When loading -->
-        <mx:State name = "loading" />
+        <mx:State name="loading"/>
 
         <!-- When the config is loaded -->
-        <mx:State name = "configLoaded"/>
+        <mx:State name="applicationLoaded"/>
 
         <!-- Working view -->
-        <mx:State name = "desktop"
-                  basedOn = "configLoaded" />
+        <mx:State name="desktop"
+                  basedOn="applicationLoaded"/>
+
+        <!-- Login view -->
+        <mx:State name="login"
+                  basedOn="applicationLoaded"/>
 
         <!-- When server connexion lost -->
-        <mx:State name = "disconnected"
-                  basedOn = "configLoaded" />
+        <mx:State name="disconnected"
+                  basedOn="applicationLoaded"/>
 
     </mx:states>
 
@@ -167,59 +173,59 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <mx:transitions>
-        <mx:Transition fromState = "loading"
-                       toState = "desktop">
+        <mx:Transition fromState="loading"
+                       toState="desktop">
             <mx:Parallel>
-                <mx:Fade target = "{applicationTitle}"
-                         duration = "3000"
-                         alphaFrom = "0.0"
-                         alphaTo = "1.0" />
+                <mx:Fade target="{applicationTitle}"
+                         duration="3000"
+                         alphaFrom="0.0"
+                         alphaTo="1.0"/>
                 <mx:Sequence>
-                    <mx:Glow duration = "1500"
-                             alphaFrom = "0.0"
-                             alphaTo = "0.0"
-                             blurXFrom = "0.0"
-                             blurXTo = "0.0"
-                             blurYFrom = "0.0"
-                             blurYTo = "0.0"
-                             color = "0x000000"
-                             target = "{applicationTitle}" />
-                    <mx:Glow duration = "500"
-                             alphaFrom = "0.0"
-                             alphaTo = "0.5"
-                             blurXFrom = "0.0"
-                             blurXTo = "15.0"
-                             blurYFrom = "0.0"
-                             blurYTo = "15.0"
-                             color = "0x000000"
-                             target = "{applicationTitle}" />
-                    <mx:Glow duration = "500"
-                             alphaFrom = "0.5"
-                             alphaTo = "0.0"
-                             blurXFrom = "15.0"
-                             blurXTo = "0.0"
-                             blurYFrom = "15.0"
-                             blurYTo = "0.0"
-                             color = "0x000000"
-                             target = "{applicationTitle}" />
+                    <mx:Glow duration="1500"
+                             alphaFrom="0.0"
+                             alphaTo="0.0"
+                             blurXFrom="0.0"
+                             blurXTo="0.0"
+                             blurYFrom="0.0"
+                             blurYTo="0.0"
+                             color="0x000000"
+                             target="{applicationTitle}"/>
+                    <mx:Glow duration="500"
+                             alphaFrom="0.0"
+                             alphaTo="0.5"
+                             blurXFrom="0.0"
+                             blurXTo="15.0"
+                             blurYFrom="0.0"
+                             blurYTo="15.0"
+                             color="0x000000"
+                             target="{applicationTitle}"/>
+                    <mx:Glow duration="500"
+                             alphaFrom="0.5"
+                             alphaTo="0.0"
+                             blurXFrom="15.0"
+                             blurXTo="0.0"
+                             blurYFrom="15.0"
+                             blurYTo="0.0"
+                             color="0x000000"
+                             target="{applicationTitle}"/>
                 </mx:Sequence>
-                <mx:Fade id = "taskBarFadeIn"
-                         target = "{desktopView.taskBar}"
-                         duration = "2000"
-                         alphaFrom = "0.0"
-                         alphaTo = "1.0" />
-                <mx:Fade id = "modulesListFadeIn"
-                         target = "{desktopView.windowContainer}"
-                         duration = "700"
-                         alphaFrom = "0.0"
-                         alphaTo = "1.0" />
-                <mx:Blur id = "modulesListBlurIn"
-                         target = "{desktopView.windowContainer}"
-                         duration = "900"
-                         blurXFrom = "100"
-                         blurYFrom = "5"
-                         blurXTo = "0"
-                         blurYTo = "0" />
+                <mx:Fade id="taskBarFadeIn"
+                         target="{desktopView.taskBar}"
+                         duration="2000"
+                         alphaFrom="0.0"
+                         alphaTo="1.0"/>
+                <mx:Fade id="modulesListFadeIn"
+                         target="{desktopView.windowContainer}"
+                         duration="700"
+                         alphaFrom="0.0"
+                         alphaTo="1.0"/>
+                <mx:Blur id="modulesListBlurIn"
+                         target="{desktopView.windowContainer}"
+                         duration="900"
+                         blurXFrom="100"
+                         blurYFrom="5"
+                         blurXTo="0"
+                         blurYTo="0"/>
             </mx:Parallel>
         </mx:Transition>
     </mx:transitions>

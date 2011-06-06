@@ -22,41 +22,41 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.command
-{
+package org.ow2.kerneos.login.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 
 import mx.controls.Alert;
+import mx.resources.ResourceManager;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.login.business.ILogOutDelegate;
 import org.ow2.kerneos.login.event.LogInEvent;
-import org.ow2.kerneos.login.model.LogInModelLocator;
+import org.ow2.kerneos.login.manager.LanguagesManager;
+import org.ow2.kerneos.login.model.LoginModelLocator;
 
 /**
  * @author Guillaume Renault
  */
-public class LogOutCommand implements ICommand, IResponder
-{
+public class LogOutCommand implements ICommand, IResponder {
     /**
-    * Send the event to the java side, using the business layer of the pattern
-    */
-    public function execute( event:CairngormEvent ):void {
-        var delegate:ILogOutDelegate = LogInModelLocator.getInstance().getLogOutDelegate();
+     * Send the event to the java side, using the business layer of the pattern
+     */
+    public function execute(event:CairngormEvent):void {
+        var delegate:ILogOutDelegate = LoginModelLocator.getInstance().getLogOutDelegate();
         delegate.responder = this;
         delegate.logOut();
     }
 
     /**
-    * Get the result of the java side. this method is called on each event from
-    * Java.
-    */
-    public function result( event : Object ):void {
+     * Get the result of the java side. this method is called on each event from
+     * Java.
+     */
+    public function result(event:Object):void {
 
-        var model:LogInModelLocator = LogInModelLocator.getInstance();
+        var model:LoginModelLocator = LoginModelLocator.getInstance();
 
         var loggedOut:Boolean = (event as ResultEvent).result as Boolean;
 
@@ -66,11 +66,11 @@ public class LogOutCommand implements ICommand, IResponder
     }
 
     /**
-    * Handle fault messages
-    */
-    public function fault( event : Object ) : void {
-        var faultEvent : FaultEvent = FaultEvent( event );
-        Alert.show( "Log out : Unhandled error","Error" );
+     * Handle fault messages
+     */
+    public function fault(event:Object):void {
+        var faultEvent:FaultEvent = FaultEvent(event);
+        Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.exception'), "Error")
     }
 
 

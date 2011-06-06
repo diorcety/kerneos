@@ -123,7 +123,7 @@
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
         <maven.test.skip>true</maven.test.skip>
         <flex-debug>true</flex-debug>
-        <flex-optimize>true</flex-optimize>
+        <flex-optimize>false</flex-optimize>
         <flex-verbose-stacktraces>true</flex-verbose-stacktraces>
       </properties>
     </profile>

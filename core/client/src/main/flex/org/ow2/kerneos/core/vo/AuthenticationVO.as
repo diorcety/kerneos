@@ -38,9 +38,9 @@ import org.granite.util.Enum;
 [Bindable]
 public class AuthenticationVO extends Enum implements IValueObject
 {
-    public static const NONE : PromptBeforeCloseVO = new PromptBeforeCloseVO("NONE", _);
-    public static const FLEX : PromptBeforeCloseVO = new PromptBeforeCloseVO("FLEX",_);
-    public static const WWW : PromptBeforeCloseVO = new PromptBeforeCloseVO("WWW",_);
+    public static const NONE : AuthenticationVO = new AuthenticationVO("NONE", _);
+    public static const FLEX : AuthenticationVO = new AuthenticationVO("FLEX",_);
+    public static const WWW : AuthenticationVO = new AuthenticationVO("WWW",_);
 
     function AuthenticationVO(value:String = null, restrictor:* = null) {
         super((value || FLEX.name), restrictor);

@@ -46,20 +46,20 @@
 
     <fx:Script>
         <![CDATA[
-            import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
+        import mx.collections.ArrayCollection;
+
+        import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
             import org.ow2.kerneos.core.managers.LanguagesManager;
             import mx.resources.ResourceManager;
             import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
 
             import mx.controls.Alert;
             import mx.events.CloseEvent;
-            import mx.modules.ModuleLoader;
 
             import flexlib.mdi.containers.MDIWindow;
             import flexlib.mdi.events.MDIManagerEvent;
             import flexlib.mdi.events.MDIWindowEvent;
 
-            import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
             import org.ow2.kerneos.core.api.KerneosModule;
             import org.ow2.kerneos.core.view.window.SwfModuleWindow;
             import org.ow2.kerneos.core.view.window.KerneosWindow;
@@ -69,6 +69,7 @@
             import org.ow2.kerneos.core.managers.NotificationsManager;
             import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
             import org.ow2.kerneos.core.model.KerneosModelLocator;
+            import org.ow2.kerneos.login.model.LoginModelLocator;
 
             // =========================================================================
             // Variables
@@ -174,8 +175,8 @@
                 // Setup the active language and the language selector component.
                 setupActiveLanguage();
 
-                // Load the modules that have the "load-on-startup" flag
-                //ModulesLifeCycleManager.doLoadOnStartup();
+                // Load the modules
+                loadModules();
             }
 
 
@@ -414,9 +415,34 @@
                 }
                 return null;
             }
+
+
+            /**
+            * Load modules and subscribe to Kerneos topic
+            */
+            private function loadModules():void {
+                // Load the modules
+                ModulesLifeCycleManager.getModules();
+
+                // Subscribe a gravity consumer to the kerneos topic
+                ModulesLifeCycleManager.subscribe();
+            }
+
+            /**
+             * When the module list has been loaded.
+             */
+            private function set modulesLoaded(modules:ArrayCollection):void {
+                if (modules != null) {
+                    // Setup the modules
+                    ModulesLifeCycleManager.initModules();
+                }
+            }
         ]]>
     </fx:Script>
 
+    <!-- The binding triggered when the module list is loaded. -->
+    <fx:Binding source="KerneosModelLocator.getInstance().moduleInstances"
+                destination="modulesLoaded"/>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- UI Children                                                             -->

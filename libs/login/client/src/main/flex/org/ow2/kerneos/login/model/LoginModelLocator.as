@@ -34,18 +34,16 @@ import org.ow2.kerneos.login.business.LogOutDelegate;
 /**
  * @author Guillaume Renault
  */
-[Bindable]
-public class LogInModelLocator implements ModelLocator
+public class LoginModelLocator implements ModelLocator
 {
 
-    // private
-
-    private var loggedInObj:Boolean = false;
+    [Bindable]
+    public var loggedIn:Boolean;
 
     /**
     * Unique instance of this locator.
     */
-    private static var model:LogInModelLocator = null;
+    private static var model:LoginModelLocator = null;
 
     //[ArrayElementType(JasmineMessageEventVO)]
 
@@ -56,31 +54,22 @@ public class LogInModelLocator implements ModelLocator
     private var logOutDelegate:ILogOutDelegate = null;
 
     // functions
-    public function LogInModelLocator()
+    public function LoginModelLocator()
     {
         super();
 
         if (model != null) {
-            throw new Error("Only one LogInModelLocator has to be set");
+            throw new Error("Only one LoginModelLocator has to be set");
         }
     }
 
-    public static function getInstance() : LogInModelLocator {
-        if (LogInModelLocator.model == null) {
-            LogInModelLocator.model = new LogInModelLocator();
+    public static function getInstance() : LoginModelLocator {
+        if (LoginModelLocator.model == null) {
+            LoginModelLocator.model = new LoginModelLocator();
         }
 
-        return LogInModelLocator.model;
+        return LoginModelLocator.model;
     }
-
-    public function set loggedIn(log:Boolean):void {
-        this.loggedInObj = log;
-    }
-
-    public function get loggedIn():Boolean {
-        return this.loggedInObj;
-    }
-
 
     // getters delegates
 

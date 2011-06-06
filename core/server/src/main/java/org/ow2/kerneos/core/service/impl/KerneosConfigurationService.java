@@ -83,8 +83,6 @@ public final class KerneosConfigurationService implements GraniteDestination {
      */
     private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
 
-    private static final String GRAVITY_DESTINATION = "kerneos-async-configuration";
-
     /**
      * The JAXB context for rules packages serialization/deserialization. Must
      * be declared with all the potentially involved classes.
@@ -217,7 +215,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
         logger.debug("Start KerneosConfigurationService");
 
         // Register the classes used with event admin
-        gcr.registerClasses(GRAVITY_DESTINATION, new Class[]{
+        gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_CONFIGURATION, new Class[]{
                 ModuleEvent.class,
                 Service.class,
                 Application.class,
@@ -231,7 +229,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
         });
 
         // Register the classes used with "kerneosConfig" service
-        gcr.registerClasses(getId(), new Class[]{
+        gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, new Class[]{
                 Service.class,
                 Application.class,
                 ApplicationInstance.class,
@@ -243,12 +241,14 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 Authentication.class
         });
 
-        // Register the few configurations used with KerneosConfigurationService
-        gravityDestination = confHelper.newGravityDestination(GRAVITY_DESTINATION, KerneosConstants.GRAVITY_SERVICE);
-        gravityDestination = confHelper.newGravityDestination(getId(), KerneosConstants.GRANITE_SERVICE);
+        // Register the asynchronous service used with KerneosConfigurationService
+        gravityDestination = confHelper.newGravityDestination(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, KerneosConstants.GRAVITY_SERVICE);
         Dictionary properties = new Hashtable();
-        properties.put("destination", GRAVITY_DESTINATION);
+        properties.put("destination", KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
         eaConfig = eaFactory.createComponentInstance(properties);
+
+        // Register the synchronous service used with KerneosConfigurationService
+        graniteDestination = confHelper.newGraniteDestination(KerneosConstants.KERNEOS_SERVICE_CONFIGURATION, KerneosConstants.GRANITE_SERVICE);
 
         // Start to track bundles
         bundleTracker.open();
@@ -270,8 +270,8 @@ public final class KerneosConfigurationService implements GraniteDestination {
         graniteDestination.dispose();
 
         // Unregister the different used classes
-        gcr.unregisterClasses(getId());
-        gcr.unregisterClasses(GRAVITY_DESTINATION);
+        gcr.unregisterClasses(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
+        gcr.unregisterClasses(KerneosConstants.KERNEOS_SERVICE_CONFIGURATION);
     }
 
     /**
@@ -486,6 +486,6 @@ public final class KerneosConfigurationService implements GraniteDestination {
      * @return the service id.
      */
     public String getId() {
-        return "kerneos-configuration";
+        return KerneosConstants.KERNEOS_SERVICE_CONFIGURATION;
     }
 }

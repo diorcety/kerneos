@@ -279,7 +279,7 @@ public class KerneosHttpService implements HttpContext {
                     String password = (data.length >= 2) ? data[1] : null;
 
                     // Auth
-                    if (kerneosSecurityService.login(user, password))
+                    if (kerneosSecurityService.logIn(user, password))
                         return true;
                 }
 

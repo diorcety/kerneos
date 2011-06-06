@@ -124,17 +124,13 @@
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <configuration>
-          <!--
           <compiledLocales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </compiledLocales>
-          -->
           <mergeResourceBundle>true</mergeResourceBundle>
-          <sourceFile>LogInPanel.mxml</sourceFile>
         </configuration>
       </plugin>
     </plugins>
-    <finalName>login</finalName>
   </build>
 </project>

@@ -24,13 +24,17 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
+<mx:Panel  xmlns:fx="http://ns.adobe.com/mxml/2009"
            xmlns:mx="library://ns.adobe.com/flex/mx"
-           pageTitle="EoS"
            xmlns:view="org.ow2.kerneos.login.view.*"
            xmlns:control="org.ow2.kerneos.login.control.*"
            xmlns:business="org.ow2.kerneos.login.business.*"
+           title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.title')}"
            backgroundAlpha="0.0">
+
+    <fx:Metadata>
+        [ResourceBundle("loginLocales")]
+    </fx:Metadata>
 
     <fx:Declarations>
         <!--business:Services id="services" /-->
@@ -39,18 +43,8 @@
 
     <fx:Script>
         <![CDATA[
-        public function logIn():void {
-            loginpanel.logIn();
-        }
-
-        public function reset():void {
-            loginpanel.user.text = "";
-            loginpanel.password.text = "";
-        }
-
-        public function logout():void {
-            loginpanel.logOut();
-        }
+        import mx.resources.ResourceManager;
+        import org.ow2.kerneos.login.manager.LanguagesManager;
         ]]>
     </fx:Script>
 
@@ -59,4 +53,4 @@
                          width="100%"
                          height="100%"/>
 
-</mx:Canvas>
+</mx:Panel>

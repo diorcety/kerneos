@@ -49,7 +49,7 @@ public class Controller extends FrontController {
     * Add all of the commands to the pool of commands.
     */
     public function initialiseCommands() : void {
-        addCommand( LogInEvent.LOG_IN, LogInCommand);
+        addCommand(LogInEvent.LOG_IN, LogInCommand);
         addCommand(LogOutEvent.LOG_OUT, LogOutCommand);
     }
 }

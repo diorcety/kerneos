@@ -65,7 +65,7 @@ public interface IKerneosSecurityService {
      * @param password The password used for login.
      * @return True if the login is successful.
      */
-    public boolean login(String username, String password);
+    public boolean logIn(String username, String password);
 
     /**
      * Check the authorisation associated to the request.
@@ -81,7 +81,7 @@ public interface IKerneosSecurityService {
      *
      * @return True if the logout is successful.
      */
-    public boolean logout();
+    public boolean logOut();
 
     /**
      * Get the roles of the logged user.

@@ -199,8 +199,11 @@ public class SwfModuleWindow extends ModuleWindow {
         unregisterClasses();
 
         // Remove module
-        removeChild(_child);
-        _child = null;
+        if(_child != null)
+        {
+            removeChild(_child);
+            _child = null;
+        }
 
         _moduleInfo.unload();
         _moduleInfo = null;

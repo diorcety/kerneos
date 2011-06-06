@@ -81,7 +81,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
             KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
             kerneosSecurityService.updateContext();
 
-            boolean logged = kerneosSecurityService.login(user, password);
+            boolean logged = kerneosSecurityService.logIn(user, password);
             if (!logged)
                 throw SecurityServiceException.newInvalidCredentialsException();
         }
@@ -112,7 +112,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
             KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
             kerneosSecurityService.updateContext();
 
-            boolean logged_out = kerneosSecurityService.logout();
+            boolean logged_out = kerneosSecurityService.logOut();
             if (!logged_out)
                 throw SecurityServiceException.newNotLoggedInException();
         }
