@@ -123,7 +123,7 @@
                       width="100%"
                       height="100%"/>
 
-    <view:ApplicationTitle includeIn="applicationLoaded"
+    <view:ApplicationTitle includeIn="applicationLoaded, login, desktop"
                            id="applicationTitle"
                            width="1000"
                            height="80"
@@ -154,16 +154,13 @@
         <mx:State name="applicationLoaded"/>
 
         <!-- Working view -->
-        <mx:State name="desktop"
-                  basedOn="applicationLoaded"/>
+        <mx:State name="desktop"/>
 
         <!-- Login view -->
-        <mx:State name="login"
-                  basedOn="applicationLoaded"/>
+        <mx:State name="login"/>
 
         <!-- When server connexion lost -->
-        <mx:State name="disconnected"
-                  basedOn="applicationLoaded"/>
+        <mx:State name="disconnected"/>
 
     </mx:states>
 
