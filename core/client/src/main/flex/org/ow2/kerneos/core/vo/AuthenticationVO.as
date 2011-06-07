@@ -41,6 +41,7 @@ public class AuthenticationVO extends Enum implements IValueObject
     public static const NONE : AuthenticationVO = new AuthenticationVO("NONE", _);
     public static const FLEX : AuthenticationVO = new AuthenticationVO("FLEX",_);
     public static const WWW : AuthenticationVO = new AuthenticationVO("WWW",_);
+    public static const INHERIT : AuthenticationVO = new AuthenticationVO("INHERIT",_);
 
     function AuthenticationVO(value:String = null, restrictor:* = null) {
         super((value || FLEX.name), restrictor);
@@ -51,7 +52,7 @@ public class AuthenticationVO extends Enum implements IValueObject
     }
 
     public static function get constants():Array {
-        return [NONE, FLEX, WWW];
+        return [NONE, FLEX, WWW, INHERIT];
     } 
 
 }

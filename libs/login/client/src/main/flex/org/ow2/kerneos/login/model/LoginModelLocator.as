@@ -22,9 +22,12 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.model
-{
+package org.ow2.kerneos.login.model {
 import com.adobe.cairngorm.model.ModelLocator;
+
+import org.ow2.kerneos.login.business.AuthDelegate;
+
+import org.ow2.kerneos.login.business.IAuthDelegate;
 
 import org.ow2.kerneos.login.business.ILogInDelegate;
 import org.ow2.kerneos.login.business.ILogOutDelegate;
@@ -34,15 +37,20 @@ import org.ow2.kerneos.login.business.LogOutDelegate;
 /**
  * @author Guillaume Renault
  */
-public class LoginModelLocator implements ModelLocator
-{
+public class LoginModelLocator implements ModelLocator {
 
     [Bindable]
     public var loggedIn:Boolean;
 
     /**
-    * Unique instance of this locator.
-    */
+     * The state of the login.
+     */
+    [Bindable]
+    public var state:String = null;
+
+    /**
+     * Unique instance of this locator.
+     */
     private static var model:LoginModelLocator = null;
 
     //[ArrayElementType(JasmineMessageEventVO)]
@@ -53,9 +61,10 @@ public class LoginModelLocator implements ModelLocator
 
     private var logOutDelegate:ILogOutDelegate = null;
 
+    private var authDelegate:IAuthDelegate = null;
+
     // functions
-    public function LoginModelLocator()
-    {
+    public function LoginModelLocator() {
         super();
 
         if (model != null) {
@@ -63,7 +72,7 @@ public class LoginModelLocator implements ModelLocator
         }
     }
 
-    public static function getInstance() : LoginModelLocator {
+    public static function getInstance():LoginModelLocator {
         if (LoginModelLocator.model == null) {
             LoginModelLocator.model = new LoginModelLocator();
         }
@@ -85,6 +94,13 @@ public class LoginModelLocator implements ModelLocator
             this.logOutDelegate = new LogOutDelegate();
         }
         return this.logOutDelegate;
+    }
+
+    public function getAuthDelegate():IAuthDelegate {
+        if (this.authDelegate == null) {
+            this.authDelegate = new AuthDelegate();
+        }
+        return this.authDelegate;
     }
 }
 }

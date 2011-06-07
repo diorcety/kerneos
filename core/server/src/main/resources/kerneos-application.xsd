@@ -80,6 +80,7 @@
       <xs:enumeration value="none"/>
       <xs:enumeration value="flex"/>
       <xs:enumeration value="www"/>
+      <xs:enumeration value="inherit"/>
     </xs:restriction>
   </xs:simpleType>
 

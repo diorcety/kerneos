@@ -38,8 +38,8 @@ public class KerneosConfigEvent extends CairngormEvent {
     /**
     * Type of the event
     */
-    public static var GET_APPLICATION:String = "getApplication";
-    public static var GET_MODULES:String = "getModules";
+    public static var GET_APPLICATION:String = "KerneosGetApplication";
+    public static var GET_MODULES:String = "KerneosGetModules";
 
     /**
      * Create a new instance, and call the super.

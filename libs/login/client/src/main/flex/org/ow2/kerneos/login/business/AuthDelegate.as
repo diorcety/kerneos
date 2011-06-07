@@ -19,42 +19,34 @@
  * USA
  *
  * --------------------------------------------------------------------------
- * $Id:Controller.as 2485 2008-09-30 14:14:35Z renaultgu $
+ * $Id$
  * --------------------------------------------------------------------------
  */
-
-package org.ow2.kerneos.login.control
+package org.ow2.kerneos.login.business
 {
-import com.adobe.cairngorm.control.FrontController;
+import com.adobe.cairngorm.business.ServiceLocator;
 
-import org.ow2.kerneos.login.command.AuthCommand;
 
-import org.ow2.kerneos.login.command.LogInCommand;
-import org.ow2.kerneos.login.command.LogOutCommand;
-import org.ow2.kerneos.login.event.AuthEvent;
-import org.ow2.kerneos.login.event.LogInEvent;
-import org.ow2.kerneos.login.event.LogOutEvent;
+import org.ow2.kerneos.common.business.AbsDelegateResponder;
 
-/**
- * Bind a type of command to an action.
- * @author Guillaume Renault
- */
-public class Controller extends FrontController {
+public class AuthDelegate extends AbsDelegateResponder implements IAuthDelegate
+{
 
     /**
-    * Create an instance of the controller. Commands are initialized here.
+    * Call a procedure on the service registered. The user's authentication is checked.
     */
-    public function Controller() {
-        initialiseCommands();
+    public function auth() : void {
+
+        // find service
+        var service : Object = ServiceLocator.getInstance().getRemoteObject( "kerneosSecurityService" );
+
+        // call service
+        var call : Object = service.isLogged();
+
+        // add the responder as a listener for the answer of the java side
+        call.addResponder( this.responder );
     }
 
-    /**
-    * Add all of the commands to the pool of commands.
-    */
-    public function initialiseCommands() : void {
-        addCommand(AuthEvent.AUTH, AuthCommand);
-        addCommand(LogInEvent.LOG_IN, LogInCommand);
-        addCommand(LogOutEvent.LOG_OUT, LogOutCommand);
-    }
+
 }
 }

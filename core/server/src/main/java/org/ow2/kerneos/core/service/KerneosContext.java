@@ -1,12 +1,14 @@
-package org.ow2.kerneos.core.service.impl;
+package org.ow2.kerneos.core.service;
 
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * The Object used the context for kerneos.
  */
-class KerneosContext {
+public class KerneosContext {
     private static ThreadLocal<KerneosContext> kerneosContextThreadLocal = new ThreadLocal<KerneosContext>() {
         @Override
         protected KerneosContext initialValue() {
@@ -32,10 +34,12 @@ class KerneosContext {
         return kerneosContextThreadLocal.get();
     }
 
+    private HttpServletRequest currentHttpRequest;
     private IApplicationInstance applicationInstance;
     private IModuleInstance moduleInstance;
 
-    KerneosContext(IApplicationInstance applicationInstance, IModuleInstance moduleInstance) {
+    public KerneosContext(HttpServletRequest currentHttpRequest, IApplicationInstance applicationInstance, IModuleInstance moduleInstance) {
+        this.currentHttpRequest = currentHttpRequest;
         this.applicationInstance = applicationInstance;
         this.moduleInstance = moduleInstance;
     }
@@ -46,5 +50,10 @@ class KerneosContext {
 
     public IModuleInstance getModuleInstance() {
         return moduleInstance;
+    }
+
+    public HttpServletRequest getCurrentHttpRequest()
+    {
+        return currentHttpRequest;
     }
 }

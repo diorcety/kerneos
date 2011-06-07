@@ -32,23 +32,19 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.login.business.ILogOutDelegate;
-import org.ow2.kerneos.login.event.LogInEvent;
+import org.ow2.kerneos.login.business.IAuthDelegate;
 import org.ow2.kerneos.login.manager.LanguagesManager;
 import org.ow2.kerneos.login.model.LoginModelLocator;
 import org.ow2.kerneos.login.model.LoginState;
 
-/**
- * @author Guillaume Renault
- */
-public class LogOutCommand implements ICommand, IResponder {
+public class AuthCommand implements ICommand, IResponder {
     /**
      * Send the event to the java side, using the business layer of the pattern
      */
     public function execute(event:CairngormEvent):void {
-        var delegate:ILogOutDelegate = LoginModelLocator.getInstance().getLogOutDelegate();
+        var delegate:IAuthDelegate = LoginModelLocator.getInstance().getAuthDelegate();
         delegate.responder = this;
-        delegate.logOut();
+        delegate.auth();
     }
 
     /**
@@ -59,13 +55,13 @@ public class LogOutCommand implements ICommand, IResponder {
 
         var model:LoginModelLocator = LoginModelLocator.getInstance();
 
-        var loggedOut:Boolean = (event as ResultEvent).result as Boolean;
+        var isLogged:Boolean = (event as ResultEvent).result as Boolean;
 
-        if (loggedOut == true) {
-            model.loggedIn = false;
+        if (isLogged == true) {
+            model.loggedIn = true;
+        } else {
+            model.state = LoginState.LOGIN;
         }
-
-        model.state = LoginState.LOGIN;
     }
 
     /**

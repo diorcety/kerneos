@@ -33,16 +33,32 @@ import java.util.Collection;
 public interface KerneosLogin {
     /**
      * Login.
+     *
      * @param application The name of the application.
-     * @param username The username.
-     * @param password The password.
+     * @param username    The username.
+     * @param password    The password.
      * @return An array with the name of the roles associated to the user. null if the login failed.
      */
-    public Collection<String> login(final String application, final String username, final String password);
+    public boolean login(final String application, final String username, final String password);
+
+    /**
+     * Get the roles of the logged user.
+     *
+     * @return A list containing the different roles of the user.
+     */
+    public Collection<String> getRoles();
 
     /**
      * Logout.
+     *
      * @return
      */
     public boolean logout();
+
+    /**
+     * Check if the user is logged
+     *
+     * @return True is the user is logged
+     */
+    public boolean isLogged();
 }

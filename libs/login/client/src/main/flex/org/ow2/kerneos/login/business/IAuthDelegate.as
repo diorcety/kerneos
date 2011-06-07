@@ -22,41 +22,18 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-
-package org.ow2.kerneos.login.event
+package org.ow2.kerneos.login.business
 {
-import com.adobe.cairngorm.control.CairngormEvent;
-
-import flash.events.Event;
-
-/**
- * LogOutEvent class. This is the link between the view layer and the command layer
- * @author Guillaume Renault
- */
-public class LogOutEvent extends CairngormEvent {
+    import org.ow2.kerneos.common.business.IDelegateResponder;
 
     /**
-    * type of the event.
+    * To be implemented by the delegate class.
     */
-    public static var LOG_OUT:String = "KerneosLogOut";
-
-    /**
-     * Create a new instance, and call the super.
-     *
-     * @param type String to put in the event.
-     */
-    public function LogOutEvent(type:String) {
-        super( type );
+    public interface IAuthDelegate extends IDelegateResponder
+    {
+        /**
+        * Check authentication of the user.
+        */
+        function auth() : void;
     }
-
-    /**
-     * Override the inherited clone() method, but don't return any state.
-     *
-     * @return this event
-     */
-    override public function clone() : Event {
-        return new LogInEvent(this.type);
-    }
-
-}
 }

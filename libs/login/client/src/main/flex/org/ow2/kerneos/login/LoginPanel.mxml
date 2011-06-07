@@ -24,13 +24,13 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Panel  xmlns:fx="http://ns.adobe.com/mxml/2009"
-           xmlns:mx="library://ns.adobe.com/flex/mx"
-           xmlns:view="org.ow2.kerneos.login.view.*"
-           xmlns:control="org.ow2.kerneos.login.control.*"
-           xmlns:business="org.ow2.kerneos.login.business.*"
-           title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.title')}"
-           backgroundAlpha="0.0">
+<mx:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:mx="library://ns.adobe.com/flex/mx"
+          xmlns:view="org.ow2.kerneos.login.view.*"
+          xmlns:control="org.ow2.kerneos.login.control.*"
+          xmlns:business="org.ow2.kerneos.login.business.*"
+          title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.title')}"
+          currentState="{LoginModelLocator.getInstance().state}">
 
     <fx:Metadata>
         [ResourceBundle("loginLocales")]
@@ -43,14 +43,59 @@
 
     <fx:Script>
         <![CDATA[
+        import com.adobe.cairngorm.control.CairngormEventDispatcher;
+
         import mx.resources.ResourceManager;
+
+        import org.ow2.kerneos.login.event.AuthEvent;
+
+        import org.ow2.kerneos.login.event.LogOutEvent;
+
         import org.ow2.kerneos.login.manager.LanguagesManager;
+        import org.ow2.kerneos.login.model.LoginModelLocator;
+
+        private function logout():void {
+            var event:LogOutEvent = new LogOutEvent(LogOutEvent.LOG_OUT);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event);
+        }
+
+        private function auth():void {
+            var event:AuthEvent = new AuthEvent(AuthEvent.AUTH);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event);
+        }
         ]]>
     </fx:Script>
 
-    <!-- Main view -->
-    <view:LoginPanelMain id="loginpanel"
-                         width="100%"
-                         height="100%"/>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- States                                                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+    <mx:states>
+
+        <!-- When Check Authentication -->
+        <mx:State name="auth" enterState="auth()"/>
+
+        <!-- When Login-->
+        <mx:State name="login"/>
+
+        <!-- When Logout -->
+        <mx:State name="logout" enterState="logout()"/>
+
+    </mx:states>
+
+    <!-- Main views -->
+    <view:AuthView includeIn="auth"
+                   id="authView"
+                   width="100%"
+                   height="100%"/>
+
+    <view:LogInView includeIn="login"
+                    id="loginView"
+                    width="100%"
+                    height="100%"/>
+
+    <view:LogOutView includeIn="logout"
+                     id="logoutView"
+                     width="100%"
+                     height="100%"/>
 </mx:Panel>

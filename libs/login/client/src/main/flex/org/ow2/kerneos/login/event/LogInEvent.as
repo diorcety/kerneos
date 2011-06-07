@@ -38,7 +38,7 @@ public class LogInEvent extends CairngormEvent {
     /**
     * type of the event.
     */
-    public static var LOG_IN:String = "Log in";
+    public static var LOG_IN:String = "KerneosLogIn";
 
     private var userObj:String = "";
 

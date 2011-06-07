@@ -19,42 +19,44 @@
  * USA
  *
  * --------------------------------------------------------------------------
- * $Id:Controller.as 2485 2008-09-30 14:14:35Z renaultgu $
+ * $Id$
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.login.control
+package org.ow2.kerneos.login.event
 {
-import com.adobe.cairngorm.control.FrontController;
+import com.adobe.cairngorm.control.CairngormEvent;
 
-import org.ow2.kerneos.login.command.AuthCommand;
-
-import org.ow2.kerneos.login.command.LogInCommand;
-import org.ow2.kerneos.login.command.LogOutCommand;
-import org.ow2.kerneos.login.event.AuthEvent;
-import org.ow2.kerneos.login.event.LogInEvent;
-import org.ow2.kerneos.login.event.LogOutEvent;
+import flash.events.Event;
 
 /**
- * Bind a type of command to an action.
+ * LogOutEvent class. This is the link between the view layer and the command layer
  * @author Guillaume Renault
  */
-public class Controller extends FrontController {
+public class AuthEvent extends CairngormEvent {
 
     /**
-    * Create an instance of the controller. Commands are initialized here.
+    * type of the event.
     */
-    public function Controller() {
-        initialiseCommands();
+    public static var AUTH:String = "KerneosAuth";
+
+    /**
+     * Create a new instance, and call the super.
+     *
+     * @param type String to put in the event.
+     */
+    public function AuthEvent(type:String) {
+        super( type );
     }
 
     /**
-    * Add all of the commands to the pool of commands.
-    */
-    public function initialiseCommands() : void {
-        addCommand(AuthEvent.AUTH, AuthCommand);
-        addCommand(LogInEvent.LOG_IN, LogInCommand);
-        addCommand(LogOutEvent.LOG_OUT, LogOutCommand);
+     * Override the inherited clone() method, but don't return any state.
+     *
+     * @return this event
+     */
+    override public function clone() : Event {
+        return new LogInEvent(this.type);
     }
+
 }
 }

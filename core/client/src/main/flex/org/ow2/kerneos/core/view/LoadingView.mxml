@@ -60,6 +60,7 @@
         import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
         import org.ow2.kerneos.core.vo.AuthenticationVO;
         import org.ow2.kerneos.login.model.LoginModelLocator;
+        import org.ow2.kerneos.login.model.LoginState;
 
 
         // =========================================================================
@@ -124,6 +125,7 @@
                     KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
                 }
                 else {
+                    LoginModelLocator.getInstance().state = LoginState.AUTH;
                     KerneosModelLocator.getInstance().state = KerneosState.LOGIN;
                 }
             }

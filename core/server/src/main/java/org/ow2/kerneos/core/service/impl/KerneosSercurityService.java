@@ -39,6 +39,7 @@ import org.granite.osgi.service.GraniteDestination;
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
 import org.ow2.kerneos.core.service.DefaultKerneosLogin;
+import org.ow2.kerneos.core.service.KerneosContext;
 import org.ow2.kerneos.core.service.KerneosLogin;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -97,21 +98,17 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
     private KerneosSession getKerneosSession() {
         HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
         Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
-        if (obj == null || !(obj instanceof KerneosSession))
-            return null;
+        if (obj == null || !(obj instanceof KerneosSession)) {
+            KerneosSession kerneosSession = new KerneosSession();
+            request.getSession().setAttribute(KERNEOS_SESSION_KEY, kerneosSession);
+            return kerneosSession;
+        }
         return (KerneosSession) obj;
     }
 
     /**
-     * Set the information about Kerneos session.
-     *
-     * @param kerneosSession The KerneosSession.
+     * Update context following the request
      */
-    private void setKerneosSession(KerneosSession kerneosSession) {
-        HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
-        request.getSession().setAttribute(KERNEOS_SESSION_KEY, kerneosSession);
-    }
-
     public void updateContext() {
         HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
         IApplicationInstance currentApplicationInstance = null;
@@ -134,7 +131,7 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
             }
         }
 
-        KerneosContext.set(new KerneosContext(currentApplicationInstance, currentModuleInstance));
+        KerneosContext.set(new KerneosContext(request, currentApplicationInstance, currentModuleInstance));
     }
 
     /**
@@ -149,9 +146,7 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
                 break;
 
             default:
-                KerneosSession kerneosSession = getKerneosSession();
-
-                return kerneosSession != null;
+                return kerneosLogin.isLogged();
         }
         return true;
     }
@@ -170,12 +165,12 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
                 break;
 
             default:
-                Collection<String> roles = kerneosLogin.login(applicationInstance.getId(), username, password);
-                if (roles == null)
+                boolean isLogged = kerneosLogin.login(applicationInstance.getId(), username, password);
+                if (!isLogged)
                     return false;
 
-                KerneosSession kerneosSession = new KerneosSession(username, roles);
-                setKerneosSession(kerneosSession);
+                KerneosSession kerneosSession = getKerneosSession();
+                kerneosSession.setRoles(kerneosLogin.getRoles());
         }
         return true;
     }
@@ -210,7 +205,7 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
     }
 
     /**
-     * Logout of Kerneos.
+     * Logout from Kerneos.
      *
      * @return True if the logout is successful.
      */
@@ -224,7 +219,7 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
                 boolean logged_out = kerneosLogin.logout();
                 if (!logged_out)
                     return false;
-                setKerneosSession(null);
+                getKerneosSession().clear();
         }
         return true;
     }
@@ -247,20 +242,13 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
      * The Object used to store the session information.
      */
     class KerneosSession {
-        private String user;
         private Collection<String> roles;
 
-        KerneosSession(String user, Collection<String> roles) {
-            this.user = user;
-            this.roles = roles;
+        KerneosSession() {
         }
 
-        public String getUser() {
-            return user;
-        }
-
-        public void setUser(String user) {
-            this.user = user;
+        public void clear() {
+            roles = null;
         }
 
         public Collection<String> getRoles() {

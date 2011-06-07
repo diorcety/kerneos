@@ -34,45 +34,14 @@
         <![CDATA[
         import mx.resources.ResourceManager;
 
-        import org.ow2.kerneos.login.event.LogInEvent;
-
-        import com.adobe.cairngorm.control.CairngormEventDispatcher;
-
         import org.ow2.kerneos.login.manager.LanguagesManager;
 
-        private function login():void {
-            var event:LogInEvent = new LogInEvent(LogInEvent.LOG_IN);
-            event.user = username.text;
-            username.text = "";
-            event.password = password.text;
-            password.text = "";
-            CairngormEventDispatcher.getInstance().dispatchEvent(event);
-
-            return;
-        }
         ]]>
     </fx:Script>
 
     <mx:Text width="100%"
              textAlign="center"
-             text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.label')}"
+             text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.auth.label')}"
              selectable="false"/>
 
-    <flexlibControls:PromptingTextInput
-        prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
-        id="username"
-        width="100%"
-        toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username.tooltip')}"/>
-
-    <flexlibControls:PromptingTextInput
-        prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password')}"
-        id="password"
-        width="100%"
-        toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password.tooltip')}"
-        displayAsPassword="true"/>
-
-    <mx:Button
-            id="validate"
-            label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.validate')}"
-            click="login();" />
 </mx:VBox>

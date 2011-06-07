@@ -41,6 +41,7 @@ import org.osgi.service.http.NamespaceException;
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
 import org.ow2.kerneos.core.config.generated.Authentication;
+import org.ow2.kerneos.core.service.KerneosContext;
 import org.ow2.kerneos.core.service.util.Base64;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -62,9 +63,6 @@ import java.util.Map;
 @Provides(properties = @StaticServiceProperty(name = "ID", value = KerneosConstants.KERNEOS_CONTEXT_NAME, type = "string"))
 public class KerneosHttpService implements HttpContext {
 
-
-    @ServiceProperty(name = "ID")
-    String id;
     /**
      * The logger.
      */
@@ -87,6 +85,9 @@ public class KerneosHttpService implements HttpContext {
     public static HttpServletRequest getCurrentHttpRequest() {
         return httpServletRequestThreadLocal.get();
     }
+
+    @ServiceProperty(name = "ID")
+    String id;
 
     /**
      * OSGi HTTPService.
@@ -273,7 +274,7 @@ public class KerneosHttpService implements HttpContext {
 
                     // Get Login/Password
                     String userpassword = authHeader.substring(6);
-                    userpassword = new String(Base64.decode(userpassword));
+                    userpassword = new String(Base64.decode(userpassword), "ISO-8859-1");
                     String[] data = userpassword.split("\\:");
                     String user = (data.length >= 1) ? data[0] : null;
                     String password = (data.length >= 2) ? data[1] : null;

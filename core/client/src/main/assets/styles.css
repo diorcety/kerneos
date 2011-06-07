@@ -26,7 +26,7 @@
 @namespace kerneosNotification "org.ow2.kerneos.core.view.notification.*";
 @namespace kerneosWindow "org.ow2.kerneos.core.view.window.*";
 @namespace kerneos "org.ow2.kerneos.core.view.*";
-@namespace kerneosLogin "org.ow2.kerneos.login.view.*";
+@namespace kerneosLogin "org.ow2.kerneos.login.*";
 
 /*******************************************************************************
  * Application
@@ -72,7 +72,7 @@ global {
 /*******************************************************************************
  * Login
  ******************************************************************************/
-kerneosLogin|LoginPanelMain {
+kerneosLogin|LoginPanel {
     dropShadowEnabled: true;
     dropShadowColor: #000000;
     borderColor: #666666;
@@ -84,6 +84,10 @@ kerneosLogin|LoginPanelMain {
     rounded-bottom-corners: true;
     cornerRadius: 3;
     backgroundColor: #CCCCCC;
+    paddingBottom: 5px;
+    paddingLeft: 3px;
+    paddingTop: 2px;
+    paddingRight: 3px;
 }
 
 /*******************************************************************************

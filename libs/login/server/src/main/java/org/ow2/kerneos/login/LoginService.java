@@ -29,6 +29,7 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 
+import org.ow2.kerneos.core.service.KerneosContext;
 import org.ow2.kerneos.core.service.KerneosLogin;
 
 import javax.security.auth.callback.CallbackHandler;
@@ -42,12 +43,14 @@ import java.util.LinkedList;
 @Provides
 public class LoginService implements KerneosLogin {
 
+    private static final String KERNEOS_SECURITY_KEY = "KERNEOS-SECURITY";
+
     /**
      * CallbackHandler.
      */
     private CallbackHandler handler = null;
 
-    public Collection<String> login(final String application, final String user, final String password) {
+    public boolean login(final String application, final String user, final String password) {
         this.handler = new NoInputCallbackHandler(user, password);
         try {
             // Obtain a LoginContext
@@ -56,17 +59,28 @@ public class LoginService implements KerneosLogin {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             lc.login();
 
+
             Collection<String> roles = new LinkedList<String>();
             for (Principal principal : lc.getSubject().getPrincipals()) {
                 roles.add(principal.getName());
             }
-            return roles;
+            KerneosContext.get().getCurrentHttpRequest().getSession().setAttribute(KERNEOS_SECURITY_KEY, roles);
+            return true;
         } catch (Exception e) {
-            return null;
+            return false;
         }
     }
 
+    public Collection<String> getRoles() {
+        return (Collection<String>) KerneosContext.get().getCurrentHttpRequest().getSession().getAttribute(KERNEOS_SECURITY_KEY);
+    }
+
     public boolean logout() {
+        KerneosContext.get().getCurrentHttpRequest().getSession().removeAttribute(KERNEOS_SECURITY_KEY);
         return true;
+    }
+
+    public boolean isLogged() {
+        return (KerneosContext.get().getCurrentHttpRequest().getSession().getAttribute(KERNEOS_SECURITY_KEY) == null) ? false : true;
     }
 }

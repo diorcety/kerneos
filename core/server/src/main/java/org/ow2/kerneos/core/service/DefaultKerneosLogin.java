@@ -5,11 +5,19 @@ import java.util.LinkedList;
 
 public class DefaultKerneosLogin implements KerneosLogin {
 
-    public Collection<String> login(String application, String user, String password) {
+    public boolean login(String application, String user, String password) {
+        return true;
+    }
+
+    public Collection<String> getRoles() {
         return new LinkedList<String>();
     }
 
     public boolean logout() {
+        return true;
+    }
+
+    public boolean isLogged() {
         return true;
     }
 }

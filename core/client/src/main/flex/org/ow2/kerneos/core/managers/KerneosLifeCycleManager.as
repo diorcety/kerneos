@@ -27,7 +27,6 @@ import com.adobe.cairngorm.business.ServiceLocator;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import flash.events.Event;
-import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
@@ -59,8 +58,8 @@ import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
 import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
 import org.ow2.kerneos.core.vo.SWFModuleVO;
 import org.ow2.kerneos.core.vo.ServiceVO;
-import org.ow2.kerneos.login.LoginPanel;
-import org.ow2.kerneos.login.event.LogOutEvent;
+import org.ow2.kerneos.login.model.LoginModelLocator;
+import org.ow2.kerneos.login.model.LoginState;
 
 
 /**
@@ -188,8 +187,7 @@ public class KerneosLifeCycleManager {
      * Logout from the application.
      */
     public static function logout(event:Event = null):void {
-        var event2:LogOutEvent = new LogOutEvent(LogOutEvent.LOG_OUT);
-        CairngormEventDispatcher.getInstance().dispatchEvent(event2);
+        LoginModelLocator.getInstance().state = LoginState.LOGOUT;
         KerneosModelLocator.getInstance().state = KerneosState.LOGIN;
     }
 
