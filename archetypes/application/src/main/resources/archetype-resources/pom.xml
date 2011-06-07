@@ -75,123 +75,170 @@
         <groupId>org.ow2.bundles</groupId>
         <artifactId>ow2-util-log</artifactId>
         <version>${ow2-util-log.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.main</artifactId>
         <version>${org.apache.felix.main.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.confman</groupId>
         <artifactId>pax-confman-propsloader</artifactId>
         <version>${pax-confman-propsloader.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>pax-logging-api</artifactId>
         <version>${pax-logging-api.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>pax-logging-service</artifactId>
         <version>${pax-logging-service.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.bundlerepository</artifactId>
         <version>${org.apache.felix.bundlerepository.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.configadmin</artifactId>
         <version>${org.apache.felix.configadmin.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.eventadmin</artifactId>
         <version>${org.apache.felix.eventadmin.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.fileinstall</artifactId>
         <version>${org.apache.felix.fileinstall.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.gogo.command</artifactId>
         <version>${org.apache.felix.gogo.command.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.gogo.runtime</artifactId>
         <version>${org.apache.felix.gogo.runtime.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.gogo.shell</artifactId>
         <version>${org.apache.felix.gogo.shell.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.http.jetty</artifactId>
         <version>${org.apache.felix.http.jetty.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
         <version>${org.apache.felix.ipojo.handler.eventadmin.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
         <version>${org.apache.felix.ipojo.handler.extender.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.ipojo</artifactId>
         <version>${org.apache.felix.ipojo.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.compendium</artifactId>
         <version>${org.osgi.compendium.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.ow2.bundles</groupId>
         <artifactId>ow2-util-i18n</artifactId>
         <version>${ow2-util-i18n.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-core</artifactId>
         <version>${graniteds-osgi.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-gravity-ea</artifactId>
         <version>${graniteds-osgi.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-gravity-jms</artifactId>
         <version>${graniteds-osgi.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-gravity</artifactId>
         <version>${graniteds-osgi.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <!--Kerneos Core Dependency-->
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-core-server</artifactId>
         <version>${kerneos-core-server.version}</version>
+        <type>bundle</type>
       </dependency>
       <!--Application Dependency-->
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>${application.artifactId}</artifactId>
         <version>${project.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
       </dependency>
       <!-- Add your kerneos modules dependencies here-->
     </dependencies>

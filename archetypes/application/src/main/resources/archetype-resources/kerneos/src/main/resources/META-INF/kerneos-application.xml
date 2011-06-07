@@ -64,4 +64,7 @@
     <!-- Default language of Kerneos. values : fr_FR or en_US -->
     <default-language>en_US</default-language>
 
+    <!-- Authentication method-->
+    <authentication>none</authentication>
+
 </application>
