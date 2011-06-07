@@ -214,9 +214,8 @@ public final class KerneosConfigurationService implements GraniteDestination {
             UnacceptableConfiguration {
         logger.debug("Start KerneosConfigurationService");
 
-        // Register the classes used with event admin
+        // Register the classes used with "kerneosConfig" service
         gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_CONFIGURATION, new Class[]{
-                ModuleEvent.class,
                 Service.class,
                 Application.class,
                 ApplicationInstance.class,
@@ -228,8 +227,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 Authentication.class
         });
 
-        // Register the classes used with "kerneosConfig" service
+        // Register the classes used with event admin
         gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, new Class[]{
+                ModuleEvent.class,
                 Service.class,
                 Application.class,
                 ApplicationInstance.class,

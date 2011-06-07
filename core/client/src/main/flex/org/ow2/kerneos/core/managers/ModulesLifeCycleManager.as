@@ -40,8 +40,11 @@ import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.core.FlexGlobals;
 import mx.core.UIComponent;
+import mx.events.CloseEvent;
+import mx.messaging.events.ChannelEvent;
 import mx.messaging.events.ChannelFaultEvent;
 import mx.messaging.events.MessageEvent;
+import mx.resources.ResourceManager;
 import mx.utils.UIDUtil;
 
 import org.granite.gravity.Consumer;
@@ -49,7 +52,9 @@ import org.ow2.kerneos.common.event.KerneosNotificationEvent;
 import org.ow2.kerneos.common.util.IconUtility;
 import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
+import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
+import org.ow2.kerneos.core.view.notification.NotificationPopUp;
 import org.ow2.kerneos.core.view.window.FolderWindow;
 import org.ow2.kerneos.core.view.window.IFrameModuleWindow;
 import org.ow2.kerneos.core.view.window.MinimizedModuleWindow;
@@ -57,6 +62,7 @@ import org.ow2.kerneos.core.view.window.ModuleWindow;
 import org.ow2.kerneos.core.view.window.SwfModuleWindow;
 import org.ow2.kerneos.core.vo.FolderVO;
 import org.ow2.kerneos.core.vo.IFrameModuleVO;
+import org.ow2.kerneos.core.vo.KerneosNotification;
 import org.ow2.kerneos.core.vo.LinkVO;
 import org.ow2.kerneos.core.vo.ModuleEventVO;
 import org.ow2.kerneos.core.vo.ModuleInstanceVO;
@@ -94,6 +100,11 @@ public class ModulesLifeCycleManager {
      * The IFrame  objects
      */
     public static var frames:Dictionary = new Dictionary();
+
+    /**
+     * true if the there is a problem with channels or communications
+     */
+    public static var inFaultState:Boolean = false;
 
     /**
      * The gravity consumer for asynchronous OSGi communication
@@ -198,7 +209,7 @@ public class ModulesLifeCycleManager {
         checkDesktopNotNull();
 
         // Remove the tasbar button
-        desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow)
+        desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow);
 
         if (window is SwfModuleWindow) {
             // Unload module
@@ -295,6 +306,9 @@ public class ModulesLifeCycleManager {
         consumer.topic = "kerneos/config";
         consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
         consumer.addEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
+        consumer.addEventListener(ChannelEvent.CONNECT, onChannelConnection);
+        consumer.addEventListener(ChannelEvent.DISCONNECT, onChannelDisconnect);
+
         consumer.subscribe();
     }
 
@@ -315,9 +329,6 @@ public class ModulesLifeCycleManager {
      * Setup the modules.
      */
     private static function installModules(modules:ArrayCollection):void {
-        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
-        var serviceIds:ArrayCollection = new ArrayCollection();
-
         // For each module
         for each (var module:ModuleVO in modules) {
             installModule(module);
@@ -329,9 +340,6 @@ public class ModulesLifeCycleManager {
      * Delete the modules setup
      */
     private static function uninstallModules(modules:ArrayCollection):void {
-        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
-        var serviceIds:ArrayCollection = new ArrayCollection();
-
         // For each module
         for each (var module:ModuleVO in modules) {
             uninstallModule(module);
@@ -399,7 +407,61 @@ public class ModulesLifeCycleManager {
      * Message showed when there is a communication problem from gravity consumer
      */
     private static function onFault(event:Event):void {
-        Alert.show(event.toString());
+        if (KerneosModelLocator.getInstance().state != KerneosState.DESKTOP &&
+                KerneosModelLocator.getInstance().state != KerneosState.DISCONNECTED) {
+            Alert.show(ResourceManager.getInstance().getString(
+                    LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.channel-problem'));
+        } else {
+            if (!inFaultState) {
+                inFaultState = true;
+
+                KerneosModelLocator.getInstance().state = KerneosState.DISCONNECTED;
+
+                Alert.show(ResourceManager.getInstance().getString(
+                        LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency'),
+                        ResourceManager.getInstance().getString(
+                                LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency.title'),
+                        Alert.OK | Alert.NO, null,
+                        channelDisconnectListener, null, Alert.OK);
+
+            }
+
+        }
+    }
+
+    private static function onChannelDisconnect(event:Event):void {
+        if (!inFaultState) {
+            Alert.show(ResourceManager.getInstance().getString(
+                    LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency'),
+                    ResourceManager.getInstance().getString(
+                            LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency.title'),
+                    Alert.OK | Alert.NO, null,
+                    channelDisconnectListener, null, Alert.OK);
+        }
+
+        inFaultState = true;
+    }
+
+    private static function onChannelConnection(event:Event):void {
+        if (inFaultState) {
+            //TODO Have to get back to normal state
+             FlexGlobals.topLevelApplication.enabled = true;
+        }
+
+        inFaultState = false;
+
+        if (KerneosModelLocator.getInstance().state == KerneosState.DISCONNECTED) {
+            KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+        }
+    }
+
+    private static function channelDisconnectListener(eventObj:CloseEvent):void {
+        // Check to see if the OK button was pressed.
+        if (eventObj.detail==Alert.OK) {
+            FlexGlobals.topLevelApplication.enabled = false;
+        } else {
+            KerneosLifeCycleManager.reloadPage();
+        }
     }
 
     /**
@@ -417,6 +479,12 @@ public class ModulesLifeCycleManager {
             if (moduleEvent.eventType == ModuleEventVO.LOAD) {
                 var moduleInstance:ModuleInstanceVO = moduleEvent.moduleInstance;
                 model.moduleInstances.addItem(moduleInstance);
+
+                //Pop-up module arrival
+                notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load',
+                        [moduleInstance.configuration.name]);
+
+                //Setup the module
                 installModule(moduleInstance.configuration);
             } else {
                 var moduleInstance:ModuleInstanceVO = null;
@@ -429,11 +497,33 @@ public class ModulesLifeCycleManager {
                     }
                 }
                 if (moduleInstance) {
+
+                    //Pop-up module departure
+                    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload',
+                            [moduleInstance.configuration.name]);
+
+                    //Unload the module
                     unloadModule(moduleInstance.configuration);
                     uninstallModule(moduleInstance.configuration);
                 }
             }
         }
+    }
+
+    /**
+     * Shows un pop-up in the main view
+     * @param messageCode The locale message defined into properties file
+     * @param parameters The parameters to be replaced in the message
+     */
+    private static function notifiedModuleArrivalDeparture(messageCode:String, parameters:Array):void {
+        // Build and display the popup
+        var notifPopUp:NotificationPopUp = new NotificationPopUp();
+        notifPopUp.message = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                messageCode, parameters);
+        notifPopUp.level = KerneosNotification.INFO;
+        notifPopUp.setStyle("bottom", 0);
+        notifPopUp.setStyle("right", 0);
+        NotificationsManager.desktop.windowContainer.addChild(notifPopUp);
     }
 }
 }

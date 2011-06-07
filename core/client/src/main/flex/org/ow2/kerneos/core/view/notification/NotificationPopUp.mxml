@@ -228,7 +228,7 @@
              useHandCursor="true"
              mouseChildren="false"
              buttonMode="true"
-             click="{window.bringToFront()}"/>
+             click="{(window != null)?window.bringToFront():''}"/>
     </mx:Box>
     
 </mx:VBox>
