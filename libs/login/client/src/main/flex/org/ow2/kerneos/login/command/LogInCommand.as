@@ -37,6 +37,7 @@ import org.ow2.kerneos.login.business.ILogInDelegate;
 import org.ow2.kerneos.login.event.LogInEvent;
 import org.ow2.kerneos.login.manager.LanguagesManager;
 import org.ow2.kerneos.login.model.LoginModelLocator;
+import org.ow2.kerneos.login.model.LoginState;
 
 
 /**
@@ -59,9 +60,12 @@ public class LogInCommand implements ICommand, IResponder {
     public function result(event:Object):void {
         var model:LoginModelLocator = LoginModelLocator.getInstance();
         var logged:Boolean = (event as ResultEvent).result as Boolean;
-        model.loggedIn = logged;
+
         if (!logged) {
             Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.failed'), "Error");
+        }
+        else {
+            model.state = LoginState.LOGGED;
         }
     }
 

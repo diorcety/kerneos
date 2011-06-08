@@ -120,13 +120,13 @@
                 progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
                         'kerneos.startup.ready');
 
+                KerneosModelLocator.getInstance().state = KerneosState.APPLICATION_LOADED;
+
                 if (!applicationInstance.configuration.authentication.equals(AuthenticationVO.FLEX)) {
-                    LoginModelLocator.getInstance().loggedIn = true;
-                    KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+                    LoginModelLocator.getInstance().state = LoginState.LOGGED;
                 }
                 else {
                     LoginModelLocator.getInstance().state = LoginState.AUTH;
-                    KerneosModelLocator.getInstance().state = KerneosState.LOGIN;
                 }
             }
         }
@@ -145,6 +145,7 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- Graphical filters & effects                                             -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <fx:Declarations>
         <mx:DropShadowFilter id="progressBarShadow"
                              distance="2"

@@ -57,8 +57,8 @@ public class AuthCommand implements ICommand, IResponder {
 
         var isLogged:Boolean = (event as ResultEvent).result as Boolean;
 
-        if (isLogged == true) {
-            model.loggedIn = true;
+        if (isLogged) {
+            model.state = LoginState.LOGGED;
         } else {
             model.state = LoginState.LOGIN;
         }

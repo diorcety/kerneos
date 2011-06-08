@@ -26,7 +26,6 @@
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:mx="library://ns.adobe.com/flex/mx"
-         xmlns:flexlibControls="flexlib.controls.*"
          horizontalAlign="center"
          verticalAlign="middle">
 
@@ -35,7 +34,6 @@
         import mx.resources.ResourceManager;
 
         import org.ow2.kerneos.login.manager.LanguagesManager;
-
         ]]>
     </fx:Script>
 

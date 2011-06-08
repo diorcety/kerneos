@@ -43,5 +43,9 @@ public class LoginState {
      */
     public static var LOGOUT:String = "logout";
 
+     /**
+     * When Logout.
+     */
+    public static var LOGGED:String = "logged";
 }
 }

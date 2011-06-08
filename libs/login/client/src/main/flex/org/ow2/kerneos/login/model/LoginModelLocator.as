@@ -38,10 +38,6 @@ import org.ow2.kerneos.login.business.LogOutDelegate;
  * @author Guillaume Renault
  */
 public class LoginModelLocator implements ModelLocator {
-
-    [Bindable]
-    public var loggedIn:Boolean;
-
     /**
      * The state of the login.
      */

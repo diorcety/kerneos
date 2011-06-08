@@ -28,28 +28,9 @@
            xmlns:mx="library://ns.adobe.com/flex/mx"
            xmlns:login="org.ow2.kerneos.login.*">
 
-    <fx:Script>
-        <![CDATA[
-        import org.ow2.kerneos.core.model.KerneosModelLocator;
-        import org.ow2.kerneos.core.model.KerneosState;
-        import org.ow2.kerneos.login.model.LoginModelLocator;
-
-        private function set loginChanged(isLogged:Boolean):void {
-            if (isLogged) {
-                KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
-            }
-        }
-        ]]>
-    </fx:Script>
-
-    <!-- The binding triggered when the login status is changed. -->
-    <fx:Binding source="LoginModelLocator.getInstance().loggedIn"
-                destination="loginChanged"/>
-
-    <!-- Main view -->
     <login:LoginPanel id="loginpanel"
                       horizontalCenter="0"
                       verticalCenter="0"
-                      width="50%"
-                      height="50%"/>
+                      width="300"
+                      height="300"/>
 </mx:Canvas>

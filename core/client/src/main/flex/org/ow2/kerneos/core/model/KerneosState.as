@@ -32,6 +32,11 @@ package org.ow2.kerneos.core.model
 public class KerneosState {
 
     /**
+     * Initial state
+     */
+    public static var INIT : String = "init";
+
+    /**
     * When the application is loading.
     */
     public static var LOADING : String = "loading";

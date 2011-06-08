@@ -69,10 +69,13 @@ kerneos|ListModuleRenderer {
 global {
     font-size: 12px;
 }
+
+
 /*******************************************************************************
  * Login
  ******************************************************************************/
 kerneosLogin|LoginPanel {
+    titleStyleName: loginWindowTitle;
     dropShadowEnabled: true;
     dropShadowColor: #000000;
     borderColor: #666666;
@@ -89,6 +92,15 @@ kerneosLogin|LoginPanel {
     paddingTop: 2px;
     paddingRight: 3px;
 }
+
+.loginWindowTitle {
+    font-weight: bold;
+    font-size: 13px;
+    color: #FEFEFE;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #FF0000;
+}
+
 
 /*******************************************************************************
  * Windows

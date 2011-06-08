@@ -61,10 +61,6 @@ public class LogOutCommand implements ICommand, IResponder {
 
         var loggedOut:Boolean = (event as ResultEvent).result as Boolean;
 
-        if (loggedOut == true) {
-            model.loggedIn = false;
-        }
-
         model.state = LoginState.LOGIN;
     }
 

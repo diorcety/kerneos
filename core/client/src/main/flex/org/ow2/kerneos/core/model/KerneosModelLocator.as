@@ -77,7 +77,7 @@ public class KerneosModelLocator implements ModelLocator
      * The state of the application.
      */
     [Bindable]
-    public var state : String = null;
+    public var state : String = KerneosState.INIT;
     
     /**
      * The stored notifications.
