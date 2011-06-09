@@ -255,6 +255,7 @@
             <Export-Package>
               org.ow2.kerneos.core;version=${project.version},
               org.ow2.kerneos.core.config.*;version=${project.version},
+              org.ow2.kerneos.core.manager;version=${project.version},
               org.ow2.kerneos.core.service;version=${project.version},
               org.ow2.kerneos.core.service.util;version=${project.version}
             </Export-Package>

@@ -94,7 +94,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
             KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
             kerneosSecurityService.updateContext();
 
-            switch (kerneosSecurityService.authorize(destination, message)) {
+            switch (kerneosSecurityService.authorize(destination.getId())) {
                 case SESSION_EXPIRED:
                     throw SecurityServiceException.newSessionExpiredException();
                 case INVALID_CREDENTIALS:

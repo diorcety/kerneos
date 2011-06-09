@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2008-2011 Bull S.A.S.
+  - Copyright (C) 2011 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -31,22 +31,52 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos</artifactId>
+    <artifactId>kerneos-login</artifactId>
     <version>2.0.0-M1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.ow2.kerneos</groupId>
-  <artifactId>kerneos-libraries</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>kerneos-profile-server</artifactId>
+  <name>Kerneos :: Libraries :: Profile :: Server</name>
 
-  <name>Kerneos :: Libraries</name>
+  <packaging>bundle</packaging>
 
-  <modules>
-    <module>cairngorm</module>
-    <module>flexlib</module>
-    <module>common</module>
-    <module>login</module>
-    <module>profile</module>
-  </modules>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+      <version>1.8.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-core-server</artifactId>
+      <version>2.0.0-M1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+          </instructions>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-ipojo-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>ipojo-bundle</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

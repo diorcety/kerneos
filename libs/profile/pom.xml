@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2008-2011 Bull S.A.S.
+  - Copyright (C) 2011 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -24,29 +24,24 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos</artifactId>
+    <artifactId>kerneos-libraries</artifactId>
     <version>2.0.0-M1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.ow2.kerneos</groupId>
-  <artifactId>kerneos-libraries</artifactId>
+  <artifactId>kerneos-profile</artifactId>
+  <name>Kerneos :: Libraries :: Profile</name>
+
   <packaging>pom</packaging>
 
-  <name>Kerneos :: Libraries</name>
-
   <modules>
-    <module>cairngorm</module>
-    <module>flexlib</module>
-    <module>common</module>
-    <module>login</module>
-    <module>profile</module>
+    <module>client</module>
+    <module>server</module>
   </modules>
 
 </project>

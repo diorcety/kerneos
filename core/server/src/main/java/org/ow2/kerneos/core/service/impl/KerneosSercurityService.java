@@ -25,7 +25,6 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import flex.messaging.messages.Message;
 import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -33,14 +32,19 @@ import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
-import org.granite.config.flex.Destination;
+
 import org.granite.osgi.ConfigurationHelper;
+import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.service.GraniteDestination;
+
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
-import org.ow2.kerneos.core.service.DefaultKerneosLogin;
-import org.ow2.kerneos.core.service.KerneosContext;
-import org.ow2.kerneos.core.service.KerneosLogin;
+import org.ow2.kerneos.core.KerneosContext;
+import org.ow2.kerneos.core.KerneosSession;
+import org.ow2.kerneos.core.manager.DefaultKerneosLogin;
+import org.ow2.kerneos.core.manager.DefaultKerneosProfile;
+import org.ow2.kerneos.core.manager.KerneosLogin;
+import org.ow2.kerneos.core.manager.KerneosProfile;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -64,8 +68,14 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
     @Requires(optional = true, defaultimplementation = DefaultKerneosLogin.class)
     private KerneosLogin kerneosLogin;
 
+    @Requires(optional = true, defaultimplementation = DefaultKerneosProfile.class)
+    private KerneosProfile kerneosProfile;
+
     @Requires
     private ConfigurationHelper confHelper;
+
+    @Requires
+    private GraniteClassRegistry gcr;
 
     @Requires(optional = true, specification = "org.ow2.kerneos.core.IApplicationInstance")
     private Collection<IApplicationInstance> applicationInstances;
@@ -79,8 +89,11 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
     private void start() {
         logger.debug("Start KerneosSecurityService");
 
+        gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_SECURITY, new Class[]{KerneosSession.class});
+
         // Register the synchronous service used with KerneosSecurityService
         graniteDestination = confHelper.newGraniteDestination(KerneosConstants.KERNEOS_SERVICE_SECURITY, KerneosConstants.GRANITE_SERVICE);
+
     }
 
     @Invalidate
@@ -88,22 +101,8 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
         logger.debug("Stop KerneosSecurityService");
 
         graniteDestination.dispose();
-    }
 
-    /**
-     * Get the information about Kerneos session.
-     *
-     * @return The KerneosSession if it is present in the session.
-     */
-    private KerneosSession getKerneosSession() {
-        HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
-        Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
-        if (obj == null || !(obj instanceof KerneosSession)) {
-            KerneosSession kerneosSession = new KerneosSession();
-            request.getSession().setAttribute(KERNEOS_SESSION_KEY, kerneosSession);
-            return kerneosSession;
-        }
-        return (KerneosSession) obj;
+        gcr.unregisterClasses(KerneosConstants.KERNEOS_SERVICE_SECURITY);
     }
 
     /**
@@ -131,24 +130,25 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
             }
         }
 
-        KerneosContext.set(new KerneosContext(request, currentApplicationInstance, currentModuleInstance));
+        KerneosSession kerneosSession;
+        Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
+        if (obj == null || !(obj instanceof KerneosSession)) {
+            kerneosSession = kerneosLogin.newSession();
+            request.getSession().setAttribute(KERNEOS_SESSION_KEY, kerneosSession);
+        } else {
+            kerneosSession = (KerneosSession) obj;
+        }
+
+        KerneosContext.setCurrentContext(new KerneosContext(request, kerneosSession, currentApplicationInstance, currentModuleInstance));
     }
 
     /**
-     * Check if there is the user is logged.
+     * Get the user' session.
      *
-     * @return True if the user is logged.
+     * @return KerneosSession.
      */
-    public boolean isLogged() {
-        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
-        switch (applicationInstance.getConfiguration().getAuthentication()) {
-            case NONE:
-                break;
-
-            default:
-                return kerneosLogin.isLogged();
-        }
-        return true;
+    public KerneosSession getSession() {
+        return new KerneosSession(KerneosContext.getCurrentContext().getSession());
     }
 
     /**
@@ -159,18 +159,14 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
      * @return True if the login is successful.
      */
     public boolean logIn(String username, String password) {
-        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
+        IApplicationInstance applicationInstance = KerneosContext.getCurrentContext().getApplicationInstance();
         switch (applicationInstance.getConfiguration().getAuthentication()) {
             case NONE:
                 break;
 
             default:
-                boolean isLogged = kerneosLogin.login(applicationInstance.getId(), username, password);
-                if (!isLogged)
-                    return false;
-
-                KerneosSession kerneosSession = getKerneosSession();
-                kerneosSession.setRoles(kerneosLogin.getRoles());
+                kerneosLogin.login(applicationInstance.getId(), username, password);
+                return KerneosContext.getCurrentContext().getSession().isLogged();
         }
         return true;
     }
@@ -178,30 +174,36 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
     /**
      * Check the authorisation associated to the request.
      *
-     * @param destination The destination of the request.
-     * @param message     The message of the request.
+     * @param destination The destination(service) requested.
      * @return The status associated to the authorisation.
      */
-    public SecurityError authorize(Destination destination, Message message) {
-        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
+    public SecurityError authorize(String destination) {
+        IApplicationInstance applicationInstance = KerneosContext.getCurrentContext().getApplicationInstance();
         switch (applicationInstance.getConfiguration().getAuthentication()) {
             case NONE:
                 break;
+
             case FLEX:
-                if (!isLogged()) {
+                if (!KerneosContext.getCurrentContext().getSession().isLogged()) {
                     for (String service : KerneosConstants.KERNEOS_SERVICES) {
-                        if (service.equalsIgnoreCase(destination.getId()))
+                        if (service.equalsIgnoreCase(destination))
                             return SecurityError.NO_ERROR;
                     }
                 }
 
             default:
-                if (!isLogged()) {
+                if (!KerneosContext.getCurrentContext().getSession().isLogged()) {
                     return SecurityError.SESSION_EXPIRED;
                 }
                 break;
         }
-        return SecurityError.NO_ERROR;
+
+        String module = (KerneosContext.getCurrentContext().getModuleInstance() != null) ? KerneosContext.getCurrentContext().getModuleInstance().getId() : null;
+        if (kerneosProfile.haveAccess(KerneosContext.getCurrentContext().getApplicationInstance().getId(), module, destination)) {
+            return SecurityError.NO_ERROR;
+        } else {
+            return SecurityError.INVALID_CREDENTIALS;
+        }
     }
 
     /**
@@ -210,53 +212,20 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
      * @return True if the logout is successful.
      */
     public boolean logOut() {
-        IApplicationInstance applicationInstance = KerneosContext.get().getApplicationInstance();
+        IApplicationInstance applicationInstance = KerneosContext.getCurrentContext().getApplicationInstance();
         switch (applicationInstance.getConfiguration().getAuthentication()) {
             case NONE:
                 break;
 
             default:
-                boolean logged_out = kerneosLogin.logout();
-                if (!logged_out)
-                    return false;
-                getKerneosSession().clear();
+                kerneosLogin.logout();
+                return !KerneosContext.getCurrentContext().getSession().isLogged();
         }
         return true;
-    }
-
-    /**
-     * Get the roles of the logged user.
-     *
-     * @return An array containing the roles associated to the logged user.
-     */
-    public Collection<String> getRoles() {
-        KerneosSession kerneosSession = getKerneosSession();
-        return (kerneosSession != null) ? kerneosSession.getRoles() : null;
     }
 
     public String getId() {
         return KerneosConstants.KERNEOS_SERVICE_SECURITY;
     }
 
-    /**
-     * The Object used to store the session information.
-     */
-    class KerneosSession {
-        private Collection<String> roles;
-
-        KerneosSession() {
-        }
-
-        public void clear() {
-            roles = null;
-        }
-
-        public Collection<String> getRoles() {
-            return roles;
-        }
-
-        public void setRoles(Collection<String> roles) {
-            this.roles = roles;
-        }
-    }
 }

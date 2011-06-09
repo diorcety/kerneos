@@ -1,7 +1,7 @@
 /**
  * Kerneos
- * Copyright (C) 2008 Bull S.A.S.
- * Contact: jasmine AT ow2.org
+ * Copyright (C) 2011 Bull S.A.S.
+ * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,31 +22,10 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.business
-{
-import com.adobe.cairngorm.business.ServiceLocator;
 
+package org.ow2.kerneos.core.manager;
 
-import org.ow2.kerneos.common.business.AbsDelegateResponder;
+public interface KerneosProfile {
 
-public class AuthDelegate extends AbsDelegateResponder implements IAuthDelegate
-{
-
-    /**
-    * Call a procedure on the service registered. The user's authentication is checked.
-    */
-    public function auth() : void {
-
-        // find service
-        var service : Object = ServiceLocator.getInstance().getRemoteObject( "kerneosSecurityService" );
-
-        // call service
-        var call : Object = service.getSession();
-
-        // add the responder as a listener for the answer of the java side
-        call.addResponder( this.responder );
-    }
-
-
-}
+    boolean haveAccess(String Application, String Module, String service);
 }

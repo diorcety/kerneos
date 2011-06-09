@@ -52,13 +52,6 @@ public interface IKerneosSecurityService {
     public void updateContext();
 
     /**
-     * Check if there is the user is logged.
-     *
-     * @return True if the user is logged.
-     */
-    public boolean isLogged();
-
-    /**
      * Login to Kerneos.
      *
      * @param username The username used for login.
@@ -70,11 +63,10 @@ public interface IKerneosSecurityService {
     /**
      * Check the authorisation associated to the request.
      *
-     * @param destination The destination of the request.
-     * @param message     The message of the request.
+     * @param destination The destination(service) requested.
      * @return The status associated to the authorisation.
      */
-    public SecurityError authorize(Destination destination, Message message);
+    public SecurityError authorize(String destination);
 
     /**
      * Logout of Kerneos.
@@ -82,11 +74,4 @@ public interface IKerneosSecurityService {
      * @return True if the logout is successful.
      */
     public boolean logOut();
-
-    /**
-     * Get the roles of the logged user.
-     *
-     * @return An array containing the roles associated to the logged user.
-     */
-    public Collection<String> getRoles();
 }

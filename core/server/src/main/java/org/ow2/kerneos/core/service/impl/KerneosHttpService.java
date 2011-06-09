@@ -40,8 +40,8 @@ import org.osgi.service.http.NamespaceException;
 
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
+import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.config.generated.Authentication;
-import org.ow2.kerneos.core.service.KerneosContext;
 import org.ow2.kerneos.core.service.util.Base64;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -263,8 +263,8 @@ public class KerneosHttpService implements HttpContext {
         setCurrentHttpRequest(request);
         kerneosSecurityService.updateContext();
 
-        if (!kerneosSecurityService.isLogged()) {
-            if (KerneosContext.get().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.WWW) {
+        if (!KerneosContext.getCurrentContext().getSession().isLogged()) {
+            if (KerneosContext.getCurrentContext().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.WWW) {
                 // Show WWW Authentication box of the web browser
                 String authHeader = request.getHeader("Authorization");
                 if (authHeader != null) {
@@ -285,8 +285,8 @@ public class KerneosHttpService implements HttpContext {
                 }
 
                 response.setHeader("WWW-Authenticate", "Basic");
-            } else if (KerneosContext.get().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.FLEX &&
-                    KerneosContext.get().getModuleInstance() == null) {
+            } else if (KerneosContext.getCurrentContext().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.FLEX &&
+                    KerneosContext.getCurrentContext().getModuleInstance() == null) {
                 // Don't allow access to modules
                 return true;
             }
@@ -295,7 +295,7 @@ public class KerneosHttpService implements HttpContext {
             response.flushBuffer();
             return false;
         } else {
-            return true;
+            return kerneosSecurityService.authorize(null) == IKerneosSecurityService.SecurityError.NO_ERROR;
         }
     }
 }

@@ -23,7 +23,9 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.core.service;
+package org.ow2.kerneos.core.manager;
+
+import org.ow2.kerneos.core.KerneosSession;
 
 import java.util.Collection;
 
@@ -37,28 +39,20 @@ public interface KerneosLogin {
      * @param application The name of the application.
      * @param username    The username.
      * @param password    The password.
-     * @return An array with the name of the roles associated to the user. null if the login failed.
      */
-    public boolean login(final String application, final String username, final String password);
-
-    /**
-     * Get the roles of the logged user.
-     *
-     * @return A list containing the different roles of the user.
-     */
-    public Collection<String> getRoles();
+    public void login(final String application, final String username, final String password);
 
     /**
      * Logout.
      *
      * @return
      */
-    public boolean logout();
+    public void logout();
 
     /**
-     * Check if the user is logged
+     * Called when a new session is need.
      *
-     * @return True is the user is logged
+     * @return The new session
      */
-    public boolean isLogged();
+    public KerneosSession newSession();
 }

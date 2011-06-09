@@ -1,7 +1,7 @@
 /**
  * Kerneos
- * Copyright (C) 2008 Bull S.A.S.
- * Contact: jasmine AT ow2.org
+ * Copyright (C) 2011 Bull S.A.S.
+ * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,31 +22,25 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.business
-{
-import com.adobe.cairngorm.business.ServiceLocator;
 
+package org.ow2.kerneos.core.manager;
 
-import org.ow2.kerneos.common.business.AbsDelegateResponder;
+import org.ow2.kerneos.core.KerneosContext;
+import org.ow2.kerneos.core.KerneosSession;
 
-public class AuthDelegate extends AbsDelegateResponder implements IAuthDelegate
-{
+import java.util.LinkedList;
 
-    /**
-    * Call a procedure on the service registered. The user's authentication is checked.
-    */
-    public function auth() : void {
+public class DefaultKerneosLogin implements KerneosLogin {
 
-        // find service
-        var service : Object = ServiceLocator.getInstance().getRemoteObject( "kerneosSecurityService" );
-
-        // call service
-        var call : Object = service.getSession();
-
-        // add the responder as a listener for the answer of the java side
-        call.addResponder( this.responder );
+    public void login(String application, String user, String password) {
+        KerneosContext.getCurrentContext().getSession().setUsername("Default");
     }
 
+    public void logout() {
+        KerneosContext.getCurrentContext().getSession().setRoles(new LinkedList<String>());
+    }
 
-}
+    public KerneosSession newSession() {
+        return new KerneosSession();
+    }
 }

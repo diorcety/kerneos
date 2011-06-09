@@ -25,6 +25,7 @@
 package org.ow2.kerneos.login.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
+import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import mx.controls.Alert;
 import mx.resources.ResourceManager;
@@ -32,10 +33,14 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
+import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
+import org.ow2.kerneos.common.view.ServerSideException;
+
 import org.ow2.kerneos.login.business.IAuthDelegate;
 import org.ow2.kerneos.login.manager.LanguagesManager;
 import org.ow2.kerneos.login.model.LoginModelLocator;
 import org.ow2.kerneos.login.model.LoginState;
+import org.ow2.kerneos.login.vo.KerneosSessionVO;
 
 public class AuthCommand implements ICommand, IResponder {
     /**
@@ -55,9 +60,9 @@ public class AuthCommand implements ICommand, IResponder {
 
         var model:LoginModelLocator = LoginModelLocator.getInstance();
 
-        var isLogged:Boolean = (event as ResultEvent).result as Boolean;
+        model.session = (event as ResultEvent).result as KerneosSessionVO;
 
-        if (isLogged) {
+        if (model.session.isLogged()) {
             model.state = LoginState.LOGGED;
         } else {
             model.state = LoginState.LOGIN;
@@ -68,8 +73,22 @@ public class AuthCommand implements ICommand, IResponder {
      * Handle fault messages
      */
     public function fault(event:Object):void {
+
+        // Retrieve the fault event
         var faultEvent:FaultEvent = FaultEvent(event);
-        Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.exception'), "Error")
+
+        // Retrieve the model
+        var model:LoginModelLocator = LoginModelLocator.getInstance();
+
+        // Tell the view and let it handle this
+        var serverSideExceptionEvent:ServerSideExceptionEvent =
+                new ServerSideExceptionEvent(
+                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + model.componentID,
+                        new ServerSideException("Error while loading the configuration",
+                                "The application configuration file could not be read successfully."
+                                        + "\n" + faultEvent.fault.faultString,
+                                faultEvent.fault.getStackTrace()));
+        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
     }
 
 

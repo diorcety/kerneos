@@ -1,7 +1,4 @@
-package org.ow2.kerneos.core.service;
-
-import org.ow2.kerneos.core.IApplicationInstance;
-import org.ow2.kerneos.core.IModuleInstance;
+package org.ow2.kerneos.core;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +18,7 @@ public class KerneosContext {
      *
      * @param kerneosContext The context.
      */
-    public static void set(KerneosContext kerneosContext) {
+    public static void setCurrentContext(KerneosContext kerneosContext) {
         kerneosContextThreadLocal.set(kerneosContext);
     }
 
@@ -30,16 +27,18 @@ public class KerneosContext {
      *
      * @return the current Kerneos context.
      */
-    public static KerneosContext get() {
+    public static KerneosContext getCurrentContext() {
         return kerneosContextThreadLocal.get();
     }
 
-    private HttpServletRequest currentHttpRequest;
+    private HttpServletRequest httpRequest;
+    private KerneosSession session;
     private IApplicationInstance applicationInstance;
     private IModuleInstance moduleInstance;
 
-    public KerneosContext(HttpServletRequest currentHttpRequest, IApplicationInstance applicationInstance, IModuleInstance moduleInstance) {
-        this.currentHttpRequest = currentHttpRequest;
+    public KerneosContext(HttpServletRequest httpRequest, KerneosSession session, IApplicationInstance applicationInstance, IModuleInstance moduleInstance) {
+        this.httpRequest = httpRequest;
+        this.session = session;
         this.applicationInstance = applicationInstance;
         this.moduleInstance = moduleInstance;
     }
@@ -52,8 +51,11 @@ public class KerneosContext {
         return moduleInstance;
     }
 
-    public HttpServletRequest getCurrentHttpRequest()
-    {
-        return currentHttpRequest;
+    public KerneosSession getSession() {
+        return session;
+    }
+
+    public HttpServletRequest getHttpRequest() {
+        return httpRequest;
     }
 }

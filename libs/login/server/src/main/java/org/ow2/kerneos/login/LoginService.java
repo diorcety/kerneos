@@ -29,8 +29,9 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 
-import org.ow2.kerneos.core.service.KerneosContext;
-import org.ow2.kerneos.core.service.KerneosLogin;
+import org.ow2.kerneos.core.KerneosContext;
+import org.ow2.kerneos.core.KerneosSession;
+import org.ow2.kerneos.core.manager.KerneosLogin;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -43,14 +44,12 @@ import java.util.LinkedList;
 @Provides
 public class LoginService implements KerneosLogin {
 
-    private static final String KERNEOS_SECURITY_KEY = "KERNEOS-SECURITY";
-
     /**
      * CallbackHandler.
      */
     private CallbackHandler handler = null;
 
-    public boolean login(final String application, final String user, final String password) {
+    public void login(final String application, final String user, final String password) {
         this.handler = new NoInputCallbackHandler(user, password);
         try {
             // Obtain a LoginContext
@@ -59,28 +58,23 @@ public class LoginService implements KerneosLogin {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             lc.login();
 
-
             Collection<String> roles = new LinkedList<String>();
             for (Principal principal : lc.getSubject().getPrincipals()) {
                 roles.add(principal.getName());
             }
-            KerneosContext.get().getCurrentHttpRequest().getSession().setAttribute(KERNEOS_SECURITY_KEY, roles);
-            return true;
+
+            KerneosContext.getCurrentContext().getSession().setUsername(user);
+            KerneosContext.getCurrentContext().getSession().setRoles(roles);
         } catch (Exception e) {
-            return false;
         }
     }
 
-    public Collection<String> getRoles() {
-        return (Collection<String>) KerneosContext.get().getCurrentHttpRequest().getSession().getAttribute(KERNEOS_SECURITY_KEY);
+    public void logout() {
+        KerneosContext.getCurrentContext().getSession().setUsername(null);
+        KerneosContext.getCurrentContext().getSession().setRoles(null);
     }
 
-    public boolean logout() {
-        KerneosContext.get().getCurrentHttpRequest().getSession().removeAttribute(KERNEOS_SECURITY_KEY);
-        return true;
-    }
-
-    public boolean isLogged() {
-        return (KerneosContext.get().getCurrentHttpRequest().getSession().getAttribute(KERNEOS_SECURITY_KEY) == null) ? false : true;
+    public KerneosSession newSession() {
+        return new KerneosSession();
     }
 }
