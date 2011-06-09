@@ -59,7 +59,6 @@
           <artifactId>spark</artifactId>
           <version>${flex.version}</version>
           <type>rb.swc</type>
-          <classifier>en_US</classifier>
           <scope>external</scope>
         </dependency>
       </dependencies>
@@ -79,7 +78,7 @@
   </profiles>
 
   <dependencies>
-    <!-- flex sdk dependencies -->
+    <!-- Flex SDK dependencies -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex</artifactId>
@@ -141,20 +140,20 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <extensions>true</extensions>
         <configuration>
           <definesDeclaration>
             <property>
               <name>CONFIG::Flex4</name>
-              <value>${isFlex4}</value>
+              <value>true</value>
             </property>
             <property>
               <name>CONFIG::Flex3</name>
-              <value>${isFlex3}</value>
+              <value>false</value>
             </property>
           </definesDeclaration>
           <compiledLocales>
             <locale>en_US</locale>
+            <locale>fr_FR</locale>
           </compiledLocales>
           <resourceBundlePath>locale/{locale}</resourceBundlePath>
           <allowSourcePathOverlap>true</allowSourcePathOverlap>

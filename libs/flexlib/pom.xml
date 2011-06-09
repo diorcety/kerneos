@@ -18,11 +18,48 @@
   <packaging>swc</packaging>
 
   <dependencies>
+    <!-- Flex SDK dependencies -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
+      <artifactId>flex</artifactId>
       <version>${flex.version}</version>
-      <type>pom</type>
+      <type>swc</type>
+      <scope>external</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.adobe.flex.framework</groupId>
+          <artifactId>playerglobal</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>framework</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>rpc</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>datavisualization</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>playerglobal</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <classifier>${player.version}</classifier>
+      <scope>external</scope>
     </dependency>
   </dependencies>
 
@@ -33,11 +70,16 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <extensions>true</extensions>
         <configuration>
           <definesDeclaration>
-            <property><name> FLEX_TARGET_VERSION::flex4</name><value>true</value></property>
-            <property><name> FLEX_TARGET_VERSION::flex3</name><value>false</value></property>
+            <property>
+              <name>FLEX_TARGET_VERSION::flex4</name>
+              <value>true</value>
+            </property>
+            <property>
+              <name>FLEX_TARGET_VERSION::flex3</name>
+              <value>false</value>
+            </property>
           </definesDeclaration>
           <namespaces>
             <namespace>

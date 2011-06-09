@@ -47,19 +47,22 @@
   </url>
 
   <properties>
+    <!-- Library versions -->
     <graniteds-osgi.version>1.0.0-SNAPSHOT</graniteds-osgi.version>
+    <cairngorm.version>2.2.3-Beta</cairngorm.version>
     <flexlib.version>2.5-SNAPSHOT</flexlib.version>
     <flexiframe.version>1.4.3</flexiframe.version>
     <flex.version>4.1.0.16076</flex.version>
     <player.version>10.0</player.version>
-    <isFlex4>true</isFlex4>
-    <isFlex3>false</isFlex3>
+
+    <!-- Plugin versions -->
     <flexmojos.version>3.7.1</flexmojos.version>
     <maven.compiler>2.3.2</maven.compiler>
 
     <!-- Settings -->
     <asdoc.aggregate>true</asdoc.aggregate>
-
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
   <scm>
@@ -117,6 +120,7 @@
   </modules>
 
   <profiles>
+    <!-- Developer profile -->
     <profile>
       <id>dev</id>
       <properties>
@@ -127,6 +131,8 @@
         <flex-verbose-stacktraces>true</flex-verbose-stacktraces>
       </properties>
     </profile>
+
+    <!-- Production profile -->
     <profile>
       <id>production</id>
       <activation>
@@ -137,231 +143,6 @@
         <flex-optimize>true</flex-optimize>
         <flex-verbose-stacktraces>false</flex-verbose-stacktraces>
       </properties>
-    </profile>
-
-    <!-- WTP configuration profile -->
-    <profile>
-      <id>initWTP</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.ow2.kerneos</groupId>
-          <artifactId>flexlib-kerneos</artifactId>
-          <version>${flexlib.version}</version>
-          <type>swc</type>
-        </dependency>
-        <dependency>
-          <groupId>com.google.code.flex-iframe</groupId>
-          <artifactId>flex-iframe</artifactId>
-          <version>${flexiframe.version}</version>
-          <type>swc</type>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.geronimo.specs</groupId>
-          <artifactId>geronimo-jms_1.1_spec</artifactId>
-          <version>1.1</version>
-        </dependency>
-        <dependency>
-          <groupId>log4j</groupId>
-          <artifactId>apache-log4j-extras</artifactId>
-          <version>1.0</version>
-        </dependency>
-        <dependency>
-          <groupId>org.ow2.carol</groupId>
-          <artifactId>carol</artifactId>
-          <version>3.0.5</version>
-        </dependency>
-        <dependency>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging-api</artifactId>
-          <version>1.1</version>
-        </dependency>
-        <dependency>
-          <groupId>org.graniteds-osgi</groupId>
-          <artifactId>granite-core</artifactId>
-          <version>${graniteds-osgi.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.objectweb.monolog</groupId>
-          <artifactId>monolog</artifactId>
-          <version>2.1.11</version>
-        </dependency>
-        <dependency>
-          <groupId>commons-fileupload</groupId>
-          <artifactId>commons-fileupload</artifactId>
-          <version>1.2.1</version>
-        </dependency>
-        <dependency>
-          <groupId>commons-io</groupId>
-          <artifactId>commons-io</artifactId>
-          <version>1.4</version>
-        </dependency>
-        <dependency>
-          <groupId>org.ow2.bundles</groupId>
-          <artifactId>ow2-bundles-externals-jaxb2</artifactId>
-          <version>1.0.17</version>
-        </dependency>
-        <dependency>
-          <groupId>org.graniteds-osgi</groupId>
-          <artifactId>granite-swc</artifactId>
-          <version>${graniteds-osgi.version}</version>
-          <type>swc</type>
-        </dependency>
-      </dependencies>
-      <build>
-        <defaultGoal>compile</defaultGoal>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.0-alpha-4</version>
-            <executions>
-              <execution>
-                <phase>compile</phase>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <!-- usefull if the war is deployed on tomcat in Eclipse -->
-                    <artifactItem>
-                      <groupId>org.ow2.carol</groupId>
-                      <artifactId>carol</artifactId>
-                      <version>3.0.5</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>commons-logging</groupId>
-                      <artifactId>commons-logging-api</artifactId>
-                      <version>1.1</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.ow2.bundles</groupId>
-                      <artifactId>ow2-bundles-externals-jaxb2</artifactId>
-                      <version>1.0.17</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.graniteds-osgi</groupId>
-                      <artifactId>granite-core</artifactId>
-                      <version>${graniteds-osgi.version}</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>log4j</groupId>
-                      <artifactId>apache-log4j-extras</artifactId>
-                      <version>1.0</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.objectweb.monolog</groupId>
-                      <artifactId>monolog</artifactId>
-                      <version>2.1.11</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>commons-fileupload</groupId>
-                      <artifactId>commons-fileupload</artifactId>
-                      <version>1.2.1</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>commons-io</groupId>
-                      <artifactId>commons-io</artifactId>
-                      <version>1.4</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        wtp/content/WEB-INF/lib
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.ow2.kerneos</groupId>
-                      <artifactId>cairngorm-kerneos</artifactId>
-                      <version>2.2.3-Beta</version>
-                      <type>swc</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        libs
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.graniteds-osgi</groupId>
-                      <artifactId>granite-swc</artifactId>
-                      <version>${graniteds-osgi.version}</version>
-                      <type>swc</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        libs
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>org.ow2.kerneos</groupId>
-                      <artifactId>flexlib-kerneos</artifactId>
-                      <version>${flexlib.version}</version>
-                      <type>swc</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        libs
-                      </outputDirectory>
-                    </artifactItem>
-
-                    <artifactItem>
-                      <groupId>com.google.code.flex-iframe</groupId>
-                      <artifactId>flex-iframe</artifactId>
-                      <version>${flexiframe.version}</version>
-                      <type>swc</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>
-                        libs
-                      </outputDirectory>
-                    </artifactItem>
-
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
 
     <!-- Asdoc generation profile -->
@@ -377,7 +158,7 @@
         <dependency>
           <groupId>org.ow2.kerneos</groupId>
           <artifactId>cairngorm-kerneos</artifactId>
-          <version>2.2.3-Beta</version>
+          <version>${cairngorm.version}</version>
           <type>swc</type>
         </dependency>
         <dependency>
@@ -417,15 +198,11 @@
               <footer>OW2 JASMINe Kerneos - http://jasmine.ow2.org</footer>
               <outputDirectory>${project.build.directory}/asdoc-all</outputDirectory>
               <packageDescriptions>
-                <org.ow2.kerneos.common.business>Kerneos common libraries.
-                </org.ow2.kerneos.common.business>
-                <org.ow2.kerneos.common.containers>Kerneos common libraries.
-                </org.ow2.kerneos.common.containers>
-                <org.ow2.kerneos.common.controls>Kerneos common libraries.
-                </org.ow2.kerneos.common.controls>
+                <org.ow2.kerneos.common.business>Kerneos common libraries.</org.ow2.kerneos.common.business>
+                <org.ow2.kerneos.common.containers>Kerneos common libraries.</org.ow2.kerneos.common.containers>
+                <org.ow2.kerneos.common.controls>Kerneos common libraries.</org.ow2.kerneos.common.controls>
                 <org.ow2.kerneos.common.event>Kerneos common libraries.</org.ow2.kerneos.common.event>
-                <org.ow2.kerneos.common.renderers>Kerneos common libraries.
-                </org.ow2.kerneos.common.renderers>
+                <org.ow2.kerneos.common.renderers>Kerneos common libraries.</org.ow2.kerneos.common.renderers>
                 <org.ow2.kerneos.common.skins>Kerneos common libraries.</org.ow2.kerneos.common.skins>
                 <org.ow2.kerneos.common.util>Kerneos common libraries.</org.ow2.kerneos.common.util>
                 <org.ow2.kerneos.common.view>Kerneos common libraries.</org.ow2.kerneos.common.view>
@@ -462,7 +239,6 @@
         </plugins>
       </build>
     </profile>
-
   </profiles>
 
   <build>
@@ -490,13 +266,14 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-deploy-plugin</artifactId>
-         <version>2.6</version>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.6</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
           <version>2.0.0</version>
+          <extensions>true</extensions>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>

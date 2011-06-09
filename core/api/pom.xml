@@ -31,6 +31,7 @@
     <groupId>org.ow2.kerneos</groupId>
     <artifactId>kerneos-core</artifactId>
     <version>2.0.0-M1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>kerneos-api</artifactId>
@@ -39,26 +40,40 @@
   <packaging>swc</packaging>
 
   <dependencies>
-
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-enforcer-plugin</artifactId>
       <version>1.0-alpha-3</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>cairngorm-kerneos</artifactId>
-      <version>2.2.3-Beta</version>
-      <type>swc</type>
-    </dependency>
-
-    <!-- Flex -->
+    <!-- Flex SDK dependencies -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
+      <artifactId>flex</artifactId>
       <version>${flex.version}</version>
-      <type>pom</type>
+      <type>swc</type>
+      <scope>external</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.adobe.flex.framework</groupId>
+          <artifactId>playerglobal</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>framework</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>playerglobal</artifactId>
+      <version>${flex.version}</version>
+      <type>swc</type>
+      <classifier>${player.version}</classifier>
+      <scope>external</scope>
     </dependency>
   </dependencies>
 

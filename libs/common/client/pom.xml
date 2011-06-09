@@ -48,15 +48,15 @@
       <version>1.0-alpha-3</version>
     </dependency>
 
+	<!-- Flex SDK dependencies -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>cairngorm-kerneos</artifactId>
-      <version>2.2.3-Beta</version>
+      <version>${cairngorm.version}</version>
       <type>swc</type>
-      <scope>external</scope>
     </dependency>
 
-    <!-- flex sdk dependencies -->
+    <!-- Flex SDK dependencies -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex</artifactId>
@@ -92,14 +92,8 @@
       <classifier>${player.version}</classifier>
       <scope>external</scope>
     </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>rpc</artifactId>
-      <version>${flex.version}</version>
-      <type>rb.swc</type>
-      <scope>external</scope>
-    </dependency>
 
+    <!-- Theme -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>halo</artifactId>
@@ -108,11 +102,11 @@
       <type>swc</type>
       <scope>theme</scope>
     </dependency>
-
   </dependencies>
 
   <build>
     <sourceDirectory>src/main/flex</sourceDirectory>
+
     <plugins>
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
