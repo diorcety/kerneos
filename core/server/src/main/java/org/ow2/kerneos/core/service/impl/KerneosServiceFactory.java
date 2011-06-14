@@ -25,9 +25,6 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.apache.felix.ipojo.ComponentInstance;
-import org.apache.felix.ipojo.Factory;
-
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -38,15 +35,16 @@ import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.gravity.osgi.adapters.jms.JMSConstants;
-import org.granite.osgi.ConfigurationHelper;
-import org.granite.osgi.GraniteClassRegistry;
 
-import org.granite.osgi.service.GraniteDestination;
+
+import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.service.GraniteFactory;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.ow2.kerneos.core.service.KerneosAsynchronous;
 import org.ow2.kerneos.core.service.KerneosAsynchronousService;
 import org.ow2.kerneos.core.service.KerneosFactory;
@@ -60,6 +58,7 @@ import org.ow2.kerneos.core.service.util.ClassAnalyzer;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
+import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
@@ -77,8 +76,8 @@ public final class KerneosServiceFactory {
      * Used for holding the different configuration/service associated with a Kerneos service.
      */
     private class ServiceInstance {
-        private ComponentInstance conf1;
-        private ComponentInstance conf2;
+        private Configuration conf1;
+        private Configuration conf2;
         private ServiceRegistration instance;
 
         /**
@@ -89,8 +88,8 @@ public final class KerneosServiceFactory {
          * @param conf2    is an iPojo component instance.
          */
         public ServiceInstance(final ServiceRegistration instance,
-                               final ComponentInstance conf1,
-                               final ComponentInstance conf2) {
+                               final Configuration conf1,
+                               final Configuration conf2) {
             this.conf1 = conf1;
             this.conf2 = conf2;
             this.instance = instance;
@@ -99,12 +98,12 @@ public final class KerneosServiceFactory {
         /**
          * Dispose all the service and the configuration associated with this instance.
          */
-        public void dispose() {
+        public void dispose() throws IOException {
             if (conf1 != null) {
-                conf1.dispose();
+                conf1.delete();
             }
             if (conf2 != null) {
-                conf2.dispose();
+                conf2.delete();
             }
             if (instance != null) {
                 instance.unregister();
@@ -115,13 +114,7 @@ public final class KerneosServiceFactory {
     private Map<String, ServiceInstance> servicesMap = new Hashtable<String, ServiceInstance>();
 
     @Requires
-    ConfigurationHelper confHelper;
-
-    @Requires(from = "org.granite.gravity.osgi.adapters.jms.configuration")
-    private Factory jmsFactory;
-
-    @Requires(from = "org.granite.gravity.osgi.adapters.ea.configuration")
-    private Factory eaFactory;
+    private ConfigurationAdmin configurationAdmin;
 
     @Requires
     private GraniteClassRegistry gcr;
@@ -178,13 +171,24 @@ public final class KerneosServiceFactory {
                     new GraniteSimpleWrapper(service, serviceId + KerneosConstants.FACTORY_SUFFIX),
                     null);
 
-            ComponentInstance factoryConfiguration = confHelper.newFactory(serviceId + KerneosConstants.FACTORY_SUFFIX);
+            Configuration factoryConfiguration;
+            {
+                Dictionary properties = new Hashtable();
+                properties.put("id", serviceId + KerneosConstants.FACTORY_SUFFIX);
+                factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Factory", null);
+                factoryConfiguration.update(properties);
+            }
 
-            ComponentInstance destinationConfiguration = confHelper.newGraniteDestination(serviceId,
-                    KerneosConstants.GRANITE_SERVICE,
-                    serviceId + KerneosConstants.FACTORY_SUFFIX,
-                    ConfigurationHelper.SCOPE.APPLICATION);
-
+            Configuration destinationConfiguration;
+            {
+                Dictionary properties = new Hashtable();
+                properties.put("id", serviceId);
+                properties.put("service", KerneosConstants.GRANITE_SERVICE);
+                properties.put("factory", serviceId + KerneosConstants.FACTORY_SUFFIX);
+                properties.put("scope", "application");
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+                destinationConfiguration.update(properties);
+            }
 
             synchronized (servicesMap) {
                 servicesMap.put(serviceId,
@@ -202,8 +206,7 @@ public final class KerneosServiceFactory {
      * @param service the instance of the service
      */
     @Unbind
-    private void unbindSimple(final KerneosSimpleService service) {
-
+    private void unbindSimple(final KerneosSimpleService service) throws IOException {
         KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
         if (ks == null) {
             logger.error("Invalid Kerneos Simple Service: " + service);
@@ -251,31 +254,41 @@ public final class KerneosServiceFactory {
                     GraniteFactory.class.getName(),
                     new GraniteFactoryWrapper(service, serviceId + KerneosConstants.FACTORY_SUFFIX),
                     null);
-
-            ComponentInstance factoryConfiguration = confHelper.newFactory(serviceId + KerneosConstants.FACTORY_SUFFIX);
+            Configuration factoryConfiguration;
+            {
+                Dictionary properties = new Hashtable();
+                properties.put("id", serviceId + KerneosConstants.FACTORY_SUFFIX);
+                factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Factory", null);
+                factoryConfiguration.update(properties);
+            }
 
             // Get Scope property
-            ConfigurationHelper.SCOPE scope = ConfigurationHelper.SCOPE.REQUEST;
+            String scope = "request";
             KerneosFactory annoProps = service.getClass().getAnnotation(KerneosFactory.class);
             if (annoProps != null) {
                 switch (annoProps.scope()) {
                     case APPLICATION:
-                        scope = ConfigurationHelper.SCOPE.APPLICATION;
+                        scope = "application";
                         break;
                     case SESSION:
-                        scope = ConfigurationHelper.SCOPE.SESSION;
+                        scope = "session";
                         break;
                     default:
-                        scope = ConfigurationHelper.SCOPE.REQUEST;
+                        scope = "request";
 
                 }
             }
 
-            ComponentInstance destinationConfiguration = confHelper.newGraniteDestination(serviceId,
-                    KerneosConstants.GRANITE_SERVICE,
-                    serviceId + KerneosConstants.FACTORY_SUFFIX,
-                    scope);
-
+            Configuration destinationConfiguration;
+            {
+                Dictionary properties = new Hashtable();
+                properties.put("id", serviceId);
+                properties.put("service", KerneosConstants.GRANITE_SERVICE);
+                properties.put("factory", serviceId + KerneosConstants.FACTORY_SUFFIX);
+                properties.put("scope", scope);
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+                destinationConfiguration.update(properties);
+            }
 
             synchronized (servicesMap) {
                 servicesMap.put(serviceId,
@@ -294,7 +307,7 @@ public final class KerneosServiceFactory {
      * @param service the instance of the service
      */
     @Unbind
-    private void unbindFactory(final KerneosFactoryService service) {
+    private void unbindFactory(final KerneosFactoryService service) throws IOException {
         KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
         if (ks == null) {
             logger.error("Invalid Kerneos Factory Service: " + service);
@@ -341,20 +354,23 @@ public final class KerneosServiceFactory {
 
         try {
 
-            ComponentInstance factoryConfiguration = null;
+            Configuration factoryConfiguration = null;
             {
                 Dictionary properties = new Hashtable();
                 for (KerneosAsynchronous.Property property : ka.properties()) {
                     properties.put(property.name(), property.value());
                 }
+
                 switch (ka.type()) {
                     case JMS:
                         properties.put("destination", serviceId);
-                        factoryConfiguration = jmsFactory.createComponentInstance(properties);
+                        factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.jms.configuration", null);
+                        factoryConfiguration.update(properties);
                         break;
                     case EVENTADMIN:
                         properties.put("destination", serviceId);
-                        factoryConfiguration = eaFactory.createComponentInstance(properties);
+                        factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.ea.configuration", null);
+                        factoryConfiguration.update(properties);
                         break;
                     default:
                         break;
@@ -372,8 +388,16 @@ public final class KerneosServiceFactory {
                 default:
                     break;
             }
-            ComponentInstance destinationConfiguration = confHelper.newGravityDestination(serviceId, KerneosConstants.GRAVITY_SERVICE, adapter);
 
+            Configuration destinationConfiguration;
+            {
+                Dictionary properties = new Hashtable();
+                properties.put("id", serviceId);
+                properties.put("service", KerneosConstants.GRAVITY_SERVICE);
+                properties.put("adapter", adapter);
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+                destinationConfiguration.update(properties);
+            }
 
             synchronized (servicesMap) {
                 servicesMap.put(serviceId, new ServiceInstance(null, destinationConfiguration, factoryConfiguration));
@@ -390,7 +414,7 @@ public final class KerneosServiceFactory {
      * @param service the instance of the service
      */
     @Unbind
-    private void unbindAsynchronous(final KerneosAsynchronousService service) {
+    private void unbindAsynchronous(final KerneosAsynchronousService service) throws IOException {
         KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
         if (ks == null) {
             logger.warn("Invalid Kerneos Asynchronous Service: " + service);

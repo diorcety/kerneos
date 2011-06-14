@@ -25,28 +25,23 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.apache.felix.ipojo.ComponentInstance;
-import org.apache.felix.ipojo.ConfigurationException;
-import org.apache.felix.ipojo.Factory;
-import org.apache.felix.ipojo.MissingHandlerException;
-import org.apache.felix.ipojo.UnacceptableConfiguration;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
-import org.granite.osgi.ConfigurationHelper;
-import org.osgi.service.http.NamespaceException;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
+import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -67,41 +62,52 @@ public class KerneosCore {
 
     private Map<String, ApplicationInstanceImpl> applicationInstanceMap = new HashMap<String, ApplicationInstanceImpl>();
 
-    private ComponentInstance granite, gravity, graniteSecurity, gravitySecurity;
+
+    private Configuration granite, gravity, graniteSecurity, gravitySecurity;
 
     /**
      * Used for holding the different configurations associated with an Application instance.
      */
     private class ApplicationInstanceImpl {
-        private ComponentInstance gavityChannel, graniteChannel;
+        private Configuration gavityChannel, graniteChannel;
 
         /**
          * Create all the configuration associated with this instance.
          */
-        public ApplicationInstanceImpl(IApplicationInstance applicationInstance) throws MissingHandlerException, ConfigurationException, UnacceptableConfiguration, NamespaceException {
+        public ApplicationInstanceImpl(IApplicationInstance applicationInstance) throws IOException {
 
             String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
-
-            gavityChannel = confHelper.newGravityChannel(KerneosConstants.GRAVITY_CHANNEL + applicationInstance.getId(),
-                    applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI, KerneosConstants.KERNEOS_CONTEXT_NAME);
-            graniteChannel = confHelper.newGraniteChannel(KerneosConstants.GRANITE_CHANNEL + applicationInstance.getId(),
-                    applicationURL + KerneosConstants.GRANITE_CHANNEL_URI, KerneosConstants.KERNEOS_CONTEXT_NAME);
+            {
+                Dictionary properties = new Hashtable();
+                properties.put("id", KerneosConstants.GRAVITY_CHANNEL + applicationInstance.getId());
+                properties.put("uri", applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
+                properties.put("context", KerneosConstants.KERNEOS_CONTEXT_NAME);
+                properties.put("gravity", "true");
+                gavityChannel = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Channel", null);
+                gavityChannel.update(properties);
+            }
+            {
+                Dictionary properties = new Hashtable();
+                properties.put("id", KerneosConstants.GRANITE_CHANNEL + applicationInstance.getId());
+                properties.put("uri", applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
+                properties.put("context", KerneosConstants.KERNEOS_CONTEXT_NAME);
+                properties.put("gravity", "false");
+                graniteChannel = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Channel", null);
+                graniteChannel.update(properties);
+            }
         }
 
         /**
          * Dispose all the configuration associated with this instance.
          */
-        public void dispose() {
-            gavityChannel.dispose();
-            graniteChannel.dispose();
+        public void dispose() throws IOException {
+            gavityChannel.delete();
+            graniteChannel.delete();
         }
     }
 
     @Requires
-    ConfigurationHelper confHelper;
-
-    @Requires(from = "org.ow2.kerneos.core.service.impl.granite.GraniteSecurityWrapper")
-    private Factory securityFactory;
+    private ConfigurationAdmin configurationAdmin;
 
     /**
      * Constructor used by iPojo.
@@ -111,47 +117,54 @@ public class KerneosCore {
 
     /**
      * Called when all the component dependencies are met.
-     *
-     * @throws MissingHandlerException   issue during GraniteDS configuration.
-     * @throws ConfigurationException    issue during GraniteDS configuration.
-     * @throws UnacceptableConfiguration issue during GraniteDS configuration.
-     * @throws NamespaceException        an invalid application url.
      */
     @Validate
-    private void start() throws MissingHandlerException, ConfigurationException,
-            UnacceptableConfiguration, NamespaceException {
+    private void start() throws IOException {
         logger.debug("Start KerneosCore");
 
-        // Gravity Configuration Instances
+        // Gravity Configurations
         {
             Dictionary properties = new Hashtable();
-            properties.put("SERVICE", KerneosConstants.GRAVITY_SERVICE);
-            gravitySecurity = securityFactory.createComponentInstance(properties);
+            properties.put("service", KerneosConstants.GRAVITY_SERVICE);
+            gravitySecurity = configurationAdmin.createFactoryConfiguration("org.ow2.kerneos.core.service.impl.granite.GraniteSecurityWrapper", null);
+            gravitySecurity.update(properties);
         }
-        gravity = confHelper.newGravityService(KerneosConstants.GRAVITY_SERVICE, EAConstants.ADAPTER_ID);
-
-
-        // Granite Configuration Instances
         {
             Dictionary properties = new Hashtable();
-            properties.put("SERVICE", KerneosConstants.GRANITE_SERVICE);
-            graniteSecurity = securityFactory.createComponentInstance(properties);
+            properties.put("id", KerneosConstants.GRAVITY_SERVICE);
+            properties.put("messageTypes", "flex.messaging.messages.AsyncMessage");
+            properties.put("defaultAdapter", EAConstants.ADAPTER_ID);
+            gravity = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Service", null);
+            gravity.update(properties);
         }
-        granite = confHelper.newGraniteService(KerneosConstants.GRANITE_SERVICE);
+
+        // Granite Configurations
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("service", KerneosConstants.GRANITE_SERVICE);
+            graniteSecurity = configurationAdmin.createFactoryConfiguration("org.ow2.kerneos.core.service.impl.granite.GraniteSecurityWrapper", null);
+            graniteSecurity.update(properties);
+        }
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("id", KerneosConstants.GRANITE_SERVICE);
+            granite = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Service", null);
+            granite.update(properties);
+        }
     }
 
     /**
      * Called when all the component dependencies aren't met anymore.
      */
     @Invalidate
-    private void stop() {
+    private void stop() throws IOException {
         logger.debug("Stop KerneosCore");
 
         // Dispose configuration
-        gravity.dispose();
-        gravitySecurity.dispose();
-        granite.dispose();
-        graniteSecurity.dispose();
+        gravity.delete();
+        gravitySecurity.delete();
+        granite.delete();
+        graniteSecurity.delete();
     }
 
     /**
@@ -160,7 +173,7 @@ public class KerneosCore {
      * @param applicationInstance the instance of an application
      */
     @Bind(aggregate = true, optional = true)
-    private void bindApplicationInstance(final IApplicationInstance applicationInstance) throws MissingHandlerException, NamespaceException, ConfigurationException, UnacceptableConfiguration {
+    private void bindApplicationInstance(final IApplicationInstance applicationInstance) throws IOException {
         ApplicationInstanceImpl applicationImpl = new ApplicationInstanceImpl(applicationInstance);
 
         synchronized (applicationInstanceMap) {
@@ -174,7 +187,7 @@ public class KerneosCore {
      * @param applicationInstance the instance of an application
      */
     @Unbind
-    private void unbindApplicationInstance(final IApplicationInstance applicationInstance) {
+    private void unbindApplicationInstance(final IApplicationInstance applicationInstance) throws IOException {
         synchronized (applicationInstanceMap) {
             ApplicationInstanceImpl applicationImpl = applicationInstanceMap.get(applicationInstance.getId());
             applicationImpl.dispose();

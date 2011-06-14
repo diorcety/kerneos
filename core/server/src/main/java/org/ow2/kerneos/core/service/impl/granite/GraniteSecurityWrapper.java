@@ -50,7 +50,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
      */
     private static Log logger = LogFactory.getLog(GraniteSecurityWrapper.class);
 
-    @Property(name = "SERVICE")
+    @Property(name = "service")
     String service;
 
     @Requires

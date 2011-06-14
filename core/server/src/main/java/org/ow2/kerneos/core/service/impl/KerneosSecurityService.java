@@ -25,22 +25,27 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.granite.osgi.ConfigurationHelper;
 import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.service.GraniteDestination;
+
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.KerneosSession;
+import org.ow2.kerneos.core.config.generated.Service;
+import org.ow2.kerneos.core.config.generated.SwfModule;
 import org.ow2.kerneos.core.manager.DefaultKerneosLogin;
 import org.ow2.kerneos.core.manager.DefaultKerneosProfile;
 import org.ow2.kerneos.core.manager.KerneosLogin;
@@ -49,7 +54,11 @@ import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * The security service used by Kerneos.
@@ -57,11 +66,11 @@ import java.util.Collection;
 @Component
 @Instantiate
 @Provides
-public class KerneosSercurityService implements IKerneosSecurityService, GraniteDestination {
+public class KerneosSecurityService implements IKerneosSecurityService, GraniteDestination {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
+    private static Log logger = LogFactory.getLog(KerneosSecurityService.class);
 
     private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION";
 
@@ -72,37 +81,107 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
     private KerneosProfile kerneosProfile;
 
     @Requires
-    private ConfigurationHelper confHelper;
+    private ConfigurationAdmin configurationAdmin;
 
     @Requires
     private GraniteClassRegistry gcr;
 
-    @Requires(optional = true, specification = "org.ow2.kerneos.core.IApplicationInstance")
-    private Collection<IApplicationInstance> applicationInstances;
+    private Map<String, IApplicationInstance> applicationMap = new HashMap<String, IApplicationInstance>();
 
-    @Requires(optional = true, specification = "org.ow2.kerneos.core.IModuleInstance")
-    private Collection<IModuleInstance> moduleInstances;
+    private Map<String, IModuleInstance> moduleMap = new HashMap<String, IModuleInstance>();
 
-    private ComponentInstance graniteDestination;
+    class ModuleService {
+        private Service service;
+        private IModuleInstance moduleInstance;
+
+        ModuleService(IModuleInstance moduleInstance, Service service) {
+            this.service = service;
+            this.moduleInstance = moduleInstance;
+        }
+
+        public IModuleInstance getModuleInstance() {
+            return moduleInstance;
+        }
+
+        public Service getService() {
+            return service;
+        }
+    }
+
+    private Map<String, ModuleService> destinationMap = new HashMap<String, ModuleService>();
+
+    private Configuration graniteDestination;
 
     @Validate
-    private void start() {
+    private void start() throws IOException {
         logger.debug("Start KerneosSecurityService");
 
         gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_SECURITY, new Class[]{KerneosSession.class});
 
         // Register the synchronous service used with KerneosSecurityService
-        graniteDestination = confHelper.newGraniteDestination(KerneosConstants.KERNEOS_SERVICE_SECURITY, KerneosConstants.GRANITE_SERVICE);
+
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("id", KerneosConstants.KERNEOS_SERVICE_SECURITY);
+            properties.put("service", KerneosConstants.GRANITE_SERVICE);
+            graniteDestination = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+            graniteDestination.update(properties);
+        }
 
     }
 
     @Invalidate
-    private void stop() {
+    private void stop() throws IOException {
         logger.debug("Stop KerneosSecurityService");
 
-        graniteDestination.dispose();
+        graniteDestination.delete();
 
         gcr.unregisterClasses(KerneosConstants.KERNEOS_SERVICE_SECURITY);
+    }
+
+
+    @Bind(aggregate = true, optional = true)
+    private void bindApplication(final IApplicationInstance applicationInstance) {
+        synchronized (applicationMap) {
+            applicationMap.put(applicationInstance.getId(), applicationInstance);
+        }
+    }
+
+    @Unbind
+    private void unbindApplication(final IApplicationInstance applicationInstance) {
+        synchronized (applicationMap) {
+            applicationMap.remove(applicationInstance.getId());
+        }
+    }
+
+    @Bind(aggregate = true, optional = true)
+    private void bindModule(final IModuleInstance moduleInstance) {
+        synchronized (moduleMap) {
+            moduleMap.put(moduleInstance.getId(), moduleInstance);
+        }
+        if (moduleInstance.getConfiguration() instanceof SwfModule) {
+            SwfModule swfModule = (SwfModule) moduleInstance.getConfiguration();
+            synchronized (destinationMap) {
+                for (Service service : swfModule.getServices()) {
+                    destinationMap.put(service.getDestination(), new ModuleService(moduleInstance, service));
+                }
+            }
+        }
+    }
+
+    @Unbind
+    private void unbindModule(final IModuleInstance moduleInstance) {
+        synchronized (moduleMap) {
+            moduleMap.remove(moduleInstance.getId());
+        }
+        if (moduleInstance.getConfiguration() instanceof SwfModule) {
+            SwfModule swfModule = (SwfModule) moduleInstance.getConfiguration();
+            synchronized (destinationMap) {
+                for (Service service : swfModule.getServices()) {
+                    destinationMap.remove(service.getDestination());
+                }
+            }
+        }
     }
 
     /**
@@ -110,9 +189,11 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
      */
     public void updateContext() {
         HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
+        KerneosSession kerneosSession = null;
         IApplicationInstance currentApplicationInstance = null;
         IModuleInstance currentModuleInstance = null;
-        for (IApplicationInstance applicationInstance : applicationInstances) {
+
+        for (IApplicationInstance applicationInstance : applicationMap.values()) {
             if (request.getRequestURI().startsWith(applicationInstance.getConfiguration().getApplicationUrl())) {
                 currentApplicationInstance = applicationInstance;
                 break;
@@ -123,14 +204,13 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
             throw new RuntimeException("Invalid Kerneos Application");
 
 
-        for (IModuleInstance moduleInstance : moduleInstances) {
+        for (IModuleInstance moduleInstance : moduleMap.values()) {
             if (request.getRequestURI().startsWith(currentApplicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId())) {
                 currentModuleInstance = moduleInstance;
                 break;
             }
         }
 
-        KerneosSession kerneosSession;
         Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
         if (obj == null || !(obj instanceof KerneosSession)) {
             kerneosSession = kerneosLogin.newSession();
@@ -198,8 +278,19 @@ public class KerneosSercurityService implements IKerneosSecurityService, Granite
                 break;
         }
 
-        String module = (KerneosContext.getCurrentContext().getModuleInstance() != null) ? KerneosContext.getCurrentContext().getModuleInstance().getId() : null;
-        if (kerneosProfile.haveAccess(KerneosContext.getCurrentContext().getApplicationInstance().getId(), module, destination)) {
+        String application = KerneosContext.getCurrentContext().getApplicationInstance().getId();
+        String module = null;
+        String service = null;
+        if (destination == null) {
+            module = (KerneosContext.getCurrentContext().getModuleInstance() != null) ? KerneosContext.getCurrentContext().getModuleInstance().getId() : null;
+        } else {
+            ModuleService moduleService = destinationMap.get(destination);
+            if (moduleService != null) {
+                module = moduleService.getModuleInstance().getId();
+                service = moduleService.getService().getId();
+            }
+        }
+        if (kerneosProfile.haveAccess(application, module, destination)) {
             return SecurityError.NO_ERROR;
         } else {
             return SecurityError.INVALID_CREDENTIALS;

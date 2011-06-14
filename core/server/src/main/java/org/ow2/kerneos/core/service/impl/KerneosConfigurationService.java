@@ -25,6 +25,7 @@
 
 package org.ow2.kerneos.core.service.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
@@ -33,11 +34,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.felix.ipojo.ComponentInstance;
-import org.apache.felix.ipojo.ConfigurationException;
-import org.apache.felix.ipojo.Factory;
-import org.apache.felix.ipojo.MissingHandlerException;
-import org.apache.felix.ipojo.UnacceptableConfiguration;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
@@ -47,14 +43,15 @@ import org.apache.felix.ipojo.annotations.Validate;
 import org.apache.felix.ipojo.handler.extender.BundleTracker;
 import org.apache.felix.ipojo.handlers.event.publisher.Publisher;
 
-import org.granite.osgi.ConfigurationHelper;
 import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.service.GraniteDestination;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-
 import org.osgi.framework.ServiceRegistration;
+
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.ow2.kerneos.core.ApplicationInstance;
 import org.ow2.kerneos.core.IApplicationInstance;
 import org.ow2.kerneos.core.IModuleInstance;
@@ -105,13 +102,10 @@ public final class KerneosConfigurationService implements GraniteDestination {
     @Requires
     private GraniteClassRegistry gcr;
 
-    @Requires(from = "org.granite.gravity.osgi.adapters.ea.configuration")
-    private Factory eaFactory;
-
     @Requires
-    ConfigurationHelper confHelper;
+    private ConfigurationAdmin configurationAdmin;
 
-    private ComponentInstance eaConfig, graniteDestination, gravityDestination;
+    private Configuration eaConfig, graniteDestination, gravityDestination;
 
     private Map<String, ApplicationInstance> applicationInstanceMap = new HashMap<String, ApplicationInstance>();
     private Map<String, ServiceRegistration> applicationRegistrationMap = new HashMap<String, ServiceRegistration>();
@@ -204,14 +198,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
 
     /**
      * Called when all the component dependencies are met.
-     *
-     * @throws MissingHandlerException   issue during GraniteDS configuration.
-     * @throws ConfigurationException    issue during GraniteDS configuration.
-     * @throws UnacceptableConfiguration issue during GraniteDS configuration.
      */
     @Validate
-    private void start() throws MissingHandlerException, ConfigurationException,
-            UnacceptableConfiguration {
+    private void start() throws IOException {
         logger.debug("Start KerneosConfigurationService");
 
         // Register the classes used with "kerneosConfig" service
@@ -242,13 +231,31 @@ public final class KerneosConfigurationService implements GraniteDestination {
         });
 
         // Register the asynchronous service used with KerneosConfigurationService
-        gravityDestination = confHelper.newGravityDestination(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, KerneosConstants.GRAVITY_SERVICE);
-        Dictionary properties = new Hashtable();
-        properties.put("destination", KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
-        eaConfig = eaFactory.createComponentInstance(properties);
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("id", KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
+            properties.put("service", KerneosConstants.GRAVITY_SERVICE);
+
+            gravityDestination = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+            gravityDestination.update(properties);
+        }
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("destination", KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
+
+            eaConfig = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.ea.configuration", null);
+            eaConfig.update(properties);
+        }
 
         // Register the synchronous service used with KerneosConfigurationService
-        graniteDestination = confHelper.newGraniteDestination(KerneosConstants.KERNEOS_SERVICE_CONFIGURATION, KerneosConstants.GRANITE_SERVICE);
+        {
+            Dictionary properties = new Hashtable();
+            properties.put("id", KerneosConstants.KERNEOS_SERVICE_CONFIGURATION);
+            properties.put("service", KerneosConstants.GRANITE_SERVICE);
+
+            graniteDestination = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+            graniteDestination.update(properties);
+        }
 
         // Start to track bundles
         bundleTracker.open();
@@ -258,16 +265,16 @@ public final class KerneosConfigurationService implements GraniteDestination {
      * Called when all the component dependencies aren't met anymore.
      */
     @Invalidate
-    private void stop() {
+    private void stop() throws IOException {
         logger.debug("Stop KerneosConfigurationService");
 
         // Stop the tracking of bundles
         bundleTracker.close();
 
         // Remove the configurations
-        eaConfig.dispose();
-        gravityDestination.dispose();
-        graniteDestination.dispose();
+        eaConfig.delete();
+        gravityDestination.delete();
+        graniteDestination.delete();
 
         // Unregister the different used classes
         gcr.unregisterClasses(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
