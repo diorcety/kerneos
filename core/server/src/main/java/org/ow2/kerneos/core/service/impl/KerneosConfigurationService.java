@@ -350,6 +350,13 @@ public final class KerneosConfigurationService implements GraniteDestination {
             if (module instanceof SwfModule) {
                 SwfModule swfModule = (SwfModule) module;
                 swfModule.setFile(KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + name + "/" + swfModule.getFile());
+
+                // Completing the destination of the module's services
+                for (Service service : swfModule.getServices()) {
+                    if (service.getDestination() == null) {
+                        service.setDestination(name + "~" + service.getId());
+                    }
+                }
             }
 
             ModuleInstance moduleInstance = new ModuleInstance(name, module, bundle);

@@ -37,9 +37,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface KerneosService {
     /**
-     * The name of the destination.
+     * The id of the service.
      */
-    String destination();
+    String id();
 
     /**
      * Analyze the class for finding classes used by the service.
