@@ -131,7 +131,7 @@ package com.adobe.cairngorm.commands
       {
          var isSequenceCommand : Boolean = ( nextEvent != null );
          if( isSequenceCommand )
-            CairngormEventDispatcher.getInstance().dispatchEvent( nextEvent );
+            CairngormEventDispatcher.getInstance(this).dispatchEvent( nextEvent );
       }
    }
 }

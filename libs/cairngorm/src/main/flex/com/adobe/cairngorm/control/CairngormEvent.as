@@ -74,7 +74,7 @@ package com.adobe.cairngorm.control
        */
       public function dispatch() : Boolean
       {
-         return CairngormEventDispatcher.getInstance().dispatchEvent( this );
+         return CairngormEventDispatcher.getInstance(this).dispatchEvent( this );
       }
       
       /**

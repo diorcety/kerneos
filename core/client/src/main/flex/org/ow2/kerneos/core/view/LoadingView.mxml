@@ -97,7 +97,7 @@
                     'kerneos.startup.loading-application-configuration');
 
             // Load the Kerneos configuration
-            KerneosLifeCycleManager.getApplication();
+            KerneosLifeCycleManager.loadApplication();
 
         }
 
@@ -130,7 +130,6 @@
                 }
             }
         }
-
         ]]>
     </fx:Script>
 

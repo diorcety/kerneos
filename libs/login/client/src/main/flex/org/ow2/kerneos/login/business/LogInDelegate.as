@@ -22,29 +22,28 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.business
-{
+package org.ow2.kerneos.login.business {
 import com.adobe.cairngorm.business.ServiceLocator;
 
 import org.ow2.kerneos.common.business.AbsDelegateResponder;
 
+/**
+ * @author Guillaume Renault
+ */
+public class LogInDelegate extends AbsDelegateResponder implements ILogInDelegate {
     /**
-     * @author Guillaume Renault
+     * Call a procedure on the service registered. A user log in is performed.
      */
-    public class LogInDelegate extends AbsDelegateResponder implements ILogInDelegate{
-        /**
-        * Call a procedure on the service registered. A user log in is performed.
-        */
-        public function logIn(user:String,password:String) : void {
-    
-            // find service
-            var service : Object = ServiceLocator.getInstance().getRemoteObject( "kerneosSecurityService" );
-    
-            // call service
-            var call : Object = service.logIn(user,password);
-    
-            // add the responder as a listener for the answer of the java side
-            call.addResponder( this.responder );
-        }
+    public function logIn(user:String, password:String):void {
+
+        // find service
+        var service:Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosSecurityService");
+
+        // call service
+        var call:Object = service.logIn(user, password);
+
+        // add the responder as a listener for the answer of the java side
+        call.addResponder(this.responder);
     }
+}
 }

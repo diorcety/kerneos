@@ -91,7 +91,7 @@ public class GetModulesCommand implements ICommand, IResponder{
                                         "The application configuration file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,
                                         faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+        CairngormEventDispatcher.getInstance(null).dispatchEvent(serverSideExceptionEvent);
     }
 }
 }

@@ -49,394 +49,355 @@
         import mx.collections.ArrayCollection;
 
         import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
-            import org.ow2.kerneos.core.managers.LanguagesManager;
-            import mx.resources.ResourceManager;
-            import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.core.managers.LanguagesManager;
 
-            import mx.controls.Alert;
-            import mx.events.CloseEvent;
+        import mx.resources.ResourceManager;
 
-            import flexlib.mdi.containers.MDIWindow;
-            import flexlib.mdi.events.MDIManagerEvent;
-            import flexlib.mdi.events.MDIWindowEvent;
+        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
 
-            import org.ow2.kerneos.core.api.KerneosModule;
-            import org.ow2.kerneos.core.view.window.SwfModuleWindow;
-            import org.ow2.kerneos.core.view.window.KerneosWindow;
-            import org.ow2.kerneos.core.view.window.ModuleWindow;
-            import org.ow2.kerneos.core.view.notification.NotificationsLog;
-            import org.ow2.kerneos.core.managers.SharedObjectManager;
-            import org.ow2.kerneos.core.managers.NotificationsManager;
-            import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
-            import org.ow2.kerneos.core.model.KerneosModelLocator;
-            import org.ow2.kerneos.login.model.LoginModelLocator;
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
 
-            // =========================================================================
-            // Variables
-            // =========================================================================
+        import flexlib.mdi.containers.MDIWindow;
+        import flexlib.mdi.events.MDIManagerEvent;
+        import flexlib.mdi.events.MDIWindowEvent;
 
-            // Assets
+        import org.ow2.kerneos.core.api.KerneosModule;
+        import org.ow2.kerneos.core.view.window.SwfModuleWindow;
+        import org.ow2.kerneos.core.view.window.KerneosWindow;
+        import org.ow2.kerneos.core.view.window.ModuleWindow;
+        import org.ow2.kerneos.core.view.notification.NotificationsLog;
+        import org.ow2.kerneos.core.managers.SharedObjectManager;
+        import org.ow2.kerneos.core.managers.NotificationsManager;
+        import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
 
-            /**
-             * Minimize all windows icon.
-             */
-            [Embed(source="/../assets/down.png")]
-            [Bindable]
-            private var downIcon : Class;
+        // =========================================================================
+        // Variables
+        // =========================================================================
 
-            /**
-             * Cascade windows icon.
-             */
-            [Embed(source="/../assets/cascade.png")]
-            [Bindable]
-            private var cascadeIcon : Class;
+        // Assets
 
-            /**
-             * Tile windows icon.
-             */
-            [Embed(source="/../assets/tile.png")]
-            [Bindable]
-            private var tileIcon : Class;
+        /**
+         * Minimize all windows icon.
+         */
+        [Embed(source="/../assets/down.png")]
+        [Bindable]
+        private var downIcon:Class;
 
-            /**
-             * Events icon.
-             */
-            [Embed(source="/../assets/events_list16.png")]
-            [Bindable]
-            private var eventsIcon : Class;
+        /**
+         * Cascade windows icon.
+         */
+        [Embed(source="/../assets/cascade.png")]
+        [Bindable]
+        private var cascadeIcon:Class;
 
-            /**
-             * Log out icon.
-             */
-            [Embed(source="/../assets/exit.png")]
-            [Bindable]
-            private var logoutIcon : Class;
+        /**
+         * Tile windows icon.
+         */
+        [Embed(source="/../assets/tile.png")]
+        [Bindable]
+        private var tileIcon:Class;
 
-            /**
-             * Icon for the en_US locale.
-             */
-            [Embed(source="/../assets/en_US.png")]
-            [Bindable]
-            public var en_USIcon : Class;
+        /**
+         * Events icon.
+         */
+        [Embed(source="/../assets/events_list16.png")]
+        [Bindable]
+        private var eventsIcon:Class;
 
-            /**
-             * Icon for the fr_FR locale.
-             */
-            [Embed(source="/../assets/fr_FR.png")]
-            [Bindable]
-            public var fr_FRIcon : Class;
+        /**
+         * Log out icon.
+         */
+        [Embed(source="/../assets/exit.png")]
+        [Bindable]
+        private var logoutIcon:Class;
 
-            // Variables
+        /**
+         * Icon for the en_US locale.
+         */
+        [Embed(source="/../assets/en_US.png")]
+        [Bindable]
+        public var en_USIcon:Class;
 
-            /**
-             * The application model
-             */
-            [Bindable]
-            private var model : KerneosModelLocator;
+        /**
+         * Icon for the fr_FR locale.
+         */
+        [Embed(source="/../assets/fr_FR.png")]
+        [Bindable]
+        public var fr_FRIcon:Class;
 
-            /**
-             * Potential window manager queued event
-             * @see closeWindow()
-             */
-            private var queuedEvent : MDIManagerEvent;
+        // Variables
 
-            /**
-             * The actual available and supported languages.
-             */
-            [Bindable]
-            private var locales : Array = [{locale: "fr_FR", label: "Français", icon: fr_FRIcon},
-                                           {locale: "en_US", label: "English", icon: en_USIcon}];
+        /**
+         * The application model
+         */
+        [Bindable]
+        private var model:KerneosModelLocator;
 
-            /**
-             * The notifications log window
-             */
-            private var notificationsLogWindow : KerneosWindow = null;
+        /**
+         * Potential window manager queued event
+         * @see closeWindow()
+         */
+        private var queuedEvent:MDIManagerEvent;
+
+        /**
+         * The actual available and supported languages.
+         */
+        [Bindable]
+        private var locales:Array = [
+            {locale: "fr_FR", label: "Français", icon: fr_FRIcon},
+            {locale: "en_US", label: "English", icon: en_USIcon}
+        ];
+
+        /**
+         * The notifications log window
+         */
+        private var notificationsLogWindow:KerneosWindow = null;
 
 
+        // =========================================================================
+        // Initialization
+        // =========================================================================
 
-            // =========================================================================
-            // Initialization
-            // =========================================================================
+        /**
+         * On view creation complete.
+         */
+        private function creationCompleteHandler(e:Event = null):void {
+            // Retrieve the application model.
+            model = KerneosModelLocator.getInstance();
 
-            /**
-             * On view creation complete.
-             */
-            private function creationCompleteHandler(e : Event = null) : void
-            {
-                // Retrieve the application model.
-                model = KerneosModelLocator.getInstance();
+            // Register as the desktop view to the different managers
+            ModulesLifeCycleManager.desktop = KerneosLifeCycleManager.desktop = NotificationsManager.desktop = this;
 
-                // Register as the desktop view to the different managers
-                ModulesLifeCycleManager.desktop = KerneosLifeCycleManager.desktop = NotificationsManager.desktop = this;
+            // Set windows events listeners.
+            windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow, false, 0, true);
 
-                // Set windows events listeners.
-                windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow, false, 0, true);
+            // Setup the active language and the language selector component.
+            setupActiveLanguage();
 
-                // Setup the active language and the language selector component.
-                setupActiveLanguage();
+            // Load the modules
+            loadModules();
+        }
 
-                // Load the modules
-                loadModules();
+
+        // =========================================================================
+        // Public methods
+        // =========================================================================
+
+        /**
+         * Save all opened windows setup to the user shared object.
+         */
+        public function saveAllWindowsSetup():void {
+            // Save the opened windows setup
+            for each (var window:KerneosWindow in windowContainer.windowManager.windowList) {
+                window.saveWindowSetup();
             }
+        }
 
 
+        // =========================================================================
+        // Windows events handlers
+        // =========================================================================
 
-            // =========================================================================
-            // Public methods
-            // =========================================================================
+        /**
+         * When closing a module window, force a confirmation from the user.
+         */
+        private function closeWindow(event:Event):void {
+            if (event is MDIManagerEvent) {
+                if ((event as MDIManagerEvent).window is ModuleWindow) {
+                    // Store a copy of the event
+                    queuedEvent = event.clone() as MDIManagerEvent;
 
-            /**
-             * Save all opened windows setup to the user shared object.
-             */
-            public function saveAllWindowsSetup() : void
-            {
-                // Save the opened windows setup
-                for each (var window : KerneosWindow in windowContainer.windowManager.windowList)
-                {
-                    window.saveWindowSetup();
-                }
-            }
+                    // This is the line that prevents the default behavior from executing as usual
+                    // because the default handler checks event.isDefaultPrevented()
+                    event.preventDefault();
 
+                    // Retrieve the target window
+                    var window:ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
 
+                    // Resolve wether the user should be prompted before closing the window
+                    var prompt:Boolean = true;
 
-            // =========================================================================
-            // Windows events handlers
-            // =========================================================================
+                    if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.NEVER)) {
+                        prompt = false;
+                    }
+                    else if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.ALWAYS)) {
+                        prompt = true;
+                    }
+                    else {
+                        // If this is a SWF module that implements KerneosModule, call the
+                        // canBeClosedWithoutPrompt() method.
+                        if (window is SwfModuleWindow) {
 
-            /**
-             * When closing a module window, force a confirmation from the user.
-             */
-            private function closeWindow(event : Event) : void
-            {
-                if (event is MDIManagerEvent)
-                {
-                    if ((event as MDIManagerEvent).window is ModuleWindow)
-                    {
-                        // Store a copy of the event
-                        queuedEvent = event.clone() as MDIManagerEvent;
+                            var kerneosModule:KerneosModule = (window as SwfModuleWindow).getKerneosModule();
 
-                        // This is the line that prevents the default behavior from executing as usual
-                        // because the default handler checks event.isDefaultPrevented()
-                        event.preventDefault();
-
-                        // Retrieve the target window
-                        var window : ModuleWindow = (event as MDIManagerEvent).window as ModuleWindow;
-
-                        // Resolve wether the user should be prompted before closing the window
-                        var prompt : Boolean = true;
-
-                        if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.NEVER))
-                        {
-                            prompt = false;
-                        }
-                        else if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.ALWAYS))
-                        {
-                            prompt = true;
-                        }
-                        else
-                        {
-                            // If this is a SWF module that implements KerneosModule, call the
-                            // canBeClosedWithoutPrompt() method.
-                            if (window is SwfModuleWindow)
-                            {
-
-                                var kerneosModule: KerneosModule = (window as SwfModuleWindow).getKerneosModule();
-
-                                if (kerneosModule)
-                                {
-                                    prompt = !kerneosModule.canBeClosedWithoutPrompt();
-                                }
+                            if (kerneosModule) {
+                                prompt = !kerneosModule.canBeClosedWithoutPrompt();
                             }
                         }
+                    }
 
-                        // Prompt the user or close directly the window
-                        if (prompt)
-                        {
-                            // Show an alert box
-                            var closeAlert : Alert = Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.closeconfirmdialog.body'), ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.closeconfirmdialog.title', [window.module.name]), 3, null, confirmCloseWindow, null, 4);
-                        }
-                        else
-                        {
-                            // Directly close the window
-                            confirmCloseWindow();
-                        }
+                    // Prompt the user or close directly the window
+                    if (prompt) {
+                        // Show an alert box
+                        var closeAlert:Alert = Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.closeconfirmdialog.body'), ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.closeconfirmdialog.title', [window.module.name]), 3, null, confirmCloseWindow, null, 4);
+                    }
+                    else {
+                        // Directly close the window
+                        confirmCloseWindow();
                     }
                 }
             }
+        }
 
 
+        /**
+         * When user confirms closing the window.
+         */
+        private function confirmCloseWindow(event:CloseEvent = null):void {
+            if (event == null || event.detail == mx.controls.Alert.YES) {
+                // Unload the module
+                ModulesLifeCycleManager.stopModuleByWindow(queuedEvent.window as ModuleWindow);
 
-            /**
-             * When user confirms closing the window.
-             */
-            private function confirmCloseWindow(event : CloseEvent = null) : void
-            {
-                if (event == null || event.detail == mx.controls.Alert.YES)
-                {
-                    // Unload the module
-                    ModulesLifeCycleManager.stopModuleByWindow(queuedEvent.window as ModuleWindow);
-
-                    // Close the window component
-                    windowContainer.windowManager.executeDefaultBehavior(queuedEvent);
-                }
-
-                queuedEvent = null;
+                // Close the window component
+                windowContainer.windowManager.executeDefaultBehavior(queuedEvent);
             }
 
+            queuedEvent = null;
+        }
 
 
-            /**
-             * Minimize all windows.
-             */
-            private function minimizeAllWindows() : void
-            {
-                var allWindows : Array = windowContainer.windowManager.windowList;
+        /**
+         * Minimize all windows.
+         */
+        private function minimizeAllWindows():void {
+            var allWindows:Array = windowContainer.windowManager.windowList;
 
-                for (var i : Number = 0; i < allWindows.length; i++)
-                {
-                    if (allWindows[i] is ModuleWindow)
-                    {
-                        (allWindows[i] as MDIWindow).minimize();
-                    }
+            for (var i:Number = 0; i < allWindows.length; i++) {
+                if (allWindows[i] is ModuleWindow) {
+                    (allWindows[i] as MDIWindow).minimize();
                 }
             }
+        }
 
 
+        // =========================================================================
+        // Modules notifications
+        // =========================================================================
 
-            // =========================================================================
-            // Modules notifications
-            // =========================================================================
+        /**
+         * Show the notifications log window.
+         */
+        private function showNotificationsLog(e:Event = null):void {
+            if (notificationsLogWindow == null) {
+                notificationsLogWindow = new KerneosWindow();
+                notificationsLogWindow.title = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.notification.title');
+                notificationsLogWindow.titleIcon = eventsIcon;
+                var notificationsLog:NotificationsLog = new NotificationsLog();
+                notificationsLogWindow.addChild(new NotificationsLog());
+                notificationsLog.percentHeight = 100;
+                notificationsLog.percentWidth = 100;
+                notificationsLogWindow.addEventListener(MDIWindowEvent.CLOSE, notificationsLogWindowCloseHandler, false, 0, true);
+                notificationsLogWindow.minimizeBtn.visible = false;
+                windowContainer.windowManager.add(notificationsLogWindow);
+            }
+            else {
+                notificationsLogWindow.bringToFront();
+            }
+        }
 
-            /**
-             * Show the notifications log window.
-             */
-            private function showNotificationsLog(e : Event = null) : void
-            {
-                if (notificationsLogWindow == null)
-                {
-                    notificationsLogWindow = new KerneosWindow();
-                    notificationsLogWindow.title = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.notification.title');
-                    notificationsLogWindow.titleIcon = eventsIcon;
-                    var notificationsLog : NotificationsLog = new NotificationsLog();
-                    notificationsLogWindow.addChild(new NotificationsLog());
-                    notificationsLog.percentHeight = 100;
-                    notificationsLog.percentWidth = 100;
-                    notificationsLogWindow.addEventListener(MDIWindowEvent.CLOSE, notificationsLogWindowCloseHandler, false, 0, true);
-                    notificationsLogWindow.minimizeBtn.visible = false;
-                    windowContainer.windowManager.add(notificationsLogWindow);
-                }
-                else
-                {
-                    notificationsLogWindow.bringToFront();
-                }
+
+        /**
+         * When the notifications log window is closed.
+         */
+        private function notificationsLogWindowCloseHandler(e:Event):void {
+            notificationsLogWindow = null;
+        }
+
+
+        // =========================================================================
+        // Localization
+        // =========================================================================
+
+        /**
+         * Resolve the active language and setup the language selection component.
+         */
+        private function setupActiveLanguage(event:Event = null):void {
+            // Retrieve the user saved setting.
+            var userActiveLanguage:String = SharedObjectManager.getActiveLanguage();
+
+            // If the user has a memorized setting, restore it.
+            if (userActiveLanguage != null) {
+                resourceManager.localeChain = [userActiveLanguage];
             }
 
-
-
-            /**
-             * When the notifications log window is closed.
-             */
-            private function notificationsLogWindowCloseHandler(e : Event) : void
-            {
-                notificationsLogWindow = null;
+            // Else apply the default setting specified in kerneos-config.
+            else {
+                resourceManager.localeChain = [this.model.applicationInstance.configuration.defaultLanguage];
             }
 
+            // Setup the language selection component.
+            setupLanguageSelector();
+        }
 
 
-            // =========================================================================
-            // Localization
-            // =========================================================================
-
-            /**
-             * Resolve the active language and setup the language selection component.
-             */
-            private function setupActiveLanguage(event : Event = null) : void
-            {
-                // Retrieve the user saved setting.
-                var userActiveLanguage : String = SharedObjectManager.getActiveLanguage();
-
-                // If the user has a memorized setting, restore it.
-                if (userActiveLanguage != null)
-                {
-                    resourceManager.localeChain = [userActiveLanguage];
-                }
-
-                // Else apply the default setting specified in kerneos-config.
-                else
-                {
-                    resourceManager.localeChain = [this.model.applicationInstance.configuration.defaultLanguage];
-                }
-
-                // Setup the language selection component.
-                setupLanguageSelector();
-            }
-
-
-
-            /**
-             * Initialize the locale selector.
-             */
-            private function setupLanguageSelector(event : Event = null) : void
-            {
-                for (var i : int = 0; i < locales.length; i++)
-                {
-                    if (locales[i].locale == resourceManager.localeChain[0])
-                    {
-                        languageSelector.selectedIndex = i;
-                        return;
-                    }
+        /**
+         * Initialize the locale selector.
+         */
+        private function setupLanguageSelector(event:Event = null):void {
+            for (var i:int = 0; i < locales.length; i++) {
+                if (locales[i].locale == resourceManager.localeChain[0]) {
+                    languageSelector.selectedIndex = i;
+                    return;
                 }
             }
+        }
 
 
+        /**
+         * When the locale selection has been changed.
+         */
+        private function languageSelectorChangeHandler(event:Event):void {
+            // Change the active language to the selected one..
+            resourceManager.localeChain = [languageSelector.selectedItem.locale];
 
-            /**
-             * When the locale selection has been changed.
-             */
-            private function languageSelectorChangeHandler(event : Event) : void
-            {
-                // Change the active language to the selected one..
-                resourceManager.localeChain = [languageSelector.selectedItem.locale];
+            // Store the user's choice.
+            SharedObjectManager.setActiveLanguage(languageSelector.selectedItem.locale);
+        }
 
-                // Store the user's choice.
-                SharedObjectManager.setActiveLanguage(languageSelector.selectedItem.locale);
+
+        /**
+         * Return the selected locale icon.
+         */
+        private function getLocaleIcon(item:Object):Class {
+            if (item.icon) {
+                return item.icon;
             }
+            return null;
+        }
 
 
+        /**
+         * Load modules and subscribe to Kerneos topic
+         */
+        private function loadModules():void {
+            // Load the modules
+            ModulesLifeCycleManager.loadModules();
 
-            /**
-             * Return the selected locale icon.
-             */
-            private function getLocaleIcon(item : Object) : Class
-            {
-                if (item.icon)
-                {
-                    return item.icon;
-                }
-                return null;
+            // Subscribe a gravity consumer to the kerneos topic
+            ModulesLifeCycleManager.subscribe();
+        }
+
+        /**
+         * When the module list has been loaded.
+         */
+        private function set modulesLoaded(modules:ArrayCollection):void {
+            if (modules != null) {
+                // Setup the modules
+                ModulesLifeCycleManager.initModules();
             }
-
-
-            /**
-            * Load modules and subscribe to Kerneos topic
-            */
-            private function loadModules():void {
-                // Load the modules
-                ModulesLifeCycleManager.getModules();
-
-                // Subscribe a gravity consumer to the kerneos topic
-                ModulesLifeCycleManager.subscribe();
-            }
-
-            /**
-             * When the module list has been loaded.
-             */
-            private function set modulesLoaded(modules:ArrayCollection):void {
-                if (modules != null) {
-                    // Setup the modules
-                    ModulesLifeCycleManager.initModules();
-                }
-            }
+        }
         ]]>
     </fx:Script>
 

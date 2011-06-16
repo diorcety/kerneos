@@ -24,6 +24,7 @@
  */
 package org.ow2.kerneos.core.view.window {
 import com.adobe.cairngorm.business.ServiceLocator;
+import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import flash.system.ApplicationDomain;
 
@@ -138,8 +139,6 @@ public class SwfModuleWindow extends ModuleWindow {
         var currentDate:Date = new Date();
         var params:String = new Number(currentDate.getTime()).toString();
 
-        registerServices();
-
         // Setup the SWF module loader
         _moduleInfo = ModuleManager.getModule((module as SWFModuleVO).file + "?" + params);
         _moduleInfo.addEventListener(ModuleEvent.READY, onLoaderReady, false, 0, true);
@@ -170,7 +169,7 @@ public class SwfModuleWindow extends ModuleWindow {
     }
 
     private function registerServices():void {
-        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance(_child);
 
         // Register services
         for each(var service:ServiceVO in (module as SWFModuleVO).services) {
@@ -195,13 +194,17 @@ public class SwfModuleWindow extends ModuleWindow {
             (_child as KerneosModule).closeModule();
         }
 
-        unregisterServices();
-        unregisterClasses();
-
         // Remove module
-        if(_child != null)
-        {
+        if (_child != null) {
             removeChild(_child);
+
+            unregisterServices();
+            unregisterClasses();
+
+            // Flush instances associated with this module
+            ServiceLocator.removeInstance(_child);
+            CairngormEventDispatcher.removeInstance(_child);
+
             _child = null;
         }
 
@@ -223,7 +226,7 @@ public class SwfModuleWindow extends ModuleWindow {
     }
 
     private function unregisterServices():void {
-        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance(_child);
 
         for each(var service:ServiceVO in (module as SWFModuleVO).services) {
             if (service.asynchronous) {
@@ -255,6 +258,7 @@ public class SwfModuleWindow extends ModuleWindow {
     private function onLoaderReady(event:ModuleEvent):void {
         _child = _moduleInfo.factory.create() as Module;
 
+        registerServices();
         registerClasses();
 
         if (_progressBar)

@@ -43,7 +43,7 @@ public class GetApplicationDelegate extends AbsDelegateResponder
     public function getApplication(application: String):void
     {
             // find service
-            var service : Object = ServiceLocator.getInstance().getRemoteObject("kerneosConfigService");
+            var service : Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosConfigService");
 
             // call service
             var call : Object = service.getApplication(application);

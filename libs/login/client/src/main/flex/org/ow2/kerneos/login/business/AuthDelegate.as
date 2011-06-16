@@ -22,29 +22,27 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.business
-{
+package org.ow2.kerneos.login.business {
 import com.adobe.cairngorm.business.ServiceLocator;
 
 
 import org.ow2.kerneos.common.business.AbsDelegateResponder;
 
-public class AuthDelegate extends AbsDelegateResponder implements IAuthDelegate
-{
+public class AuthDelegate extends AbsDelegateResponder implements IAuthDelegate {
 
     /**
-    * Call a procedure on the service registered. The user's authentication is checked.
-    */
-    public function auth() : void {
+     * Call a procedure on the service registered. The user's authentication is checked.
+     */
+    public function auth():void {
 
         // find service
-        var service : Object = ServiceLocator.getInstance().getRemoteObject( "kerneosSecurityService" );
+        var service:Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosSecurityService");
 
         // call service
-        var call : Object = service.getSession();
+        var call:Object = service.getSession();
 
         // add the responder as a listener for the answer of the java side
-        call.addResponder( this.responder );
+        call.addResponder(this.responder);
     }
 
 

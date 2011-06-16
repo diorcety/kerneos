@@ -22,8 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.business
-{
+package org.ow2.kerneos.login.business {
 import com.adobe.cairngorm.business.ServiceLocator;
 
 import mx.controls.Alert;
@@ -33,22 +32,21 @@ import org.ow2.kerneos.common.business.AbsDelegateResponder;
 /**
  * @author guillaume Renault
  */
-public class LogOutDelegate extends AbsDelegateResponder implements ILogOutDelegate
-{
+public class LogOutDelegate extends AbsDelegateResponder implements ILogOutDelegate {
 
     /**
-    * Call a procedure on the service registered. A user log out is performed.
-    */
-    public function logOut() : void {
+     * Call a procedure on the service registered. A user log out is performed.
+     */
+    public function logOut():void {
 
         // find service
-        var service : Object = ServiceLocator.getInstance().getRemoteObject( "kerneosSecurityService" );
+        var service:Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosSecurityService");
 
         // call service
-        var call : Object = service.logOut();
+        var call:Object = service.logOut();
 
         // add the responder as a listener for the answer of the java side
-        call.addResponder( this.responder );
+        call.addResponder(this.responder);
     }
 
 

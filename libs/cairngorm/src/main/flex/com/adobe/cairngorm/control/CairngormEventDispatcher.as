@@ -34,8 +34,13 @@ package com.adobe.cairngorm.control
 {
    import flash.events.IEventDispatcher;
    import flash.events.EventDispatcher;
+import flash.utils.Dictionary;
 
-   /**
+import mx.modules.ModuleManager;
+
+import mx.resources.ResourceManager;
+
+/**
     * The CairngormEventDispatcher class is a singleton class, used by the application
     * developer to broadcast events that correspond to user gestures and requests.
     *
@@ -56,7 +61,7 @@ package com.adobe.cairngorm.control
     * var eventObject : LoginEvent = new LoginEvent();
     * eventObject.username = username.text;
     * eventObject.password = username.password;
-    * 
+    *
     * CairngormEventDispatcher.getInstance().dispatchEvent( eventObject );
     * </pre>
     *
@@ -64,43 +69,62 @@ package com.adobe.cairngorm.control
     * @see com.adobe.cairngorm.control.CairngormEvent
     * @see flash.events.IEventDispatcher
     */
-   
+
    public class CairngormEventDispatcher
    {
-      private static var instance : CairngormEventDispatcher;  
+      private static var instances : Dictionary = new Dictionary();
       private var eventDispatcher : IEventDispatcher;
-      
+
       /**
-       * Returns the single instance of the dispatcher
-       */ 
-      public static function getInstance() : CairngormEventDispatcher 
-      {
-         if ( instance == null )
-            instance = new CairngormEventDispatcher();
-          
-           return instance;
+       * Returns a instance of the dispatcher
+       */
+      public static function getInstance(obj:Object):CairngormEventDispatcher {
+        var instance:Object = ModuleManager.getAssociatedFactory(obj);
+        if (instance == null)
+            instance = "application";
+
+        if (instances[instance] == null) {
+            var cgDispatcher:CairngormEventDispatcher = new CairngormEventDispatcher();
+            instances[instance] = cgDispatcher;
+            return cgDispatcher;
+        }
+        else {
+            return instances[instance];
+        }
       }
-      
+
+      /**
+       * Delete a instance of the dispatcher
+       */
+      public static function removeInstance(obj:Object): void {
+        var instance:Object = ModuleManager.getAssociatedFactory(obj);
+        if (instance == null)
+            instance = "application";
+        if (instances[instance] != null) {
+            delete instances[instance];
+        }
+      }
+
       /**
        * Constructor.
        */
-      public function CairngormEventDispatcher( target:IEventDispatcher = null ) 
+      public function CairngormEventDispatcher( target:IEventDispatcher = null )
       {
          eventDispatcher = new EventDispatcher( target );
       }
-      
+
       /**
        * Adds an event listener.
        */
-      public function addEventListener( type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false ) : void 
+      public function addEventListener( type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false ) : void
       {
          eventDispatcher.addEventListener( type, listener, useCapture, priority, useWeakReference );
       }
-      
+
       /**
        * Removes an event listener.
        */
-      public function removeEventListener( type:String, listener:Function, useCapture:Boolean = false ) : void 
+      public function removeEventListener( type:String, listener:Function, useCapture:Boolean = false ) : void
       {
          eventDispatcher.removeEventListener( type, listener, useCapture );
       }
@@ -108,23 +132,23 @@ package com.adobe.cairngorm.control
       /**
        * Dispatches a cairngorm event.
        */
-      public function dispatchEvent( event:CairngormEvent ) : Boolean 
+      public function dispatchEvent( event:CairngormEvent ) : Boolean
       {
          return eventDispatcher.dispatchEvent( event );
       }
-      
+
       /**
        * Returns whether an event listener exists.
        */
-      public function hasEventListener( type:String ) : Boolean 
+      public function hasEventListener( type:String ) : Boolean
       {
          return eventDispatcher.hasEventListener( type );
       }
-      
+
       /**
        * Returns whether an event will trigger.
        */
-      public function willTrigger(type:String) : Boolean 
+      public function willTrigger(type:String) : Boolean
       {
          return eventDispatcher.willTrigger( type );
       }

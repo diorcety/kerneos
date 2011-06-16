@@ -38,21 +38,52 @@
 
     <fx:Script>
         <![CDATA[
-      import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
-      import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
+        import mx.collections.ArrayCollection;
 
+        import org.ow2.kerneos.core.api.KerneosModule;
+        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.core.view.window.KerneosWindow;
+        import org.ow2.kerneos.core.view.window.SwfModuleWindow;
 
-      /**
-       * On application creation complete.
-       */
-      private function applicationCompleteHandler():void {
-        // Initialize the main view
-        mainView.initializeView();
+        /**
+         * Get the open module having the given name.
+         */
+        public function getKerneosModule(name:String):KerneosModule {
+            for each (var window:KerneosWindow in mainView.desktopView.windowContainer.windowManager.windowList) {
+                if (window is SwfModuleWindow) {
+                    var swfModuleWindow:SwfModuleWindow = window as SwfModuleWindow;
+                    if (swfModuleWindow.module.name == name)
+                        return swfModuleWindow.getKerneosModule();
+                }
+            }
+            return null;
+        }
 
-        // Register methods that can be called externally from the Javascript.
-        ExternalInterface.addCallback("canBeClosed", KerneosLifeCycleManager.canBeClosed);
-      }
-      ]]>
+        /**
+         * Get the open module list.
+         */
+        public function getKerneosModules():ArrayCollection {
+            var list: ArrayCollection = new ArrayCollection();
+            for each (var window:KerneosWindow in mainView.desktopView.windowContainer.windowManager.windowList) {
+                if (window is SwfModuleWindow) {
+                    var swfModuleWindow:SwfModuleWindow = window as SwfModuleWindow;
+                    list.addItem(swfModuleWindow);
+                }
+            }
+            return list;
+        }
+
+        /**
+         * On application creation complete.
+         */
+        private function applicationCompleteHandler():void {
+            // Initialize the main view
+            mainView.initializeView();
+
+            // Register methods that can be called externally from the Javascript.
+            ExternalInterface.addCallback("canBeClosed", KerneosLifeCycleManager.canBeClosed);
+        }
+        ]]>
     </fx:Script>
 
     <!-- The locales resource bundles -->
@@ -70,7 +101,7 @@
     </fx:Declarations>
 
     <!-- The style sheet -->
-    <fx:Style source="/../assets/styles.css" />
+    <fx:Style source="/../assets/styles.css"/>
 
     <!-- The main view that contains the complete app -->
     <view:KerneosMainView id="mainView"/>

@@ -127,7 +127,8 @@ public class KerneosLifeCycleManager {
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
         // Set the kerneosSecurityService.
-        ServiceLocator.getInstance().setServiceForId("kerneosSecurityService", "kerneos-security", false);
+        var serviceLocator: ServiceLocator = ServiceLocator.getInstance(null);
+        serviceLocator.setServiceForId("kerneosSecurityService", "kerneos-security", false);
         GraniteClassRegistry.registerClasses("security", []);
 
         var kerneosConfigurationClasses = [ApplicationInstanceVO, ApplicationVO, AuthenticationVO, FolderVO,
@@ -135,26 +136,26 @@ public class KerneosLifeCycleManager {
             PromptBeforeCloseVO, ServiceVO, SWFModuleVO];
 
         // Set the kerneosConfigService.
-        ServiceLocator.getInstance().setServiceForId("kerneosConfigService", "kerneos-configuration", false);
+        serviceLocator.setServiceForId("kerneosConfigService", "kerneos-configuration", false);
         GraniteClassRegistry.registerClasses("kerneos-configuration", kerneosConfigurationClasses);
 
         // Set the kerneosAsyncConfigService.
-        ServiceLocator.getInstance().setServiceForId("kerneosAsyncConfigService", "kerneos-async-configuration", true);
+        serviceLocator.setServiceForId("kerneosAsyncConfigService", "kerneos-async-configuration", true);
         GraniteClassRegistry.registerClasses("kerneos-async-configuration", kerneosConfigurationClasses);
 
-        ServiceLocator.getInstance().getRemoteObject("kerneosSecurityService").channelSet = amfChannelSet;
-        ServiceLocator.getInstance().getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
-        ServiceLocator.getInstance().getConsumer("kerneosAsyncConfigService").channelSet = amfGravityChannelSet;
+        serviceLocator.getRemoteObject("kerneosSecurityService").channelSet = amfChannelSet;
+        serviceLocator.getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
+        serviceLocator.getConsumer("kerneosAsyncConfigService").channelSet = amfGravityChannelSet;
     }
 
 
     /**
      * Launch the command to load the application configuration.
      */
-    public static function getApplication():void {
+    public static function loadApplication():void {
         try {
             var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_APPLICATION);
-            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+            CairngormEventDispatcher.getInstance(null).dispatchEvent(event_module);
         }
         catch (e:Error) {
             trace("An error occurred while loading Kerneos config file: " + e.message);

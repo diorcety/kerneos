@@ -43,53 +43,48 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-enforcer-plugin</artifactId>
+      <version>1.0-alpha-3</version>
+    </dependency>
+
+    <!-- Flex dependencies-->
+    <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>cairngorm-kerneos</artifactId>
       <version>${cairngorm.version}</version>
       <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-common-client</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-login-client</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-api</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>flexlib-kerneos</artifactId>
       <type>swc</type>
       <version>${flexlib.version}</version>
     </dependency>
-
     <dependency>
       <groupId>com.google.code.flex-iframe</groupId>
       <artifactId>flex-iframe</artifactId>
       <version>${flexiframe.version}</version>
       <type>swc</type>
     </dependency>
-
-    <dependency>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-enforcer-plugin</artifactId>
-      <version>1.0-alpha-3</version>
-    </dependency>
-
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-swc</artifactId>
@@ -97,7 +92,7 @@
       <type>swc</type>
     </dependency>
 
-    <!-- Flex -->
+    <!-- Flex SDK dependencies-->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex-framework</artifactId>
@@ -129,7 +124,7 @@
             <locale>fr_FR</locale>
           </compiledLocales>
           <mergeResourceBundle>true</mergeResourceBundle>
-          <sourceFile>Kerneos.mxml</sourceFile>
+          <sourceFile>org/ow2/kerneos/core/Kerneos.mxml</sourceFile>
           <linkReport>true</linkReport>
         </configuration>
       </plugin>
