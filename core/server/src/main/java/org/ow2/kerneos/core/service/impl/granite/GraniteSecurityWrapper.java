@@ -76,10 +76,10 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
 
     public void login(String user, String password) throws SecurityServiceException {
         if (GraniteManager.getCurrentInstance() instanceof HttpGraniteContext) {
+
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
-            kerneosSecurityService.updateContext();
+            kerneosSecurityService.updateContext(httpGraniteContext.getRequest(), null);
 
             boolean logged = kerneosSecurityService.logIn(user, password);
             if (!logged)
@@ -89,12 +89,13 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
 
     public void authorize(Destination destination, Message message) throws SecurityServiceException {
         if (GraniteManager.getCurrentInstance() instanceof HttpGraniteContext) {
+
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
-            kerneosSecurityService.updateContext();
 
-            switch (kerneosSecurityService.authorize(destination.getId())) {
+            kerneosSecurityService.updateContext(httpGraniteContext.getRequest(), destination.getId());
+
+            switch (kerneosSecurityService.authorize()) {
                 case SESSION_EXPIRED:
                     throw SecurityServiceException.newSessionExpiredException();
                 case INVALID_CREDENTIALS:
@@ -109,8 +110,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
 
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            KerneosHttpService.setCurrentHttpRequest(httpGraniteContext.getRequest());
-            kerneosSecurityService.updateContext();
+            kerneosSecurityService.updateContext(httpGraniteContext.getRequest(), null);
 
             boolean logged_out = kerneosSecurityService.logOut();
             if (!logged_out)

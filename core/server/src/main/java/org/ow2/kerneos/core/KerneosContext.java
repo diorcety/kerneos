@@ -1,5 +1,7 @@
 package org.ow2.kerneos.core;
 
+import org.ow2.kerneos.core.config.generated.Service;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -35,12 +37,16 @@ public class KerneosContext {
     private KerneosSession session;
     private IApplicationInstance applicationInstance;
     private IModuleInstance moduleInstance;
+    private Service service;
 
-    public KerneosContext(HttpServletRequest httpRequest, KerneosSession session, IApplicationInstance applicationInstance, IModuleInstance moduleInstance) {
+    public KerneosContext(HttpServletRequest httpRequest, KerneosSession session,
+                          IApplicationInstance applicationInstance, IModuleInstance moduleInstance,
+                          Service service) {
         this.httpRequest = httpRequest;
         this.session = session;
         this.applicationInstance = applicationInstance;
         this.moduleInstance = moduleInstance;
+        this.service = service;
     }
 
     public IApplicationInstance getApplicationInstance() {
@@ -49,6 +55,10 @@ public class KerneosContext {
 
     public IModuleInstance getModuleInstance() {
         return moduleInstance;
+    }
+
+    public Service getService() {
+        return service;
     }
 
     public KerneosSession getSession() {

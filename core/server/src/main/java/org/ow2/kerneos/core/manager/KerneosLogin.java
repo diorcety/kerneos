@@ -50,7 +50,7 @@ public interface KerneosLogin {
     public void logout();
 
     /**
-     * Called when a new session is need.
+     * Called when a new session is needed.
      *
      * @return The new session
      */

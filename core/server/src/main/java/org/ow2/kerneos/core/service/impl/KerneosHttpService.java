@@ -78,14 +78,6 @@ public class KerneosHttpService implements HttpContext {
         }
     };
 
-    public static void setCurrentHttpRequest(HttpServletRequest httpServletRequest) {
-        httpServletRequestThreadLocal.set(httpServletRequest);
-    }
-
-    public static HttpServletRequest getCurrentHttpRequest() {
-        return httpServletRequestThreadLocal.get();
-    }
-
     @ServiceProperty(name = "ID")
     String id;
 
@@ -260,42 +252,39 @@ public class KerneosHttpService implements HttpContext {
      */
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
-        setCurrentHttpRequest(request);
-        kerneosSecurityService.updateContext();
+        kerneosSecurityService.updateContext(request, null);
 
-        if (!KerneosContext.getCurrentContext().getSession().isLogged()) {
-            if (KerneosContext.getCurrentContext().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.WWW) {
-                // Show WWW Authentication box of the web browser
-                String authHeader = request.getHeader("Authorization");
-                if (authHeader != null) {
-                    // Check AUTH type
-                    if (!authHeader.toUpperCase().startsWith("BASIC "))
-                        return false;
-
-                    // Get Login/Password
-                    String userpassword = authHeader.substring(6);
-                    userpassword = new String(Base64.decode(userpassword), "ISO-8859-1");
-                    String[] data = userpassword.split("\\:");
-                    String user = (data.length >= 1) ? data[0] : null;
-                    String password = (data.length >= 2) ? data[1] : null;
-
-                    // Auth
-                    if (kerneosSecurityService.logIn(user, password))
-                        return true;
-                }
-
-                response.setHeader("WWW-Authenticate", "Basic");
-            } else if (KerneosContext.getCurrentContext().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.FLEX &&
-                    KerneosContext.getCurrentContext().getModuleInstance() == null) {
-                // Don't allow access to modules
+        switch (kerneosSecurityService.authorize()) {
+            case NO_ERROR:
                 return true;
-            }
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentLength(0);
-            response.flushBuffer();
-            return false;
-        } else {
-            return kerneosSecurityService.authorize(null) == IKerneosSecurityService.SecurityError.NO_ERROR;
+
+            default:
+                if (KerneosContext.getCurrentContext().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.WWW) {
+                    // Show WWW Authentication box of the web browser
+                    String authHeader = request.getHeader("Authorization");
+                    if (authHeader != null) {
+                        // Check AUTH type
+                        if (authHeader.toUpperCase().startsWith("BASIC ")) {
+
+                            // Get Login/Password
+                            String userpassword = authHeader.substring(6);
+                            userpassword = new String(Base64.decode(userpassword), "ISO-8859-1");
+                            String[] data = userpassword.split("\\:");
+                            String user = (data.length >= 1) ? data[0] : null;
+                            String password = (data.length >= 2) ? data[1] : null;
+
+                            // Auth
+                            if (kerneosSecurityService.logIn(user, password))
+                                return true;
+                        }
+                    }
+
+                    response.setHeader("WWW-Authenticate", "Basic");
+                }
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentLength(0);
+                response.flushBuffer();
+                return false;
         }
     }
 }

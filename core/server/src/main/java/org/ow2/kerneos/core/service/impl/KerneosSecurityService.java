@@ -187,11 +187,11 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
     /**
      * Update context following the request
      */
-    public void updateContext() {
-        HttpServletRequest request = KerneosHttpService.getCurrentHttpRequest();
+    public void updateContext(HttpServletRequest request, String destination) {
         KerneosSession kerneosSession = null;
         IApplicationInstance currentApplicationInstance = null;
         IModuleInstance currentModuleInstance = null;
+        Service currentService = null;
 
         for (IApplicationInstance applicationInstance : applicationMap.values()) {
             if (request.getRequestURI().startsWith(applicationInstance.getConfiguration().getApplicationUrl())) {
@@ -203,14 +203,22 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         if (currentApplicationInstance == null)
             throw new RuntimeException("Invalid Kerneos Application");
 
-
-        for (IModuleInstance moduleInstance : moduleMap.values()) {
-            if (request.getRequestURI().startsWith(currentApplicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId())) {
-                currentModuleInstance = moduleInstance;
-                break;
+        if (destination == null) {
+            for (IModuleInstance moduleInstance : moduleMap.values()) {
+                if (request.getRequestURI().startsWith(currentApplicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId())) {
+                    currentModuleInstance = moduleInstance;
+                    break;
+                }
+            }
+        } else {
+            ModuleService moduleService = destinationMap.get(destination);
+            if (moduleService != null) {
+                currentModuleInstance = moduleService.getModuleInstance();
+                currentService = moduleService.getService();
             }
         }
 
+        // Get or create a session
         Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
         if (obj == null || !(obj instanceof KerneosSession)) {
             kerneosSession = kerneosLogin.newSession();
@@ -219,7 +227,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
             kerneosSession = (KerneosSession) obj;
         }
 
-        KerneosContext.setCurrentContext(new KerneosContext(request, kerneosSession, currentApplicationInstance, currentModuleInstance));
+        KerneosContext.setCurrentContext(new KerneosContext(request, kerneosSession, currentApplicationInstance, currentModuleInstance, currentService));
     }
 
     /**
@@ -254,10 +262,9 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
     /**
      * Check the authorisation associated to the request.
      *
-     * @param destination The destination(service) requested.
      * @return The status associated to the authorisation.
      */
-    public SecurityError authorize(String destination) {
+    public SecurityError authorize() {
         IApplicationInstance applicationInstance = KerneosContext.getCurrentContext().getApplicationInstance();
         switch (applicationInstance.getConfiguration().getAuthentication()) {
             case NONE:
@@ -265,10 +272,8 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
 
             case FLEX:
                 if (!KerneosContext.getCurrentContext().getSession().isLogged()) {
-                    for (String service : KerneosConstants.KERNEOS_SERVICES) {
-                        if (service.equalsIgnoreCase(destination))
-                            return SecurityError.NO_ERROR;
-                    }
+                    if (KerneosContext.getCurrentContext().getModuleInstance() == null)
+                        return SecurityError.NO_ERROR;
                 }
 
             default:
@@ -278,23 +283,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
                 break;
         }
 
-        String application = KerneosContext.getCurrentContext().getApplicationInstance().getId();
-        String module = null;
-        String service = null;
-        if (destination == null) {
-            module = (KerneosContext.getCurrentContext().getModuleInstance() != null) ? KerneosContext.getCurrentContext().getModuleInstance().getId() : null;
-        } else {
-            ModuleService moduleService = destinationMap.get(destination);
-            if (moduleService != null) {
-                module = moduleService.getModuleInstance().getId();
-                service = moduleService.getService().getId();
-            }
-        }
-        if (kerneosProfile.haveAccess(application, module, destination)) {
-            return SecurityError.NO_ERROR;
-        } else {
-            return SecurityError.INVALID_CREDENTIALS;
-        }
+        return SecurityError.NO_ERROR;
     }
 
     /**

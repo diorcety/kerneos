@@ -30,6 +30,7 @@ import org.granite.config.flex.Destination;
 import org.ow2.kerneos.core.ApplicationInstance;
 import org.ow2.kerneos.core.ModuleInstance;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 /**
@@ -49,7 +50,7 @@ public interface IKerneosSecurityService {
     /**
      * Have to be called for updating the KerneosContext according to the request.
      */
-    public void updateContext();
+    public void updateContext(HttpServletRequest request, String destination);
 
     /**
      * Login to Kerneos.
@@ -63,10 +64,9 @@ public interface IKerneosSecurityService {
     /**
      * Check the authorisation associated to the request.
      *
-     * @param destination The destination(service) requested.
      * @return The status associated to the authorisation.
      */
-    public SecurityError authorize(String destination);
+    public SecurityError authorize();
 
     /**
      * Logout of Kerneos.

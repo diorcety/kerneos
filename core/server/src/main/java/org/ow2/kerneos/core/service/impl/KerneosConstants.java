@@ -93,9 +93,4 @@ public final class KerneosConstants {
     public static final String KERNEOS_SERVICE_CONFIGURATION = "kerneos-configuration";
     public static final String KERNEOS_SERVICE_ASYNC_CONFIGURATION = "kerneos-async-configuration";
     public static final String KERNEOS_SERVICE_SECURITY = "kerneos-security";
-
-    public static final String[] KERNEOS_SERVICES = new String[]{
-            KERNEOS_SERVICE_CONFIGURATION,
-            KERNEOS_SERVICE_ASYNC_CONFIGURATION,
-            KERNEOS_SERVICE_SECURITY};
 }
