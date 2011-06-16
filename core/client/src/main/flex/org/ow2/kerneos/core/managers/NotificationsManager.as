@@ -50,7 +50,6 @@ public class NotificationsManager {
      *
      * Must be set before calling the static functions.
      */
-    [Bindable]
     public static var desktop:DesktopView = null;
 
 
@@ -58,6 +57,9 @@ public class NotificationsManager {
     // Public static methods
     // =========================================================================
 
+    public static function init(desktop:DesktopView):void {
+        NotificationsManager.desktop = desktop;
+    }
     /**
      * Receive notification events from modules
      */

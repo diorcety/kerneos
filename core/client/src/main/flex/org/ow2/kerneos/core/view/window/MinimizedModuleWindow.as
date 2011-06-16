@@ -93,7 +93,7 @@ public class MinimizedModuleWindow extends Button
         this._moduleWindow = window;
         this.label = window.module.name;
         this.toolTip = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.taskbar.label',[window.module.name]);
-        this.setStyle("icon", window.module.getSmallIcon(this) as Class);
+        this.setStyle("icon", window.module.getSmallIcon(this, true) as Class);
         this.doubleClickEnabled = true;
         
         // Intercept button click events

@@ -190,7 +190,7 @@
         <mx:State name="applicationLoaded" stateGroups="loaded"/>
 
         <!-- Working view -->
-        <mx:State name="desktop" stateGroups="loaded"/>
+        <mx:State name="desktop" stateGroups="loaded" enterState="desktopView.loadModules()" exitState="desktopView.unloadModules()"/>
 
         <!-- Login view -->
         <mx:State name="login" stateGroups="loaded"/>

@@ -36,6 +36,8 @@ import flash.utils.Dictionary;
 
 import flexlib.mdi.containers.MDIWindow;
 
+import mx.binding.utils.BindingUtils;
+
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.core.FlexGlobals;
@@ -93,18 +95,17 @@ public class ModulesLifeCycleManager {
      *
      * Must be set before calling the static functions.
      */
-    [Bindable]
-    public static var desktop:DesktopView = null;
+    private static var desktop:DesktopView = null;
 
     /**
      * The IFrame  objects
      */
-    public static var frames:Dictionary = new Dictionary();
+    private static var frames:Dictionary = new Dictionary();
 
     /**
      * true if the there is a problem with channels or communications
      */
-    public static var inFaultState:Boolean = false;
+    private static var inFaultState:Boolean = false;
 
     /**
      * The gravity consumer for asynchronous OSGi communication
@@ -115,14 +116,9 @@ public class ModulesLifeCycleManager {
     // Public static methods
     // =========================================================================
 
-    /**
-     * Initialization of the modules.
-     */
-    public static function initModules(e:Event = null):void {
-
-        for each(var moduleInstance:ModuleInstanceVO in KerneosModelLocator.getInstance().moduleInstances) {
-            installModule(moduleInstance.configuration);
-        }
+    public static function init(desktop:DesktopView):void {
+        ModulesLifeCycleManager.desktop = desktop;
+        BindingUtils.bindSetter(initModules, KerneosModelLocator.getInstance(), "moduleInstances");
     }
 
     /**
@@ -135,6 +131,15 @@ public class ModulesLifeCycleManager {
         }
         catch (e:Error) {
             trace("An error occurred while loading module list: " + e.message);
+        }
+    }
+
+    /**
+     * Unload all application modules
+     */
+    public static function unloadModules():void {
+        for each(var moduleInstance:ModuleInstanceVO in KerneosModelLocator.getInstance().moduleInstances) {
+            uninstallModule(moduleInstance.configuration);
         }
     }
 
@@ -166,7 +171,7 @@ public class ModulesLifeCycleManager {
 
                 // Add Notification listener
                 window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
-                                        NotificationsManager.handleNotificationEvent, false, 0, true);
+                        NotificationsManager.handleNotificationEvent, false, 0, true);
             }
 
             // Else if this is an IFrame module
@@ -202,7 +207,25 @@ public class ModulesLifeCycleManager {
     }
 
     /**
-     * Unload a module by its window.
+     * Stop a module.
+     */
+    public static function stopModule(module:ModuleVO):void {
+        // Check that desktop is not null
+        checkDesktopNotNull();
+
+        // Unload module and close it window
+        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+
+        for each (var window:MDIWindow in allWindows) {
+            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
+                stopModuleByWindow(window as ModuleWindow);
+                desktop.windowContainer.windowManager.remove(window);
+            }
+        }
+    }
+
+    /**
+     * Stop a module by its window.
      */
     public static function stopModuleByWindow(window:ModuleWindow):void {
         // Check that desktop is not null
@@ -216,7 +239,7 @@ public class ModulesLifeCycleManager {
             (window as SwfModuleWindow).unload();
 
             // Unload the module
-            KerneosLifeCycleManager.desktop.setFocus();
+            ModulesLifeCycleManager.desktop.setFocus();
         }
         else if (window is IFrameModuleWindow) {
             // Delete the IFrame
@@ -228,6 +251,24 @@ public class ModulesLifeCycleManager {
 
         // Force garbage collection
         System.gc();
+    }
+
+    /**
+     * Stop all the active modules.
+     */
+    public static function stopAllModules(e:Event = null):void {
+        // Check that desktop is not null
+        checkDesktopNotNull();
+
+        // Unload all modules and close windows
+        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+
+        for each (var window:MDIWindow in allWindows) {
+            if (window is ModuleWindow) {
+                stopModuleByWindow(window as ModuleWindow);
+                desktop.windowContainer.windowManager.remove(window);
+            }
+        }
     }
 
     /**
@@ -244,42 +285,6 @@ public class ModulesLifeCycleManager {
             if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
                 (window as ModuleWindow).bringToFront();
                 return;
-            }
-        }
-    }
-
-    /**
-     * Unload all the active modules.
-     */
-    public static function unloadAllModules(e:Event = null):void {
-        // Check that desktop is not null
-        checkDesktopNotNull();
-
-        // Unload all modules and close windows
-        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-
-        for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow) {
-                stopModuleByWindow(window as ModuleWindow);
-                desktop.windowContainer.windowManager.remove(window);
-            }
-        }
-    }
-
-    /**
-     * Unload a module.
-     */
-    public static function unloadModule(module:ModuleVO):void {
-        // Check that desktop is not null
-        checkDesktopNotNull();
-
-        // Unload module and close it window
-        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-
-        for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
-                stopModuleByWindow(window as ModuleWindow);
-                desktop.windowContainer.windowManager.remove(window);
             }
         }
     }
@@ -312,9 +317,27 @@ public class ModulesLifeCycleManager {
         consumer.subscribe();
     }
 
+    public static function unsubscribe():void {
+        consumer.removeEventListener(ChannelFaultEvent.FAULT, onFault);
+        consumer.removeEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
+        consumer.removeEventListener(ChannelEvent.CONNECT, onChannelConnection);
+        consumer.removeEventListener(ChannelEvent.DISCONNECT, onChannelDisconnect);
+
+        consumer.unsubscribe();
+    }
+
     // =========================================================================
     // Private methods
     // =========================================================================
+
+    /**
+     * Initialization of the modules.
+     */
+    private static function initModules(moduleInstances:ArrayCollection):void {
+        for each(var moduleInstance:ModuleInstanceVO in moduleInstances) {
+            installModule(moduleInstance.configuration);
+        }
+    }
 
     /**
      * Check that the desktop view is referenced.
@@ -410,7 +433,7 @@ public class ModulesLifeCycleManager {
         if (KerneosModelLocator.getInstance().state != KerneosState.DESKTOP &&
                 KerneosModelLocator.getInstance().state != KerneosState.DISCONNECTED) {
             Alert.show(ResourceManager.getInstance().getString(
-                    LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.startup.channel-problem'));
+                    LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.channel-problem'));
         } else {
             if (!inFaultState) {
                 inFaultState = true;
@@ -418,9 +441,9 @@ public class ModulesLifeCycleManager {
                 KerneosModelLocator.getInstance().state = KerneosState.DISCONNECTED;
 
                 Alert.show(ResourceManager.getInstance().getString(
-                        LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency'),
+                        LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency'),
                         ResourceManager.getInstance().getString(
-                                LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency.title'),
+                                LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency.title'),
                         Alert.OK | Alert.NO, null,
                         channelDisconnectListener, null, Alert.OK);
 
@@ -432,9 +455,9 @@ public class ModulesLifeCycleManager {
     private static function onChannelDisconnect(event:Event):void {
         if (!inFaultState) {
             Alert.show(ResourceManager.getInstance().getString(
-                    LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency'),
+                    LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency'),
                     ResourceManager.getInstance().getString(
-                            LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.channel-problem.missing-dependency.title'),
+                            LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency.title'),
                     Alert.OK | Alert.NO, null,
                     channelDisconnectListener, null, Alert.OK);
         }
@@ -445,7 +468,7 @@ public class ModulesLifeCycleManager {
     private static function onChannelConnection(event:Event):void {
         if (inFaultState) {
             //TODO Have to get back to normal state
-             FlexGlobals.topLevelApplication.enabled = true;
+            FlexGlobals.topLevelApplication.enabled = true;
         }
 
         inFaultState = false;
@@ -457,7 +480,7 @@ public class ModulesLifeCycleManager {
 
     private static function channelDisconnectListener(eventObj:CloseEvent):void {
         // Check to see if the OK button was pressed.
-        if (eventObj.detail==Alert.OK) {
+        if (eventObj.detail == Alert.OK) {
             FlexGlobals.topLevelApplication.enabled = false;
         } else {
             KerneosLifeCycleManager.reloadPage();
@@ -480,12 +503,11 @@ public class ModulesLifeCycleManager {
                 var moduleInstance:ModuleInstanceVO = moduleEvent.moduleInstance;
                 model.moduleInstances.addItem(moduleInstance);
 
-                //Pop-up module arrival
-                notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load',
-                        [moduleInstance.configuration.name]);
-
                 //Setup the module
                 installModule(moduleInstance.configuration);
+
+                //Pop-up module arrival
+                notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', moduleInstance);
             } else {
                 var moduleInstance:ModuleInstanceVO = null;
                 for (var index:int = 0; index < model.moduleInstances.length; index++) {
@@ -497,14 +519,12 @@ public class ModulesLifeCycleManager {
                     }
                 }
                 if (moduleInstance) {
+                    //Unload the module
+                    stopModule(moduleInstance.configuration);
+                    uninstallModule(moduleInstance.configuration);
 
                     //Pop-up module departure
-                    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload',
-                            [moduleInstance.configuration.name]);
-
-                    //Unload the module
-                    unloadModule(moduleInstance.configuration);
-                    uninstallModule(moduleInstance.configuration);
+                    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', moduleInstance);
                 }
             }
         }
@@ -515,14 +535,16 @@ public class ModulesLifeCycleManager {
      * @param messageCode The locale message defined into properties file
      * @param parameters The parameters to be replaced in the message
      */
-    private static function notifiedModuleArrivalDeparture(messageCode:String, parameters:Array):void {
+    private static function notifiedModuleArrivalDeparture(messageCode:String, module:ModuleInstanceVO):void {
         // Build and display the popup
         var notifPopUp:NotificationPopUp = new NotificationPopUp();
         notifPopUp.message = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                messageCode, parameters);
+                messageCode, [module.configuration.name]);
         notifPopUp.level = KerneosNotification.INFO;
         notifPopUp.setStyle("bottom", 0);
         notifPopUp.setStyle("right", 0);
+        notifPopUp.module = module.configuration;
+
         NotificationsManager.desktop.windowContainer.addChild(notifPopUp);
     }
 }

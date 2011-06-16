@@ -98,7 +98,7 @@ public class ModuleVO implements IValueObject {
     /**
      * Get the the small icon asset.
      */
-    public function getSmallIcon(target:UIComponent, obj:Boolean = false):Object {
+    public function getSmallIcon(target:UIComponent, useClass:Boolean = false):Object {
         // If no icon specified, return the default one
         if (smallIcon == null) {
             return defaultSmallIcon;
@@ -106,7 +106,7 @@ public class ModuleVO implements IValueObject {
 
         // Else load the given URL
         else {
-            if (obj)
+            if (!useClass)
                 return IconUtility.getObject(target, smallIcon, 16, 16);
             else
                 return IconUtility.getClass(target, smallIcon, 16, 16);
@@ -116,7 +116,7 @@ public class ModuleVO implements IValueObject {
     /**
      * Get the the big icon asset.
      */
-    public function getBigIcon(target:UIComponent, obj:Boolean = false):Object {
+    public function getBigIcon(target:UIComponent, useClass:Boolean = false):Object {
         // If no icon specified, return the default one
         if (bigIcon == null) {
             return defaultBigIcon;
@@ -124,7 +124,7 @@ public class ModuleVO implements IValueObject {
 
         // Else load the given URL
         else {
-            if (obj)
+            if (!useClass)
                 return IconUtility.getObject(target, bigIcon, 64, 64);
             else
                 return IconUtility.getClass(target, bigIcon, 64, 64);

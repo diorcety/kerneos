@@ -46,8 +46,9 @@
     import org.ow2.kerneos.common.event.KerneosNotificationEvent;
     import org.ow2.kerneos.core.vo.KerneosNotification;
     import org.ow2.kerneos.core.view.window.ModuleWindow;
-    
-    
+    import org.ow2.kerneos.core.vo.ModuleVO;
+
+
     // =========================================================================
     // Variables
     // =========================================================================
@@ -74,6 +75,9 @@
     */
     [Bindable]
     public var window : ModuleWindow;
+
+    [Bindable]
+    public var module : ModuleVO;
     
     
     // Private vars
@@ -200,8 +204,8 @@
         <mx:Image id="moduleIcon"
                   width="16" 
                   height="16"
-                  source="{window.module.getSmallIcon(moduleIcon, true)}"/>
-        <mx:Text text="{window.module.name}"
+                  source="{(window != null)?window.module.getSmallIcon(moduleIcon): module.getSmallIcon(moduleIcon)}"/>
+        <mx:Text text="{(window != null)?window.module.name: module.name}"
                  fontWeight="bold"
                  selectable="false"
                  useHandCursor="true"

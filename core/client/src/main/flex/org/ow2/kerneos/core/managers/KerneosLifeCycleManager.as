@@ -43,7 +43,6 @@ import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
 import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
-import org.ow2.kerneos.core.view.KerneosMainView;
 import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
 import org.ow2.kerneos.core.vo.ApplicationVO;
 import org.ow2.kerneos.core.vo.AuthenticationVO;
@@ -78,18 +77,11 @@ public class KerneosLifeCycleManager {
      *
      * Must be set before calling the static functions.
      */
-    [Bindable]
-    public static var desktop:DesktopView = null;
-
-    /**
-     * Wether the logout() function has been called.
-     */
-    private static var loggingOut:Boolean = false;
+    private static var desktop:DesktopView = null;
 
     /**
      * AMF Channel set.
      */
-    [Bindable]
     public static var amfChannelSet:ChannelSet = null;
 
     /**
@@ -101,6 +93,10 @@ public class KerneosLifeCycleManager {
     // =========================================================================
     // Public methods
     // =========================================================================
+
+    public static function init(desktop:DesktopView):void {
+        KerneosLifeCycleManager.desktop = desktop;
+    }
 
     /**
      * Setup the AMF channel and Kerneos services.
@@ -177,9 +173,13 @@ public class KerneosLifeCycleManager {
 
             // Save the user settings
             SharedObjectManager.save();
-
-            return (loggingOut || !KerneosModelLocator.getInstance().applicationInstance.configuration.showConfirmCloseDialog);
         }
+
+        if (KerneosModelLocator.getInstance().state != KerneosState.LOADING &&
+                KerneosModelLocator.getInstance().state != KerneosState.LOGIN) {
+            return (!KerneosModelLocator.getInstance().applicationInstance.configuration.showConfirmCloseDialog);
+        }
+
         return true;
     }
 
@@ -189,7 +189,6 @@ public class KerneosLifeCycleManager {
      */
     public static function logout(event:Event = null):void {
         LoginModelLocator.getInstance().state = LoginState.LOGOUT;
-        KerneosModelLocator.getInstance().state = KerneosState.LOGIN;
     }
 
 

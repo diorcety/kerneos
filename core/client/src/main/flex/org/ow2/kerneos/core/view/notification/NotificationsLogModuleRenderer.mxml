@@ -80,7 +80,7 @@
     
     <!-- The module thumbnail -->
     <commonView:SmoothImage id="moduleThumb"
-                       source="{_notif.module.getSmallIcon(moduleThumb, true)}"
+                       source="{_notif.module.getSmallIcon(moduleThumb)}"
                        width="16"
                        height="16"/>
                        

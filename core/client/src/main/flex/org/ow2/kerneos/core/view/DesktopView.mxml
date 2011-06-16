@@ -168,16 +168,15 @@
             model = KerneosModelLocator.getInstance();
 
             // Register as the desktop view to the different managers
-            ModulesLifeCycleManager.desktop = KerneosLifeCycleManager.desktop = NotificationsManager.desktop = this;
+            KerneosLifeCycleManager.init(this);
+            NotificationsManager.init(this);
+            ModulesLifeCycleManager.init(this);
 
             // Set windows events listeners.
             windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow, false, 0, true);
 
             // Setup the active language and the language selector component.
             setupActiveLanguage();
-
-            // Load the modules
-            loadModules();
         }
 
 
@@ -381,7 +380,7 @@
         /**
          * Load modules and subscribe to Kerneos topic
          */
-        private function loadModules():void {
+        public function loadModules():void {
             // Load the modules
             ModulesLifeCycleManager.loadModules();
 
@@ -390,20 +389,17 @@
         }
 
         /**
-         * When the module list has been loaded.
+         * Unload modules and unsubscribe from Kerneos topic
          */
-        private function set modulesLoaded(modules:ArrayCollection):void {
-            if (modules != null) {
-                // Setup the modules
-                ModulesLifeCycleManager.initModules();
-            }
+        public function unloadModules():void {
+            // Unload the modules
+            ModulesLifeCycleManager.unloadModules();
+
+            // Unsubscribe a gravity consumer to the kerneos topic
+            ModulesLifeCycleManager.unsubscribe();
         }
         ]]>
     </fx:Script>
-
-    <!-- The binding triggered when the module list is loaded. -->
-    <fx:Binding source="KerneosModelLocator.getInstance().moduleInstances"
-                destination="modulesLoaded"/>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- UI Children                                                             -->

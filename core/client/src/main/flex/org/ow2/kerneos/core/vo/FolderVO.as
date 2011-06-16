@@ -75,26 +75,26 @@ public class FolderVO extends ModuleWithWindowVO implements IValueObject {
     /**
      * Get the the small icon asset.
      */
-    override public function getSmallIcon(target:UIComponent, obj:Boolean = false):Object {
+    override public function getSmallIcon(target:UIComponent, useClass:Boolean = false):Object {
         // If no icon specified, return the default one
         if (smallIcon == null) {
             return defaultFolderSmallIcon;
         }
         else {
-            return super.getSmallIcon(target, obj);
+            return super.getSmallIcon(target, useClass);
         }
     }
 
     /**
      * Get the the big icon asset.
      */
-    override public function getBigIcon(target:UIComponent, obj:Boolean = false):Object {
+    override public function getBigIcon(target:UIComponent, useClass:Boolean = false):Object {
         // If no icon specified, return the default one
         if (bigIcon == null) {
             return defaultFolderBigIcon;
         }
         else {
-            return super.getBigIcon(target, obj);
+            return super.getBigIcon(target, useClass);
         }
     }
 }
