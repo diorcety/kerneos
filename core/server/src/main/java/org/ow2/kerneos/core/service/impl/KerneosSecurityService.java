@@ -74,6 +74,9 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
 
     private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION";
 
+    //TODO evaluate this property, find the way to remove this property
+    private static final String EQUINOX_WAR_PREFIX = "/bridge";
+
     @Requires(optional = true, defaultimplementation = DefaultKerneosLogin.class)
     private KerneosLogin kerneosLogin;
 
@@ -194,7 +197,10 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         Service currentService = null;
 
         for (IApplicationInstance applicationInstance : applicationMap.values()) {
-            if (request.getRequestURI().startsWith(applicationInstance.getConfiguration().getApplicationUrl())) {
+            String requestUri = applicationInstance.getConfiguration().getApplicationUrl();
+            logger.debug("Update Context - REQUEST URI :" + requestUri);
+            if (request.getRequestURI().startsWith(applicationInstance.getConfiguration().getApplicationUrl())
+                    || request.getRequestURI().startsWith(EQUINOX_WAR_PREFIX + applicationInstance.getConfiguration().getApplicationUrl())) {
                 currentApplicationInstance = applicationInstance;
                 break;
             }
@@ -205,7 +211,11 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
 
         if (destination == null) {
             for (IModuleInstance moduleInstance : moduleMap.values()) {
-                if (request.getRequestURI().startsWith(currentApplicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId())) {
+                if (request.getRequestURI().startsWith(currentApplicationInstance.getConfiguration().getApplicationUrl() +
+                        "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId())
+                        || request.getRequestURI().startsWith(EQUINOX_WAR_PREFIX +
+                        currentApplicationInstance.getConfiguration().getApplicationUrl() + "/" +
+                        KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId())) {
                     currentModuleInstance = moduleInstance;
                     break;
                 }
