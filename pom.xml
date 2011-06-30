@@ -48,7 +48,7 @@
 
   <properties>
     <!-- Library versions -->
-    <graniteds-osgi.version>1.0.0-SNAPSHOT</graniteds-osgi.version>
+    <graniteds-osgi.version>1.0.0-M1</graniteds-osgi.version>
     <cairngorm.version>2.2.3-Beta</cairngorm.version>
     <flexlib.version>2.5-SNAPSHOT</flexlib.version>
     <flexiframe.version>1.4.3</flexiframe.version>
