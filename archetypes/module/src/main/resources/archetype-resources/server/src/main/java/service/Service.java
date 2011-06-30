@@ -48,7 +48,7 @@ import org.ow2.util.log.LogFactory;
  * "HelloService" destination.
  * It is the same destination defined in kerneos-module.xml
  */
-@KerneosService(destination = "HelloService")
+@KerneosService(id = "hello_service")
 public class Service implements KerneosSimpleService{
 
      /**

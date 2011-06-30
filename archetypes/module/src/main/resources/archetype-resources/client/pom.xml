@@ -43,34 +43,6 @@
   <packaging>swf</packaging>
 
   <dependencies>
-      <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>cairngorm-kerneos</artifactId>
-      <type>swc</type>
-    </dependency>
-
-    <!-- Common classes form JASMINe-EoS -->
-    <!--
-    <dependency>
-      <groupId>org.ow2.jasmine.monitoring</groupId>
-      <artifactId>jasmine-eos-common-client</artifactId>
-      <version>${jasmine-eos.version}</version>
-      <type>swc</type>
-    </dependency>
-    -->
-
-    <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-common-client</artifactId>
-      <type>swc</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-api</artifactId>
-      <type>swc</type>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-enforcer-plugin</artifactId>
@@ -78,9 +50,11 @@
 
     <!-- Flex -->
     <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
-      <type>pom</type>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-core-client</artifactId>
+      <version>${kerneos.version}</version>
+      <type>xml</type>
+      <classifier>link-report</classifier>
     </dependency>
   </dependencies>
 

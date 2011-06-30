@@ -67,4 +67,28 @@
     <!-- Authentication method-->
     <authentication>none</authentication>
 
+    <!-- Set the managers -->
+    <managers>
+        <!-- Login Manager -->
+        <!--
+        <login id="org.ow2.kerneos...login">
+            <property id="prop1" value="value1"/>
+        </login>
+        -->
+
+        <!-- Roles Manager -->
+        <!--
+        <profile id="org.ow2.kerneos...roles">
+            <property id="prop1" value="value1"/>
+        </profile>
+        -->
+
+        <!-- Profile Manager -->
+        <!--
+        <profile id="org.ow2.kerneos...profile">
+            <property id="prop1" value="value1"/>
+        </profile>
+        -->
+  </managers>
+
 </application>

@@ -23,11 +23,8 @@
 package event
 {
 import com.adobe.cairngorm.control.CairngormEvent;
+import flash.events.Event;
 
-/*
- // Example import:
- import flash.events.Event;
-*/
 
 /**
  * A ModuleEvent is dispatched when the associated action is triggered from the view.
