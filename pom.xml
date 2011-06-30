@@ -138,7 +138,7 @@
       <id>dev</id>
       <properties>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
-        <maven.test.skip>true</maven.test.skip>
+        <maven.test.skip>false</maven.test.skip>
         <flex-debug>true</flex-debug>
         <flex-optimize>false</flex-optimize>
         <flex-verbose-stacktraces>true</flex-verbose-stacktraces>
