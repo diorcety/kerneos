@@ -113,7 +113,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
             Dictionary properties = new Hashtable();
             properties.put("destination", KerneosConstants.KERNEOS_SERVICE_ASYNC_SECURITY);
 
-            eaConfig = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.ea.application", null);
+            eaConfig = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.ea.configuration", null);
             eaConfig.update(properties);
         }
     }

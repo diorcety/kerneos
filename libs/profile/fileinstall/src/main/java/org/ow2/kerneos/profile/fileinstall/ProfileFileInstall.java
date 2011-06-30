@@ -10,10 +10,13 @@ import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 import org.apache.felix.ipojo.handlers.event.publisher.Publisher;
 
+import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.osgi.GraniteClassRegistry;
 
 import org.osgi.service.cm.ConfigurationAdmin;
 
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.manager.KerneosProfile;
 import org.ow2.kerneos.profile.config.generated.ObjectFactory;
@@ -29,6 +32,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 @Component
 @Provides
@@ -46,13 +51,10 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
     private String FILE;
 
     /**
-     * Async Event Publisher.
+     * Event Admin.
      */
-    @org.apache.felix.ipojo.handlers.event.Publisher(
-            name = "KerneosConfigurationService",
-            topics = KerneosConstants.KERNEOS_PROFILE_TOPIC
-    )
-    private Publisher publisher;
+    @Requires
+    private EventAdmin eventAdmin;
 
     /**
      * Granite Class Registry.
@@ -91,6 +93,13 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
     public synchronized void install(File file) throws Exception {
         try {
             profile = loadProfileConfig(file);
+
+            // Send message
+            Dictionary<String, Object> properties = new Hashtable<String, Object>();
+            properties.put(EAConstants.DATA, profile);
+            Event event = new Event(KerneosConstants.KERNEOS_PROFILE_TOPIC + "/" + ID, properties);
+            eventAdmin.sendEvent(event);
+
             logger.info("New Kerneos Profile: " + file.getPath());
         } catch (Exception ex) {
 
@@ -101,6 +110,13 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
     public synchronized void update(File file) throws Exception {
         try {
             profile = loadProfileConfig(file);
+
+            // Send message
+            Dictionary<String, Object> properties = new Hashtable<String, Object>();
+            properties.put(EAConstants.DATA, profile);
+            Event event = new Event(KerneosConstants.KERNEOS_PROFILE_TOPIC + "/" + ID, properties);
+            eventAdmin.sendEvent(event);
+
             logger.info("Update Kerneos Profile: " + file.getPath());
         } catch (Exception ex) {
             logger.error(ex, "Invalid Kerneos Profile file: " + file.getPath());

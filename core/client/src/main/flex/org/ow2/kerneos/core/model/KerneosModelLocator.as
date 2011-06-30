@@ -113,8 +113,6 @@ public class KerneosModelLocator implements ModelLocator {
      */
     public function KerneosModelLocator() {
         super();
-        modules.filterFunction = moduleFilterFunction;
-        modules.refresh();
 
         if (model != null) {
             throw new Error("Only one KerneosModelLocator can be instantiated.");
@@ -130,13 +128,6 @@ public class KerneosModelLocator implements ModelLocator {
             KerneosModelLocator.model = new KerneosModelLocator();
         }
         return KerneosModelLocator.model;
-    }
-
-    /**
-     * Return true if the module have to be shown
-     */
-    public function moduleFilterFunction(module:ModuleVO):Boolean {
-        return ProfileManager.haveModuleAccess(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session.roles, module.bundle, module.id);
     }
 
     // =========================================================================

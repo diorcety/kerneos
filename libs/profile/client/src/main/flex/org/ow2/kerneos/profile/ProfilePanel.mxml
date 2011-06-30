@@ -41,16 +41,13 @@
 
     <fx:Script>
         <![CDATA[
-        import com.adobe.cairngorm.business.ServiceLocator;
         import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
         import mx.resources.ResourceManager;
 
-        import org.granite.util.GraniteClassRegistry;
-
         import org.ow2.kerneos.profile.event.GetProfileEvent;
-
         import org.ow2.kerneos.profile.manager.LanguagesManager;
+        import org.ow2.kerneos.profile.manager.ProfileManager;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
         import org.ow2.kerneos.profile.model.ProfileState;
 
@@ -81,7 +78,7 @@
         <mx:State name="unload" enterState="unload()"/>
 
         <!-- profile loaded-->
-        <mx:State name="loaded"/>
+        <mx:State name="loaded" enterState="ProfileManager.subscribe()" exitState="ProfileManager.unsubscribe()"/>
     </mx:states>
 
 

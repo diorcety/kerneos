@@ -23,7 +23,13 @@
  * --------------------------------------------------------------------------
  */
 package org.ow2.kerneos.profile.manager {
+import com.adobe.cairngorm.business.ServiceLocator;
+
 import mx.collections.ArrayCollection;
+import mx.messaging.events.MessageEvent;
+
+import org.granite.gravity.Consumer;
+import org.ow2.kerneos.profile.model.ProfileModelLocator;
 
 import org.ow2.kerneos.profile.vo.ProfileVO;
 import org.ow2.kerneos.profile.vo.ProfileBundleVO;
@@ -34,7 +40,38 @@ import org.ow2.kerneos.profile.vo.ProfileRuleVO;
 import org.ow2.kerneos.profile.vo.ProfileServiceVO;
 
 public class ProfileManager {
+    /**
+     * The gravity consumer for asynchronous OSGi communication
+     */
+    private static var consumer:Consumer = null;
+
     public function ProfileManager() {
+    }
+
+
+    /**
+     * Subscribe a gravity consumer to the kerneos topic
+     */
+    public static function subscribe():void {
+        consumer = ServiceLocator.getInstance().getConsumer("kerneosAsyncProfileService");
+        consumer.addEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
+
+        consumer.subscribe();
+    }
+
+    public static function unsubscribe():void {
+        consumer.removeEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
+
+        consumer.unsubscribe();
+    }
+
+    /**
+     * Receive the message from gravity consumer and change profile
+     * @param event ModuleEventVO
+     */
+    private static function onModuleEventMessage(event:MessageEvent):void {
+        var profile:ProfileVO = event.message.body as ProfileVO;
+        ProfileModelLocator.getInstance().profile = profile;
     }
 
     public static function haveModuleAccess(profile:ProfileVO, roles:ArrayCollection, bundleId:String, moduleId:String):Boolean {

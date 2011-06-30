@@ -164,9 +164,9 @@ public class ModulesLifeCycleManager {
         KerneosModelLocator.getInstance().modules.addItem(module);
 
         //Pop-up module arrival
-        if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
-            notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', module);
-        }
+        //if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
+        //    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', module);
+        //}
 
         // If "load on startup", load it
         if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup) {
@@ -198,9 +198,9 @@ public class ModulesLifeCycleManager {
         }
 
         //Pop-up module departure
-        if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
-            notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', module);
-        }
+        //if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
+        //    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', module);
+        //}
     }
 
     /**
