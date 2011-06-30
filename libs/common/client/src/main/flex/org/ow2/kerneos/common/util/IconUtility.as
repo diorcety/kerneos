@@ -107,8 +107,7 @@ public class IconUtility extends BitmapAsset {
         return IconUtility;
     }
 
-    public static function getObject(target:UIComponent, source:String, width:Number = NaN,
-                                     height:Number = NaN):Object {
+    public static function getObject(target:UIComponent, source:String, width:Number = NaN, height:Number = NaN):Object {
 
         // Prepare to create or locate a Loader for the asset.
         var loader:Loader;
@@ -252,11 +251,9 @@ public class IconUtility extends BitmapAsset {
      * @return A reference to the IconUtility class which may be treated as a BitmapAsset.
      */
     public static function deleteSource(source:String):void {
-        if (!dictionaryByURL) {
-            // if the dictionary contains the source we delete it
-            if (dictionaryByURL[source]) {
-                delete dictionaryByURL[source];
-            }
+        // if the dictionary contains the source we delete it
+        if (dictionaryByURL[source]) {
+            delete dictionaryByURL[source];
         }
     }
 

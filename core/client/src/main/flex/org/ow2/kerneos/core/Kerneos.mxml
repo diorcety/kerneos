@@ -28,7 +28,6 @@
                 xmlns:mx="library://ns.adobe.com/flex/mx"
                 xmlns:view="org.ow2.kerneos.core.view.*"
                 xmlns:control="org.ow2.kerneos.core.control.*"
-                xmlns:business="org.ow2.kerneos.core.business.*"
                 paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"
                 pageTitle="Kerneos"
                 preloader="org.ow2.kerneos.core.view.preloader.KerneosPreloader"
@@ -38,40 +37,7 @@
 
     <fx:Script>
         <![CDATA[
-        import mx.collections.ArrayCollection;
-
-        import org.ow2.kerneos.core.api.KerneosModule;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
-        import org.ow2.kerneos.core.view.window.KerneosWindow;
-        import org.ow2.kerneos.core.view.window.SwfModuleWindow;
-
-        /**
-         * Get the open module having the given name.
-         */
-        public function getKerneosModule(name:String):KerneosModule {
-            for each (var window:KerneosWindow in mainView.desktopView.windowContainer.windowManager.windowList) {
-                if (window is SwfModuleWindow) {
-                    var swfModuleWindow:SwfModuleWindow = window as SwfModuleWindow;
-                    if (swfModuleWindow.module.name == name)
-                        return swfModuleWindow.getKerneosModule();
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Get the open module list.
-         */
-        public function getKerneosModules():ArrayCollection {
-            var list: ArrayCollection = new ArrayCollection();
-            for each (var window:KerneosWindow in mainView.desktopView.windowContainer.windowManager.windowList) {
-                if (window is SwfModuleWindow) {
-                    var swfModuleWindow:SwfModuleWindow = window as SwfModuleWindow;
-                    list.addItem(swfModuleWindow);
-                }
-            }
-            return list;
-        }
 
         /**
          * On application creation complete.
@@ -93,9 +59,6 @@
     </fx:Metadata>
 
     <fx:Declarations>
-        <!-- The business layer -->
-        <business:Services id="services"/>
-
         <!-- The controller -->
         <control:Controller id="controller"/>
     </fx:Declarations>

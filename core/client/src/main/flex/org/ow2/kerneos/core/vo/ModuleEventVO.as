@@ -21,7 +21,6 @@
  * $Id: ModulesVO.as 5743 2009-12-13 21:59:24Z nicoulaj $
  */
 package org.ow2.kerneos.core.vo {
-import org.ow2.kerneos.core.vo.ModuleInstanceVO;
 
 /**
  * An event
@@ -36,7 +35,7 @@ public class ModuleEventVO {
     /**
      * Module Object
      */
-    public var moduleInstance:ModuleInstanceVO;
+    public var module:ModuleVO;
 
     /**
      * Module's event type (load or unload).

@@ -36,8 +36,6 @@ import flash.utils.Dictionary;
 
 import flexlib.mdi.containers.MDIWindow;
 
-import mx.binding.utils.BindingUtils;
-
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.core.FlexGlobals;
@@ -67,7 +65,6 @@ import org.ow2.kerneos.core.vo.IFrameModuleVO;
 import org.ow2.kerneos.core.vo.KerneosNotification;
 import org.ow2.kerneos.core.vo.LinkVO;
 import org.ow2.kerneos.core.vo.ModuleEventVO;
-import org.ow2.kerneos.core.vo.ModuleInstanceVO;
 import org.ow2.kerneos.core.vo.ModuleVO;
 import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
 import org.ow2.kerneos.core.vo.SWFModuleVO;
@@ -118,7 +115,6 @@ public class ModulesLifeCycleManager {
 
     public static function init(desktop:DesktopView):void {
         ModulesLifeCycleManager.desktop = desktop;
-        BindingUtils.bindSetter(initModules, KerneosModelLocator.getInstance(), "moduleInstances");
     }
 
     /**
@@ -127,7 +123,7 @@ public class ModulesLifeCycleManager {
     public static function loadModules():void {
         try {
             var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_MODULES);
-            CairngormEventDispatcher.getInstance(null).dispatchEvent(event_module);
+            CairngormEventDispatcher.getInstance(desktop).dispatchEvent(event_module);
         }
         catch (e:Error) {
             trace("An error occurred while loading module list: " + e.message);
@@ -138,13 +134,97 @@ public class ModulesLifeCycleManager {
      * Unload all application modules
      */
     public static function unloadModules():void {
-        for each(var moduleInstance:ModuleInstanceVO in KerneosModelLocator.getInstance().moduleInstances) {
-            uninstallModule(moduleInstance.configuration);
+        while (KerneosModelLocator.getInstance().modules.length) {
+            uninstallModule(KerneosModelLocator.getInstance().modules.getItemAt(0) as ModuleVO);
         }
     }
 
     /**
-     * Launch a module.
+     * Get a module by his id.
+     */
+    public static function getModule(id:String):ModuleVO {
+        for each (var module:ModuleVO in KerneosModelLocator.getInstance().modules) {
+            if (module.id == id)
+                return module;
+        }
+        return null;
+    }
+
+    /**
+     * Setup a module
+     */
+    public static function installModule(module:ModuleVO, notify:Boolean = false):void {
+
+        // Call the function recursively for folders
+        if (module is FolderVO && ((module as FolderVO).modules != null)) {
+            installModules((module as FolderVO).modules);
+        }
+
+        // Add to the module list.
+        KerneosModelLocator.getInstance().modules.addItem(module);
+
+        //Pop-up module arrival
+        if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
+            notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', module);
+        }
+
+        // If "load on startup", load it
+        if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup) {
+            desktop.callLater(startModule, [module]);
+        }
+    }
+
+    /**
+     * Uninstall module
+     */
+    public static function uninstallModule(module:ModuleVO, notify:Boolean = false):void {
+
+        // Stop module
+        stopModule(module);
+
+        // Remove from the module list.
+        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
+        for (var index:int = 0; index < model.modules.length; index++) {
+            var mod:ModuleVO = model.modules[index] as ModuleVO;
+            if (mod.name == module.name) {
+                model.modules.removeItemAt(index);
+                break;
+            }
+        }
+
+        // Call the function recursively for folders
+        if (module is FolderVO && ((module as FolderVO).modules != null)) {
+            uninstallModules((module as FolderVO).modules);
+        }
+
+        //Pop-up module departure
+        if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
+            notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', module);
+        }
+    }
+
+    /**
+     * Setup the modules.
+     */
+    public static function installModules(modules:ArrayCollection):void {
+        // For each module
+        for each (var module:ModuleVO in modules) {
+            installModule(module);
+        }
+    }
+
+    /**
+     * Delete the modules setup
+     */
+    public static function uninstallModules(modules:ArrayCollection):void {
+        // For each module
+        for each (var module:ModuleVO in modules) {
+            uninstallModule(module);
+        }
+    }
+
+    /**
+     * Start a module.
      */
     public static function startModule(module:ModuleVO):void {
         // Check that desktop is not null
@@ -171,7 +251,7 @@ public class ModulesLifeCycleManager {
 
                 // Add Notification listener
                 window.addEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
-                        NotificationsManager.handleNotificationEvent, false, 0, true);
+                        NotificationsManager.handleNotificationEvent);
             }
 
             // Else if this is an IFrame module
@@ -186,6 +266,9 @@ public class ModulesLifeCycleManager {
             else if (module is FolderVO) {
                 window = new FolderWindow(module as FolderVO);
             }
+
+            // Set the window associated with the module
+            (module as ModuleWithWindowVO).window = window;
 
             // Create the button in the taskbar
             var minimizedModuleWindow:MinimizedModuleWindow = new MinimizedModuleWindow(window);
@@ -231,10 +314,17 @@ public class ModulesLifeCycleManager {
         // Check that desktop is not null
         checkDesktopNotNull();
 
+        // Clear window associated with the module
+        window.module.window = null;
+
         // Remove the tasbar button
         desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow);
 
         if (window is SwfModuleWindow) {
+            // Remove Notification listener
+            window.removeEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
+                    NotificationsManager.handleNotificationEvent);
+
             // Unload module
             (window as SwfModuleWindow).unload();
 
@@ -251,24 +341,6 @@ public class ModulesLifeCycleManager {
 
         // Force garbage collection
         System.gc();
-    }
-
-    /**
-     * Stop all the active modules.
-     */
-    public static function stopAllModules(e:Event = null):void {
-        // Check that desktop is not null
-        checkDesktopNotNull();
-
-        // Unload all modules and close windows
-        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-
-        for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow) {
-                stopModuleByWindow(window as ModuleWindow);
-                desktop.windowContainer.windowManager.remove(window);
-            }
-        }
     }
 
     /**
@@ -290,25 +362,10 @@ public class ModulesLifeCycleManager {
     }
 
     /**
-     * Load the icon at the url and put it in the icon cache.
-     */
-    public static function cacheIcon(url:String):void {
-        IconUtility.getClass(FlexGlobals.topLevelApplication as UIComponent, url);
-    }
-
-    /**
-     * Erase the icon from the icon cache.
-     */
-    public static function deleteCacheIcon(url:String):void {
-        IconUtility.deleteSource(url);
-    }
-
-    /**
      * Subscribe a gravity consumer to the kerneos topic
      */
     public static function subscribe():void {
         consumer = ServiceLocator.getInstance(null).getConsumer("kerneosAsyncConfigService");
-        consumer.topic = "kerneos/config";
         consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
         consumer.addEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
         consumer.addEventListener(ChannelEvent.CONNECT, onChannelConnection);
@@ -331,98 +388,11 @@ public class ModulesLifeCycleManager {
     // =========================================================================
 
     /**
-     * Initialization of the modules.
-     */
-    private static function initModules(moduleInstances:ArrayCollection):void {
-        for each(var moduleInstance:ModuleInstanceVO in moduleInstances) {
-            installModule(moduleInstance.configuration);
-        }
-    }
-
-    /**
      * Check that the desktop view is referenced.
      */
     private static function checkDesktopNotNull(e:Event = null):void {
         if (desktop == null) {
             throw new Error('the "desktop" property must be assigned before calling the modules' + ' life cycle manager methods.');
-        }
-    }
-
-    /**
-     * Setup the modules.
-     */
-    private static function installModules(modules:ArrayCollection):void {
-        // For each module
-        for each (var module:ModuleVO in modules) {
-            installModule(module);
-        }
-
-    }
-
-    /**
-     * Delete the modules setup
-     */
-    private static function uninstallModules(modules:ArrayCollection):void {
-        // For each module
-        for each (var module:ModuleVO in modules) {
-            uninstallModule(module);
-        }
-    }
-
-    /**
-     * Setup one module
-     */
-    private static function installModule(module:ModuleVO):void {
-        // Cache the icons
-        if (module.smallIcon != null) {
-            cacheIcon(module.smallIcon);
-        }
-
-        if (module.bigIcon != null) {
-            cacheIcon(module.bigIcon);
-        }
-
-        // Call the function recursively for folders
-        if (module is FolderVO && ((module as FolderVO).modules != null)) {
-            installModules((module as FolderVO).modules);
-        }
-    }
-
-    /**
-     * Delete module setup
-     */
-    private static function uninstallModule(module:ModuleVO):void {
-        // Cache the icons
-        if (module.smallIcon != null) {
-            deleteCacheIcon(module.smallIcon);
-        }
-
-        if (module.bigIcon != null) {
-            deleteCacheIcon(module.bigIcon);
-        }
-
-        // Call the function recursively for folders
-        if (module is FolderVO && ((module as FolderVO).modules != null)) {
-            uninstallModules((module as FolderVO).modules);
-        }
-    }
-
-    /**
-     * Start the modules that have the "loadOnStartup" option.
-     */
-    private static function doLoadOnStartupModules(module:ModuleVO):void {
-        // Check that desktop is not null
-        checkDesktopNotNull();
-
-        // Call the function recursively for folders
-        if (module is FolderVO) {
-            for each(var submodule:ModuleVO in (module as FolderVO).modules)
-                doLoadOnStartupModules(submodule);
-        }
-
-        // If "load on startup", load it
-        if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup) {
-            desktop.callLater(startModule, [module]);
         }
     }
 
@@ -495,37 +465,15 @@ public class ModulesLifeCycleManager {
         var moduleEvent:ModuleEventVO = event.message.body as ModuleEventVO;
 
         //if the event is a ModuleEvent type and it has a moduleVO
-        if (moduleEvent && moduleEvent.moduleInstance) {
+        if (moduleEvent && moduleEvent.module) {
             var model:KerneosModelLocator = KerneosModelLocator.getInstance();
 
             //if the action is LOAD, the module is installed otherwise it is uninstalled
+            var module:ModuleVO = moduleEvent.module;
             if (moduleEvent.eventType == ModuleEventVO.LOAD) {
-                var moduleInstance:ModuleInstanceVO = moduleEvent.moduleInstance;
-                model.moduleInstances.addItem(moduleInstance);
-
-                //Setup the module
-                installModule(moduleInstance.configuration);
-
-                //Pop-up module arrival
-                notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', moduleInstance);
+                installModule(module, true);
             } else {
-                var moduleInstance:ModuleInstanceVO = null;
-                for (var index:int = 0; index < model.moduleInstances.length; index++) {
-                    var ami:ModuleInstanceVO = model.moduleInstances[index] as ModuleInstanceVO;
-                    if (ami.id == moduleEvent.moduleInstance.id) {
-                        moduleInstance = ami;
-                        model.moduleInstances.removeItemAt(index);
-                        break;
-                    }
-                }
-                if (moduleInstance) {
-                    //Unload the module
-                    stopModule(moduleInstance.configuration);
-                    uninstallModule(moduleInstance.configuration);
-
-                    //Pop-up module departure
-                    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', moduleInstance);
-                }
+                uninstallModule(module, true);
             }
         }
     }
@@ -535,15 +483,15 @@ public class ModulesLifeCycleManager {
      * @param messageCode The locale message defined into properties file
      * @param parameters The parameters to be replaced in the message
      */
-    private static function notifiedModuleArrivalDeparture(messageCode:String, module:ModuleInstanceVO):void {
+    private static function notifiedModuleArrivalDeparture(messageCode:String, module:ModuleVO):void {
         // Build and display the popup
         var notifPopUp:NotificationPopUp = new NotificationPopUp();
         notifPopUp.message = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                messageCode, [module.configuration.name]);
+                messageCode, [module.name]);
         notifPopUp.level = KerneosNotification.INFO;
         notifPopUp.setStyle("bottom", 0);
         notifPopUp.setStyle("right", 0);
-        notifPopUp.module = module.configuration;
+        notifPopUp.module = module;
 
         NotificationsManager.desktop.windowContainer.addChild(notifPopUp);
     }

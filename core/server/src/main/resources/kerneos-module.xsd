@@ -25,10 +25,10 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <xs:schema
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  elementFormDefault="qualified"
-  targetNamespace="org.ow2.kerneos:module"
-  xmlns:k="org.ow2.kerneos:module">
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="org.ow2.kerneos:module"
+    xmlns:k="org.ow2.kerneos:module">
 
 
   <!--##################################################################################
@@ -41,6 +41,8 @@
 
   <xs:complexType name="module">
     <xs:sequence>
+      <xs:element name="id" type="xs:string" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="bundle" type="xs:string" maxOccurs="1" minOccurs="0"/>
       <xs:element name="name" type="xs:string" maxOccurs="1" minOccurs="1"/>
       <xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="1"/>
       <xs:element name="small-icon" type="xs:string" maxOccurs="1" minOccurs="0"/>

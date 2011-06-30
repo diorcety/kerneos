@@ -68,6 +68,9 @@
 
     <mx:states>
 
+        <!-- Idle state-->
+        <mx:State name="idle"/>
+
         <!-- When check authentication -->
         <mx:State name="auth" enterState="auth()"/>
 

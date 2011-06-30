@@ -25,9 +25,7 @@
 
 package org.ow2.kerneos.core.manager;
 
-import org.ow2.kerneos.core.KerneosSession;
-
-import java.util.Collection;
+import org.ow2.kerneos.login.KerneosSession;
 
 /**
  * Interface for provide an login and logout service to Kerneos.

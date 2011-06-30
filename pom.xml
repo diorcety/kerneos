@@ -95,6 +95,10 @@
       <id>flex-iframe</id>
       <url>http://flex-iframe.googlecode.com/svn/maven2</url>
     </repository>
+    <repository>
+      <id>apache-repository</id>
+      <url>repo1.maven.org/maven2/</url>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>

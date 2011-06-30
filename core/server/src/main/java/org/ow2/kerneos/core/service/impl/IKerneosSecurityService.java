@@ -25,13 +25,7 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import flex.messaging.messages.Message;
-import org.granite.config.flex.Destination;
-import org.ow2.kerneos.core.ApplicationInstance;
-import org.ow2.kerneos.core.ModuleInstance;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
 
 /**
  * Interface of the Kerneos Security Service.
@@ -50,7 +44,12 @@ public interface IKerneosSecurityService {
     /**
      * Have to be called for updating the KerneosContext according to the request.
      */
-    public void updateContext(HttpServletRequest request, String destination);
+    public void updateContext(HttpServletRequest request);
+
+    /**
+     * Have to be called for updating the KerneosContext according to the request.
+     */
+    public void updateContext(HttpServletRequest request, String destination, String method);
 
     /**
      * Login to Kerneos.

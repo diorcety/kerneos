@@ -25,6 +25,8 @@
 
 package org.ow2.kerneos.core;
 
+import org.ow2.kerneos.core.config.generated.Module;
+
 import java.io.Serializable;
 
 /**
@@ -34,7 +36,7 @@ public class ModuleEvent implements Serializable {
     /**
      * Module Object
      */
-    private ModuleInstance moduleInstance;
+    private Module module;
 
     /**
      * Module's event type (load or unload).
@@ -60,16 +62,18 @@ public class ModuleEvent implements Serializable {
 
     /**
      * Create a module event.
-     * @param moduleInstance is an instance of module associated with the event.
+     *
+     * @param module    is an instance of module associated with the event.
      * @param eventType is the type of event associated with the module.
      */
-    public ModuleEvent(final ModuleInstance moduleInstance, final String eventType) {
-        this.moduleInstance = moduleInstance;
+    public ModuleEvent(final Module module, final String eventType) {
+        this.module = module;
         this.eventType = eventType;
     }
 
     /**
      * Get the type of event.
+     *
      * @return the eventType.
      */
     public String getEventType() {
@@ -78,22 +82,25 @@ public class ModuleEvent implements Serializable {
 
     /**
      * Get the  instance of module associated with the event.
+     *
      * @return the instance of module
      */
-    public ModuleInstance getModuleInstance() {
-        return moduleInstance;
+    public Module getModule() {
+        return module;
     }
 
     /**
      * Set the instance of module associated with the event.
-     * @param moduleInstance is an instance of module associated with the event.
+     *
+     * @param module is an instance of module associated with the event.
      */
-    public void setModuleInstance(ModuleInstance moduleInstance) {
-        this.moduleInstance = moduleInstance;
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     /**
      * Set the type of event.
+     *
      * @param type is the type of event.
      */
     public void setEventType(String type) {

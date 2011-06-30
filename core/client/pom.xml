@@ -67,6 +67,12 @@
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-profile-client</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-api</artifactId>
       <version>${project.version}</version>
       <type>swc</type>

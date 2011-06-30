@@ -1,8 +1,32 @@
+/**
+ * Kerneos
+ * Copyright (C) 2011 Bull S.A.S.
+ * Contact: jasmine@ow2.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * --------------------------------------------------------------------------
+ * $Id$
+ * --------------------------------------------------------------------------
+ */
+
 package org.ow2.kerneos.core;
 
 import org.ow2.kerneos.core.config.generated.Service;
-
-import javax.servlet.http.HttpServletRequest;
+import org.ow2.kerneos.login.KerneosSession;
 
 /**
  * The Object used the context for kerneos.
@@ -33,39 +57,38 @@ public class KerneosContext {
         return kerneosContextThreadLocal.get();
     }
 
-    private HttpServletRequest httpRequest;
     private KerneosSession session;
-    private IApplicationInstance applicationInstance;
-    private IModuleInstance moduleInstance;
+    private IApplicationBundle applicationBundle;
+    private IModuleBundle moduleBundle;
     private Service service;
+    private String method;
 
-    public KerneosContext(HttpServletRequest httpRequest, KerneosSession session,
-                          IApplicationInstance applicationInstance, IModuleInstance moduleInstance,
-                          Service service) {
-        this.httpRequest = httpRequest;
+    public KerneosContext(KerneosSession session, IApplicationBundle applicationBundle,
+                          IModuleBundle moduleBundle, Service service, String method) {
         this.session = session;
-        this.applicationInstance = applicationInstance;
-        this.moduleInstance = moduleInstance;
+        this.applicationBundle = applicationBundle;
+        this.moduleBundle = moduleBundle;
         this.service = service;
+        this.method = method;
     }
 
-    public IApplicationInstance getApplicationInstance() {
-        return applicationInstance;
+    public IApplicationBundle getApplicationBundle() {
+        return applicationBundle;
     }
 
-    public IModuleInstance getModuleInstance() {
-        return moduleInstance;
+    public IModuleBundle getModuleBundle() {
+        return moduleBundle;
     }
 
     public Service getService() {
         return service;
     }
 
-    public KerneosSession getSession() {
-        return session;
+    public String getMethod() {
+        return method;
     }
 
-    public HttpServletRequest getHttpRequest() {
-        return httpRequest;
+    public KerneosSession getSession() {
+        return session;
     }
 }

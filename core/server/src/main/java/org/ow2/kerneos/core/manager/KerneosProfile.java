@@ -25,7 +25,9 @@
 
 package org.ow2.kerneos.core.manager;
 
+import org.ow2.kerneos.profile.config.generated.Profile;
+
 public interface KerneosProfile {
 
-    boolean haveAccess(String Application, String Module, String service);
+    Profile getProfile();
 }

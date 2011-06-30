@@ -25,8 +25,11 @@
 
 package org.ow2.kerneos.core.manager;
 
+import org.ow2.kerneos.profile.config.generated.Profile;
+
 public class DefaultKerneosProfile implements KerneosProfile {
-    public boolean haveAccess(String Application, String Module, String service) {
-        return true;
+
+    public Profile getProfile() {
+        return new Profile();
     }
 }

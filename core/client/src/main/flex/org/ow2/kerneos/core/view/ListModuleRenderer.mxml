@@ -34,7 +34,7 @@
          width="140"
          height="100"
          verticalGap="0"
-         toolTip="{_moduleInstance.configuration.description}"
+         toolTip="{module.description}"
          buttonMode="true"
          useHandCursor="true"
          mouseChildren="false"
@@ -55,8 +55,8 @@
 
     <fx:Script>
         <![CDATA[
-        import org.ow2.kerneos.core.vo.ModuleInstanceVO;
         import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
+        import org.ow2.kerneos.core.vo.ModuleVO;
 
         // =========================================================================
         // Variables
@@ -68,7 +68,7 @@
          * The data displayed by the renderer
          */
         [Bindable]
-        private var _moduleInstance:ModuleInstanceVO;
+        private var module:ModuleVO;
 
 
         // =========================================================================
@@ -101,7 +101,7 @@
          * On mouse out
          */
         public function mouseOutHandler(event:Event = null):void {
-            if (!_moduleInstance.configuration.loaded) {
+            if (!module.loaded) {
                 this.setStyle('borderStyle', 'none');
             }
         }
@@ -116,7 +116,7 @@
          */
         [Bindable("dataChange")]
         override public function get data():Object {
-            return _moduleInstance;
+            return module;
         }
 
 
@@ -124,9 +124,9 @@
          * Set the item renderer data object
          */
         override public function set data(value:Object):void {
-            _moduleInstance = value as ModuleInstanceVO;
+            module = value as ModuleVO;
 
-            if (_moduleInstance.configuration.loaded) {
+            if (module.loaded) {
                 this.setStyle('borderStyle', 'solid');
             }
             else {
@@ -147,11 +147,11 @@
          * Start the module
          */
         private function startModule(e:Event):void {
-            if (!_moduleInstance.configuration.loaded) {
-                ModulesLifeCycleManager.startModule(_moduleInstance.configuration);
+            if (!module.loaded) {
+                ModulesLifeCycleManager.startModule(module);
             }
             else {
-                ModulesLifeCycleManager.bringToFront(_moduleInstance.configuration);
+                ModulesLifeCycleManager.bringToFront(module);
             }
         }
         ]]>
@@ -170,7 +170,7 @@
 
     <!-- The module thumbnail -->
     <commonView:SmoothImage id="moduleThumb"
-                            source="{_moduleInstance.configuration.getBigIcon(moduleThumb)}"
+                            source="{module.getBigIcon(moduleThumb)}"
                             width="64"
                             height="64"/>
 
@@ -180,7 +180,7 @@
             height="36"
             id="moduleName"
             color="#111111"
-            label="{_moduleInstance.configuration.name}"
+            label="{module.name}"
             filters="{[nameShadow]}"/>
 
 </mx:VBox>

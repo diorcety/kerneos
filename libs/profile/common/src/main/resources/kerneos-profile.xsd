@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - JASMINe
+  - Copyright (C) 2009 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="org.ow2.kerneos:profile"
+    xmlns:k="org.ow2.kerneos:profile">
+
+
+  <!--##################################################################################
+  # kerneos-config
+  ###################################################################################-->
+
+  <xs:element name="profile" type="k:profile"/>
+  <xs:element name="bundle" type="k:profile-bundle"/>
+  <xs:element name="module" type="k:profile-module"/>
+  <xs:element name="service" type="k:profile-service"/>
+  <xs:element name="method" type="k:profile-method"/>
+  <xs:element name="rule" type="k:profile-rule"/>
+
+  <xs:complexType name="profile">
+    <xs:sequence>
+      <xs:element name="defaultPolicy" type="k:profile-policy" maxOccurs="1" minOccurs="0" default="deny"/>
+      <xs:element name="defaultRules" type="k:profile-rules" maxOccurs="1" minOccurs="0"/>
+      <xs:element name="bundles" type="k:profile-bundles" maxOccurs="1" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="profile-bundles">
+    <xs:sequence>
+      <xs:element ref="k:bundle" maxOccurs="unbounded" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="profile-bundle">
+    <xs:sequence>
+      <xs:element name="rules" type="k:profile-rules" maxOccurs="1" minOccurs="0"/>
+      <xs:element name="modules" type="k:profile-modules" maxOccurs="1" minOccurs="0"/>
+      <xs:element name="services" type="k:profile-services" maxOccurs="1" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" use="required" type="xs:string"/>
+  </xs:complexType>
+
+
+  <xs:complexType name="profile-modules">
+    <xs:sequence>
+      <xs:element ref="k:module" maxOccurs="unbounded" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="profile-module">
+    <xs:sequence>
+      <xs:element name="rules" type="k:profile-rules" maxOccurs="1" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" use="required" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="profile-services">
+    <xs:sequence>
+      <xs:element ref="k:service" maxOccurs="unbounded" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="profile-service">
+    <xs:sequence>
+      <xs:element name="rules" type="k:profile-rules" maxOccurs="1" minOccurs="0"/>
+      <xs:element name="methods" type="k:profile-methods" maxOccurs="1" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" use="required" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="profile-methods">
+    <xs:sequence>
+      <xs:element ref="k:method" maxOccurs="unbounded" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="profile-method">
+    <xs:sequence>
+      <xs:element name="rules" type="k:profile-rules" maxOccurs="1" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" use="required" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="profile-rules">
+    <xs:sequence>
+      <xs:element ref="k:rule" maxOccurs="unbounded" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="profile-rule">
+    <xs:attribute name="role" type="xs:string"/>
+    <xs:attribute name="policy" type="k:profile-policy"/>
+  </xs:complexType>
+
+  <!-- Authentication type -->
+  <xs:simpleType name="profile-policy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="allow"/>
+      <xs:enumeration value="deny"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

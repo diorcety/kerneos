@@ -26,6 +26,7 @@
 package org.ow2.kerneos.core.service.impl.granite;
 
 import flex.messaging.messages.Message;
+import flex.messaging.messages.RemotingMessage;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Property;
@@ -79,7 +80,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
 
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            kerneosSecurityService.updateContext(httpGraniteContext.getRequest(), null);
+            kerneosSecurityService.updateContext(httpGraniteContext.getRequest());
 
             boolean logged = kerneosSecurityService.logIn(user, password);
             if (!logged)
@@ -92,8 +93,8 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
 
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-
-            kerneosSecurityService.updateContext(httpGraniteContext.getRequest(), destination.getId());
+            String method = (message instanceof RemotingMessage) ? ((RemotingMessage) message).getOperation() : null;
+            kerneosSecurityService.updateContext(httpGraniteContext.getRequest(), destination.getId(), method);
 
             switch (kerneosSecurityService.authorize()) {
                 case SESSION_EXPIRED:
@@ -110,7 +111,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
 
             // Set current HttpRequest
             HttpGraniteContext httpGraniteContext = (HttpGraniteContext) GraniteManager.getCurrentInstance();
-            kerneosSecurityService.updateContext(httpGraniteContext.getRequest(), null);
+            kerneosSecurityService.updateContext(httpGraniteContext.getRequest());
 
             boolean logged_out = kerneosSecurityService.logOut();
             if (!logged_out)

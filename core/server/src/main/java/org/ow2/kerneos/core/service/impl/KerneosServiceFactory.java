@@ -47,7 +47,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-import org.ow2.kerneos.core.IModuleInstance;
+import org.ow2.kerneos.core.IModuleBundle;
+import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.config.generated.SwfModule;
 import org.ow2.kerneos.core.service.KerneosAsynchronous;
@@ -118,7 +119,7 @@ public final class KerneosServiceFactory {
     }
 
     private Map<String, ServiceInstance> servicesMap = new Hashtable<String, ServiceInstance>();
-    private Map<Bundle, IModuleInstance> moduleMap = new HashMap<Bundle, IModuleInstance>();
+    private Map<Bundle, IModuleBundle> moduleBundleMap = new HashMap<Bundle, IModuleBundle>();
 
     @Requires
     private ConfigurationAdmin configurationAdmin;
@@ -154,17 +155,17 @@ public final class KerneosServiceFactory {
         logger.debug("Stop KerneosServiceFactory");
     }
 
-    @Bind(aggregate = true, optional = true)
-    private void bindModule(final IModuleInstance moduleInstance) {
-        synchronized (moduleMap) {
-            moduleMap.put(moduleInstance.getBundle(), moduleInstance);
+    @Bind(aggregate = true)
+    private void bindModule(final IModuleBundle moduleBundle) {
+        synchronized (moduleBundleMap) {
+            moduleBundleMap.put(moduleBundle.getBundle(), moduleBundle);
         }
     }
 
     @Unbind
-    private void unbindModule(final IModuleInstance moduleInstance) {
-        synchronized (moduleMap) {
-            moduleMap.remove(moduleInstance.getBundle());
+    private void unbindModule(final IModuleBundle moduleBundle) {
+        synchronized (moduleBundleMap) {
+            moduleBundleMap.remove(moduleBundle.getBundle());
         }
     }
 
@@ -177,17 +178,17 @@ public final class KerneosServiceFactory {
      * @throws Exception Invalid kerneos service
      */
     private String getDestination(final ServiceReference serviceRef, final String serviceId) throws Exception {
-        IModuleInstance moduleInstance = moduleMap.get(serviceRef.getBundle());
-        if (moduleInstance == null)
+        IModuleBundle moduleBundle = moduleBundleMap.get(serviceRef.getBundle());
+        if (moduleBundle == null)
             throw new Exception("Can't find the Module associated to the service: " + serviceId);
-        if (!(moduleInstance.getConfiguration() instanceof SwfModule))
+        if (!(moduleBundle.getModule() instanceof SwfModule))
             throw new Exception("Invalid type of Module(not SwfModule) for the Kerneos service: " + serviceId);
-        SwfModule swfModule = (SwfModule) moduleInstance.getConfiguration();
+        SwfModule swfModule = (SwfModule) moduleBundle.getModule();
         for (Service service : swfModule.getServices()) {
             if (service.getId().equals(serviceId))
                 return service.getDestination();
         }
-        throw new Exception("Service \"" + serviceId + "\" not found in: " + moduleInstance.getId());
+        throw new Exception("Service \"" + serviceId + "\" not found in: " + moduleBundle.getId());
     }
 
     /**

@@ -28,7 +28,7 @@
            xmlns:mx="library://ns.adobe.com/flex/mx"
            xmlns:login="org.ow2.kerneos.login.*">
 
-    <login:LoginPanel id="loginpanel"
+    <login:LoginPanel id="loginPanel"
                       horizontalCenter="0"
                       verticalCenter="0"
                       width="300"

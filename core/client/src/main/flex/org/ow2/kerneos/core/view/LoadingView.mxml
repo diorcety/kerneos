@@ -36,7 +36,7 @@
     <fx:Metadata>
         <![CDATA[
         /**
-         * The view displayed while loading and parsing the application configuration.
+         * The view displayed while loading and parsing the application.
          *
          * @author Julien Nicoulaud
          * @internal Some styles are hardcoded to fit the preloader ones and make
@@ -48,20 +48,14 @@
 
     <fx:Script>
         <![CDATA[
-        import mx.collections.ArrayCollection;
         import mx.resources.ResourceManager;
 
         import org.ow2.kerneos.core.managers.LanguagesManager;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
-        import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
         import org.ow2.kerneos.core.managers.SharedObjectManager;
         import org.ow2.kerneos.core.model.KerneosState;
         import org.ow2.kerneos.core.model.KerneosModelLocator;
-        import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
-        import org.ow2.kerneos.core.vo.AuthenticationVO;
-        import org.ow2.kerneos.login.model.LoginModelLocator;
-        import org.ow2.kerneos.login.model.LoginState;
-
+        import org.ow2.kerneos.core.vo.ApplicationVO;
 
         // =========================================================================
         // Initialization
@@ -89,14 +83,14 @@
         }
 
         /**
-         * Load Application configuration
+         * Load application
          */
         private function loadApplication():void {
             // Update the displayed label
             progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                    'kerneos.startup.loading-application-configuration');
+                    'kerneos.startup.loading-application');
 
-            // Load the Kerneos configuration
+            // Load the Kerneos application
             KerneosLifeCycleManager.loadApplication();
 
         }
@@ -104,30 +98,18 @@
         /**
          * When the application config has been loaded.
          */
-        private function set applicationLoaded(applicationInstance:ApplicationInstanceVO):void {
-            if (applicationInstance != null) {
+        private function set applicationLoaded(application:ApplicationVO):void {
+            if (application != null) {
 
                 // Update the displayed label
                 progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
                         'kerneos.startup.setup-modules-icon-cache');
-
-                // Load the application logo if one
-                if (applicationInstance.configuration.applicationLogo != null) {
-                    ModulesLifeCycleManager.cacheIcon(applicationInstance.configuration.applicationLogo);
-                }
 
                 // Update the displayed label
                 progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
                         'kerneos.startup.ready');
 
                 KerneosModelLocator.getInstance().state = KerneosState.APPLICATION_LOADED;
-
-                if (!applicationInstance.configuration.authentication.equals(AuthenticationVO.FLEX)) {
-                    LoginModelLocator.getInstance().state = LoginState.LOGGED;
-                }
-                else {
-                    LoginModelLocator.getInstance().state = LoginState.AUTH;
-                }
             }
         }
         ]]>
@@ -138,7 +120,7 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <!-- The binding triggered when the application is loaded. -->
-    <fx:Binding source="KerneosModelLocator.getInstance().applicationInstance"
+    <fx:Binding source="KerneosModelLocator.getInstance().application"
                 destination="applicationLoaded"/>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

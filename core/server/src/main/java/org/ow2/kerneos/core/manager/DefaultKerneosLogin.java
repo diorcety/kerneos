@@ -26,7 +26,7 @@
 package org.ow2.kerneos.core.manager;
 
 import org.ow2.kerneos.core.KerneosContext;
-import org.ow2.kerneos.core.KerneosSession;
+import org.ow2.kerneos.login.KerneosSession;
 
 import java.util.LinkedList;
 
@@ -38,7 +38,7 @@ public class DefaultKerneosLogin implements KerneosLogin {
     }
 
     public void logout() {
-        KerneosContext.getCurrentContext().getSession().setRoles(new LinkedList<String>());
+        KerneosContext.getCurrentContext().getSession().reset();
     }
 
     public KerneosSession newSession() {

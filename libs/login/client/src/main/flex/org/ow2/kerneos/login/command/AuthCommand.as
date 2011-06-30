@@ -83,7 +83,7 @@ public class AuthCommand implements ICommand, IResponder {
         // Tell the view and let it handle this
         var serverSideExceptionEvent:ServerSideExceptionEvent =
                 new ServerSideExceptionEvent(
-                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + model.componentID,
+                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
                         new ServerSideException("Error while loading the configuration",
                                 "The application configuration file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,

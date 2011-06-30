@@ -20,19 +20,18 @@
  *
  * $Id$
  */
-package org.ow2.kerneos.core.model
-{
+package org.ow2.kerneos.core.model {
 
 import com.adobe.cairngorm.model.ModelLocator;
 
 import mx.collections.ArrayCollection;
-import mx.collections.ArrayList;
-import mx.core.FlexGlobals;
-import mx.utils.UIDUtil;
 
 import org.ow2.kerneos.core.business.*;
-import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
 import org.ow2.kerneos.core.vo.ApplicationVO;
+import org.ow2.kerneos.core.vo.ModuleVO;
+import org.ow2.kerneos.login.model.LoginModelLocator;
+import org.ow2.kerneos.profile.manager.ProfileManager;
+import org.ow2.kerneos.profile.model.ProfileModelLocator;
 
 
 /**
@@ -41,114 +40,101 @@ import org.ow2.kerneos.core.vo.ApplicationVO;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-public class KerneosModelLocator implements ModelLocator
-{
-    
+public class KerneosModelLocator implements ModelLocator {
+    // Singleton class unique instance
+
+    /**
+     * Unique instance of this locator.
+     */
+    private static var model:KerneosModelLocator;
+
     // =========================================================================
     // Properties
     // =========================================================================
-    
-    /**
-     * The unique ID of this component.
-     *
-     * @internal
-     *   Used to prevent a Cairngorm issue: when a command event is dispatched,
-     * every controller that registered this event type receives it, even if
-     * located in another module. To prevent this from happening and triggering
-     * multiple severe unexpected concurrence bugs, each event dispatched is
-     * postfixed with this unique ID.
-     */
-    public var componentID : String = UIDUtil.createUID();
 
     /**
-     * The config of Kerneos.
+     * The application.
      */
     [Bindable]
-    public var applicationInstance : ApplicationInstanceVO;
+    public var application:ApplicationVO = null;
 
     /**
-     * The module list.
+     * The Module configurations.
      */
     [Bindable]
-    [ArrayElementType('org.ow2.kerneos.core.vo.ModuleInstanceVO')]
-    public var moduleInstances : ArrayCollection;
-    
+    [ArrayElementType('org.ow2.kerneos.core.vo.ModuleVO')]
+    public var modules:ArrayCollection = new ArrayCollection();
+
     /**
      * The state of the application.
      */
     [Bindable]
-    public var state : String = KerneosState.INIT;
-    
+    public var state:String = KerneosState.INIT;
+
     /**
      * The stored notifications.
      */
     [Bindable]
     [ArrayElementType('org.ow2.kerneos.core.vo.KerneosNotification')]
-    public var notifications : ArrayCollection = new ArrayCollection();
-    
-    // Singleton class unique instance
-    
-    /**
-     * Unique instance of this locator.
-     */
-    private static var model : KerneosModelLocator;
-    
+    public var notifications:ArrayCollection = new ArrayCollection();
+
+
     // Delegates unique instances
-    
+
     /**
      * "Get Kerneos config file" delegate unique instance
      */
-    private var getKerneosConfigDelegate : IGetApplicationConfigDelegate = null;
-    
+    private var getKerneosConfigDelegate:IGetApplicationConfigDelegate = null;
+
     /**
      * "Get Modules" delegate unique instance
      */
-    private var getModulesDelegate : IGetModulesDelegate = null;
-    
+    private var getModulesDelegate:IGetModulesDelegate = null;
+
     // =========================================================================
     // Construction
     // =========================================================================
-    
+
     /**
      * Build a new KerneosModelLocator.
      */
-    public function KerneosModelLocator()
-    {
+    public function KerneosModelLocator() {
         super();
-        
-        if (model != null)
-        {
+        modules.filterFunction = moduleFilterFunction;
+        modules.refresh();
+
+        if (model != null) {
             throw new Error("Only one KerneosModelLocator can be instantiated.");
         }
     }
-    
-    
-    
+
+
     /**
      * Get the unique instance of KerneosModelLocator.
      */
-    public static function getInstance() : KerneosModelLocator
-    {
-        if (KerneosModelLocator.model == null)
-        {
+    public static function getInstance():KerneosModelLocator {
+        if (KerneosModelLocator.model == null) {
             KerneosModelLocator.model = new KerneosModelLocator();
         }
         return KerneosModelLocator.model;
     }
-    
-    
-    
+
+    /**
+     * Return true if the module have to be shown
+     */
+    public function moduleFilterFunction(module:ModuleVO):Boolean {
+        return ProfileManager.haveModuleAccess(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session.roles, module.bundle, module.id);
+    }
+
     // =========================================================================
     // Delegates getters
     // =========================================================================
-    
+
     /**
      * Get the "Get Kerneos config file" delegate unique instance.
      */
-    public function getGetKerneosConfigDelegate() : IGetApplicationConfigDelegate
-    {
-        if (this.getKerneosConfigDelegate == null)
-        {
+    public function getGetKerneosConfigDelegate():IGetApplicationConfigDelegate {
+        if (this.getKerneosConfigDelegate == null) {
             this.getKerneosConfigDelegate = new GetApplicationDelegate();
         }
         return this.getKerneosConfigDelegate;
@@ -157,10 +143,8 @@ public class KerneosModelLocator implements ModelLocator
     /**
      * Get the "Get Modules" delegate unique instance.
      */
-    public function getGetModulesDelegate() : IGetModulesDelegate
-    {
-        if (this.getModulesDelegate == null)
-        {
+    public function getGetModulesDelegate():IGetModulesDelegate {
+        if (this.getModulesDelegate == null) {
             this.getModulesDelegate = new GetModulesDelegate();
         }
         return this.getModulesDelegate;

@@ -38,8 +38,9 @@ import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
-import org.ow2.kerneos.core.IApplicationInstance;
-import org.ow2.kerneos.core.IModuleInstance;
+import org.ow2.kerneos.core.IApplicationBundle;
+import org.ow2.kerneos.core.IModuleBundle;
+import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.config.generated.Authentication;
 import org.ow2.kerneos.core.service.util.Base64;
@@ -69,8 +70,6 @@ public class KerneosHttpService implements HttpContext {
     private static Log logger = LogFactory.getLog(KerneosHttpService.class);
     private static final String PREFIX = "bundle:/";
     private static final String PREFIX2 = "bundle://";
-    private static final String PREFIX_EQUINOX = "bundleresource:/";
-    private static final String PREFIX_EQUINOX2 = "bundleresource://";
 
 
     private static ThreadLocal<HttpServletRequest> httpServletRequestThreadLocal = new ThreadLocal<HttpServletRequest>() {
@@ -92,100 +91,95 @@ public class KerneosHttpService implements HttpContext {
     @Requires
     private IKerneosSecurityService kerneosSecurityService;
 
-    private Map<String, IApplicationInstance> applicationInstanceMap = new HashMap<String, IApplicationInstance>();
-    private Map<String, IModuleInstance> moduleInstanceMap = new HashMap<String, IModuleInstance>();
+    private Map<String, IApplicationBundle> applicationBundleMap = new HashMap<String, IApplicationBundle>();
+    private Map<String, IModuleBundle> moduleBundleMap = new HashMap<String, IModuleBundle>();
 
     /**
      * Called when an Application Instance is registered.
      *
-     * @param applicationInstance The instance of application.
+     * @param applicationBundle The instance of application.
      */
     @Bind(aggregate = true, optional = true)
-    private void bindApplicationInstance(final IApplicationInstance applicationInstance) throws NamespaceException {
-        String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
-
-        String name = applicationInstance.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString();
-
-        //The name parameter must not end with slash ('/')
-        if ((name.charAt(name.length()-1) == '/') || (name.charAt(name.length()-1) == '\\')) {
-          name = name.substring(0, name.length()-1);
-        }
+    private void bindApplicationBundle(final IApplicationBundle applicationBundle) throws NamespaceException {
+        String applicationURL = applicationBundle.getApplication().getApplicationUrl();
 
         // Register Kerneos Application resources
-        httpService.registerResources(applicationURL, name, this);
+        httpService.registerResources(applicationURL,
+                applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString(),
+                this);
         httpService.registerResources(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME,
                 KerneosConstants.KERNEOS_SWF_NAME, this);
 
-        synchronized (applicationInstanceMap) {
-            applicationInstanceMap.put(applicationInstance.getId(), applicationInstance);
+        synchronized (applicationBundleMap) {
+            applicationBundleMap.put(applicationBundle.getId(), applicationBundle);
         }
 
 
         // Register Kerneos Module resources for this application
-        for (IModuleInstance moduleInstance : moduleInstanceMap.values()) {
-            registerApplicationModule(applicationInstance, moduleInstance);
+        for (IModuleBundle moduleBundle : moduleBundleMap.values()) {
+            registerApplicationModule(applicationBundle, moduleBundle);
         }
 
-        logger.info("Register \"" + applicationInstance.getId() + "\" resources: " + applicationURL);
+        logger.info("Register \"" + applicationBundle.getId() + "\" resources: " + applicationURL);
     }
 
     /**
      * Called when an Application Instance is unregistered.
      *
-     * @param applicationInstance The instance of application.
+     * @param applicationBundle The instance of application.
      */
     @Unbind
-    private void unbindApplicationInstance(final IApplicationInstance applicationInstance) {
-        String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
+    private void unbindApplicationBundle(final IApplicationBundle applicationBundle) {
+        String applicationURL = applicationBundle.getApplication().getApplicationUrl();
 
         // Unregister Kerneos resources
-        logger.info("Unregister \"" + applicationInstance.getId() + "\" resources: " + applicationURL);
+        logger.info("Unregister \"" + applicationBundle.getId() + "\" resources: " + applicationURL);
 
         httpService.unregister(applicationURL);
         httpService.unregister(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME);
 
         // UnRegister Kerneos Module resources for this application
-        for (IModuleInstance moduleInstance : moduleInstanceMap.values()) {
-            unregisterApplicationModule(applicationInstance, moduleInstance);
+        for (IModuleBundle moduleBundle : moduleBundleMap.values()) {
+            unregisterApplicationModule(applicationBundle, moduleBundle);
         }
 
-        synchronized (applicationInstanceMap) {
-            applicationInstanceMap.remove(applicationInstance.getId());
+        synchronized (applicationBundleMap) {
+            applicationBundleMap.remove(applicationBundle.getId());
         }
     }
 
     /**
      * Called when an Module Instance is registered.
      *
-     * @param moduleInstance The instance of module.
+     * @param moduleBundle The instance of module.
      * @throws NamespaceException Never thrown.
      */
     @Bind(aggregate = true, optional = true)
-    private void bindModuleInstance(final IModuleInstance moduleInstance) throws NamespaceException {
-        synchronized (moduleInstanceMap) {
-            moduleInstanceMap.put(moduleInstance.getId(), moduleInstance);
+    private void bindModuleBundle(final IModuleBundle moduleBundle) throws NamespaceException {
+        synchronized (moduleBundleMap) {
+            moduleBundleMap.put(moduleBundle.getId(), moduleBundle);
         }
 
         // Register Kerneos Module resources for the applications
-        for (IApplicationInstance applicationInstance : applicationInstanceMap.values()) {
-            registerApplicationModule(applicationInstance, moduleInstance);
+        for (IApplicationBundle applicationBundle : applicationBundleMap.values()) {
+            registerApplicationModule(applicationBundle, moduleBundle);
         }
     }
 
     /**
      * Called when an Module Instance is unregistered.
      *
-     * @param moduleInstance The instance of module.
+     * @param moduleBundle The instance of module.
      */
     @Unbind
-    private void unbindModuleInstance(final IModuleInstance moduleInstance) {
+    private void unbindModuleBundle(final IModuleBundle moduleBundle) {
         // UnRegister Kerneos Module resources for the applications
-        for (IApplicationInstance applicationInstance : applicationInstanceMap.values()) {
-            unregisterApplicationModule(applicationInstance, moduleInstance);
+        for (IApplicationBundle applicationBundle : applicationBundleMap.values()) {
+            unregisterApplicationModule(applicationBundle, moduleBundle);
         }
 
-        synchronized (moduleInstanceMap) {
-            moduleInstanceMap.remove(moduleInstance.getId());
+        synchronized (moduleBundleMap) {
+            moduleBundleMap.remove(moduleBundle.getId());
         }
     }
 
@@ -193,31 +187,24 @@ public class KerneosHttpService implements HttpContext {
     /**
      * Add a module to an application.
      *
-     * @param applicationInstance The application.
-     * @param moduleInstance      The module to add.
+     * @param applicationBundle The application.
+     * @param moduleBundle      The module to add.
      */
-    public void registerApplicationModule(IApplicationInstance applicationInstance, IModuleInstance moduleInstance) throws NamespaceException {
-        String name = moduleInstance.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString();
-
-        //The name parameter must not end with slash ('/')
-        if ((name.charAt(name.length()-1) == '/') || (name.charAt(name.length()-1) == '\\')) {
-          name = name.substring(0, name.length()-1);
-        }
-
+    public void registerApplicationModule(IApplicationBundle applicationBundle, IModuleBundle moduleBundle) throws NamespaceException {
         httpService.registerResources(
-                applicationInstance.getConfiguration().getApplicationUrl() + "/" +
-                        KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId(), name, this);
+                applicationBundle.getApplication().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId(),
+                moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString(), this);
     }
 
     /**
      * Remove a module from an application.
      *
-     * @param applicationInstance The application.
-     * @param moduleInstance      The module to remove.
+     * @param applicationBundle The application.
+     * @param moduleBundle      The module to remove.
      */
-    public void unregisterApplicationModule(IApplicationInstance applicationInstance, IModuleInstance moduleInstance) {
+    public void unregisterApplicationModule(IApplicationBundle applicationBundle, IModuleBundle moduleBundle) {
         httpService.unregister(
-                applicationInstance.getConfiguration().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleInstance.getId());
+                applicationBundle.getApplication().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId());
     }
 
     /**
@@ -237,19 +224,13 @@ public class KerneosHttpService implements HttpContext {
      * @return the URL type which permits to acced to the resource.
      */
     public URL getResource(final String name) {
-        if (name.startsWith(PREFIX) ||
-                name.startsWith(PREFIX_EQUINOX)) {
+        if (name.startsWith(PREFIX)) {
             try {
-                // Fix apache.felix.http.jetty bug for felix and equinox
-                if ((name.startsWith(PREFIX) && !name.startsWith(PREFIX2))) {
-                    String resourceUrl = PREFIX2 + name.substring(PREFIX.length());
-                    return new URL(resourceUrl);
+                // Fix Jetty bug
+                if (!name.startsWith(PREFIX2)) {
+                    return new URL("bundle://" + name.substring(PREFIX.length()));
                 } else {
-                    if (name.startsWith(PREFIX_EQUINOX) && !name.startsWith(PREFIX_EQUINOX2)) {
-                       return new URL(PREFIX_EQUINOX2 + name.substring(PREFIX_EQUINOX.length()));
-                    } else {
-                        return new URL(name);
-                    }
+                    return new URL(name);
                 }
             } catch (MalformedURLException e) {
                 return null;
@@ -272,14 +253,14 @@ public class KerneosHttpService implements HttpContext {
      */
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
-        kerneosSecurityService.updateContext(request, null);
+        kerneosSecurityService.updateContext(request);
 
         switch (kerneosSecurityService.authorize()) {
             case NO_ERROR:
                 return true;
 
             default:
-                if (KerneosContext.getCurrentContext().getApplicationInstance().getConfiguration().getAuthentication() == Authentication.WWW) {
+                if (KerneosContext.getCurrentContext().getApplicationBundle().getApplication().getAuthentication() == Authentication.WWW) {
                     // Show WWW Authentication box of the web browser
                     String authHeader = request.getHeader("Authorization");
                     if (authHeader != null) {

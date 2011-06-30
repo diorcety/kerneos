@@ -21,11 +21,13 @@
  * $Id: ModulesVO.as 5743 2009-12-13 21:59:24Z nicoulaj $
  */
 package org.ow2.kerneos.login.vo {
+import com.adobe.cairngorm.vo.IValueObject;
+
 import mx.collections.ArrayCollection;
 
-[RemoteClass(alias="org.ow2.kerneos.core.KerneosSession")]
+[RemoteClass(alias="org.ow2.kerneos.login.KerneosSession")]
 [Bindable]
-public class KerneosSessionVO {
+public class KerneosSessionVO implements IValueObject{
 
     public var username:String = null;
 

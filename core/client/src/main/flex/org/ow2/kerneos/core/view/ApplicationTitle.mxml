@@ -69,10 +69,10 @@
          * Loads the application logo.
          */
         private function creationCompleteHandler(e:Event = null):void {
-            if (KerneosModelLocator.getInstance().applicationInstance.configuration.applicationLogo !== null) {
+            if (KerneosModelLocator.getInstance().application.applicationLogo !== null) {
                 applicationLogoIcon = IconUtility.getClass(applicationLogo,
-                                                           KerneosModelLocator.getInstance().applicationInstance.configuration.applicationLogo, 64,
-                                                           64);
+                        KerneosModelLocator.getInstance().application.applicationLogo, 64,
+                        64);
             }
         }
         ]]>
@@ -103,13 +103,13 @@
                             height = "64" />
 
     <mx:Text id = "applicationProjectTitle"
-             text = "{KerneosModelLocator.getInstance().applicationInstance.configuration.applicationProject}"
+             text = "{KerneosModelLocator.getInstance().application.applicationProject}"
              styleName = "consoleMark1"
              filters = "{[applicationTitleShadow]}"
              selectable = "false" />
 
     <mx:Text id = "applicationNameTitle"
-             text = "{KerneosModelLocator.getInstance().applicationInstance.configuration.applicationName}"
+             text = "{KerneosModelLocator.getInstance().application.applicationName}"
              styleName = "consoleMark2"
              filters = "{[applicationTitleShadow]}"
              selectable = "false" />

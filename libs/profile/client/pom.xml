@@ -45,7 +45,7 @@
       <artifactId>maven-enforcer-plugin</artifactId>
       <version>1.0-alpha-3</version>
     </dependency>
-    
+
     <!-- Flex dependencies -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
@@ -66,6 +66,13 @@
       <artifactId>flexlib-kerneos</artifactId>
       <type>swc</type>
       <version>2.1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.graniteds-osgi</groupId>
+      <artifactId>granite-swc</artifactId>
+      <version>${graniteds-osgi.version}</version>
+      <type>swc</type>
     </dependency>
 
     <!-- Flex SDK dependencies -->

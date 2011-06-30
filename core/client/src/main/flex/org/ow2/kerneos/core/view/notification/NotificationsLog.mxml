@@ -47,132 +47,116 @@
 
     <fx:Script>
         <![CDATA[
-            import flash.system.Capabilities;
+        import flash.system.Capabilities;
 
-            import mx.controls.Alert;
-            import mx.resources.ResourceManager;
-            import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.resources.ResourceManager;
+        import mx.collections.ArrayCollection;
 
-            import com.adobe.cairngorm.model.ModelLocator;
+        import com.adobe.cairngorm.model.ModelLocator;
 
-            import org.ow2.kerneos.core.vo.KerneosNotification;
-            import org.ow2.kerneos.core.model.KerneosModelLocator;
-            import org.ow2.kerneos.core.managers.LanguagesManager;
+        import org.ow2.kerneos.core.vo.KerneosNotification;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
+        import org.ow2.kerneos.core.managers.LanguagesManager;
 
-            // =========================================================================
-            // Variables
-            // =========================================================================
+        // =========================================================================
+        // Variables
+        // =========================================================================
 
-            /**
-             * Clear list icon
-             */
-            [Embed(source="/../assets/clear16.png")]
-            [Bindable]
-            private var clearIcon : Class;
+        /**
+         * Clear list icon
+         */
+        [Embed(source="/../assets/clear16.png")]
+        [Bindable]
+        private var clearIcon:Class;
 
-            /**
-             * Copy icon
-             */
-            [Embed(source="/../assets/copy16.png")]
-            [Bindable]
-            private var copyIcon : Class;
+        /**
+         * Copy icon
+         */
+        [Embed(source="/../assets/copy16.png")]
+        [Bindable]
+        private var copyIcon:Class;
 
 
+        // =========================================================================
+        // Initialization
+        // =========================================================================
 
-            // =========================================================================
-            // Initialization
-            // =========================================================================
+        /**
+         * Init the component
+         */
+        private function initComponent(event:Event = null):void {
+            // Filter debug messages by default
+            KerneosModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
+            KerneosModelLocator.getInstance().notifications.refresh();
+        }
 
-            /**
-             * Init the component
-             */
-            private function initComponent(event : Event = null) : void
-            {
-                // Filter debug messages by default
+
+        // =========================================================================
+        // Public Methods
+        // =========================================================================
+
+        /**
+         * Export the list as a text and copy it to the system clipboard
+         */
+        public function copyToClipboard():void {
+            // Generate the text and copy it in the clipboard
+            System.setClipboard(exportListToText());
+
+            // Display a message
+            Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.ready-dialog.body'), ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.ready-dialog.title'), 4, null, null, copyIcon, 4);
+        }
+
+
+        /**
+         * Clear the notifications list
+         */
+        public function clearList(e:Event = null):void {
+            KerneosModelLocator.getInstance().notifications.removeAll()
+        }
+
+
+        // =========================================================================
+        // Private Methods
+        // =========================================================================
+
+        /**
+         * When the "show debug" checkbox changes
+         */
+        private function handleShowDebugCheckboxChange(event:Event):void {
+            if (showDebugCheckBox.selected) {
+                KerneosModelLocator.getInstance().notifications.filterFunction = null;
+                KerneosModelLocator.getInstance().notifications.refresh();
+            }
+            else {
                 KerneosModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
                 KerneosModelLocator.getInstance().notifications.refresh();
             }
+        }
 
 
+        /**
+         * Format the log as text
+         */
+        private function exportListToText():String {
+            var res:String = '================================================================================\n' + KerneosModelLocator.getInstance().application.applicationProject + ' ' + KerneosModelLocator.getInstance().application.applicationName + ', ' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.header.date', [new Date().toUTCString()]) + '\n' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.header.flash-player-version', [Capabilities.version + ((Capabilities.isDebugger) ? ' debug' : ' ')]) + ' (' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.header.flash-player-memory-used', [(System.totalMemory / 1024).toString()]) + ')\n' + '================================================================================\n';
 
-            // =========================================================================
-            // Public Methods
-            // =========================================================================
-
-            /**
-             * Export the list as a text and copy it to the system clipboard
-             */
-            public function copyToClipboard() : void
-            {
-                // Generate the text and copy it in the clipboard
-                System.setClipboard(exportListToText());
-
-                // Display a message
-                Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.ready-dialog.body'), ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.ready-dialog.title'), 4, null, null, copyIcon, 4);
+            for each (var notif:KerneosNotification in KerneosModelLocator.getInstance().notifications) {
+                res += notif.toString() + "\n";
             }
+            return res;
+        }
 
 
-
-            /**
-             * Clear the notifications list
-             */
-            public function clearList(e : Event = null) : void
-            {
-                KerneosModelLocator.getInstance().notifications.removeAll()
+        /**
+         * Filters the "debug" level messages on the list
+         */
+        private function filterDebugMessages(item:Object):Boolean {
+            if ((item as KerneosNotification).level == KerneosNotification.DEBUG) {
+                return false;
             }
-
-
-
-            // =========================================================================
-            // Private Methods
-            // =========================================================================
-
-            /**
-             * When the "show debug" checkbox changes
-             */
-            private function handleShowDebugCheckboxChange(event : Event) : void
-            {
-                if (showDebugCheckBox.selected)
-                {
-                    KerneosModelLocator.getInstance().notifications.filterFunction = null;
-                    KerneosModelLocator.getInstance().notifications.refresh();
-                }
-                else
-                {
-                    KerneosModelLocator.getInstance().notifications.filterFunction = filterDebugMessages;
-                    KerneosModelLocator.getInstance().notifications.refresh();
-                }
-            }
-
-
-
-            /**
-             * Format the log as text
-             */
-            private function exportListToText() : String
-            {
-                var res : String = '================================================================================\n' + KerneosModelLocator.getInstance().applicationInstance.configuration.applicationProject + ' ' + KerneosModelLocator.getInstance().applicationInstance.configuration.applicationName + ', ' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.header.date', [new Date().toUTCString()]) + '\n' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.header.flash-player-version', [Capabilities.version + ((Capabilities.isDebugger) ? ' debug' : ' ')]) + ' (' + ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.notifications.export.header.flash-player-memory-used', [(System.totalMemory / 1024).toString()]) + ')\n' + '================================================================================\n';
-
-                for each (var notif : KerneosNotification in KerneosModelLocator.getInstance().notifications)
-                {
-                    res += notif.toString() + "\n";
-                }
-                return res;
-            }
-
-
-
-            /**
-             * Filters the "debug" level messages on the list
-             */
-            private function filterDebugMessages(item : Object) : Boolean
-            {
-                if ((item as KerneosNotification).level == KerneosNotification.DEBUG)
-                {
-                    return false;
-                }
-                return true;
-            }
+            return true;
+        }
         ]]>
     </fx:Script>
 

@@ -25,12 +25,8 @@
 package org.ow2.kerneos.login.model {
 import com.adobe.cairngorm.model.ModelLocator;
 
-import mx.utils.UIDUtil;
-
 import org.ow2.kerneos.login.business.AuthDelegate;
-
 import org.ow2.kerneos.login.business.IAuthDelegate;
-
 import org.ow2.kerneos.login.business.ILogInDelegate;
 import org.ow2.kerneos.login.business.ILogOutDelegate;
 import org.ow2.kerneos.login.business.LogInDelegate;
@@ -43,22 +39,10 @@ import org.ow2.kerneos.login.vo.KerneosSessionVO;
 public class LoginModelLocator implements ModelLocator {
 
     /**
-     * The unique ID of this component.
-     *
-     * @internal
-     *   Used to prevent a Cairngorm issue: when a command event is dispatched,
-     * every controller that registered this event type receives it, even if
-     * located in another module. To prevent this from happening and triggering
-     * multiple severe unexpected concurrence bugs, each event dispatched is
-     * postfixed with this unique ID.
-     */
-    public var componentID : String = UIDUtil.createUID();
-
-    /**
      * The state of the login.
      */
     [Bindable]
-    public var state:String = null;
+    public var state:String = LoginState.IDLE;
 
     [Bindable]
     public var session:KerneosSessionVO = null;

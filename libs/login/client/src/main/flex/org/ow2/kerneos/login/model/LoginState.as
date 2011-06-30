@@ -27,6 +27,10 @@ package org.ow2.kerneos.login.model {
  */
 [Bindable]
 public class LoginState {
+    /**
+     * Idle state
+     */
+    public static var IDLE:String = "idle";
 
     /**
      * When Check Authentication
@@ -43,7 +47,7 @@ public class LoginState {
      */
     public static var LOGOUT:String = "logout";
 
-     /**
+    /**
      * When Logout.
      */
     public static var LOGGED:String = "logged";

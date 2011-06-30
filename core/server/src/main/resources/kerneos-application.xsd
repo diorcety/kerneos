@@ -74,7 +74,7 @@
   <xs:element name="default-language" type="xs:string" default="en_US"/>
   <xs:element name="authentication" type="k:authentication" default="flex"/>
 
-  <!-- Security type -->
+  <!-- Authentication type -->
   <xs:simpleType name="authentication">
     <xs:restriction base="xs:string">
       <xs:enumeration value="none"/>

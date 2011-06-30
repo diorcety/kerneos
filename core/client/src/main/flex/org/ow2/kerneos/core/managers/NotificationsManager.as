@@ -71,7 +71,7 @@ public class NotificationsManager {
         var model:KerneosModelLocator = KerneosModelLocator.getInstance();
 
         // Store the notification, if notifications log activated
-        if (model.applicationInstance.configuration.enableNotificationsLog) {
+        if (model.application.enableNotificationsLog) {
             model.notifications.addItem(new KerneosNotification(window.module, event.message, event.level));
         }
 
@@ -91,7 +91,7 @@ public class NotificationsManager {
             }
 
             // If a PopUp should be shown and the window does not have the focus
-            if (model.applicationInstance.configuration.showNotificationPopups && event.showPopup && (model.applicationInstance.configuration.showPopupsFromActiveWindow || (!model.applicationInstance.configuration.showPopupsFromActiveWindow && !window.hasFocus))) {
+            if (model.application.showNotificationPopups && event.showPopup && (model.application.showPopupsFromActiveWindow || (!model.application.showPopupsFromActiveWindow && !window.hasFocus))) {
                 // Check that desktop is not null
                 checkDesktopNotNull();
 

@@ -37,7 +37,8 @@ import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-import org.ow2.kerneos.core.IApplicationInstance;
+import org.ow2.kerneos.core.IApplicationBundle;
+import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -60,7 +61,7 @@ public class KerneosCore {
      */
     private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
 
-    private Map<String, ApplicationInstanceImpl> applicationInstanceMap = new HashMap<String, ApplicationInstanceImpl>();
+    private Map<String, ApplicationBundleImpl> applicationBundleMap = new HashMap<String, ApplicationBundleImpl>();
 
 
     private Configuration granite, gravity, graniteSecurity, gravitySecurity;
@@ -68,18 +69,18 @@ public class KerneosCore {
     /**
      * Used for holding the different configurations associated with an Application instance.
      */
-    private class ApplicationInstanceImpl {
+    private class ApplicationBundleImpl {
         private Configuration gavityChannel, graniteChannel;
 
         /**
          * Create all the configuration associated with this instance.
          */
-        public ApplicationInstanceImpl(IApplicationInstance applicationInstance) throws IOException {
+        public ApplicationBundleImpl(IApplicationBundle applicationBundle) throws IOException {
 
-            String applicationURL = applicationInstance.getConfiguration().getApplicationUrl();
+            String applicationURL = applicationBundle.getApplication().getApplicationUrl();
             {
                 Dictionary properties = new Hashtable();
-                properties.put("id", KerneosConstants.GRAVITY_CHANNEL + applicationInstance.getId());
+                properties.put("id", KerneosConstants.GRAVITY_CHANNEL + applicationBundle.getId());
                 properties.put("uri", applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
                 properties.put("context", KerneosConstants.KERNEOS_CONTEXT_NAME);
                 properties.put("gravity", "true");
@@ -88,7 +89,7 @@ public class KerneosCore {
             }
             {
                 Dictionary properties = new Hashtable();
-                properties.put("id", KerneosConstants.GRANITE_CHANNEL + applicationInstance.getId());
+                properties.put("id", KerneosConstants.GRANITE_CHANNEL + applicationBundle.getId());
                 properties.put("uri", applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
                 properties.put("context", KerneosConstants.KERNEOS_CONTEXT_NAME);
                 properties.put("gravity", "false");
@@ -160,7 +161,7 @@ public class KerneosCore {
     private void stop() throws IOException {
         logger.debug("Stop KerneosCore");
 
-        // Dispose configuration
+        // Dispose configurations
         gravity.delete();
         gravitySecurity.delete();
         granite.delete();
@@ -170,26 +171,26 @@ public class KerneosCore {
     /**
      * Called when an Application instance is registered.
      *
-     * @param applicationInstance the instance of an application
+     * @param applicationBundle the instance of an application
      */
     @Bind(aggregate = true, optional = true)
-    private void bindApplicationInstance(final IApplicationInstance applicationInstance) throws IOException {
-        ApplicationInstanceImpl applicationImpl = new ApplicationInstanceImpl(applicationInstance);
+    private void bindApplicationBundle(final IApplicationBundle applicationBundle) throws IOException {
+        ApplicationBundleImpl applicationImpl = new ApplicationBundleImpl(applicationBundle);
 
-        synchronized (applicationInstanceMap) {
-            applicationInstanceMap.put(applicationInstance.getId(), applicationImpl);
+        synchronized (applicationBundleMap) {
+            applicationBundleMap.put(applicationBundle.getId(), applicationImpl);
         }
     }
 
     /**
      * Called when an Application instance is unregistered.
      *
-     * @param applicationInstance the instance of an application
+     * @param applicationBundle the instance of an application
      */
     @Unbind
-    private void unbindApplicationInstance(final IApplicationInstance applicationInstance) throws IOException {
-        synchronized (applicationInstanceMap) {
-            ApplicationInstanceImpl applicationImpl = applicationInstanceMap.get(applicationInstance.getId());
+    private void unbindApplicationBundle(final IApplicationBundle applicationBundle) throws IOException {
+        synchronized (applicationBundleMap) {
+            ApplicationBundleImpl applicationImpl = applicationBundleMap.get(applicationBundle.getId());
             applicationImpl.dispose();
         }
 

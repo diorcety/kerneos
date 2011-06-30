@@ -35,8 +35,8 @@ import mx.rpc.events.ResultEvent;
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.core.business.IGetApplicationConfigDelegate;
+import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
-import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
 import org.ow2.kerneos.core.vo.ApplicationVO;
 
 /**
@@ -67,10 +67,10 @@ public class GetApplicationCommand implements ICommand, IResponder{
         var model:KerneosModelLocator = KerneosModelLocator.getInstance();
         
         // Retrieve the result
-        var result:ApplicationInstanceVO = (event as ResultEvent).result as ApplicationInstanceVO;
-        
-        // Extract the data and update the model
-        model.applicationInstance = result;
+        var result:ApplicationVO = (event as ResultEvent).result as ApplicationVO;
+
+        // Update
+        KerneosLifeCycleManager.setApplication(result);
     }
     
     /**
@@ -87,12 +87,12 @@ public class GetApplicationCommand implements ICommand, IResponder{
         // Tell the view and let it handle this
         var serverSideExceptionEvent : ServerSideExceptionEvent =
             new ServerSideExceptionEvent(
-                ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + model.componentID,
+                ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
                 new ServerSideException("Error while loading the configuration",
-                                        "The application configuration file could not be read successfully."
+                                        "The application file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,
                                         faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance(null).dispatchEvent(serverSideExceptionEvent);
+        CairngormEventDispatcher.getInstance(this).dispatchEvent(serverSideExceptionEvent);
     }
 }
 }

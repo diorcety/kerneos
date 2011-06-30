@@ -26,12 +26,12 @@
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:mx="library://ns.adobe.com/flex/mx"
-         xmlns:view = "org.ow2.kerneos.core.view.*"
-         xmlns:commonView = "org.ow2.kerneos.common.view.*"
-         xmlns:flexlibContainers = "flexlib.containers.*"
-         xmlns:flexlibMdiContainers = "flexlib.mdi.containers.*"
-         creationComplete = "creationCompleteHandler()"
-         verticalGap = "1">
+         xmlns:view="org.ow2.kerneos.core.view.*"
+         xmlns:commonView="org.ow2.kerneos.common.view.*"
+         xmlns:flexlibContainers="flexlib.containers.*"
+         xmlns:flexlibMdiContainers="flexlib.mdi.containers.*"
+         creationComplete="creationCompleteHandler()"
+         verticalGap="1">
 
     <fx:Metadata>
         <![CDATA[
@@ -46,15 +46,11 @@
 
     <fx:Script>
         <![CDATA[
-        import mx.collections.ArrayCollection;
-
-        import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
-        import org.ow2.kerneos.core.managers.LanguagesManager;
-
+        import mx.core.FlexGlobals;
+        import mx.core.UIComponent;
+        import mx.events.CollectionEvent;
+        import mx.events.CollectionEventKind;
         import mx.resources.ResourceManager;
-
-        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
-
         import mx.controls.Alert;
         import mx.events.CloseEvent;
 
@@ -62,15 +58,22 @@
         import flexlib.mdi.events.MDIManagerEvent;
         import flexlib.mdi.events.MDIWindowEvent;
 
+        import org.ow2.kerneos.common.util.IconUtility;
+
         import org.ow2.kerneos.core.api.KerneosModule;
+        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.core.managers.LanguagesManager;
+        import org.ow2.kerneos.core.managers.NotificationsManager;
+        import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
+        import org.ow2.kerneos.core.managers.SharedObjectManager;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
         import org.ow2.kerneos.core.view.window.SwfModuleWindow;
         import org.ow2.kerneos.core.view.window.KerneosWindow;
         import org.ow2.kerneos.core.view.window.ModuleWindow;
         import org.ow2.kerneos.core.view.notification.NotificationsLog;
-        import org.ow2.kerneos.core.managers.SharedObjectManager;
-        import org.ow2.kerneos.core.managers.NotificationsManager;
-        import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
-        import org.ow2.kerneos.core.model.KerneosModelLocator;
+        import org.ow2.kerneos.core.vo.ModuleVO;
+        import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
 
         // =========================================================================
         // Variables
@@ -164,6 +167,7 @@
          * On view creation complete.
          */
         private function creationCompleteHandler(e:Event = null):void {
+
             // Retrieve the application model.
             model = KerneosModelLocator.getInstance();
 
@@ -172,13 +176,14 @@
             NotificationsManager.init(this);
             ModulesLifeCycleManager.init(this);
 
+            KerneosModelLocator.getInstance().modules.addEventListener(CollectionEvent.COLLECTION_CHANGE, modulesUpdated);
+
             // Set windows events listeners.
             windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow, false, 0, true);
 
             // Setup the active language and the language selector component.
             setupActiveLanguage();
         }
-
 
         // =========================================================================
         // Public methods
@@ -333,7 +338,7 @@
 
             // Else apply the default setting specified in kerneos-config.
             else {
-                resourceManager.localeChain = [this.model.applicationInstance.configuration.defaultLanguage];
+                resourceManager.localeChain = [this.model.application.defaultLanguage];
             }
 
             // Setup the language selection component.
@@ -376,7 +381,6 @@
             return null;
         }
 
-
         /**
          * Load modules and subscribe to Kerneos topic
          */
@@ -398,6 +402,22 @@
             // Unsubscribe a gravity consumer to the kerneos topic
             ModulesLifeCycleManager.unsubscribe();
         }
+
+        private function modulesUpdated(event:CollectionEvent):void {
+            switch (event.kind) {
+                case CollectionEventKind.ADD:
+                    for each(var module:ModuleVO in event.items) {
+                        // Clear cache
+                        IconUtility.deleteSource(module.bigIcon);
+                        IconUtility.deleteSource(module.smallIcon);
+
+                        // Reload cache
+                        module.getSmallIcon(FlexGlobals.topLevelApplication as UIComponent);
+                        module.getBigIcon(FlexGlobals.topLevelApplication as UIComponent);
+                    }
+                    break;
+            }
+        }
         ]]>
     </fx:Script>
 
@@ -405,107 +425,108 @@
     <!-- UI Children                                                             -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <flexlibMdiContainers:MDICanvas id = "windowContainer"
-                                    horizontalScrollPolicy = "off"
-                                    verticalScrollPolicy = "off"
-                                    width = "100%"
-                                    height = "100%"
-                                    backgroundColor = "#FFFFFF"
-                                    backgroundAlpha = "0"
-                                    snapDistance = "15"
-                                    tilePadding = "5">
-        <mx:TileList id = "modulesList"
-                     height = "100%"
-                     x = "5"
-                     y = "5"
-                     direction = "vertical"
-                     dataProvider = "{model.moduleInstances}"
-                     backgroundAlpha = "0.0"
-                     borderStyle = "none"
-                     useRollOver = "false"
-                     selectable = "false"
-                     itemRenderer = "org.ow2.kerneos.core.view.ListModuleRenderer">
+    <flexlibMdiContainers:MDICanvas id="windowContainer"
+                                    horizontalScrollPolicy="off"
+                                    verticalScrollPolicy="off"
+                                    width="100%"
+                                    height="100%"
+                                    backgroundColor="#FFFFFF"
+                                    backgroundAlpha="0"
+                                    snapDistance="15"
+                                    tilePadding="5">
+        <mx:TileList id="modulesList"
+                     height="100%"
+                     width="100%"
+                     x="5"
+                     y="5"
+                     direction="vertical"
+                     dataProvider="{model.modules}"
+                     backgroundAlpha="0.0"
+                     borderStyle="none"
+                     useRollOver="false"
+                     selectable="false"
+                     itemRenderer="org.ow2.kerneos.core.view.ListModuleRenderer">
         </mx:TileList>
     </flexlibMdiContainers:MDICanvas>
-    <mx:HBox id = "taskBar"
-             width = "100%"
-             height = "32"
-             bottom = "0"
-             left = "0"
-             right = "0"
-             paddingLeft = "5"
-             paddingRight = "5"
-             styleName = "taskBar">
-        <mx:Button width = "22"
-                   height = "22"
-                   icon = "{downIcon}"
-                   click = "{minimizeAllWindows()}"
-                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.minimizeButton.tooltip')}"
-                   styleName = "taskBarSmallButton"
-                   visible = "{model.applicationInstance.configuration.showMinimizeAllButton}"
-                   includeInLayout = "{model.applicationInstance.configuration.showMinimizeAllButton}" />
-        <mx:VRule height = "70%"
-                  alpha = "0.25"
-                  visible = "{model.applicationInstance.configuration.showMinimizeAllButton}"
-                  includeInLayout = "{model.applicationInstance.configuration.showMinimizeAllButton}" />
-        <view:KerneosButtonScrollingCanvas id = "scrollabeTaskBarZone"
-                                           width = "100%"
-                                           height = "100%"
-                                           buttonWidth = "24"
-                                           explicitButtonHeight = "24"
-                                           leftButtonStyleName = "taskBarScrollLeftButton"
-                                           rightButtonStyleName = "taskBarScrollRightButton"
-                                           scrollJump = "40"
-                                           scrollSpeed = "20">
-            <mx:HBox id = "minimizedWindowsButtonsContainer"
-                     width = "100%"
-                     height = "100%"
-                     horizontalAlign = "left"
-                     verticalAlign = "middle"
-                     verticalScrollPolicy = "off"
-                     horizontalScrollPolicy = "off" />
-            <mx:Spacer width = "100%" />
+    <mx:HBox id="taskBar"
+             width="100%"
+             height="32"
+             bottom="0"
+             left="0"
+             right="0"
+             paddingLeft="5"
+             paddingRight="5"
+             styleName="taskBar">
+        <mx:Button width="22"
+                   height="22"
+                   icon="{downIcon}"
+                   click="{minimizeAllWindows()}"
+                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.minimizeButton.tooltip')}"
+                   styleName="taskBarSmallButton"
+                   visible="{model.application.showMinimizeAllButton}"
+                   includeInLayout="{model.application.showMinimizeAllButton}"/>
+        <mx:VRule height="70%"
+                  alpha="0.25"
+                  visible="{model.application.showMinimizeAllButton}"
+                  includeInLayout="{model.application.showMinimizeAllButton}"/>
+        <view:KerneosButtonScrollingCanvas id="scrollabeTaskBarZone"
+                                           width="100%"
+                                           height="100%"
+                                           buttonWidth="24"
+                                           explicitButtonHeight="24"
+                                           leftButtonStyleName="taskBarScrollLeftButton"
+                                           rightButtonStyleName="taskBarScrollRightButton"
+                                           scrollJump="40"
+                                           scrollSpeed="20">
+            <mx:HBox id="minimizedWindowsButtonsContainer"
+                     width="100%"
+                     height="100%"
+                     horizontalAlign="left"
+                     verticalAlign="middle"
+                     verticalScrollPolicy="off"
+                     horizontalScrollPolicy="off"/>
+            <mx:Spacer width="100%"/>
         </view:KerneosButtonScrollingCanvas>
-        <mx:VRule height = "70%"
-                  alpha = "0.25" />
-        <commonView:IconComboBox id = "languageSelector"
-                                 dataProvider = "{locales}"
-                                 labelField = "label"
-                                 iconFunction = "getLocaleIcon"
-                                 change = "languageSelectorChangeHandler(event)"
-                                 styleName = "localeComboBox"
-                                 toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.languageSelector.tooltip')}" />
-        <mx:VRule height = "70%"
-                  alpha = "0.25" />
-        <mx:Button width = "22"
-                   height = "22"
-                   icon = "{cascadeIcon}"
-                   click = "windowContainer.windowManager.cascade()"
-                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.cascadeButton.tooltip')}"
-                   styleName = "taskBarSmallButton"
-                   visible = "{model.applicationInstance.configuration.showCascadeButton}"
-                   includeInLayout = "{model.applicationInstance.configuration.showCascadeButton}" />
-        <mx:Button width = "22"
-                   height = "22"
-                   icon = "{tileIcon}"
-                   click = "windowContainer.windowManager.tile(true,3)"
-                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.tileButton.tooltip')}"
-                   styleName = "taskBarSmallButton"
-                   visible = "{model.applicationInstance.configuration.showTileButton}"
-                   includeInLayout = "{model.applicationInstance.configuration.showTileButton}" />
-        <mx:Button width = "22"
-                   height = "22"
-                   icon = "{eventsIcon}"
-                   click = "{showNotificationsLog()}"
-                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.notificationsLogButton.tooltip')}"
-                   styleName = "taskBarSmallButton"
-                   visible = "{model.applicationInstance.configuration.enableNotificationsLog}"
-                   includeInLayout = "{model.applicationInstance.configuration.enableNotificationsLog}" />
-        <mx:Button width = "22"
-                   height = "22"
-                   icon = "{logoutIcon}"
-                   click = "{KerneosLifeCycleManager.logout()}"
-                   toolTip = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.logoutButton.tooltip')}"
-                   styleName = "taskBarSmallButton" />
+        <mx:VRule height="70%"
+                  alpha="0.25"/>
+        <commonView:IconComboBox id="languageSelector"
+                                 dataProvider="{locales}"
+                                 labelField="label"
+                                 iconFunction="getLocaleIcon"
+                                 change="languageSelectorChangeHandler(event)"
+                                 styleName="localeComboBox"
+                                 toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.languageSelector.tooltip')}"/>
+        <mx:VRule height="70%"
+                  alpha="0.25"/>
+        <mx:Button width="22"
+                   height="22"
+                   icon="{cascadeIcon}"
+                   click="windowContainer.windowManager.cascade()"
+                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.cascadeButton.tooltip')}"
+                   styleName="taskBarSmallButton"
+                   visible="{model.application.showCascadeButton}"
+                   includeInLayout="{model.application.showCascadeButton}"/>
+        <mx:Button width="22"
+                   height="22"
+                   icon="{tileIcon}"
+                   click="windowContainer.windowManager.tile(true,3)"
+                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.tileButton.tooltip')}"
+                   styleName="taskBarSmallButton"
+                   visible="{model.application.showTileButton}"
+                   includeInLayout="{model.application.showTileButton}"/>
+        <mx:Button width="22"
+                   height="22"
+                   icon="{eventsIcon}"
+                   click="{showNotificationsLog()}"
+                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.notificationsLogButton.tooltip')}"
+                   styleName="taskBarSmallButton"
+                   visible="{model.application.enableNotificationsLog}"
+                   includeInLayout="{model.application.enableNotificationsLog}"/>
+        <mx:Button width="22"
+                   height="22"
+                   icon="{logoutIcon}"
+                   click="{KerneosLifeCycleManager.logout()}"
+                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.logoutButton.tooltip')}"
+                   styleName="taskBarSmallButton"/>
     </mx:HBox>
 </mx:VBox>

@@ -62,6 +62,16 @@ public class ModuleVO implements IValueObject {
     // Fields
 
     /**
+     * The id of the module.
+     */
+    public var id:String = null;
+
+    /**
+     * The bundle of the module.
+     */
+    public var bundle:String = null;
+
+    /**
      * The displayed name of the module.
      */
     public var name:String = null;

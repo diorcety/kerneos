@@ -30,35 +30,31 @@ import flash.events.Event;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
+import mx.binding.utils.BindingUtils;
+
 import mx.core.FlexGlobals;
+import mx.core.UIComponent;
 import mx.messaging.ChannelSet;
 import mx.utils.URLUtil;
 
 import org.granite.channels.GraniteOSGiChannel;
 import org.granite.gravity.channels.GravityOSGiChannel;
 import org.granite.util.GraniteClassRegistry;
+import org.ow2.kerneos.common.util.IconUtility;
 
 import org.ow2.kerneos.common.util.StringUtils;
 import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
 import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
-import org.ow2.kerneos.core.vo.ApplicationInstanceVO;
 import org.ow2.kerneos.core.vo.ApplicationVO;
 import org.ow2.kerneos.core.vo.AuthenticationVO;
-import org.ow2.kerneos.core.vo.FolderVO;
-import org.ow2.kerneos.core.vo.IFrameModuleVO;
-import org.ow2.kerneos.core.vo.KerneosNotification;
-import org.ow2.kerneos.core.vo.LinkVO;
-import org.ow2.kerneos.core.vo.ModuleEventVO;
-import org.ow2.kerneos.core.vo.ModuleInstanceVO;
-import org.ow2.kerneos.core.vo.ModuleVO;
-import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
-import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
-import org.ow2.kerneos.core.vo.SWFModuleVO;
-import org.ow2.kerneos.core.vo.ServiceVO;
+import org.ow2.kerneos.core.vo.ConfigVOObjects;
 import org.ow2.kerneos.login.model.LoginModelLocator;
 import org.ow2.kerneos.login.model.LoginState;
+import org.ow2.kerneos.core.vo.SecurityVOObjects;
+import org.ow2.kerneos.profile.model.ProfileModelLocator;
+import org.ow2.kerneos.profile.model.ProfileState;
 
 
 /**
@@ -102,8 +98,6 @@ public class KerneosLifeCycleManager {
      * Setup the AMF channel and Kerneos services.
      */
     public static function setupKerneosServices(e:Event = null):void {
-        // Retrieve the application model
-        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
 
         // Init client-server communications channels properties
         var urlServer:String = URLUtil.getServerNameWithPort(FlexGlobals.topLevelApplication.systemManager.stage.loaderInfo.url);
@@ -122,40 +116,54 @@ public class KerneosLifeCycleManager {
                 "http://" + urlServer + "/" + context + "/gravity/amf");
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
-        // Set the kerneosSecurityService.
-        var serviceLocator: ServiceLocator = ServiceLocator.getInstance(null);
-        serviceLocator.setServiceForId("kerneosSecurityService", "kerneos-security", false);
-        GraniteClassRegistry.registerClasses("security", []);
-
-        var kerneosConfigurationClasses = [ApplicationInstanceVO, ApplicationVO, AuthenticationVO, FolderVO,
-            IFrameModuleVO, KerneosNotification, LinkVO, ModuleEventVO, ModuleInstanceVO, ModuleVO, ModuleWithWindowVO,
-            PromptBeforeCloseVO, ServiceVO, SWFModuleVO];
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance(null);
 
         // Set the kerneosConfigService.
         serviceLocator.setServiceForId("kerneosConfigService", "kerneos-configuration", false);
-        GraniteClassRegistry.registerClasses("kerneos-configuration", kerneosConfigurationClasses);
+        GraniteClassRegistry.registerClasses("kerneos-configuration", ConfigVOObjects.array());
 
         // Set the kerneosAsyncConfigService.
         serviceLocator.setServiceForId("kerneosAsyncConfigService", "kerneos-async-configuration", true);
-        GraniteClassRegistry.registerClasses("kerneos-async-configuration", kerneosConfigurationClasses);
+        GraniteClassRegistry.registerClasses("kerneos-async-configuration", ConfigVOObjects.array());
+
+        // Set the kerneosSecurityService.
+        serviceLocator.setServiceForId("kerneosSecurityService", "kerneos-security", false);
+        GraniteClassRegistry.registerClasses("kerneos-profile", SecurityVOObjects.array());
+
+        // Set the kerneosAsyncSecurityService.
+        serviceLocator.setServiceForId("kerneosAsyncSecurityService", "kerneos-async-security", true);
+        GraniteClassRegistry.registerClasses("kerneos-async-security", SecurityVOObjects.array());
+
+        // Configure the services
+        serviceLocator.getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
+
+        serviceLocator.getConsumer("kerneosAsyncConfigService").channelSet = amfGravityChannelSet;
+        serviceLocator.getConsumer("kerneosAsyncConfigService").topic = "kerneos/config";
 
         serviceLocator.getRemoteObject("kerneosSecurityService").channelSet = amfChannelSet;
-        serviceLocator.getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;
-        serviceLocator.getConsumer("kerneosAsyncConfigService").channelSet = amfGravityChannelSet;
+
+        serviceLocator.getConsumer("kerneosAsyncSecurityService").channelSet = amfGravityChannelSet;
     }
 
 
     /**
-     * Launch the command to load the application configuration.
+     * Launch the command to load the application.
      */
     public static function loadApplication():void {
         try {
             var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_APPLICATION);
-            CairngormEventDispatcher.getInstance(null).dispatchEvent(event_module);
+            CairngormEventDispatcher.getInstance(desktop).dispatchEvent(event_module);
         }
         catch (e:Error) {
             trace("An error occurred while loading Kerneos config file: " + e.message);
         }
+    }
+
+    /**
+     * Set the application instance
+     */
+    public static function setApplication(application:ApplicationVO):void {
+        KerneosModelLocator.getInstance().application = application;
     }
 
 
@@ -177,18 +185,45 @@ public class KerneosLifeCycleManager {
 
         if (KerneosModelLocator.getInstance().state != KerneosState.LOADING &&
                 KerneosModelLocator.getInstance().state != KerneosState.LOGIN) {
-            return (!KerneosModelLocator.getInstance().applicationInstance.configuration.showConfirmCloseDialog);
+            return (!KerneosModelLocator.getInstance().application.showConfirmCloseDialog);
         }
 
         return true;
     }
 
+    /**
+     * New State handling
+     */
+    public static function stateChanged(applicationState:String, loginState:String, profileState:String):void {
+        if (applicationState != KerneosState.LOADING && applicationState != KerneosState.INIT) {
+            if (loginState == LoginState.IDLE) {
+                if (!KerneosModelLocator.getInstance().application.authentication.equals(AuthenticationVO.FLEX)) {
+                    LoginModelLocator.getInstance().state = LoginState.LOGGED;
+                } else {
+                    LoginModelLocator.getInstance().state = LoginState.AUTH;
+                }
+            } else if (loginState == LoginState.LOGGED) {
+                if (profileState == ProfileState.IDLE) {
+                    ProfileModelLocator.getInstance().state = ProfileState.LOAD;
+                }
+                else if (profileState == ProfileState.LOADED) {
+                    KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+                }
+                else {
+                    KerneosModelLocator.getInstance().state = KerneosState.PROFILE;
+                }
+            } else {
+                KerneosModelLocator.getInstance().state = KerneosState.LOGIN;
+            }
+        }
+    }
 
     /**
      * Logout from the application.
      */
     public static function logout(event:Event = null):void {
         LoginModelLocator.getInstance().state = LoginState.LOGOUT;
+        ProfileModelLocator.getInstance().state = ProfileState.UNLOAD;
     }
 
 
@@ -198,6 +233,5 @@ public class KerneosLifeCycleManager {
     public static function reloadPage():void {
         navigateToURL(new URLRequest("javascript:location.reload();"), "_self");
     }
-
 }
 }

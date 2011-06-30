@@ -49,20 +49,19 @@ import org.granite.osgi.service.GraniteDestination;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.ow2.kerneos.core.ApplicationInstance;
-import org.ow2.kerneos.core.IApplicationInstance;
-import org.ow2.kerneos.core.IModuleInstance;
+
+import org.ow2.kerneos.core.ApplicationBundle;
+import org.ow2.kerneos.core.IApplicationBundle;
+import org.ow2.kerneos.core.IModuleBundle;
+import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.ModuleEvent;
-import org.ow2.kerneos.core.ModuleInstance;
-import org.ow2.kerneos.core.config.generated.Authentication;
-import org.ow2.kerneos.core.config.generated.IframeModule;
+import org.ow2.kerneos.core.ModuleBundle;
 import org.ow2.kerneos.core.config.generated.Application;
+import org.ow2.kerneos.core.config.generated.Folder;
 import org.ow2.kerneos.core.config.generated.Module;
 import org.ow2.kerneos.core.config.generated.ObjectFactory;
-import org.ow2.kerneos.core.config.generated.PromptBeforeClose;
 import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.config.generated.SwfModule;
 import org.ow2.util.log.Log;
@@ -107,9 +106,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
 
     private Configuration eaConfig, graniteDestination, gravityDestination;
 
-    private Map<String, ApplicationInstance> applicationInstanceMap = new HashMap<String, ApplicationInstance>();
+    private Map<String, ApplicationBundle> applicationBundleMap = new HashMap<String, ApplicationBundle>();
     private Map<String, ServiceRegistration> applicationRegistrationMap = new HashMap<String, ServiceRegistration>();
-    private Map<String, ModuleInstance> moduleInstanceMap = new HashMap<String, ModuleInstance>();
+    private Map<String, ModuleBundle> moduleBundleMap = new HashMap<String, ModuleBundle>();
     private Map<String, ServiceRegistration> moduleRegistrationMap = new HashMap<String, ServiceRegistration>();
 
     private BundleTracker bundleTracker;
@@ -204,31 +203,10 @@ public final class KerneosConfigurationService implements GraniteDestination {
         logger.debug("Start KerneosConfigurationService");
 
         // Register the classes used with "kerneosConfig" service
-        gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_CONFIGURATION, new Class[]{
-                Service.class,
-                Application.class,
-                ApplicationInstance.class,
-                Module.class,
-                ModuleInstance.class,
-                IframeModule.class,
-                SwfModule.class,
-                PromptBeforeClose.class,
-                Authentication.class
-        });
+        gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_CONFIGURATION, ConfigObjects.list());
 
         // Register the classes used with event admin
-        gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, new Class[]{
-                ModuleEvent.class,
-                Service.class,
-                Application.class,
-                ApplicationInstance.class,
-                Module.class,
-                ModuleInstance.class,
-                IframeModule.class,
-                SwfModule.class,
-                PromptBeforeClose.class,
-                Authentication.class
-        });
+        gcr.registerClasses(KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, ConfigObjects.list());
 
         // Register the asynchronous service used with KerneosConfigurationService
         {
@@ -292,12 +270,12 @@ public final class KerneosConfigurationService implements GraniteDestination {
 
         try {
             // Get the url used for resources of the bundle
-            Application application = loadApplicationConfig(bundle);
-            ApplicationInstance applicationInstance = new ApplicationInstance(name, application, bundle);
-            ServiceRegistration instance = bundleContext.registerService(IApplicationInstance.class.getName(), applicationInstance, null);
+            Application application = loadKerneosApplicationConfig(bundle);
+            ApplicationBundle applicationBundle = new ApplicationBundle(name, application, bundle);
+            ServiceRegistration instance = bundleContext.registerService(IApplicationBundle.class.getName(), applicationBundle, null);
 
-            synchronized (applicationInstanceMap) {
-                applicationInstanceMap.put(name, applicationInstance);
+            synchronized (applicationBundleMap) {
+                applicationBundleMap.put(name, applicationBundle);
                 applicationRegistrationMap.put(name, instance);
             }
 
@@ -316,10 +294,10 @@ public final class KerneosConfigurationService implements GraniteDestination {
     private void onApplicationDeparture(final Bundle bundle, final String name) {
         logger.debug("Remove Application Module: " + name);
         try {
-            ApplicationInstance applicationInstance = null;
+            ApplicationBundle applicationBundle = null;
             ServiceRegistration applicationRegistration = null;
-            synchronized (applicationInstanceMap) {
-                applicationInstance = applicationInstanceMap.remove(name);
+            synchronized (applicationBundleMap) {
+                applicationBundle = applicationBundleMap.remove(name);
                 applicationRegistration = applicationRegistrationMap.remove(name);
             }
 
@@ -330,6 +308,29 @@ public final class KerneosConfigurationService implements GraniteDestination {
         }
 
     }
+
+    private void transformModule(Module module, String name) {
+        // Fix Paths with module name
+        module.setBundle(name);
+        module.setBigIcon(KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + name + "/" + module.getBigIcon());
+        module.setSmallIcon(KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + name + "/" + module.getSmallIcon());
+        if (module instanceof SwfModule) {
+            SwfModule swfModule = (SwfModule) module;
+            swfModule.setFile(KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + name + "/" + swfModule.getFile());
+
+            // Completing the destination of the module's services
+            for (Service service : swfModule.getServices()) {
+                if (service.getDestination() == null) {
+                    service.setDestination(name + "~" + service.getId());
+                }
+            }
+        } else if (module instanceof Folder) {
+            for (Module subModule : ((Folder) module).getModules()) {
+                transformModule(subModule, name);
+            }
+        }
+    }
+
 
     /**
      * Call when a new Kerneos Module is arrived.
@@ -342,33 +343,20 @@ public final class KerneosConfigurationService implements GraniteDestination {
 
         try {
             // Get the url used for resources of the bundle
-            Module module = loadModuleConfig(bundle);
+            Module module = loadKerneosModuleConfig(bundle);
 
-            // Fix Paths with module name
-            module.setBigIcon(KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + name + "/" + module.getBigIcon());
-            module.setSmallIcon(KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + name + "/" + module.getSmallIcon());
-            if (module instanceof SwfModule) {
-                SwfModule swfModule = (SwfModule) module;
-                swfModule.setFile(KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + name + "/" + swfModule.getFile());
+            transformModule(module, name);
 
-                // Completing the destination of the module's services
-                for (Service service : swfModule.getServices()) {
-                    if (service.getDestination() == null) {
-                        service.setDestination(name + "~" + service.getId());
-                    }
-                }
-            }
+            ModuleBundle moduleBundle = new ModuleBundle(name, module, bundle);
+            ServiceRegistration instance = bundleContext.registerService(IModuleBundle.class.getName(), moduleBundle, null);
 
-            ModuleInstance moduleInstance = new ModuleInstance(name, module, bundle);
-            ServiceRegistration instance = bundleContext.registerService(IModuleInstance.class.getName(), moduleInstance, null);
-
-            synchronized (moduleInstanceMap) {
-                moduleInstanceMap.put(name, moduleInstance);
+            synchronized (moduleBundleMap) {
+                moduleBundleMap.put(name, moduleBundle);
                 moduleRegistrationMap.put(name, instance);
             }
 
             // Post an event
-            ModuleEvent me = new ModuleEvent(moduleInstance, ModuleEvent.LOAD);
+            ModuleEvent me = new ModuleEvent(moduleBundle.getModule(), ModuleEvent.LOAD);
             publisher.sendData(me);
         } catch (Exception e) {
             logger.error(e, "Can't add the Kerneos Module: " + name);
@@ -385,17 +373,17 @@ public final class KerneosConfigurationService implements GraniteDestination {
     private void onModuleDeparture(final Bundle bundle, final String name) {
         logger.debug("Remove Kerneos Module: " + name);
         try {
-            ModuleInstance moduleInstance = null;
+            ModuleBundle moduleBundle = null;
             ServiceRegistration moduleRegistration = null;
-            synchronized (moduleInstanceMap) {
-                moduleInstance = moduleInstanceMap.remove(name);
+            synchronized (moduleBundleMap) {
+                moduleBundle = moduleBundleMap.remove(name);
                 moduleRegistration = moduleRegistrationMap.remove(name);
             }
 
             moduleRegistration.unregister();
 
             // Post an event
-            ModuleEvent me = new ModuleEvent(moduleInstance, ModuleEvent.UNLOAD);
+            ModuleEvent me = new ModuleEvent(moduleBundle.getModule(), ModuleEvent.UNLOAD);
             publisher.sendData(me);
         } catch (Exception e) {
             logger.error(e, "Can't remove the Kerneos Module: " + name);
@@ -408,9 +396,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
      *
      * @param bundle the bundle corresponding to the module.
      * @return the information corresponding to the module.
-     * @throws Exception the kerneos module configuration file is not found are is invalid.
+     * @throws Exception the kerneos module application file is not found are is invalid.
      */
-    private Module loadModuleConfig(final Bundle bundle) throws Exception {
+    private Module loadKerneosModuleConfig(final Bundle bundle) throws Exception {
 
         // Retrieve the Kerneos module file
         URL url = bundle.getResource(KerneosConstants.KERNEOS_MODULE_FILE);
@@ -431,17 +419,17 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 resource.close();
             }
         } else {
-            throw new Exception("No configuration file available at " + KerneosConstants.KERNEOS_MODULE_FILE);
+            throw new Exception("No application file available at " + KerneosConstants.KERNEOS_MODULE_FILE);
         }
     }
 
     /**
-     * Load the Kerneos config file and build the configuration object.
+     * Load the Kerneos config file and build the application object.
      *
      * @param bundle the bundle corresponding to the module.
-     * @throws Exception the Kerneos application configuration file is not found are is invalid.
+     * @throws Exception the Kerneos application application file is not found are is invalid.
      */
-    private Application loadApplicationConfig(final Bundle bundle) throws Exception {
+    private Application loadKerneosApplicationConfig(final Bundle bundle) throws Exception {
 
         // Retrieve the Kerneos application file
         URL url = bundle.getResource(KerneosConstants.KERNEOS_APPLICATION_FILE);
@@ -457,9 +445,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 // Create an unmarshaller
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-                // Deserialize the configuration file
-                //JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
-                //return (Application) element.getValue();
+                // Deserialize the application file
                 return (Application) unmarshaller.unmarshal(resource);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -468,19 +454,19 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 resource.close();
             }
         } else {
-            throw new Exception("No configuration file available at " + KerneosConstants.KERNEOS_APPLICATION_FILE);
+            throw new Exception("No application file available at " + KerneosConstants.KERNEOS_APPLICATION_FILE);
         }
     }
 
     /**
      * Get the an application.
      *
-     * @return the Kerneos configuration.
+     * @return the Kerneos application.
      */
-    public ApplicationInstance getApplication(String application) {
-        for (ApplicationInstance applicationInstance : applicationInstanceMap.values()) {
-            if (applicationInstance.getId().equals(application))
-                return applicationInstance;
+    public Application getApplication(String application) {
+        for (ApplicationBundle applicationBundle : applicationBundleMap.values()) {
+            if (applicationBundle.getId().equals(application))
+                return applicationBundle.getApplication();
         }
         return null;
     }
@@ -490,8 +476,12 @@ public final class KerneosConfigurationService implements GraniteDestination {
      *
      * @return the module list.
      */
-    public Collection<ModuleInstance> getModules() {
-        return moduleInstanceMap.values();
+    public Collection<Module> getModules() {
+        List<Module> modules = new LinkedList<Module>();
+        for (ModuleBundle moduleBundle : moduleBundleMap.values()) {
+            modules.add(moduleBundle.getModule());
+        }
+        return modules;
     }
 
     /**
