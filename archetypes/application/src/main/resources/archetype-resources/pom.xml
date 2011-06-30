@@ -63,7 +63,7 @@
     <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
     <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
     <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
-    <kerneos-core-server.version>2.0.0-M1</kerneos-core-server.version>
+    <kerneos-core-server.version>2.0.0</kerneos-core-server.version>
     <maven-assembly-plugin.version>2.2.1</maven-assembly-plugin.version>
   </properties>
 
