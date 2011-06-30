@@ -38,7 +38,7 @@ import org.ow2.kerneos.login.business.IAuthDelegate;
 import org.ow2.kerneos.login.manager.LanguagesManager;
 import org.ow2.kerneos.login.model.LoginModelLocator;
 import org.ow2.kerneos.login.model.LoginState;
-import org.ow2.kerneos.login.vo.KerneosSessionVO;
+import org.ow2.kerneos.login.vo.SessionVO;
 
 public class AuthCommand implements ICommand, IResponder {
     /**
@@ -58,7 +58,7 @@ public class AuthCommand implements ICommand, IResponder {
 
         var model:LoginModelLocator = LoginModelLocator.getInstance();
 
-        model.session = (event as ResultEvent).result as KerneosSessionVO;
+        model.session = (event as ResultEvent).result as SessionVO;
 
         if (model.session.isLogged()) {
             model.state = LoginState.LOGGED;

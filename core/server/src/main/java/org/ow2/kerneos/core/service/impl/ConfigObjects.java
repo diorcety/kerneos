@@ -34,6 +34,9 @@ import org.ow2.kerneos.core.config.generated.PromptBeforeClose;
 import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.config.generated.SwfModule;
 
+/**
+ * Classes used with configuration service.
+ */
 public class ConfigObjects {
     private ConfigObjects() {
 

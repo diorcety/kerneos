@@ -22,14 +22,14 @@
  */
 package org.ow2.kerneos.core.vo {
 import org.ow2.kerneos.profile.vo.*;
-import org.ow2.kerneos.login.vo.KerneosSessionVO;
+import org.ow2.kerneos.login.vo.SessionVO;
 
 public class SecurityVOObjects {
     public function SecurityVOObjects() {
     }
 
     public static function array():Array {
-        return [ProfileMethodVO, ProfileModuleVO, ProfilePolicyVO, ProfileVO, ProfileRuleVO, ProfileServiceVO, KerneosSessionVO];
+        return [ProfileMethodVO, ProfileModuleVO, ProfilePolicyVO, ProfileVO, ProfileRuleVO, ProfileServiceVO, SessionVO];
     }
 }
 }

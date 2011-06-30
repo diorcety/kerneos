@@ -81,7 +81,7 @@
         import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
         import org.ow2.kerneos.login.model.LoginModelLocator;
         import org.ow2.kerneos.login.model.LoginModelLocator;
-        import org.ow2.kerneos.login.vo.KerneosSessionVO;
+        import org.ow2.kerneos.login.vo.SessionVO;
         import org.ow2.kerneos.profile.manager.ProfileManager;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
@@ -441,7 +441,7 @@
             updateDesktop(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session, KerneosModelLocator.getInstance().modules);
         }
 
-        private function loginUpdated(session:KerneosSessionVO):void {
+        private function loginUpdated(session:SessionVO):void {
             updateDesktop(ProfileModelLocator.getInstance().profile, session, KerneosModelLocator.getInstance().modules);
         }
 
@@ -449,7 +449,7 @@
             updateDesktop(profile, LoginModelLocator.getInstance().session, KerneosModelLocator.getInstance().modules);
         }
 
-        private function updateDesktop(profile:ProfileVO, session:KerneosSessionVO, modules:ArrayCollection):void {
+        private function updateDesktop(profile:ProfileVO, session:SessionVO, modules:ArrayCollection):void {
             var roles:ArrayCollection = (session != null) ? session.roles : null;
 
             var newArr:ArrayCollection = new ArrayCollection();

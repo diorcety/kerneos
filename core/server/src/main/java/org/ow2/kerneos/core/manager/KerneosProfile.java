@@ -27,7 +27,15 @@ package org.ow2.kerneos.core.manager;
 
 import org.ow2.kerneos.profile.config.generated.Profile;
 
+/**
+ * Interface for provide a profile service to Kerneos.
+ */
 public interface KerneosProfile {
 
+    /**
+     * Get the profile of the application.
+     *
+     * @return the profile of the application.
+     */
     Profile getProfile();
 }

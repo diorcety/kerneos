@@ -25,16 +25,16 @@ import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
 
-[RemoteClass(alias="org.ow2.kerneos.login.KerneosSession")]
+[RemoteClass(alias="org.ow2.kerneos.login.Session")]
 [Bindable]
-public class KerneosSessionVO implements IValueObject{
+public class SessionVO implements IValueObject{
 
     public var username:String = null;
 
     [ArrayElementType('String')]
     public var roles:ArrayCollection = null;
 
-    public function KerneosSessionVO() {
+    public function SessionVO() {
     }
 
     public function isLogged():Boolean {

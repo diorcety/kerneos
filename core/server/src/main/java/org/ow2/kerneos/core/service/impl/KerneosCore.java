@@ -25,10 +25,6 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.apache.felix.ipojo.ComponentInstance;
-import org.apache.felix.ipojo.ConfigurationException;
-import org.apache.felix.ipojo.MissingHandlerException;
-import org.apache.felix.ipojo.UnacceptableConfiguration;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -37,8 +33,6 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
-
-import org.apache.felix.ipojo.api.composite.Instance;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
 
@@ -53,7 +47,7 @@ import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.config.generated.ManagerProperty;
 import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.config.generated.SwfModule;
-import org.ow2.kerneos.login.KerneosSession;
+import org.ow2.kerneos.login.Session;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -291,18 +285,18 @@ public class KerneosCore implements IKerneosCore {
         kerneosContext.setMethod(null);
 
         // Get or create a session
-        KerneosSession kerneosSession = null;
+        Session session = null;
         Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
-        if (obj == null || !(obj instanceof KerneosSession)) {
-            kerneosSession = kerneosContext.getLoginManager().newSession();
-            if (kerneosSession.getRoles() != null) {
-                kerneosSession.setRoles(kerneosContext.getRolesManager().resolve(kerneosSession.getRoles()));
+        if (obj == null || !(obj instanceof Session)) {
+            session = kerneosContext.getLoginManager().newSession();
+            if (session.getRoles() != null) {
+                session.setRoles(kerneosContext.getRolesManager().resolve(session.getRoles()));
             }
-            request.getSession().setAttribute(KERNEOS_SESSION_KEY, kerneosSession);
+            request.getSession().setAttribute(KERNEOS_SESSION_KEY, session);
         } else {
-            kerneosSession = (KerneosSession) obj;
+            session = (Session) obj;
         }
-        kerneosContext.setSession(kerneosSession);
+        kerneosContext.setSession(session);
     }
 
     public void updateContext(String destination, String method) {

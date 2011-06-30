@@ -32,7 +32,7 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.manager.KerneosLogin;
-import org.ow2.kerneos.login.KerneosSession;
+import org.ow2.kerneos.login.Session;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -79,7 +79,7 @@ public class LoginService implements KerneosLogin {
         KerneosContext.getCurrentContext().getSession().reset();
     }
 
-    public KerneosSession newSession() {
-        return new KerneosSession();
+    public Session newSession() {
+        return new Session();
     }
 }

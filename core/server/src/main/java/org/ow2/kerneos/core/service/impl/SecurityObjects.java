@@ -25,7 +25,7 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.ow2.kerneos.login.KerneosSession;
+import org.ow2.kerneos.login.Session;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.kerneos.profile.config.generated.ProfileMethod;
 import org.ow2.kerneos.profile.config.generated.ProfileModule;
@@ -33,6 +33,9 @@ import org.ow2.kerneos.profile.config.generated.ProfilePolicy;
 import org.ow2.kerneos.profile.config.generated.ProfileRule;
 import org.ow2.kerneos.profile.config.generated.ProfileService;
 
+/**
+ * Classes used with security service.
+ */
 public class SecurityObjects {
     private SecurityObjects() {
 
@@ -45,7 +48,7 @@ public class SecurityObjects {
             Profile.class,
             ProfileRule.class,
             ProfileService.class,
-            KerneosSession.class};
+            Session.class};
 
     public static Class[] list() {
         return list;

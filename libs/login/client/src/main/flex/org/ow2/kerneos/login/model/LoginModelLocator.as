@@ -31,7 +31,7 @@ import org.ow2.kerneos.login.business.ILogInDelegate;
 import org.ow2.kerneos.login.business.ILogOutDelegate;
 import org.ow2.kerneos.login.business.LogInDelegate;
 import org.ow2.kerneos.login.business.LogOutDelegate;
-import org.ow2.kerneos.login.vo.KerneosSessionVO;
+import org.ow2.kerneos.login.vo.SessionVO;
 
 /**
  * @author Guillaume Renault
@@ -45,7 +45,7 @@ public class LoginModelLocator implements ModelLocator {
     public var state:String = LoginState.IDLE;
 
     [Bindable]
-    public var session:KerneosSessionVO = null;
+    public var session:SessionVO = null;
 
     /**
      * Unique instance of this locator.

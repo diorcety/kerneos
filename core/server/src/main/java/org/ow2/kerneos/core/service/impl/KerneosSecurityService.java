@@ -41,7 +41,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.ow2.kerneos.core.IApplicationBundle;
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.KerneosContext;
-import org.ow2.kerneos.login.KerneosSession;
+import org.ow2.kerneos.login.Session;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.kerneos.profile.config.generated.ProfileBundle;
 import org.ow2.kerneos.profile.config.generated.ProfileMethod;
@@ -81,9 +81,11 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
     private Map<String, IApplicationBundle> applicationMap = new HashMap<String, IApplicationBundle>();
 
 
-
     private Configuration graniteDestination, gravityDestination, eaConfig;
 
+    /**
+     * Called when all the component dependencies are met.
+     */
     @Validate
     private void start() throws IOException {
         logger.debug("Start KerneosSecurityService");
@@ -118,6 +120,9 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         }
     }
 
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
     @Invalidate
     private void stop() throws IOException {
         logger.debug("Stop KerneosSecurityService");
@@ -135,10 +140,15 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
      *
      * @return KerneosSession.
      */
-    public KerneosSession getSession() {
+    public Session getSession() {
         return KerneosContext.getCurrentContext().getSession();
     }
 
+    /**
+     * Get the application profile.
+     *
+     * @return Profile.
+     */
     public Profile getProfile() {
         return KerneosContext.getCurrentContext().getProfileManager().getProfile();
     }
@@ -158,9 +168,9 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
 
             default:
                 KerneosContext.getCurrentContext().getLoginManager().login(applicationBundle.getId(), username, password);
-                KerneosSession kerneosSession = KerneosContext.getCurrentContext().getSession();
-                if (kerneosSession.getRoles() != null) {
-                    kerneosSession.setRoles(KerneosContext.getCurrentContext().getRolesManager().resolve(kerneosSession.getRoles()));
+                Session session = KerneosContext.getCurrentContext().getSession();
+                if (session.getRoles() != null) {
+                    session.setRoles(KerneosContext.getCurrentContext().getRolesManager().resolve(session.getRoles()));
                 }
                 return KerneosContext.getCurrentContext().getSession().isLogged();
         }
@@ -233,6 +243,13 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         return SecurityError.NO_ERROR;
     }
 
+    /**
+     * Get a bundle using its id.
+     *
+     * @param bundles the list of bundles.
+     * @param id      the id of the bundle to find.
+     * @return the bundle with the matching id or null otherwise.
+     */
     private ProfileBundle getBundle(List<ProfileBundle> bundles, String id) {
         for (ProfileBundle bundle : bundles) {
             if (bundle.getId().equals(id))
@@ -241,6 +258,13 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         return null;
     }
 
+    /**
+     * Get a service using its id.
+     *
+     * @param services the list of services.
+     * @param id       the id of the service to find.
+     * @return the service with the matching id or null otherwise.
+     */
     private ProfileService getService(List<ProfileService> services, String id) {
         for (ProfileService service : services) {
             if (service.getId().equals(id))
@@ -249,6 +273,13 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         return null;
     }
 
+    /**
+     * Get a method using its id.
+     *
+     * @param methods the list of methods.
+     * @param id      the id of the method to find.
+     * @return the method with the matching id or null otherwise.
+     */
     private ProfileMethod getMethod(List<ProfileMethod> methods, String id) {
         for (ProfileMethod method : methods) {
             if (method.getId().equals(id))
@@ -257,14 +288,24 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         return null;
     }
 
+    /**
+     * Get the policy associated corresponding to the rules and the roles
+     *
+     * @param rules         the list of rules.
+     * @param roles         the list of user's roles.
+     * @param defaultPolicy the default policy to use if no matching rules is found.
+     * @return the policy.
+     */
     private ProfilePolicy getPolicy(List<ProfileRule> rules, Collection<String> roles, ProfilePolicy defaultPolicy) {
+        ProfilePolicy policy = null;
         if (roles != null) {
             for (ProfileRule rule : rules) {
                 if (roles.contains(rule.getRole()))
-                    return rule.getPolicy();
+                    if (policy == null || rule.getPolicy() == ProfilePolicy.ALLOW)
+                        policy = rule.getPolicy();
             }
         }
-        return defaultPolicy;
+        return (policy != null) ? policy : defaultPolicy;
     }
 
     /**
@@ -285,6 +326,9 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         return true;
     }
 
+    /**
+     * Security service id
+     */
     public String getId() {
         return KerneosConstants.KERNEOS_SERVICE_SECURITY;
     }

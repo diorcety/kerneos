@@ -29,7 +29,7 @@ import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.manager.KerneosLogin;
 import org.ow2.kerneos.core.manager.KerneosProfile;
 import org.ow2.kerneos.core.manager.KerneosRoles;
-import org.ow2.kerneos.login.KerneosSession;
+import org.ow2.kerneos.login.Session;
 
 /**
  * The Object used the context for kerneos.
@@ -57,7 +57,7 @@ public class KerneosContext {
     }
 
     // Session
-    private KerneosSession session;
+    private Session session;
 
     // Request
     private IApplicationBundle applicationBundle;
@@ -105,11 +105,11 @@ public class KerneosContext {
         this.method = method;
     }
 
-    public KerneosSession getSession() {
+    public Session getSession() {
         return session;
     }
 
-    public void setSession(KerneosSession session) {
+    public void setSession(Session session) {
         this.session = session;
     }
 

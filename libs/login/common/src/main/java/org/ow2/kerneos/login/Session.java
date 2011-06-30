@@ -32,12 +32,12 @@ import java.util.Map;
 /**
  * The Object used to store the session information.
  */
-public final class KerneosSession {
+public final class Session {
     private String username = null;
     private Collection<String> roles = null;
     private Map<String, Object> properties = new HashMap<String, Object>();
 
-    public KerneosSession() {
+    public Session() {
     }
 
     public void reset() {
