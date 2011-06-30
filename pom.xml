@@ -24,9 +24,7 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -37,7 +35,7 @@
 
   <groupId>org.ow2.kerneos</groupId>
   <artifactId>kerneos</artifactId>
-  <version>2.0.0-M1-SNAPSHOT</version>
+  <version>2.0.0</version>
 
   <name>Kerneos</name>
   <packaging>pom</packaging>
@@ -66,10 +64,10 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk
+    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/tags/kerneos-2.0.0</connection>
+    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/tags/kerneos-2.0.0
     </developerConnection>
-    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/trunk</url>
+    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/tags/kerneos-2.0.0?repname=jasmine&amp;path=/kerneos/trunk</url>
   </scm>
 
   <repositories>
