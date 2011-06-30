@@ -28,7 +28,7 @@ package org.ow2.kerneos.core.manager;
 import java.util.Collection;
 
 /**
- * Interface for provide a roles resolution service to Kerneos.
+ * Interface for providing a roles resolution service to Kerneos.
  */
 public interface KerneosRoles {
     /**

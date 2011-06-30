@@ -28,7 +28,7 @@ package org.ow2.kerneos.core.manager;
 import org.ow2.kerneos.login.Session;
 
 /**
- * Interface for provide an login and logout service to Kerneos.
+ * Interface for providing a authentication service to Kerneos.
  */
 public interface KerneosLogin {
     /**

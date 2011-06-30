@@ -496,7 +496,9 @@
                     module.getBigIcon(FlexGlobals.topLevelApplication as UIComponent);
 
                     //Show notification
-                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP && ModulesLifeCycleManager.notification) {
+                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP &&
+                            ModulesLifeCycleManager.notification &&
+                            model.application.showNotificationPopups) {
                         notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', module1);
                     }
                 }
@@ -506,7 +508,9 @@
             for each (var module2:ModuleVO in desktopModules) {
                 if (!newArr.contains(module2)) {
                     //Show notification
-                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP && ModulesLifeCycleManager.notification) {
+                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP &&
+                            ModulesLifeCycleManager.notification &&
+                            model.application.showNotificationPopups) {
                         notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', module2);
                     }
                 }
