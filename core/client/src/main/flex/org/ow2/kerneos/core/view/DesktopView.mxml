@@ -424,6 +424,9 @@
             ModulesLifeCycleManager.unsubscribe();
         }
 
+        /**
+         * Open a notification
+         */
         private function notifiedModuleArrivalDeparture(messageCode:String, module:ModuleVO):void {
             // Build and display the popup
             var notifPopUp:NotificationPopUp = new NotificationPopUp();
@@ -437,18 +440,31 @@
             NotificationsManager.desktop.windowContainer.addChild(notifPopUp);
         }
 
+        /**
+         * Update the desktop (modules change)
+         */
         private function modulesUpdated(event:CollectionEvent):void {
             updateDesktop(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session, KerneosModelLocator.getInstance().modules);
         }
 
+        /**
+         * Update the desktop (login change)
+         */
         private function loginUpdated(session:SessionVO):void {
             updateDesktop(ProfileModelLocator.getInstance().profile, session, KerneosModelLocator.getInstance().modules);
         }
 
+        /**
+         * Update the desktop (profile change)
+         */
         private function profileUpdated(profile:ProfileVO):void {
             updateDesktop(profile, LoginModelLocator.getInstance().session, KerneosModelLocator.getInstance().modules);
         }
 
+
+        /**
+         * Update the desktop view
+         */
         private function updateDesktop(profile:ProfileVO, session:SessionVO, modules:ArrayCollection):void {
             var roles:ArrayCollection = (session != null) ? session.roles : null;
 

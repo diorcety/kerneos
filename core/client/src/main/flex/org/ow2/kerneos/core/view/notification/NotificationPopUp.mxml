@@ -29,10 +29,7 @@
          width="180"
          height="120"
          horizontalAlign="center"
-         showEffect="{fadeIn}"
          addedEffect="{fadeIn}"
-         creationCompleteEffect="{fadeIn}"
-         removedEffect="{fadeOut}"
          hideEffect="{fadeOut}"
          creationComplete="initComponent()"
          horizontalScrollPolicy="off"
@@ -43,7 +40,6 @@
     
     import mx.core.Container;
 
-    import org.ow2.kerneos.common.event.KerneosNotificationEvent;
     import org.ow2.kerneos.core.vo.KerneosNotification;
     import org.ow2.kerneos.core.view.window.ModuleWindow;
     import org.ow2.kerneos.core.vo.ModuleVO;
@@ -129,7 +125,7 @@
             closed = true;
             
             // Remove this from the stage
-            (parent as Container).removeChild(this);
+            this.visible = false;
         }
     }
     
@@ -195,7 +191,7 @@
         <mx:Fade id="fadeOut"
                  alphaFrom="1.0"
                  alphaTo="0.0"
-                 duration="100"/>
+                 duration="100" effectEnd="(parent as Container).removeChild(this);"/>
     </fx:Declarations>
    
     <!-- UI -->  
