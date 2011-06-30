@@ -64,10 +64,10 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk
+    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/branches/kerneos-2.0.x</connection>
+    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/branches/kerneos-2.0.x
     </developerConnection>
-    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/trunk</url>
+    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/branches/kerneos-2.0.x?repname=jasmine&amp;path=/kerneos/trunk</url>
   </scm>
 
   <repositories>

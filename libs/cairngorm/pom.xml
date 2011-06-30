@@ -35,7 +35,7 @@
     </parent>
 
     <artifactId>cairngorm-kerneos</artifactId>
-    <version>2.2.5-SNAPSHOT</version>
+    <version>2.0.1-SNAPSHOT</version>
 
     <name>Kerneos :: Libraries :: Cairngorm</name>
 

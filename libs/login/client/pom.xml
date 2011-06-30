@@ -50,7 +50,7 @@
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>cairngorm-kerneos</artifactId>
-      <version>2.2.5-SNAPSHOT</version>
+      <version>2.0.1-SNAPSHOT</version>
       <type>swc</type>
     </dependency>
 
@@ -65,7 +65,7 @@
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>flexlib-kerneos</artifactId>
       <type>swc</type>
-      <version>2.6-SNAPSHOT</version>
+      <version>2.0.1-SNAPSHOT</version>
     </dependency>
 
     <!-- Flex SDK dependencies -->
