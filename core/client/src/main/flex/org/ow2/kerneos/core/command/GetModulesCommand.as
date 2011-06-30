@@ -35,6 +35,7 @@ import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
+import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.vo.ModuleVO;
 
 /**
@@ -71,6 +72,9 @@ public class GetModulesCommand implements ICommand, IResponder {
         for each(var module:ModuleVO in result) {
             ModulesLifeCycleManager.installModule(module);
         }
+
+        // Enable notification (Profile & Session && Modules updated)
+        ModulesLifeCycleManager.notification = true;
     }
 
     /**

@@ -29,7 +29,6 @@
            xmlns:view="org.ow2.kerneos.core.view.*"
            width="100%"
            height="100%"
-           creationPolicy="all"
            currentState="{KerneosModelLocator.getInstance().state}">
 
     <fx:Metadata>
@@ -56,11 +55,8 @@
         import org.ow2.kerneos.core.model.KerneosState;
         import org.ow2.kerneos.core.model.KerneosModelLocator;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
-        import org.ow2.kerneos.core.vo.AuthenticationVO;
         import org.ow2.kerneos.login.model.LoginModelLocator;
-        import org.ow2.kerneos.login.model.LoginState;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
-        import org.ow2.kerneos.profile.model.ProfileState;
 
         // =========================================================================
         // Variables
@@ -89,9 +85,12 @@
         // =========================================================================
 
         /**
-         * On component creation complete.
+         * On view initialization.
          */
-        public function initializeView(e:Event = null):void {
+        public function initializeView():void {
+
+            desktopView.initializeView();
+
             // Listen to server side exceptions events
             CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show, false, 0, true);
 
@@ -163,11 +162,15 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <view:LoadingView includeIn="loading"
+                      itemCreationPolicy="immediate"
+                      itemDestructionPolicy="never"
                       id="loadingView"
                       width="100%"
                       height="100%"/>
 
     <view:ApplicationTitle includeIn="loaded"
+                           itemCreationPolicy="immediate"
+                           itemDestructionPolicy="never"
                            id="applicationTitle"
                            width="1000"
                            height="80"
@@ -175,12 +178,16 @@
                            right="10"/>
 
     <view:DesktopView includeIn="desktop"
+                      itemCreationPolicy="immediate"
+                      itemDestructionPolicy="never"
                       id="desktopView"
                       width="100%"
                       height="100%"/>
 
     <!-- Use visible property for forcing hide of login window when skipping login -->
     <view:LoginView includeIn="login"
+                    itemCreationPolicy="immediate"
+                    itemDestructionPolicy="never"
                     visible="{KerneosModelLocator.getInstance().state == KerneosState.LOGIN}"
                     id="loginView"
                     width="100%"
@@ -188,6 +195,8 @@
 
     <!-- Use visible property for forcing hide of profile window when skipping profile -->
     <view:ProfileView includeIn="profile"
+                      itemCreationPolicy="immediate"
+                      itemDestructionPolicy="never"
                       visible="{KerneosModelLocator.getInstance().state == KerneosState.PROFILE}"
                       id="profileView"
                       width="100%"
@@ -208,15 +217,15 @@
         <!-- When the config is loaded -->
         <mx:State name="applicationLoaded" stateGroups="loaded"/>
 
-        <!-- Working view -->
-        <mx:State name="desktop" stateGroups="loaded" enterState="desktopView.callLater(desktopView.loadModules)"
-                  exitState="desktopView.callLater(desktopView.unloadModules)"/>
-
         <!-- Login view -->
         <mx:State name="login" stateGroups="loaded"/>
 
-        <!-- Login view -->
+        <!-- Profile view -->
         <mx:State name="profile" stateGroups="loaded"/>
+
+        <!-- Working view -->
+        <mx:State name="desktop" stateGroups="loaded" enterState="desktopView.loadModules()"
+                  exitState="desktopView.unloadModules()"/>
 
         <!-- When server connexion lost -->
         <mx:State name="disconnected"/>

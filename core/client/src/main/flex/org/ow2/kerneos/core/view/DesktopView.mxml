@@ -28,7 +28,6 @@
          xmlns:mx="library://ns.adobe.com/flex/mx"
          xmlns:view="org.ow2.kerneos.core.view.*"
          xmlns:commonView="org.ow2.kerneos.common.view.*"
-         xmlns:flexlibContainers="flexlib.containers.*"
          xmlns:flexlibMdiContainers="flexlib.mdi.containers.*"
          creationComplete="creationCompleteHandler()"
          verticalGap="1">
@@ -71,17 +70,22 @@
         import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
         import org.ow2.kerneos.core.managers.SharedObjectManager;
         import org.ow2.kerneos.core.model.KerneosModelLocator;
+        import org.ow2.kerneos.core.model.KerneosState;
+        import org.ow2.kerneos.core.view.notification.NotificationPopUp;
         import org.ow2.kerneos.core.view.window.SwfModuleWindow;
         import org.ow2.kerneos.core.view.window.KerneosWindow;
         import org.ow2.kerneos.core.view.window.ModuleWindow;
         import org.ow2.kerneos.core.view.notification.NotificationsLog;
+        import org.ow2.kerneos.core.vo.KerneosNotification;
         import org.ow2.kerneos.core.vo.ModuleVO;
         import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
         import org.ow2.kerneos.login.model.LoginModelLocator;
         import org.ow2.kerneos.login.model.LoginModelLocator;
+        import org.ow2.kerneos.login.vo.KerneosSessionVO;
         import org.ow2.kerneos.profile.manager.ProfileManager;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
+        import org.ow2.kerneos.profile.vo.ProfileVO;
         import org.ow2.kerneos.profile.vo.ProfileVO;
         import org.ow2.kerneos.profile.vo.ProfileVO;
 
@@ -174,10 +178,9 @@
         // =========================================================================
 
         /**
-         * On view creation complete.
+         * On view initialization.
          */
-        private function creationCompleteHandler(e:Event = null):void {
-
+        public function initializeView():void {
             // Retrieve the application model.
             model = KerneosModelLocator.getInstance();
 
@@ -187,7 +190,15 @@
             ModulesLifeCycleManager.init(this);
 
             KerneosModelLocator.getInstance().modules.addEventListener(CollectionEvent.COLLECTION_CHANGE, modulesUpdated);
+            BindingUtils.bindSetter(profileUpdated, ProfileModelLocator.getInstance(), "profile");
+            BindingUtils.bindSetter(loginUpdated, LoginModelLocator.getInstance(), "session");
 
+        }
+
+        /**
+         * On view creation complete.
+         */
+        private function creationCompleteHandler():void {
             // Set windows events listeners.
             windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow, false, 0, true);
 
@@ -413,23 +424,34 @@
             ModulesLifeCycleManager.unsubscribe();
         }
 
-        private function modulesUpdated(event:CollectionEvent):void {
-            switch (event.kind) {
-                case CollectionEventKind.ADD:
-                    for each(var module:ModuleVO in event.items) {
-                        // Clear cache
-                        IconUtility.deleteSource(module.bigIcon);
-                        IconUtility.deleteSource(module.smallIcon);
+        private function notifiedModuleArrivalDeparture(messageCode:String, module:ModuleVO):void {
+            // Build and display the popup
+            var notifPopUp:NotificationPopUp = new NotificationPopUp();
+            notifPopUp.message = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                    messageCode, [module.name]);
+            notifPopUp.level = KerneosNotification.INFO;
+            notifPopUp.setStyle("bottom", 0);
+            notifPopUp.setStyle("right", 0);
+            notifPopUp.module = module;
 
-                        // Reload cache
-                        module.getSmallIcon(FlexGlobals.topLevelApplication as UIComponent);
-                        module.getBigIcon(FlexGlobals.topLevelApplication as UIComponent);
-                    }
-                    break;
-            }
+            NotificationsManager.desktop.windowContainer.addChild(notifPopUp);
         }
 
-        private function desktopModule(profile:ProfileVO, roles:ArrayCollection, modules:ArrayCollection):ArrayCollection {
+        private function modulesUpdated(event:CollectionEvent):void {
+            updateDesktop(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session, KerneosModelLocator.getInstance().modules);
+        }
+
+        private function loginUpdated(session:KerneosSessionVO):void {
+            updateDesktop(ProfileModelLocator.getInstance().profile, session, KerneosModelLocator.getInstance().modules);
+        }
+
+        private function profileUpdated(profile:ProfileVO):void {
+            updateDesktop(profile, LoginModelLocator.getInstance().session, KerneosModelLocator.getInstance().modules);
+        }
+
+        private function updateDesktop(profile:ProfileVO, session:KerneosSessionVO, modules:ArrayCollection):void {
+            var roles:ArrayCollection = (session != null) ? session.roles : null;
+
             var newArr:ArrayCollection = new ArrayCollection();
             for each(var module:ModuleVO in modules) {
                 if (ProfileManager.haveModuleAccess(profile, roles, module.bundle, module.id))
@@ -446,8 +468,38 @@
             newArr.sort = dataSort;
             newArr.refresh();
 
-            return newArr;
+            // Seek added Modules
+            for each (var module1:ModuleVO in newArr) {
+                if (!desktopModules.contains(module1)) {
+                    // Clear cache
+                    IconUtility.deleteSource(module.bigIcon);
+                    IconUtility.deleteSource(module.smallIcon);
+
+                    // Reload cache
+                    module.getSmallIcon(FlexGlobals.topLevelApplication as UIComponent);
+                    module.getBigIcon(FlexGlobals.topLevelApplication as UIComponent);
+
+                    //Show notification
+                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP && ModulesLifeCycleManager.notification) {
+                        notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', module1);
+                    }
+                }
+            }
+
+            // Seek removed Modules
+            for each (var module2:ModuleVO in desktopModules) {
+                if (!newArr.contains(module2)) {
+                    //Show notification
+                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP && ModulesLifeCycleManager.notification) {
+                        notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', module2);
+                    }
+                }
+            }
+
+            desktopModules = newArr;
         }
+
+        [Bindable] var desktopModules:ArrayCollection = new ArrayCollection();
         ]]>
     </fx:Script>
 
@@ -470,7 +522,7 @@
                      x="5"
                      y="5"
                      direction="vertical"
-                     dataProvider="{desktopModule(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session.roles, model.modules)}"
+                     dataProvider="{desktopModules}"
                      backgroundAlpha="0.0"
                      borderStyle="none"
                      useRollOver="false"

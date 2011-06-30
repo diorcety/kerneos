@@ -109,6 +109,9 @@ public class ModulesLifeCycleManager {
      */
     private static var consumer:Consumer = null;
 
+
+    public static var notification:Boolean = true;
+
     // =========================================================================
     // Public static methods
     // =========================================================================
@@ -122,6 +125,8 @@ public class ModulesLifeCycleManager {
      */
     public static function loadModules():void {
         try {
+            // Disable notification during loading
+            notification = false;
             var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_MODULES);
             CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
         }
@@ -134,9 +139,12 @@ public class ModulesLifeCycleManager {
      * Unload all application modules
      */
     public static function unloadModules():void {
+        // Disable notification during unloading
+        notification = false;
         while (KerneosModelLocator.getInstance().modules.length) {
             uninstallModule(KerneosModelLocator.getInstance().modules.getItemAt(0) as ModuleVO);
         }
+        notification = true;
     }
 
     /**
@@ -162,11 +170,6 @@ public class ModulesLifeCycleManager {
 
         // Add to the module list.
         KerneosModelLocator.getInstance().modules.addItem(module);
-
-        //Pop-up module arrival
-        //if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
-        //    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', module);
-        //}
 
         // If "load on startup", load it
         if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup) {
@@ -196,11 +199,6 @@ public class ModulesLifeCycleManager {
         if (module is FolderVO && ((module as FolderVO).modules != null)) {
             uninstallModules((module as FolderVO).modules);
         }
-
-        //Pop-up module departure
-        //if (notify && KerneosModelLocator.getInstance().moduleFilterFunction(module)) {
-        //    notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', module);
-        //}
     }
 
     /**
@@ -476,24 +474,6 @@ public class ModulesLifeCycleManager {
                 uninstallModule(module, true);
             }
         }
-    }
-
-    /**
-     * Shows un pop-up in the main view
-     * @param messageCode The locale message defined into properties file
-     * @param parameters The parameters to be replaced in the message
-     */
-    private static function notifiedModuleArrivalDeparture(messageCode:String, module:ModuleVO):void {
-        // Build and display the popup
-        var notifPopUp:NotificationPopUp = new NotificationPopUp();
-        notifPopUp.message = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                messageCode, [module.name]);
-        notifPopUp.level = KerneosNotification.INFO;
-        notifPopUp.setStyle("bottom", 0);
-        notifPopUp.setStyle("right", 0);
-        notifPopUp.module = module;
-
-        NotificationsManager.desktop.windowContainer.addChild(notifPopUp);
     }
 }
 }
