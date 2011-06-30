@@ -35,6 +35,7 @@ import org.ow2.kerneos.core.service.impl.KerneosSecurityService;
 import org.ow2.kerneos.login.Session;
 import org.ow2.kerneos.profile.config.generated.ObjectFactory;
 import org.ow2.kerneos.profile.config.generated.Profile;
+import org.ow2.kerneos.profile.config.generated.ProfilePolicy;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -85,15 +86,21 @@ public class SecurityTest extends TestCase {
         ModuleBundle module = new ModuleBundle("test", new Module(), null);
         context.setModuleBundle(module);
 
-        assertEquals("Default policy(unset)", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
+        profile.getProfile().setDefaultPolicy(ProfilePolicy.ALLOW);
+
+        assertEquals("Default allow policy (unset)", securityService.authorize(), IKerneosSecurityService.SecurityError.NO_ERROR);
+
+        profile.getProfile().setDefaultPolicy(ProfilePolicy.DENY);
+
+        assertEquals("Default deny policy (unset)", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
 
         roles.clear();
         roles.add("jonas");
-        assertEquals("Default allow policy", securityService.authorize(), IKerneosSecurityService.SecurityError.NO_ERROR);
+        assertEquals("Default allow rule", securityService.authorize(), IKerneosSecurityService.SecurityError.NO_ERROR);
 
         roles.clear();
         roles.add("principal1");
-        assertEquals("Default deny policy", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
+        assertEquals("Default deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
     }
 
     /**

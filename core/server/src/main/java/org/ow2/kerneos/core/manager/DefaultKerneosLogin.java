@@ -33,8 +33,13 @@ import java.util.LinkedList;
 public class DefaultKerneosLogin implements KerneosLogin {
 
     public void login(String application, String user, String password) {
-        KerneosContext.getCurrentContext().getSession().setUsername("Default");
-        KerneosContext.getCurrentContext().getSession().setRoles(new LinkedList<String>());
+        if (user.equals(password)) {
+            LinkedList roles = new LinkedList<String>();
+            roles.add(user);
+
+            KerneosContext.getCurrentContext().getSession().setUsername(user);
+            KerneosContext.getCurrentContext().getSession().setRoles(roles);
+        }
     }
 
     public void logout() {

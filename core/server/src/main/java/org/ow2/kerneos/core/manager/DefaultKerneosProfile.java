@@ -26,10 +26,13 @@
 package org.ow2.kerneos.core.manager;
 
 import org.ow2.kerneos.profile.config.generated.Profile;
+import org.ow2.kerneos.profile.config.generated.ProfilePolicy;
 
 public class DefaultKerneosProfile implements KerneosProfile {
 
     public Profile getProfile() {
-        return new Profile();
+        Profile profile = new Profile();
+        profile.setDefaultPolicy(ProfilePolicy.ALLOW);
+        return profile;
     }
 }
