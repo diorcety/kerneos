@@ -40,7 +40,7 @@ public class LogOutDelegate extends AbsDelegateResponder implements ILogOutDeleg
     public function logOut():void {
 
         // find service
-        var service:Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosSecurityService");
+        var service:Object = ServiceLocator.getInstance().getRemoteObject("kerneosSecurityService");
 
         // call service
         var call:Object = service.logOut();

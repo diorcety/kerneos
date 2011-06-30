@@ -46,7 +46,7 @@
             username.text = "";
             event.password = password.text;
             password.text = "";
-            CairngormEventDispatcher.getInstance(this).dispatchEvent(event);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event);
         }
         ]]>
     </fx:Script>

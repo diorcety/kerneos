@@ -37,7 +37,7 @@ public class LogInDelegate extends AbsDelegateResponder implements ILogInDelegat
     public function logIn(user:String, password:String):void {
 
         // find service
-        var service:Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosSecurityService");
+        var service:Object = ServiceLocator.getInstance().getRemoteObject("kerneosSecurityService");
 
         // call service
         var call:Object = service.logIn(user, password);

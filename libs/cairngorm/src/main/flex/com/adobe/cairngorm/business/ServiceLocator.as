@@ -41,12 +41,6 @@ import com.adobe.cairngorm.Consumer;
 
 import com.adobe.cairngorm.Producer;
 
-import flash.utils.Dictionary;
-
-import mx.core.IFlexModuleFactory;
-
-import mx.modules.ModuleManager;
-
 import mx.rpc.AbstractInvoker;
 import mx.rpc.AbstractService;
 import mx.rpc.http.HTTPService;
@@ -65,7 +59,7 @@ import mx.rpc.soap.WebService;
  * session.
  */
 public class ServiceLocator implements IServiceLocator {
-    private static var instances : Dictionary = new Dictionary();
+    private static var _instance:ServiceLocator;
 
     private var _httpServices:HTTPServices;
     private var _remoteObjects:RemoteObjects;
@@ -78,31 +72,29 @@ public class ServiceLocator implements IServiceLocator {
      * Return the ServiceLocator instance.
      * @return the instance.
      */
-    public static function getInstance(obj:Object):ServiceLocator {
-        var instance:Object = ModuleManager.getAssociatedFactory(obj);
-        if (instance == null)
-            instance = "application";
+    public static function get instance():ServiceLocator {
+        if (! _instance) {
+            _instance = new ServiceLocator();
+        }
 
-        if (instances[instance] == null) {
-            var cgService:ServiceLocator = new ServiceLocator();
-            instances[instance] = cgService;
-            return cgService;
-        }
-        else {
-            return instances[instance];
-        }
+        return _instance;
     }
-    
+
     /**
-     * Delete a instance of the dispatcher
+     * Return the ServiceLocator instance.
+     * @return the instance.
      */
-    public static function removeInstance(obj:Object): void {
-        var instance:Object = ModuleManager.getAssociatedFactory(obj);
-        if (instance == null)
-            instance = "application";
-        if (instances[instance] != null) {
-            delete instances[instance];
+    public static function getInstance():ServiceLocator {
+        return instance;
+    }
+
+    // Constructor should be private but current AS3.0 does not allow it
+    public function ServiceLocator() {
+        if (_instance) {
+            throw new CairngormError(CairngormMessageCodes.SINGLETON_EXCEPTION, "ServiceLocator");
         }
+
+        _instance = this;
     }
 
     /**

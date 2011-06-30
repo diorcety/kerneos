@@ -61,7 +61,7 @@
 
         private function load():void {
             var event:GetProfileEvent = new GetProfileEvent(GetProfileEvent.GET_PROFILE);
-            CairngormEventDispatcher.getInstance(this).dispatchEvent(event);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event);
         }
         ]]>
     </fx:Script>

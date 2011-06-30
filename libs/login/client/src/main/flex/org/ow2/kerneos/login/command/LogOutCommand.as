@@ -27,8 +27,6 @@ import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
-import mx.controls.Alert;
-import mx.resources.ResourceManager;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
@@ -37,8 +35,6 @@ import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 
 import org.ow2.kerneos.login.business.ILogOutDelegate;
-import org.ow2.kerneos.login.event.LogInEvent;
-import org.ow2.kerneos.login.manager.LanguagesManager;
 import org.ow2.kerneos.login.model.LoginModelLocator;
 import org.ow2.kerneos.login.model.LoginState;
 
@@ -87,7 +83,7 @@ public class LogOutCommand implements ICommand, IResponder {
                                 "The application configuration file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,
                                 faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance(this).dispatchEvent(serverSideExceptionEvent);
+        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
     }
 
 

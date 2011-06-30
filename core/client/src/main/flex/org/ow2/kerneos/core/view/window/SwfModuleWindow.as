@@ -24,7 +24,6 @@
  */
 package org.ow2.kerneos.core.view.window {
 import com.adobe.cairngorm.business.ServiceLocator;
-import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import flash.system.ApplicationDomain;
 
@@ -168,7 +167,7 @@ public class SwfModuleWindow extends ModuleWindow {
     }
 
     private function registerServices():void {
-        var serviceLocator:ServiceLocator = ServiceLocator.getInstance(_child);
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
 
         // Register services
         for each(var service:ServiceVO in (module as SWFModuleVO).services) {
@@ -200,10 +199,6 @@ public class SwfModuleWindow extends ModuleWindow {
             unregisterServices();
             unregisterClasses();
 
-            // Flush instances associated with this module
-            ServiceLocator.removeInstance(_child);
-            CairngormEventDispatcher.removeInstance(_child);
-
             _child = null;
         }
 
@@ -225,7 +220,7 @@ public class SwfModuleWindow extends ModuleWindow {
     }
 
     private function unregisterServices():void {
-        var serviceLocator:ServiceLocator = ServiceLocator.getInstance(_child);
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
 
         for each(var service:ServiceVO in (module as SWFModuleVO).services) {
             if (service.asynchronous) {

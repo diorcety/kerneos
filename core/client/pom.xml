@@ -128,7 +128,7 @@
             <locale>fr_FR</locale>
           </compiledLocales>
           <mergeResourceBundle>true</mergeResourceBundle>
-          <sourceFile>org/ow2/kerneos/core/Kerneos.mxml</sourceFile>
+          <sourceFile>Kerneos.mxml</sourceFile>
           <linkReport>true</linkReport>
         </configuration>
       </plugin>

@@ -24,10 +24,7 @@ package org.ow2.kerneos.core.business
 {
 import com.adobe.cairngorm.business.ServiceLocator;
 
-import mx.core.FlexGlobals;
-
 import org.ow2.kerneos.common.business.AbsDelegateResponder;
-import org.ow2.kerneos.common.util.StringUtils;
 
 /**
 * Load the Kerneos config file
@@ -43,7 +40,7 @@ public class GetApplicationDelegate extends AbsDelegateResponder
     public function getApplication(application: String):void
     {
             // find service
-            var service : Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosConfigService");
+            var service : Object = ServiceLocator.getInstance().getRemoteObject("kerneosConfigService");
 
             // call service
             var call : Object = service.getApplication(application);

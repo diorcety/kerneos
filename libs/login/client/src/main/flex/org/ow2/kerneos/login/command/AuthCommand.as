@@ -27,8 +27,6 @@ import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
-import mx.controls.Alert;
-import mx.resources.ResourceManager;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
@@ -88,7 +86,7 @@ public class AuthCommand implements ICommand, IResponder {
                                 "The application configuration file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,
                                 faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance(this).dispatchEvent(serverSideExceptionEvent);
+        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
     }
 
 

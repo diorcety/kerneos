@@ -64,7 +64,7 @@
     </fx:Declarations>
 
     <!-- The style sheet -->
-    <fx:Style source="/../assets/styles.css"/>
+    <fx:Style source="../assets/styles.css"/>
 
     <!-- The main view that contains the complete app -->
     <view:KerneosMainView id="mainView"/>

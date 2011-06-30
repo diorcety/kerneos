@@ -30,17 +30,13 @@ import flash.events.Event;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-import mx.binding.utils.BindingUtils;
-
 import mx.core.FlexGlobals;
-import mx.core.UIComponent;
 import mx.messaging.ChannelSet;
 import mx.utils.URLUtil;
 
 import org.granite.channels.GraniteOSGiChannel;
 import org.granite.gravity.channels.GravityOSGiChannel;
 import org.granite.util.GraniteClassRegistry;
-import org.ow2.kerneos.common.util.IconUtility;
 
 import org.ow2.kerneos.common.util.StringUtils;
 import org.ow2.kerneos.core.event.KerneosConfigEvent;
@@ -116,7 +112,7 @@ public class KerneosLifeCycleManager {
                 "http://" + urlServer + "/" + context + "/gravity/amf");
         amfGravityChannelSet.addChannel(amfGravityChannel);
 
-        var serviceLocator:ServiceLocator = ServiceLocator.getInstance(null);
+        var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
 
         // Set the kerneosConfigService.
         serviceLocator.setServiceForId("kerneosConfigService", "kerneos-configuration", false);
@@ -152,7 +148,7 @@ public class KerneosLifeCycleManager {
     public static function loadApplication():void {
         try {
             var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_APPLICATION);
-            CairngormEventDispatcher.getInstance(desktop).dispatchEvent(event_module);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
         }
         catch (e:Error) {
             trace("An error occurred while loading Kerneos config file: " + e.message);

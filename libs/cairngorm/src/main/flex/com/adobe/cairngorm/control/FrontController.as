@@ -194,7 +194,7 @@ package com.adobe.cairngorm.control
              throw new CairngormError( CairngormMessageCodes.COMMAND_SHOULD_IMPLEMENT_ICOMMAND, commandRef );
          
          commands[ commandName ] = commandRef;
-         CairngormEventDispatcher.getInstance(this).addEventListener( commandName, executeCommand, false, 0, useWeakReference );
+         CairngormEventDispatcher.getInstance().addEventListener( commandName, executeCommand, false, 0, useWeakReference );
       }
       
      /**
@@ -212,7 +212,7 @@ package com.adobe.cairngorm.control
          if ( commands[ commandName ] === undefined )
             throw new CairngormError( CairngormMessageCodes.COMMAND_NOT_REGISTERED, commandName);  
          
-         CairngormEventDispatcher.getInstance(this).removeEventListener( commandName, executeCommand );
+         CairngormEventDispatcher.getInstance().removeEventListener( commandName, executeCommand );
          
          commands[ commandName ] = undefined;
          delete commands[ commandName ]; 

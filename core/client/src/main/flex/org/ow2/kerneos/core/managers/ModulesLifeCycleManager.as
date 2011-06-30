@@ -123,7 +123,7 @@ public class ModulesLifeCycleManager {
     public static function loadModules():void {
         try {
             var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_MODULES);
-            CairngormEventDispatcher.getInstance(desktop).dispatchEvent(event_module);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
         }
         catch (e:Error) {
             trace("An error occurred while loading module list: " + e.message);
@@ -365,7 +365,7 @@ public class ModulesLifeCycleManager {
      * Subscribe a gravity consumer to the kerneos topic
      */
     public static function subscribe():void {
-        consumer = ServiceLocator.getInstance(null).getConsumer("kerneosAsyncConfigService");
+        consumer = ServiceLocator.getInstance().getConsumer("kerneosAsyncConfigService");
         consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
         consumer.addEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
         consumer.addEventListener(ChannelEvent.CONNECT, onChannelConnection);

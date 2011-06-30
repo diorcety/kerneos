@@ -52,12 +52,12 @@
 
         private function auth():void {
             var event:AuthEvent = new AuthEvent(AuthEvent.AUTH);
-            CairngormEventDispatcher.getInstance(this).dispatchEvent(event);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event);
         }
 
         private function logout():void {
             var event:LogOutEvent = new LogOutEvent(LogOutEvent.LOG_OUT);
-            CairngormEventDispatcher.getInstance(this).dispatchEvent(event);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event);
         }
         ]]>
     </fx:Script>

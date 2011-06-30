@@ -87,12 +87,12 @@ public class GetModulesCommand implements ICommand, IResponder {
         // Tell the view and let it handle this
         var serverSideExceptionEvent:ServerSideExceptionEvent =
                 new ServerSideExceptionEvent(
-                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
+                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + model.componentID,
                         new ServerSideException("Error while loading the configuration",
                                 "The application file could not be read successfully."
                                         + "\n" + faultEvent.fault.faultString,
                                 faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance(this).dispatchEvent(serverSideExceptionEvent);
+        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
     }
 }
 }

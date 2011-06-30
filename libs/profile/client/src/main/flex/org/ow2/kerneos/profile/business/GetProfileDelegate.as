@@ -36,7 +36,7 @@ public class GetProfileDelegate extends AbsDelegateResponder implements IGetProf
     public function getProfile():void {
 
         // find service
-        var service:Object = ServiceLocator.getInstance(null).getRemoteObject("kerneosSecurityService");
+        var service:Object = ServiceLocator.getInstance().getRemoteObject("kerneosSecurityService");
 
         // call service
         var call:Object = service.getProfile();
