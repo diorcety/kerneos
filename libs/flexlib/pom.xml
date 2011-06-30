@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>flexlib-kerneos</artifactId>
-  <version>2.5-SNAPSHOT</version>
+  <version>${flexlib.version}</version>
 
   <name>Kerneos :: Libraries :: FlexLib</name>
 
