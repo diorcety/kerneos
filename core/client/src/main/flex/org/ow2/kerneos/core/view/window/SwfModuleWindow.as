@@ -137,10 +137,9 @@ public class SwfModuleWindow extends ModuleWindow {
      */
     public function load():void {
         var currentDate:Date = new Date();
-        var params:String = new Number(currentDate.getTime()).toString();
 
         // Setup the SWF module loader
-        _moduleInfo = ModuleManager.getModule((module as SWFModuleVO).file + "?" + params);
+        _moduleInfo = ModuleManager.getModule((module as SWFModuleVO).file);
         _moduleInfo.addEventListener(ModuleEvent.READY, onLoaderReady, false, 0, true);
         _moduleInfo.addEventListener(ModuleEvent.ERROR, onLoaderError, false, 0, true);
         _moduleInfo.addEventListener(ModuleEvent.PROGRESS, onProgress, false, 0, true);
