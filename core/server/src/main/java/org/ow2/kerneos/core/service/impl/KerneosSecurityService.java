@@ -25,13 +25,11 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.osgi.GraniteClassRegistry;
@@ -41,28 +39,19 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.ow2.kerneos.core.IApplicationBundle;
-import org.ow2.kerneos.core.IModuleBundle;
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.login.KerneosSession;
-import org.ow2.kerneos.core.config.generated.Service;
-import org.ow2.kerneos.core.config.generated.SwfModule;
-import org.ow2.kerneos.core.manager.DefaultKerneosLogin;
-import org.ow2.kerneos.core.manager.DefaultKerneosProfile;
-import org.ow2.kerneos.core.manager.DefaultKerneosRoles;
-import org.ow2.kerneos.core.manager.KerneosLogin;
-import org.ow2.kerneos.core.manager.KerneosProfile;
-import org.ow2.kerneos.core.manager.KerneosRoles;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.kerneos.profile.config.generated.ProfileBundle;
 import org.ow2.kerneos.profile.config.generated.ProfileMethod;
 import org.ow2.kerneos.profile.config.generated.ProfilePolicy;
 import org.ow2.kerneos.profile.config.generated.ProfileRule;
 import org.ow2.kerneos.profile.config.generated.ProfileService;
+
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -83,18 +72,6 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
      */
     private static Log logger = LogFactory.getLog(KerneosSecurityService.class);
 
-    private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION";
-
-    @Requires(optional = true, defaultimplementation = DefaultKerneosLogin.class)
-    private KerneosLogin kerneosLogin;
-
-    @Requires(optional = true, defaultimplementation = DefaultKerneosRoles.class)
-    private KerneosRoles kerneosRoles;
-
-    @Requires(optional = true, defaultimplementation = DefaultKerneosProfile.class)
-    private KerneosProfile kerneosProfile;
-
-
     @Requires
     private ConfigurationAdmin configurationAdmin;
 
@@ -103,27 +80,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
 
     private Map<String, IApplicationBundle> applicationMap = new HashMap<String, IApplicationBundle>();
 
-    private Map<String, IModuleBundle> moduleMap = new HashMap<String, IModuleBundle>();
 
-    class ModuleService {
-        private Service service;
-        private IModuleBundle moduleBundle;
-
-        ModuleService(IModuleBundle moduleBundle, Service service) {
-            this.service = service;
-            this.moduleBundle = moduleBundle;
-        }
-
-        public IModuleBundle getModuleBundle() {
-            return moduleBundle;
-        }
-
-        public Service getService() {
-            return service;
-        }
-    }
-
-    private Map<String, ModuleService> destinationMap = new HashMap<String, ModuleService>();
 
     private Configuration graniteDestination, gravityDestination, eaConfig;
 
@@ -173,108 +130,6 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
         gcr.unregisterClasses(KerneosConstants.KERNEOS_SERVICE_ASYNC_SECURITY);
     }
 
-
-    @Bind(aggregate = true, optional = true)
-    private void bindApplicationBundle(final IApplicationBundle applicationBundle) {
-        synchronized (applicationMap) {
-            applicationMap.put(applicationBundle.getId(), applicationBundle);
-        }
-    }
-
-    @Unbind
-    private void unbindApplicationBundle(final IApplicationBundle applicationBundle) {
-        synchronized (applicationMap) {
-            applicationMap.remove(applicationBundle.getId());
-        }
-    }
-
-    @Bind(aggregate = true, optional = true)
-    private void bindModuleBundle(final IModuleBundle moduleBundle) {
-        synchronized (moduleMap) {
-            moduleMap.put(moduleBundle.getId(), moduleBundle);
-        }
-        if (moduleBundle.getModule() instanceof SwfModule) {
-            SwfModule swfModule = (SwfModule) moduleBundle.getModule();
-            synchronized (destinationMap) {
-                for (Service service : swfModule.getServices()) {
-                    destinationMap.put(service.getDestination(), new ModuleService(moduleBundle, service));
-                }
-            }
-        }
-    }
-
-    @Unbind
-    private void unbindModuleBundle(final IModuleBundle moduleBundle) {
-        synchronized (moduleMap) {
-            moduleMap.remove(moduleBundle.getId());
-        }
-        if (moduleBundle.getModule() instanceof SwfModule) {
-            SwfModule swfModule = (SwfModule) moduleBundle.getModule();
-            synchronized (destinationMap) {
-                for (Service service : swfModule.getServices()) {
-                    destinationMap.remove(service.getDestination());
-                }
-            }
-        }
-    }
-
-    /**
-     * Update context following the request
-     */
-    public void updateContext(HttpServletRequest request) {
-        updateContext(request, null, null);
-    }
-
-    /**
-     * Update context following the request & destination & method
-     */
-    public void updateContext(HttpServletRequest request, String destination, String method) {
-        KerneosSession kerneosSession = null;
-        IApplicationBundle currentApplicationBundle = null;
-        IModuleBundle currentModuleBundle = null;
-        Service currentService = null;
-        String currentMethod = method;
-
-        for (IApplicationBundle applicationBundle : applicationMap.values()) {
-            if (request.getRequestURI().startsWith(applicationBundle.getApplication().getApplicationUrl())) {
-                currentApplicationBundle = applicationBundle;
-                break;
-            }
-        }
-
-        if (currentApplicationBundle == null)
-            throw new RuntimeException("Invalid Kerneos Application");
-
-        if (destination == null) {
-            for (IModuleBundle moduleBundle : moduleMap.values()) {
-                if (request.getRequestURI().startsWith(currentApplicationBundle.getApplication().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId())) {
-                    currentModuleBundle = moduleBundle;
-                    break;
-                }
-            }
-        } else {
-            ModuleService moduleService = destinationMap.get(destination);
-            if (moduleService != null) {
-                currentModuleBundle = moduleService.getModuleBundle();
-                currentService = moduleService.getService();
-            }
-        }
-
-        // Get or create a session
-        Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
-        if (obj == null || !(obj instanceof KerneosSession)) {
-            kerneosSession = kerneosLogin.newSession();
-            if (kerneosSession.getRoles() != null) {
-                kerneosSession.setRoles(kerneosRoles.resolve(kerneosSession.getRoles()));
-            }
-            request.getSession().setAttribute(KERNEOS_SESSION_KEY, kerneosSession);
-        } else {
-            kerneosSession = (KerneosSession) obj;
-        }
-
-        KerneosContext.setCurrentContext(new KerneosContext(kerneosSession, currentApplicationBundle, currentModuleBundle, currentService, currentMethod));
-    }
-
     /**
      * Get the user' session.
      *
@@ -285,7 +140,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
     }
 
     public Profile getProfile() {
-        return kerneosProfile.getProfile();
+        return KerneosContext.getCurrentContext().getProfileManager().getProfile();
     }
 
     /**
@@ -302,10 +157,10 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
                 break;
 
             default:
-                kerneosLogin.login(applicationBundle.getId(), username, password);
+                KerneosContext.getCurrentContext().getLoginManager().login(applicationBundle.getId(), username, password);
                 KerneosSession kerneosSession = KerneosContext.getCurrentContext().getSession();
                 if (kerneosSession.getRoles() != null) {
-                    kerneosSession.setRoles(kerneosRoles.resolve(kerneosSession.getRoles()));
+                    kerneosSession.setRoles(KerneosContext.getCurrentContext().getRolesManager().resolve(kerneosSession.getRoles()));
                 }
                 return KerneosContext.getCurrentContext().getSession().isLogged();
         }
@@ -338,7 +193,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
 
         KerneosContext kerneosContext = KerneosContext.getCurrentContext();
         Collection<String> roles = kerneosContext.getSession().getRoles();
-        Profile profile = kerneosProfile.getProfile();
+        Profile profile = KerneosContext.getCurrentContext().getProfileManager().getProfile();
 
         if (kerneosContext.getModuleBundle() != null) {
             if (profile == null)
@@ -424,7 +279,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
                 break;
 
             default:
-                kerneosLogin.logout();
+                KerneosContext.getCurrentContext().getLoginManager().logout();
                 return !KerneosContext.getCurrentContext().getSession().isLogged();
         }
         return true;

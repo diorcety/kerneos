@@ -26,6 +26,9 @@
 package org.ow2.kerneos.core;
 
 import org.ow2.kerneos.core.config.generated.Service;
+import org.ow2.kerneos.core.manager.KerneosLogin;
+import org.ow2.kerneos.core.manager.KerneosProfile;
+import org.ow2.kerneos.core.manager.KerneosRoles;
 import org.ow2.kerneos.login.KerneosSession;
 
 /**
@@ -40,55 +43,97 @@ public class KerneosContext {
     };
 
     /**
-     * Set the current Kerneos context.
-     *
-     * @param kerneosContext The context.
-     */
-    public static void setCurrentContext(KerneosContext kerneosContext) {
-        kerneosContextThreadLocal.set(kerneosContext);
-    }
-
-    /**
      * Get the current Kerneos context.
      *
      * @return the current Kerneos context.
      */
     public static KerneosContext getCurrentContext() {
+        KerneosContext context = kerneosContextThreadLocal.get();
+        if (context == null) {
+            context = new KerneosContext();
+            kerneosContextThreadLocal.set(context);
+        }
         return kerneosContextThreadLocal.get();
     }
 
+    // Session
     private KerneosSession session;
+
+    // Request
     private IApplicationBundle applicationBundle;
     private IModuleBundle moduleBundle;
     private Service service;
     private String method;
 
-    public KerneosContext(KerneosSession session, IApplicationBundle applicationBundle,
-                          IModuleBundle moduleBundle, Service service, String method) {
-        this.session = session;
-        this.applicationBundle = applicationBundle;
-        this.moduleBundle = moduleBundle;
-        this.service = service;
-        this.method = method;
+    // Managers
+    private KerneosLogin kerneosLogin;
+    private KerneosProfile kerneosProfile;
+    private KerneosRoles kerneosRoles;
+
+    private KerneosContext() {
     }
 
     public IApplicationBundle getApplicationBundle() {
         return applicationBundle;
     }
 
+    public void setApplicationBundle(IApplicationBundle applicationBundle) {
+        this.applicationBundle = applicationBundle;
+    }
+
     public IModuleBundle getModuleBundle() {
         return moduleBundle;
+    }
+
+    public void setModuleBundle(IModuleBundle moduleBundle) {
+        this.moduleBundle = moduleBundle;
     }
 
     public Service getService() {
         return service;
     }
 
+    public void setService(Service service) {
+        this.service = service;
+    }
+
     public String getMethod() {
         return method;
     }
 
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
     public KerneosSession getSession() {
         return session;
+    }
+
+    public void setSession(KerneosSession session) {
+        this.session = session;
+    }
+
+    public KerneosLogin getLoginManager() {
+        return kerneosLogin;
+    }
+
+    public void setLoginManager(KerneosLogin loginManager) {
+        this.kerneosLogin = loginManager;
+    }
+
+    public KerneosProfile getProfileManager() {
+        return kerneosProfile;
+    }
+
+    public void setProfileManager(KerneosProfile profileManager) {
+        this.kerneosProfile = profileManager;
+    }
+
+    public KerneosRoles getRolesManager() {
+        return kerneosRoles;
+    }
+
+    public void setRolesManager(KerneosRoles rolesManager) {
+        this.kerneosRoles = rolesManager;
     }
 }

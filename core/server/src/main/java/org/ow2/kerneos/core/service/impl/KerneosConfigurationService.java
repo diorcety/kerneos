@@ -272,7 +272,10 @@ public final class KerneosConfigurationService implements GraniteDestination {
             // Get the url used for resources of the bundle
             Application application = loadKerneosApplicationConfig(bundle);
             ApplicationBundle applicationBundle = new ApplicationBundle(name, application, bundle);
-            ServiceRegistration instance = bundleContext.registerService(IApplicationBundle.class.getName(), applicationBundle, null);
+
+            Dictionary dictionary = new Hashtable();
+            dictionary.put("ID", name);
+            ServiceRegistration instance = bundleContext.registerService(IApplicationBundle.class.getName(), applicationBundle, dictionary);
 
             synchronized (applicationBundleMap) {
                 applicationBundleMap.put(name, applicationBundle);
@@ -348,7 +351,10 @@ public final class KerneosConfigurationService implements GraniteDestination {
             transformModule(module, name);
 
             ModuleBundle moduleBundle = new ModuleBundle(name, module, bundle);
-            ServiceRegistration instance = bundleContext.registerService(IModuleBundle.class.getName(), moduleBundle, null);
+
+            Dictionary dictionary = new Hashtable();
+            dictionary.put("ID", name);
+            ServiceRegistration instance = bundleContext.registerService(IModuleBundle.class.getName(), moduleBundle, dictionary);
 
             synchronized (moduleBundleMap) {
                 moduleBundleMap.put(name, moduleBundle);

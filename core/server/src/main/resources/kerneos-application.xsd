@@ -25,10 +25,10 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <xs:schema
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  elementFormDefault="qualified"
-  targetNamespace="org.ow2.kerneos:application"
-  xmlns:k="org.ow2.kerneos:application">
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="org.ow2.kerneos:application"
+    xmlns:k="org.ow2.kerneos:application">
 
 
   <!--##################################################################################
@@ -51,6 +51,7 @@
         <xs:element ref="k:show-confirm-close-dialog" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="k:default-language" maxOccurs="1" minOccurs="0"/>
         <xs:element ref="k:authentication" maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="k:managers" maxOccurs="1" minOccurs="0"/>
       </xs:all>
     </xs:complexType>
   </xs:element>
@@ -84,4 +85,25 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:element name="managers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="login" type="k:manager" maxOccurs="1" minOccurs="0"/>
+        <xs:element name="roles" type="k:manager" maxOccurs="1" minOccurs="0"/>
+        <xs:element name="profile" type="k:manager" maxOccurs="1" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="manager">
+    <xs:sequence>
+      <xs:element name="property" type="k:manager-property" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" use="required" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="manager-property">
+    <xs:attribute name="id" use="required" type="xs:string"/>
+    <xs:attribute name="value" use="required" type="xs:string"/>
+  </xs:complexType>
 </xs:schema>

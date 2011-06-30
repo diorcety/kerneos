@@ -27,40 +27,9 @@ package org.ow2.kerneos.core.service.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Interface of the Kerneos Security Service.
- */
-public interface IKerneosSecurityService {
+public interface IKerneosCore {
 
-    /**
-     * The different status associated to the session.
-     */
-    enum SecurityError {
-        NO_ERROR,
-        SESSION_EXPIRED,
-        INVALID_CREDENTIALS
-    }
+    void updateContext(HttpServletRequest request);
 
-    /**
-     * Login to Kerneos.
-     *
-     * @param username The username used for login.
-     * @param password The password used for login.
-     * @return True if the login is successful.
-     */
-    public boolean logIn(String username, String password);
-
-    /**
-     * Check the authorisation associated to the request.
-     *
-     * @return The status associated to the authorisation.
-     */
-    public SecurityError authorize();
-
-    /**
-     * Logout of Kerneos.
-     *
-     * @return True if the logout is successful.
-     */
-    public boolean logOut();
+    void updateContext(String destination, String method);
 }

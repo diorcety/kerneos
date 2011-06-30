@@ -26,9 +26,10 @@
 package org.ow2.kerneos.login.loginmodule;
 
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 
+import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.manager.KerneosLogin;
 import org.ow2.kerneos.login.KerneosSession;
@@ -40,10 +41,15 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Component
-@Instantiate
 @Provides
 public class LoginService implements KerneosLogin {
 
+    @Property(name = "ID", mandatory = true)
+    @ServiceProperty(name = "ID")
+    private String ID;
+
+    @Property(name = "module", mandatory = true)
+    private String MODULE;
     /**
      * CallbackHandler.
      */
@@ -53,7 +59,7 @@ public class LoginService implements KerneosLogin {
         this.handler = new NoInputCallbackHandler(user, password);
         try {
             // Obtain a LoginContext
-            LoginContext lc = new LoginContext("kerneos-" + application, this.handler);
+            LoginContext lc = new LoginContext(MODULE, this.handler);
 
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             lc.login();

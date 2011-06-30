@@ -41,7 +41,7 @@
     <flex.version>4.1.0.16076</flex.version>
     <ipojo.version>1.8.0</ipojo.version>
     <junit.version>3.8.1</junit.version>
-    <kerneos.version>2.0.0-M1-SNAPSHOT</kerneos.version>
+    <kerneos.version>2.1.0-SNAPSHOT</kerneos.version>
     <maven-bundle.version>2.3.4</maven-bundle.version>
     <maven-compiler.version>2.3.2</maven-compiler.version>
     <maven-dependency.version>2.0</maven-dependency.version>
