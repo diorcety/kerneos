@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-      <version>1.8.0</version>
+      <version>${ipojo.annotations.version}</version>
       <scope>provided</scope>
     </dependency>
 

@@ -24,7 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -45,15 +47,24 @@
   </url>
 
   <properties>
-    <!-- Library versions -->
+    <!-- GraniteDS -->
     <graniteds-osgi.version>1.0.0-M1</graniteds-osgi.version>
+    
+    <!-- Flex -->
     <cairngorm.version>2.2.5-SNAPSHOT</cairngorm.version>
     <flexlib.version>2.6-SNAPSHOT</flexlib.version>
     <flexiframe.version>1.4.3</flexiframe.version>
     <flex.version>4.1.0.16076</flex.version>
     <player.version>10.0</player.version>
 
-    <!-- Plugin versions -->
+    <!-- iPOJO -->
+    <ipojo.version>1.8.0</ipojo.version>
+    <ipojo.annotations.version>1.8.0</ipojo.annotations.version>
+    <ipojo.eventadmin.version>1.8.0</ipojo.eventadmin.version>
+    <ipojo.api.version>1.6.0</ipojo.api.version>
+    <ipojo.extender.version>1.4.0</ipojo.extender.version>
+
+    <!-- Plugins -->
     <flexmojos.version>3.7.1</flexmojos.version>
     <maven.compiler>2.3.2</maven.compiler>
 
@@ -280,7 +291,7 @@
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-ipojo-plugin</artifactId>
-          <version>1.8.0</version>
+          <version>${ipojo.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
