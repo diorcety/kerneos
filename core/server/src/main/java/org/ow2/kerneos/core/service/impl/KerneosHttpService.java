@@ -79,6 +79,8 @@ public class KerneosHttpService implements HttpContext {
     private static Log logger = LogFactory.getLog(KerneosHttpService.class);
     private static final String PREFIX = "bundle:/";
     private static final String PREFIX2 = "bundle://";
+    private static final String PREFIX_EQUINOX = "bundleresource:/";
+    private static final String PREFIX_EQUINOX2 = "bundleresource://";
 
     @ServiceProperty(name = "ID")
     String contextID;
@@ -140,10 +142,18 @@ public class KerneosHttpService implements HttpContext {
             graniteChannel.update(properties);
         }
 
+        String name = applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString();
+
+         //The name parameter must not end with slash ('/')
+        if ((name.charAt(name.length()-1) == '/') || (name.charAt(name.length()-1) == '\\')) {
+          name = name.substring(0, name.length()-1);
+        }
+
+        logger.info("Register Resources - Url: " + applicationURL + " - Alias: " + name);
+
         // Register Kerneos Application resources
         httpService.registerResources(applicationURL,
-                applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString(),
-                this);
+                name,this);
 
         httpService.registerResources(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME,
                 KerneosConstants.KERNEOS_SWF_NAME, this);
@@ -178,8 +188,18 @@ public class KerneosHttpService implements HttpContext {
             moduleBundleMap.put(moduleBundle.getId(), moduleBundle);
         }
 
-        httpService.registerResources(applicationBundle.getApplication().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId(),
-                moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString(), this);
+        String name = moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString();
+
+         //The name parameter must not end with slash ('/')
+        if ((name.charAt(name.length()-1) == '/') || (name.charAt(name.length()-1) == '\\')) {
+          name = name.substring(0, name.length()-1);
+        }
+
+        logger.info("Register Module Resources - Url: " + applicationBundle.getApplication().getApplicationUrl() + "/" +
+                KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId() + " - Alias: " + name);
+
+        httpService.registerResources(applicationBundle.getApplication().getApplicationUrl() + "/" +
+                KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId(), name, this);
     }
 
     /**
@@ -213,13 +233,19 @@ public class KerneosHttpService implements HttpContext {
      * @return the URL type which permits to acced to the resource.
      */
     public URL getResource(final String name) {
-        if (name.startsWith(PREFIX)) {
+        if (name.startsWith(PREFIX) ||
+                name.startsWith(PREFIX_EQUINOX)) {
             try {
-                // Fix Jetty bug
-                if (!name.startsWith(PREFIX2)) {
-                    return new URL("bundle://" + name.substring(PREFIX.length()));
+                // Fix apache.felix.http.jetty bug for felix and equinox
+                if ((name.startsWith(PREFIX) && !name.startsWith(PREFIX2))) {
+                    String resourceUrl = PREFIX2 + name.substring(PREFIX.length());
+                    return new URL(resourceUrl);
                 } else {
-                    return new URL(name);
+                    if (name.startsWith(PREFIX_EQUINOX) && !name.startsWith(PREFIX_EQUINOX2)) {
+                       return new URL(PREFIX_EQUINOX2 + name.substring(PREFIX_EQUINOX.length()));
+                    } else {
+                        return new URL(name);
+                    }
                 }
             } catch (MalformedURLException e) {
                 return null;
