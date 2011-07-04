@@ -35,11 +35,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}-packaging-felix</artifactId>
+  <artifactId>${artifactId}-packaging-war</artifactId>
   <version>${version}</version>
-  <name>${groupId} :: ${artifactId} :: Packaging :: Felix</name>
+  <name>${groupId} :: ${artifactId} :: Packaging :: War</name>
+  <packaging>war</packaging>
 
-  <repositories>
+ <repositories>
     <repository>
       <id>ops4j.repository</id>
       <url>http://repository.ops4j.org/maven2</url>
@@ -64,6 +65,11 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>com.springsource.repository.bundles.external</id>
+      <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+      <url>http://repository.springsource.com/maven/bundles/external</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -75,12 +81,7 @@
       <artifactId>${application.artifactId}</artifactId>
       <type>bundle</type>
     </dependency>
-    <!--Felix Dependency-->
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.main</artifactId>
-      <type>bundle</type>
-    </dependency>
+    <!--Felix Dependencies-->
     <dependency>
       <groupId>org.ops4j.pax.confman</groupId>
       <artifactId>pax-confman-propsloader</artifactId>
@@ -98,42 +99,12 @@
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.bundlerepository</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.configadmin</artifactId>
       <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.eventadmin</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.fileinstall</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.gogo.command</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.gogo.runtime</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.gogo.shell</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.http.jetty</artifactId>
       <type>bundle</type>
     </dependency>
     <dependency>
@@ -149,11 +120,6 @@
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
       <type>bundle</type>
     </dependency>
     <dependency>
@@ -187,6 +153,17 @@
       <artifactId>granite-gravity</artifactId>
       <type>bundle</type>
     </dependency>
+    <!-- Asynchronous communication dependencies -->
+    <dependency>
+      <groupId>javax.jms</groupId>
+      <artifactId>com.springsource.javax.jms</artifactId>
+      <type>bundle</type>
+    </dependency>
+    <dependency>
+      <groupId>javax.transaction</groupId>
+      <artifactId>com.springsource.javax.transaction</artifactId>
+      <type>bundle</type>
+    </dependency>
     <!--Kerneos Core Dependency-->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
@@ -198,24 +175,44 @@
 
   <build>
     <plugins>
+      <!-- Copy needed dependencies bundles into the plugins folder-->
       <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptors>
-            <descriptor>src/main/assembly.xml</descriptor>
-          </descriptors>
-        </configuration>
+        <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
+            <phase>prepare-package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>copy-dependencies</goal>
             </goals>
+            <configuration>
+              <excludeTransitive>true</excludeTransitive>
+              <outputDirectory>${project.build.directory}/${artifactId}-packaging-war-${version}/WEB-INF/eclipse/plugins</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
+
+      <!-- Build the war artifact excluding somme lib jars not needed  -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <warName>bridge</warName>
+          <packagingIncludes>WEB-INF/web.xml,WEB-INF/eclipse/**,WEB-INF/lib/servletbridge.jar</packagingIncludes>
+          <webResources>
+            <!-- Replace ${application.artifactId}-${version} for the right application bundle name in the config.ini file -->
+            <resource>
+              <directory>src/main/webapp/WEB-INF/eclipse/configuration</directory>
+              <filtering>true</filtering>
+              <targetPath>WEB-INF/eclipse/configuration</targetPath>
+              <includes>
+                <include>config.ini</include>
+              </includes>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
 </project>

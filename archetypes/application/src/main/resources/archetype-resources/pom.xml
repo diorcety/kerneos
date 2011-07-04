@@ -63,8 +63,10 @@
     <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
     <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
     <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
-    <kerneos-core-server.version>2.0.0</kerneos-core-server.version>
+    <kerneos-core-server.version>2.1.0-SNAPSHOT</kerneos-core-server.version>
     <maven-assembly-plugin.version>2.2.1</maven-assembly-plugin.version>
+    <com.springsource.javax.transaction.version>1.1.0</com.springsource.javax.transaction.version>
+    <com.springsource.javax.jms.version>1.1.0</com.springsource.javax.jms.version>
   </properties>
 
 
@@ -222,6 +224,21 @@
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-gravity</artifactId>
         <version>${graniteds-osgi.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
+      </dependency>
+      <!-- Asynchronous communication dependencies -->
+      <dependency>
+        <groupId>javax.transaction</groupId>
+        <artifactId>com.springsource.javax.transaction</artifactId>
+        <version>${com.springsource.javax.transaction.version}</version>
+        <type>bundle</type>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.jms</groupId>
+        <artifactId>com.springsource.javax.jms</artifactId>
+        <version>${com.springsource.javax.jms.version}</version>
         <type>bundle</type>
         <scope>runtime</scope>
       </dependency>

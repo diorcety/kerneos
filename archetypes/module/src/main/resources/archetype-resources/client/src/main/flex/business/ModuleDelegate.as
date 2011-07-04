@@ -43,7 +43,7 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
             {
                 // find the service
                 // "hello_service" is defined in kerneos-module.xml as
-                // <service id="hello_service" destination="HelloService"/>
+                // <service id="hello_service"/>
                 var service : Object = ServiceLocator.getInstance().getRemoteObject("hello_service");
                 
                 // Make the service call. The method called on service is the method name

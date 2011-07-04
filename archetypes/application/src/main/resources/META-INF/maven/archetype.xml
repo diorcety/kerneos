@@ -46,6 +46,7 @@
     <resource>kerneos/src/main/resources/META-INF/kerneos-application.xml</resource>
 
     <!-- Packaging resources -->
+    <resource>packaging/pom.xml</resource>
     <!-- Felix resources -->
     <resource>packaging/felix/src/main/resources/conf/services/org.ops4j.pax.logging.properties</resource>
     <resource>packaging/felix/src/main/resources/conf/config.properties</resource>
@@ -57,8 +58,24 @@
     <resource>packaging/felix/src/main/resources/start.sh</resource>
     <resource>packaging/felix/src/main/assembly.xml</resource>
     <resource>packaging/felix/pom.xml</resource>
-    <resource>packaging/pom.xml</resource>
+    <!-- War resources -->
+    <resource>packaging/war/pom.xml</resource>
+    <resource>packaging/war/src/main/webapp/WEB-INF/web.xml</resource>
+    <resource>packaging/war/src/main/webapp/WEB-INF/eclipse/launch.ini</resource>
+    <resource>packaging/war/src/main/webapp/WEB-INF/eclipse/.eclipseproduct</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/configuration/config.ini</resource>
+    <resource>packaging/war/src/main/webapp/WEB-INF/eclipse/features/org.eclipse.equinox.servletbridge.feature_1.0.0/feature.xml</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/javax.servlet_2.4.0.v200706111738.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.equinox.http.servlet_1.1.0.v20100503.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.osgi.services_3.2.100.v20100503.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.apache.commons.logging_1.0.4.v201005080501.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.equinox.http.servletbridge_1.0.0.200704022148.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.update.configurator_3.2.100.v20070322.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.equinox.common_3.6.0.v20100503.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.equinox.registry_3.5.0.v20100503.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.equinox.http.registry_1.1.1.R36x_v20101103.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/eclipse/plugins/org.eclipse.osgi_3.6.2.R36x_v20110210.jar</resource>
+    <resource filtered="false">packaging/war/src/main/webapp/WEB-INF/lib/servletbridge.jar</resource>
 
   </resources>
-
 </archetype>

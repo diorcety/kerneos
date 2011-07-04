@@ -43,6 +43,7 @@
 
   <modules>
     <module>felix</module>
+    <module>war</module>
   </modules>
 
 </project>
