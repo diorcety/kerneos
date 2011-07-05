@@ -48,7 +48,7 @@
                 //             Action to do when the module is closed         //
                 //                                                            //
                 ////////////////////////////////////////////////////////////////
-                /**
+                /*
                  // Remove all the commands to the pool of commands
                  // Example:
                  controller.removeCommands();
