@@ -159,6 +159,12 @@ public class KerneosHttpService implements HttpContext {
                 KerneosConstants.KERNEOS_SWF_NAME, this);
 
         logger.info("Create Map \"" + applicationBundle.getId() + "\" -> \"" + applicationURL + "\"");
+
+        logger.info("###########################################################################");
+        logger.info("Your application main URL is register as : " + applicationURL);
+        logger.info("Example URL : http://localhost:8080" + applicationURL + "/index.html");
+        logger.info("or http://localhost:8080/bridge" + applicationURL + "/index.html if you are in Tomcat");
+        logger.info("###########################################################################");
     }
 
     @Invalidate
