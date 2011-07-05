@@ -44,7 +44,10 @@
 
   <properties>
     <application.artifactId>${artifactId}-kerneos</application.artifactId>
-    <graniteds-osgi.version>1.0.0-M1</graniteds-osgi.version>
+    <granite-core.version>1.0.0-M1</granite-core.version>
+    <granite-gravity-ea.version>1.0.0-M1</granite-gravity-ea.version>
+    <granite-gravity-jms.version>1.0.0-M1</granite-gravity-jms.version>
+    <granite-gravity.version>1.0.0-M1</granite-gravity.version>
     <ow2-util-log.version>1.0.23</ow2-util-log.version>
     <org.apache.felix.main.version>3.0.8</org.apache.felix.main.version>
     <pax-confman-propsloader.version>0.2.2</pax-confman-propsloader.version>
@@ -202,28 +205,28 @@
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-core</artifactId>
-        <version>${graniteds-osgi.version}</version>
+        <version>${granite-core.version}</version>
         <type>bundle</type>
         <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-gravity-ea</artifactId>
-        <version>${graniteds-osgi.version}</version>
+        <version>${granite-gravity-ea.version}</version>
         <type>bundle</type>
         <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-gravity-jms</artifactId>
-        <version>${graniteds-osgi.version}</version>
+        <version>${granite-gravity-jms.version}</version>
         <type>bundle</type>
         <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.graniteds-osgi</groupId>
         <artifactId>granite-gravity</artifactId>
-        <version>${graniteds-osgi.version}</version>
+        <version>${granite-gravity.version}</version>
         <type>bundle</type>
         <scope>runtime</scope>
       </dependency>
