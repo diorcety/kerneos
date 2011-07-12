@@ -21,8 +21,7 @@
  * $Id$
  */
 
-package org.ow2.kerneos.core.vo
-{
+package org.ow2.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 
@@ -33,77 +32,84 @@ import com.adobe.cairngorm.vo.IValueObject;
  */
 [RemoteClass(alias="org.ow2.kerneos.core.config.generated.Application")]
 [Bindable]
-public class ApplicationVO implements IValueObject
-{
+public class ApplicationVO implements IValueObject {
     // =========================================================================
     // Properties
     // =========================================================================
-    
+
     // Settings
-    
+
     /**
      * The name of the project (totally random example: "JASMINe").
      */
-    public var applicationProject : String = "JASMINe";
-    
+    public var applicationProject:String = "JASMINe";
+
     /**
      * The name of the application.
      */
-    public var applicationName : String = "Kerneos";
+    public var applicationName:String = "Kerneos";
 
     /**
      * The url of the application
      */
-    public var applicationUrl : String = "/kerneos";
-    
+    public var applicationUrl:String = "/kerneos";
+
     /**
      * The path to the application logo (64x64 image).
      */
-    public var applicationLogo : String = null;
-    
+    public var applicationLogo:String = null;
+
     /**
      * Allow to show the taskbar "Minimize all" button.
      */
-    public var showMinimizeAllButton : Boolean = true;
-    
+    public var showMinimizeAllButton:Boolean = true;
+
     /**
      * Allow to show the taskbar "cascade" button.
      */
-    public var showCascadeButton : Boolean = true;
-    
+    public var showCascadeButton:Boolean = true;
+
     /**
      * Allow to show the taskbar "tile" button.
      */
-    public var showTileButton : Boolean = true;
-    
+    public var showTileButton:Boolean = true;
+
     /**
      * Allow to show notification popups.
      */
-    public var showNotificationPopups : Boolean = true;
-    
+    public var showNotificationPopups:Boolean = true;
+
     /**
      * Allow to show notification popups, even on windows that have the focus.
      */
-    public var showPopupsFromActiveWindow : Boolean = false;
-    
+    public var showPopupsFromActiveWindow:Boolean = false;
+
     /**
      * Enable notifications logging.
      */
-    public var enableNotificationsLog : Boolean = true;
-    
+    public var enableNotificationsLog:Boolean = true;
+
     /**
      * Show a "confirm close" dialog when closing the browser window.
      */
-    public var showConfirmCloseDialog : Boolean = true;
-    
-    /**
-     * Set the default language used in Kerneos when loading.
-     */
-    public var defaultLanguage : String = "en_US";
+    public var showConfirmCloseDialog:Boolean = true;
 
     /**
      * Set the default language used in Kerneos when loading.
      */
-    public var authentication : AuthenticationVO;
+    public var defaultLanguage:String = "en_US";
+
+    /**
+     * Set the default language used in Kerneos when loading.
+     */
+    public var authentication:AuthenticationVO;
+
+
+    /**
+     * Constructor
+     */
+    function ApplicationVO() {
+
+    }
 }
 }

@@ -24,7 +24,8 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -52,6 +53,24 @@
       <artifactId>flex-framework</artifactId>
       <version>${flex.version}</version>
       <type>pom</type>
+    </dependency>
+
+    <!-- Theme -->
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
+      <type>css</type>
+      <scope>theme</scope>
     </dependency>
   </dependencies>
 

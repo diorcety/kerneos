@@ -34,5 +34,12 @@ public class ProfileServiceVO {
 
     [ArrayElementType('org.ow2.kerneos.profile.vo.ProfileMethodVO')]
     public var methods:ArrayCollection = null;
+
+    /**
+     * Constructor
+     */
+    function ProfileServiceVO() {
+
+    }
 }
 }

@@ -158,6 +158,14 @@ package com.adobe.cairngorm.control
       */ 
       protected var commands : Dictionary = new Dictionary();
 
+      /**
+       * Constructor
+       */
+      function FrontController()
+      {
+
+      }
+
      /**
       * Registers a ICommand class with the Front Controller, against an event name
       * and listens for events with that name.

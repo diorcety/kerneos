@@ -31,5 +31,12 @@ public class ProfileModuleVO {
 
     [ArrayElementType('org.ow2.kerneos.profile.vo.ProfileRuleVO')]
     public var rules:ArrayCollection = null;
+
+    /**
+     * Constructor
+     */
+    function ProfileModuleVO() {
+
+    }
 }
 }

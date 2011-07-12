@@ -450,6 +450,7 @@ mx|Alert {
     down-skin: Embed("./minimize_up.png");
 }
 
+/*
 mx|TabBar {
     selected-tab-text-style-name: tabBarButtonSelected;
     tab-style-name: tabBarButton;
@@ -476,6 +477,7 @@ mx|TabBar {
     text-roll-over-color: #003399;
     color: #003399;
 }
+*/
 
 .leftArrowButton {
     up-skin: Embed("./left_arrow_up.gif");

@@ -44,7 +44,15 @@ package com.adobe.cairngorm.business
    internal class HTTPServices extends AbstractServices
    {
       private var services : Dictionary = new Dictionary();
-      
+
+      /**
+       * Constructor
+       */
+      function HTTPServices()
+      {
+
+      }
+
       /**
        * Register the services.
        * @param serviceLocator the IServiceLocator instance.

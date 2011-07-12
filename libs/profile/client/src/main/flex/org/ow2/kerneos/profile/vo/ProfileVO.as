@@ -34,5 +34,12 @@ public class ProfileVO {
 
     [ArrayElementType('org.ow2.kerneos.profile.vo.ProfileBundleVO')]
     public var bundles:ArrayCollection = null;
+
+    /**
+     * Constructor
+     */
+    function ProfileVO() {
+
+    }
 }
 }

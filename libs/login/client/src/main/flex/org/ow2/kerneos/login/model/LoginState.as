@@ -51,5 +51,13 @@ public class LoginState {
      * When Logout.
      */
     public static var LOGGED:String = "logged";
+
+    /**
+     * Constructor
+     */
+    function LoginState()
+    {
+
+    }
 }
 }

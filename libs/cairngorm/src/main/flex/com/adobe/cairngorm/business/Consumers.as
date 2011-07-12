@@ -45,6 +45,13 @@ internal class Consumers extends AbstractServices {
     private var services:Dictionary = new Dictionary();
 
     /**
+     * Constructor
+     */
+    function Consumers()
+    {
+
+    }
+    /**
      * Register the services.
      * @param serviceLocator the IServiceLocator instance.
      */

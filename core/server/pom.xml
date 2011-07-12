@@ -258,22 +258,19 @@
         <configuration>
           <instructions>
             <Include-Resource>
+              {maven-resources}, {maven-dependencies},
               ${project.build.directory}/kerneos
             </Include-Resource>
             <Export-Package>
               org.ow2.kerneos.core;version=${project.version},
-              org.ow2.kerneos.core.config;version=${project.version},
               org.ow2.kerneos.core.config.*;version=${project.version},
               org.ow2.kerneos.core.manager;version=${project.version},
               org.ow2.kerneos.core.service;version=${project.version},
               org.ow2.kerneos.core.service.util;version=${project.version},
               org.ow2.kerneos.login;version=${project.version},
-              org.ow2.kerneos.login.*;version=${project.version},
-              org.ow2.kerneos.profile;version=${project.version},
               org.ow2.kerneos.profile.*;version=${project.version},
             </Export-Package>
             <Private-Package>
-              org.ow2.kerneos.core.login.impl,
               org.ow2.kerneos.core.service.impl.*
             </Private-Package>
           </instructions>

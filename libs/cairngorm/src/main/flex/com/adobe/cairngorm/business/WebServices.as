@@ -43,6 +43,15 @@ package com.adobe.cairngorm.business
     */
    internal class WebServices extends AbstractServices
    {
+
+      /**
+       * Constructor
+       */
+      function WebServices()
+      {
+
+      }
+
       private var services : Dictionary = new Dictionary();
       
       /**

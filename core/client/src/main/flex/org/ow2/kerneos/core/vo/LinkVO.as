@@ -58,6 +58,13 @@ public class LinkVO extends ModuleVO implements IValueObject {
     public var url:String = null;
 
 
+    /**
+     * Constructor
+     */
+    function LinkVO() {
+
+    }
+
     // =========================================================================
     // Public methods
     // =========================================================================

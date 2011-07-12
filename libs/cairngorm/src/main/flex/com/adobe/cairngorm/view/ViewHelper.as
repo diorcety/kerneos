@@ -80,8 +80,16 @@ package com.adobe.cairngorm.view
       /**
       * The id of the view 
       */
-      protected var id : String;      
-      
+      protected var id : String;
+
+      /**
+       * Constructor
+       */
+      function ViewHelper()
+      {
+
+      }
+
       /**
        * On initialization, the view is initialized with the <code>ViewLocator</code>
        * with the <code>ViewLocator</code>, using its <code>id</code>.

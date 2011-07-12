@@ -45,6 +45,14 @@ internal class Producers extends AbstractServices {
     private var services:Dictionary = new Dictionary();
 
     /**
+     * Constructor
+     */
+    function Producers()
+    {
+
+    }
+
+    /**
      * Register the services.
      * @param serviceLocator the IServiceLocator instance.
      */

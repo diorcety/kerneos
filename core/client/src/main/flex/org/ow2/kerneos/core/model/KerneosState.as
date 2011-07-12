@@ -65,5 +65,12 @@ public class KerneosState {
      */
     public static var DISCONNECTED:String = "disconnected";
 
+    /**
+     * Constructor
+     */
+    function KerneosState()
+    {
+
+    }
 }
 }

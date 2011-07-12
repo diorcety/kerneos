@@ -140,7 +140,7 @@ public class KerneosButtonScrollingCanvas extends Canvas
      */
     private static function initializeStyles() : void
     {
-        var selector : CSSStyleDeclaration = StyleManager.getStyleDeclaration("KerneosButtonScrollingCanvas");
+        var selector : CSSStyleDeclaration = StyleManager.getStyleManager(null).getStyleDeclaration("KerneosButtonScrollingCanvas");
         
         if (!selector)
         {
@@ -155,11 +155,11 @@ public class KerneosButtonScrollingCanvas extends Canvas
             this.rightButtonStyleName = "rightButton";
         }
         
-        StyleManager.setStyleDeclaration("KerneosButtonScrollingCanvas", selector, false);
+        StyleManager.getStyleManager(null).setStyleDeclaration("KerneosButtonScrollingCanvas", selector, false);
         
         // Style for the left arrow for tab scrolling
         var upStyleName : String = selector.getStyle("upButtonStyleName");
-        var upSelector : CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + upStyleName);
+        var upSelector : CSSStyleDeclaration = StyleManager.getStyleManager(null).getStyleDeclaration("." + upStyleName);
         
         if (!upSelector)
         {
@@ -173,11 +173,11 @@ public class KerneosButtonScrollingCanvas extends Canvas
             this.cornerRadius = 0;
         }
         
-        StyleManager.setStyleDeclaration("." + upStyleName, upSelector, false);
+        StyleManager.getStyleManager(null).setStyleDeclaration("." + upStyleName, upSelector, false);
         
         // Style for the down arrow button
         var downStyleName : String = selector.getStyle("downButtonStyleName");
-        var downSelector : CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + downStyleName);
+        var downSelector : CSSStyleDeclaration = StyleManager.getStyleManager(null).getStyleDeclaration("." + downStyleName);
         
         if (!downSelector)
         {
@@ -191,11 +191,11 @@ public class KerneosButtonScrollingCanvas extends Canvas
             this.cornerRadius = 0;
         }
         
-        StyleManager.setStyleDeclaration("." + downStyleName, downSelector, false);
+        StyleManager.getStyleManager(null).setStyleDeclaration("." + downStyleName, downSelector, false);
         
         // Style for the left arrow button
         var leftStyleName : String = selector.getStyle("leftButtonStyleName");
-        var leftSelector : CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + leftStyleName);
+        var leftSelector : CSSStyleDeclaration = StyleManager.getStyleManager(null).getStyleDeclaration("." + leftStyleName);
         
         if (!leftSelector)
         {
@@ -209,11 +209,11 @@ public class KerneosButtonScrollingCanvas extends Canvas
             this.cornerRadius = 0;
         }
         
-        StyleManager.setStyleDeclaration("." + leftStyleName, leftSelector, false);
+        StyleManager.getStyleManager(null).setStyleDeclaration("." + leftStyleName, leftSelector, false);
         
         // Style for the right arrow button
         var rightStyleName : String = selector.getStyle("rightButtonStyleName");
-        var rightSelector : CSSStyleDeclaration = StyleManager.getStyleDeclaration("." + rightStyleName);
+        var rightSelector : CSSStyleDeclaration = StyleManager.getStyleManager(null).getStyleDeclaration("." + rightStyleName);
         
         if (!rightSelector)
         {
@@ -227,7 +227,7 @@ public class KerneosButtonScrollingCanvas extends Canvas
             this.cornerRadius = 0;
         }
         
-        StyleManager.setStyleDeclaration("." + rightStyleName, rightSelector, false);
+        StyleManager.getStyleManager(null).setStyleDeclaration("." + rightStyleName, rightSelector, false);
     
     }
     

@@ -21,8 +21,7 @@
  * $Id$
  */
 
-package org.ow2.kerneos.core.vo
-{
+package org.ow2.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 
@@ -35,22 +34,27 @@ import com.adobe.cairngorm.vo.IValueObject;
  */
 [RemoteClass(alias="org.ow2.kerneos.core.config.generated.Service")]
 [Bindable]
-public class ServiceVO implements IValueObject
-{
+public class ServiceVO implements IValueObject {
     /**
      * The id of the service.
      */
-    public var id : String = null;
-    
+    public var id:String = null;
+
     /**
      * The destination of the service.
      */
-    public var destination : String = null;
+    public var destination:String = null;
 
     /**
      *  Asynchronous service.
      */
-    public var asynchronous: Boolean = false;
+    public var asynchronous:Boolean = false;
 
+    /**
+     * Constructor
+     */
+    function ServiceVO() {
+
+    }
 }
 }

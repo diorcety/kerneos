@@ -29,5 +29,12 @@ public class ProfileRuleVO {
     public var role:String = null;
 
     public var policy:ProfilePolicyVO = null;
+
+    /**
+     * Constructor
+     */
+    function ProfileRuleVO() {
+
+    }
 }
 }

@@ -213,7 +213,7 @@
             verticalAlign="middle"
             horizontalAlign="center"
             horizontalScrollPolicy="off">
-    <mx:Text htmlText="{(level !== KerneosNotification.INFO)?level+': ':''}{message}"
+    <mx:Text htmlText="{(level != KerneosNotification.INFO)?level+': ':''}{message}"
              width="100%"
              textAlign="center"
              selectable="false"

@@ -47,5 +47,13 @@ public class ProfileState {
      * When the profile is loaded
      */
     public static var LOADED:String = "loaded";
+
+    /**
+     * Constructor
+     */
+    function ProfileState()
+    {
+
+    }
 }
 }

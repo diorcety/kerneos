@@ -44,7 +44,15 @@ package com.adobe.cairngorm.business
       // The variable for storing the timeout for the services.
       // Default to no timeout, same as Flex.
       private var _timeout : int = 0;
-      
+
+      /**
+       * Constructor
+       */
+      function AbstractServices()
+      {
+
+      }
+
       /**
        * Register the services.
        * @param serviceLocator the IServiceLocator isntance.

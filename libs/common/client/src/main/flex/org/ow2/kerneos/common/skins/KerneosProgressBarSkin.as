@@ -27,6 +27,8 @@ package org.ow2.kerneos.common.skins
 
 import flash.filters.DropShadowFilter;
 
+import mx.core.FlexGlobals;
+
 import mx.skins.Border;
 import mx.styles.StyleManager;
 import mx.utils.ColorUtil;
@@ -90,7 +92,7 @@ public class KerneosProgressBarSkin extends Border
         
         // Retrieve the user-defined styles
         var barColorStyle : * = getStyle("barColor");
-        var barColor : uint = StyleManager.isValidStyleValue(barColorStyle) ? barColorStyle : getStyle("themeColor");
+        var barColor : uint = StyleManager.getStyleManager(null).isValidStyleValue(barColorStyle) ? barColorStyle : getStyle("themeColor");
         
         // Draw the progress bar
         graphics.clear();

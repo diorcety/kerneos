@@ -20,8 +20,7 @@
  *
  * $Id$
  */
-package org.ow2.kerneos.core.vo
-{
+package org.ow2.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 
@@ -33,26 +32,32 @@ import com.adobe.cairngorm.vo.IValueObject;
  */
 [RemoteClass(alias="org.ow2.kerneos.core.config.generated.IframeModule")]
 [Bindable]
-public class IFrameModuleVO extends ModuleWithWindowVO implements IValueObject
-{
-    
+public class IFrameModuleVO extends ModuleWithWindowVO implements IValueObject {
+
     // =========================================================================
     // Properties
     // =========================================================================
-    
+
     /**
      * The web page URL.
      */
-    public var url : String = null;
-    
+    public var url:String = null;
+
     /**
-    * Show the "Open in browser" button.
-    */
-    public var showOpenInBrowserButton : Boolean = false;
-    
+     * Show the "Open in browser" button.
+     */
+    public var showOpenInBrowserButton:Boolean = false;
+
     /**
-    * Show the history navigation buttons.
-    */
-    public var showHistoryNavigationButtons : Boolean = false;
+     * Show the history navigation buttons.
+     */
+    public var showHistoryNavigationButtons:Boolean = false;
+
+    /**
+     * Constructor
+     */
+    function IFrameModuleVO() {
+
+    }
 }
 }

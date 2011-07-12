@@ -25,7 +25,8 @@
  - $Id$
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <parent>
     <groupId>org.ow2.kerneos</groupId>
@@ -43,14 +44,16 @@
     <docbkx.html.dir>${project.build.directory}/docbkx/html</docbkx.html.dir>
     <docbkx.pdf.dir>${project.build.directory}/docbkx/pdf</docbkx.pdf.dir>
   </properties>
-  
+
   <distributionManagement>
     <site>
       <id>kerneos-doc.website</id>
-      <url>scp://${maven.username}@jupiter.objectweb.org/var/lib/gforge/chroot/home/groups/jasmine/htdocs/doc/docbkx/${artifactId}/${project.version}</url>
+      <url>
+        scp://${maven.username}@jupiter.objectweb.org/var/lib/gforge/chroot/home/groups/jasmine/htdocs/doc/docbkx/${project.artifactId}/${project.version}
+      </url>
     </site>
   </distributionManagement>
-  
+
   <build>
 
     <pluginManagement>
@@ -89,28 +92,28 @@
 
     <plugins>
       <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-resources-plugin</artifactId>
-      <executions>
-        <execution>
-          <goals>
-            <goal>copy-resources</goal>
-          </goals>
-          <phase>process-resources</phase>
-        </execution>
-      </executions>
-      <configuration>
-        <outputDirectory>${docbkx.html.dir}</outputDirectory>
-        <resources>
-          <resource>
-            <directory>${project.basedir}/src/resources</directory>
-          </resource>
-          <resource>
-            <directory>${project.basedir}/src/xslt</directory>
-            <filtering>true</filtering>
-          </resource>
-        </resources>
-      </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>process-resources</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDirectory>${docbkx.html.dir}</outputDirectory>
+          <resources>
+            <resource>
+              <directory>${project.basedir}/src/resources</directory>
+            </resource>
+            <resource>
+              <directory>${project.basedir}/src/xslt</directory>
+              <filtering>true</filtering>
+            </resource>
+          </resources>
+        </configuration>
       </plugin>
 
       <plugin>
@@ -172,8 +175,8 @@
                 <configuration>
                   <tasks>
                     <delete>
-                      <fileset dir="${docbkx.pdf.dir}" includes="*.fo" />
-                      <fileset dir="${docbkx.html.dir}" includes="*.xsl" />
+                      <fileset dir="${docbkx.pdf.dir}" includes="*.fo"/>
+                      <fileset dir="${docbkx.html.dir}" includes="*.xsl"/>
                     </delete>
                   </tasks>
                 </configuration>
@@ -300,7 +303,7 @@
       </activation>
       <build>
         <plugins>
-            <plugin>
+          <plugin>
             <artifactId>maven-site-plugin</artifactId>
             <executions>
               <execution>

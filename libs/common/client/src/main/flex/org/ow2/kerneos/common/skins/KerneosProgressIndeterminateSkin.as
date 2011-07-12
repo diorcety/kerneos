@@ -28,6 +28,8 @@ package org.ow2.kerneos.common.skins
 import flash.display.Graphics;
 import flash.filters.DropShadowFilter;
 
+import mx.core.FlexGlobals;
+
 import mx.skins.Border;
 import mx.styles.StyleManager;
 import mx.utils.ColorUtil;
@@ -86,8 +88,8 @@ public class KerneosProgressIndeterminateSkin extends Border
         
         // Retrieve the user-defined styles
         var fillColors : Array = getStyle("trackColors") as Array;
-        StyleManager.getColorNames(fillColors);
-        var fillColor : uint = StyleManager.isValidStyleValue(fillColors[0]) ? fillColors[0] : 0x666666;
+        StyleManager.getStyleManager(null).getColorNames(fillColors);
+        var fillColor : uint = StyleManager.getStyleManager(null).isValidStyleValue(fillColors[0]) ? fillColors[0] : 0x666666;
         
         // Compute the hatch interval        
         var hatchInterval : Number = getStyle("indeterminateMoveInterval");

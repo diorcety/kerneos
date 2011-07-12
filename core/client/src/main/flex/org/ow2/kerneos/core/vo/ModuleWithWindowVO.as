@@ -83,5 +83,12 @@ public class ModuleWithWindowVO extends ModuleVO implements IValueObject {
 
     public var promptBeforeClose:PromptBeforeCloseVO = PromptBeforeCloseVO.DEFAULT;
 
+
+    /**
+     * Constructor
+     */
+    function ModuleWithWindowVO() {
+
+    }
 }
 }

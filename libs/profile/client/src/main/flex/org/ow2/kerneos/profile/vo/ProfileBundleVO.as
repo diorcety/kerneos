@@ -37,5 +37,12 @@ public class ProfileBundleVO {
 
     [ArrayElementType('org.ow2.kerneos.profile.vo.ProfileServiceVO')]
     public var services:ArrayCollection = null;
+
+    /**
+     * Constructor
+     */
+    function ProfileBundleVO() {
+
+    }
 }
 }

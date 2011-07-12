@@ -50,6 +50,15 @@
       <version>${maven.enforcer.version}</version>
     </dependency>
 
+    <!-- GraniteDS OSGi -->
+    <dependency>
+      <groupId>org.graniteds-osgi</groupId>
+      <artifactId>granite-swc</artifactId>
+      <version>${graniteds-osgi.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+
     <!-- Flex SDK dependencies-->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
@@ -58,13 +67,22 @@
       <type>pom</type>
     </dependency>
 
-    <!-- GraniteDS OSGi -->
+    <!-- Theme -->
     <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-swc</artifactId>
-      <version>${graniteds-osgi.version}</version>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
       <type>swc</type>
-      <scope>external</scope>
+      <scope>theme</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
+      <type>css</type>
+      <scope>theme</scope>
     </dependency>
   </dependencies>
 

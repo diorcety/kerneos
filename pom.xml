@@ -67,6 +67,8 @@
     <maven.enforcer.version>1.0-alpha-3</maven.enforcer.version>
     <maven.bundle.version>2.3.4</maven.bundle.version>
     <maven.ipojo.version>1.8.0</maven.ipojo.version>
+    <maven.deploy.version>2.6</maven.deploy.version>
+    <maven.resources.version>2.5</maven.resources.version>
     <maven.compiler>2.3.2</maven.compiler>
 
     <!-- Settings -->
@@ -171,6 +173,7 @@
           <extensions>true</extensions>
           <configuration>
             <ignoreVersionIssues>true</ignoreVersionIssues>
+            <storepass />
             <debug>${flex-debug}</debug>
             <optimize>${flex-optimize}</optimize>
             <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
@@ -188,7 +191,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.6</version>
+          <version>${maven.deploy.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven.resources.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>

@@ -212,7 +212,7 @@ public class SharedObjectManager
     {
         if (_sharedObject == null || _sharedObject.data == null || _sharedObject.data.count == 0)
         {
-            return null;
+            return false;
         }
         
         var windowsIsMaximized : Boolean;
@@ -223,7 +223,7 @@ public class SharedObjectManager
         }
         catch (error : Error)
         {
-            return null;
+            return false;
         }
         
         return windowsIsMaximized;

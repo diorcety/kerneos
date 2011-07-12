@@ -20,8 +20,7 @@
  *
  * $Id$
  */
-package org.ow2.kerneos.core.vo
-{
+package org.ow2.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
@@ -35,22 +34,28 @@ import mx.collections.ArrayCollection;
  */
 [RemoteClass(alias="org.ow2.kerneos.core.config.generated.SwfModule")]
 [Bindable]
-public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject
-{
+public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject {
 
     // =========================================================================
     // Properties
     // =========================================================================
 
     /**
-    * The SWF file path.
-    */
-    public var file : String = null;
+     * The SWF file path.
+     */
+    public var file:String = null;
 
     /**
-    * The module services.
-    */
+     * The module services.
+     */
     [ArrayElementType('org.ow2.kerneos.core.vo.ServiceVO')]
-    public var services : ArrayCollection = null;
+    public var services:ArrayCollection = null;
+
+    /**
+     * Constructor
+     */
+    function SWFModuleVO() {
+
+    }
 }
 }

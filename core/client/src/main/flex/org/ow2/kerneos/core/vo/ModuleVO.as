@@ -101,6 +101,13 @@ public class ModuleVO implements IValueObject {
     public var loaded:Boolean = false;
 
 
+    /**
+     * Constructor
+     */
+    function ModuleVO() {
+
+    }
+
     // =========================================================================
     // Public methods
     // =========================================================================

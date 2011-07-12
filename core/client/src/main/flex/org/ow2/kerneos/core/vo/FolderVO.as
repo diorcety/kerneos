@@ -66,7 +66,14 @@ public class FolderVO extends ModuleWithWindowVO implements IValueObject {
      * The modules.
      */
     [ArrayElementType('org.ow2.kerneos.core.vo.ModuleVO')]
-    public var modules: ArrayCollection = null;
+    public var modules:ArrayCollection = null;
+
+    /**
+     * Constructor
+     */
+    function FolderVO() {
+
+    }
 
     // =========================================================================
     // Public methods

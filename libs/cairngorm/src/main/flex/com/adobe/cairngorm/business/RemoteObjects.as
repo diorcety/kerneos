@@ -46,7 +46,15 @@ package com.adobe.cairngorm.business
    internal class RemoteObjects extends AbstractServices
    {
       private var services : Dictionary = new Dictionary();
-      
+
+      /**
+       * Constructor
+       */
+      function RemoteObjects()
+      {
+
+      }
+
       /**
        * Register the services.
        * @param serviceLocator the IServiceLocator instance.

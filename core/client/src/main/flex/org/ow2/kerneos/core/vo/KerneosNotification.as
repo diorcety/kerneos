@@ -30,6 +30,7 @@ package org.ow2.kerneos.core.vo
 * 
 * @author Julien Nicoulaud
 */
+[Bindable]
 public class KerneosNotification
 {
     // =========================================================================
@@ -39,13 +40,11 @@ public class KerneosNotification
     /**
     * The module sending the event.
     */
-    [Bindable]
     public var module : ModuleVO;
     
     /**
     * The message carried by the event.
     */
-    [Bindable]
     public var message : String;
     
     /**
@@ -59,13 +58,11 @@ public class KerneosNotification
     /**
     * The level of the message.
     */
-    [Bindable]
     public var level : String;
     
     /**
     * The emission date of the message.
     */
-    [Bindable]
     public var date : Date;
     
     
