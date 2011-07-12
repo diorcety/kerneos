@@ -55,10 +55,10 @@
       <type>swc</type>
     </dependency>
     <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>flexlib-kerneos</artifactId>
+      <groupId>com.google.code.flexlib</groupId>
+      <artifactId>flexlib</artifactId>
       <type>swc</type>
-      <version>2.1.0-SNAPSHOT</version>
+      <version>${flexlib.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.flex-iframe</groupId>

@@ -50,7 +50,7 @@
 
     <!-- Flex -->
     <cairngorm.version>2.2.5-SNAPSHOT</cairngorm.version>
-    <flexlib.version>2.6-SNAPSHOT</flexlib.version>
+    <flexlib.version>2.6-M2</flexlib.version>
     <flexiframe.version>1.4.3</flexiframe.version>
     <flex.version>4.5.0.20967</flex.version>
     <player.version>10.1</player.version>
