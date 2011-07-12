@@ -148,7 +148,7 @@
          */
         private function startModule(e:Event):void {
             if (!module.loaded) {
-                ModulesLifeCycleManager.startModule(module);
+                ModulesLifeCycleManager.openModule(module);
             }
             else {
                 ModulesLifeCycleManager.bringToFront(module);

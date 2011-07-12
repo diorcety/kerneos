@@ -26,16 +26,21 @@
 package org.ow2.kerneos.login.loginmodule;
 
 import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 
 import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.Validate;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.manager.KerneosLogin;
 import org.ow2.kerneos.login.Session;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -43,6 +48,10 @@ import java.util.LinkedList;
 @Component
 @Provides
 public class LoginService implements KerneosLogin {
+    /**
+     * The logger.
+     */
+    private static Log logger = LogFactory.getLog(LoginService.class);
 
     @Property(name = "ID", mandatory = true)
     @ServiceProperty(name = "ID")
@@ -50,10 +59,21 @@ public class LoginService implements KerneosLogin {
 
     @Property(name = "module", mandatory = true)
     private String MODULE;
+
     /**
      * CallbackHandler.
      */
     private CallbackHandler handler = null;
+
+    @Validate
+    private void start() throws IOException {
+        logger.debug("Start LoginService(" + ID + ")");
+    }
+
+    @Invalidate
+    private void stop() throws IOException {
+        logger.debug("Stop LoginService(" + ID + ")");
+    }
 
     public void login(final String application, final String user, final String password) {
         this.handler = new NoInputCallbackHandler(user, password);

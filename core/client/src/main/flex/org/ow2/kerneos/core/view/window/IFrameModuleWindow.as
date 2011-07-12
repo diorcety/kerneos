@@ -78,7 +78,8 @@ public class IFrameModuleWindow extends ModuleWindow
     public function IFrameModuleWindow(module : IFrameModuleVO, frame : IFrame)
     {
         // Call super class constructor
-        super(module);
+        super();
+        this.module = module;
 
         // Assign properties
         this._frame = frame;

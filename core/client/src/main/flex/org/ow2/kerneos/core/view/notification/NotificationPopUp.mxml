@@ -37,149 +37,141 @@
     
     <fx:Script>
     <![CDATA[
-    
-    import mx.core.Container;
+        import mx.core.Container;
 
-    import org.ow2.kerneos.core.vo.KerneosNotification;
-    import org.ow2.kerneos.core.view.window.ModuleWindow;
-    import org.ow2.kerneos.core.vo.ModuleVO;
+        import org.ow2.kerneos.core.vo.KerneosNotification;
+        import org.ow2.kerneos.core.view.window.ModuleWindow;
+        import org.ow2.kerneos.core.vo.ModuleVO;
 
 
-    // =========================================================================
-    // Variables
-    // =========================================================================
-    
-    /**
-    * The time before it auto-closes (in ms)
-    */
-    public static var LIFE_TIME :int = 2500;
-    
-    /**
-    * The html text message
-    */
-    [Bindable]
-    public var message : String;
-    
-    /**
-    * The message level
-    */
-    [Bindable]
-    public var level : String;
-    
-    /**
-    * The window linked to this message
-    */
-    [Bindable]
-    public var window : ModuleWindow;
+        // =========================================================================
+        // Variables
+        // =========================================================================
 
-    [Bindable]
-    public var module : ModuleVO;
-    
-    
-    // Private vars
-    
-    /**
-    * The timer used to automatically close the popup
-    */
-    private var timer:Timer;
-    
-    /**
-    * Wether the popup has already been closed
-    */
-    private var closed : Boolean = false;
-    
-    
-    // =========================================================================
-    // Initialization
-    // =========================================================================
-    
-    /**
-    * Initialize the notification popup component
-    */
-    private function initComponent(e:Event=null):void
-    {
-        // Start the auto-close timer
-        startTimer();
-        
-        // Reset the timer when mouse is on the component
-        addEventListener(MouseEvent.MOUSE_OVER,stopTimer);
-        addEventListener(MouseEvent.MOUSE_OUT,startTimer);
-    }
-    
-    
-    // =========================================================================
-    // Public methods
-    // =========================================================================    
-    
-    /**
-    * Close the popup
-    */
-    public function close(e:Event=null):void
-    {
-        if (!closed) {
-            // Stop and delete the timer
-            stopTimer();
-            timer = null;
-            
-            // Mark the popup as closed
-            closed = true;
-            
-            // Remove this from the stage
-            this.visible = false;
-        }
-    }
-    
-    
-    // =========================================================================
-    // Private methods
-    // =========================================================================
-    
-    /**
-    * Start the auto-close timer
-    */
-    private function startTimer(e:Event=null):void
-    {
-        // If the timer is not initialized, create it
-        if (timer == null) {
-            timer = new Timer(LIFE_TIME,1);
-        } else {
-            timer.reset();
-        }
-        
-        // Then start it
-        timer.addEventListener(TimerEvent.TIMER,timerHandler, false, 0, true);
-        timer.start();
-    }
-    
-    /**
-    * Stop the auto-close timer
-    */
-    private function stopTimer(e:Event=null):void
-    {
-        if (timer !== null) {
-            // Stop and reset the timer
-            timer.reset();
-            timer.removeEventListener(TimerEvent.TIMER,timerHandler);
-        }
-    }
-    
-    
-    /**
-    * Handle the timer tick
-    */
-    private function timerHandler(e:Event):void
-    {
-        // If not already closed
-        if (!closed) {
-            
-            // Close the popup
-            close();
+        /**
+         * The time before it auto-closes (in ms)
+         */
+        public static var LIFE_TIME:int = 2500;
+
+        /**
+         * The html text message
+         */
+        [Bindable]
+        public var message:String;
+
+        /**
+         * The message level
+         */
+        [Bindable]
+        public var level:String;
+
+        /**
+         * The window linked to this message
+         */
+        [Bindable]
+        public var window:ModuleWindow;
+
+        [Bindable]
+        public var module:ModuleVO;
+
+
+        // Private vars
+
+        /**
+         * The timer used to automatically close the popup
+         */
+        private var timer:Timer;
+
+        /**
+         * Wether the popup has already been closed
+         */
+        private var closed:Boolean = false;
+
+
+        // =========================================================================
+        // Initialization
+        // =========================================================================
+
+        /**
+         * Initialize the notification popup component
+         */
+        private function initComponent(e:Event = null):void {
+            // Start the auto-close timer
+            startTimer();
+
+            // Reset the timer when mouse is on the component
+            addEventListener(MouseEvent.MOUSE_OVER, stopTimer);
+            addEventListener(MouseEvent.MOUSE_OUT, startTimer);
         }
 
-    }
 
-    
-    ]]>
+        // =========================================================================
+        // Public methods
+        // =========================================================================
+
+        /**
+         * Close the popup
+         */
+        public function close(e:Event = null):void {
+            if (!closed) {
+                // Stop and delete the timer
+                stopTimer();
+                timer = null;
+
+                // Mark the popup as closed
+                closed = true;
+
+                // Remove this from the stage
+                this.visible = false;
+            }
+        }
+
+
+        // =========================================================================
+        // Private methods
+        // =========================================================================
+
+        /**
+         * Start the auto-close timer
+         */
+        private function startTimer(e:Event = null):void {
+            // If the timer is not initialized, create it
+            if (timer == null) {
+                timer = new Timer(LIFE_TIME, 1);
+            } else {
+                timer.reset();
+            }
+
+            // Then start it
+            timer.addEventListener(TimerEvent.TIMER, timerHandler, false, 0, true);
+            timer.start();
+        }
+
+        /**
+         * Stop the auto-close timer
+         */
+        private function stopTimer(e:Event = null):void {
+            if (timer !== null) {
+                // Stop and reset the timer
+                timer.reset();
+                timer.removeEventListener(TimerEvent.TIMER, timerHandler);
+            }
+        }
+
+
+        /**
+         * Handle the timer tick
+         */
+        private function timerHandler(e:Event):void {
+            // If not already closed
+            if (!closed) {
+
+                // Close the popup
+                close();
+            }
+
+        }
+        ]]>
     </fx:Script>
 
     <fx:Declarations>

@@ -39,7 +39,6 @@ import flexlib.mdi.containers.MDIWindow;
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.core.FlexGlobals;
-import mx.core.UIComponent;
 import mx.events.CloseEvent;
 import mx.messaging.events.ChannelEvent;
 import mx.messaging.events.ChannelFaultEvent;
@@ -49,12 +48,10 @@ import mx.utils.UIDUtil;
 
 import org.granite.gravity.Consumer;
 import org.ow2.kerneos.common.event.KerneosNotificationEvent;
-import org.ow2.kerneos.common.util.IconUtility;
 import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
 import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
-import org.ow2.kerneos.core.view.notification.NotificationPopUp;
 import org.ow2.kerneos.core.view.window.FolderWindow;
 import org.ow2.kerneos.core.view.window.IFrameModuleWindow;
 import org.ow2.kerneos.core.view.window.MinimizedModuleWindow;
@@ -62,7 +59,6 @@ import org.ow2.kerneos.core.view.window.ModuleWindow;
 import org.ow2.kerneos.core.view.window.SwfModuleWindow;
 import org.ow2.kerneos.core.vo.FolderVO;
 import org.ow2.kerneos.core.vo.IFrameModuleVO;
-import org.ow2.kerneos.core.vo.KerneosNotification;
 import org.ow2.kerneos.core.vo.LinkVO;
 import org.ow2.kerneos.core.vo.ModuleEventVO;
 import org.ow2.kerneos.core.vo.ModuleVO;
@@ -173,7 +169,7 @@ public class ModulesLifeCycleManager {
 
         // If "load on startup", load it
         if (module is ModuleWithWindowVO && (module as ModuleWithWindowVO).loadOnStartup) {
-            desktop.callLater(startModule, [module]);
+            desktop.callLater(openModule, [module]);
         }
     }
 
@@ -181,9 +177,6 @@ public class ModulesLifeCycleManager {
      * Uninstall module
      */
     public static function uninstallModule(module:ModuleVO, notify:Boolean = false):void {
-
-        // Stop module
-        stopModule(module);
 
         // Remove from the module list.
         var model:KerneosModelLocator = KerneosModelLocator.getInstance();
@@ -224,7 +217,7 @@ public class ModulesLifeCycleManager {
     /**
      * Start a module.
      */
-    public static function startModule(module:ModuleVO):void {
+    public static function openModule(module:ModuleVO):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
@@ -242,7 +235,8 @@ public class ModulesLifeCycleManager {
             // If this is a swf module
             if (module is SWFModuleVO) {
                 // Create a window
-                window = new SwfModuleWindow(module as SWFModuleVO);
+                window = new SwfModuleWindow();
+                window.module = module as SWFModuleVO;
 
                 // Load Module
                 (window as SwfModuleWindow).load();
@@ -269,7 +263,8 @@ public class ModulesLifeCycleManager {
             (module as ModuleWithWindowVO).window = window;
 
             // Create the button in the taskbar
-            var minimizedModuleWindow:MinimizedModuleWindow = new MinimizedModuleWindow(window);
+            var minimizedModuleWindow:MinimizedModuleWindow = new MinimizedModuleWindow();
+            minimizedModuleWindow.window = window;
             desktop.minimizedWindowsButtonsContainer.addChild(minimizedModuleWindow);
             window.minimizedModuleWindow = minimizedModuleWindow;
 
@@ -288,9 +283,9 @@ public class ModulesLifeCycleManager {
     }
 
     /**
-     * Stop a module.
+     * Close a module.
      */
-    public static function stopModule(module:ModuleVO):void {
+    public static function closeModule(module:ModuleVO):void {
         // Check that desktop is not null
         checkDesktopNotNull();
 
@@ -299,8 +294,50 @@ public class ModulesLifeCycleManager {
 
         for each (var window:MDIWindow in allWindows) {
             if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
-                stopModuleByWindow(window as ModuleWindow);
-                desktop.windowContainer.windowManager.remove(window);
+                closeModuleByWindow(window as ModuleWindow);
+            }
+        }
+    }
+
+    /**
+     * Close a module by its window.
+     */
+    public static function closeModuleByWindow(window:ModuleWindow):void {
+        // Check that desktop is not null
+        checkDesktopNotNull();
+
+        // Clear window associated with the module
+        window.module.window = null;
+
+        // Update the module state
+        window.module.loaded = false;
+
+        // Set focus on desktop
+        desktop.setFocus();
+
+        // Remove the tasbar button
+        desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow);
+
+        // Remove from window manager
+        desktop.windowContainer.windowManager.remove(window);
+
+        // Stop the module
+        stopModuleByWindow(window);
+    }
+
+    /**
+     * Stop a module.
+     */
+    public static function stopModule(module:ModuleVO, cause:String = null):void {
+        // Check that desktop is not null
+        checkDesktopNotNull();
+
+        // Unload module and close it window
+        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+
+        for each (var window:MDIWindow in allWindows) {
+            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
+                stopModuleByWindow(window as ModuleWindow, cause);
             }
         }
     }
@@ -308,34 +345,19 @@ public class ModulesLifeCycleManager {
     /**
      * Stop a module by its window.
      */
-    public static function stopModuleByWindow(window:ModuleWindow):void {
-        // Check that desktop is not null
-        checkDesktopNotNull();
-
-        // Clear window associated with the module
-        window.module.window = null;
-
-        // Remove the tasbar button
-        desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow);
-
+    public static function stopModuleByWindow(window:ModuleWindow, cause:String = null):void {
         if (window is SwfModuleWindow) {
             // Remove Notification listener
             window.removeEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
                     NotificationsManager.handleNotificationEvent);
 
             // Unload module
-            (window as SwfModuleWindow).unload();
-
-            // Unload the module
-            ModulesLifeCycleManager.desktop.setFocus();
+            (window as SwfModuleWindow).unload(cause);
         }
         else if (window is IFrameModuleWindow) {
             // Delete the IFrame
             (window as IFrameModuleWindow).removeIFrame();
         }
-
-        // Update the module state
-        window.module.loaded = false;
 
         // Force garbage collection
         System.gc();

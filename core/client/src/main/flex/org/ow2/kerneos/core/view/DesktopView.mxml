@@ -52,7 +52,6 @@
         import mx.core.FlexGlobals;
         import mx.core.UIComponent;
         import mx.events.CollectionEvent;
-        import mx.events.CollectionEventKind;
         import mx.resources.ResourceManager;
         import mx.controls.Alert;
         import mx.events.CloseEvent;
@@ -80,13 +79,9 @@
         import org.ow2.kerneos.core.vo.ModuleVO;
         import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
         import org.ow2.kerneos.login.model.LoginModelLocator;
-        import org.ow2.kerneos.login.model.LoginModelLocator;
         import org.ow2.kerneos.login.vo.SessionVO;
         import org.ow2.kerneos.profile.manager.ProfileManager;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
-        import org.ow2.kerneos.profile.model.ProfileModelLocator;
-        import org.ow2.kerneos.profile.vo.ProfileVO;
-        import org.ow2.kerneos.profile.vo.ProfileVO;
         import org.ow2.kerneos.profile.vo.ProfileVO;
 
         // =========================================================================
@@ -255,10 +250,15 @@
                         // canBeClosedWithoutPrompt() method.
                         if (window is SwfModuleWindow) {
 
-                            var kerneosModule:KerneosModule = (window as SwfModuleWindow).getKerneosModule();
+                            // Don't show prompt if the module is not loaded
+                            if ((window as SwfModuleWindow).isLoaded()) {
+                                var kerneosModule:KerneosModule = (window as SwfModuleWindow).getKerneosModule();
 
-                            if (kerneosModule) {
-                                prompt = !kerneosModule.canBeClosedWithoutPrompt();
+                                if (kerneosModule) {
+                                    prompt = !kerneosModule.canBeClosedWithoutPrompt();
+                                }
+                            } else {
+                                prompt = false;
                             }
                         }
                     }
@@ -283,10 +283,7 @@
         private function confirmCloseWindow(event:CloseEvent = null):void {
             if (event == null || event.detail == mx.controls.Alert.YES) {
                 // Unload the module
-                ModulesLifeCycleManager.stopModuleByWindow(queuedEvent.window as ModuleWindow);
-
-                // Close the window component
-                windowContainer.windowManager.executeDefaultBehavior(queuedEvent);
+                ModulesLifeCycleManager.closeModuleByWindow(queuedEvent.window as ModuleWindow);
             }
 
             queuedEvent = null;
@@ -507,6 +504,10 @@
             // Seek removed Modules
             for each (var module2:ModuleVO in desktopModules) {
                 if (!newArr.contains(module2)) {
+
+                    // Stop module
+                    ModulesLifeCycleManager.stopModule(module2, "kerneos.error.module.uninstalled");
+
                     //Show notification
                     if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP &&
                             ModulesLifeCycleManager.notification &&

@@ -57,15 +57,6 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
     private EventAdmin eventAdmin;
 
     /**
-     * Granite Class Registry.
-     */
-    @Requires
-    private GraniteClassRegistry gcr;
-
-    @Requires
-    private ConfigurationAdmin configurationAdmin;
-
-    /**
      * The JAXB context for rules packages serialization/deserialization. Must
      * be declared with all the potentially involved classes.
      */
@@ -81,12 +72,12 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
 
     @Validate
     private void start() throws IOException {
-        logger.debug("Start ProfileFileInstall");
+        logger.debug("Start ProfileFileInstall(" + ID + ")");
     }
 
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop ProfileFileInstall");
+        logger.debug("Stop ProfileFileInstall(" + ID + ")");
     }
 
 

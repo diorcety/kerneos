@@ -1,0 +1,265 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - JASMINe
+     - Copyright (C) 2011 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<view:ModuleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+                   xmlns:mx="library://ns.adobe.com/flex/mx"
+                   xmlns:view="org.ow2.kerneos.core.view.window.*"
+                   xmlns:controls="org.ow2.kerneos.common.controls.*"
+                   backgroundColor="{state == 'loaded'? 0xCCCCCC: 0x666666}"
+                   currentState="{state}">
+
+    <fx:Metadata>
+        <![CDATA[
+        ]]>
+    </fx:Metadata>
+
+    <fx:Script>
+        <![CDATA[
+        import com.adobe.cairngorm.business.ServiceLocator;
+
+        import mx.modules.Module;
+        import mx.resources.ResourceManager;
+
+        import org.granite.util.GraniteClassRegistry;
+
+        import org.ow2.kerneos.core.api.KerneosModule;
+        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.core.managers.LanguagesManager;
+        import org.ow2.kerneos.core.vo.SWFModuleVO;
+        import org.ow2.kerneos.core.vo.ServiceVO;
+
+        private static var __mod:Module; // Hack
+
+        [Bindable]
+        private var state:String = "idle";
+
+        [Bindable]
+        private var error:String;
+
+        // =========================================================================
+        // Public methods
+        // =========================================================================
+
+        /**
+         * Get the KerneosModule object associated with this SwfModule
+         * @return null if there is not KerneosModule
+         */
+        public function getKerneosModule():KerneosModule {
+            if (moduleLoader.child is KerneosModule) {
+                return moduleLoader.child as KerneosModule;
+            }
+            return null;
+        }
+
+        /**
+         * Load the module
+         */
+        public function load():void {
+            state = "loading";
+
+            // Load the module with the ModuleLoader
+            moduleLoader.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
+            moduleLoader.loadModule((module as SWFModuleVO).file);
+        }
+
+
+        /**
+         * Unload the module
+         */
+        public function unload(cause:String = null):void {
+            // If the module implements the interface KerneosModule,
+            // trigger the closeModule() method
+            if (getKerneosModule()) {
+                getKerneosModule().closeModule();
+            }
+
+            // Remove services & registred classes
+            if (moduleLoader.child != null) {
+                unregisterServices();
+                unregisterClasses();
+            }
+
+            // Unload the module with the ModuleLoader
+            moduleLoader.unloadModule();
+            moduleLoader.child = null;
+
+            error = (cause == null) ? "kerneos.error.swfmodule.unloaded" : cause;
+            state = "error";
+        }
+
+        /**
+         * Return true if the module is loaded
+         */
+        public function isLoaded():Boolean {
+            return  state == "loaded";
+        }
+
+
+        // =========================================================================
+        // Private methods
+        // =========================================================================
+        /**
+         * Register classes used by each services
+         */
+        private function registerClasses():void {
+
+            // Register classes used by the services if the module is a Kerneos module type
+            if (getKerneosModule()) {
+                var dic:Dictionary = getKerneosModule().servicesClasses();
+                if (dic != null) {
+                    for (var key:String in dic) {
+                        for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                            if (service.id == key)
+                                GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         *Register services
+         */
+        private function registerServices():void {
+            var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+
+            // Register services
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                serviceLocator.setServiceForId(service.id, service.destination, service.asynchronous);
+                if (service.asynchronous) {
+                    serviceLocator.getConsumer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
+                    serviceLocator.getProducer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
+                }
+                else {
+                    serviceLocator.getRemoteObject(service.id).channelSet = KerneosLifeCycleManager.amfChannelSet;
+                }
+            }
+        }
+
+        /**
+         * Unregister classes with by each services
+         */
+        private function unregisterClasses():void {
+
+            // Unregister classes used by the services if the module is a Kerneos module type
+            if (getKerneosModule()) {
+                var dic:Dictionary = getKerneosModule().servicesClasses();
+                if (dic != null) {
+                    for (var key:String in dic) {
+                        GraniteClassRegistry.unregisterClasses(key);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Unregister services
+         */
+        private function unregisterServices():void {
+            var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                if (service.asynchronous) {
+                    serviceLocator.getConsumer(service.id).disconnect();
+                    serviceLocator.getProducer(service.id).disconnect();
+                }
+                else {
+                    serviceLocator.getRemoteObject(service.id).disconnect();
+                }
+
+                serviceLocator.removeServiceForId(service.id, service.asynchronous);
+            }
+        }
+
+        /**
+         * When the module has finished loading
+         */
+        private function loaderReady(event:Event = null):void {
+            registerServices();
+            registerClasses();
+            state = "loaded";
+        }
+
+        private function loaderError(event:Event = null):void {
+            error = "kerneos.error.swfmodule.loading-error";
+            state = "error";
+        }
+        ]]>
+    </fx:Script>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- States                                                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <view:states>
+        <!-- Initial state-->
+        <mx:State name="idle"/>
+
+        <!-- When the module is loading -->
+        <mx:State name="loading"/>
+
+        <!-- When the module is loaded -->
+        <mx:State name="loaded"/>
+
+        <!-- When an fatal issue occurs -->
+        <mx:State name="error"/>
+
+    </view:states>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Components                                                              -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <controls:KerneosProgressBar id="progressBar"
+                                 includeIn="loading"
+                                 itemCreationPolicy="immediate"
+                                 itemDestructionPolicy="never"
+                                 mode="manual"
+                                 trackHeight="20"
+                                 barColor="0x444444"
+                                 color="0xEFEFEF"
+                                 borderColor="0xFFFFFF"
+                                 conversion="1024"
+                                 label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-bar.label') + ' %3%% (%1/%2 kb)'}"/>
+
+    <mx:ModuleLoader id="moduleLoader"
+                     includeIn="loaded"
+                     itemCreationPolicy="immediate"
+                     itemDestructionPolicy="never"
+                     ready="loaderReady(event)"
+                     error="loaderError(event)"
+                     width="100%"
+                     height="100%"
+                     progress="progressBar.setProgress(event.bytesLoaded, event.bytesTotal)"/>
+
+    <mx:Label id="errorLabel"
+              color="0xEFEFEF"
+              includeIn="error"
+              itemCreationPolicy="immediate"
+              itemDestructionPolicy="never"
+              text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,error)}"/>
+
+</view:ModuleWindow>

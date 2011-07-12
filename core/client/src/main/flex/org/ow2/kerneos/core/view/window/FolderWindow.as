@@ -22,8 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.core.view.window
-{
+package org.ow2.kerneos.core.view.window {
 
 import mx.containers.Box;
 import mx.controls.Text;
@@ -41,21 +40,19 @@ import org.ow2.kerneos.core.vo.FolderVO;
  * @author Julien Nicoulaud
  */
 [Bindable]
-public class FolderWindow extends ModuleWindow
-{
+public class FolderWindow extends ModuleWindow {
 
     // =========================================================================
     // Variables
     // =========================================================================
 
-    private var descriptionLabel : Text;
-    private var descriptionBox : Box;
+    private var descriptionLabel:Text;
+    private var descriptionBox:Box;
 
     /**
      * The modules list displayed
      */
-    private var modulesList : TileList;
-
+    private var modulesList:TileList;
 
 
     // =========================================================================
@@ -65,37 +62,33 @@ public class FolderWindow extends ModuleWindow
     /**
      * Build a new folder window.
      */
-    public function FolderWindow(module:FolderVO)
-    {
+    public function FolderWindow(module:FolderVO) {
         // Call super classe constructor
-        super(module);
+        super();
+        this.module = module;
     }
 
     /**
      * Create UI children.
      */
-    override protected function createChildren():void
-    {
+    override protected function createChildren():void {
         // Call super class method
         super.createChildren();
 
         // Create the description box
-        if (descriptionBox == null)
-        {
+        if (descriptionBox == null) {
             descriptionBox = new Box();
             addChild(descriptionBox);
         }
 
         // Create the description label
-        if (descriptionLabel == null)
-        {
+        if (descriptionLabel == null) {
             descriptionLabel = new Text();
             descriptionBox.addChild(descriptionLabel);
         }
 
         // Create the modules list
-        if (modulesList == null)
-        {
+        if (modulesList == null) {
             modulesList = new TileList();
             addChild(modulesList);
         }
@@ -104,34 +97,33 @@ public class FolderWindow extends ModuleWindow
     /**
      * Commit the component properties.
      */
-    override protected function commitProperties():void
-    {
+    override protected function commitProperties():void {
         // Call super class function
         super.commitProperties();
 
         // Set some window properties
-        setStyle("paddingTop",5);
-        setStyle("paddingBottom",5);
-        setStyle("paddingLeft",5);
-        setStyle("paddingRight",5);
+        setStyle("paddingTop", 5);
+        setStyle("paddingBottom", 5);
+        setStyle("paddingLeft", 5);
+        setStyle("paddingRight", 5);
         //setStyle("verticalGap",0);
 
         // Set the properties for the description box
         descriptionBox.percentWidth = 100;
-        descriptionBox.setStyle("styleName","folderWindowDescriptionBox");
+        descriptionBox.setStyle("styleName", "folderWindowDescriptionBox");
 
         // Set the properties for the description label
         descriptionLabel.text = module.description;
         descriptionLabel.percentWidth = 100;
         descriptionLabel.selectable = false;
-        descriptionLabel.setStyle("styleName","folderWindowDescriptionLabel");
+        descriptionLabel.setStyle("styleName", "folderWindowDescriptionLabel");
 
         // Set the properties for the modules list
         modulesList.percentHeight = 100;
         modulesList.percentWidth = 100;
         modulesList.verticalScrollPolicy = "none";
         modulesList.horizontalScrollPolicy = "none";
-        modulesList.setStyle("styleName","folderWindowModulesList");
+        modulesList.setStyle("styleName", "folderWindowModulesList");
         modulesList.selectable = false;
         modulesList.dataProvider = (module as FolderVO).modules;
         modulesList.itemRenderer = new ClassFactory(ListModuleRenderer);
