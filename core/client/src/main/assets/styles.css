@@ -32,19 +32,18 @@
 /*******************************************************************************
  * Application
  ******************************************************************************/
- 
+
 mx|Application {
-   background-gradient-colors: #FFFFFF, #666666;
-   backgroundColor: #FFFFFF;
-   color: #000000;
-   theme-color: #777777;
+    background-gradient-colors: #FFFFFF, #666666;
+    backgroundColor: #FFFFFF;
+    color: #000000;
+    theme-color: #777777;
 }
 
-
 /*******************************************************************************
- * Kerneos desktop
- ******************************************************************************/
- 
+* Kerneos desktop
+******************************************************************************/
+
 kerneos|ListModuleRenderer {
     border-color: #555555;
     border-thickness: 2px;
@@ -62,19 +61,17 @@ kerneos|ListModuleRenderer {
     color: #FFFFFF;
 }
 
-
 /*******************************************************************************
- * Default
- ******************************************************************************/
+* Default
+******************************************************************************/
 
 global {
     font-size: 12px;
 }
 
-
 /*******************************************************************************
- * Login
- ******************************************************************************/
+* Login
+******************************************************************************/
 kerneosLogin|LoginPanel {
     titleStyleName: loginWindowTitle;
     dropShadowEnabled: true;
@@ -102,10 +99,9 @@ kerneosLogin|LoginPanel {
     drop-shadow-color: #FF0000;
 }
 
-
 /*******************************************************************************
- * Login
- ******************************************************************************/
+* Login
+******************************************************************************/
 kerneosProfile|ProfilePanel {
     titleStyleName: profileWindowTitle;
     dropShadowEnabled: true;
@@ -133,10 +129,9 @@ kerneosProfile|ProfilePanel {
     drop-shadow-color: #FF0000;
 }
 
-
 /*******************************************************************************
- * Windows
- ******************************************************************************/
+* Windows
+******************************************************************************/
 
 kerneosWindow|KerneosWindow {
     titleStyleName: moduleWindowTitle;
@@ -207,7 +202,7 @@ kerneosWindow|FolderWindow {
     backgroundImage: ClassReference("org.ow2.kerneos.common.view.GradientBackground");
     backgroundSize: "100%";
     fillColors: #666666, #EEEEEE;
-    fillAlphas: 1.0,0.2;
+    fillAlphas: 1.0, 0.2;
     style-name-no-focus: noFocusFolderWindow;
 }
 
@@ -252,58 +247,58 @@ kerneosWindow|FolderWindow {
 }
 
 .moduleWindowMinimizeButton {
-    upSkin: Embed(source="minimize_up.png");
-    overSkin: Embed(source="minimize_over.png");
-    downSkin: Embed(source="minimize_up.png");
+    upSkin: Embed(source = "minimize_up.png");
+    overSkin: Embed(source = "minimize_over.png");
+    downSkin: Embed(source = "minimize_up.png");
 }
 
 .moduleWindowMaximizeButton {
-    upSkin: Embed(source="maximize_up.png");
-    overSkin: Embed(source="maximize_over.png");
-    downSkin: Embed(source="maximize_up.png");}
+    upSkin: Embed(source = "maximize_up.png");
+    overSkin: Embed(source = "maximize_over.png");
+    downSkin: Embed(source = "maximize_up.png");
+}
 
 .moduleWindowCloseButton {
-    upSkin: Embed(source="close_up.png");
-    overSkin: Embed(source="close_over.png");
-    downSkin: Embed(source="close_up.png");
+    upSkin: Embed(source = "close_up.png");
+    overSkin: Embed(source = "close_over.png");
+    downSkin: Embed(source = "close_up.png");
 }
 
 .moduleWindowRestoreButton {
-    upSkin: Embed(source="restore_up.png");
-    overSkin: Embed(source="restore_over.png");
-    downSkin: Embed(source="restore_up.png");
+    upSkin: Embed(source = "restore_up.png");
+    overSkin: Embed(source = "restore_over.png");
+    downSkin: Embed(source = "restore_up.png");
 }
 
 .iFrameWindowPreviousPageButton {
-    upSkin: Embed(source="arrow_left_up.png");
-    overSkin: Embed(source="arrow_left_over.png");
-    downSkin: Embed(source="arrow_left_up.png");
+    upSkin: Embed(source = "arrow_left_up.png");
+    overSkin: Embed(source = "arrow_left_over.png");
+    downSkin: Embed(source = "arrow_left_up.png");
 }
 
 .iFrameWindowNextPageButton {
-    upSkin: Embed(source="arrow_right_up.png");
-    overSkin: Embed(source="arrow_right_over.png");
-    downSkin: Embed(source="arrow_right_up.png");
+    upSkin: Embed(source = "arrow_right_up.png");
+    overSkin: Embed(source = "arrow_right_over.png");
+    downSkin: Embed(source = "arrow_right_up.png");
 }
 
 .iFrameWindowNavigateExternallyButton {
-    upSkin: Embed(source="arrow_up_right_up.png");
-    overSkin: Embed(source="arrow_up_right_over.png");
-    downSkin: Embed(source="arrow_up_right_up.png");
+    upSkin: Embed(source = "arrow_up_right_up.png");
+    overSkin: Embed(source = "arrow_up_right_over.png");
+    downSkin: Embed(source = "arrow_up_right_up.png");
 }
 
 .iFrameWindowSeparator {
 }
 
-
 /*******************************************************************************
- * Taskbar
- ******************************************************************************/
+* Taskbar
+******************************************************************************/
 
 .taskBar {
     vertical-align: middle;
     border-style: outset;
-    fill-colors: #777777,#000000;
+    fill-colors: #777777, #000000;
 }
 
 .taskBarSmallButton {
@@ -317,13 +312,7 @@ kerneosWindow|FolderWindow {
 }
 
 kerneosWindow|MinimizedModuleWindow {
-    cornerRadius: 1;
-    color: #EFEFEF;
-    roll-over-color: #000000;
-    highlightAlphas: 0.10, 0.20;
-    fillAlphas: 0.20, 0.20, 0.50, 0.50;
-    fillColors: #000000, #000000, #ffffff, #eeeeee;
-    borderColor: #454545;
+    cornerRadius: 3;
 }
 
 .localeComboBox {
@@ -347,34 +336,34 @@ kerneosWindow|MinimizedModuleWindow {
 }
 
 kerneosWindow|ModuleSnapshotTooltip {
-   backgroundAlpha: 0.8;
-   borderAlpha: 1.0;
-   backgroundColor: #454545;
-   borderColor: #404040;
-   borderStyle: solid;
-   border-thickness: 2px;
-   color: #EFEFEF;
-   cornerRadius: 2px;
+    backgroundAlpha: 0.8;
+    borderAlpha: 1.0;
+    backgroundColor: #454545;
+    borderColor: #404040;
+    borderStyle: solid;
+    border-thickness: 2px;
+    color: #EFEFEF;
+    cornerRadius: 2px;
 }
 
 .taskBarScrollLeftButton {
-    upSkin: Embed(source="taskbar_left_up.png");
-    overSkin: Embed(source="taskbar_left_over.png");
-    downSkin: Embed(source="taskbar_left_up.png");
+    upSkin: Embed(source = "taskbar_left_up.png");
+    overSkin: Embed(source = "taskbar_left_over.png");
+    downSkin: Embed(source = "taskbar_left_up.png");
 }
 
 .taskBarScrollRightButton {
-    upSkin: Embed(source="taskbar_right_up.png");
-    overSkin: Embed(source="taskbar_right_over.png");
-    downSkin: Embed(source="taskbar_right_up.png");
+    upSkin: Embed(source = "taskbar_right_up.png");
+    overSkin: Embed(source = "taskbar_right_over.png");
+    downSkin: Embed(source = "taskbar_right_up.png");
 }
 
 /*******************************************************************************
  * Notifications
  ******************************************************************************/
- 
+
 kerneosNotification|NotificationPopUp {
-    background-image: Embed("./notification_background.png", scaleGridTop="42", scaleGridBottom="138", scaleGridLeft="11", scaleGridRight="118");
+    background-image: Embed("./notification_background.png", scaleGridTop = "42", scaleGridBottom = "138", scaleGridLeft = "11", scaleGridRight = "118");
     background-size: "100%";
     padding-bottom: 5px;
     padding-left: 7px;
@@ -383,21 +372,20 @@ kerneosNotification|NotificationPopUp {
 }
 
 .closeNotificationPopUpButton {
-    upSkin: Embed(source="notification_close.png");
-    overSkin: Embed(source="notification_close_over.png");
-    downSkin: Embed(source="notification_close.png");
+    upSkin: Embed(source = "notification_close.png");
+    overSkin: Embed(source = "notification_close_over.png");
+    downSkin: Embed(source = "notification_close.png");
 }
 
-
 /*******************************************************************************
- * Base components
- ******************************************************************************/
+* Base components
+******************************************************************************/
 
 mx|ToolTip {
-   backgroundAlpha: 0.9;
-   cornerRadius: 2;
-   backgroundColor: #454545;
-   color: #FFFFFF;
+    backgroundAlpha: 0.9;
+    cornerRadius: 2;
+    backgroundColor: #454545;
+    color: #FFFFFF;
 }
 
 mx|Alert {
@@ -443,64 +431,62 @@ mx|Alert {
     fillAlphas: 0.2, 0.1, 0.3, 0.3;
 }
 
-
 /*******************************************************************************
- * Misc
- ******************************************************************************/
- 
+* Misc
+******************************************************************************/
+
 .maximizeRestoreButton {
-    up-skin:            Embed("./maximize_up.png");
-    over-skin:          Embed("./maximize_over.png");
-    down-skin:          Embed("./maximize_up.png");
-    selected-up-skin:   Embed("./restore_up.png");
+    up-skin: Embed("./maximize_up.png");
+    over-skin: Embed("./maximize_over.png");
+    down-skin: Embed("./maximize_up.png");
+    selected-up-skin: Embed("./restore_up.png");
     selected-over-skin: Embed("./restore_over.png");
     selected-down-skin: Embed("./restore_up.png");
 }
 
 .minimizeButton {
-    up-skin:        Embed("./minimize_up.png");
-    over-skin:      Embed("./minimize_over.png");
-    down-skin:      Embed("./minimize_up.png");
+    up-skin: Embed("./minimize_up.png");
+    over-skin: Embed("./minimize_over.png");
+    down-skin: Embed("./minimize_up.png");
 }
 
-
 mx|TabBar {
-    selected-tab-text-style-name:     tabBarButtonSelected;
-    tab-style-name:                 tabBarButton;
+    selected-tab-text-style-name: tabBarButtonSelected;
+    tab-style-name: tabBarButton;
 }
 
 .tabBarButton {
-    up-skin:                Embed("./tab_up.png", scaleGridTop="11", scaleGridBottom="30", scaleGridLeft="10", scaleGridRight="92");
-    over-skin:                Embed("./tab_up.png", scaleGridTop="11", scaleGridBottom="30", scaleGridLeft="10", scaleGridRight="92");
-    down-skin:                Embed("./tab_up.png", scaleGridTop="11", scaleGridBottom="30", scaleGridLeft="10", scaleGridRight="92");
-    selected-up-skin:        Embed("./tab_selected.png", scaleGridTop="13", scaleGridBottom="31", scaleGridLeft="9", scaleGridRight="91");
-    selected-over-skin:        Embed("./tab_selected.png", scaleGridTop="13", scaleGridBottom="31", scaleGridLeft="9", scaleGridRight="91");
-    selected-down-skin:        Embed("./tab_selected.png", scaleGridTop="13", scaleGridBottom="31", scaleGridLeft="9", scaleGridRight="91");
-    color:                     #333333;
-    text-roll-over-color:    #858585;
-    font-size:                12px;
-    font-family:            arial;
-    text-align:                left;
-    padding-left:            10px;
-    padding-right:            20px;
-    padding-top:            -4px;
+    up-skin: Embed("./tab_up.png", scaleGridTop = "11", scaleGridBottom = "30", scaleGridLeft = "10", scaleGridRight = "92");
+    over-skin: Embed("./tab_up.png", scaleGridTop = "11", scaleGridBottom = "30", scaleGridLeft = "10", scaleGridRight = "92");
+    down-skin: Embed("./tab_up.png", scaleGridTop = "11", scaleGridBottom = "30", scaleGridLeft = "10", scaleGridRight = "92");
+    selected-up-skin: Embed("./tab_selected.png", scaleGridTop = "13", scaleGridBottom = "31", scaleGridLeft = "9", scaleGridRight = "91");
+    selected-over-skin: Embed("./tab_selected.png", scaleGridTop = "13", scaleGridBottom = "31", scaleGridLeft = "9", scaleGridRight = "91");
+    selected-down-skin: Embed("./tab_selected.png", scaleGridTop = "13", scaleGridBottom = "31", scaleGridLeft = "9", scaleGridRight = "91");
+    color: #333333;
+    text-roll-over-color: #858585;
+    font-size: 12px;
+    font-family: arial;
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 20px;
+    padding-top: -4px;
 }
 
 .tabBarButtonSelected {
-    text-roll-over-color:    #003399;
-    color:                    #003399;
+    text-roll-over-color: #003399;
+    color: #003399;
 }
 
 .leftArrowButton {
-    up-skin:        Embed("./left_arrow_up.gif");
-    over-skin:        Embed("./left_arrow_over.gif");
-    down-skin:        Embed("./left_arrow_up.gif");
-    disabled-skin:    Embed("./left_arrow_disabled.gif");
+    up-skin: Embed("./left_arrow_up.gif");
+    over-skin: Embed("./left_arrow_over.gif");
+    down-skin: Embed("./left_arrow_up.gif");
+    disabled-skin: Embed("./left_arrow_disabled.gif");
 }
 
 .rightArrowButton {
-    up-skin:        Embed("./right_arrow_up.gif");
-    over-skin:        Embed("./right_arrow_over.gif");
-    down-skin:        Embed("./right_arrow_up.gif");
-    disabled-skin:    Embed("./right_arrow_disabled.gif");
+    up-skin: Embed("./right_arrow_up.gif");
+    over-skin: Embed("./right_arrow_over.gif");
+    down-skin: Embed("./right_arrow_up.gif");
+    disabled-skin: Embed("./right_arrow_disabled.gif");
 }

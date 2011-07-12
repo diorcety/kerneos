@@ -132,6 +132,14 @@
       <type>swc</type>
       <scope>theme</scope>
     </dependency>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
+      <type>css</type>
+      <scope>theme</scope>
+    </dependency>
   </dependencies>
 
   <build>

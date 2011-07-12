@@ -24,17 +24,18 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Button xmlns:fx="http://ns.adobe.com/mxml/2009"
-           xmlns:mx="library://ns.adobe.com/flex/mx"
-           label="{window.module.name}"
-           toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.taskbar.label',[window.module.name])}"
-           doubleClickEnabled="true"
-           click="simpleClickHandler(event)"
-           doubleClick="doubleClickHandler(event)"
-           toolTipCreate="createSnapshotToolTip(event)"
-           toolTipShow="positionToolTip(event)"
-           mouseOver="updateSnapshot(event)"
-           icon="{window.module.getSmallIcon(this, true) as Class}">
+<s:ToggleButton xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:mx="library://ns.adobe.com/flex/mx"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                label="{window.module.name}"
+                toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.taskbar.label',[window.module.name])}"
+                doubleClickEnabled="true"
+                click="simpleClickHandler(event)"
+                doubleClick="doubleClickHandler(event)"
+                toolTipCreate="createSnapshotToolTip(event)"
+                toolTipShow="positionToolTip(event)"
+                mouseOver="updateSnapshot(event)"
+                icon="{window.module.getSmallIcon(this)}">
 
     <fx:Metadata>
         <![CDATA[
@@ -80,18 +81,18 @@
         public function set window(window:ModuleWindow):void {
             if (_moduleWindow != null) {
                 // Remove events listener
-                _moduleWindow.removeEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler);
                 _moduleWindow.removeEventListener(MDIWindowEvent.RESTORE, windowRestoreHandler);
                 _moduleWindow.removeEventListener(MDIWindowEvent.FOCUS_START, windowFocusStartHandler);
+                _moduleWindow.removeEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler);
                 _moduleWindow.removeEventListener(MDIWindowEvent.FOCUS_END, windowFocusEndHandler);
 
             }
             _moduleWindow = window;
             if (_moduleWindow != null) {
                 // Add events listener
-                _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler, false, 0, true);
                 _moduleWindow.addEventListener(MDIWindowEvent.RESTORE, windowRestoreHandler, false, 0, true);
                 _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START, windowFocusStartHandler, false, 0, true);
+                _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler, false, 0, true);
                 _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END, windowFocusEndHandler, false, 0, true);
             }
         }
@@ -176,6 +177,8 @@
                 // Bring it to front
                 _moduleWindow.windowManager.bringToFront(_moduleWindow as MDIWindow);
             }
+
+            e.preventDefault();
         }
 
 
@@ -187,6 +190,8 @@
                 // Maximize it
                 _moduleWindow.maximize();
             }
+
+            e.preventDefault();
         }
 
 
@@ -195,36 +200,33 @@
         // =========================================================================
 
         /**
-         * When the window is minimized.
-         */
-        protected function windowMinimizeHandler(e:Event):void {
-            windowFocusEndHandler();
-        }
-
-
-        /**
          * When the window is restored.
          */
-        protected function windowRestoreHandler(e:Event):void {
+        protected function windowRestoreHandler(e:Event = null):void {
+            windowFocusStartHandler();
         }
 
 
         /**
          * When the window gets the focus.
          */
-        protected function windowFocusStartHandler(e:Event):void {
-            this.setStyle("borderColor", "#454545");
-            this.setStyle("fillColors", [0x000000, 0x000000, 0xffffff, 0xeeeeee]);
+        protected function windowFocusStartHandler(e:Event = null):void {
+            selected = true;
         }
 
+        /**
+         * When the window is minimized.
+         */
+        protected function windowMinimizeHandler(e:Event = null):void {
+            windowFocusEndHandler();
+        }
 
         /**
          * When the window loses the focus.
          */
         protected function windowFocusEndHandler(e:Event = null):void {
-            this.setStyle("borderColor", "#BBBBBB");
-            this.setStyle("fillColors", [0x999999, 0x454545, 0xffffff, 0xeeeeee]);
             snapshotObsolete = true;
+            selected = false;
         }
 
 
@@ -271,4 +273,4 @@
         ]]>
     </fx:Script>
 
-</mx:Button>
+</s:ToggleButton>
