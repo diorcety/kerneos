@@ -33,7 +33,7 @@
         <![CDATA[
         import mx.resources.ResourceManager;
 
-        import org.ow2.kerneos.profile.manager.LanguagesManager;
+        import org.ow2.kerneos.common.managers.LanguagesManager;
         ]]>
     </fx:Script>
 

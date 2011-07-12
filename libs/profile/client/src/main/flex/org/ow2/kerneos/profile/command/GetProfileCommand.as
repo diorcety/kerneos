@@ -27,13 +27,17 @@ import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
+import mx.resources.ResourceManager;
+
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
+import org.ow2.kerneos.common.managers.ErrorManager;
 import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.profile.business.IGetProfileDelegate;
+import org.ow2.kerneos.common.managers.LanguagesManager;
 import org.ow2.kerneos.profile.model.ProfileModelLocator;
 import org.ow2.kerneos.profile.model.ProfileState;
 import org.ow2.kerneos.profile.vo.ProfileVO;
@@ -65,21 +69,22 @@ public class GetProfileCommand implements ICommand, IResponder {
      * Handle fault messages
      */
     public function fault(event:Object):void {
+        if (!ErrorManager.handleError(event)) {
+            // Retrieve the fault event
+            var faultEvent:FaultEvent = FaultEvent(event);
 
-        // Retrieve the fault event
-        var faultEvent:FaultEvent = FaultEvent(event);
+            // Retrieve the model
+            var model:ProfileModelLocator = ProfileModelLocator.getInstance();
 
-        // Retrieve the model
-        var model:ProfileModelLocator = ProfileModelLocator.getInstance();
-
-        // Tell the view and let it handle this
-        var serverSideExceptionEvent:ServerSideExceptionEvent =
-                new ServerSideExceptionEvent(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
-                        new ServerSideException("Error while loading the configuration",
-                                "The application configuration file could not be read successfully."
-                                        + "\n" + faultEvent.fault.faultString,
-                                faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+            // Tell the view and let it handle this
+            var serverSideExceptionEvent:ServerSideExceptionEvent =
+                    new ServerSideExceptionEvent(
+                            ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
+                            new ServerSideException(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.profile.error.profile.title"),
+                                    ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.profile.error.profile", [faultEvent.fault.faultString]),
+                                    faultEvent.fault.getStackTrace()));
+            CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+        }
     }
 
 

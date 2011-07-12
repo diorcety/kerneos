@@ -38,7 +38,7 @@ public interface IKerneosSecurityService {
     enum SecurityError {
         NO_ERROR,
         SESSION_EXPIRED,
-        INVALID_CREDENTIALS
+        ACCESS_DENIED
     }
 
     /**

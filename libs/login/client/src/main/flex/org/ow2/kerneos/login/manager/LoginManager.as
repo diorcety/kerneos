@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -22,22 +22,9 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.login.manager
-{
-
-import mx.resources.ResourceManager;
-
-
-/**
- * Manages the languages.
- *
- * @author Julien Nicoulaud
- */
-public class LanguagesManager
-{
-	/**
-	 * The name of the resource bundle containing the current locale resources.
-	 */
-	public static const LOCALE_RESOURCE_BUNDLE : String = 'loginLocales';
+package org.ow2.kerneos.login.manager {
+public class LoginManager {
+    public function LoginManager() {
+    }
 }
 }

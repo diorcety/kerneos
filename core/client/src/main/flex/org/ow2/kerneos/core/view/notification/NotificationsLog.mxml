@@ -47,17 +47,12 @@
 
     <fx:Script>
         <![CDATA[
-        import flash.system.Capabilities;
-
         import mx.controls.Alert;
         import mx.resources.ResourceManager;
-        import mx.collections.ArrayCollection;
-
-        import com.adobe.cairngorm.model.ModelLocator;
 
         import org.ow2.kerneos.core.vo.KerneosNotification;
         import org.ow2.kerneos.core.model.KerneosModelLocator;
-        import org.ow2.kerneos.core.managers.LanguagesManager;
+        import org.ow2.kerneos.common.managers.LanguagesManager;
 
         // =========================================================================
         // Variables

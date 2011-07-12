@@ -98,8 +98,8 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
             switch (kerneosSecurityService.authorize()) {
                 case SESSION_EXPIRED:
                     throw SecurityServiceException.newSessionExpiredException();
-                case INVALID_CREDENTIALS:
-                    throw SecurityServiceException.newInvalidCredentialsException();
+                case ACCESS_DENIED:
+                    throw SecurityServiceException.newAccessDeniedException();
                 default:
             }
         }

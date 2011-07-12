@@ -92,7 +92,7 @@
             desktopView.initializeView();
 
             // Listen to server side exceptions events
-            CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + KerneosModelLocator.getInstance().componentID, ServerSideExceptionEvent.show, false, 0, true);
+            CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION, exceptionHandler);
 
             // Listen to keyboards events at the "application" level
             parentApplication.addEventListener(KeyboardEvent.KEY_UP, keyHandler, false, 0, true);
@@ -115,6 +115,18 @@
                     KerneosLifeCycleManager.reloadPage();
                     break;
             }
+        }
+
+        /**
+         * Handles kerneos exceptions
+         */
+        private function exceptionHandler(exceptionEvent:ServerSideExceptionEvent):void {
+            // Stop the event propagation
+            exceptionEvent.stopImmediatePropagation();
+            exceptionEvent.preventDefault();
+
+            errorView.exception = exceptionEvent.exception;
+            KerneosModelLocator.getInstance().state = KerneosState.ERROR;
         }
 
         /**
@@ -202,6 +214,14 @@
                       width="100%"
                       height="100%"/>
 
+    <view:ErrorView includeIn="error"
+                    itemCreationPolicy="immediate"
+                    itemDestructionPolicy="never"
+                    visible="{KerneosModelLocator.getInstance().state == KerneosState.ERROR}"
+                    id="errorView"
+                    width="100%"
+                    height="100%"/>
+
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- States                                                                  -->
@@ -224,11 +244,10 @@
         <mx:State name="profile" stateGroups="loaded"/>
 
         <!-- Working view -->
-        <mx:State name="desktop" stateGroups="loaded" enterState="desktopView.loadModules()"
-                  exitState="desktopView.unloadModules()"/>
+        <mx:State name="desktop" stateGroups="loaded" enterState="desktopView.load()" exitState="desktopView.unload()"/>
 
-        <!-- When server connexion lost -->
-        <mx:State name="disconnected"/>
+        <!-- When a fatal error is occurred -->
+        <mx:State name="error"/>
 
     </mx:states>
 

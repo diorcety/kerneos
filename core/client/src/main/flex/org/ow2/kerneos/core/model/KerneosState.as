@@ -61,9 +61,9 @@ public class KerneosState {
     public static var DESKTOP:String = "desktop";
 
     /**
-     * When the connexion to the server has been lost.
+     * When a fatal error is occurred.
      */
-    public static var DISCONNECTED:String = "disconnected";
+    public static var ERROR:String = "error";
 
     /**
      * Constructor

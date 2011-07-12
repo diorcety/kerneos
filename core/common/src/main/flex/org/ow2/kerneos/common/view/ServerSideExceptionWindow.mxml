@@ -26,9 +26,9 @@
 -->
 <mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:mx="library://ns.adobe.com/flex/mx"
-                width="350"
+                width="450"
                 height="150"
-                showCloseButton="true"
+                showCloseButton="{popup}"
                 close="close();"
                 titleIcon="@Embed(source='/../assets/exception.png')"
                 title="{exception.name}"
@@ -37,7 +37,8 @@
                 borderColor="#CCCCCC"
                 width.detailedView="700"
                 height.detailedView="450"
-                backgroundColor="#CCCCCC">
+                backgroundColor="#CCCCCC"
+                currentState="{state}">
 
     <fx:Metadata>
         <![CDATA[
@@ -69,6 +70,12 @@
          */
         [Bindable]
         public var exception:ServerSideException;
+
+        [Bindable]
+        public var popup:Boolean = true;
+
+        [Bindable]
+        private var state:String = "simpleView";
 
         // Assets
 
@@ -118,15 +125,16 @@
          * Show/hide details button handler
          */
         public function toggleDetails(e:Event = null):void {
-            if (this.currentState == null) {
+            if (this.currentState == "simpleView") {
                 this.currentState = "detailedView";
                 detailsButton.label = "Hide details";
             }
             else if (this.currentState == "detailedView") {
-                this.currentState = null;
+                this.currentState = "simpleView";
                 detailsButton.label = "Show details";
             }
-            PopUpManager.centerPopUp(this);
+            if (popup)
+                PopUpManager.centerPopUp(this);
         }
         ]]>
     </fx:Script>
@@ -155,7 +163,9 @@
         <mx:Button id="CloseButton"
                    label="Close"
                    click="close();"
-                   icon="{closeIcon16}"/>
+                   icon="{closeIcon16}"
+                   visible="{popup}"
+                   includeInLayout="{popup}"/>
         <mx:Button id="detailsButton"
                    label="Show details"
                    visible="{exception.hasStackTrace()}"
@@ -169,6 +179,7 @@
     </mx:ControlBar>
 
     <mx:states>
+        <mx:State name="simpleView"/>
         <mx:State name="detailedView"/>
     </mx:states>
 

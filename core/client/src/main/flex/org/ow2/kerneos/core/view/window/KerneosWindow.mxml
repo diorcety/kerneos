@@ -42,7 +42,7 @@
         import mx.events.FlexEvent;
         import mx.resources.ResourceManager;
 
-        import org.ow2.kerneos.core.managers.LanguagesManager;
+        import org.ow2.kerneos.common.managers.LanguagesManager;
         import org.ow2.kerneos.core.managers.SharedObjectManager;
 
         // =========================================================================

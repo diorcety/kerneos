@@ -50,8 +50,6 @@
         import mx.collections.ArrayCollection;
         import mx.collections.Sort;
         import mx.collections.SortField;
-        import mx.core.FlexGlobals;
-        import mx.core.UIComponent;
         import mx.events.CollectionEvent;
         import mx.resources.ResourceManager;
         import mx.controls.Alert;
@@ -62,10 +60,10 @@
         import flexlib.mdi.events.MDIWindowEvent;
 
         import org.ow2.kerneos.common.util.IconUtility;
+        import org.ow2.kerneos.common.managers.LanguagesManager;
 
         import org.ow2.kerneos.core.api.KerneosModule;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
-        import org.ow2.kerneos.core.managers.LanguagesManager;
         import org.ow2.kerneos.core.managers.NotificationsManager;
         import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
         import org.ow2.kerneos.core.managers.SharedObjectManager;
@@ -406,23 +404,31 @@
         /**
          * Load modules and subscribe to Kerneos topic
          */
-        public function loadModules():void {
+        public function load():void {
             // Load the modules
             ModulesLifeCycleManager.loadModules();
 
-            // Subscribe a gravity consumer to the kerneos topic
+            // Subscribe a gravity consumer to the Kerneos configuration topic
             ModulesLifeCycleManager.subscribe();
         }
 
         /**
          * Unload modules and unsubscribe from Kerneos topic
          */
-        public function unloadModules():void {
+        public function unload():void {
+            // Unsubscribe a gravity consumer to the Kerneos configuration topic
+            ModulesLifeCycleManager.unsubscribe();
+
             // Unload the modules
             ModulesLifeCycleManager.unloadModules();
 
-            // Unsubscribe a gravity consumer to the kerneos topic
-            ModulesLifeCycleManager.unsubscribe();
+            // Close all the windows
+            var allWindows:Array = (windowContainer.windowManager.windowList as Array).concat();
+            for each (var window:MDIWindow in allWindows) {
+                if (window is ModuleWindow) {
+                    ModulesLifeCycleManager.closeModuleByWindow(window as ModuleWindow);
+                }
+            }
         }
 
         /**
@@ -510,7 +516,7 @@
                 if (!newArr.contains(module2)) {
 
                     // Stop module
-                    ModulesLifeCycleManager.stopModule(module2, "kerneos.error.module.uninstalled");
+                    ModulesLifeCycleManager.stopModule(module2, "kerneos.error.swfmodule.uninstalled");
 
                     //Show notification
                     if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP &&

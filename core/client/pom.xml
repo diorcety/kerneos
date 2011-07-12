@@ -92,7 +92,7 @@
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-common-client</artifactId>
+      <artifactId>kerneos-common</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
     </dependency>

@@ -35,11 +35,12 @@ import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
+import org.ow2.kerneos.common.managers.ErrorManager;
 import org.ow2.kerneos.common.view.ServerSideException;
 
 import org.ow2.kerneos.login.business.ILogInDelegate;
 import org.ow2.kerneos.login.event.LogInEvent;
-import org.ow2.kerneos.login.manager.LanguagesManager;
+import org.ow2.kerneos.common.managers.LanguagesManager;
 import org.ow2.kerneos.login.model.LoginModelLocator;
 import org.ow2.kerneos.login.model.LoginState;
 
@@ -66,7 +67,8 @@ public class LogInCommand implements ICommand, IResponder {
         var logged:Boolean = (event as ResultEvent).result as Boolean;
 
         if (!logged) {
-            Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.failed'), "Error");
+            Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.failed'),
+            ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.login.failed.title'));
         }
         else {
             model.state = LoginState.AUTH;
@@ -77,22 +79,22 @@ public class LogInCommand implements ICommand, IResponder {
      * Handle fault messages
      */
     public function fault(event:Object):void {
+        if (!ErrorManager.handleError(event)) {
+            // Retrieve the fault event
+            var faultEvent:FaultEvent = FaultEvent(event);
 
-        // Retrieve the fault event
-        var faultEvent:FaultEvent = FaultEvent(event);
+            // Retrieve the model
+            var model:LoginModelLocator = LoginModelLocator.getInstance();
 
-        // Retrieve the model
-        var model:LoginModelLocator = LoginModelLocator.getInstance();
-
-        // Tell the view and let it handle this
-        var serverSideExceptionEvent:ServerSideExceptionEvent =
-                new ServerSideExceptionEvent(
-                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
-                        new ServerSideException("Error while loading the configuration",
-                                "The application configuration file could not be read successfully."
-                                        + "\n" + faultEvent.fault.faultString,
-                                faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+            // Tell the view and let it handle this
+            var serverSideExceptionEvent:ServerSideExceptionEvent =
+                    new ServerSideExceptionEvent(
+                            ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
+                            new ServerSideException(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.login.error.login.title"),
+                                    ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.login.error.login", [faultEvent.fault.faultString]),
+                                    faultEvent.fault.getStackTrace()));
+            CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+        }
     }
 }
 }

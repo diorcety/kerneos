@@ -92,7 +92,7 @@ public class SecurityTest extends TestCase {
 
         profile.getProfile().setDefaultPolicy(ProfilePolicy.DENY);
 
-        assertEquals("Default deny policy (unset)", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
+        assertEquals("Default deny policy (unset)", securityService.authorize(), IKerneosSecurityService.SecurityError.ACCESS_DENIED);
 
         roles.clear();
         roles.add("jonas");
@@ -100,7 +100,7 @@ public class SecurityTest extends TestCase {
 
         roles.clear();
         roles.add("principal1");
-        assertEquals("Default deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
+        assertEquals("Default deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.ACCESS_DENIED);
     }
 
     /**
@@ -181,10 +181,10 @@ public class SecurityTest extends TestCase {
         assertEquals("Propagation of parent rule", securityService.authorize(), IKerneosSecurityService.SecurityError.NO_ERROR);
 
         service.setId("test2");
-        assertEquals("Override deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
+        assertEquals("Override deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.ACCESS_DENIED);
 
         context.setMethod("test3");
-        assertEquals("Override allow in deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.INVALID_CREDENTIALS);
+        assertEquals("Override allow in deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.ACCESS_DENIED);
     }
 
     class TestProfileManager implements KerneosProfile {

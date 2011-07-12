@@ -34,7 +34,7 @@ import mx.core.UIComponent;
 import mx.events.ToolTipEvent;
 import mx.resources.ResourceManager;
 
-import org.ow2.kerneos.core.managers.LanguagesManager;
+import org.ow2.kerneos.common.managers.LanguagesManager;
 
 
 /**

@@ -22,7 +22,7 @@
  * $Id$
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.core.managers
+package org.ow2.kerneos.common.managers
 {
 
 import mx.resources.ResourceManager;

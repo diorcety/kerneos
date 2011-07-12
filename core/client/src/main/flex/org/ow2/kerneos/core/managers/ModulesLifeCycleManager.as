@@ -37,20 +37,20 @@ import flash.utils.Dictionary;
 import flexlib.mdi.containers.MDIWindow;
 
 import mx.collections.ArrayCollection;
-import mx.controls.Alert;
-import mx.core.FlexGlobals;
-import mx.events.CloseEvent;
-import mx.messaging.events.ChannelEvent;
 import mx.messaging.events.ChannelFaultEvent;
 import mx.messaging.events.MessageEvent;
 import mx.resources.ResourceManager;
+import mx.rpc.events.FaultEvent;
 import mx.utils.UIDUtil;
 
 import org.granite.gravity.Consumer;
 import org.ow2.kerneos.common.event.KerneosNotificationEvent;
+import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
+import org.ow2.kerneos.common.managers.ErrorManager;
+import org.ow2.kerneos.common.managers.LanguagesManager;
+import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
-import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
 import org.ow2.kerneos.core.view.window.FolderWindow;
 import org.ow2.kerneos.core.view.window.IFrameModuleWindow;
@@ -96,11 +96,6 @@ public class ModulesLifeCycleManager {
     private static var frames:Dictionary = new Dictionary();
 
     /**
-     * true if the there is a problem with channels or communications
-     */
-    private static var inFaultState:Boolean = false;
-
-    /**
      * The gravity consumer for asynchronous OSGi communication
      */
     private static var consumer:Consumer = null;
@@ -141,14 +136,6 @@ public class ModulesLifeCycleManager {
         // Uninstall all the modules
         while (KerneosModelLocator.getInstance().modules.length) {
             uninstallModule(KerneosModelLocator.getInstance().modules.getItemAt(0) as ModuleVO);
-        }
-
-        // Close all the windows
-        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-        for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow) {
-                closeModuleByWindow(window as ModuleWindow);
-            }
         }
 
         notification = true;
@@ -402,8 +389,6 @@ public class ModulesLifeCycleManager {
         consumer = ServiceLocator.getInstance().getConsumer("kerneosAsyncConfigService");
         consumer.addEventListener(ChannelFaultEvent.FAULT, onFault);
         consumer.addEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
-        consumer.addEventListener(ChannelEvent.CONNECT, onChannelConnection);
-        consumer.addEventListener(ChannelEvent.DISCONNECT, onChannelDisconnect);
 
         consumer.subscribe();
     }
@@ -411,8 +396,6 @@ public class ModulesLifeCycleManager {
     public static function unsubscribe():void {
         consumer.removeEventListener(ChannelFaultEvent.FAULT, onFault);
         consumer.removeEventListener(MessageEvent.MESSAGE, onModuleEventMessage);
-        consumer.removeEventListener(ChannelEvent.CONNECT, onChannelConnection);
-        consumer.removeEventListener(ChannelEvent.DISCONNECT, onChannelDisconnect);
 
         consumer.unsubscribe();
     }
@@ -434,60 +417,18 @@ public class ModulesLifeCycleManager {
      * Message showed when there is a communication problem from gravity consumer
      */
     private static function onFault(event:Event):void {
-        if (KerneosModelLocator.getInstance().state != KerneosState.DESKTOP &&
-                KerneosModelLocator.getInstance().state != KerneosState.DISCONNECTED) {
-            Alert.show(ResourceManager.getInstance().getString(
-                    LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.startup.channel-problem'));
-        } else {
-            if (!inFaultState) {
-                inFaultState = true;
+        if (!ErrorManager.handleError(event)) {
+            if (event is FaultEvent) {
+                // Retrieve the fault event
+                var faultEvent:FaultEvent = FaultEvent(event);
 
-                KerneosModelLocator.getInstance().state = KerneosState.DISCONNECTED;
-
-                Alert.show(ResourceManager.getInstance().getString(
-                        LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency'),
-                        ResourceManager.getInstance().getString(
-                                LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency.title'),
-                        Alert.OK | Alert.NO, null,
-                        channelDisconnectListener, null, Alert.OK);
-
+                var serverSideExceptionEvent:ServerSideExceptionEvent = new ServerSideExceptionEvent(
+                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
+                        new ServerSideException(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.error.moduleEvent.title"),
+                                ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.error.moduleEvent", [faultEvent.fault.faultString]),
+                                faultEvent.fault.getStackTrace()));
+                CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
             }
-
-        }
-    }
-
-    private static function onChannelDisconnect(event:Event):void {
-        if (!inFaultState) {
-            Alert.show(ResourceManager.getInstance().getString(
-                    LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency'),
-                    ResourceManager.getInstance().getString(
-                            LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.channel-problem.missing-dependency.title'),
-                    Alert.OK | Alert.NO, null,
-                    channelDisconnectListener, null, Alert.OK);
-        }
-
-        inFaultState = true;
-    }
-
-    private static function onChannelConnection(event:Event):void {
-        if (inFaultState) {
-            //TODO Have to get back to normal state
-            FlexGlobals.topLevelApplication.enabled = true;
-        }
-
-        inFaultState = false;
-
-        if (KerneosModelLocator.getInstance().state == KerneosState.DISCONNECTED) {
-            KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
-        }
-    }
-
-    private static function channelDisconnectListener(eventObj:CloseEvent):void {
-        // Check to see if the OK button was pressed.
-        if (eventObj.detail == Alert.OK) {
-            FlexGlobals.topLevelApplication.enabled = false;
-        } else {
-            KerneosLifeCycleManager.reloadPage();
         }
     }
 

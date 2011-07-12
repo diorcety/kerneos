@@ -45,9 +45,10 @@
 
         import org.granite.util.GraniteClassRegistry;
 
+        import org.ow2.kerneos.common.managers.LanguagesManager;
+
         import org.ow2.kerneos.core.api.KerneosModule;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
-        import org.ow2.kerneos.core.managers.LanguagesManager;
         import org.ow2.kerneos.core.vo.SWFModuleVO;
         import org.ow2.kerneos.core.vo.ServiceVO;
 

@@ -43,8 +43,6 @@
 
   <modules>
     <module>cairngorm</module>
-    <!--<module>flexlib</module>-->
-    <module>common</module>
     <module>login</module>
     <module>profile</module>
   </modules>

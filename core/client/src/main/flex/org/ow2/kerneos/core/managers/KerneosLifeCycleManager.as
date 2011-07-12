@@ -192,7 +192,7 @@ public class KerneosLifeCycleManager {
      * New State handling
      */
     public static function stateChanged(applicationState:String, loginState:String, profileState:String):void {
-        if (applicationState != KerneosState.LOADING && applicationState != KerneosState.INIT) {
+        if (applicationState != KerneosState.LOADING && applicationState != KerneosState.INIT && applicationState != KerneosState.ERROR) {
             if (loginState == LoginState.IDLE) {
                 if (!KerneosModelLocator.getInstance().application.authentication.equals(AuthenticationVO.FLEX)) {
                     LoginModelLocator.getInstance().state = LoginState.LOGGED;

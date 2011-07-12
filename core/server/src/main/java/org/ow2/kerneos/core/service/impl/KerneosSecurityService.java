@@ -207,7 +207,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
 
         if (kerneosContext.getModuleBundle() != null) {
             if (profile == null)
-                return SecurityError.INVALID_CREDENTIALS;
+                return SecurityError.ACCESS_DENIED;
 
             ProfilePolicy policy = getPolicy(profile.getDefaultRules(), roles, profile.getDefaultPolicy());
 
@@ -215,28 +215,28 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
             if (bundle != null) {
                 policy = getPolicy(bundle.getRules(), roles, policy);
                 if (policy == ProfilePolicy.DENY)
-                    return SecurityError.INVALID_CREDENTIALS;
+                    return SecurityError.ACCESS_DENIED;
 
                 if (kerneosContext.getService() != null) {
                     ProfileService service = getService(bundle.getServices(), kerneosContext.getService().getId());
                     if (service != null) {
                         policy = getPolicy(service.getRules(), roles, policy);
                         if (policy == ProfilePolicy.DENY)
-                            return SecurityError.INVALID_CREDENTIALS;
+                            return SecurityError.ACCESS_DENIED;
 
                         if (kerneosContext.getMethod() != null) {
                             ProfileMethod method = getMethod(service.getMethods(), kerneosContext.getMethod());
                             if (method != null) {
                                 policy = getPolicy(method.getRules(), roles, policy);
                                 if (policy == ProfilePolicy.DENY)
-                                    return SecurityError.INVALID_CREDENTIALS;
+                                    return SecurityError.ACCESS_DENIED;
                             }
                         }
                     }
                 }
             }
 
-            return policy == ProfilePolicy.ALLOW ? SecurityError.NO_ERROR : SecurityError.INVALID_CREDENTIALS;
+            return policy == ProfilePolicy.ALLOW ? SecurityError.NO_ERROR : SecurityError.ACCESS_DENIED;
         }
 
         // Allow access to application only in other cases

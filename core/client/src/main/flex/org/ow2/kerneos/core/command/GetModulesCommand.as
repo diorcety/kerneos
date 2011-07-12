@@ -26,16 +26,19 @@ import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import mx.collections.ArrayCollection;
+import mx.resources.ResourceManager;
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
+import org.ow2.kerneos.common.managers.ErrorManager;
+import org.ow2.kerneos.common.managers.LanguagesManager;
+
 import org.ow2.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
-import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.vo.ModuleVO;
 
 /**
@@ -81,22 +84,19 @@ public class GetModulesCommand implements ICommand, IResponder {
      * Handle faults
      */
     public function fault(event:Object):void {
+        if (!ErrorManager.handleError(event)) {
+            // Retrieve the fault event
+            var faultEvent:FaultEvent = FaultEvent(event);
 
-        // Retrieve the fault event
-        var faultEvent:FaultEvent = FaultEvent(event);
-
-        // Retrieve the model
-        var model:KerneosModelLocator = KerneosModelLocator.getInstance();
-
-        // Tell the view and let it handle this
-        var serverSideExceptionEvent:ServerSideExceptionEvent =
-                new ServerSideExceptionEvent(
-                        ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + model.componentID,
-                        new ServerSideException("Error while loading the configuration",
-                                "The application file could not be read successfully."
-                                        + "\n" + faultEvent.fault.faultString,
-                                faultEvent.fault.getStackTrace()));
-        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+            // Tell the view and let it handle this
+            var serverSideExceptionEvent:ServerSideExceptionEvent =
+                    new ServerSideExceptionEvent(
+                            ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
+                            new ServerSideException(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.error.modules.title"),
+                                    ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, "kerneos.error.modules", [faultEvent.fault.faultString]),
+                                    faultEvent.fault.getStackTrace()));
+            CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+        }
     }
 }
 }

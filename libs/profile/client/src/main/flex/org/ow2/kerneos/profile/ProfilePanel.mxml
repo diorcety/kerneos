@@ -30,11 +30,6 @@
           xmlns:control="org.ow2.kerneos.profile.control.*"
           currentState="{ProfileModelLocator.getInstance().state}"
           title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.profile.title')}">
-
-    <fx:Metadata>
-        [ResourceBundle("profileLocales")]
-    </fx:Metadata>
-
     <fx:Declarations>
         <control:Controller id="controller"/>
     </fx:Declarations>
@@ -45,8 +40,8 @@
 
         import mx.resources.ResourceManager;
 
+        import org.ow2.kerneos.common.managers.LanguagesManager;
         import org.ow2.kerneos.profile.event.GetProfileEvent;
-        import org.ow2.kerneos.profile.manager.LanguagesManager;
         import org.ow2.kerneos.profile.manager.ProfileManager;
         import org.ow2.kerneos.profile.model.ProfileModelLocator;
         import org.ow2.kerneos.profile.model.ProfileState;

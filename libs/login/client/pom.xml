@@ -56,7 +56,7 @@
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-common-client</artifactId>
+      <artifactId>kerneos-common</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
     </dependency>
@@ -102,11 +102,6 @@
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <configuration>
-          <localesCompiled>
-            <locale>en_US</locale>
-            <locale>fr_FR</locale>
-          </localesCompiled>
-          <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
         </configuration>
       </plugin>
     </plugins>

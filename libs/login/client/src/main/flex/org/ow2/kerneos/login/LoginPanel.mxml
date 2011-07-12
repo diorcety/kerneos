@@ -31,10 +31,6 @@
           currentState="{LoginModelLocator.getInstance().state}"
           title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.title')}">
 
-    <fx:Metadata>
-        [ResourceBundle("loginLocales")]
-    </fx:Metadata>
-
     <fx:Declarations>
         <control:Controller id="controller"/>
     </fx:Declarations>
@@ -45,9 +41,9 @@
 
         import mx.resources.ResourceManager;
 
+        import org.ow2.kerneos.common.managers.LanguagesManager;
         import org.ow2.kerneos.login.event.AuthEvent;
         import org.ow2.kerneos.login.event.LogOutEvent;
-        import org.ow2.kerneos.login.manager.LanguagesManager;
         import org.ow2.kerneos.login.model.LoginModelLocator;
 
         private function auth():void {
