@@ -38,7 +38,7 @@ import org.granite.osgi.service.GraniteDestination;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-import org.ow2.kerneos.core.IApplicationBundle;
+import org.ow2.kerneos.core.ApplicationBundle;
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.login.Session;
@@ -78,7 +78,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
     @Requires
     private GraniteClassRegistry gcr;
 
-    private Map<String, IApplicationBundle> applicationMap = new HashMap<String, IApplicationBundle>();
+    private Map<String, ApplicationBundle> applicationMap = new HashMap<String, ApplicationBundle>();
 
 
     private Configuration graniteDestination, gravityDestination, eaConfig;
@@ -161,7 +161,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
      * @return True if the login is successful.
      */
     public boolean logIn(String username, String password) {
-        IApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
+        ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
         switch (applicationBundle.getApplication().getAuthentication()) {
             case NONE:
                 break;
@@ -183,7 +183,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
      * @return The status associated to the authorisation.
      */
     public SecurityError authorize() {
-        IApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
+        ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
         switch (applicationBundle.getApplication().getAuthentication()) {
             case NONE:
                 break;
@@ -314,7 +314,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
      * @return True if the logout is successful.
      */
     public boolean logOut() {
-        IApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
+        ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
         switch (applicationBundle.getApplication().getAuthentication()) {
             case NONE:
                 break;

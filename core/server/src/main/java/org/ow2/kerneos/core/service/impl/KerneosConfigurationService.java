@@ -41,23 +41,22 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
 import org.apache.felix.ipojo.handler.extender.BundleTracker;
-import org.apache.felix.ipojo.handlers.event.publisher.Publisher;
 
+import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.service.GraniteDestination;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 import org.ow2.kerneos.core.ApplicationBundle;
-import org.ow2.kerneos.core.IApplicationBundle;
-import org.ow2.kerneos.core.IModuleBundle;
+import org.ow2.kerneos.core.ModuleBundle;
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.ModuleEvent;
-import org.ow2.kerneos.core.ModuleBundle;
 import org.ow2.kerneos.core.config.generated.Application;
 import org.ow2.kerneos.core.config.generated.Folder;
 import org.ow2.kerneos.core.config.generated.Module;
@@ -85,31 +84,19 @@ public final class KerneosConfigurationService implements GraniteDestination {
      */
     private JAXBContext jaxbContext;
 
-    /**
-     * Async Event Publisher.
-     */
-    @org.apache.felix.ipojo.handlers.event.Publisher(
-            name = "KerneosConfigurationService",
-            topics = KerneosConstants.KERNEOS_CONFIG_TOPIC
-    )
+    @Requires
+    private EventAdmin eventAdmin;
 
-    private Publisher publisher;
-
-    /**
-     * Granite Class Registry.
-     */
     @Requires
     private GraniteClassRegistry gcr;
 
     @Requires
     private ConfigurationAdmin configurationAdmin;
 
-    private Configuration eaConfig, graniteDestination, gravityDestination;
+    @Requires
+    private IKerneosCore kerneosCore;
 
-    private Map<String, ApplicationBundle> applicationBundleMap = new HashMap<String, ApplicationBundle>();
-    private Map<String, ServiceRegistration> applicationRegistrationMap = new HashMap<String, ServiceRegistration>();
-    private Map<String, ModuleBundle> moduleBundleMap = new HashMap<String, ModuleBundle>();
-    private Map<String, ServiceRegistration> moduleRegistrationMap = new HashMap<String, ServiceRegistration>();
+    private Configuration eaConfig, graniteDestination, gravityDestination;
 
     private BundleTracker bundleTracker;
     private BundleContext bundleContext;
@@ -273,17 +260,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
             Application application = loadKerneosApplicationConfig(bundle);
             ApplicationBundle applicationBundle = new ApplicationBundle(name, application, bundle);
 
-            Dictionary dictionary = new Hashtable();
-            dictionary.put("ID", name);
-            ServiceRegistration instance = bundleContext.registerService(IApplicationBundle.class.getName(), applicationBundle, dictionary);
-
-            synchronized (applicationBundleMap) {
-                applicationBundleMap.put(name, applicationBundle);
-                applicationRegistrationMap.put(name, instance);
-            }
-
+            kerneosCore.addApplicationBundle(applicationBundle);
         } catch (Exception e) {
-            logger.error(e, "Can't add the Kerneos Application: " + name);
+            logger.error("Can't create the application \"" + name + "\": " + e);
             return;
         }
     }
@@ -297,17 +276,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
     private void onApplicationDeparture(final Bundle bundle, final String name) {
         logger.debug("Remove Application Module: " + name);
         try {
-            ApplicationBundle applicationBundle = null;
-            ServiceRegistration applicationRegistration = null;
-            synchronized (applicationBundleMap) {
-                applicationBundle = applicationBundleMap.remove(name);
-                applicationRegistration = applicationRegistrationMap.remove(name);
-            }
-
-            applicationRegistration.unregister();
-
+            ApplicationBundle applicationBundle = kerneosCore.removeApplicationBundle(name);
         } catch (Exception e) {
-            logger.error(e, "Can't remove the Kerneos Application: " + name);
+            logger.error("Can't remove the application \"" + name + "\": " + e);
         }
 
     }
@@ -352,20 +323,16 @@ public final class KerneosConfigurationService implements GraniteDestination {
 
             ModuleBundle moduleBundle = new ModuleBundle(name, module, bundle);
 
-            Dictionary dictionary = new Hashtable();
-            dictionary.put("ID", name);
-            ServiceRegistration instance = bundleContext.registerService(IModuleBundle.class.getName(), moduleBundle, dictionary);
-
-            synchronized (moduleBundleMap) {
-                moduleBundleMap.put(name, moduleBundle);
-                moduleRegistrationMap.put(name, instance);
-            }
+            kerneosCore.addModuleBundle(moduleBundle);
 
             // Post an event
             ModuleEvent me = new ModuleEvent(moduleBundle.getModule(), ModuleEvent.LOAD);
-            publisher.sendData(me);
+            Dictionary<String, Object> properties = new Hashtable<String, Object>();
+            properties.put(EAConstants.DATA, me);
+            Event event = new Event(KerneosConstants.KERNEOS_CONFIG_TOPIC, properties);
+            eventAdmin.sendEvent(event);
         } catch (Exception e) {
-            logger.error(e, "Can't add the Kerneos Module: " + name);
+            logger.error("Can't create the module \"" + name + "\": " + e);
             return;
         }
     }
@@ -379,20 +346,18 @@ public final class KerneosConfigurationService implements GraniteDestination {
     private void onModuleDeparture(final Bundle bundle, final String name) {
         logger.debug("Remove Kerneos Module: " + name);
         try {
-            ModuleBundle moduleBundle = null;
-            ServiceRegistration moduleRegistration = null;
-            synchronized (moduleBundleMap) {
-                moduleBundle = moduleBundleMap.remove(name);
-                moduleRegistration = moduleRegistrationMap.remove(name);
+            ModuleBundle moduleBundle = kerneosCore.removeModuleBundle(name);
+
+            if (moduleBundle != null) {
+                // Post an event
+                ModuleEvent me = new ModuleEvent(moduleBundle.getModule(), ModuleEvent.UNLOAD);
+                Dictionary<String, Object> properties = new Hashtable<String, Object>();
+                properties.put(EAConstants.DATA, me);
+                Event event = new Event(KerneosConstants.KERNEOS_CONFIG_TOPIC, properties);
+                eventAdmin.sendEvent(event);
             }
-
-            moduleRegistration.unregister();
-
-            // Post an event
-            ModuleEvent me = new ModuleEvent(moduleBundle.getModule(), ModuleEvent.UNLOAD);
-            publisher.sendData(me);
         } catch (Exception e) {
-            logger.error(e, "Can't remove the Kerneos Module: " + name);
+            logger.error("Can't remove the module \"" + name + "\": " + e);
         }
     }
 
@@ -470,11 +435,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
      * @return the Kerneos application.
      */
     public Application getApplication(String application) {
-        for (ApplicationBundle applicationBundle : applicationBundleMap.values()) {
-            if (applicationBundle.getId().equals(application))
-                return applicationBundle.getApplication();
-        }
-        return null;
+        return kerneosCore.getApplicationBundle(application).getApplication();
     }
 
     /**
@@ -484,7 +445,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
      */
     public Collection<Module> getModules() {
         List<Module> modules = new LinkedList<Module>();
-        for (ModuleBundle moduleBundle : moduleBundleMap.values()) {
+        for (ModuleBundle moduleBundle : kerneosCore.getModuleBundles().values()) {
             modules.add(moduleBundle.getModule());
         }
         return modules;

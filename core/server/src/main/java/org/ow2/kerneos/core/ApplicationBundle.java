@@ -27,33 +27,34 @@ package org.ow2.kerneos.core;
 
 import org.osgi.framework.Bundle;
 
+import org.osgi.service.cm.Configuration;
 import org.ow2.kerneos.core.config.generated.Application;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
  * An instance of Application.
  */
-public class ApplicationBundle implements IApplicationBundle {
-    protected String id;
-    protected Application application;
-    protected transient Bundle bundle;
-
-    /**
-     * Empty constructor.
-     */
-    public ApplicationBundle() {
-    }
+public class ApplicationBundle {
+    private String id;
+    private Application application;
+    private Bundle bundle;
+    private List<Configuration> configurations = new LinkedList<Configuration>();
 
     /**
      * Construct a module instance using an id and a application.
      *
-     * @param id            the id of the instance.
+     * @param id          the id of the instance.
      * @param application the application of the instance.
      */
     public ApplicationBundle(String id, Application application, Bundle bundle) {
         this.id = id;
         this.application = application;
         this.bundle = bundle;
+        configurations = new LinkedList<Configuration>();
     }
 
     /**
@@ -99,5 +100,27 @@ public class ApplicationBundle implements IApplicationBundle {
      */
     public Bundle getBundle() {
         return bundle;
+    }
+
+    /**
+     * Add a configuration associated with the ApplicationBundle
+     *
+     * @param configuration the configuration
+     */
+    public synchronized void addConfiguration(Configuration configuration) {
+        configurations.add(configuration);
+    }
+
+    /**
+     * Remove all the configuration associated with the ApplicationBundle
+     *
+     * @throws IOException
+     */
+    public synchronized void dispose() throws IOException {
+
+        for (Configuration configuration : configurations) {
+            configuration.delete();
+        }
+        configurations.clear();
     }
 }

@@ -92,12 +92,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
-      <version>${ipojo.eventadmin.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
       <version>${ipojo.extender.version}</version>
       <scope>provided</scope>
@@ -259,7 +253,7 @@
           <instructions>
             <Include-Resource>
               {maven-resources}, {maven-dependencies},
-              ${project.build.directory}/kerneos
+              KERNEOS=${project.build.directory}/kerneos
             </Include-Resource>
             <Export-Package>
               org.ow2.kerneos.core;version=${project.version},

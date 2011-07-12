@@ -25,23 +25,22 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-import org.ow2.kerneos.core.IApplicationBundle;
-import org.ow2.kerneos.core.IModuleBundle;
+import org.ow2.kerneos.core.ApplicationBundle;
+import org.ow2.kerneos.core.ModuleBundle;
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.config.generated.ManagerProperty;
@@ -53,11 +52,9 @@ import org.ow2.util.log.LogFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Map;
 
 
@@ -76,9 +73,11 @@ public class KerneosCore implements IKerneosCore {
      */
     private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
 
-    private Map<String, KerneosApplication> applicationMap = new HashMap<String, KerneosApplication>();
+    private Map<String, ApplicationBundle> applicationMap = new HashMap<String, ApplicationBundle>();
 
-    private Map<String, IModuleBundle> moduleMap = new HashMap<String, IModuleBundle>();
+    private Map<String, ModuleBundle> moduleMap = new HashMap<String, ModuleBundle>();
+
+    private Map<String, Service> serviceMap = new HashMap<String, Service>();
 
     private Map<String, ModuleService> destinationMap = new HashMap<String, ModuleService>();
 
@@ -101,7 +100,7 @@ public class KerneosCore implements IKerneosCore {
      * Called when all the component dependencies are met.
      */
     @Validate
-    private void start() throws IOException {
+    private synchronized void start() throws IOException {
         logger.debug("Start KerneosCore");
 
         // Gravity Configurations
@@ -139,7 +138,7 @@ public class KerneosCore implements IKerneosCore {
      * Called when all the component dependencies aren't met anymore.
      */
     @Invalidate
-    private void stop() throws IOException {
+    private synchronized void stop() throws IOException {
         logger.debug("Stop KerneosCore");
 
         // Dispose configurations
@@ -147,16 +146,27 @@ public class KerneosCore implements IKerneosCore {
         gravitySecurity.delete();
         granite.delete();
         graniteSecurity.delete();
+
+        // Dispose applications
+        while (applicationMap.size() != 0) {
+            try {
+                String applicationId = applicationMap.keySet().iterator().next();
+                removeApplicationBundle(applicationId);
+            } catch (Exception e) {
+            }
+        }
+
+        // Dispose modules
+        while (moduleMap.size() != 0) {
+            try {
+                String moduleId = moduleMap.keySet().iterator().next();
+                removeModuleBundle(moduleId);
+            } catch (Exception e) {
+            }
+        }
     }
 
-    /**
-     * Called when an Application instance is registered.
-     *
-     * @param applicationBundle the instance of an application
-     */
-    @Bind(aggregate = true, optional = true)
-    private void bindApplicationBundle(final IApplicationBundle applicationBundle) throws IOException {
-        KerneosApplication kerneosApplication = new KerneosApplication();
+    public synchronized void addApplicationBundle(final ApplicationBundle applicationBundle) throws Exception {
         try {
             // Managers
             if (applicationBundle.getApplication().getManagers() != null) {
@@ -170,7 +180,7 @@ public class KerneosCore implements IKerneosCore {
                     }
                     instance.update(dictionary);
 
-                    kerneosApplication.addInstance(instance);
+                    applicationBundle.addConfiguration(instance);
                 }
                 if (applicationBundle.getApplication().getManagers().getProfile() != null) {
                     Configuration instance = configurationAdmin.createFactoryConfiguration(applicationBundle.getApplication().getManagers().getProfile().getId(), null);
@@ -182,7 +192,7 @@ public class KerneosCore implements IKerneosCore {
                     }
                     instance.update(dictionary);
 
-                    kerneosApplication.addInstance(instance);
+                    applicationBundle.addConfiguration(instance);
                 }
                 if (applicationBundle.getApplication().getManagers().getRoles() != null) {
                     Configuration instance = configurationAdmin.createFactoryConfiguration(applicationBundle.getApplication().getManagers().getRoles().getId(), null);
@@ -194,7 +204,7 @@ public class KerneosCore implements IKerneosCore {
                     }
                     instance.update(dictionary);
 
-                    kerneosApplication.addInstance(instance);
+                    applicationBundle.addConfiguration(instance);
                 }
             }
 
@@ -206,81 +216,116 @@ public class KerneosCore implements IKerneosCore {
 
             Dictionary dictionary = new Hashtable();
             dictionary.put("requires.filters", new String[]{
-                    "application", "(ID=" + applicationBundle.getId() + ")",
                     "login", "(ID=" + applicationBundle.getId() + ")",
                     "profile", "(ID=" + applicationBundle.getId() + ")",
                     "roles", "(ID=" + applicationBundle.getId() + ")",
             });
+            dictionary.put("ID", applicationBundle.getId());
             httpInstance.update(dictionary);
 
-            kerneosApplication.addInstance(httpInstance);
+            applicationBundle.addConfiguration(httpInstance);
 
-            synchronized (applicationMap) {
-                applicationMap.put(applicationBundle.getId(), kerneosApplication);
-            }
+            applicationMap.put(applicationBundle.getId(), applicationBundle);
 
         } catch (Exception e) {
-            kerneosApplication.dispose();
-            logger.error("Can't create the application \"" + applicationBundle.getId() + "\": " + e);
+            applicationBundle.dispose();
+            throw e;
         }
     }
 
-    /**
-     * Called when an Application instance is unregistered.
-     *
-     * @param applicationBundle the instance of an application
-     */
-    @Unbind
-    private void unbindApplicationBundle(final IApplicationBundle applicationBundle) throws IOException {
-        synchronized (applicationMap) {
-            KerneosApplication ka = applicationMap.remove(applicationBundle.getId());
-            ka.dispose();
-        }
-
+    public synchronized ApplicationBundle removeApplicationBundle(final String applicationId) throws Exception {
+        ApplicationBundle applicationBundle = null;
+        applicationBundle = applicationMap.remove(applicationId);
+        applicationBundle.dispose();
+        return applicationBundle;
     }
 
-    @Bind(aggregate = true, optional = true)
-    private void bindModuleBundle(final IModuleBundle moduleBundle) {
-        synchronized (moduleMap) {
-            moduleMap.put(moduleBundle.getId(), moduleBundle);
+    public synchronized Map<String, ApplicationBundle> getApplicationBundles() {
+        return new HashMap<String, ApplicationBundle>(applicationMap);
+    }
+
+    public synchronized ApplicationBundle getApplicationBundle(Bundle bundle) {
+        for (ApplicationBundle applicationBundle : applicationMap.values()) {
+            if (applicationBundle.getBundle() == bundle) {
+                return applicationBundle;
+            }
         }
+        return null;
+    }
+
+    public synchronized ApplicationBundle getApplicationBundle(String applicationId) {
+        return applicationMap.get(applicationId);
+    }
+
+    public synchronized void addModuleBundle(final ModuleBundle moduleBundle) throws Exception {
+        moduleMap.put(moduleBundle.getId(), moduleBundle);
         if (moduleBundle.getModule() instanceof SwfModule) {
             SwfModule swfModule = (SwfModule) moduleBundle.getModule();
-            synchronized (destinationMap) {
-                for (Service service : swfModule.getServices()) {
-                    destinationMap.put(service.getDestination(), new ModuleService(moduleBundle, service));
-                }
+            for (Service service : swfModule.getServices()) {
+                destinationMap.put(service.getDestination(), new ModuleService(moduleBundle, service));
+            }
+            for (Service service : swfModule.getServices()) {
+                serviceMap.put(service.getId(), service);
             }
         }
     }
 
-    @Unbind
-    private void unbindModuleBundle(final IModuleBundle moduleBundle) {
-        synchronized (moduleMap) {
-            moduleMap.remove(moduleBundle.getId());
-        }
+    public synchronized ModuleBundle removeModuleBundle(final String moduleId) throws Exception {
+        ModuleBundle moduleBundle = moduleMap.remove(moduleId);
         if (moduleBundle.getModule() instanceof SwfModule) {
             SwfModule swfModule = (SwfModule) moduleBundle.getModule();
-            synchronized (destinationMap) {
-                for (Service service : swfModule.getServices()) {
-                    destinationMap.remove(service.getDestination());
-                }
+            for (Service service : swfModule.getServices()) {
+                destinationMap.remove(service.getDestination());
+            }
+            for (Service service : swfModule.getServices()) {
+                serviceMap.remove(service.getId());
             }
         }
+
+        return moduleBundle;
     }
 
+    public synchronized Map<String, ModuleBundle> getModuleBundles() {
+        return new HashMap<String, ModuleBundle>(moduleMap);
+    }
+
+    public synchronized ModuleBundle getModuleBundle(Bundle bundle) {
+        for (ModuleBundle moduleBundle : moduleMap.values()) {
+            if (moduleBundle.getBundle() == bundle) {
+                return moduleBundle;
+            }
+        }
+        return null;
+    }
+
+    public synchronized ModuleBundle getModuleBundle(String moduleId) {
+        return moduleMap.get(moduleId);
+    }
+
+    public synchronized Service getService(String serviceId) {
+        Service service = serviceMap.get(serviceId);
+        return service;
+    }
 
     public void updateContext(HttpServletRequest request) {
         KerneosContext kerneosContext = KerneosContext.getCurrentContext();
 
-        IModuleBundle currentModuleBundle = null;
-        for (IModuleBundle moduleBundle : moduleMap.values()) {
-            if (request.getRequestURI().contains("/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId())) {
-                currentModuleBundle = moduleBundle;
-                break;
+        // Get the module and the associated path
+        String path = request.getPathInfo();
+        ModuleBundle currentModuleBundle = null;
+        if (path != null && path.startsWith(KerneosConstants.KERNEOS_MODULE_URL)) {
+            path = path.substring(KerneosConstants.KERNEOS_MODULE_URL.length());
+            int sep = path.indexOf("/");
+            if (sep != -1) {
+                synchronized (this) {
+                    currentModuleBundle = moduleMap.get(path.substring(0, sep));
+                }
+                path = path.substring(sep);
             }
         }
+
         kerneosContext.setModuleBundle(currentModuleBundle);
+        kerneosContext.setPath(path);
         kerneosContext.setService(null);
         kerneosContext.setMethod(null);
 
@@ -301,9 +346,12 @@ public class KerneosCore implements IKerneosCore {
 
     public void updateContext(String destination, String method) {
         KerneosContext kerneosContext = KerneosContext.getCurrentContext();
-
+        kerneosContext.setPath(null);
         kerneosContext.setMethod(method);
-        ModuleService moduleService = destinationMap.get(destination);
+        ModuleService moduleService;
+        synchronized (this) {
+            moduleService = destinationMap.get(destination);
+        }
         if (moduleService != null) {
             kerneosContext.setModuleBundle(moduleService.getModuleBundle());
             kerneosContext.setService(moduleService.getService());
@@ -312,39 +360,19 @@ public class KerneosCore implements IKerneosCore {
 
     class ModuleService {
         private Service service;
-        private IModuleBundle moduleBundle;
+        private ModuleBundle moduleBundle;
 
-        ModuleService(IModuleBundle moduleBundle, Service service) {
+        ModuleService(ModuleBundle moduleBundle, Service service) {
             this.service = service;
             this.moduleBundle = moduleBundle;
         }
 
-        public IModuleBundle getModuleBundle() {
+        public ModuleBundle getModuleBundle() {
             return moduleBundle;
         }
 
         public Service getService() {
             return service;
-        }
-    }
-
-    class KerneosApplication {
-
-        private Collection<Configuration> instances = new LinkedList<Configuration>();
-
-        synchronized void addInstance(Configuration instance) {
-            instances.add(instance);
-        }
-
-        synchronized void dispose() {
-            for (Configuration instance : instances) {
-                try {
-                    instance.delete();
-                } catch (Exception e) {
-
-                }
-            }
-            instances.clear();
         }
     }
 }

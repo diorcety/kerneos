@@ -25,9 +25,37 @@
 
 package org.ow2.kerneos.core.service.impl;
 
+import org.osgi.framework.Bundle;
+import org.ow2.kerneos.core.ApplicationBundle;
+import org.ow2.kerneos.core.ModuleBundle;
+import org.ow2.kerneos.core.config.generated.Service;
+
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 public interface IKerneosCore {
+
+    public void addApplicationBundle(final ApplicationBundle applicationBundle) throws Exception;
+
+    public ApplicationBundle removeApplicationBundle(final String applicationId) throws Exception;
+
+    public void addModuleBundle(final ModuleBundle moduleBundle) throws Exception;
+
+    public ModuleBundle removeModuleBundle(final String moduleId) throws Exception;
+
+    public ModuleBundle getModuleBundle(Bundle bundle);
+
+    public ModuleBundle getModuleBundle(String moduleId);
+
+    public Service getService(String serviceId);
+
+    public Map<String, ModuleBundle> getModuleBundles();
+
+    public ApplicationBundle getApplicationBundle(Bundle bundle);
+
+    public ApplicationBundle getApplicationBundle(String applicationId);
+
+    public Map<String, ApplicationBundle> getApplicationBundles();
 
     void updateContext(HttpServletRequest request);
 

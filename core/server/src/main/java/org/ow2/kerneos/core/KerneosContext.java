@@ -60,10 +60,11 @@ public class KerneosContext {
     private Session session;
 
     // Request
-    private IApplicationBundle applicationBundle;
-    private IModuleBundle moduleBundle;
+    private ApplicationBundle applicationBundle;
+    private ModuleBundle moduleBundle;
     private Service service;
     private String method;
+    private String path;
 
     // Managers
     private KerneosLogin kerneosLogin;
@@ -73,19 +74,19 @@ public class KerneosContext {
     private KerneosContext() {
     }
 
-    public IApplicationBundle getApplicationBundle() {
+    public ApplicationBundle getApplicationBundle() {
         return applicationBundle;
     }
 
-    public void setApplicationBundle(IApplicationBundle applicationBundle) {
+    public void setApplicationBundle(ApplicationBundle applicationBundle) {
         this.applicationBundle = applicationBundle;
     }
 
-    public IModuleBundle getModuleBundle() {
+    public ModuleBundle getModuleBundle() {
         return moduleBundle;
     }
 
-    public void setModuleBundle(IModuleBundle moduleBundle) {
+    public void setModuleBundle(ModuleBundle moduleBundle) {
         this.moduleBundle = moduleBundle;
     }
 
@@ -103,6 +104,14 @@ public class KerneosContext {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public Session getSession() {

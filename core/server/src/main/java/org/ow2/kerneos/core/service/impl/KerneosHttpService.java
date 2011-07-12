@@ -25,13 +25,12 @@
 
 package org.ow2.kerneos.core.service.impl;
 
-import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
-import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.osgi.service.cm.Configuration;
@@ -40,8 +39,8 @@ import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
-import org.ow2.kerneos.core.IApplicationBundle;
-import org.ow2.kerneos.core.IModuleBundle;
+import org.ow2.kerneos.core.ApplicationBundle;
+import org.ow2.kerneos.core.ModuleBundle;
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.config.generated.Authentication;
@@ -59,7 +58,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -77,13 +75,11 @@ public class KerneosHttpService implements HttpContext {
      * The logger.
      */
     private static Log logger = LogFactory.getLog(KerneosHttpService.class);
-    private static final String PREFIX = "bundle:/";
-    private static final String PREFIX2 = "bundle://";
-    private static final String PREFIX_EQUINOX = "bundleresource:/";
-    private static final String PREFIX_EQUINOX2 = "bundleresource://";
 
     @ServiceProperty(name = "ID")
-    String contextID;
+    @Property(name = "ID", mandatory = true)
+    private String application;
+
 
     /**
      * OSGi HTTPService.
@@ -109,25 +105,26 @@ public class KerneosHttpService implements HttpContext {
     @Requires(id = "profile", optional = true, defaultimplementation = DefaultKerneosProfile.class, proxy = false)
     private KerneosProfile kerneosProfile;
 
-    @Requires(id = "application")
-    private IApplicationBundle applicationBundle;
-
     private Configuration gavityChannel, graniteChannel;
 
-    private Map<String, IModuleBundle> moduleBundleMap = new HashMap<String, IModuleBundle>();
+    private Map<String, ModuleBundle> moduleBundleMap = new HashMap<String, ModuleBundle>();
 
+    private ApplicationBundle applicationBundle;
+
+    /**
+     * Called when all the component dependencies are met.
+     */
     @Validate
     private void start() throws NamespaceException, IOException {
-        contextID = applicationBundle.getId();
+        logger.debug("Start Kerneos Application: " + application);
 
-        logger.debug("Start Kerneos Application: " + applicationBundle.getId());
-
+        applicationBundle = kerneosCore.getApplicationBundle(application);
         String applicationURL = applicationBundle.getApplication().getApplicationUrl();
         {
             Dictionary properties = new Hashtable();
             properties.put("id", KerneosConstants.GRAVITY_CHANNEL + applicationBundle.getId());
             properties.put("uri", applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
-            properties.put("context", contextID);
+            properties.put("context", application);
             properties.put("gravity", "true");
             gavityChannel = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Channel", null);
             gavityChannel.update(properties);
@@ -136,40 +133,24 @@ public class KerneosHttpService implements HttpContext {
             Dictionary properties = new Hashtable();
             properties.put("id", KerneosConstants.GRANITE_CHANNEL + applicationBundle.getId());
             properties.put("uri", applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
-            properties.put("context", contextID);
+            properties.put("context", application);
             properties.put("gravity", "false");
             graniteChannel = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Channel", null);
             graniteChannel.update(properties);
         }
 
-        String name = applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString();
-
-         //The name parameter must not end with slash ('/')
-        if ((name.charAt(name.length()-1) == '/') || (name.charAt(name.length()-1) == '\\')) {
-          name = name.substring(0, name.length()-1);
-        }
-
-        logger.info("Register Resources - Url: " + applicationURL + " - Alias: " + name);
-
         // Register Kerneos Application resources
-        httpService.registerResources(applicationURL,
-                name,this);
+        httpService.registerResources(applicationURL, "", this);
 
-        httpService.registerResources(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME,
-                KerneosConstants.KERNEOS_SWF_NAME, this);
-
-        logger.info("Create Map \"" + applicationBundle.getId() + "\" -> \"" + applicationURL + "\"");
-
-        logger.info("###########################################################################");
-        logger.info("Your application main URL is register as : " + applicationURL);
-        logger.info("Example URL : http://localhost:8080" + applicationURL + "/index.html");
-        logger.info("or http://localhost:8080/bridge" + applicationURL + "/index.html if you are in Tomcat");
-        logger.info("###########################################################################");
+        logger.info("Create Map \"" + application + "\" -> \"" + applicationURL + "\"");
     }
 
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop Kerneos Application: " + applicationBundle.getId());
+        logger.debug("Stop Kerneos Application: " + application);
 
         gavityChannel.delete();
         graniteChannel.delete();
@@ -179,47 +160,6 @@ public class KerneosHttpService implements HttpContext {
         logger.info("Destroy Map \"" + applicationBundle.getId() + "\" -> \"" + applicationURL + "\"");
 
         httpService.unregister(applicationURL);
-        httpService.unregister(applicationURL + "/" + KerneosConstants.KERNEOS_SWF_NAME);
-    }
-
-    /**
-     * Called when an Module Instance is registered.
-     *
-     * @param moduleBundle The instance of module.
-     * @throws NamespaceException Never thrown.
-     */
-    @Bind(aggregate = true, optional = true)
-    private void bindModuleBundle(final IModuleBundle moduleBundle) throws NamespaceException {
-        synchronized (moduleBundleMap) {
-            moduleBundleMap.put(moduleBundle.getId(), moduleBundle);
-        }
-
-        String name = moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH).toString();
-
-         //The name parameter must not end with slash ('/')
-        if ((name.charAt(name.length()-1) == '/') || (name.charAt(name.length()-1) == '\\')) {
-          name = name.substring(0, name.length()-1);
-        }
-
-        logger.info("Register Module Resources - Url: " + applicationBundle.getApplication().getApplicationUrl() + "/" +
-                KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId() + " - Alias: " + name);
-
-        httpService.registerResources(applicationBundle.getApplication().getApplicationUrl() + "/" +
-                KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId(), name, this);
-    }
-
-    /**
-     * Called when an Module Instance is unregistered.
-     *
-     * @param moduleBundle The instance of module.
-     */
-    @Unbind
-    private void unbindModuleBundle(final IModuleBundle moduleBundle) {
-        synchronized (moduleBundleMap) {
-            moduleBundleMap.remove(moduleBundle.getId());
-        }
-
-        httpService.unregister(applicationBundle.getApplication().getApplicationUrl() + "/" + KerneosConstants.KERNEOS_MODULE_PREFIX + "/" + moduleBundle.getId());
     }
 
     /**
@@ -238,27 +178,18 @@ public class KerneosHttpService implements HttpContext {
      * @param name url is the string corresponding to the url request.
      * @return the URL type which permits to acced to the resource.
      */
-    public URL getResource(final String name) {
-        if (name.startsWith(PREFIX) ||
-                name.startsWith(PREFIX_EQUINOX)) {
-            try {
-                // Fix apache.felix.http.jetty bug for felix and equinox
-                if ((name.startsWith(PREFIX) && !name.startsWith(PREFIX2))) {
-                    String resourceUrl = PREFIX2 + name.substring(PREFIX.length());
-                    return new URL(resourceUrl);
-                } else {
-                    if (name.startsWith(PREFIX_EQUINOX) && !name.startsWith(PREFIX_EQUINOX2)) {
-                       return new URL(PREFIX_EQUINOX2 + name.substring(PREFIX_EQUINOX.length()));
-                    } else {
-                        return new URL(name);
-                    }
-                }
-            } catch (MalformedURLException e) {
-                return null;
-            }
+    public URL getResource(String name) {
+        String path = KerneosContext.getCurrentContext().getPath();
+        ModuleBundle moduleBundle = KerneosContext.getCurrentContext().getModuleBundle();
+        ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
+
+        if (moduleBundle != null) {
+                return moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
         } else {
-            if (name.startsWith(KerneosConstants.KERNEOS_SWF_NAME)) {
-                return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_SWF_NAME);
+            if (name.startsWith(KerneosConstants.KERNEOS_SWF_URL)) {
+                return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + KerneosConstants.KERNEOS_SWF_URL);
+            } else if (applicationBundle != null) {
+                return applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
             }
         }
         return null;
@@ -272,6 +203,7 @@ public class KerneosHttpService implements HttpContext {
      * @return return true if the user have the credential.
      * @throws IOException neven happen.
      */
+
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
         //Disable Cache

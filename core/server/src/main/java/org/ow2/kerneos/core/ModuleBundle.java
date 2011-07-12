@@ -27,15 +27,21 @@ package org.ow2.kerneos.core;
 
 import org.osgi.framework.Bundle;
 
+import org.osgi.service.cm.Configuration;
 import org.ow2.kerneos.core.config.generated.Module;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * An instance of Module.
  */
-public class ModuleBundle implements IModuleBundle {
+public class ModuleBundle {
     private String id;
     private Module module;
-    protected transient Bundle bundle;
+    private Bundle bundle;
+    private List<Configuration> configurations = new LinkedList<Configuration>();
 
     /**
      * Empty constructor.
@@ -47,7 +53,7 @@ public class ModuleBundle implements IModuleBundle {
     /**
      * Construct a module instance using an id and a module.
      *
-     * @param id            the id of the instance.
+     * @param id     the id of the instance.
      * @param module the module of the instance.
      */
     public ModuleBundle(String id, Module module, Bundle bundle) {
@@ -99,5 +105,26 @@ public class ModuleBundle implements IModuleBundle {
      */
     public Bundle getBundle() {
         return bundle;
+    }
+
+    /**
+     * Add a configuration associated with the ApplicationBundle
+     *
+     * @param configuration the configuration
+     */
+    public synchronized void addConfiguration(Configuration configuration) {
+        configurations.add(configuration);
+    }
+
+    /**
+     * Remove all the configuration associated with the ApplicationBundle
+     *
+     * @throws java.io.IOException
+     */
+    public synchronized void dispose() throws IOException {
+        for (Configuration configuration : configurations) {
+            configuration.delete();
+        }
+        configurations.clear();
     }
 }
