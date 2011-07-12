@@ -23,26 +23,29 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.profile.fileinstall;
+package org.ow2.kerneos.profile.jonas;
 
-import org.apache.felix.fileinstall.ArtifactInstaller;
+import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
-
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
-
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-
 import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.manager.KerneosProfile;
 import org.ow2.kerneos.profile.config.generated.ObjectFactory;
 import org.ow2.kerneos.profile.config.generated.Profile;
+import org.ow2.util.ee.deploy.api.deployable.IDeployable;
+import org.ow2.util.ee.deploy.api.deployer.DeployerException;
+import org.ow2.util.ee.deploy.api.deployer.IDeployer;
+import org.ow2.util.ee.deploy.api.deployer.IDeployerManager;
+import org.ow2.util.ee.deploy.api.deployer.UnsupportedDeployerException;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -50,19 +53,19 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 @Component
-@Provides
-public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
+@Provides(specifications = {KerneosProfile.class})
+public class ProfileJonas implements IDeployer, KerneosProfile {
     /**
-     * The logger.
+     * Logger.
      */
-    private static Log logger = LogFactory.getLog(ProfileFileInstall.class);
+    private static final Log logger = LogFactory.getLog(ProfileJonas.class);
 
     /**
      * Mandatory service property used by Kerneos core.
@@ -94,10 +97,14 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
      */
     private Profile profile;
 
+    private IDeployerManager deployerManager;
+
+    private boolean started = false;
+
     /**
      * Constructor
      */
-    ProfileFileInstall() throws Exception {
+    ProfileJonas() throws Exception {
         jaxbContext = JAXBContext.newInstance(
                 ObjectFactory.class.getPackage().getName(),
                 ObjectFactory.class.getClassLoader());
@@ -108,7 +115,11 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
      */
     @Validate
     private void start() throws IOException {
-        logger.debug("Start ProfileFileInstall(" + ID + ")");
+        logger.debug("Start ProfileJonas(" + ID + ")");
+        if (deployerManager != null) {
+            deployerManager.register(this);
+        }
+        started = true;
     }
 
     /**
@@ -116,13 +127,48 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
      */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop ProfileFileInstall(" + ID + ")");
+        logger.debug("Stop ProfileJonas(" + ID + ")");
+        started = false;
+        if (deployerManager != null) {
+            deployerManager.unregister(this);
+        }
     }
 
 
-    public synchronized void install(File file) throws Exception {
+    /**
+     * Bind method for the DeployerManager.
+     *
+     * @param deployerManager the deployer manager.
+     */
+    @Bind
+    public void bindDeployerManager(final IDeployerManager deployerManager) {
+        this.deployerManager = deployerManager;
+        if (started) {
+            deployerManager.register(this);
+        }
+    }
+
+    /**
+     * Unbind method for the DeployerManager.
+     *
+     * @param deployerManager the deployer manager.
+     */
+    @Unbind
+    public void unbindDeployerManager(final IDeployerManager deployerManager) {
+        this.deployerManager = null;
+        if (started) {
+            deployerManager.unregister(this);
+        }
+    }
+
+
+    /**
+     * Called when a supported file is deployed.
+     */
+    public void deploy(IDeployable<?> deployable) throws DeployerException, UnsupportedDeployerException {
         try {
-            profile = loadProfileConfig(file);
+            boolean update = profile != null;
+            profile = loadProfileConfig(deployable.getArchive().getURL());
 
             // Send message
             Dictionary<String, Object> properties = new Hashtable<String, Object>();
@@ -130,52 +176,55 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
             Event event = new Event(KerneosConstants.KERNEOS_PROFILE_TOPIC + "/" + ID, properties);
             eventAdmin.sendEvent(event);
 
-            logger.info("New Kerneos Profile: " + file.getPath());
+            if (!update)
+                logger.info("New Kerneos Profile: " + deployable.getShortName());
+            else
+                logger.info("Update Kerneos Profile: " + deployable.getShortName());
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file: " + file.getPath());
+            logger.error(ex, "Invalid Kerneos Profile file: " + deployable.getShortName());
         }
     }
 
-    public synchronized void update(File file) throws Exception {
+    /**
+     * Called when a deployed supported file cis undeployed.
+     */
+    public void undeploy(IDeployable<?> deployable) throws DeployerException {
         try {
-            profile = loadProfileConfig(file);
+            if (!new File(deployable.getArchive().getURL().getFile()).exists()) {
+                profile = null;
 
-            // Send message
-            Dictionary<String, Object> properties = new Hashtable<String, Object>();
-            properties.put(EAConstants.DATA, profile);
-            Event event = new Event(KerneosConstants.KERNEOS_PROFILE_TOPIC + "/" + ID, properties);
-            eventAdmin.sendEvent(event);
-
-            logger.info("Update Kerneos Profile: " + file.getPath());
+                logger.info("Delete Kerneos Profile: " + deployable.getShortName());
+            }
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file: " + file.getPath());
+            logger.error(ex, "Invalid Kerneos Profile file: " + deployable.getShortName());
         }
     }
 
-    public synchronized void uninstall(File file) throws Exception {
-        try {
-            profile = null;
-            logger.info("Delete Kerneos Profile: " + file.getPath());
-        } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file: " + file.getPath());
-        }
+    public boolean isDeployed(IDeployable<?> deployable) throws DeployerException {
+        return profile != null;
     }
 
-    public boolean canHandle(File file) {
-        return file.getName().endsWith(FILE);
+    /**
+     * Check if  this deployer can support a file.
+     *
+     * @param deployable is the file to check.
+     * @return true if the file is supported otherwise false.
+     */
+    public boolean supports(IDeployable<?> deployable) {
+        return KerneosProfileDeployable.class.isAssignableFrom(deployable.getClass()) && deployable.getShortName().equals(FILE);
     }
 
     /**
      * Get the Profile describe in the file.
      *
-     * @param file the file to parse.
+     * @param url the url to parse.
      * @return the Profile contained in the XML format in the file.
      * @throws Exception the file can be correctly parsed.
      */
-    private Profile loadProfileConfig(File file) throws Exception {
+    private Profile loadProfileConfig(URL url) throws Exception {
 
         // Retrieve the Kerneos module file
-        InputStream resource = new FileInputStream(file);
+        InputStream resource = url.openStream();
         // Unmarshall it
         try {
             // Create an unmarshaller

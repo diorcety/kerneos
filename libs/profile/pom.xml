@@ -45,6 +45,7 @@
     <module>client</module>
     <module>common</module>
     <module>fileinstall</module>
+    <module>jonas</module>
   </modules>
 
 </project>
