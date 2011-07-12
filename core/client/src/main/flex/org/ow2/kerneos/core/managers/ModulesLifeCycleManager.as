@@ -137,9 +137,20 @@ public class ModulesLifeCycleManager {
     public static function unloadModules():void {
         // Disable notification during unloading
         notification = false;
+
+        // Uninstall all the modules
         while (KerneosModelLocator.getInstance().modules.length) {
             uninstallModule(KerneosModelLocator.getInstance().modules.getItemAt(0) as ModuleVO);
         }
+
+        // Close all the windows
+        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
+        for each (var window:MDIWindow in allWindows) {
+            if (window is ModuleWindow) {
+                closeModuleByWindow(window as ModuleWindow);
+            }
+        }
+
         notification = true;
     }
 
@@ -293,7 +304,7 @@ public class ModulesLifeCycleManager {
         var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
 
         for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
+            if (window is ModuleWindow && (window as ModuleWindow).usingModule(module)) {
                 closeModuleByWindow(window as ModuleWindow);
             }
         }
@@ -332,7 +343,7 @@ public class ModulesLifeCycleManager {
         var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
 
         for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
+            if (window is ModuleWindow && (window as ModuleWindow).usingModule(module)) {
                 stopModuleByWindow(window as ModuleWindow, cause);
             }
         }
@@ -342,26 +353,28 @@ public class ModulesLifeCycleManager {
      * Stop a module by its window.
      */
     public static function stopModuleByWindow(window:ModuleWindow, cause:String = null):void {
-        if (window is SwfModuleWindow) {
-            // Remove Notification listener
-            window.removeEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
-                    NotificationsManager.handleNotificationEvent);
+        // Check if the window is current window of the module
+        if (window.module.window == window) {
+            if (window is SwfModuleWindow) {
+                // Remove Notification listener
+                window.removeEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
+                        NotificationsManager.handleNotificationEvent);
 
-            // Unload module
-            (window as SwfModuleWindow).unload(cause);
+                // Unload module
+                (window as SwfModuleWindow).unload(cause);
+            }
+            else if (window is IFrameModuleWindow) {
+                // Delete the IFrame
+                (window as IFrameModuleWindow).removeIFrame();
+            }
 
             // Clear window associated with the module
             window.module.window = null;
             window.module.loaded = false;
-            window.module = null;
-        }
-        else if (window is IFrameModuleWindow) {
-            // Delete the IFrame
-            (window as IFrameModuleWindow).removeIFrame();
-        }
 
-        // Force garbage collection
-        System.gc();
+            // Force garbage collection
+            System.gc();
+        }
     }
 
     /**
@@ -375,7 +388,7 @@ public class ModulesLifeCycleManager {
         var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
 
         for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow && (window as ModuleWindow).module.name == module.name) {
+            if (window is ModuleWindow && (window as ModuleWindow).usingModule(module)) {
                 (window as ModuleWindow).bringToFront();
                 return;
             }

@@ -144,21 +144,58 @@
 
   <build>
     <sourceDirectory>src/main/flex</sourceDirectory>
-
-    <plugins>
-      <plugin>
-        <groupId>org.sonatype.flexmojos</groupId>
-        <artifactId>flexmojos-maven-plugin</artifactId>
-        <configuration>
-          <localesCompiled>
-            <locale>en_US</locale>
-            <locale>fr_FR</locale>
-          </localesCompiled>
-          <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
-          <sourceFile>Kerneos.mxml</sourceFile>
-          <linkReportAttach>true</linkReportAttach>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.flexmojos</groupId>
+            <artifactId>flexmojos-maven-plugin</artifactId>
+            <configuration>
+              <localesCompiled>
+                <locale>en_US</locale>
+                <locale>fr_FR</locale>
+              </localesCompiled>
+              <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
+              <sourceFile>Kerneos.mxml</sourceFile>
+              <linkReportAttach>true</linkReportAttach>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>production</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.flexmojos</groupId>
+            <artifactId>flexmojos-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>asdoc</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <localesCompiled>
+                <locale>en_US</locale>
+                <locale>fr_FR</locale>
+              </localesCompiled>
+              <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
+              <sourceFile>Kerneos.mxml</sourceFile>
+              <linkReportAttach>true</linkReportAttach>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

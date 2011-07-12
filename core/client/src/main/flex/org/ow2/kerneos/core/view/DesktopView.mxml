@@ -28,6 +28,7 @@
          xmlns:mx="library://ns.adobe.com/flex/mx"
          xmlns:view="org.ow2.kerneos.core.view.*"
          xmlns:commonView="org.ow2.kerneos.common.view.*"
+         xmlns:flexlibContainers="flexlib.containers.*"
          xmlns:flexlibMdiContainers="flexlib.mdi.containers.*"
          creationComplete="creationCompleteHandler()"
          verticalGap="1">
@@ -239,7 +240,10 @@
                     // Resolve wether the user should be prompted before closing the window
                     var prompt:Boolean = true;
 
-                    if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.NEVER)) {
+                    if (window.usingModule(window.module)) {
+                        prompt = false;
+                    }
+                    else if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.NEVER)) {
                         prompt = false;
                     }
                     else if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.ALWAYS)) {
@@ -573,15 +577,15 @@
                   alpha="0.25"
                   visible="{model.application.showMinimizeAllButton}"
                   includeInLayout="{model.application.showMinimizeAllButton}"/>
-        <view:KerneosButtonScrollingCanvas id="scrollabeTaskBarZone"
-                                           width="100%"
-                                           height="100%"
-                                           buttonWidth="24"
-                                           explicitButtonHeight="24"
-                                           leftButtonStyleName="taskBarScrollLeftButton"
-                                           rightButtonStyleName="taskBarScrollRightButton"
-                                           scrollJump="40"
-                                           scrollSpeed="20">
+        <flexlibContainers:ButtonScrollingCanvas id="scrollabeTaskBarZone"
+                                                 width="100%"
+                                                 height="100%"
+                                                 buttonWidth="24"
+                                                 explicitButtonHeight="24"
+                                                 leftButtonStyleName="taskBarScrollLeftButton"
+                                                 rightButtonStyleName="taskBarScrollRightButton"
+                                                 scrollJump="40"
+                                                 scrollSpeed="20">
             <mx:HBox id="minimizedWindowsButtonsContainer"
                      width="100%"
                      height="100%"
@@ -590,7 +594,7 @@
                      verticalScrollPolicy="off"
                      horizontalScrollPolicy="off"/>
             <mx:Spacer width="100%"/>
-        </view:KerneosButtonScrollingCanvas>
+        </flexlibContainers:ButtonScrollingCanvas>
         <mx:VRule height="70%"
                   alpha="0.25"/>
         <commonView:IconComboBox id="languageSelector"

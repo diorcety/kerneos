@@ -41,6 +41,7 @@
         import flexlib.mdi.containers.MDICanvas;
 
         import org.ow2.kerneos.core.managers.SharedObjectManager;
+        import org.ow2.kerneos.core.vo.ModuleVO;
 
         import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
 
@@ -69,6 +70,14 @@
 
             // Setup the controls
             windowControls.maximizeRestoreBtn.visible = windowControls.maximizeRestoreBtn.includeInLayout = module.maximizable;
+        }
+
+        // =========================================================================
+        // Public functions
+        // =========================================================================
+
+        public function usingModule(module:ModuleVO):Boolean {
+            return this.module.id == module.id && this.module.bundle == module.bundle && this.module.window == this;
         }
 
         // =========================================================================
