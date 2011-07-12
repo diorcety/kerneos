@@ -35,7 +35,7 @@
                 toolTipCreate="createSnapshotToolTip(event)"
                 toolTipShow="positionToolTip(event)"
                 mouseOver="updateSnapshot(event)"
-                icon="{window.module.getSmallIcon(this)}">
+                icon="{window.module.getSmallIcon()}">
 
     <fx:Metadata>
         <![CDATA[
@@ -51,9 +51,7 @@
         import mx.effects.Fade;
         import mx.effects.Glow;
         import mx.effects.Sequence;
-
         import mx.events.ToolTipEvent;
-
         import mx.graphics.ImageSnapshot;
         import mx.resources.ResourceManager;
 
@@ -90,10 +88,10 @@
             _moduleWindow = window;
             if (_moduleWindow != null) {
                 // Add events listener
-                _moduleWindow.addEventListener(MDIWindowEvent.RESTORE, windowRestoreHandler, false, 0, true);
-                _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START, windowFocusStartHandler, false, 0, true);
-                _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler, false, 0, true);
-                _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END, windowFocusEndHandler, false, 0, true);
+                _moduleWindow.addEventListener(MDIWindowEvent.RESTORE, windowRestoreHandler);
+                _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_START, windowFocusStartHandler);
+                _moduleWindow.addEventListener(MDIWindowEvent.MINIMIZE, windowMinimizeHandler);
+                _moduleWindow.addEventListener(MDIWindowEvent.FOCUS_END, windowFocusEndHandler);
             }
         }
 

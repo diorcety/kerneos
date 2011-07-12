@@ -107,7 +107,7 @@ public class IconUtility extends BitmapAsset {
         return IconUtility;
     }
 
-    public static function getObject(target:UIComponent, source:String, width:Number = NaN, height:Number = NaN):Object {
+    public static function getObject(source:String, width:Number = NaN, height:Number = NaN):Object {
 
         // Prepare to create or locate a Loader for the asset.
         var loader:Loader;

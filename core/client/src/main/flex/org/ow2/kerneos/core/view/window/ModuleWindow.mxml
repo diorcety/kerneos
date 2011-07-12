@@ -65,7 +65,7 @@
         // =========================================================================
 
         private function creationCompleteHandler(e:Event = null):void {
-            this.titleIcon = module.getSmallIcon(this.titleBar, true) as Class;
+            this.titleIcon = module.getSmallIcon(this.titleBar) as Class;
 
             // Setup the controls
             windowControls.maximizeRestoreBtn.visible = windowControls.maximizeRestoreBtn.includeInLayout = module.maximizable;

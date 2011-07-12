@@ -72,13 +72,13 @@ public class LinkVO extends ModuleVO implements IValueObject {
     /**
      * Get the the big icon asset.
      */
-    override public function getBigIcon(target:UIComponent, useClass:Boolean = false):Object {
+    override public function getBigIcon(target:UIComponent = null):Object {
         // If no icon specified, return the default one
         if (bigIcon == null) {
             return defaultLinkBigIcon;
         }
         else {
-            return super.getBigIcon(target, useClass);
+            return super.getBigIcon(target);
         }
     }
 }

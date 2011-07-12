@@ -170,7 +170,7 @@
 
     <!-- The module thumbnail -->
     <commonView:SmoothImage id="moduleThumb"
-                            source="{module.getBigIcon(moduleThumb)}"
+                            source="{module.getBigIcon()}"
                             width="64"
                             height="64"/>
 

@@ -489,8 +489,8 @@
                     IconUtility.deleteSource(module.smallIcon);
 
                     // Reload cache
-                    module.getSmallIcon(FlexGlobals.topLevelApplication as UIComponent);
-                    module.getBigIcon(FlexGlobals.topLevelApplication as UIComponent);
+                    module.getSmallIcon();
+                    module.getBigIcon();
 
                     //Show notification
                     if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP &&

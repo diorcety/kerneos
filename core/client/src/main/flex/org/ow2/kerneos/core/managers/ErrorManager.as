@@ -36,22 +36,24 @@ public class ErrorManager {
     public function ErrorManager() {
     }
 
-    public static function handleError(errorEvent:Event, manager:ErrorManager = null):void {
+    public static function handleError(errorEvent:Event, manager:ErrorManager = null):Boolean {
         if (errorEvent.type == FaultEvent.FAULT) {
             var faultEvent:FaultEvent = errorEvent as FaultEvent;
             if (faultEvent.fault.faultCode == "Server.Security.InvalidCredentials") {
                 Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.error.invalid-credentials'),
                         ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.error.invalid-credentials.title')
                 );
-                errorEvent.stopImmediatePropagation();
+                return true;
             }
         } else if (errorEvent.type == ChannelFaultEvent.FAULT) {
             var channelFaultEvent:ChannelFaultEvent = errorEvent as ChannelFaultEvent;
             Alert.show(ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.error.connexion-fault'),
                     ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.error.connexion-fault.title')
             );
-            errorEvent.stopImmediatePropagation();
+            return true;
         }
+
+        return false;
     }
 }
 }

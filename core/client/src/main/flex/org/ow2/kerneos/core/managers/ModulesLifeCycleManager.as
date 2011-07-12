@@ -306,20 +306,16 @@ public class ModulesLifeCycleManager {
         // Check that desktop is not null
         checkDesktopNotNull();
 
-        // Clear window associated with the module
-        window.module.window = null;
-
-        // Update the module state
-        window.module.loaded = false;
-
         // Set focus on desktop
         desktop.setFocus();
 
         // Remove the tasbar button
         desktop.minimizedWindowsButtonsContainer.removeChild(window.minimizedModuleWindow);
+        window.minimizedModuleWindow.window = null;
 
         // Remove from window manager
         desktop.windowContainer.windowManager.remove(window);
+        window.minimizedModuleWindow = null;
 
         // Stop the module
         stopModuleByWindow(window);
@@ -353,6 +349,11 @@ public class ModulesLifeCycleManager {
 
             // Unload module
             (window as SwfModuleWindow).unload(cause);
+
+            // Clear window associated with the module
+            window.module.window = null;
+            window.module.loaded = false;
+            window.module = null;
         }
         else if (window is IFrameModuleWindow) {
             // Delete the IFrame
