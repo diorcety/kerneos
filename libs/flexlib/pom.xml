@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.kerneos</groupId>
@@ -16,48 +17,12 @@
   <packaging>swc</packaging>
 
   <dependencies>
-    <!-- Flex SDK dependencies -->
+    <!-- Flex SDK dependencies-->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex</artifactId>
+      <artifactId>flex-framework</artifactId>
       <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.adobe.flex.framework</groupId>
-          <artifactId>playerglobal</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>framework</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>rpc</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>datavisualization</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>playerglobal</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <classifier>${player.version}</classifier>
-      <scope>external</scope>
+      <type>pom</type>
     </dependency>
   </dependencies>
 
@@ -69,7 +34,7 @@
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <configuration>
-          <definesDeclaration>
+          <defines>
             <property>
               <name>FLEX_TARGET_VERSION::flex4</name>
               <value>true</value>
@@ -78,7 +43,7 @@
               <name>FLEX_TARGET_VERSION::flex3</name>
               <value>false</value>
             </property>
-          </definesDeclaration>
+          </defines>
           <namespaces>
             <namespace>
               <uri>http://code.google.com/p/flexlib/</uri>

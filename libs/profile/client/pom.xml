@@ -31,7 +31,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos-login</artifactId>
+    <artifactId>kerneos-profile</artifactId>
     <version>2.1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -45,7 +45,7 @@
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-enforcer-plugin</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>${maven.enforcer.version}</version>
     </dependency>
 
     <!-- Flex dependencies -->
@@ -55,7 +55,18 @@
       <version>2.1.0-SNAPSHOT</version>
       <type>swc</type>
     </dependency>
-
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>flexlib-kerneos</artifactId>
+      <type>swc</type>
+      <version>2.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.graniteds-osgi</groupId>
+      <artifactId>granite-swc</artifactId>
+      <version>${graniteds-osgi.version}</version>
+      <type>swc</type>
+    </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-common-client</artifactId>
@@ -63,69 +74,22 @@
       <type>swc</type>
     </dependency>
 
+    <!-- Flex SDK dependencies-->
     <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>flexlib-kerneos</artifactId>
-      <type>swc</type>
-      <version>2.1.0-SNAPSHOT</version>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
     </dependency>
 
+    <!-- Theme -->
     <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-swc</artifactId>
-      <version>${graniteds-osgi.version}</version>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
       <type>swc</type>
-    </dependency>
-
-    <!-- Flex SDK dependencies -->
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.adobe.flex.framework</groupId>
-          <artifactId>playerglobal</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>framework</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>framework</artifactId>
-      <version>${flex.version}</version>
-      <type>rb.swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>rpc</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>rpc</artifactId>
-      <version>${flex.version}</version>
-      <type>rb.swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>playerglobal</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <classifier>${player.version}</classifier>
-      <scope>external</scope>
+      <scope>theme</scope>
     </dependency>
   </dependencies>
 
@@ -137,11 +101,11 @@
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <configuration>
-          <compiledLocales>
+          <localesCompiled>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
-          </compiledLocales>
-          <mergeResourceBundle>true</mergeResourceBundle>
+          </localesCompiled>
+          <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
         </configuration>
       </plugin>
     </plugins>

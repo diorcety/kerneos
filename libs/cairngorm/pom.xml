@@ -24,160 +24,97 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.ow2.kerneos</groupId>
-        <artifactId>kerneos-libraries</artifactId>
-        <version>2.1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-
-    <artifactId>cairngorm-kerneos</artifactId>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.ow2.kerneos</groupId>
+    <artifactId>kerneos-libraries</artifactId>
     <version>2.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-    <name>Kerneos :: Libraries :: Cairngorm</name>
+  <artifactId>cairngorm-kerneos</artifactId>
+  <version>2.1.0-SNAPSHOT</version>
 
-    <packaging>swc</packaging>
+  <name>Kerneos :: Libraries :: Cairngorm</name>
 
-    <profiles>
-        <profile>
-            <id>flex4</id>
-            <dependencies>
-                <dependency>
-                    <groupId>com.adobe.flex.framework</groupId>
-                    <artifactId>spark</artifactId>
-                    <version>${flex.version}</version>
-                    <type>swc</type>
-                    <scope>external</scope>
-                </dependency>
-                <dependency>
-                    <groupId>com.adobe.flex.framework</groupId>
-                    <artifactId>spark</artifactId>
-                    <version>${flex.version}</version>
-                    <type>rb.swc</type>
-                    <scope>external</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>flex3</id>
-            <dependencies>
-                <dependency>
-                    <groupId>com.adobe.flex.framework</groupId>
-                    <artifactId>framework</artifactId>
-                    <version>${flex.version}</version>
-                    <type>rb.swc</type>
-                    <scope>external</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+  <packaging>swc</packaging>
 
-    <dependencies>
-        <!-- Flex SDK dependencies -->
-        <dependency>
-            <groupId>com.adobe.flex.framework</groupId>
-            <artifactId>flex</artifactId>
-            <version>${flex.version}</version>
-            <type>swc</type>
-            <scope>external</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.adobe.flex.framework</groupId>
-                    <artifactId>playerglobal</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.flex.framework</groupId>
-            <artifactId>framework</artifactId>
-            <version>${flex.version}</version>
-            <type>swc</type>
-            <scope>external</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.flex.framework</groupId>
-            <artifactId>rpc</artifactId>
-            <version>${flex.version}</version>
-            <type>swc</type>
-            <scope>external</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.flex.framework</groupId>
-            <artifactId>playerglobal</artifactId>
-            <version>${flex.version}</version>
-            <type>swc</type>
-            <classifier>${player.version}</classifier>
-            <scope>external</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.flex.framework</groupId>
-            <artifactId>rpc</artifactId>
-            <version>${flex.version}</version>
-            <type>rb.swc</type>
-            <scope>external</scope>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-enforcer-plugin</artifactId>
+      <version>${maven.enforcer.version}</version>
+    </dependency>
 
-        <!-- GraniteDS OSGi -->
-        <dependency>
-            <groupId>org.graniteds-osgi</groupId>
-            <artifactId>granite-swc</artifactId>
-            <version>${graniteds-osgi.version}</version>
-            <type>swc</type>
-            <scope>external</scope>
-        </dependency>
-    </dependencies>
+    <!-- Flex SDK dependencies-->
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
 
-    <build>
-        <sourceDirectory>src/main/flex</sourceDirectory>
+    <!-- GraniteDS OSGi -->
+    <dependency>
+      <groupId>org.graniteds-osgi</groupId>
+      <artifactId>granite-swc</artifactId>
+      <version>${graniteds-osgi.version}</version>
+      <type>swc</type>
+      <scope>external</scope>
+    </dependency>
+  </dependencies>
 
-        <plugins>
+  <build>
+    <sourceDirectory>src/main/flex</sourceDirectory>
 
-            <plugin>
-                <groupId>org.sonatype.flexmojos</groupId>
-                <artifactId>flexmojos-maven-plugin</artifactId>
-                <configuration>
-                    <definesDeclaration>
-                        <property>
-                            <name>CONFIG::Flex4</name>
-                            <value>true</value>
-                        </property>
-                        <property>
-                            <name>CONFIG::Flex3</name>
-                            <value>false</value>
-                        </property>
-                    </definesDeclaration>
-                    <compiledLocales>
-                        <locale>en_US</locale>
-                        <locale>fr_FR</locale>
-                    </compiledLocales>
-                    <resourceBundlePath>locale/{locale}</resourceBundlePath>
-                    <allowSourcePathOverlap>true</allowSourcePathOverlap>
-                    <namespaces>
-                        <namespace>
-                            <uri>http://www.adobe.com/2006/cairngorm</uri>
-                            <manifest>src/main/flex/cairngorm-manifest.xml</manifest>
-                        </namespace>
-                    </namespaces>
-                    <includeSources>
-                        <param>${project.build.sourceDirectory}</param>
-                    </includeSources>
-                    <showWarnings>true</showWarnings>
-                    <useResourceBundleMetadata>false</useResourceBundleMetadata>
-                </configuration>
-            </plugin>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <configuration>
+          <defines>
+            <property>
+              <name>CONFIG::Flex4</name>
+              <value>true</value>
+            </property>
+            <property>
+              <name>CONFIG::Flex3</name>
+              <value>false</value>
+            </property>
+          </defines>
+          <compiledLocales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+          </compiledLocales>
+          <resourceBundlePath>locale/{locale}</resourceBundlePath>
+          <allowSourcePathOverlap>true</allowSourcePathOverlap>
+          <namespaces>
+            <namespace>
+              <uri>http://www.adobe.com/2006/cairngorm</uri>
+              <manifest>src/main/flex/cairngorm-manifest.xml</manifest>
+            </namespace>
+          </namespaces>
+          <includeSources>
+            <param>${project.build.sourceDirectory}</param>
+          </includeSources>
+          <showWarnings>true</showWarnings>
+          <useResourceBundleMetadata>false</useResourceBundleMetadata>
+        </configuration>
+      </plugin>
 
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
 
-        </plugins>
-    </build>
+    </plugins>
+  </build>
 
 </project>

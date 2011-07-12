@@ -59,9 +59,6 @@
   </dependencies>
 
   <build>
-    <finalName>myModule</finalName>
-    <sourceDirectory>src/main/flex</sourceDirectory>
-
     <plugins>
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>

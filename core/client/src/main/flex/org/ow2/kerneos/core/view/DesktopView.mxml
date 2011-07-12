@@ -520,7 +520,8 @@
             desktopModules = newArr;
         }
 
-        [Bindable] var desktopModules:ArrayCollection = new ArrayCollection();
+        [Bindable]
+        private var desktopModules:ArrayCollection = new ArrayCollection();
         ]]>
     </fx:Script>
 

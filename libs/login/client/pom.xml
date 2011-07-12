@@ -24,7 +24,8 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -43,9 +44,9 @@
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-enforcer-plugin</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>${maven.enforcer.version}</version>
     </dependency>
-    
+
     <!-- Flex dependencies -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
@@ -53,14 +54,12 @@
       <version>2.1.0-SNAPSHOT</version>
       <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-common-client</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
     </dependency>
-
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>flexlib-kerneos</artifactId>
@@ -68,55 +67,22 @@
       <version>2.1.0-SNAPSHOT</version>
     </dependency>
 
-    <!-- Flex SDK dependencies -->
+    <!-- Flex SDK dependencies-->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex</artifactId>
+      <artifactId>flex-framework</artifactId>
       <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
+
+    <!-- Theme -->
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
       <type>swc</type>
-      <scope>external</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.adobe.flex.framework</groupId>
-          <artifactId>playerglobal</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>framework</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>framework</artifactId>
-      <version>${flex.version}</version>
-      <type>rb.swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>rpc</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>rpc</artifactId>
-      <version>${flex.version}</version>
-      <type>rb.swc</type>
-      <scope>external</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>playerglobal</artifactId>
-      <version>${flex.version}</version>
-      <type>swc</type>
-      <classifier>${player.version}</classifier>
-      <scope>external</scope>
+      <scope>theme</scope>
     </dependency>
   </dependencies>
 
@@ -128,11 +94,11 @@
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <configuration>
-          <compiledLocales>
+          <localesCompiled>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
-          </compiledLocales>
-          <mergeResourceBundle>true</mergeResourceBundle>
+          </localesCompiled>
+          <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
         </configuration>
       </plugin>
     </plugins>
