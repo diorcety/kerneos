@@ -200,6 +200,11 @@ public final class KerneosServiceFactory {
         }
     }
 
+    /**
+     * Add a simple service
+     *
+     * @param service the instance of the service
+     */
     private synchronized void addSimple(final KerneosSimpleService service) {
         try {
             KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
@@ -257,6 +262,12 @@ public final class KerneosServiceFactory {
         }
     }
 
+
+    /**
+     * Remove a simple service
+     *
+     * @param service the instance of the service
+     */
     private synchronized void removeSimple(final KerneosSimpleService service) {
         try {
             KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
@@ -295,6 +306,11 @@ public final class KerneosServiceFactory {
         }
     }
 
+    /**
+     * Add a factory service
+     *
+     * @param service the instance of the service
+     */
     private synchronized void addFactory(final KerneosFactoryService service) {
         try {
             KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
@@ -368,6 +384,12 @@ public final class KerneosServiceFactory {
         }
     }
 
+
+    /**
+     * Remove a factory service
+     *
+     * @param service the instance of the service
+     */
     private synchronized void removeFactory(final KerneosFactoryService service) {
         try {
             KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
@@ -406,6 +428,11 @@ public final class KerneosServiceFactory {
         }
     }
 
+    /**
+     * Add a asynchronous service
+     *
+     * @param service the instance of the service
+     */
     private synchronized void addAsynchronous(final KerneosAsynchronousService service) {
         try {
             KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
@@ -484,6 +511,11 @@ public final class KerneosServiceFactory {
         }
     }
 
+    /**
+     * Remove a asynchronous service
+     *
+     * @param service the instance of the service
+     */
     private synchronized void removeAsynchronous(final KerneosAsynchronousService service) {
         try {
             KerneosService ks = service.getClass().getAnnotation(KerneosService.class);

@@ -107,8 +107,6 @@ public class KerneosHttpService implements HttpContext {
 
     private Configuration gavityChannel, graniteChannel;
 
-    private Map<String, ModuleBundle> moduleBundleMap = new HashMap<String, ModuleBundle>();
-
     private ApplicationBundle applicationBundle;
 
     /**
@@ -119,6 +117,8 @@ public class KerneosHttpService implements HttpContext {
         logger.debug("Start Kerneos Application: " + application);
 
         applicationBundle = kerneosCore.getApplicationBundle(application);
+
+        // Register Granite/Gravity channels
         String applicationURL = applicationBundle.getApplication().getApplicationUrl();
         {
             Dictionary properties = new Hashtable();
@@ -141,7 +141,6 @@ public class KerneosHttpService implements HttpContext {
 
         // Register Kerneos Application resources
         httpService.registerResources(applicationURL, "", this);
-
         logger.info("Create Map \"" + application + "\" -> \"" + applicationURL + "\"");
     }
 
@@ -152,14 +151,15 @@ public class KerneosHttpService implements HttpContext {
     private void stop() throws IOException {
         logger.debug("Stop Kerneos Application: " + application);
 
+        String applicationURL = applicationBundle.getApplication().getApplicationUrl();
+
+        // Unregister Granite/Gravity channels
         gavityChannel.delete();
         graniteChannel.delete();
 
-        String applicationURL = applicationBundle.getApplication().getApplicationUrl();
-
-        logger.info("Destroy Map \"" + applicationBundle.getId() + "\" -> \"" + applicationURL + "\"");
-
+        // Unregister Kerneos Application resources
         httpService.unregister(applicationURL);
+        logger.info("Destroy Map \"" + applicationBundle.getId() + "\" -> \"" + applicationURL + "\"");
     }
 
     /**
@@ -184,7 +184,7 @@ public class KerneosHttpService implements HttpContext {
         ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
 
         if (moduleBundle != null) {
-                return moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+            return moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
         } else {
             if (name.startsWith(KerneosConstants.KERNEOS_SWF_URL)) {
                 return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + KerneosConstants.KERNEOS_SWF_URL);
@@ -201,15 +201,16 @@ public class KerneosHttpService implements HttpContext {
      * @param request  is the object containing the request information.
      * @param response is the object containing the response information.
      * @return return true if the user have the credential.
-     * @throws IOException neven happen.
+     * @throws IOException should never happen.
      */
 
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
-        //Disable Cache
+        // Disable Cache
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 
+        // Update context
         KerneosContext kerneosContext = KerneosContext.getCurrentContext();
         kerneosContext.setApplicationBundle(applicationBundle);
         kerneosContext.setLoginManager(kerneosLogin);

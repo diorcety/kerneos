@@ -247,6 +247,15 @@ public final class KerneosConfigurationService implements GraniteDestination {
     }
 
     /**
+     * Adapt the configuration of an application to Kerneos.
+     *
+     * @param application the application to transform.
+     * @param name        the name associated with the application.
+     */
+    private void transformApplication(Application application, String name) {
+    }
+
+    /**
      * Call when a new Kerneos Module is arrived.
      *
      * @param bundle The Bundle corresponding to the module.
@@ -258,6 +267,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
         try {
             // Get the url used for resources of the bundle
             Application application = loadKerneosApplicationConfig(bundle);
+
+            transformApplication(application, name);
+
             ApplicationBundle applicationBundle = new ApplicationBundle(name, application, bundle);
 
             kerneosCore.addApplicationBundle(applicationBundle);
@@ -283,6 +295,12 @@ public final class KerneosConfigurationService implements GraniteDestination {
 
     }
 
+    /**
+     * Adapt the configuration of a module to Kerneos.
+     *
+     * @param module the module to transform.
+     * @param name   the name associated with the module.
+     */
     private void transformModule(Module module, String name) {
         // Fix Paths with module name
         module.setBundle(name);
