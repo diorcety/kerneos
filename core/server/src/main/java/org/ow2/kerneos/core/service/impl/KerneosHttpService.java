@@ -186,7 +186,7 @@ public class KerneosHttpService implements HttpContext {
         if (moduleBundle != null) {
             return moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
         } else {
-            if (name.startsWith(KerneosConstants.KERNEOS_SWF_URL)) {
+            if (path.startsWith(KerneosConstants.KERNEOS_SWF_URL)) {
                 return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + KerneosConstants.KERNEOS_SWF_URL);
             } else if (applicationBundle != null) {
                 return applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
