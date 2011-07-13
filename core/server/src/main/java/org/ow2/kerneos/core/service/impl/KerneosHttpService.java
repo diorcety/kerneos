@@ -183,13 +183,15 @@ public class KerneosHttpService implements HttpContext {
         ModuleBundle moduleBundle = KerneosContext.getCurrentContext().getModuleBundle();
         ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
 
-        if (moduleBundle != null) {
-            return moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
-        } else {
-            if (path.startsWith(KerneosConstants.KERNEOS_SWF_URL)) {
-                return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + KerneosConstants.KERNEOS_SWF_URL);
-            } else if (applicationBundle != null) {
-                return applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+        if (path != null) {
+            if (moduleBundle != null) {
+                return moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+            } else {
+                if (path.startsWith(KerneosConstants.KERNEOS_SWF_URL)) {
+                    return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + KerneosConstants.KERNEOS_SWF_URL);
+                } else if (applicationBundle != null) {
+                    return applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+                }
             }
         }
         return null;
