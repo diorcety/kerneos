@@ -311,7 +311,7 @@ public class KerneosCore implements IKerneosCore {
         KerneosContext kerneosContext = KerneosContext.getCurrentContext();
 
         // Get the module and the associated path
-        String path = request.getPathInfo();
+        String path = request.getRequestURI().substring(kerneosContext.getApplicationBundle().getApplication().getApplicationUrl().length());
         ModuleBundle currentModuleBundle = null;
         if (path != null && path.startsWith(KerneosConstants.KERNEOS_MODULE_URL)) {
             path = path.substring(KerneosConstants.KERNEOS_MODULE_URL.length());
