@@ -129,6 +129,7 @@
     <module>archetypes</module>
     <module>core</module>
     <module>libs</module>
+    <module>modules</module>
     <module>examples</module>
     <module>documentation</module>
   </modules>
