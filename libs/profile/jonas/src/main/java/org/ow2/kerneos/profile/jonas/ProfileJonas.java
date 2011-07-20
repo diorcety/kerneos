@@ -177,11 +177,11 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
             eventAdmin.sendEvent(event);
 
             if (!update)
-                logger.info("New Kerneos Profile: " + deployable.getShortName());
+                logger.info("New Kerneos Profile(" + ID + "): " + deployable.getShortName());
             else
-                logger.info("Update Kerneos Profile: " + deployable.getShortName());
+                logger.info("Update Kerneos Profile(" + ID + "): " + deployable.getShortName());
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file: " + deployable.getShortName());
+            logger.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + deployable.getShortName());
         }
     }
 
@@ -193,10 +193,10 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
             if (!new File(deployable.getArchive().getURL().getFile()).exists()) {
                 profile = null;
 
-                logger.info("Delete Kerneos Profile: " + deployable.getShortName());
+                logger.info("Delete Kerneos Profile(" + ID + "): " + deployable.getShortName());
             }
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file: " + deployable.getShortName());
+            logger.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + deployable.getShortName());
         }
     }
 
