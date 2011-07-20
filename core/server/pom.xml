@@ -70,6 +70,12 @@
 
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-core-common</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-login-common</artifactId>
       <version>2.1.0-SNAPSHOT</version>
       <scope>compile</scope>
@@ -111,70 +117,6 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler}</version>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.jvnet.jaxb2.maven2</groupId>
-        <artifactId>maven-jaxb2-plugin</artifactId>
-        <version>0.7.5</version>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <schemaDirectory>src/main/resources/</schemaDirectory>
-          <strict>true</strict>
-          <verbose>true</verbose>
-          <extension>true</extension>
-          <args>
-            <arg>-Xcollection-setter-injector</arg>
-            <arg>-Xboolean-getter</arg>
-            <arg>-Xdefault-value</arg>
-            <arg>-Xxew</arg>
-            <arg>-delete</arg>
-            <arg>-setter</arg>
-          </args>
-          <plugins>
-            <plugin>
-              <groupId>net.java.dev.vcc.thirdparty</groupId>
-              <artifactId>collection-setter-injector</artifactId>
-              <version>0.5.0-1</version>
-            </plugin>
-            <plugin>
-              <groupId>org.jvnet.jaxb2_commons</groupId>
-              <artifactId>basic</artifactId>
-              <version>0.4.1.5</version>
-            </plugin>
-            <plugin>
-              <groupId>org.jvnet.jaxb2_commons</groupId>
-              <artifactId>gettersetter</artifactId>
-              <version>0.4.1.5</version>
-            </plugin>
-            <plugin>
-              <groupId>org.jvnet.jaxb2_commons</groupId>
-              <artifactId>defaultvalue</artifactId>
-              <version>1.0</version>
-            </plugin>
-            <plugin>
-              <groupId>dk.conspicio</groupId>
-              <artifactId>jaxb-xew</artifactId>
-              <version>1.0</version>
-            </plugin>
-          </plugins>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
@@ -195,25 +137,6 @@
                 </artifactItem>
               </artifactItems>
               <outputDirectory>${project.build.directory}/kerneos</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.2</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <includes>
-                <include>**/xjc/*</include>
-              </includes>
             </configuration>
           </execution>
         </executions>
