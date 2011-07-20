@@ -253,6 +253,11 @@ public final class KerneosConfigurationService implements GraniteDestination {
      * @param name        the name associated with the application.
      */
     private void transformApplication(Application application, String name) {
+        // Correctly format URL
+        if(!application.getApplicationUrl().startsWith("/"))
+            application.setApplicationUrl("/" + application.getApplicationUrl());
+        if(application.getApplicationUrl().endsWith("/"))
+            application.setApplicationUrl(application.getApplicationUrl().substring(0, application.getApplicationUrl().length() - 1));
     }
 
     /**
@@ -392,7 +397,10 @@ public final class KerneosConfigurationService implements GraniteDestination {
         // Retrieve the Kerneos module file
         URL url = bundle.getResource(KerneosConstants.KERNEOS_MODULE_FILE);
         if (url != null) {
+            // Load the file
+            logger.info("Loading file : {0} from {1}", url.getFile(), bundle.getBundleId());
             InputStream resource = url.openStream();
+
             // Unmarshall it
             try {
                 // Create an unmarshaller
@@ -426,7 +434,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
         if (url != null) {
 
             // Load the file
-            logger.info("Loading file : {0}", url.getFile());
+            logger.info("Loading file : {0} from {1}", url.getFile(), bundle.getBundleId());
             InputStream resource = url.openStream();
 
             // Unmarshall it
