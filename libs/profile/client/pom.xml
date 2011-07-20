@@ -42,12 +42,6 @@
   <packaging>swc</packaging>
 
   <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-enforcer-plugin</artifactId>
-      <version>${maven.enforcer.version}</version>
-    </dependency>
-
     <!-- Flex dependencies -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>

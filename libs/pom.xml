@@ -33,15 +33,17 @@
     <groupId>org.ow2.kerneos</groupId>
     <artifactId>kerneos</artifactId>
     <version>2.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.ow2.kerneos</groupId>
   <artifactId>kerneos-libraries</artifactId>
-  <packaging>pom</packaging>
-
   <name>Kerneos :: Libraries</name>
 
+  <packaging>pom</packaging>
+
   <modules>
+    <module>api</module>
+    <module>common</module>
     <module>cairngorm</module>
     <module>login</module>
     <module>profile</module>

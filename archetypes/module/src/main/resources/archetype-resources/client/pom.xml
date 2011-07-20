@@ -43,11 +43,6 @@
   <packaging>swf</packaging>
 
   <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-enforcer-plugin</artifactId>
-    </dependency>
-
     <!-- Flex -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>

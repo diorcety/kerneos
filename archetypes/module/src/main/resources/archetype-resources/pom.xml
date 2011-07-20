@@ -49,7 +49,6 @@
     <maven-bundle.version>2.3.4</maven-bundle.version>
     <maven-compiler.version>2.3.2</maven-compiler.version>
     <maven-dependency.version>2.0</maven-dependency.version>
-    <maven.enforcer.version>1.0-alpha-3</maven.enforcer.version>
   </properties>
 
   <modules>
@@ -59,12 +58,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>${maven.enforcer.version}</version>
-      </dependency>
-
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
