@@ -36,13 +36,13 @@
   <name>${groupId} :: ${artifactId}</name>
 
   <properties>
-    <flexmojos.version>3.7.1</flexmojos.version>
+    <flexmojos.version>4.0-beta-7</flexmojos.version>
     <ipojo.version>1.8.0</ipojo.version>
     <junit.version>3.8.1</junit.version>
     <kerneos.version>2.1.0-SNAPSHOT</kerneos.version>
 
     <!-- Flex -->
-    <flex.version>4.1.0.16076</flex.version>
+    <flex.version>4.5.0.20967</flex.version>
     <player.version>10.2</player.version>
 
     <!-- Plugins -->
@@ -50,6 +50,60 @@
     <maven-compiler.version>2.3.2</maven-compiler.version>
     <maven-dependency.version>2.0</maven-dependency.version>
   </properties>
+
+  <profiles>
+    <!-- Developer profile -->
+    <profile>
+      <id>dev</id>
+      <properties>
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+        <maven.test.skip>false</maven.test.skip>
+        <flex-debug>true</flex-debug>
+        <flex-optimize>false</flex-optimize>
+        <flex-verbose-stacktraces>true</flex-verbose-stacktraces>
+      </properties>
+    </profile>
+
+    <!-- Production profile -->
+    <profile>
+      <id>production</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <flex-debug>false</flex-debug>
+        <flex-optimize>true</flex-optimize>
+        <flex-verbose-stacktraces>false</flex-verbose-stacktraces>
+      </properties>
+    </profile>
+  </profiles>
+
+  <repositories>
+    <repository>
+      <id>flexmojos-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>flexmojos-repository-plugin</id>
+      <name>FlexMojos repository on Sonatype.org</name>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
 
   <modules>
     <module>client</module>
@@ -95,4 +149,33 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonatype.flexmojos</groupId>
+          <artifactId>flexmojos-maven-plugin</artifactId>
+          <version>${flexmojos.version}</version>
+          <extensions>true</extensions>
+          <configuration>
+            <ignoreVersionIssues>true</ignoreVersionIssues>
+            <storepass/>
+            <debug>${flex-debug}</debug>
+            <optimize>${flex-optimize}</optimize>
+            <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
+            <targetPlayer>${player.version}</targetPlayer>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.adobe.flex</groupId>
+              <artifactId>compiler</artifactId>
+              <version>${flex.version}</version>
+              <type>pom</type>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

@@ -54,6 +54,8 @@
   </dependencies>
 
   <build>
+    <sourceDirectory>src/main/flex</sourceDirectory>
+
     <plugins>
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
@@ -61,21 +63,13 @@
         <version>${flexmojos.version}</version>
         <extensions>true</extensions>
         <configuration>
-          <compiledLocales>
+          <localesCompiled>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
-          </compiledLocales>
+          </localesCompiled>
+          <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
           <sourceFile>MyModule.mxml</sourceFile>
-          <optimize>false</optimize>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.adobe.flex</groupId>
-            <artifactId>compiler</artifactId>
-            <version>${flex.version}</version>
-            <type>pom</type>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>
