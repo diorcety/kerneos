@@ -45,7 +45,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
-         <version>${maven-dependency.version}</version>
+         <version>${maven.dependency.version}</version>
         <executions>
           <execution>
             <id>copy-dependencies</id>
@@ -73,7 +73,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>${maven-bundle.version}</version>
+        <version>${maven.bundle.version}</version>
         <extensions>true</extensions>
         <configuration>
           <instructions>
@@ -102,7 +102,7 @@
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler.version}</version>
+        <version>${maven.compiler}</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>

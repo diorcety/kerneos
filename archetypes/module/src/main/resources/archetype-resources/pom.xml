@@ -36,19 +36,19 @@
   <name>${groupId} :: ${artifactId}</name>
 
   <properties>
-    <flexmojos.version>4.0-beta-7</flexmojos.version>
-    <ipojo.version>1.8.0</ipojo.version>
+    <flexmojos.version>$flexmojos.version</flexmojos.version>
+    <ipojo.version>$ipojo.version</ipojo.version>
     <junit.version>3.8.1</junit.version>
-    <kerneos.version>2.1.0-SNAPSHOT</kerneos.version>
+    <kerneos.version>$kerneos.version</kerneos.version>
 
     <!-- Flex -->
-    <flex.version>4.5.0.20967</flex.version>
-    <player.version>10.2</player.version>
+    <flex.version>$flex.version</flex.version>
+    <player.version>$player.version</player.version>
 
     <!-- Plugins -->
-    <maven-bundle.version>2.3.4</maven-bundle.version>
-    <maven-compiler.version>2.3.2</maven-compiler.version>
-    <maven-dependency.version>2.0</maven-dependency.version>
+    <maven.bundle.version>$maven.bundle.version</maven.bundle.version>
+    <maven.compiler>$maven.compiler</maven.compiler>
+    <maven.dependency.version>$maven.dependency.version</maven.dependency.version>
   </properties>
 
   <profiles>

@@ -54,8 +54,36 @@
             <configuration>
               <tasks>
                 <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
-                  <replacetoken>$kerneos-version</replacetoken>
+                  <replacetoken>$kerneos.version</replacetoken>
                   <replacevalue>${project.version}</replacevalue>
+                </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$flexmojos.version</replacetoken>
+                  <replacevalue>${flexmojos.version}</replacevalue>
+                </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$ipojo.version</replacetoken>
+                  <replacevalue>${ipojo.version}</replacevalue>
+                </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$flex.version</replacetoken>
+                  <replacevalue>${flex.version}</replacevalue>
+                </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$player.version</replacetoken>
+                  <replacevalue>${player.version}</replacevalue>
+                </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$maven.bundle.version</replacetoken>
+                  <replacevalue>${maven.bundle.version}</replacevalue>
+                </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$maven.compiler</replacetoken>
+                  <replacevalue>${maven.compiler}</replacevalue>
+                </replace>
+                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
+                  <replacetoken>$maven.dependency.version</replacetoken>
+                  <replacevalue>${maven.dependency.version}</replacevalue>
                 </replace>
               </tasks>
             </configuration>
