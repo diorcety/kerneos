@@ -25,9 +25,49 @@
 
 package org.ow2.kerneos.core.manager;
 
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Property;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.Validate;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
+
+import java.io.IOException;
 import java.util.Collection;
 
+@Component
+@Provides
 public class DefaultKerneosRoles implements KerneosRoles {
+    /**
+     * The logger.
+     */
+    private static Log logger = LogFactory.getLog(DefaultKerneosLogin.class);
+
+    /**
+     * Mandatory service property used by Kerneos core.
+     */
+    @Property(name = "ID", mandatory = true)
+    @ServiceProperty(name = "ID")
+    private String ID;
+
+    /**
+     * Called when all the component dependencies are met.
+     */
+    @Validate
+    private void start() throws IOException {
+        logger.debug("Start DefaultKerneosRoles(" + ID + ")");
+    }
+
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
+    @Invalidate
+    private void stop() throws IOException {
+        logger.debug("Stop DefaultKerneosRoles(" + ID + ")");
+    }
+
     public Collection<String> resolve(Collection<String> roles) {
         return roles;
     }

@@ -143,8 +143,8 @@ public class SecurityTest extends TestCase {
 
     /**
      * Override rules management.
-     * ALLOW can override a default DENY policy.
-     * DENY is a final policy can be override by child rule.
+     * ALLOW can override a DENY policy.
+     * DENY can override a ALLOW policy.
      */
     public void testOverrideRule() throws Exception {
         KerneosContext context = KerneosContext.getCurrentContext();
@@ -184,7 +184,7 @@ public class SecurityTest extends TestCase {
         assertEquals("Override deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.ACCESS_DENIED);
 
         context.setMethod("test3");
-        assertEquals("Override allow in deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.ACCESS_DENIED);
+        assertEquals("Override allow in deny rule", securityService.authorize(), IKerneosSecurityService.SecurityError.NO_ERROR);
     }
 
     class TestProfileManager implements KerneosProfile {

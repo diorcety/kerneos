@@ -83,14 +83,10 @@ public class ProfileManager {
         var bundle:ProfileBundleVO = getBundle(profile.bundles, bundleId);
         if (bundle != null) {
             policy = getPolicy(bundle.rules, roles, policy);
-            if (policy.equals(ProfilePolicyVO.DENY))
-                return false;
 
             var module:ProfileModuleVO = getModule(bundle.modules, moduleId);
             if (module != null) {
                 policy = getPolicy(module.rules, roles, policy);
-                if (policy.equals(ProfilePolicyVO.DENY))
-                    return false;
 
             }
         }
@@ -107,21 +103,15 @@ public class ProfileManager {
         var bundle:ProfileBundleVO = getBundle(profile.bundles, bundleId);
         if (bundle != null) {
             policy = getPolicy(bundle.rules, roles, policy);
-            if (policy.equals(ProfilePolicyVO.DENY))
-                return false;
 
             var service:ProfileServiceVO = getService(bundle.services, serviceId);
             if (service != null) {
                 policy = getPolicy(service.rules, roles, policy);
-                if (policy.equals(ProfilePolicyVO.DENY))
-                    return false;
 
                 if (methodId != null) {
                     var method:ProfileMethodVO = getMethod(service.methods, methodId);
                     if (method != null) {
                         policy = getPolicy(method.rules, roles, policy);
-                        if (policy.equals(ProfilePolicyVO.DENY))
-                            return false;
                     }
                 }
             }

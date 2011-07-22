@@ -25,12 +25,51 @@
 
 package org.ow2.kerneos.core.manager;
 
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Property;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.Validate;
 import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.login.Session;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
+@Component
+@Provides
 public class DefaultKerneosLogin implements KerneosLogin {
+    /**
+     * The logger.
+     */
+    private static Log logger = LogFactory.getLog(DefaultKerneosLogin.class);
+
+    /**
+     * Mandatory service property used by Kerneos core.
+     */
+    @Property(name = "ID", mandatory = true)
+    @ServiceProperty(name = "ID")
+    private String ID;
+
+    /**
+     * Called when all the component dependencies are met.
+     */
+    @Validate
+    private void start() throws IOException {
+        logger.debug("Start DefaultKerneosLogin(" + ID + ")");
+    }
+
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
+    @Invalidate
+    private void stop() throws IOException {
+        logger.debug("Stop DefaultKerneosLogin(" + ID + ")");
+    }
+
 
     public void login(String application, String user, String password) {
         if (user.equals(password)) {

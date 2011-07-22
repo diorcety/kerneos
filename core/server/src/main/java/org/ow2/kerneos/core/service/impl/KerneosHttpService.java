@@ -96,13 +96,13 @@ public class KerneosHttpService implements HttpContext {
     @Requires
     private IKerneosSecurityService kerneosSecurityService;
 
-    @Requires(id = "login", optional = true, defaultimplementation = DefaultKerneosLogin.class, proxy = false)
+    @Requires(id = "login", proxy = false, nullable = false)
     private KerneosLogin kerneosLogin;
 
-    @Requires(id = "roles", optional = true, defaultimplementation = DefaultKerneosRoles.class, proxy = false)
+    @Requires(id = "roles", proxy = false, nullable = false)
     private KerneosRoles kerneosRoles;
 
-    @Requires(id = "profile", optional = true, defaultimplementation = DefaultKerneosProfile.class, proxy = false)
+    @Requires(id = "profile", proxy = false, nullable = false)
     private KerneosProfile kerneosProfile;
 
     private Configuration gavityChannel, graniteChannel;

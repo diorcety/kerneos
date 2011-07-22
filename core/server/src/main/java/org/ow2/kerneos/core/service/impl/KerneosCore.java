@@ -46,6 +46,9 @@ import org.ow2.kerneos.core.KerneosContext;
 import org.ow2.kerneos.core.config.generated.ManagerProperty;
 import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.config.generated.SwfModule;
+import org.ow2.kerneos.core.manager.DefaultKerneosLogin;
+import org.ow2.kerneos.core.manager.DefaultKerneosProfile;
+import org.ow2.kerneos.core.manager.DefaultKerneosRoles;
 import org.ow2.kerneos.login.Session;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -66,7 +69,7 @@ import java.util.Map;
 @Provides
 public class KerneosCore implements IKerneosCore {
 
-    private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION";
+    private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION-";
 
     /**
      * The logger.
@@ -170,6 +173,7 @@ public class KerneosCore implements IKerneosCore {
         try {
             // Managers
             if (applicationBundle.getApplication().getManagers() != null) {
+                // Login
                 if (applicationBundle.getApplication().getManagers().getLogin() != null) {
                     Configuration instance = configurationAdmin.createFactoryConfiguration(applicationBundle.getApplication().getManagers().getLogin().getId(), null);
 
@@ -181,7 +185,17 @@ public class KerneosCore implements IKerneosCore {
                     instance.update(dictionary);
 
                     applicationBundle.addConfiguration(instance);
+                } else {
+                    Configuration instance = configurationAdmin.createFactoryConfiguration(DefaultKerneosLogin.class.getName(), null);
+
+                    Dictionary dictionary = new Hashtable();
+                    dictionary.put("ID", applicationBundle.getId());
+                    instance.update(dictionary);
+
+                    applicationBundle.addConfiguration(instance);
                 }
+
+                // Profile
                 if (applicationBundle.getApplication().getManagers().getProfile() != null) {
                     Configuration instance = configurationAdmin.createFactoryConfiguration(applicationBundle.getApplication().getManagers().getProfile().getId(), null);
 
@@ -193,7 +207,17 @@ public class KerneosCore implements IKerneosCore {
                     instance.update(dictionary);
 
                     applicationBundle.addConfiguration(instance);
+                } else {
+                    Configuration instance = configurationAdmin.createFactoryConfiguration(DefaultKerneosProfile.class.getName(), null);
+
+                    Dictionary dictionary = new Hashtable();
+                    dictionary.put("ID", applicationBundle.getId());
+                    instance.update(dictionary);
+
+                    applicationBundle.addConfiguration(instance);
                 }
+
+                // Roles
                 if (applicationBundle.getApplication().getManagers().getRoles() != null) {
                     Configuration instance = configurationAdmin.createFactoryConfiguration(applicationBundle.getApplication().getManagers().getRoles().getId(), null);
 
@@ -202,6 +226,14 @@ public class KerneosCore implements IKerneosCore {
                     for (ManagerProperty prop : applicationBundle.getApplication().getManagers().getRoles().getProperty()) {
                         dictionary.put(prop.getId(), prop.getValue());
                     }
+                    instance.update(dictionary);
+
+                    applicationBundle.addConfiguration(instance);
+                } else {
+                    Configuration instance = configurationAdmin.createFactoryConfiguration(DefaultKerneosRoles.class.getName(), null);
+
+                    Dictionary dictionary = new Hashtable();
+                    dictionary.put("ID", applicationBundle.getId());
                     instance.update(dictionary);
 
                     applicationBundle.addConfiguration(instance);
@@ -331,13 +363,14 @@ public class KerneosCore implements IKerneosCore {
 
         // Get or create a session
         Session session = null;
-        Object obj = request.getSession().getAttribute(KERNEOS_SESSION_KEY);
+        String sessionKey = KERNEOS_SESSION_KEY + kerneosContext.getApplicationBundle().getId();
+        Object obj = request.getSession().getAttribute(sessionKey);
         if (obj == null || !(obj instanceof Session)) {
             session = kerneosContext.getLoginManager().newSession();
             if (session.getRoles() != null) {
                 session.setRoles(kerneosContext.getRolesManager().resolve(session.getRoles()));
             }
-            request.getSession().setAttribute(KERNEOS_SESSION_KEY, session);
+            request.getSession().setAttribute(sessionKey, session);
         } else {
             session = (Session) obj;
         }

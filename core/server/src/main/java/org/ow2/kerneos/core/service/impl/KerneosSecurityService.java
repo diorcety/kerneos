@@ -214,22 +214,16 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
             ProfileBundle bundle = getBundle(profile.getBundles(), kerneosContext.getModuleBundle().getId());
             if (bundle != null) {
                 policy = getPolicy(bundle.getRules(), roles, policy);
-                if (policy == ProfilePolicy.DENY)
-                    return SecurityError.ACCESS_DENIED;
 
                 if (kerneosContext.getService() != null) {
                     ProfileService service = getService(bundle.getServices(), kerneosContext.getService().getId());
                     if (service != null) {
                         policy = getPolicy(service.getRules(), roles, policy);
-                        if (policy == ProfilePolicy.DENY)
-                            return SecurityError.ACCESS_DENIED;
 
                         if (kerneosContext.getMethod() != null) {
                             ProfileMethod method = getMethod(service.getMethods(), kerneosContext.getMethod());
                             if (method != null) {
                                 policy = getPolicy(method.getRules(), roles, policy);
-                                if (policy == ProfilePolicy.DENY)
-                                    return SecurityError.ACCESS_DENIED;
                             }
                         }
                     }
