@@ -27,28 +27,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
-  <version>${version}</version>
+  <groupId>\${groupId}</groupId>
+  <artifactId>\${artifactId}</artifactId>
+  <version>\${version}</version>
 
   <packaging>pom</packaging>
 
-  <name>${groupId} :: ${artifactId}</name>
+  <name>\${groupId} :: \${artifactId}</name>
 
   <properties>
-    <flexmojos.version>$flexmojos.version</flexmojos.version>
-    <ipojo.version>$ipojo.version</ipojo.version>
-    <junit.version>3.8.1</junit.version>
-    <kerneos.version>$kerneos.version</kerneos.version>
+    <flexmojos-version>${flexmojos.version}</flexmojos-version>
+    <ipojo-version>${ipojo.version}</ipojo-version>
+    <junit-version>3.8.1</junit-version>
+    <kerneos.version>${project.version}</kerneos.version>
 
     <!-- Flex -->
-    <flex.version>$flex.version</flex.version>
-    <player.version>$player.version</player.version>
+    <flex-version>${flex.version}</flex-version>
+    <player-version>${player.version}</player-version>
 
     <!-- Plugins -->
-    <maven.bundle.version>$maven.bundle.version</maven.bundle.version>
-    <maven.compiler>$maven.compiler</maven.compiler>
-    <maven.dependency.version>$maven.dependency.version</maven.dependency.version>
+    <maven-bundle.version>${maven.bundle.version}</maven-bundle.version>
+    <maven-compiler>${maven.compiler}</maven-compiler>
+    <maven-dependency.version>${maven.dependency.version}</maven-dependency.version>
   </properties>
 
   <profiles>
@@ -115,7 +115,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
+        <version>\${junit-version}</version>
         <scope>test</scope>
       </dependency>
 
@@ -123,20 +123,20 @@
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-        <version>${ipojo.version}</version>
+        <version>\${ipojo-version}</version>
       </dependency>
 
       <!-- Kerneos -->
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-core-client</artifactId>
-        <version>${kerneos.version}</version>
+        <version>\${kerneos.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-core-server</artifactId>
-        <version>${kerneos.version}</version>
+        <version>\${kerneos.version}</version>
         <scope>provided</scope>
       </dependency>
 
@@ -144,7 +144,7 @@
       <dependency>
         <groupId>com.adobe.flex.framework</groupId>
         <artifactId>flex-framework</artifactId>
-        <version>${flex.version}</version>
+        <version>\${flex-version}</version>
         <type>pom</type>
       </dependency>
     </dependencies>
@@ -156,21 +156,21 @@
         <plugin>
           <groupId>org.sonatype.flexmojos</groupId>
           <artifactId>flexmojos-maven-plugin</artifactId>
-          <version>${flexmojos.version}</version>
+          <version>\${flexmojos-version}</version>
           <extensions>true</extensions>
           <configuration>
             <ignoreVersionIssues>true</ignoreVersionIssues>
             <storepass/>
-            <debug>${flex-debug}</debug>
-            <optimize>${flex-optimize}</optimize>
-            <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
-            <targetPlayer>${player.version}</targetPlayer>
+            <debug>\${flex-debug}</debug>
+            <optimize>\${flex-optimize}</optimize>
+            <verboseStacktraces>\${flex-verbose-stacktraces}</verboseStacktraces>
+            <targetPlayer>\${player-version}</targetPlayer>
           </configuration>
           <dependencies>
             <dependency>
               <groupId>com.adobe.flex</groupId>
               <artifactId>compiler</artifactId>
-              <version>${flex.version}</version>
+              <version>\${flex-version}</version>
               <type>pom</type>
             </dependency>
           </dependencies>
