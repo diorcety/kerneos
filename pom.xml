@@ -53,7 +53,7 @@
     <flexlib.version>2.6-M2</flexlib.version>
     <flexiframe.version>1.4.3</flexiframe.version>
     <flex.version>4.5.0.20967</flex.version>
-    <player.version>10.1</player.version>
+    <player.version>10.2</player.version>
 
     <!-- iPOJO -->
     <ipojo.version>1.8.0</ipojo.version>
@@ -166,8 +166,8 @@
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
-         <artifactId>wagon-ssh</artifactId>
-         <version>1.0</version>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0</version>
       </extension>
     </extensions>
 

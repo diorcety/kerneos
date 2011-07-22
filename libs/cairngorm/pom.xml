@@ -98,11 +98,11 @@
               <value>false</value>
             </property>
           </defines>
-          <compiledLocales>
+          <localesCompiled>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
-          </compiledLocales>
-          <resourceBundlePath>locale/{locale}</resourceBundlePath>
+          </localesCompiled>
+          <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
           <allowSourcePathOverlap>true</allowSourcePathOverlap>
           <namespaces>
             <namespace>

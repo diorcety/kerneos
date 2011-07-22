@@ -76,11 +76,11 @@
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
         <configuration>
-          <compiledLocales>
+          <localesCompiled>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
-          </compiledLocales>
-          <mergeResourceBundle>true</mergeResourceBundle>
+          </localesCompiled>
+          <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
         </configuration>
       </plugin>
     </plugins>
