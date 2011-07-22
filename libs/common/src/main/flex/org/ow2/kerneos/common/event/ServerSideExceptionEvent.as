@@ -49,7 +49,7 @@ public class ServerSideExceptionEvent extends CairngormEvent
     /**
     * Default server side exception event type
     */
-    public static var SERVER_SIDE_EXCEPTION:String = "serverSideException";
+    public static const SERVER_SIDE_EXCEPTION:String = "serverSideException";
     
     
     // Fields

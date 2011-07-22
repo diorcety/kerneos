@@ -46,6 +46,7 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.ow2.kerneos.core.KerneosConstants;
+import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.service.KerneosAsynchronous;
 import org.ow2.kerneos.core.service.KerneosAsynchronousService;
 import org.ow2.kerneos.core.service.KerneosFactory;
@@ -215,7 +216,11 @@ public final class KerneosServiceFactory {
 
             logger.debug("New Kerneos Simple Service: " + ks.id());
 
-            String destination = kerneosCore.getService(ks.id()).getDestination();
+            Service ser = kerneosCore.getService(ks.id());
+            if (ser == null)
+                throw new Exception("Can't find the service \"" + ks.id() + "\"");
+            String destination = ser.getDestination();
+
             registerClasses(destination, service);
 
             ServiceRegistration instance = bundleContext.registerService(
@@ -245,7 +250,7 @@ public final class KerneosServiceFactory {
             instancesMap.put(ks.id(), new ServiceInstance(destination, instance, destinationConfiguration, factoryConfiguration));
 
         } catch (Exception e) {
-            logger.error(e, "Can't register a Simple Service");
+            logger.error("Can't register a Simple Service: " + e);
         }
     }
 
@@ -289,7 +294,7 @@ public final class KerneosServiceFactory {
 
             ksi.dispose();
         } catch (Exception e) {
-            logger.error(e, "Can't unregister a Simple Service");
+            logger.error("Can't unregister a Simple Service: " + e);
         }
     }
 
@@ -321,7 +326,11 @@ public final class KerneosServiceFactory {
 
             logger.debug("New Kerneos Factory Service: " + ks.id());
 
-            String destination = kerneosCore.getService(ks.id()).getDestination();
+            Service ser = kerneosCore.getService(ks.id());
+            if (ser == null)
+                throw new Exception("Can't find the service \"" + ks.id() + "\"");
+            String destination = ser.getDestination();
+
             registerClasses(destination, service);
 
             ServiceRegistration instance = bundleContext.registerService(
@@ -367,7 +376,7 @@ public final class KerneosServiceFactory {
             instancesMap.put(ks.id(), new ServiceInstance(destination, instance, destinationConfiguration, factoryConfiguration));
 
         } catch (Exception e) {
-            logger.error(e, "Can't register a Factory Service");
+            logger.error("Can't register a Factory Service: " + e);
         }
     }
 
@@ -410,7 +419,7 @@ public final class KerneosServiceFactory {
 
             kfi.dispose();
         } catch (Exception e) {
-            logger.error(e, "Can't unregister a Factory Service");
+            logger.error("Can't unregister a Factory Service: " + e);
         }
     }
 
@@ -444,7 +453,11 @@ public final class KerneosServiceFactory {
 
             logger.debug("New Kerneos Asynchronous Service: " + ks.id());
 
-            String destination = kerneosCore.getService(ks.id()).getDestination();
+            Service ser = kerneosCore.getService(ks.id());
+            if (ser == null)
+                throw new Exception("Can't find the service \"" + ks.id() + "\"");
+            String destination = ser.getDestination();
+
             registerClasses(destination, service);
 
             Configuration factoryConfiguration = null;
@@ -494,7 +507,7 @@ public final class KerneosServiceFactory {
 
             instancesMap.put(ks.id(), new ServiceInstance(destination, null, destinationConfiguration, factoryConfiguration));
         } catch (Exception e) {
-            logger.error(e, "Can't register a Asynchronous Service");
+            logger.error("Can't register a Asynchronous Service: " + e);
         }
     }
 
@@ -535,7 +548,7 @@ public final class KerneosServiceFactory {
 
             ksi.dispose();
         } catch (Exception e) {
-            logger.error(e, "Can't unregister a Asynchronous Service");
+            logger.error("Can't unregister a Asynchronous Service: " + e);
         }
     }
 
