@@ -30,58 +30,23 @@
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.ow2</groupId>
-    <artifactId>ow2</artifactId>
-    <version>1.1</version>
+    <groupId>org.ow2.kerneos.examples</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.ow2.kerneos</groupId>
-  <artifactId>kerneos</artifactId>
-  <version>2.1.0-SNAPSHOT</version>
-
-  <name>Kerneos</name>
+  <artifactId>modules</artifactId>
   <packaging>pom</packaging>
 
-  <url>http://wiki.jasmine.objectweb.org/xwiki/bin/view/Main/WebHome</url>
+  <name>Kerneos Examples :: Modules</name>
 
   <properties>
-    <!-- GraniteDS -->
-    <graniteds-osgi.version>1.0.0-M1</graniteds-osgi.version>
-
-    <!-- Flex -->
-    <cairngorm.version>2.2.5-SNAPSHOT</cairngorm.version>
-    <flexlib.version>2.6-M2</flexlib.version>
-    <flexiframe.version>1.4.3</flexiframe.version>
-    <flex.version>4.5.0.20967</flex.version>
-    <player.version>10.2</player.version>
-
-    <!-- iPOJO -->
-    <ipojo.version>1.8.0</ipojo.version>
-    <ipojo.annotations.version>1.8.0</ipojo.annotations.version>
-    <ipojo.eventadmin.version>1.8.0</ipojo.eventadmin.version>
-    <ipojo.api.version>1.6.0</ipojo.api.version>
-    <ipojo.extender.version>1.4.0</ipojo.extender.version>
-
-    <!-- Plugins -->
     <flexmojos.version>4.0-beta-7</flexmojos.version>
-    <maven.bundle.version>2.3.4</maven.bundle.version>
-    <maven.ipojo.version>1.8.0</maven.ipojo.version>
-    <maven.deploy.version>2.6</maven.deploy.version>
-    <maven.resources.version>2.5</maven.resources.version>
-    <maven.compiler>2.3.2</maven.compiler>
-
-    <!-- Settings -->
-    <asdoc.aggregate>true</asdoc.aggregate>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <flex.version>4.5.0.20967</flex.version>
+    <ipojo.version>1.8.0</ipojo.version>
+    <junit.version>3.8.1</junit.version>
   </properties>
-
-  <scm>
-    <connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://jlegrand@svn.forge.objectweb.org/svnroot/jasmine/kerneos/trunk
-    </developerConnection>
-    <url>http://websvn.ow2.org/listing.php?repname=jasmine&amp;path=/kerneos/trunk</url>
-  </scm>
 
   <repositories>
     <repository>
@@ -94,26 +59,7 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <repository>
-      <id>java-net</id>
-      <url>http://download.java.net/maven/2/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>flex-iframe</id>
-      <url>http://flex-iframe.googlecode.com/svn/maven2</url>
-    </repository>
-    <repository>
-      <id>apache-repository</id>
-      <url>repo1.maven.org/maven2/</url>
-    </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>flexmojos-repository-plugin</id>
@@ -127,14 +73,6 @@
       </releases>
     </pluginRepository>
   </pluginRepositories>
-
-  <modules>
-    <module>archetypes</module>
-    <module>core</module>
-    <module>libs</module>
-    <module>examples</module>
-    <module>documentation</module>
-  </modules>
 
   <profiles>
     <!-- Developer profile -->
@@ -163,15 +101,13 @@
     </profile>
   </profiles>
 
-  <build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>1.0</version>
-      </extension>
-    </extensions>
+  <modules>
+    <module>module1</module>
+    <module>module2</module>
+  </modules>
 
+
+  <build>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -196,39 +132,7 @@
             </dependency>
           </dependencies>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>${maven.deploy.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>${maven.resources.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>${maven.bundle.version}</version>
-          <extensions>true</extensions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-ipojo-plugin</artifactId>
-          <version>${maven.ipojo.version}</version>
-        </plugin>
       </plugins>
     </pluginManagement>
-
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler}</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 </project>

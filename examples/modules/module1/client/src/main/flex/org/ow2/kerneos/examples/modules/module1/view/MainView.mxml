@@ -1,0 +1,89 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - Kerneos
+     - Copyright (C) 2009-2011 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<!-- Tag fx is used in the Example -->
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
+         width="100%"
+         height="100%"
+         verticalAlign="middle"
+         horizontalAlign="center"
+         creationComplete="creationCompleteHandler()">
+
+    <fx:Script>
+      <![CDATA[
+        import com.adobe.cairngorm.control.CairngormEventDispatcher;
+
+        import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
+        import org.ow2.kerneos.examples.modules.module1.event.ModuleEvent;
+        import org.ow2.kerneos.examples.modules.module1.model.ModuleModelLocator;
+
+        import org.ow2.kerneos.login.model.LoginModelLocator;
+        import org.ow2.kerneos.profile.manager.ProfileManager;
+        import org.ow2.kerneos.profile.model.ProfileModelLocator;
+
+        /**
+         * On view creation complete handler
+         */
+        private function creationCompleteHandler(even:Event = null):void {
+            CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+        }
+
+        /**
+         * On Module destroy
+         */
+        public function destroy():void {
+            // Remove all the event listener for avoid memory leaks
+            CairngormEventDispatcher.getInstance().removeEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+        }
+
+        private function sendNormal():void {
+            var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.NORMAL);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+        }
+
+        private function sendAdmin():void {
+            var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.ADMIN);
+            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+        }
+        ]]>
+    </fx:Script>
+
+    <mx:Form width="100%" height="100%">
+        <mx:FormItem label="{resourceManager.getString('module1Resources', 'username.label')}">
+            <mx:Label text="{LoginModelLocator.getInstance().session.username}"/>
+        </mx:FormItem>
+        <mx:FormItem label="{resourceManager.getString('module1Resources', 'roles.label')}">
+            <mx:Label text="{'['+LoginModelLocator.getInstance().session.roles.source.join(', ')+']'}"/>
+        </mx:FormItem>
+
+        <mx:Button label="{resourceManager.getString('module1Resources', 'normal.label')}" click="sendNormal()"/>
+
+        <mx:Button label="{resourceManager.getString('module1Resources', 'admin.label')}" click="sendAdmin()"
+                   enabled="{ProfileManager.haveServiceAccess(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session.roles, 'kerneos-module1', 'module1-service1', 'admin')}"/>
+
+        <mx:Button label="{resourceManager.getString('module1Resources', 'adminforce.label')}" click="sendAdmin()"/>
+    </mx:Form>
+
+</mx:VBox>

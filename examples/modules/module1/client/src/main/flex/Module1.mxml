@@ -1,0 +1,90 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - Kerneos
+     - Copyright (C) 2009-2011 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<mx:Module xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:mx="library://ns.adobe.com/flex/mx"
+           xmlns:view="org.ow2.kerneos.examples.modules.module1.view.*"
+           xmlns:control="org.ow2.kerneos.examples.modules.module1.control.*"
+           implements="org.ow2.kerneos.core.api.KerneosModule"
+           width="100%"
+           height="100%">
+
+    <fx:Metadata>
+        [ResourceBundle("module1Resources")]
+    </fx:Metadata>
+
+    <fx:Script>
+        <![CDATA[
+        // =========================================================================
+        // Implementation of KerneosModule
+        // =========================================================================
+
+
+        /**
+         * When the module is closed, cut off all client-server communications
+         */
+        public function closeModule():void {
+            ////////////////////////////////////////////////////////////////
+            //                                                            //
+            //             Action to do when the module is closed         //
+            //                                                            //
+            ////////////////////////////////////////////////////////////////
+            mainView.destroy();
+            controller.removeCommands();
+        }
+
+        /**
+         * Returns true if Kerneos can close the module without prompting the user
+         */
+        public function canBeClosedWithoutPrompt():Boolean {
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+            //                                                                                            //
+            //             return whether or not a prompt should be shown when closing the module         //
+            //                                                                                            //
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+
+            return true;
+        }
+
+        /**
+         * Return a dictionary with the classes used by the services
+         * One entry in the dictionary is like
+         * dictionary[idService] = [Class1, Class2, ...]
+         */
+        public function servicesClasses():Dictionary {
+            return null;
+        }
+        ]]>
+    </fx:Script>
+
+    <fx:Declarations>
+        <!-- Instantiate the controller. A controller a module -->
+        <control:Controller id="controller"/>
+    </fx:Declarations>
+
+    <!-- Instantiate the main view -->
+    <view:MainView id="mainView"/>
+
+</mx:Module>
