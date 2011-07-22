@@ -130,24 +130,10 @@
         }
 
         /**
-         * Handles login state changes
+         * Handles states changes
          */
-        private function set loginChanged(loginState:String):void {
-            KerneosLifeCycleManager.stateChanged(KerneosModelLocator.getInstance().state, loginState, ProfileModelLocator.getInstance().state);
-        }
-
-        /**
-         * Handles profile state changes
-         */
-        private function set profileChanged(profileState:String):void {
-            KerneosLifeCycleManager.stateChanged(KerneosModelLocator.getInstance().state, LoginModelLocator.getInstance().state, profileState);
-        }
-
-        /**
-         * Handles kerneos state changes
-         */
-        private function set applicationChanged(applicationState:String):void {
-            KerneosLifeCycleManager.stateChanged(applicationState, LoginModelLocator.getInstance().state, ProfileModelLocator.getInstance().state);
+        private function set updateState(applicationState:String):void {
+            callLater(KerneosLifeCycleManager.stateChanged);
         }
         ]]>
     </fx:Script>
@@ -156,17 +142,21 @@
     <!-- Bindings                                                                -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <!-- The binding triggered when the application is loaded. -->
+    <!-- The binding triggered when the application status is changed -->
     <fx:Binding source="KerneosModelLocator.getInstance().state"
-                destination="applicationChanged"/>
+                destination="updateState"/>
+
+    <!-- The binding triggered when the modules status is changed -->
+    <fx:Binding source="KerneosModelLocator.getInstance().modulesState"
+                destination="updateState"/>
 
     <!-- The binding triggered when the login status is changed. -->
     <fx:Binding source="LoginModelLocator.getInstance().state"
-                destination="loginChanged"/>
+                destination="updateState"/>
 
     <!-- The binding triggered when the profile status is changed. -->
     <fx:Binding source="ProfileModelLocator.getInstance().state"
-                destination="profileChanged"/>
+                destination="updateState"/>
 
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -196,20 +186,23 @@
                       width="100%"
                       height="100%"/>
 
-    <!-- Use visible property for forcing hide of login window when skipping login -->
+    <view:ModulesView includeIn="modules"
+                      itemCreationPolicy="immediate"
+                      itemDestructionPolicy="never"
+                      id="modulesView"
+                      width="100%"
+                      height="100%"/>
+
     <view:LoginView includeIn="login"
                     itemCreationPolicy="immediate"
                     itemDestructionPolicy="never"
-                    visible="{KerneosModelLocator.getInstance().state == KerneosState.LOGIN}"
                     id="loginView"
                     width="100%"
                     height="100%"/>
 
-    <!-- Use visible property for forcing hide of profile window when skipping profile -->
     <view:ProfileView includeIn="profile"
                       itemCreationPolicy="immediate"
                       itemDestructionPolicy="never"
-                      visible="{KerneosModelLocator.getInstance().state == KerneosState.PROFILE}"
                       id="profileView"
                       width="100%"
                       height="100%"/>
@@ -217,7 +210,6 @@
     <view:ErrorView includeIn="error"
                     itemCreationPolicy="immediate"
                     itemDestructionPolicy="never"
-                    visible="{KerneosModelLocator.getInstance().state == KerneosState.ERROR}"
                     id="errorView"
                     width="100%"
                     height="100%"/>
@@ -242,6 +234,9 @@
 
         <!-- Profile view -->
         <mx:State name="profile" stateGroups="loaded"/>
+
+        <!-- Modules view -->
+        <mx:State name="modules" stateGroups="loaded"/>
 
         <!-- Working view -->
         <mx:State name="desktop" stateGroups="loaded" enterState="desktopView.load()" exitState="desktopView.unload()"/>

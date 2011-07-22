@@ -27,6 +27,7 @@ import com.adobe.cairngorm.model.ModelLocator;
 import mx.collections.ArrayCollection;
 
 import org.ow2.kerneos.core.business.*;
+import org.ow2.kerneos.core.model.ModulesState;
 import org.ow2.kerneos.core.vo.ApplicationVO;
 
 
@@ -66,6 +67,12 @@ public class KerneosModelLocator implements ModelLocator {
      */
     [Bindable]
     public var state:String = KerneosState.INIT;
+
+    /**
+     * The state of the modules.
+     */
+    [Bindable]
+    public var modulesState:String = ModulesState.IDLE;
 
     /**
      * The stored notifications.

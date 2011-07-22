@@ -23,9 +23,9 @@
  * --------------------------------------------------------------------------
  */
 @namespace mx "library://ns.adobe.com/flex/mx";
+@namespace kerneos "org.ow2.kerneos.core.view.*";
 @namespace kerneosNotification "org.ow2.kerneos.core.view.notification.*";
 @namespace kerneosWindow "org.ow2.kerneos.core.view.window.*";
-@namespace kerneos "org.ow2.kerneos.core.view.*";
 @namespace kerneosLogin "org.ow2.kerneos.login.*";
 @namespace kerneosProfile "org.ow2.kerneos.profile.*";
 
@@ -70,6 +70,36 @@ global {
 }
 
 /*******************************************************************************
+* Modules
+******************************************************************************/
+kerneos|ModulesPanel {
+    titleStyleName: modulesWindowTitle;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    borderColor: #666666;
+    borderAlpha: 1;
+    borderThicknessRight: 4;
+    borderThicknessLeft: 4;
+    borderThicknessTop: 2;
+    borderThicknessBottom: 3;
+    rounded-bottom-corners: true;
+    cornerRadius: 3;
+    backgroundColor: #CCCCCC;
+    paddingBottom: 5px;
+    paddingLeft: 3px;
+    paddingTop: 2px;
+    paddingRight: 3px;
+}
+
+.modulesWindowTitle {
+    font-weight: bold;
+    font-size: 13px;
+    color: #FEFEFE;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #FF0000;
+}
+
+/*******************************************************************************
 * Login
 ******************************************************************************/
 kerneosLogin|LoginPanel {
@@ -100,7 +130,7 @@ kerneosLogin|LoginPanel {
 }
 
 /*******************************************************************************
-* Login
+* Profile
 ******************************************************************************/
 kerneosProfile|ProfilePanel {
     titleStyleName: profileWindowTitle;

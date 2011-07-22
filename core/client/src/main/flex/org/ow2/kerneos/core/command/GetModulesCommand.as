@@ -39,6 +39,7 @@ import org.ow2.kerneos.common.managers.LanguagesManager;
 import org.ow2.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
+import org.ow2.kerneos.core.model.ModulesState;
 import org.ow2.kerneos.core.vo.ModuleVO;
 
 /**
@@ -76,8 +77,7 @@ public class GetModulesCommand implements ICommand, IResponder {
             ModulesLifeCycleManager.installModule(module);
         }
 
-        // Enable notification (Profile & Session && Modules updated)
-        ModulesLifeCycleManager.notification = true;
+        model.modulesState = ModulesState.LOADED;
     }
 
     /**

@@ -68,7 +68,7 @@
         import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
         import org.ow2.kerneos.core.managers.SharedObjectManager;
         import org.ow2.kerneos.core.model.KerneosModelLocator;
-        import org.ow2.kerneos.core.model.KerneosState;
+        import org.ow2.kerneos.core.model.ModulesState;
         import org.ow2.kerneos.core.view.notification.NotificationPopUp;
         import org.ow2.kerneos.core.view.window.SwfModuleWindow;
         import org.ow2.kerneos.core.view.window.KerneosWindow;
@@ -402,26 +402,15 @@
         }
 
         /**
-         * Load modules and subscribe to Kerneos topic
+         * Called when the desktop is loaded
          */
         public function load():void {
-            // Load the modules
-            ModulesLifeCycleManager.loadModules();
-
-            // Subscribe a gravity consumer to the Kerneos configuration topic
-            ModulesLifeCycleManager.subscribe();
         }
 
         /**
-         * Unload modules and unsubscribe from Kerneos topic
+         * Called when the desktop is unloaded
          */
         public function unload():void {
-            // Unsubscribe a gravity consumer to the Kerneos configuration topic
-            ModulesLifeCycleManager.unsubscribe();
-
-            // Unload the modules
-            ModulesLifeCycleManager.unloadModules();
-
             // Close all the windows
             var allWindows:Array = (windowContainer.windowManager.windowList as Array).concat();
             for each (var window:MDIWindow in allWindows) {
@@ -503,8 +492,7 @@
                     module.getBigIcon();
 
                     //Show notification
-                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP &&
-                            ModulesLifeCycleManager.notification &&
+                    if (KerneosModelLocator.getInstance().modulesState == ModulesState.LOADED &&
                             model.application.showNotificationPopups) {
                         notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.load', module1);
                     }
@@ -519,8 +507,7 @@
                     ModulesLifeCycleManager.stopModule(module2, "kerneos.error.swfmodule.uninstalled");
 
                     //Show notification
-                    if (KerneosModelLocator.getInstance().state == KerneosState.DESKTOP &&
-                            ModulesLifeCycleManager.notification &&
+                    if (KerneosModelLocator.getInstance().modulesState == ModulesState.LOADED &&
                             model.application.showNotificationPopups) {
                         notifiedModuleArrivalDeparture('kerneos.lifecyclemanager.notification.module.unload', module2);
                     }

@@ -41,6 +41,7 @@ import org.granite.util.GraniteClassRegistry;
 import org.ow2.kerneos.common.util.StringUtils;
 import org.ow2.kerneos.core.event.KerneosConfigEvent;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
+import org.ow2.kerneos.core.model.ModulesState;
 import org.ow2.kerneos.core.model.KerneosState;
 import org.ow2.kerneos.core.view.DesktopView;
 import org.ow2.kerneos.core.vo.ApplicationVO;
@@ -191,8 +192,10 @@ public class KerneosLifeCycleManager {
     /**
      * New State handling
      */
-    public static function stateChanged(applicationState:String, loginState:String, profileState:String):void {
+    public static function stateChanged():void {
+        var applicationState:String = KerneosModelLocator.getInstance().state;
         if (applicationState != KerneosState.LOADING && applicationState != KerneosState.INIT && applicationState != KerneosState.ERROR) {
+            var loginState:String = LoginModelLocator.getInstance().state;
             if (loginState == LoginState.IDLE) {
                 if (!KerneosModelLocator.getInstance().application.authentication.equals(AuthenticationVO.FLEX)) {
                     LoginModelLocator.getInstance().state = LoginState.LOGGED;
@@ -200,11 +203,21 @@ public class KerneosLifeCycleManager {
                     LoginModelLocator.getInstance().state = LoginState.AUTH;
                 }
             } else if (loginState == LoginState.LOGGED) {
+                var profileState:String = ProfileModelLocator.getInstance().state;
                 if (profileState == ProfileState.IDLE) {
                     ProfileModelLocator.getInstance().state = ProfileState.LOAD;
                 }
                 else if (profileState == ProfileState.LOADED) {
-                    KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+                    var modulesState:String = KerneosModelLocator.getInstance().modulesState;
+                    if (modulesState == ModulesState.IDLE) {
+                        KerneosModelLocator.getInstance().modulesState = ModulesState.LOAD;
+                    }
+                    else if (modulesState == ModulesState.LOADED) {
+                        KerneosModelLocator.getInstance().state = KerneosState.DESKTOP;
+                    }
+                    else {
+                        KerneosModelLocator.getInstance().state = KerneosState.MODULES;
+                    }
                 }
                 else {
                     KerneosModelLocator.getInstance().state = KerneosState.PROFILE;
@@ -219,8 +232,9 @@ public class KerneosLifeCycleManager {
      * Logout from the application.
      */
     public static function logout(event:Event = null):void {
-        LoginModelLocator.getInstance().state = LoginState.LOGOUT;
+        KerneosModelLocator.getInstance().modulesState = ModulesState.UNLOAD;
         ProfileModelLocator.getInstance().state = ProfileState.UNLOAD;
+        LoginModelLocator.getInstance().state = LoginState.LOGOUT;
     }
 
 

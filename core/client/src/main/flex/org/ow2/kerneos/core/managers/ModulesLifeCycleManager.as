@@ -101,8 +101,6 @@ public class ModulesLifeCycleManager {
     private static var consumer:Consumer = null;
 
 
-    public static var notification:Boolean = true;
-
     // =========================================================================
     // Public static methods
     // =========================================================================
@@ -116,8 +114,6 @@ public class ModulesLifeCycleManager {
      */
     public static function loadModules():void {
         try {
-            // Disable notification during loading
-            notification = false;
             var event_module:KerneosConfigEvent = new KerneosConfigEvent(KerneosConfigEvent.GET_MODULES);
             CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
         }
@@ -130,15 +126,10 @@ public class ModulesLifeCycleManager {
      * Unload all application modules
      */
     public static function unloadModules():void {
-        // Disable notification during unloading
-        notification = false;
-
         // Uninstall all the modules
         while (KerneosModelLocator.getInstance().modules.length) {
             uninstallModule(KerneosModelLocator.getInstance().modules.getItemAt(0) as ModuleVO);
         }
-
-        notification = true;
     }
 
     /**

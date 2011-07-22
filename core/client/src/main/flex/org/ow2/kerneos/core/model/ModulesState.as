@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -28,52 +28,32 @@ package org.ow2.kerneos.core.model {
  * @author Julien Nicoulaud
  */
 [Bindable]
-public class KerneosState {
+public class ModulesState {
 
     /**
      * Initial state.
      */
-    public static var INIT:String = "init";
+    public static var IDLE:String = "idle";
 
     /**
-     * When the application is loading.
+     * When load the modules.
      */
-    public static var LOADING:String = "loading";
+    public static var LOAD:String = "load";
 
     /**
-     * When the config is loaded.
+     * When unload the modules.
      */
-    public static var APPLICATION_LOADED:String = "applicationLoaded";
+    public static var UNLOAD:String = "unload";
 
     /**
-     * When the user have to login.
+     * When the modules are loaded.
      */
-    public static var LOGIN:String = "login";
-
-    /**
-     * When the application is loaded.
-     */
-    public static var PROFILE:String = "profile";
-
-    /**
-     * When the modules are loaded or unloaded.
-     */
-    public static var MODULES:String = "modules";
-
-    /**
-     * When the desktop is displayed.
-     */
-    public static var DESKTOP:String = "desktop";
-
-    /**
-     * When a fatal error is occurred.
-     */
-    public static var ERROR:String = "error";
+    public static var LOADED:String = "loaded";
 
     /**
      * Constructor
      */
-    function KerneosState() {
+    function ModulesState() {
 
     }
 }
