@@ -42,27 +42,50 @@
   <url>http://maven.apache.org</url>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>archetype-resources/pom.xml</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>archetype-resources/pom.xml</exclude>
+        </excludes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <tasks>
-                <replace dir="${project.build.directory}/classes/archetype-resources" includes="**/pom.xml">
-                  <replacetoken>$kerneos-version</replacetoken>
-                  <replacevalue>${project.version}</replacevalue>
-                </replace>
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven.resources.version}</version>
+        <configuration>
+          <escapeString>\</escapeString>
+        </configuration>
       </plugin>
     </plugins>
+
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>2.0</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>2.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
 </project>

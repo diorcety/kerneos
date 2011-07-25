@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modules>
+    <module id="${application.artifactId}" dir="application" name="${rootArtifactId}-application">
+      <fileSets>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.xml</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/kerneos</directory>
+          <includes>
+            <include>**/*.html</include>
+            <include>**/*.png</include>
+            <include>**/*.js</include>
+            <include>**/*.css</include>
+            <include>**/*.ico</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-packaging" dir="packaging" name="${rootArtifactId}-packaging">
+      <modules>
+        <module id="${rootArtifactId}-packaging-felix" dir="felix" name="${rootArtifactId}-packaging-felix">
+          <fileSets>
+            <fileSet encoding="UTF-8">
+              <directory>src/main</directory>
+              <includes>
+                <include>**/*.xml</include>
+              </includes>
+            </fileSet>
+            <fileSet encoding="UTF-8">
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>**/*.properties</include>
+                <include>**/*.bat</include>
+                <include>**/*.sh</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-packaging-war" dir="war" name="${rootArtifactId}-packaging-war">
+          <fileSets>
+            <fileSet encoding="UTF-8">
+              <directory>src/main/webapp</directory>
+              <includes>
+                <include>**/*.xml</include>
+                 <include>**/*.eclipseproduct</include>
+                <include>**/*.jar</include>
+                <include>**/*.ini</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+      </modules>
+    </module>
+  </modules>
+</archetype-descriptor>

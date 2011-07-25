@@ -29,17 +29,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>${groupId}</groupId>
-    <artifactId>${artifactId}</artifactId>
+    <artifactId>${rootArtifactId}</artifactId>
     <version>${version}</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}-packaging</artifactId>
-  <version>${version}</version>
+  <artifactId>${artifactId}</artifactId>
+
   <packaging>pom</packaging>
 
-  <name>${groupId} :: ${artifactId} :: Packaging</name>
+  <name>${groupId} :: ${rootArtifactId} :: Packaging</name>
 
   <modules>
     <module>felix</module>

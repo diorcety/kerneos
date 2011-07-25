@@ -29,22 +29,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>${groupId}</groupId>
-    <artifactId>${artifactId}</artifactId>
+    <artifactId>${rootArtifactId}</artifactId>
     <version>${version}</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>${groupId}</groupId>
   <artifactId>${application.artifactId}</artifactId>
-  <version>${version}</version>
 
-  <name>${groupId} :: ${artifactId} :: Kerneos</name>
+  <name>${groupId} :: ${rootArtifactId} :: Application</name>
+
   <packaging>bundle</packaging>
-
-  <properties>
-    <ipojo.version>1.8.0</ipojo.version>
-    <maven-bundle.version>2.3.4</maven-bundle.version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -63,6 +59,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
+            <!-- this application name has to be the same in the index.html : application=kerneos-application -->
             <Kerneos-Application>kerneos-application</Kerneos-Application>
             <Include-Resource>
               src/main/resources,
