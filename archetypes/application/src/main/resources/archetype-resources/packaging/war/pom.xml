@@ -79,96 +79,78 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${application.artifactId}</artifactId>
-      <type>bundle</type>
     </dependency>
     <!--Felix Dependencies-->
     <dependency>
       <groupId>org.ops4j.pax.confman</groupId>
       <artifactId>pax-confman-propsloader</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>pax-logging-api</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>pax-logging-service</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.configadmin</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.eventadmin</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.ow2.bundles</groupId>
       <artifactId>ow2-util-i18n</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.ow2.bundles</groupId>
       <artifactId>ow2-util-log</artifactId>
-      <type>bundle</type>
     </dependency>
     <!-- GraniteDS Dependencies-->
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-core</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity-ea</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity-jms</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity</artifactId>
-      <type>bundle</type>
     </dependency>
     <!-- Asynchronous communication dependencies -->
     <dependency>
       <groupId>javax.jms</groupId>
       <artifactId>com.springsource.javax.jms</artifactId>
-      <type>bundle</type>
     </dependency>
     <dependency>
       <groupId>javax.transaction</groupId>
       <artifactId>com.springsource.javax.transaction</artifactId>
-      <type>bundle</type>
     </dependency>
     <!--Kerneos Core Dependency-->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-core-server</artifactId>
-      <type>bundle</type>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

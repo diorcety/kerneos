@@ -16,18 +16,21 @@
 <!--  END Browser History required section -->
 
 <style>
-body { margin: 0px; overflow:hidden }
+        body {
+            margin: 0px;
+            overflow: hidden
+        }
 </style>
 <script language="JavaScript" type="text/javascript">
 <!--
 // -----------------------------------------------------------------------------
 // Globals
 // Major version of Flash required
-var requiredMajorVersion = 9;
+var requiredMajorVersion = 10;
 // Minor version of Flash required
 var requiredMinorVersion = 0;
 // Minor version of Flash required
-var requiredRevision = 28;
+var requiredRevision = 0;
 // -----------------------------------------------------------------------------
 // -->
 
@@ -45,7 +48,6 @@ window.onbeforeunload = function () {
     }
 }
 
-<!--
 // Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
 var hasProductInstall = DetectFlashVer(6, 0, 65);
 
@@ -95,11 +97,10 @@ if ( hasProductInstall && !hasRequestedVersion ) {
             "allowFullScreen", "true"
     );
   } else {  // flash is too old or we can't detect the plugin
-    var alternateContent = 'This JASMINe Module requires Adobe Flash. '
+    var alternateContent = 'This Kerneos Module requires Adobe Flash. '
        + '<a href=http://www.adobe.com/go/getflash/>Get Flash here</a>.';
     document.write(alternateContent);  // insert non-flash content
   }
-// -->
 </script>
 <noscript>
       <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"

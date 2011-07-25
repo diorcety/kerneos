@@ -50,7 +50,6 @@
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-core-server</artifactId>
-      <type>bundle</type>
       <scope>provided</scope>
     </dependency>
   </dependencies>

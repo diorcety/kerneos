@@ -50,10 +50,6 @@
     <!-- Felix resources -->
     <resource>packaging/felix/src/main/resources/conf/services/org.ops4j.pax.logging.properties</resource>
     <resource>packaging/felix/src/main/resources/conf/config.properties</resource>
-    <resource>packaging/felix/src/main/resources/DEPENDENCIES</resource>
-    <resource>packaging/felix/src/main/resources/LICENSE</resource>
-    <resource>packaging/felix/src/main/resources/LICENSE.kxml2</resource>
-    <resource>packaging/felix/src/main/resources/NOTICE</resource>
     <resource>packaging/felix/src/main/resources/start.bat</resource>
     <resource>packaging/felix/src/main/resources/start.sh</resource>
     <resource>packaging/felix/src/main/assembly.xml</resource>

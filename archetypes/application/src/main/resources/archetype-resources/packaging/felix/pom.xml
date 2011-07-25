@@ -66,148 +66,190 @@
     </repository>
   </repositories>
 
-  <dependencies>
-    <!-- Add your kerneos modules dependencies here-->
-
-    <!--Application Dependency-->
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>${application.artifactId}</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <!--Felix Dependency-->
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.main</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.confman</groupId>
-      <artifactId>pax-confman-propsloader</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-api</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-service</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.bundlerepository</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.configadmin</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.eventadmin</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.fileinstall</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.gogo.command</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.gogo.runtime</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.gogo.shell</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.http.jetty</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.bundles</groupId>
-      <artifactId>ow2-util-i18n</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.bundles</groupId>
-      <artifactId>ow2-util-log</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <!-- GraniteDS Dependencies-->
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-core</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-gravity-ea</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-gravity-jms</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-gravity</artifactId>
-      <type>bundle</type>
-    </dependency>
-    <!--Kerneos Core Dependency-->
-    <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-core-server</artifactId>
-      <type>bundle</type>
-      <scope>runtime</scope>
-    </dependency>
-  </dependencies>
-
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.main.distribution</artifactId>
+                  <classifier>project</classifier>
+                  <type>zip</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/felix</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <!-- Log -->
+                <artifactItem>
+                  <groupId>org.ops4j.pax.confman</groupId>
+                  <artifactId>pax-confman-propsloader</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle/log</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ops4j.pax.logging</groupId>
+                  <artifactId>pax-logging-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle/log</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ops4j.pax.logging</groupId>
+                  <artifactId>pax-logging-service</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle/log</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.bundles</groupId>
+                  <artifactId>ow2-util-i18n</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.bundles</groupId>
+                  <artifactId>ow2-util-log</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+
+                <!-- OSGi -->
+                <artifactItem>
+                  <groupId>org.osgi</groupId>
+                  <artifactId>org.osgi.compendium</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.configadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.fileinstall</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+
+                <!-- HTTP -->
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.http.jetty</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+
+                <!-- iPOJO -->
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+
+                <!-- GraniteDS -->
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-core</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-gravity-ea</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-gravity-jms</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-gravity</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                </artifactItem>
+
+                <!-- Kerneos -->
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-core-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-profile-fileinstall</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+
+                <!-- Application -->
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${application.artifactId}</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+
+                <!-- Modules -->
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptors>
             <descriptor>src/main/assembly.xml</descriptor>
           </descriptors>
+
         </configuration>
         <executions>
           <execution>
-            <id>make-assembly</id>
+            <id>assemble</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
