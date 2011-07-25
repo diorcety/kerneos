@@ -33,7 +33,7 @@
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>halo</artifactId>
-      <version>${flex.version}</version>
+      <version>${flex-version}</version>
       <classifier>theme</classifier>
       <type>swc</type>
       <scope>theme</scope>
