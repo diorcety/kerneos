@@ -24,8 +24,8 @@
     <kerneos.version>${project.version}</kerneos.version>
 
     <!-- Flex -->
-    <flex.version>4.1.0.16076</flex.version>
-    <player.version>10.2</player.version>
+    <flex-version>${flex.version}</flex-version>
+    <player-version>${player.version}</player-version>
 
     <!-- Plugins -->
     <maven-bundle.version>${maven.bundle.version}</maven-bundle.version>
