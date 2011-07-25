@@ -48,7 +48,9 @@
     <ipojo.version>1.8.0</ipojo.version>
     <maven-bundle.version>2.3.4</maven-bundle.version>
     <maven-compiler.version>2.3.2</maven-compiler.version>
-    <maven-dependency.version>2.0</maven-dependency.version>
+    <maven-dependency.version>2.3</maven-dependency.version>
+    <maven-assembly.version>2.2.1</maven-assembly.version>
+    <maven-war.version>2.1.1</maven-war.version>
 
     <kerneos.version>2.1.0-SNAPSHOT</kerneos.version>
   </properties>

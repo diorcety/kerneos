@@ -1,0 +1,38 @@
+###############################################################################
+ Kerneos
+ Copyright (C) 2011 Bull S.A.S.
+ Contact: jasmine@ow2.org
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ USA
+###############################################################################
+
+1) Start felix with the following command:
+-On linux
+./start
+-On windows
+start.bat
+
+2) Access to the application with the following URLs:
+http://localhost:8080/app1/index.html
+or
+http://localhost:8080/app2/index.html
+
+3) There is two applications:
+-Application 1 is an example of an application during a development state.
+    * no authentication, no profile
+-Application 2 is an example of an application during a production state.
+    * 3 users: root, user1, user2 (same password that username)
+    * Authentication (flex side), and profile.

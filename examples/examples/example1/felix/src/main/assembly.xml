@@ -47,8 +47,12 @@
       </excludes>
     </fileSet>
     <fileSet>
-      <directory>${project.build.directory}/bundle</directory>
+      <directory>${project.build.directory}/bundles</directory>
       <outputDirectory>bundle</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/bundles/log</directory>
+      <outputDirectory>bundle/log</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>${project.build.directory}/load</directory>
@@ -71,6 +75,10 @@
     </file>
     <file>
       <source>${project.basedir}/src/main/resources/start.bat</source>
+      <outputDirectory></outputDirectory>
+    </file>
+    <file>
+      <source>${project.basedir}/src/main/resources/README</source>
       <outputDirectory></outputDirectory>
     </file>
   </files>

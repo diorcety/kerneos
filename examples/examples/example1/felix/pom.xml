@@ -73,6 +73,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency.version}</version>
         <executions>
           <execution>
             <id>unpack</id>
@@ -106,57 +107,57 @@
                   <groupId>org.ops4j.pax.confman</groupId>
                   <artifactId>pax-confman-propsloader</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle/log</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles/log</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ops4j.pax.logging</groupId>
                   <artifactId>pax-logging-api</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle/log</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles/log</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ops4j.pax.logging</groupId>
                   <artifactId>pax-logging-service</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle/log</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles/log</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.bundles</groupId>
                   <artifactId>ow2-util-i18n</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.bundles</groupId>
                   <artifactId>ow2-util-log</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
 
                 <!-- OSGi -->
                 <artifactItem>
-                  <groupId>org.osgi</groupId>
+                  <groupId>org.apache.felix</groupId>
                   <artifactId>org.osgi.compendium</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.configadmin</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.eventadmin</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.fileinstall</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
 
                 <!-- HTTP -->
@@ -164,7 +165,7 @@
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.http.jetty</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
 
                 <!-- iPOJO -->
@@ -172,19 +173,19 @@
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.ipojo</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
 
                 <!-- GraniteDS -->
@@ -192,25 +193,19 @@
                   <groupId>org.graniteds-osgi</groupId>
                   <artifactId>granite-core</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.graniteds-osgi</groupId>
                   <artifactId>granite-gravity-ea</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.graniteds-osgi</groupId>
-                  <artifactId>granite-gravity-jms</artifactId>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.graniteds-osgi</groupId>
                   <artifactId>granite-gravity</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
 
                 <!-- Kerneos -->
@@ -264,7 +259,9 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven-assembly.version}</version>
         <configuration>
           <descriptors>
             <descriptor>src/main/assembly.xml</descriptor>

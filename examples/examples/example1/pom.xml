@@ -60,9 +60,9 @@
     <org.apache.felix.ipojo.handler.eventadmin.version>1.6.0</org.apache.felix.ipojo.handler.eventadmin.version>
     <org.apache.felix.ipojo.handler.extender.version>1.4.0</org.apache.felix.ipojo.handler.extender.version>
     <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
-    <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
+    <org.osgi.core.version>1.4.0</org.osgi.core.version>
+    <org.osgi.compendium.version>1.4.0</org.osgi.compendium.version>
     <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
-    <maven-assembly-plugin.version>2.2.1</maven-assembly-plugin.version>
     <com.springsource.javax.transaction.version>1.1.0</com.springsource.javax.transaction.version>
     <com.springsource.javax.jms.version>1.1.0</com.springsource.javax.jms.version>
   </properties>
@@ -174,7 +174,13 @@
         <scope>runtime</scope>
       </dependency>
       <dependency>
-        <groupId>org.osgi</groupId>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.osgi.core</artifactId>
+        <version>${org.osgi.core.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
         <artifactId>org.osgi.compendium</artifactId>
         <version>${org.osgi.compendium.version}</version>
         <scope>runtime</scope>
