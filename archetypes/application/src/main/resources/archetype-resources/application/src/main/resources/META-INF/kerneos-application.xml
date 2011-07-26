@@ -31,11 +31,11 @@
     <!-- Kerneos settings -->
 
     <!-- The two parts of the mark displayed on the top right corner -->
-    <application-project>Test</application-project>
-    <application-name>TeSt</application-name>
+    <application-project>Application</application-project>
+    <application-name>Desktop</application-name>
 
     <!-- Base URL used -->
-    <application-url>/test</application-url>
+    <application-url>/application</application-url>
 
     <!-- The path to the console logo (64x64 image) -->
     <application-logo>icons/icon.png</application-logo>
