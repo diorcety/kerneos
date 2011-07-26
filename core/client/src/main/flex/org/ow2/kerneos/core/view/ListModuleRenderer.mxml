@@ -26,8 +26,8 @@
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:s="library://ns.adobe.com/flex/spark"
          xmlns:commonView="org.ow2.kerneos.common.view.*"
-         xmlns:coreView="org.ow2.kerneos.core.view.*"
          implements="mx.controls.listClasses.IListItemRenderer"
          horizontalAlign="center"
          verticalAlign="middle"
@@ -175,12 +175,11 @@
                             height="64"/>
 
     <!-- The module name -->
-    <coreView:MultiLineLinkButton
-            width="130"
-            height="36"
-            id="moduleName"
-            color="#111111"
-            label="{module.name}"
-            filters="{[nameShadow]}"/>
+    <s:Label id="moduleName"
+             width="130"
+             height="36"
+             maxDisplayedLines="2"
+             filters="{[nameShadow]}"
+             text="{module.name}"/>
 
 </mx:VBox>
