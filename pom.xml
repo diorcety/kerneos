@@ -69,6 +69,7 @@
     <maven.deploy.version>2.6</maven.deploy.version>
     <maven.resources.version>2.5</maven.resources.version>
     <maven.compiler>2.3.2</maven.compiler>
+    <maven.dependency.version>2.3</maven.dependency.version>
 
     <!-- Settings -->
     <asdoc.aggregate>true</asdoc.aggregate>
