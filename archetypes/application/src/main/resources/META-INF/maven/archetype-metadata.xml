@@ -3,7 +3,7 @@
     xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modules>
-    <module id="${application.artifactId}" dir="application" name="${rootArtifactId}-application">
+    <module id="${rootArtifactId}-application" dir="application" name="${rootArtifactId}-application">
       <fileSets>
         <fileSet encoding="UTF-8">
           <directory>src/main/resources</directory>
@@ -45,13 +45,17 @@
         </module>
         <module id="${rootArtifactId}-packaging-war" dir="war" name="${rootArtifactId}-packaging-war">
           <fileSets>
-            <fileSet encoding="UTF-8">
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/java</directory>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" encoding="UTF-8">
               <directory>src/main/webapp</directory>
               <includes>
                 <include>**/*.xml</include>
-                 <include>**/*.eclipseproduct</include>
-                <include>**/*.jar</include>
-                <include>**/*.ini</include>
+                <include>**/*.properties</include>
               </includes>
             </fileSet>
           </fileSets>

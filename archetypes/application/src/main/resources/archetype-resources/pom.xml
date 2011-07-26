@@ -1,29 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - Kerneos
-  - Copyright (C) 2011 Bull S.A.S.
-  - Contact: jasmine@ow2.org
-  -
-  - This library is free software; you can redistribute it and/or
-  - modify it under the terms of the GNU Lesser General Public
-  - License as published by the Free Software Foundation; either
-  - version 2.1 of the License, or any later version.
-  -
-  - This library is distributed in the hope that it will be useful,
-  - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  - Lesser General Public License for more details.
-  -
-  - You should have received a copy of the GNU Lesser General Public
-  - License along with this library; if not, write to the Free Software
-  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
-  - USA
-  -
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id$
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -44,7 +19,6 @@
 
   <properties>
     <!-- Dependencies versions -->
-    <application.artifactId>\${artifactId}-application</application.artifactId>
     <granite-core.version>${graniteds-osgi.version}</granite-core.version>
     <granite-gravity-ea.version>${graniteds-osgi.version}</granite-gravity-ea.version>
     <granite-gravity-jms.version>${graniteds-osgi.version}</granite-gravity-jms.version>
@@ -65,7 +39,7 @@
     <org.apache.felix.ipojo.handler.eventadmin.version>1.6.0</org.apache.felix.ipojo.handler.eventadmin.version>
     <org.apache.felix.ipojo.handler.extender.version>1.4.0</org.apache.felix.ipojo.handler.extender.version>
     <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
-    <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
+    <org.osgi.compendium.version>1.4.0</org.osgi.compendium.version>
     <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
     <kerneos-core-server.version>${project.version}</kerneos-core-server.version>
     <kerneos-profile-fileinstall.version>${project.version}</kerneos-profile-fileinstall.version>
@@ -74,6 +48,8 @@
     <com.springsource.javax.jms.version>1.1.0</com.springsource.javax.jms.version>
     <ipojo.version>${ipojo.version}</ipojo.version>
     <maven-bundle.version>${maven.bundle.version}</maven-bundle.version>
+    <maven-war.version>2.1.1</maven-war.version>
+    <maven-dependency.version>${maven.dependency.version}</maven-dependency.version>
   </properties>
 
 
@@ -179,9 +155,9 @@
         <scope>runtime</scope>
       </dependency>
       <dependency>
-        <groupId>org.osgi</groupId>
+        <groupId>org.apache.felix</groupId>
         <artifactId>org.osgi.compendium</artifactId>
-        <version>\${org.osgi.compendium.version}</version>
+        <version>${org.osgi.compendium.version}</version>
         <scope>runtime</scope>
       </dependency>
       <dependency>
@@ -241,7 +217,7 @@
       <!--Application Dependency-->
       <dependency>
         <groupId>\${project.groupId}</groupId>
-        <artifactId>\${application.artifactId}</artifactId>
+        <artifactId>${rootArtifactId}-application</artifactId>
         <version>\${project.version}</version>
         <scope>runtime</scope>
       </dependency>
