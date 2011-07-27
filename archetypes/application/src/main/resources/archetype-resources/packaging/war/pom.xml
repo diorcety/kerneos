@@ -18,33 +18,6 @@
 
   <packaging>war</packaging>
 
- <repositories>
-    <repository>
-      <id>ops4j.repository</id>
-      <url>http://repository.ops4j.org/maven2</url>
-    </repository>
-    <repository>
-      <id>repo objectweb</id>
-      <url>http://maven.objectweb.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>repo objectweb snapshots</id>
-      <url>http://maven.objectweb.org/maven2-snapshot</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
   <dependencies>
     <dependency>
       <groupId>javax.servlet</groupId>
