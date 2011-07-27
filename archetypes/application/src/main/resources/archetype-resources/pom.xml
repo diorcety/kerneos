@@ -50,6 +50,8 @@
     <maven-bundle.version>${maven.bundle.version}</maven-bundle.version>
     <maven-war.version>2.1.1</maven-war.version>
     <maven-dependency.version>${maven.dependency.version}</maven-dependency.version>
+    <ow2-util.version>1.0.31</ow2-util.version>
+    <kerneos-login-loginmodule.version>${project.version}</kerneos-login-loginmodule.version>
   </properties>
 
   <repositories>
@@ -229,11 +231,16 @@
         <version>\${com.springsource.javax.jms.version}</version>
         <scope>runtime</scope>
       </dependency>
-      <!--Kerneos Core Dependency-->
+      <!--Kerneos 2 Dependencies-->
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-core-server</artifactId>
         <version>\${kerneos-core-server.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-login-loginmodule</artifactId>
+        <version>\${kerneos-login-loginmodule.version}</version>
       </dependency>
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
@@ -257,6 +264,11 @@
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>\${maven-assembly-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.ow2.util.maven</groupId>
+          <artifactId>maven-jbuilding-plugin</artifactId>
+          <version>\${ow2-util.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

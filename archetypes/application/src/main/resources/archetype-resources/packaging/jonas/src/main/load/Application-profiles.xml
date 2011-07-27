@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile xmlns="org.ow2.kerneos:profile"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <defaultRules>
+    <rule role="jonas" policy="allow"/>
+    <!--<rule role="principal1" policy="deny"/>-->
+  </defaultRules>
+
+  <!-- Modules bundles-->
+  <!--<bundles>
+    <bundle id="jasmine-eos-quickvisu-server-1.4.1-M1-SNAPSHOT">
+      <rules>
+        <rule role="principal1" policy="allow"/>
+      </rules>
+    </bundle>
+    <bundle id="jasmine-eos-probe-server-1.4.1-M1-SNAPSHOT">
+      <rules>
+        <rule role="principal1" policy="deny"/>
+      </rules>
+    </bundle>
+  </bundles>-->
+</profile>
