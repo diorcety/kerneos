@@ -29,7 +29,8 @@
           xmlns:view="org.ow2.kerneos.login.view.*"
           xmlns:control="org.ow2.kerneos.login.control.*"
           currentState="{LoginModelLocator.getInstance().state}"
-          title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.title')}">
+          title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.title')}"
+          backgroundImage="@Embed('/../assets/splash_screen_up.png')">
 
     <fx:Declarations>
         <control:Controller id="controller"/>
@@ -86,18 +87,27 @@
     <!-- Views                                                                   -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <view:AuthView includeIn="auth"
-                   id="authView"
-                   width="100%"
-                   height="100%"/>
+    <mx:HBox width="100%"
+             height="100%"
+             paddingLeft="480"
+             paddingTop="170" 
+             paddingRight="10"
+             paddingBottom="10">
 
-    <view:LogInView includeIn="login"
-                    id="loginView"
-                    width="100%"
-                    height="100%"/>
+        <view:AuthView includeIn="auth"
+                       id="authView"
+                       width="100%"
+                       height="100%"/>
 
-    <view:LogOutView includeIn="logout"
-                     id="logoutView"
-                     width="100%"
-                     height="100%"/>
+        <view:LogInView includeIn="login"
+                        id="loginView"
+                        width="100%"
+                        height="100%"/>
+
+        <view:LogOutView includeIn="logout"
+                         id="logoutView"
+                         width="100%"
+                         height="100%"/>
+    </mx:HBox>
+
 </mx:Panel>

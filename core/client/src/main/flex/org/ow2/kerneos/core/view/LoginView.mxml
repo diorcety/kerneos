@@ -31,6 +31,6 @@
     <login:LoginPanel id="loginPanel"
                       horizontalCenter="0"
                       verticalCenter="0"
-                      width="300"
-                      height="300"/>
+                      width="800"
+                      height="400"/>
 </mx:Canvas>

@@ -51,11 +51,12 @@
         ]]>
     </fx:Script>
 
+    <!--
     <mx:Text width="100%"
              textAlign="center"
              text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.login.label')}"
              selectable="false"/>
-
+    -->
     <flexlibControls:PromptingTextInput
             prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
             id="username"
