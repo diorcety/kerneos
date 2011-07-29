@@ -1,7 +1,7 @@
 <?xml version = "1.0" encoding = "utf-8"?>
 <!--
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-     - JASMINe
+     - Kerneos
      - Copyright (C) 2009-2011 Bull S.A.S.
      - Contact: jasmine AT ow2.org
      -
@@ -24,24 +24,83 @@
 -->
 <mx:Module xmlns:fx="http://ns.adobe.com/mxml/2009"
            xmlns:mx="library://ns.adobe.com/flex/mx"
-           implements="org.ow2.kerneos.core.api.KerneosModule"
-           width="100%"
-           height="100%">
+           xmlns:view = "org.ow2.kerneos.modules.store.view.*"
+           xmlns:control = "org.ow2.kerneos.modules.store.control.*"
+           implements = "org.ow2.kerneos.core.api.KerneosModule"
+           width = "100%"
+           height = "100%">
 
     <fx:Script>
         <![CDATA[
 
-        public function closeModule():void {
+        // =========================================================================
+        // Implementation of KerneosModule
+        // =========================================================================
+
+
+        /**
+         * When the module is closed, cut off all client-server communications
+         */
+        public function closeModule() : void
+        {
+            ////////////////////////////////////////////////////////////////
+            //                                                            //
+            //             Action to do when the module is closed         //
+            //                                                            //
+            ////////////////////////////////////////////////////////////////
+            /*
+             // Remove all the commands to the pool of commands
+             // Example:
+             controller.removeCommands();
+             controller = null;
+             */
         }
 
-        public function canBeClosedWithoutPrompt():Boolean {
+        public function canBeClosedWithoutPrompt() : Boolean {
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+            //                                                                                            //
+            //             return whether or not a prompt should be shown when closing the module         //
+            //                                                                                            //
+            ////////////////////////////////////////////////////////////////////////////////////////////////
+
             return true;
         }
 
-        public function servicesClasses():Dictionary {
+        /**
+         * Return a dictionary with the classes used by the services
+         * One entry in the dictionary is like
+         * dictionary[idService] = [Class1, Class2, ...]
+         */
+        public function servicesClasses(): Dictionary {
+            /**
+             * Register all the classes used by the services
+             * MyObject and MySubObject are used by the service "object_service"
+             * "object_service" is defined in kerneos-module.xml as
+             * <service id="object_service" destination="ObjectService"/>
+             *
+             * The variable _servicesClasses is defined as a class variable on the top of the class
+             *
+             *
+             * if(_servicesClasses == null)
+             * {
+             *   _servicesClasses = new Dictionary();
+             *   _servicesClasses["object_service"]= [MyObject, MySubObject];
+             * }
+             * return _servicesClasses;
+             */
             return null;
         }
+
         ]]>
     </fx:Script>
+
+    <fx:Declarations>
+        <!-- Instantiate the controller. A controller a module -->
+        <control:Controller id="controller"/>
+    </fx:Declarations>
+
+    <!-- Instantiate the main view -->
+    <view:MainView />
 
 </mx:Module>

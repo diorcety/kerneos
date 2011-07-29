@@ -46,4 +46,105 @@
     <module>server</module>
   </modules>
 
+  <properties>
+    <junit.version>3.8.1</junit.version>
+    <kerneos.version>2.1.0-SNAPSHOT</kerneos.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>flexmojos-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>flexmojos-repository-plugin</id>
+      <name>FlexMojos repository on Sonatype.org</name>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- iPOJO -->
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+        <version>${ipojo.version}</version>
+      </dependency>
+
+      <!-- Kerneos -->
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-core-client</artifactId>
+        <version>${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-core-server</artifactId>
+        <version>${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <!-- Flex -->
+      <dependency>
+        <groupId>com.adobe.flex.framework</groupId>
+        <artifactId>flex-framework</artifactId>
+        <version>${flex.version}</version>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonatype.flexmojos</groupId>
+          <artifactId>flexmojos-maven-plugin</artifactId>
+          <version>${flexmojos.version}</version>
+          <extensions>true</extensions>
+          <configuration>
+            <ignoreVersionIssues>true</ignoreVersionIssues>
+            <storepass/>
+            <debug>${flex-debug}</debug>
+            <optimize>${flex-optimize}</optimize>
+            <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
+            <targetPlayer>${player.version}</targetPlayer>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.adobe.flex</groupId>
+              <artifactId>compiler</artifactId>
+              <version>${flex.version}</version>
+              <type>pom</type>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
 </project>

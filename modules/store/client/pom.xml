@@ -47,12 +47,21 @@
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-core-client</artifactId>
-      <version>2.1.0-SNAPSHOT</version>
+      <version>${kerneos.version}</version>
       <type>xml</type>
       <classifier>link-report</classifier>
     </dependency>
-  </dependencies>
 
+    <!-- Theme -->
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <version>${flex.version}</version>
+      <classifier>theme</classifier>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <sourceDirectory>src/main/flex</sourceDirectory>
@@ -61,12 +70,14 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
+        <extensions>true</extensions>
         <configuration>
           <localesCompiled>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </localesCompiled>
           <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
+          <sourceFile>Store.mxml</sourceFile>
         </configuration>
       </plugin>
     </plugins>

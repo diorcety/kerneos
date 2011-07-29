@@ -43,10 +43,25 @@
 
   <dependencies>
     <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-core-server</artifactId>
-      <version>2.1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ow2.util</groupId>
+      <artifactId>util-log</artifactId>
+      <version>1.0.10</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
     </dependency>
   </dependencies>
 
@@ -54,6 +69,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
+         <version>${maven.dependency.version}</version>
         <executions>
           <execution>
             <id>copy-dependencies</id>
@@ -66,7 +82,7 @@
                 <artifactItem>
                   <groupId>org.ow2.kerneos.modules</groupId>
                   <artifactId>store-client</artifactId>
-                  <version>1.0.0-SNAPSHOT</version>
+                  <version>${project.version}</version>
                   <type>swf</type>
                   <overWrite>true</overWrite>
                   <destFileName>store.swf</destFileName>
@@ -85,7 +101,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Kerneos-Module>kerneos-store-${version}</Kerneos-Module>
+            <Kerneos-Module>kerneos-store-${project.version}</Kerneos-Module>
             <Include-Resource>
               src/main/resources,
               KERNEOS=src/main/kerneos,
