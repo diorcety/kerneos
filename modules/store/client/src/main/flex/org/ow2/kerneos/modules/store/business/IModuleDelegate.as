@@ -32,11 +32,13 @@ public interface IModuleDelegate extends IDelegateResponder
     //                                                                //
     ////////////////////////////////////////////////////////////////////
     
-    /*
         // The interface of the delegate.
         // Example :
             function callServerSide(parameters : Object) : void;
-    */
-    
+
+    function getStoreInfo() : void;
+
+    /*function changeStoreState(parameters : Object) : void;*/
+
 }
 }

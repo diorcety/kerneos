@@ -23,17 +23,23 @@
 package org.ow2.kerneos.modules.store.model
 {
 
+import avmplus.metadataXml;
+
 import org.ow2.kerneos.modules.store.business.IModuleDelegate;
 
 import org.ow2.kerneos.modules.store.business.ModuleDelegate;
 
 import com.adobe.cairngorm.model.ModelLocator;
 
+import mx.collections.ArrayCollection;
+
 import mx.utils.UIDUtil;
 
- /**
-  * The model locator for the Module.
-  */
+import org.ow2.kerneos.modules.store.vo.StoreInfo;
+
+/**
+ * The model locator for the Module.
+ */
 [Bindable]
 public class ModuleModelLocator implements ModelLocator
 {
@@ -44,47 +50,56 @@ public class ModuleModelLocator implements ModelLocator
     //                                //
     ////////////////////////////////////
 
-  /**
-    * The unique ID of this component
-    *
-    * @internal
-    *   Used to prevent a Cairngorm issue: when a command event is dispatched,
-    * every controller that registered this event type receives it, even if
-    * located in another module. To prevent this from happening and triggering
-    * multiple severe unexpected concurrence bugs, each event dispatched is
-    * postfixed with this unique ID.
-    */
+    /**
+     * The unique ID of this component
+     *
+     * @internal
+     *   Used to prevent a Cairngorm issue: when a command event is dispatched,
+     * every controller that registered this event type receives it, even if
+     * located in another module. To prevent this from happening and triggering
+     * multiple severe unexpected concurrence bugs, each event dispatched is
+     * postfixed with this unique ID.
+     */
     public var componentID:String = UIDUtil.createUID();
 
 
     /**
-    * Unique instance of this locator.
-    */
+     * Unique instance of this locator.
+     */
     private static var moduleModel : ModuleModelLocator = null;
-    
+
     ////////////////////////////////////////////
     //                                        //
     //             Variables Delegate         //
     //                                        //
     ////////////////////////////////////////////
-    /*
+
     // Put here the delegate instances of your model.
     // Example :
-        private var myDelegate : IModuleDelegate = null;
-    */
+    private var myDelegate : IModuleDelegate = null;
+
 
     ////////////////////////////////////////////////
     //                                            //
     //             Variables Of the model         //
     //                                            //
     ////////////////////////////////////////////////
-    
-    /*
+
+
     // Put here all the variables of the model
     // Example :
-        private var _myDataObj : String = null;
-    */
-    
+    private var _myDataObj : String = null;
+
+    private var _myStoreInfo : StoreInfo = null;
+
+    private var _storeState : String = "";
+
+    /**
+     * List of selected modules of the installed modules list
+     */
+    private var _listeSelectedModules : ArrayCollection = null;
+
+
     ////////////////////////////////////
     //                                //
     //             Functions          //
@@ -94,7 +109,7 @@ public class ModuleModelLocator implements ModelLocator
     public function ModuleModelLocator()
     {
         super();
-        
+
         if (moduleModel != null)
         {
             throw new Error("Only one ModelLocator has to be set");
@@ -102,16 +117,16 @@ public class ModuleModelLocator implements ModelLocator
     }
 
 
-     /**
-      * Get the only created instance of the ModuleModelLocator
-      */
+    /**
+     * Get the only created instance of the ModuleModelLocator
+     */
     public static function getInstance() : ModuleModelLocator
     {
         if (ModuleModelLocator.moduleModel == null)
         {
             ModuleModelLocator.moduleModel = new ModuleModelLocator();
         }
-        
+
         return ModuleModelLocator.moduleModel;
     }
 
@@ -121,28 +136,50 @@ public class ModuleModelLocator implements ModelLocator
     //                                //
     ////////////////////////////////////
 
-    /*
+
     // Put here all the setters for the model update.
     // Example :
-        public function set myDataObj(_myData : String) : void {
-            this._myDataObj = _myData;
-        }
-    */
+    public function set myDataObj(_myData : String) : void {
+        this._myDataObj = _myData;
+    }
+
+    public function set myStoreInfo (_myStore : StoreInfo) : void {
+        this._myStoreInfo = _myStore;
+    }
+
+    public function set storeState (_state : String) : void {
+        this._storeState = _state;
+    }
+
+    public function set listeSelectedModules (_listeModules : ArrayCollection) : void {
+        this._listeSelectedModules = _listeModules;
+    }
+
 
     ////////////////////////////////////
     //                                //
     //             Getters            //
     //                                //
     ////////////////////////////////////
-    
-    /*
+
+
     // Put here all the getters to access the model variables
     // Example :
-        public function get myDataObj() : String {
-            return this._myDataObj;
-        }
-    */
+    public function get myDataObj() : String {
+        return this._myDataObj;
+    }
 
+    public function get myStoreInfo () : StoreInfo {
+        return this._myStoreInfo
+    }
+
+     public function get storeState () : String {
+       return this._storeState;
+    }
+
+    public function get listeSelectedModules () : ArrayCollection {
+        return this._listeSelectedModules;
+    }
 
     ////////////////////////////////////////////
     //                                        //
@@ -150,17 +187,17 @@ public class ModuleModelLocator implements ModelLocator
     //                                        //
     ////////////////////////////////////////////
 
-    /*
+
     // Put here the getters to access all the delegates of the created module
     // Example :
-        public function getMyDelegate() : IModuleDelegate {
-            if (this.myDelegate == null) {
-                this.myDelegate = new ModuleDelegate();
-            }
-            return this.myDelegate;
+    public function getMyDelegate() : IModuleDelegate {
+        if (this.myDelegate == null) {
+            this.myDelegate = new ModuleDelegate();
         }
-    
-    */
+        return this.myDelegate;
+    }
+
+
 
 }
 }

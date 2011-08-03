@@ -54,17 +54,15 @@ public class Controller extends FrontController {
      * multiple severe unexpected concurrence bugs, each event dispatched is
      * postfixed with this unique ID.
      */
-    
+
     public function initialiseCommands() : void
     {
-        /*
-        // Retrieve the component model
-        var moduleModel : ModuleModelLocator = ModuleModelLocator.getInstance();
-
         // Add the events to the controler with the associated command
-        // Example :
-        this.addCommand(ModuleEvent.MY_ACTION, ModuleCommand);
-        */
+        this.addCommand(ModuleEvent.GET_MODULE_INFO, ModuleCommand);
+        this.addCommand(ModuleEvent.GET_STORE_INFO, GetStoreInfo);
+        this.addCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE, ChangeSelectedModuleInstall);
+        this.addCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE, ChangeStoreState);
+
     }
 
     /**
@@ -73,13 +71,12 @@ public class Controller extends FrontController {
      */
     public function removeCommands() : void
     {
+        // Remove the events to the controller with the associated command
+        this.removeCommand(ModuleEvent.GET_MODULE_INFO);
+        this.removeCommand(ModuleEvent.GET_STORE_INFO);
+        this.removeCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
+        this.removeCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
 
-        /*
-            // Remove the events to the controller with the associated command
-            // Example :
-
-                this.removeCommand(ModuleEvent.MY_ACTION);
-        */
     }
 
 }

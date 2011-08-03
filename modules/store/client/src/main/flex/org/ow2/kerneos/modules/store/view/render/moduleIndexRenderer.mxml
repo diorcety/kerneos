@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true">
+	
+	<fx:Script>
+		<![CDATA[
+        import mx.controls.Alert;
+
+        import com.adobe.cairngorm.control.CairngormEventDispatcher;
+
+        import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
+        import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
+
+        protected function installModuleButton_clickHandler(event:MouseEvent):void {
+            Alert.show("Install " + data.name);
+        }
+
+        protected function moduleIcon_clickHandler(event:MouseEvent):void {
+            if (event.target.id != "installModuleButton") {
+                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                evt.state = "ModuleDetail";
+                CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+            }
+        }
+        ]]>
+	</fx:Script>
+	
+	<s:VGroup id="module1" width="128" height="200" horizontalAlign="center"
+			  verticalAlign="top" click="moduleIcon_clickHandler(event)" >
+		<mx:LinkButton icon="{data.icon}" paddingLeft="0"
+					   paddingRight="0" />
+		<s:Label fontWeight="bold" paddingLeft="0" text="{data.name}"/>
+		<s:Label fontWeight="bold" paddingLeft="0" paddingRight="0" text="{data.author}"
+				 verticalAlign="top"/>
+		<s:Button id="installModuleButton" label="Install"
+				  click="installModuleButton_clickHandler(event)"/>
+    </s:VGroup>
+	
+</s:ItemRenderer>

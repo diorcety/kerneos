@@ -30,6 +30,8 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
+import org.ow2.kerneos.modules.store.vo.StoreInfo;
+
 // Server Exceptions imports
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
@@ -42,7 +44,7 @@ import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
   * The command class from the cairngorm model.
   */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class ModuleCommand implements ICommand, IResponder
+public class GetStoreInfo implements ICommand, IResponder
 {
     /**
      * Retrieve the delegate and use it to make the call.
@@ -62,8 +64,8 @@ public class ModuleCommand implements ICommand, IResponder
             // Example :
                 var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();       
                 delegate.responder = this;
-                var parameters : String = "";
-                delegate.callServerSide(parameters);
+
+                delegate.getStoreInfo();
 
     }
 
@@ -82,7 +84,7 @@ public class ModuleCommand implements ICommand, IResponder
             // Handle the result of the call. Usely, the model is updated.
             // Example :
                 var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-                moduleModel.myDataObj = (data as ResultEvent).result as String;
+                moduleModel.myStoreInfo = (data as ResultEvent).result as StoreInfo;
             
 
     }

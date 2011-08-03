@@ -1,4 +1,4 @@
-<?xml version = "1.0" encoding = "utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      - Kerneos
@@ -23,84 +23,446 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:Module xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:s="library://ns.adobe.com/flex/spark"
            xmlns:mx="library://ns.adobe.com/flex/mx"
-           xmlns:view = "org.ow2.kerneos.modules.store.view.*"
            xmlns:control = "org.ow2.kerneos.modules.store.control.*"
            implements = "org.ow2.kerneos.core.api.KerneosModule"
-           width = "100%"
-           height = "100%">
-
-    <fx:Script>
-        <![CDATA[
-
-        // =========================================================================
-        // Implementation of KerneosModule
-        // =========================================================================
+           xmlns:vo="org.ow2.kerneos.modules.store.vo.*"
+           layout="absolute" width="100%" height="100%"
+           creationComplete="init()">
 
 
-        /**
-         * When the module is closed, cut off all client-server communications
-         */
-        public function closeModule() : void
-        {
-            ////////////////////////////////////////////////////////////////
-            //                                                            //
-            //             Action to do when the module is closed         //
-            //                                                            //
-            ////////////////////////////////////////////////////////////////
-            /*
-             // Remove all the commands to the pool of commands
-             // Example:
-             controller.removeCommands();
-             controller = null;
-             */
+    <fx:Style>
+
+        @namespace s "library://ns.adobe.com/flex/spark";
+        @namespace mx "library://ns.adobe.com/flex/mx";
+        @namespace vo "org.ow2.kerneos.modules.store.vo.*";
+
+        .accHead {
+            fontSize: 18;
+            fontWeight: normal;
         }
 
-        public function canBeClosedWithoutPrompt() : Boolean {
 
-            ////////////////////////////////////////////////////////////////////////////////////////////////
-            //                                                                                            //
-            //             return whether or not a prompt should be shown when closing the module         //
-            //                                                                                            //
-            ////////////////////////////////////////////////////////////////////////////////////////////////
-
-            return true;
-        }
-
-        /**
-         * Return a dictionary with the classes used by the services
-         * One entry in the dictionary is like
-         * dictionary[idService] = [Class1, Class2, ...]
-         */
-        public function servicesClasses(): Dictionary {
-            /**
-             * Register all the classes used by the services
-             * MyObject and MySubObject are used by the service "object_service"
-             * "object_service" is defined in kerneos-module.xml as
-             * <service id="object_service" destination="ObjectService"/>
-             *
-             * The variable _servicesClasses is defined as a class variable on the top of the class
-             *
-             *
-             * if(_servicesClasses == null)
-             * {
-             *   _servicesClasses = new Dictionary();
-             *   _servicesClasses["object_service"]= [MyObject, MySubObject];
-             * }
-             * return _servicesClasses;
-             */
-            return null;
-        }
-
-        ]]>
-    </fx:Script>
+    </fx:Style>
 
     <fx:Declarations>
         <!-- Instantiate the controller. A controller a module -->
         <control:Controller id="controller"/>
+
+        <s:ArrayCollection id="modulesResultList">
+            <vo:Module name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
+                       description="Monitoring lets you visualize, analyze and export graph.
+						  2 Monitoring lets you visualize, analyze and export graphs. 
+						  3 Monitoring lets you visualize, analyze and export graphs. 
+						  4 Monitoring lets you visualize, analyze and export graphs. 
+						  5 Monitoring lets you visualize, analyze and export graphs. 
+						  6 Monitoring lets you visualize, analyze and export graphs. 
+						  7 Monitoring lets you visualize, analyze and export graphs."/>
+            <vo:Module name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+        </s:ArrayCollection>
+
+        <s:ArrayCollection id="modulesSearchResultList">
+            <vo:Module name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
+                       description="Monitoring lets you visualize, analyze and export graph.
+						  2 Monitoring lets you visualize, analyze and export graphs. 
+						  3 Monitoring lets you visualize, analyze and export graphs. 
+						  4 Monitoring lets you visualize, analyze and export graphs. 
+						  5 Monitoring lets you visualize, analyze and export graphs. 
+						  6 Monitoring lets you visualize, analyze and export graphs. 
+						  7 Monitoring lets you visualize, analyze and export graphs."/>
+            <vo:Module name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"
+                       description="Monitoring lets you visualize, analyze and export graph.
+						  2 Monitoring lets you visualize, analyze and export graphs. 
+						  3 Monitoring lets you visualize, analyze and export graphs. 
+						  4 Monitoring lets you visualize, analyze and export graphs. 
+						  5 Monitoring lets you visualize, analyze and export graphs. 
+						  6 Monitoring lets you visualize, analyze and export graphs. 
+						  7 Monitoring lets you visualize, analyze and export graphs."/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
+                       description="Monitoring lets you visualize, analyze and export graph.
+						  2 Monitoring lets you visualize, analyze and export graphs. 
+						  3 Monitoring lets you visualize, analyze and export graphs. 
+						  4 Monitoring lets you visualize, analyze and export graphs. 
+						  5 Monitoring lets you visualize, analyze and export graphs. 
+						  6 Monitoring lets you visualize, analyze and export graphs. 
+						  7 Monitoring lets you visualize, analyze and export graphs."/>
+            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
+                       description="Monitoring lets you visualize, analyze and export graph.
+						  2 Monitoring lets you visualize, analyze and export graphs. 
+						  3 Monitoring lets you visualize, analyze and export graphs. 
+						  4 Monitoring lets you visualize, analyze and export graphs. 
+						  5 Monitoring lets you visualize, analyze and export graphs. 
+						  6 Monitoring lets you visualize, analyze and export graphs. 
+						  7 Monitoring lets you visualize, analyze and export graphs."/>
+
+        </s:ArrayCollection>
     </fx:Declarations>
 
-    <!-- Instantiate the main view -->
-    <view:MainView />
+    <mx:states >
+        <mx:State name="Default" />
+        <mx:State name="ModuleDetail" />
+        <mx:State name="InstalledModules" />
+        <mx:State name="FindModules" />
+    </mx:states>
+
+    <s:Group x="0" y="0" width="100%" height="100%">
+        <fx:Script>
+			<![CDATA[
+            import mx.controls.Alert;
+            import mx.events.ListEvent;
+
+            import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
+            import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
+
+            import org.ow2.kerneos.modules.store.event.ModuleEvent;
+
+            import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
+            import org.ow2.kerneos.modules.store.vo.StoreInfo;
+
+            import com.adobe.cairngorm.control.CairngormEventDispatcher;
+
+            import mx.events.ItemClickEvent;
+            import mx.collections.ArrayCollection;
+
+            private var _selectModule:org.ow2.kerneos.modules.store.vo.Module = null;
+
+            /**
+             * Keywords used to look up for modules
+             */
+            [Bindable]
+            private var _keywords : String;
+
+            // =========================================================================
+            // Implementation of KerneosModule
+            // =========================================================================
+
+
+            /**
+             * When the module is closed, cut off all client-server communications
+             */
+            public function closeModule() : void
+            {
+                ////////////////////////////////////////////////////////////////
+                //                                                            //
+                //             Action to do when the module is closed         //
+                //                                                            //
+                ////////////////////////////////////////////////////////////////
+                // Remove all the commands to the pool of commands
+                controller.removeCommands();
+                controller = null;
+            }
+
+            public function canBeClosedWithoutPrompt() : Boolean {
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+                //                                                                                            //
+                //             return whether or not a prompt should be shown when closing the module         //
+                //                                                                                            //
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+
+                return true;
+            }
+
+            /**
+             * Return a dictionary with the classes used by the services
+             * One entry in the dictionary is like
+             * dictionary[idService] = [Class1, Class2, ...]
+             */
+            public function servicesClasses(): Dictionary {
+                /**
+                 * Register all the classes used by the services
+                 * MyObject and MySubObject are used by the service "object_service"
+                 * "object_service" is defined in kerneos-module.xml as
+                 * <service id="object_service" destination="ObjectService"/>
+                 *
+                 * The variable _servicesClasses is defined as a class variable on the top of the class
+                 *
+                 *
+                 * if(_servicesClasses == null)
+                 * {
+                 *   _servicesClasses = new Dictionary();
+                 *   _servicesClasses["object_service"]= [MyObject, MySubObject];
+                 * }
+                 * return _servicesClasses;
+                 */
+                return null;
+            }
+
+
+            protected function init():void
+            {
+                this.id = "moduleStoreModule";
+
+                _selectModule = new org.ow2.kerneos.modules.store.vo.Module();
+                _selectModule.name = "JASMINe Monitoring";
+                _selectModule.author = "BULL SAS";
+                _selectModule.description = "Monitoring lets you visualize, analyze and export graphs."
+                        + "2 Monitoring lets you visualize, analyze and export graphs."
+                        + "3 Monitoring lets you visualize, analyze and export graphs."
+                        + "4 Monitoring lets you visualize, analyze and export graphs."
+                        + "5 Monitoring lets you visualize, analyze and export graphs."
+                        + "6 Monitoring lets you visualize, analyze and export graphs."
+                        + "7 Monitoring lets you visualize, analyze and export graphs.";
+
+                [Embed(source='/../assets/logo_jasmine_monitoring.png')]
+                var icon:Class;
+
+                _selectModule.icon = icon;
+                _selectModule.size = 4000;
+                _selectModule.releaseDate = new Date();
+                _selectModule.version = "1.4.2";
+                _selectModule.category = "Monitoring";
+                _selectModule.installsNumber = 1000000;
+
+                //Change application state when click on one menu item
+                linkBar.addEventListener(ItemClickEvent.ITEM_CLICK, handleLinkBar);
+
+                searchInput.text="Module's Name..";
+                searchInput.addEventListener(FocusEvent.FOCUS_IN, handleSearchInputFocusIn);
+                searchInput.addEventListener(FocusEvent.FOCUS_OUT, handleSearchInputFocusOut);
+
+                ModuleModelLocator.getInstance().listeSelectedModules = new ArrayCollection();
+
+                /*this.addEventListener(SelectedModuleEvent.SELECTED_MODULE_CHANGE, onItemChanged);*/
+            }
+
+            private function handleLinkBar(event:ItemClickEvent) : void {
+                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                evt.state = "";
+                CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+            }
+
+            private function handleSearchInputFocusIn (event:FocusEvent) : void {
+                searchInput.text = "";
+            }
+
+            private function handleSearchInputFocusOut (event:FocusEvent) : void {
+                if (searchInput.text == "") {
+                    searchInput.text = "Module's Name..";
+                }
+            }
+
+            protected function handleDGInstalledModulesClick(event:ListEvent):void
+            {
+                if (event.columnIndex != 0) {
+                    (dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.Module).selected =
+                            !(dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.Module).selected;
+
+                    var evt : ChangeSelectedModuleInstallEvent = new ChangeSelectedModuleInstallEvent(
+                            ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
+                    evt.item = dgInstalledModules.selectedItem;
+                    CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+                }
+            }
+
+            public function chkbxAllSelectHandler(evt : Event):void{
+                ModuleModelLocator.getInstance().listeSelectedModules.removeAll();
+
+                for each (var item:Object in modulesResultList){
+                    item.selected = chkbxAllSelect.selected;
+                    if(item.selected){
+                        ModuleModelLocator.getInstance().listeSelectedModules.addItem(item);
+
+                    }
+                }
+                modulesResultList.refresh();
+            }
+
+            protected function searchInput_enterHandler():void
+            {
+                /*Alert.show("Find modules by word : " + searchInput.text);*/
+
+                //TODO enlever le focus
+                searchIconButton.setFocus();
+                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                evt.state = "FindModules";
+                CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+            }
+
+
+            private function handleInstalledModulesState() : void {
+
+                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                evt.state = "InstalledModules";
+                CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+
+                //Dispatch calls to server methods, Test API REST
+
+                var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.GET_MODULE_INFO);
+                CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+
+                var store_event:ModuleEvent = new ModuleEvent(ModuleEvent.GET_STORE_INFO);
+                CairngormEventDispatcher.getInstance().dispatchEvent(store_event);
+
+            }
+
+            /**
+             * The message is showed when myData in the ModelLocator is modified,
+             * a pop-up with the message is displayed
+             */
+            private function set newMessage(message:String) : void {
+                if (message != null) {
+                    Alert.show("Store name " + message);
+                }
+            }
+
+            /**
+             * The message is showed when myStoreInfo in the ModelLocator is modified
+             */
+            private function set newStoreInfo(storeInfo:StoreInfo) : void {
+                if (storeInfo != null) {
+                    /* labelModuleNameTest.text = storeInfo.name;
+                     labelModuleDescriptionTest.text = storeInfo.description;
+                     labelModuleURLTest.text = storeInfo.url;*/
+                }
+            }
+
+            /**
+             * Change current state when storeState in the ModelLocator is modified
+             */
+            private function set newStoreState(state:String) : void {
+                if (state != null) {
+                    this.currentState = state;
+                }
+            }
+
+            ]]>
+		</fx:Script>
+
+        <!-- Setup button -->
+        <s:Button id="setupButton" x="642" y="28" label="Setup" fontSize="18"
+                  icon="/../assets/engine_icon.gif"/>
+
+        <!-- Search box and icon -->
+        <!-- BUG 02/08/2011 if s:TextInput is used, problem with SoftKeyboardEvent class doesn't found -->
+        <s:HGroup x="337" y="28" width="241" height="32" horizontalAlign="center" verticalAlign="top">
+            <mx:TextInput id="searchInput" paddingTop="8" fontSize="12" enter="searchInput_enterHandler()" />
+            <mx:LinkButton id="searchIconButton" width="34" height="28"
+                           click="searchInput_enterHandler()" icon="@Embed('/../assets/Crystal_Clear_app_xmag.png')"
+                           paddingLeft="15" paddingRight="0"/>
+        </s:HGroup>
+
+        <!-- Installed Modules Button -->
+        <s:Button x="14" y="96" width="168" label="Installed" fontSize="18" click="handleInstalledModulesState()" />
+
+        <!-- Categories Menu -->
+        <mx:Accordion x="14" y="133" width="168" height="306" label="Categories" fontSize="16"
+                      headerStyleName="accHead" textAlign="center"
+                      fontWeight="normal">
+            <s:NavigatorContent width="100%" height="100%" label="Categories" fontSize="16">
+                <mx:LinkBar id="linkBar" width="100%" dataProvider="{mainViewStack}"
+                            direction="vertical" verticalGap="8" currentState=""/>
+            </s:NavigatorContent>
+        </mx:Accordion>
+
+        <!-- Main Conteneur -->
+        <s:BorderContainer x="190" y="96" width="553" height="463">
+            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461" >
+                <s:NavigatorContent width="100%" height="100%" label="Popular">
+                    <s:DataGroup id="dgPopularModules" x="0" y="0" width="100%" height="100%"
+                                 dataProvider="{modulesResultList}" itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
+                                 name="dgPopularModules"
+                                 visible.Default="true"
+                                 visible.ModuleDetail="false">
+                        <s:layout>
+                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
+                                          requestedRowCount="2" rowHeight="200"/>
+                        </s:layout>
+                    </s:DataGroup>
+                </s:NavigatorContent>
+
+
+                <s:NavigatorContent width="100%" height="100%" label="Monitoring">
+                </s:NavigatorContent>
+                <s:NavigatorContent width="100%" height="100%" label="Admin">
+                </s:NavigatorContent>
+                <s:NavigatorContent width="100%" height="100%" label="Others">
+                </s:NavigatorContent>
+            </mx:ViewStack>
+
+            <!-- Detail module view-->
+            <s:Group includeIn="ModuleDetail" x="0" y="0" width="100%" height="100%">
+                <s:Label x="142" y="10" width="381" height="21" fontSize="18"
+                         fontWeight="bold" text="{_selectModule.name}"/>
+                <s:Image x="10" y="10" width="128" height="128"
+                         source="{_selectModule.icon}"/>
+                <s:Label x="146" y="39" width="381" height="21" fontSize="14"
+                         fontWeight="bold" text="{_selectModule.author}"/>
+                <s:Label x="146" y="68" width="395" height="99" text="{_selectModule.description}"/>
+                <s:Button x="40" y="146" label="Install"/>
+                <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
+                         text="About this module"/>
+                <s:Label x="10" y="217" fontSize="14" text="Updated:"/>
+                <s:Label x="76" y="217" fontSize="14"
+                         text="{_selectModule.releaseDate.toDateString()}"/>
+                <s:Label x="11" y="245" fontSize="14" text="Version:"/>
+                <s:Label x="70" y="245" fontSize="14" text="{_selectModule.version}"
+                         verticalAlign="middle"/>
+                <s:Label x="191" y="217" fontSize="14" text="Category:"/>
+                <s:Label x="257" y="217" fontSize="14"
+                         text="{_selectModule.category}"/>
+                <s:Label x="191" y="244" fontSize="14" text="Installs:"/>
+                <s:Label x="244" y="244" fontSize="14"
+                         text="{_selectModule.installsNumber}"/>
+                <s:Label x="381" y="218" fontSize="14" text="Size:"/>
+                <s:Label x="416" y="218" fontSize="14"
+                         text="{_selectModule.size} Bytes"/>
+            </s:Group>
+
+            <!-- Installed Modules View-->
+            <s:Group includeIn="InstalledModules" x="0" y="0" width="100%" height="100%" >
+                <mx:CheckBox id="chkbxAllSelect" x="63" y="6" width="200"
+                             label="{(chkbxAllSelect.selected)?'Deselect All':'Select All'}"
+                             change="chkbxAllSelectHandler(event)"/>
+                <mx:DataGrid id="dgInstalledModules" x="43" y="42" height="236" dataProvider="{modulesResultList}"
+                             itemClick="handleDGInstalledModulesClick(event)">
+                    <mx:columns>
+                        <mx:DataGridColumn width="60" dataField="selected" headerText="Select" sortable="false"
+                                           itemRenderer="org.ow2.kerneos.modules.store.view.render.chkBxRender"></mx:DataGridColumn>
+                        <mx:DataGridColumn width="160" dataField="name" headerText="Name" ></mx:DataGridColumn>
+                        <mx:DataGridColumn width="110" dataField="version" headerText="Version"></mx:DataGridColumn>
+                        <mx:DataGridColumn width="130" dataField="category" headerText="Category"></mx:DataGridColumn>
+                    </mx:columns>
+                </mx:DataGrid>
+                <s:Button x="43" y="329" label="Update" click="Alert.show('Update selected modules');"/>
+                <s:Button x="169" y="329" label="Uninstall" click="Alert.show('Uninstall selected modules');"/>
+                <mx:Label x="50" y="289" text="{modulesResultList.length + ' result(s) ' +
+                ModuleModelLocator.getInstance().listeSelectedModules.length+' selected item(s)' }" />
+
+                <!--TEST APPEL STORE API REST -->
+                <!--<mx:Label id="labelModuleNameTest" x="15" y="15" text="" />
+                <mx:Label id="labelModuleDescriptionTest" x="15" y="50" text="" />
+                <mx:Label id="labelModuleURLTest" x="15" y="85" text="" />-->
+
+            </s:Group>
+
+            <!-- Find Modules View-->
+            <s:Group includeIn="FindModules" x="0" y="0" width="100%" height="100%">
+                <s:Label x="10" y="10" text="{modulesSearchResultList.length} results for &quot; {searchInput.text} &quot;"/>
+                <mx:HRule x="10" y="30" width="531"/>
+                <s:DataGroup x="0" y="35" width="545" height="422" dataProvider="{modulesSearchResultList}"
+                             itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleResearchRenderer">
+                    <s:layout>
+                        <s:VerticalLayout gap="5" requestedRowCount="4" rowHeight="102"
+                                          variableRowHeight="false" />
+                    </s:layout>
+                </s:DataGroup>
+            </s:Group>
+
+        </s:BorderContainer>
+    </s:Group>
+
+    <fx:Binding source="ModuleModelLocator.getInstance().myDataObj" destination="newMessage"/>
+
+    <fx:Binding source="ModuleModelLocator.getInstance().myStoreInfo" destination="newStoreInfo"/>
+
+    <fx:Binding source="ModuleModelLocator.getInstance().storeState" destination="newStoreState"/>
 
 </mx:Module>

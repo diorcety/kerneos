@@ -22,53 +22,43 @@
  */
 package org.ow2.kerneos.modules.store.event
 {
-import com.adobe.cairngorm.control.CairngormEvent;
 import flash.events.Event;
+import com.adobe.cairngorm.control.CairngormEvent;
 
 
 /**
  * A ModuleEvent is dispatched when the associated action is triggered from the view.
  */
-public class ModuleEvent extends CairngormEvent
+public class ChangeSelectedModuleInstallEvent extends CairngormEvent
 {
-    
+
     ////////////////////////////////////
     //                                //
     //             Event Type         //
     //                                //
     ////////////////////////////////////
 
-    public static var GET_MODULE_INFO : String = "GET_MODULE_INFO";
+    public static var SELECTED_MODULE_CHANGE : String = "SELECTED_MODULE_CHANGE";
 
-    public static var GET_STORE_INFO : String = "GET_STORE_INFO";
 
-    /*
-     // Example :
-     // Message send in the event
-     private var message: String = "";
-     */
+    private var _item: Object = null;
 
     /**
      * Creates a new ModuleEvent.
      */
-    public function ModuleEvent(type : String)
+    public function ChangeSelectedModuleInstallEvent(type : String)
     {
         super(type);
     }
 
-    /*
-     // Event message setting and getting
-     // Example :
-     public function setMessage(message:String):void 
-     {
-         this.message = message;
-     }
-     
-     public function getMessage(): String
-     {
-         return message;
-     }
-     */
+
+    public function set item (item : Object) : void {
+        this._item = item;
+    }
+
+    public function get item () : Object {
+        return this._item;
+    }
 
     /**
      * Overrides the clone function of the CairngormEvent class.
@@ -76,12 +66,10 @@ public class ModuleEvent extends CairngormEvent
      */
     override public function clone() : Event
     {
-        var ev:ModuleEvent = new ModuleEvent(this.type);
-        /*
-         // Example:
-         // Add the event message
-         ev.setMessage(this.message);
-         */
+        var ev:ChangeSelectedModuleInstallEvent = new ChangeSelectedModuleInstallEvent(this.type);
+
+        ev.item = this._item;
+
         return ev;
     }
 
