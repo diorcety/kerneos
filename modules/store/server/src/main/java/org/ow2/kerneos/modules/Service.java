@@ -10,7 +10,6 @@ import org.apache.felix.ipojo.annotations.Validate;
 import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.kerneos.modules.impl.Store;
-import org.ow2.kerneosstore.api.StoreInfo;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -44,7 +43,7 @@ public class Service implements KerneosSimpleService{
         logger.info("Calling Store REST API");
 
         IStore store = new Store();
-        StoreInfo result = store.getInfo();
+        org.ow2.kerneosstore.api.Store result = store.getInfo();
 
         logger.info("Store Name : " + result.getName());
         logger.info("Store Description : " + result.getDescription());
@@ -65,7 +64,7 @@ public class Service implements KerneosSimpleService{
      */
     public String sayHello(final String name) {
         IStore store = new Store();
-        StoreInfo result = store.getInfo();
+        org.ow2.kerneosstore.api.Store result = store.getInfo();
 
         return result.getName();
     }
@@ -73,9 +72,9 @@ public class Service implements KerneosSimpleService{
     /**
      *
      */
-    public StoreInfo getStoreInfo() {
+    public org.ow2.kerneosstore.api.Store getStoreInfo() {
         IStore store = new Store();
-        StoreInfo result = store.getInfo();
+        org.ow2.kerneosstore.api.Store result = store.getInfo();
         return result;
     }
 }
