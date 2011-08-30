@@ -102,7 +102,7 @@ public class ModuleImpl implements ModuleVersion {
 
     @Override
     public Module getModule() {
-        return new SimpleModule(id);
+        return (Module)this;
     }
 
     @Override
@@ -132,26 +132,35 @@ public class ModuleImpl implements ModuleVersion {
         return Integer.parseInt(matcher.group(3));
     }
 
-    class SimpleModule implements Module {
-        private Long id;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        SimpleModule(Long id) {
-            this.id = id;
-        }
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-        @Override
-        public Long getId() {
-            return id;
-        }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        @Override
-        public Collection getVersions() {
-            return null;
-        }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-        @Override
-        public Collection getCategories() {
-            return null;
-        }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setCategories(Collection<CategoryImpl> categories) {
+        this.categories = categories;
     }
 }

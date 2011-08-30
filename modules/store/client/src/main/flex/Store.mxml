@@ -126,6 +126,7 @@
             import org.ow2.kerneos.modules.store.event.StoreEvent;
 
             import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
+            import org.ow2.kerneos.modules.store.vo.CategoryVO;
             import org.ow2.kerneos.modules.store.vo.StoreVO;
 
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -191,10 +192,9 @@
 
                 if (_servicesClasses == null) {
                     _servicesClasses = new Dictionary();
-                    _servicesClasses["hello_service"] = [org.ow2.kerneos.modules.store.vo.StoreVO];
-                    _servicesClasses["store_service"] = [org.ow2.kerneos.modules.store.vo.StoreVO];
-                    _servicesClasses["store_service"] = [org.ow2.kerneos.modules.store.vo.ModuleVO];
-                    _servicesClasses["store_service"] = [ByteArray];
+                    _servicesClasses["hello_service"] = [StoreVO];
+                    _servicesClasses["store_service"] = [StoreVO, ModuleVO, ByteArray, CategoryVO];
+
                 }
                 return _servicesClasses;
 
@@ -309,9 +309,9 @@
                 get_module_event.id = 1;
                 CairngormEventDispatcher.getInstance().dispatchEvent(get_module_event);
 
-                /* var get_module_image_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE_IMAGE);
+                var get_module_image_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE_IMAGE);
                 get_module_image_event.id = 1;
-                CairngormEventDispatcher.getInstance().dispatchEvent(get_module_image_event);*/
+                CairngormEventDispatcher.getInstance().dispatchEvent(get_module_image_event);
 
             }
 
@@ -361,7 +361,8 @@
              */
             private function set testChangeImage(image:Bitmap):void {
                 if (image != null) {
-
+                    imageTestBitmap.source = ModuleModelLocator.getInstance().imageTest;
+                    imageTestBitmap.visible = true;
                 }
             }
             ]]>
@@ -432,8 +433,8 @@
                          text="About this module"/>
                 <s:Label x="10" y="217" fontSize="14" text="Updated:"/>
                 <!--TODO uncomment date -->
-               <!-- <s:Label x="76" y="217" fontSize="14"
-                         text="{_selectModule.date.toDateString()}"/>-->
+                <s:Label x="76" y="217" fontSize="14"
+                         text="{_selectModule.date.toDateString()}"/>
                 <s:Label x="11" y="245" fontSize="14" text="Version:"/>
                 <s:Label x="70" y="245" fontSize="14" text="{_selectModule.version}"
                          verticalAlign="middle"/>
@@ -474,7 +475,7 @@
                 <mx:Label id="labelModuleURLTest" x="15" y="85" text="" />-->
 
                 <!-- Test get module image from REST -->
-                <s:BitmapImage x="43" y="329" source="ModuleModelLocator.getInstance().imageTest"/>
+                <s:BitmapImage id="imageTestBitmap" x="300" y="329" source="ModuleModelLocator.getInstance().imageTest"/>
 
             </s:Group>
 

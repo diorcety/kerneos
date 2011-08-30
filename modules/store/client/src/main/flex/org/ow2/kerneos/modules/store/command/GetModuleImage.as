@@ -30,6 +30,7 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 
 import flash.display.Loader;
+import flash.display.LoaderInfo;
 import flash.events.Event;
 
 import flash.utils.ByteArray;
@@ -95,29 +96,16 @@ public class GetModuleImage implements ICommand, IResponder
 
 
         var icon:ByteArray = (data as ResultEvent).result as ByteArray;
-        trace(icon);
-        trace(icon.length);
-
-        //var icon:IconUtility =  new IconUtility((data as ResultEvent).result as ByteArray);
 
         var imageLoader:Loader = new Loader();
         imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
         imageLoader.loadBytes(icon);
-
-
-
-        //moduleModel.mainModule.icon = icon.
-
-
-
     }
 
     private function imageLoadComplete(event:Event):void
     {
-        var loader:Loader = event.target as Loader;
+        var loader:Loader = (event.target as LoaderInfo).loader;
         var bmp:Bitmap = Bitmap(loader.content);
-
-        trace(bmp.toString());
 
         var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
         moduleModel.imageTest = bmp;

@@ -43,7 +43,7 @@ import java.util.Collection;
 @Instantiate
 @Provides
 
-@KerneosService(id = "store_service", classes = {StoreImpl.class,ModuleImpl.class,Byte[].class})
+@KerneosService(id = "store_service", classes = {StoreImpl.class,ModuleImpl.class,Byte[].class, CategoryImpl.class})
 
 public class StoreService implements KerneosSimpleService {
     /**
@@ -106,19 +106,11 @@ public class StoreService implements KerneosSimpleService {
      * @param id Module's id
      * @return Image of the module with the given id
      */
-    public Byte[] getModuleImage(Long id) {
+    public byte[] getModuleImage(Long id) {
 
         //TODO objet icon utility cote flex
-
-        byte[] img = storeRS.getModuleVersionImage(id);
-        Byte[] result = new Byte[img.length];
-        for(int i=0; i < img.length; i++) {
-           result[i] = Byte.valueOf(img[i]);
-        }
-
-        logger.info("Send module image to client flex " + result.length);
-
-        return result;
+        logger.info("Send module image to client flex ");
+        return storeRS.getModuleVersionImage(id);
     }
 
     /**

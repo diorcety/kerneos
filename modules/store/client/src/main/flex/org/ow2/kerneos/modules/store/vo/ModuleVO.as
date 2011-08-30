@@ -60,7 +60,7 @@ package org.ow2.kerneos.modules.store.vo
 		/**
 		 * Module's release date
 		 */
-		//private var _date:Date;
+		private var _date:Date;
 		
 		/**
 		 * Size in Bytes of the module
@@ -83,11 +83,10 @@ package org.ow2.kerneos.modules.store.vo
         /**
          * Url of the method
          */
-        [Transient]
         private var _url:String;
 
-        /*[ArrayElementType('org.ow2.kerneos.modules.store.vo.CategoryVO')]
-        private var _categories:ArrayCollection;*/
+        [ArrayElementType('org.ow2.kerneos.modules.store.vo.CategoryVO')]
+        private var _categories:ArrayCollection;
 		
 		/**
 		 * It is the module selected in the datagrid
@@ -161,7 +160,7 @@ package org.ow2.kerneos.modules.store.vo
 			_description = value;
 		}
 
-		/*public function get date():Date
+		public function get date():Date
 		{
 			return _date;
 		}
@@ -169,7 +168,7 @@ package org.ow2.kerneos.modules.store.vo
 		public function set date(value:Date):void
 		{
 			_date = value;
-		}*/
+		}
 
 		public function get size():int
 		{
@@ -221,7 +220,7 @@ package org.ow2.kerneos.modules.store.vo
             this._url = url;
         }
 
-        /*public function get categories():ArrayCollection
+        public function get categories():ArrayCollection
         {
             return this._categories;
         }
@@ -229,7 +228,7 @@ package org.ow2.kerneos.modules.store.vo
         public function set categories(categories:ArrayCollection):void
         {
             this._categories = categories;
-        }*/
+        }
 
 	}
 	
