@@ -59,10 +59,11 @@ public class Controller extends FrontController {
     {
         // Add the events to the controler with the associated command
         this.addCommand(ModuleEvent.GET_MODULE_INFO, ModuleCommand);
-        this.addCommand(ModuleEvent.GET_STORE_INFO, GetStoreInfo);
+        this.addCommand(StoreEvent.GET_STORE, GetStoreInfo);
         this.addCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE, ChangeSelectedModuleInstall);
         this.addCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE, ChangeStoreState);
-
+        this.addCommand(GetModuleEvent.GET_MODULE, GetModule);
+        this.addCommand(GetModuleEvent.GET_MODULE_IMAGE, GetModuleImage);
     }
 
     /**
@@ -73,10 +74,11 @@ public class Controller extends FrontController {
     {
         // Remove the events to the controller with the associated command
         this.removeCommand(ModuleEvent.GET_MODULE_INFO);
-        this.removeCommand(ModuleEvent.GET_STORE_INFO);
+        this.removeCommand(StoreEvent.GET_STORE);
         this.removeCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
         this.removeCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
-
+        this.removeCommand(GetModuleEvent.GET_MODULE);
+        this.removeCommand(GetModuleEvent.GET_MODULE_IMAGE);
     }
 
 }

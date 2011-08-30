@@ -1,0 +1,162 @@
+/**
+ * Kerneos
+ * Copyright (C) 2009-2011 Bull S.A.S.
+ * Contact: jasmine@ow2.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * --------------------------------------------------------------------------
+ * $Id$
+ * --------------------------------------------------------------------------
+ */
+
+package org.ow2.kerneos.modules.store.services;
+
+
+import org.apache.felix.ipojo.annotations.*;
+import org.ow2.kerneos.core.service.KerneosService;
+import org.ow2.kerneos.core.service.KerneosSimpleService;
+import org.ow2.kerneos.modules.store.IStoreRS;
+import org.ow2.kerneos.modules.store.impl.CategoryImpl;
+import org.ow2.kerneos.modules.store.impl.ModuleImpl;
+import org.ow2.kerneos.modules.store.impl.StoreImpl;
+import org.ow2.kerneos.modules.store.impl.StoreRS;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
+
+import java.util.Collection;
+
+@Component
+@Instantiate
+@Provides
+
+@KerneosService(id = "store_service", classes = {StoreImpl.class,ModuleImpl.class,Byte[].class})
+
+public class StoreService implements KerneosSimpleService {
+    /**
+     * The logger
+     */
+    private static Log logger = LogFactory.getLog(StoreService.class);
+
+    private IStoreRS storeRS;
+
+    /**
+     * Start
+     */
+    @Validate
+    private void start() {
+        logger.info("Start store service");
+
+        logger.info("Calling Store REST API");
+
+        storeRS = new StoreRS();
+
+        IStoreRS store = new StoreRS();
+        org.ow2.kerneosstore.api.Store result = store.getStore();
+
+        logger.info("Store Name : " + result.getName());
+        logger.info("Store Description : " + result.getDescription());
+        logger.info("Store Url : " + result.getUrl());
+    }
+
+    /**
+     * Stop
+     */
+    @Invalidate
+    private void stop() {
+        logger.info("Stop store service");
+    }
+
+    /**
+     *  Get a store
+     *  @param url store url, REST path
+     */
+    public StoreImpl getStore(String url) {
+        StoreImpl result = (StoreImpl) storeRS.getStore();
+        return result;
+    }
+
+    /**
+     *
+     * @param id Module's id
+     * @return Module with the given id
+     */
+    public ModuleImpl getModule(Long id) {
+        ModuleImpl result = (ModuleImpl) storeRS.getModuleVersion(id);
+        logger.info("Module id parameter " + id);
+        logger.info("Modules name " + result.getName());
+        return result;
+    }
+
+    /**
+     *
+     * @param id Module's id
+     * @return Image of the module with the given id
+     */
+    public Byte[] getModuleImage(Long id) {
+
+        //TODO objet icon utility cote flex
+
+        byte[] img = storeRS.getModuleVersionImage(id);
+        Byte[] result = new Byte[img.length];
+        for(int i=0; i < img.length; i++) {
+           result[i] = Byte.valueOf(img[i]);
+        }
+
+        logger.info("Send module image to client flex " + result.length);
+
+        return result;
+    }
+
+    /**
+     *
+     * @param filter
+     * @param order
+     * @param itemByPage
+     * @param page
+     * @return
+     */
+    public Collection<ModuleImpl> getModulesByName(String filter, String order,
+                                                   Integer itemByPage, Integer page) {
+        Collection result = storeRS.getModulesByName(filter, order, itemByPage, page);
+        return result;
+    }
+
+    public Collection<ModuleImpl> getCategories() {
+        Collection result = storeRS.getCategories();
+        return result;
+    }
+
+    public CategoryImpl getCategory(Long id) {
+        return (CategoryImpl)storeRS.getCategory(id);
+    }
+
+    /**
+     *
+     * @param id Module's id
+     * @return Confirmation message of good or wrong module install
+     */
+    public String downloadModule(Long id) {
+        byte[] module = storeRS.downloadModule(id);
+
+        if (module == null) {
+            return "";
+        }
+
+        //TODO install module in the osgi framework
+        return "";
+    }
+}

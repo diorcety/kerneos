@@ -35,5 +35,6 @@
   <file>store.swf</file>
   <services>
     <service id="hello_service"/>
+    <service id="store_service"/>
   </services>
 </swf-module>

@@ -1,7 +1,7 @@
 /**
  * Kerneos
  * Copyright (C) 2009-2011 Bull S.A.S.
- * Contact: jasmine AT ow2.org
+ * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,28 +19,13 @@
  * USA
  *
  * --------------------------------------------------------------------------
+ * $Id$
+ * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.business
-{
-import org.ow2.kerneos.common.business.IDelegateResponder;
 
-public interface IModuleDelegate extends IDelegateResponder
-{
-    ////////////////////////////////////////////////////////////////////
-    //                                                                //
-    //             Function that does the requested operation         //
-    //                                                                //
-    ////////////////////////////////////////////////////////////////////
+package org.ow2.kerneos.modules.store;
 
-    // The interface of the delegate.
-    // Example :
-    function callServerSide(parameters : Object) : void;
+import org.ow2.kerneosstore.web.RSStoreClient;
 
-    function getStore(parameters : Object) : void;
-
-    function getModule(parameters : Object) : void;
-
-    function getModuleImage(parameters : Object) : void;
-
-}
+public interface IStoreRS extends RSStoreClient{
 }

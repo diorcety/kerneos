@@ -51,7 +51,7 @@
         <control:Controller id="controller"/>
 
         <s:ArrayCollection id="modulesResultList">
-            <vo:Module name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
+            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -59,17 +59,17 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:Module name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
         </s:ArrayCollection>
 
         <s:ArrayCollection id="modulesSearchResultList">
-            <vo:Module name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
+            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -77,7 +77,7 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:Module name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"
+            <vo:ModuleVO name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -85,7 +85,7 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -93,7 +93,7 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:Module name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
+            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -120,24 +120,28 @@
 
             import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
             import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
+            import org.ow2.kerneos.modules.store.event.GetModuleEvent;
 
             import org.ow2.kerneos.modules.store.event.ModuleEvent;
+            import org.ow2.kerneos.modules.store.event.StoreEvent;
 
             import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
-            import org.ow2.kerneos.modules.store.vo.StoreInfo;
+            import org.ow2.kerneos.modules.store.vo.StoreVO;
 
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
             import mx.events.ItemClickEvent;
             import mx.collections.ArrayCollection;
 
-            private var _selectModule:org.ow2.kerneos.modules.store.vo.Module = null;
+            private var _selectModule:org.ow2.kerneos.modules.store.vo.ModuleVO = null;
+
+            private var _servicesClasses:Dictionary;
 
             /**
              * Keywords used to look up for modules
              */
             [Bindable]
-            private var _keywords : String;
+            private var _keywords:String;
 
             // =========================================================================
             // Implementation of KerneosModule
@@ -147,8 +151,7 @@
             /**
              * When the module is closed, cut off all client-server communications
              */
-            public function closeModule() : void
-            {
+            public function closeModule():void {
                 ////////////////////////////////////////////////////////////////
                 //                                                            //
                 //             Action to do when the module is closed         //
@@ -159,7 +162,7 @@
                 controller = null;
             }
 
-            public function canBeClosedWithoutPrompt() : Boolean {
+            public function canBeClosedWithoutPrompt():Boolean {
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////
                 //                                                                                            //
@@ -175,7 +178,7 @@
              * One entry in the dictionary is like
              * dictionary[idService] = [Class1, Class2, ...]
              */
-            public function servicesClasses(): Dictionary {
+            public function servicesClasses():Dictionary {
                 /**
                  * Register all the classes used by the services
                  * MyObject and MySubObject are used by the service "object_service"
@@ -184,23 +187,25 @@
                  *
                  * The variable _servicesClasses is defined as a class variable on the top of the class
                  *
-                 *
-                 * if(_servicesClasses == null)
-                 * {
-                 *   _servicesClasses = new Dictionary();
-                 *   _servicesClasses["object_service"]= [MyObject, MySubObject];
-                 * }
-                 * return _servicesClasses;
                  */
-                return null;
+
+                if (_servicesClasses == null) {
+                    _servicesClasses = new Dictionary();
+                    _servicesClasses["hello_service"] = [org.ow2.kerneos.modules.store.vo.StoreVO];
+                    _servicesClasses["store_service"] = [org.ow2.kerneos.modules.store.vo.StoreVO];
+                    _servicesClasses["store_service"] = [org.ow2.kerneos.modules.store.vo.ModuleVO];
+                    _servicesClasses["store_service"] = [ByteArray];
+                }
+                return _servicesClasses;
+
+                //return null;
             }
 
 
-            protected function init():void
-            {
+            protected function init():void {
                 this.id = "moduleStoreModule";
 
-                _selectModule = new org.ow2.kerneos.modules.store.vo.Module();
+                _selectModule = new org.ow2.kerneos.modules.store.vo.ModuleVO();
                 _selectModule.name = "JASMINe Monitoring";
                 _selectModule.author = "BULL SAS";
                 _selectModule.description = "Monitoring lets you visualize, analyze and export graphs."
@@ -211,12 +216,12 @@
                         + "6 Monitoring lets you visualize, analyze and export graphs."
                         + "7 Monitoring lets you visualize, analyze and export graphs.";
 
-                [Embed(source='/../assets/logo_jasmine_monitoring.png')]
-                var icon:Class;
+                [Embed(source='/../assets/logo_jasmine_monitoring.png')] var icon:Class;
 
                 _selectModule.icon = icon;
                 _selectModule.size = 4000;
-                _selectModule.releaseDate = new Date();
+                //TODO uncomment
+                //_selectModule.date = new Date();
                 _selectModule.version = "1.4.2";
                 _selectModule.category = "Monitoring";
                 _selectModule.installsNumber = 1000000;
@@ -224,7 +229,7 @@
                 //Change application state when click on one menu item
                 linkBar.addEventListener(ItemClickEvent.ITEM_CLICK, handleLinkBar);
 
-                searchInput.text="Module's Name..";
+                searchInput.text = "Module's Name..";
                 searchInput.addEventListener(FocusEvent.FOCUS_IN, handleSearchInputFocusIn);
                 searchInput.addEventListener(FocusEvent.FOCUS_OUT, handleSearchInputFocusOut);
 
@@ -233,41 +238,40 @@
                 /*this.addEventListener(SelectedModuleEvent.SELECTED_MODULE_CHANGE, onItemChanged);*/
             }
 
-            private function handleLinkBar(event:ItemClickEvent) : void {
-                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+            private function handleLinkBar(event:ItemClickEvent):void {
+                var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
                 evt.state = "";
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
             }
 
-            private function handleSearchInputFocusIn (event:FocusEvent) : void {
+            private function handleSearchInputFocusIn(event:FocusEvent):void {
                 searchInput.text = "";
             }
 
-            private function handleSearchInputFocusOut (event:FocusEvent) : void {
+            private function handleSearchInputFocusOut(event:FocusEvent):void {
                 if (searchInput.text == "") {
                     searchInput.text = "Module's Name..";
                 }
             }
 
-            protected function handleDGInstalledModulesClick(event:ListEvent):void
-            {
+            protected function handleDGInstalledModulesClick(event:ListEvent):void {
                 if (event.columnIndex != 0) {
-                    (dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.Module).selected =
-                            !(dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.Module).selected;
+                    (dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.ModuleVO).selected =
+                            !(dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.ModuleVO).selected;
 
-                    var evt : ChangeSelectedModuleInstallEvent = new ChangeSelectedModuleInstallEvent(
+                    var evt:ChangeSelectedModuleInstallEvent = new ChangeSelectedModuleInstallEvent(
                             ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
                     evt.item = dgInstalledModules.selectedItem;
                     CairngormEventDispatcher.getInstance().dispatchEvent(evt);
                 }
             }
 
-            public function chkbxAllSelectHandler(evt : Event):void{
+            public function chkbxAllSelectHandler(evt:Event):void {
                 ModuleModelLocator.getInstance().listeSelectedModules.removeAll();
 
-                for each (var item:Object in modulesResultList){
+                for each (var item:Object in modulesResultList) {
                     item.selected = chkbxAllSelect.selected;
-                    if(item.selected){
+                    if (item.selected) {
                         ModuleModelLocator.getInstance().listeSelectedModules.addItem(item);
 
                     }
@@ -275,21 +279,20 @@
                 modulesResultList.refresh();
             }
 
-            protected function searchInput_enterHandler():void
-            {
+            protected function searchInput_enterHandler():void {
                 /*Alert.show("Find modules by word : " + searchInput.text);*/
 
                 //TODO enlever le focus
                 searchIconButton.setFocus();
-                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
                 evt.state = "FindModules";
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
             }
 
 
-            private function handleInstalledModulesState() : void {
+            private function handleInstalledModulesState():void {
 
-                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
                 evt.state = "InstalledModules";
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
 
@@ -298,8 +301,17 @@
                 var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.GET_MODULE_INFO);
                 CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
 
-                var store_event:ModuleEvent = new ModuleEvent(ModuleEvent.GET_STORE_INFO);
+                var store_event:StoreEvent = new StoreEvent(StoreEvent.GET_STORE);
+                store_event.url = "localhost...";
                 CairngormEventDispatcher.getInstance().dispatchEvent(store_event);
+
+                var get_module_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE);
+                get_module_event.id = 1;
+                CairngormEventDispatcher.getInstance().dispatchEvent(get_module_event);
+
+                /* var get_module_image_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE_IMAGE);
+                get_module_image_event.id = 1;
+                CairngormEventDispatcher.getInstance().dispatchEvent(get_module_image_event);*/
 
             }
 
@@ -307,7 +319,7 @@
              * The message is showed when myData in the ModelLocator is modified,
              * a pop-up with the message is displayed
              */
-            private function set newMessage(message:String) : void {
+            private function set newMessage(message:String):void {
                 if (message != null) {
                     Alert.show("Store name " + message);
                 }
@@ -316,7 +328,7 @@
             /**
              * The message is showed when myStoreInfo in the ModelLocator is modified
              */
-            private function set newStoreInfo(storeInfo:StoreInfo) : void {
+            private function set newStoreInfo(storeInfo:org.ow2.kerneos.modules.store.vo.StoreVO):void {
                 if (storeInfo != null) {
                     /* labelModuleNameTest.text = storeInfo.name;
                      labelModuleDescriptionTest.text = storeInfo.description;
@@ -327,12 +339,31 @@
             /**
              * Change current state when storeState in the ModelLocator is modified
              */
-            private function set newStoreState(state:String) : void {
+            private function set newStoreState(state:String):void {
                 if (state != null) {
                     this.currentState = state;
                 }
             }
 
+            /**
+             * Test server call getModule
+             * @param mainModule
+             */
+            private function set mainModuleDetail(mainModule:ModuleVO):void {
+                if (mainModule != null) {
+                    Alert.show("Module Name " + mainModule.name);
+                }
+            }
+
+            /**
+             * Test server call getModule
+             * @param mainModule
+             */
+            private function set testChangeImage(image:Bitmap):void {
+                if (image != null) {
+
+                }
+            }
             ]]>
 		</fx:Script>
 
@@ -400,8 +431,9 @@
                 <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
                          text="About this module"/>
                 <s:Label x="10" y="217" fontSize="14" text="Updated:"/>
-                <s:Label x="76" y="217" fontSize="14"
-                         text="{_selectModule.releaseDate.toDateString()}"/>
+                <!--TODO uncomment date -->
+               <!-- <s:Label x="76" y="217" fontSize="14"
+                         text="{_selectModule.date.toDateString()}"/>-->
                 <s:Label x="11" y="245" fontSize="14" text="Version:"/>
                 <s:Label x="70" y="245" fontSize="14" text="{_selectModule.version}"
                          verticalAlign="middle"/>
@@ -441,6 +473,9 @@
                 <mx:Label id="labelModuleDescriptionTest" x="15" y="50" text="" />
                 <mx:Label id="labelModuleURLTest" x="15" y="85" text="" />-->
 
+                <!-- Test get module image from REST -->
+                <s:BitmapImage x="43" y="329" source="ModuleModelLocator.getInstance().imageTest"/>
+
             </s:Group>
 
             <!-- Find Modules View-->
@@ -464,5 +499,9 @@
     <fx:Binding source="ModuleModelLocator.getInstance().myStoreInfo" destination="newStoreInfo"/>
 
     <fx:Binding source="ModuleModelLocator.getInstance().storeState" destination="newStoreState"/>
+
+    <fx:Binding source="ModuleModelLocator.getInstance().mainModule" destination="mainModuleDetail"/>
+
+    <fx:Binding source="ModuleModelLocator.getInstance().imageTest" destination="testChangeImage"/>
 
 </mx:Module>

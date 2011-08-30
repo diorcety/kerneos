@@ -49,6 +49,8 @@
   <properties>
     <junit.version>3.8.1</junit.version>
     <kerneos.version>2.1.0-SNAPSHOT</kerneos.version>
+    <kerneos-store.version>1.0.0-SNAPSHOT</kerneos-store.version>
+    <jersey-client.version>1.8</jersey-client.version>
   </properties>
 
   <repositories>
@@ -108,12 +110,32 @@
         <scope>provided</scope>
       </dependency>
 
+      <!-- Kerneos Store-->
+      <dependency>
+        <groupId>org.ow2.kerneos-store</groupId>
+        <artifactId>api</artifactId>
+        <version>${kerneos-store.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos-store</groupId>
+        <artifactId>web</artifactId>
+        <version>${kerneos-store.version}</version>
+        <type>jar</type>
+      </dependency>
+
       <!-- Flex -->
       <dependency>
         <groupId>com.adobe.flex.framework</groupId>
         <artifactId>flex-framework</artifactId>
         <version>${flex.version}</version>
         <type>pom</type>
+      </dependency>
+
+      <!-- REST -->
+      <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-client</artifactId>
+        <version>${jersey-client.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

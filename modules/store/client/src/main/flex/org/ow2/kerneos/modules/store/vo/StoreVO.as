@@ -9,16 +9,16 @@ package org.ow2.kerneos.modules.store.vo {
 
 import com.adobe.cairngorm.vo.IValueObject;
 
-[RemoteClass(alias="org.ow2.kerneosstore.api.StoreInfo")]
+[RemoteClass(alias="org.ow2.kerneos.modules.store.impl.StoreImpl")]
 [Bindable]
-public class StoreInfo implements IValueObject {
+public class StoreVO implements IValueObject {
 
     public var name : String;
     public var description : String;
     public var url : String;
 
 
-    public function StoreInfo() {
+    public function StoreVO() {
     }
 }
 }

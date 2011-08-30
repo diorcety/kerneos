@@ -30,9 +30,8 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.StoreEvent;
-
-import org.ow2.kerneos.modules.store.vo.StoreVO;
+import org.ow2.kerneos.modules.store.event.GetModuleEvent;
+import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
 // Server Exceptions imports
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
@@ -43,10 +42,10 @@ import org.ow2.kerneos.modules.store.event.ModuleEvent;
 import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
 /**
-  * The command class from the cairngorm model.
-  */
+ * The command class from the cairngorm model.
+ */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class GetStoreInfo implements ICommand, IResponder
+public class GetModule implements ICommand, IResponder
 {
     /**
      * Retrieve the delegate and use it to make the call.
@@ -58,17 +57,15 @@ public class GetStoreInfo implements ICommand, IResponder
         //             Handle the execution           //
         //                                            //
         ////////////////////////////////////////////////
-        
 
-            // - Get the delegate
-            // - Register the responder
-            // - Make the call
-            // Example :
-                var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
-                 var parameters : String = (event as StoreEvent).url;
-                delegate.responder = this;
 
-                delegate.getStore(parameters);
+        // - Get the delegate
+        // - Register the responder
+        // - Make the call
+        var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
+        delegate.responder = this;
+        var parameters : Number = (event as GetModuleEvent).id;
+        delegate.getModule(parameters);
 
     }
 
@@ -82,13 +79,13 @@ public class GetStoreInfo implements ICommand, IResponder
         //             Handle the result              //
         //                                            //
         ////////////////////////////////////////////////
-        
 
-            // Handle the result of the call. Usely, the model is updated.
-            // Example :
-                var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-                moduleModel.myStoreInfo = (data as ResultEvent).result as org.ow2.kerneos.modules.store.vo.StoreVO;
-            
+
+        // Handle the result of the call. Usely, the model is updated.
+        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
+        moduleModel.mainModule = (data as ResultEvent).result as ModuleVO;
+
+        trace(moduleModel.mainModule.name);
 
     }
 
@@ -97,38 +94,38 @@ public class GetStoreInfo implements ICommand, IResponder
      */
     public function fault(info:Object):void
     {
-    
+
         ////////////////////////////////////////
         //                                    //
         //             Handle fault           //
         //                                    //
         ////////////////////////////////////////
-        
 
-            // The following code generates a formated panel that contains
-            // the fault. However, librairies from jasmine-eos should be included
-            // to get the common and util classes
-            
-            // Code :
-            
-                 // Retrieve the fault event
-                var faultEvent : FaultEvent = FaultEvent(info);
-        
-                // Tell the view and let it handle this
-                var serverSideExceptionEvent : ServerSideExceptionEvent =
-                    new ServerSideExceptionEvent(
+
+        // The following code generates a formated panel that contains
+        // the fault. However, librairies from jasmine-eos should be included
+        // to get the common and util classes
+
+        // Code :
+
+        // Retrieve the fault event
+        var faultEvent : FaultEvent = FaultEvent(info);
+
+        // Tell the view and let it handle this
+        var serverSideExceptionEvent : ServerSideExceptionEvent =
+                new ServerSideExceptionEvent(
                         "serverSideException",
                         new ServerSideException("Error while Executing the action",
-                                                "The operation could not be performed."
-                                                + "\n" + faultEvent.fault.faultCode
-                                                + "\n" + faultEvent.fault.faultString,
-                                                faultEvent.fault.getStackTrace()));
-                                                
-                // Dispatch the event using the cairngorm event dispatcher
-                CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
-             
+                                "The operation could not be performed."
+                                        + "\n" + faultEvent.fault.faultCode
+                                        + "\n" + faultEvent.fault.faultString,
+                                faultEvent.fault.getStackTrace()));
 
-        
+        // Dispatch the event using the cairngorm event dispatcher
+        CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+
+
+
     }
 
 }

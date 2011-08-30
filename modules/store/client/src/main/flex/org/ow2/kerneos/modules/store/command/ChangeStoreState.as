@@ -32,7 +32,7 @@ import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
 
-import org.ow2.kerneos.modules.store.vo.StoreInfo;
+import org.ow2.kerneos.modules.store.vo.StoreVO;
 
 // Server Exceptions imports
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;

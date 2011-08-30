@@ -25,6 +25,8 @@ package org.ow2.kerneos.modules.store.model
 
 import avmplus.metadataXml;
 
+import flash.display.Bitmap;
+
 import org.ow2.kerneos.modules.store.business.IModuleDelegate;
 
 import org.ow2.kerneos.modules.store.business.ModuleDelegate;
@@ -35,7 +37,9 @@ import mx.collections.ArrayCollection;
 
 import mx.utils.UIDUtil;
 
-import org.ow2.kerneos.modules.store.vo.StoreInfo;
+import org.ow2.kerneos.modules.store.vo.ModuleVO;
+
+import org.ow2.kerneos.modules.store.vo.StoreVO;
 
 /**
  * The model locator for the Module.
@@ -90,14 +94,18 @@ public class ModuleModelLocator implements ModelLocator
     // Example :
     private var _myDataObj : String = null;
 
-    private var _myStoreInfo : StoreInfo = null;
+    private var _myStoreInfo : org.ow2.kerneos.modules.store.vo.StoreVO = null;
 
     private var _storeState : String = "";
+
+    private var _mainModule : ModuleVO = null;
 
     /**
      * List of selected modules of the installed modules list
      */
     private var _listeSelectedModules : ArrayCollection = null;
+
+    private var _imageTest : Bitmap = null;
 
 
     ////////////////////////////////////
@@ -143,7 +151,7 @@ public class ModuleModelLocator implements ModelLocator
         this._myDataObj = _myData;
     }
 
-    public function set myStoreInfo (_myStore : StoreInfo) : void {
+    public function set myStoreInfo (_myStore : org.ow2.kerneos.modules.store.vo.StoreVO) : void {
         this._myStoreInfo = _myStore;
     }
 
@@ -155,7 +163,13 @@ public class ModuleModelLocator implements ModelLocator
         this._listeSelectedModules = _listeModules;
     }
 
+    public function set mainModule (_mainModule : ModuleVO) : void {
+        this._mainModule = _mainModule;
+    }
 
+     public function set imageTest (_imageTest : Bitmap) : void {
+        this._imageTest = _imageTest;
+    }
     ////////////////////////////////////
     //                                //
     //             Getters            //
@@ -169,7 +183,7 @@ public class ModuleModelLocator implements ModelLocator
         return this._myDataObj;
     }
 
-    public function get myStoreInfo () : StoreInfo {
+    public function get myStoreInfo () : org.ow2.kerneos.modules.store.vo.StoreVO {
         return this._myStoreInfo
     }
 
@@ -181,6 +195,13 @@ public class ModuleModelLocator implements ModelLocator
         return this._listeSelectedModules;
     }
 
+    public function get mainModule () : ModuleVO {
+        return this._mainModule;
+    }
+
+    public function get imageTest () : Bitmap {
+        return this._imageTest;
+    }
     ////////////////////////////////////////////
     //                                        //
     //            Delegate Getters            //

@@ -53,19 +53,27 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
-    public function getStoreInfo() : void
+    public function getStore(parameters : Object) : void
     {
-        var service : Object = ServiceLocator.getInstance().getRemoteObject("hello_service");
-
-        var call : Object = service.getStoreInfo();
-
+        var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call : Object = service.getStore(parameters);
         call.addResponder(this.responder);
     }
 
-    /*public function changeStoreState(parameters : Object) : void {
+    public function getModule(parameters : Object) : void
+    {
+        var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call : Object = service.getModule(parameters);
+        call.addResponder(this.responder);
+    }
 
+     public function getModuleImage(parameters : Object) : void
+     {
+        var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call : Object = service.getModuleImage(parameters);
+        call.addResponder(this.responder);
+     }
 
-    }*/
 
 }
 }

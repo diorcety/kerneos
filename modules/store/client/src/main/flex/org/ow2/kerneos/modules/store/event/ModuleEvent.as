@@ -40,8 +40,6 @@ public class ModuleEvent extends CairngormEvent
 
     public static var GET_MODULE_INFO : String = "GET_MODULE_INFO";
 
-    public static var GET_STORE_INFO : String = "GET_STORE_INFO";
-
     /*
      // Example :
      // Message send in the event
