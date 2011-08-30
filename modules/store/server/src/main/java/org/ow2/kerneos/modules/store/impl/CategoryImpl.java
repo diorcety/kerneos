@@ -36,7 +36,7 @@ import java.util.Collection;
 @XmlRootElement(name = "category")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CategoryImpl implements Category {
-    private Long id;
+    private String id;
     private String name;
     private String description;
 
@@ -50,11 +50,11 @@ public class CategoryImpl implements Category {
         description = category.getDescription();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

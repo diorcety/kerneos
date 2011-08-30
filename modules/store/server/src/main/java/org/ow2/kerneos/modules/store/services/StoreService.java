@@ -94,7 +94,7 @@ public class StoreService implements KerneosSimpleService {
      * @param id Module's id
      * @return Module with the given id
      */
-    public ModuleImpl getModule(Long id) {
+    public ModuleImpl getModule(String id) {
         ModuleImpl result = (ModuleImpl) storeRS.getModuleVersion(id);
         logger.info("Module id parameter " + id);
         logger.info("Modules name " + result.getName());
@@ -106,7 +106,7 @@ public class StoreService implements KerneosSimpleService {
      * @param id Module's id
      * @return Image of the module with the given id
      */
-    public byte[] getModuleImage(Long id) {
+    public byte[] getModuleImage(String id) {
 
         //TODO objet icon utility cote flex
         logger.info("Send module image to client flex ");
@@ -121,9 +121,23 @@ public class StoreService implements KerneosSimpleService {
      * @param page
      * @return
      */
-    public Collection<ModuleImpl> getModulesByName(String filter, String order,
-                                                   Integer itemByPage, Integer page) {
-        Collection result = storeRS.getModulesByName(filter, order, itemByPage, page);
+    public Collection<ModuleImpl> searchModules(String filter, String field, String order,
+                                                             Integer itemByPage, Integer page) {
+        Collection result = storeRS.searchModules(filter, field, order, itemByPage, page);
+        return result;
+    }
+
+    /**
+     *
+     * @param id
+     * @param order
+     * @param itemByPage
+     * @param page
+     * @return
+     */
+    public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
+                                                             Integer itemByPage, Integer page) {
+        Collection result = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
         return result;
     }
 
@@ -132,7 +146,7 @@ public class StoreService implements KerneosSimpleService {
         return result;
     }
 
-    public CategoryImpl getCategory(Long id) {
+    public CategoryImpl getCategory(String id) {
         return (CategoryImpl)storeRS.getCategory(id);
     }
 
@@ -141,7 +155,7 @@ public class StoreService implements KerneosSimpleService {
      * @param id Module's id
      * @return Confirmation message of good or wrong module install
      */
-    public String downloadModule(Long id) {
+    public String downloadModule(String id) {
         byte[] module = storeRS.downloadModule(id);
 
         if (module == null) {

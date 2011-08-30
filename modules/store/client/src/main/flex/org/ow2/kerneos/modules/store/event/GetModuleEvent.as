@@ -15,19 +15,19 @@ public class GetModuleEvent extends CairngormEvent {
 
     public static var GET_MODULE_IMAGE : String = "GET_MODULE_IMAGE";
 
-    private var _id : Number = 0;
+    private var _id : String = "";
 
     public function GetModuleEvent(type : String)
     {
         super(type);
     }
 
-    public function set id(id:Number):void
+    public function set id(id:String):void
     {
         this._id = id;
     }
 
-    public function get id(): Number
+    public function get id(): String
     {
         return _id;
     }

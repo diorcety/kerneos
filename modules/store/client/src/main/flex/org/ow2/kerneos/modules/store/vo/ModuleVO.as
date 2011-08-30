@@ -30,7 +30,7 @@ package org.ow2.kerneos.modules.store.vo
     public class ModuleVO implements IValueObject
 	{
 
-        private var _id:Number;
+        private var _id:String;
 		/**
 		 * Module's name
 		 */
@@ -100,12 +100,12 @@ package org.ow2.kerneos.modules.store.vo
 		{
 		}
 
-        public function get id():Number
+        public function get id():String
         {
             return _id;
         }
 
-        public function set id(id:Number):void
+        public function set id(id:String):void
         {
             this._id = id;
         }

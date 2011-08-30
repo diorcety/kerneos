@@ -306,11 +306,11 @@
                 CairngormEventDispatcher.getInstance().dispatchEvent(store_event);
 
                 var get_module_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE);
-                get_module_event.id = 1;
+                get_module_event.id = "apache-commons-io";
                 CairngormEventDispatcher.getInstance().dispatchEvent(get_module_event);
 
                 var get_module_image_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE_IMAGE);
-                get_module_image_event.id = 1;
+                get_module_image_event.id = "apache-commons-io";
                 CairngormEventDispatcher.getInstance().dispatchEvent(get_module_image_event);
 
             }

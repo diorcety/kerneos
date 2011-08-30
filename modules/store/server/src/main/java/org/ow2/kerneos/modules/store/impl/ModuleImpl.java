@@ -30,9 +30,7 @@ import org.ow2.kerneosstore.api.Module;
 import org.ow2.kerneosstore.api.ModuleVersion;
 import org.ow2.kerneosstore.web.CategoryElement;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -44,13 +42,15 @@ import java.util.regex.Pattern;
 public class ModuleImpl implements ModuleVersion {
     private static Pattern versionPattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
 
-    private Long id;
+    private String id;
     private String version;
     private String name;
     private Date date;
     private String description;
     private String author;
     private String url;
+    @XmlElementWrapper(name = "categories")
+    @XmlElement(name = "category")
     private Collection<CategoryImpl> categories;
 
     public ModuleImpl()
@@ -72,7 +72,7 @@ public class ModuleImpl implements ModuleVersion {
         }
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -132,7 +132,7 @@ public class ModuleImpl implements ModuleVersion {
         return Integer.parseInt(matcher.group(3));
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

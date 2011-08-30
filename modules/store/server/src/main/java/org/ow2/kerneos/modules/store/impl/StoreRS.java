@@ -48,29 +48,34 @@ public class StoreRS implements IStoreRS {
         return webResource.get(StoreImpl.class);
     }
 
-    //TODO delete this methode from the interface
-    public Map<Repository, String> getRepositoryEntries(Long moduleId) {
+    @Override
+    public Map<Repository, String> getRepositoryEntries(String id) {
         return null;
     }
 
-    public byte[] getModuleVersionImage(Long id) {
+    @Override
+    public byte[] getModuleVersionImage(String id) {
         Client client = new Client();
 
         WebResource webResource = client.resource(url + "/module/" + id + "/image");
         return webResource.get(byte[].class);
     }
 
-    public ModuleVersion getModuleVersion(Long id) {
+    @Override
+    public ModuleVersion getModuleVersion(String id) {
         Client client = new Client();
 
         WebResource webResource = client.resource(url + "/module/" + id);
         return webResource.get(ModuleImpl.class);
     }
 
-    public Collection<ModuleVersion> getModulesByName(String filter, String order, Integer itemByPage, Integer page) {
+    @Override
+    public Collection<ModuleVersion> searchModules(String filter, String field, String order,
+                                                             Integer itemByPage, Integer page) {
         Client client = new Client();
 
         MultivaluedMap queryParams = new MultivaluedMapImpl();
+        queryParams.add("field", field);
         queryParams.add("order", order);
         queryParams.add("itemByPage", itemByPage);
         queryParams.add("page", page);
@@ -87,6 +92,30 @@ public class StoreRS implements IStoreRS {
         return modulesResult;
     }
 
+    @Override
+    public Collection<ModuleVersion> searchModulesByCategory(String id, String field, String order,
+                                                                       Integer itemByPage, Integer page) {
+         Client client = new Client();
+
+        MultivaluedMap queryParams = new MultivaluedMapImpl();
+        queryParams.add("field", field);
+        queryParams.add("order", order);
+        queryParams.add("itemByPage", itemByPage);
+        queryParams.add("page", page);
+
+         WebResource webResource = client.resource(url + "/category/"+id+"/modules");
+
+        GenericType<Collection<ModuleImpl>> genericModules =
+                new GenericType<Collection<ModuleImpl>>() {};
+
+
+        Collection modulesResult =
+                webResource.queryParams(queryParams).get(genericModules);
+
+        return modulesResult;
+    }
+
+    @Override
     public Collection<Category> getCategories() {
         Client client = new Client();
 
@@ -100,14 +129,16 @@ public class StoreRS implements IStoreRS {
         return categoriesResult;
     }
 
-    public Category getCategory(Long id) {
+    @Override
+    public Category getCategory(String id) {
         Client client = new Client();
 
         WebResource webResource = client.resource(url + "/category/" + id);
         return webResource.get(CategoryImpl.class);
     }
 
-    public byte[] downloadModule(Long id) {
+    @Override
+    public byte[] downloadModule(String id) {
         Client client = new Client();
 
         WebResource webResource = client.resource(url + "/module/" + id + "/download");

@@ -64,7 +64,7 @@ public class GetModule implements ICommand, IResponder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var parameters : Number = (event as GetModuleEvent).id;
+        var parameters : String = (event as GetModuleEvent).id;
         delegate.getModule(parameters);
 
     }
