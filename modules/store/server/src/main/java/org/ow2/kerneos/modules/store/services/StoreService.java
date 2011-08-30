@@ -30,6 +30,7 @@ import org.apache.felix.ipojo.annotations.*;
 import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.kerneos.modules.store.IStoreRS;
+import org.ow2.kerneos.modules.store.IStoreService;
 import org.ow2.kerneos.modules.store.impl.CategoryImpl;
 import org.ow2.kerneos.modules.store.impl.ModuleImpl;
 import org.ow2.kerneos.modules.store.impl.StoreImpl;
@@ -45,7 +46,7 @@ import java.util.Collection;
 
 @KerneosService(id = "store_service", classes = {StoreImpl.class,ModuleImpl.class,Byte[].class, CategoryImpl.class})
 
-public class StoreService implements KerneosSimpleService {
+public class StoreService implements KerneosSimpleService, IStoreService {
     /**
      * The logger
      */
@@ -84,6 +85,7 @@ public class StoreService implements KerneosSimpleService {
      *  Get a store
      *  @param url store url, REST path
      */
+    @Override
     public StoreImpl getStore(String url) {
         StoreImpl result = (StoreImpl) storeRS.getStore();
         return result;
@@ -94,6 +96,7 @@ public class StoreService implements KerneosSimpleService {
      * @param id Module's id
      * @return Module with the given id
      */
+    @Override
     public ModuleImpl getModule(String id) {
         ModuleImpl result = (ModuleImpl) storeRS.getModuleVersion(id);
         logger.info("Module id parameter " + id);
@@ -106,6 +109,7 @@ public class StoreService implements KerneosSimpleService {
      * @param id Module's id
      * @return Image of the module with the given id
      */
+    @Override
     public byte[] getModuleImage(String id) {
 
         //TODO objet icon utility cote flex
@@ -121,6 +125,7 @@ public class StoreService implements KerneosSimpleService {
      * @param page
      * @return
      */
+    @Override
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
                                                              Integer itemByPage, Integer page) {
         Collection result = storeRS.searchModules(filter, field, order, itemByPage, page);
@@ -135,17 +140,20 @@ public class StoreService implements KerneosSimpleService {
      * @param page
      * @return
      */
+    @Override
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
                                                              Integer itemByPage, Integer page) {
         Collection result = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
         return result;
     }
 
+    @Override
     public Collection<ModuleImpl> getCategories() {
         Collection result = storeRS.getCategories();
         return result;
     }
 
+    @Override
     public CategoryImpl getCategory(String id) {
         return (CategoryImpl)storeRS.getCategory(id);
     }
@@ -155,6 +163,7 @@ public class StoreService implements KerneosSimpleService {
      * @param id Module's id
      * @return Confirmation message of good or wrong module install
      */
+    @Override
     public String downloadModule(String id) {
         byte[] module = storeRS.downloadModule(id);
 
