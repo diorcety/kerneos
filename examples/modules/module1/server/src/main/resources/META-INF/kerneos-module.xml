@@ -27,15 +27,13 @@
 <swf-module xmlns="org.ow2.kerneos:module"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="org.ow2.kerneos:module">
-  <id>Kerneos Module 2</id>
-  <name>Console Collecter</name>
+  <id>Kerneos-module1</id>
+  <name>Module 1</name>
   <description>An example using profile abilities</description>
   <small-icon>icons/icon16.png</small-icon>
   <big-icon>icons/icon64.png</big-icon>
   <file>module1.swf</file>
   <services>
-    <service id="module1-service1">
-      <class java="" flex="ddd"  />
-        </service>
+    <service id="module1-service1"/>
   </services>
 </swf-module>
