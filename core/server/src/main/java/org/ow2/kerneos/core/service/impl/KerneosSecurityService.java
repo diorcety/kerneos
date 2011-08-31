@@ -32,7 +32,9 @@ import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
 
+import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.osgi.GraniteClassRegistry;
+import org.granite.osgi.GraniteConstants;
 import org.granite.osgi.service.GraniteDestination;
 
 import org.osgi.service.cm.Configuration;
@@ -98,7 +100,7 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
             Dictionary properties = new Hashtable();
             properties.put("id", KerneosConstants.KERNEOS_SERVICE_SECURITY);
             properties.put("service", KerneosConstants.GRANITE_SERVICE);
-            graniteDestination = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+            graniteDestination = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
             graniteDestination.update(properties);
         }
 
@@ -108,14 +110,14 @@ public class KerneosSecurityService implements IKerneosSecurityService, GraniteD
             properties.put("id", KerneosConstants.KERNEOS_SERVICE_ASYNC_SECURITY);
             properties.put("service", KerneosConstants.GRAVITY_SERVICE);
 
-            gravityDestination = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+            gravityDestination = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
             gravityDestination.update(properties);
         }
         {
             Dictionary properties = new Hashtable();
             properties.put("destination", KerneosConstants.KERNEOS_SERVICE_ASYNC_SECURITY);
 
-            eaConfig = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.ea.configuration", null);
+            eaConfig = configurationAdmin.createFactoryConfiguration(EAConstants.CONFIGURATION_ID, null);
             eaConfig.update(properties);
         }
     }

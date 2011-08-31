@@ -44,6 +44,7 @@ import org.apache.felix.ipojo.handler.extender.BundleTracker;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.osgi.GraniteClassRegistry;
+import org.granite.osgi.GraniteConstants;
 import org.granite.osgi.service.GraniteDestination;
 
 import org.osgi.framework.Bundle;
@@ -201,14 +202,14 @@ public final class KerneosConfigurationService implements GraniteDestination {
             properties.put("id", KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
             properties.put("service", KerneosConstants.GRAVITY_SERVICE);
 
-            gravityDestination = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+            gravityDestination = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
             gravityDestination.update(properties);
         }
         {
             Dictionary properties = new Hashtable();
             properties.put("destination", KerneosConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION);
 
-            eaConfig = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.ea.configuration", null);
+            eaConfig = configurationAdmin.createFactoryConfiguration(EAConstants.CONFIGURATION_ID, null);
             eaConfig.update(properties);
         }
 
@@ -218,7 +219,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
             properties.put("id", KerneosConstants.KERNEOS_SERVICE_CONFIGURATION);
             properties.put("service", KerneosConstants.GRANITE_SERVICE);
 
-            graniteDestination = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+            graniteDestination = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
             graniteDestination.update(properties);
         }
 

@@ -43,7 +43,7 @@
 
   <properties>
     <!-- Dependencies versions -->
-    <granite-osgi.version>1.0.0-M1</granite-osgi.version>
+    <granite-osgi.version>1.0.0-M2-SNAPSHOT</granite-osgi.version>
     <ow2-util-log.version>1.0.23</ow2-util-log.version>
     <org.apache.felix.main.version>3.2.2</org.apache.felix.main.version>
     <pax-confman-propsloader.version>0.2.2</pax-confman-propsloader.version>

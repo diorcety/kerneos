@@ -37,6 +37,7 @@ import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.gravity.osgi.adapters.jms.JMSConstants;
 
 import org.granite.osgi.GraniteClassRegistry;
+import org.granite.osgi.GraniteConstants;
 import org.granite.osgi.service.GraniteFactory;
 
 import org.osgi.framework.BundleContext;
@@ -233,7 +234,7 @@ public final class KerneosServiceFactory {
             {
                 Dictionary properties = new Hashtable();
                 properties.put("id", destination + KerneosConstants.FACTORY_SUFFIX);
-                factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Factory", null);
+                factoryConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.FACTORY, null);
                 factoryConfiguration.update(properties);
             }
 
@@ -244,7 +245,7 @@ public final class KerneosServiceFactory {
                 properties.put("service", KerneosConstants.GRANITE_SERVICE);
                 properties.put("factory", destination + KerneosConstants.FACTORY_SUFFIX);
                 properties.put("scope", "application");
-                destinationConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
                 destinationConfiguration.update(properties);
             }
 
@@ -342,7 +343,7 @@ public final class KerneosServiceFactory {
             {
                 Dictionary properties = new Hashtable();
                 properties.put("id", destination + KerneosConstants.FACTORY_SUFFIX);
-                factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Factory", null);
+                factoryConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.FACTORY, null);
                 factoryConfiguration.update(properties);
             }
 
@@ -370,7 +371,7 @@ public final class KerneosServiceFactory {
                 properties.put("service", KerneosConstants.GRANITE_SERVICE);
                 properties.put("factory", destination + KerneosConstants.FACTORY_SUFFIX);
                 properties.put("scope", scope);
-                destinationConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
                 destinationConfiguration.update(properties);
             }
 
@@ -471,12 +472,12 @@ public final class KerneosServiceFactory {
                 switch (ka.type()) {
                     case JMS:
                         properties.put("destination", destination);
-                        factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.jms.configuration", null);
+                        factoryConfiguration = configurationAdmin.createFactoryConfiguration(JMSConstants.CONFIGURATION_ID, null);
                         factoryConfiguration.update(properties);
                         break;
                     case EVENTADMIN:
                         properties.put("destination", destination);
-                        factoryConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.gravity.osgi.adapters.ea.configuration", null);
+                        factoryConfiguration = configurationAdmin.createFactoryConfiguration(EAConstants.CONFIGURATION_ID, null);
                         factoryConfiguration.update(properties);
                         break;
                     default:
@@ -502,7 +503,7 @@ public final class KerneosServiceFactory {
                 properties.put("id", destination);
                 properties.put("service", KerneosConstants.GRAVITY_SERVICE);
                 properties.put("adapter", adapter);
-                destinationConfiguration = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Destination", null);
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
                 destinationConfiguration.update(properties);
             }
 

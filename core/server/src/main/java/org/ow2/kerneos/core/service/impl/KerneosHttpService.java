@@ -33,6 +33,7 @@ import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 
+import org.granite.osgi.GraniteConstants;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.http.HttpContext;
@@ -126,7 +127,7 @@ public class KerneosHttpService implements HttpContext {
             properties.put("uri", applicationURL + KerneosConstants.GRAVITY_CHANNEL_URI);
             properties.put("context", application);
             properties.put("gravity", "true");
-            gavityChannel = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Channel", null);
+            gavityChannel = configurationAdmin.createFactoryConfiguration(GraniteConstants.CHANNEL, null);
             gavityChannel.update(properties);
         }
         {
@@ -135,7 +136,7 @@ public class KerneosHttpService implements HttpContext {
             properties.put("uri", applicationURL + KerneosConstants.GRANITE_CHANNEL_URI);
             properties.put("context", application);
             properties.put("gravity", "false");
-            graniteChannel = configurationAdmin.createFactoryConfiguration("org.granite.config.flex.Channel", null);
+            graniteChannel = configurationAdmin.createFactoryConfiguration(GraniteConstants.CHANNEL, null);
             graniteChannel.update(properties);
         }
 
