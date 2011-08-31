@@ -28,7 +28,7 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="org.ow2.kerneos:module">
   <id>kerneos-module2</id>
-  <name>Module Configurer</name>
+  <name>Kerneos Module 2</name>
   <description>A chat example using an asynchronous service</description>
   <small-icon>icons/icon16.png</small-icon>
   <big-icon>icons/icon64.png</big-icon>

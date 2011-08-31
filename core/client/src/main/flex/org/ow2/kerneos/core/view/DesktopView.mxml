@@ -421,10 +421,10 @@
         }
 
         /**
-         * Open a notification
+         * Open a module notification
          */
         private function notifiedModuleArrivalDeparture(messageCode:String, module:ModuleVO):void {
-            // Build and display the popup
+            // Build popup
             var notifPopUp:NotificationPopUp = new NotificationPopUp();
             notifPopUp.message = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
                     messageCode, [module.name]);
@@ -433,6 +433,12 @@
             notifPopUp.setStyle("right", 0);
             notifPopUp.module = module;
 
+            // Store the notification, if notifications log activated
+            if (model.application.enableNotificationsLog) {
+                model.notifications.addItem(new KerneosNotification(module, notifPopUp.message, notifPopUp.level));
+            }
+
+            // Display the popup
             NotificationsManager.desktop.windowContainer.addChild(notifPopUp);
         }
 
