@@ -105,6 +105,13 @@ public class ModuleModelLocator implements ModelLocator
      */
     private var _listeSelectedModules : ArrayCollection = null;
 
+    /**
+     * List of modules showed in the main view, also is the list
+     * of results finding modules
+     */
+    [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')]
+    private var _listeModules : ArrayCollection = null;
+
     private var _imageTest : Bitmap = null;
 
 
@@ -163,6 +170,10 @@ public class ModuleModelLocator implements ModelLocator
         this._listeSelectedModules = _listeModules;
     }
 
+    public function set listeModules (_listeModules : ArrayCollection) : void {
+        this._listeModules = _listeModules;
+    }
+
     public function set mainModule (_mainModule : ModuleVO) : void {
         this._mainModule = _mainModule;
     }
@@ -193,6 +204,10 @@ public class ModuleModelLocator implements ModelLocator
 
     public function get listeSelectedModules () : ArrayCollection {
         return this._listeSelectedModules;
+    }
+
+    public function get listeModules () : ArrayCollection {
+        return this._listeModules;
     }
 
     public function get mainModule () : ModuleVO {

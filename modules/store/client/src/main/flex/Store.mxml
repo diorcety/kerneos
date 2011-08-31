@@ -115,6 +115,8 @@
     <s:Group x="0" y="0" width="100%" height="100%">
         <fx:Script>
 			<![CDATA[
+            import com.adobe.cairngorm.model.ModelLocator;
+
             import mx.controls.Alert;
             import mx.events.ListEvent;
 
@@ -123,6 +125,7 @@
             import org.ow2.kerneos.modules.store.event.GetModuleEvent;
 
             import org.ow2.kerneos.modules.store.event.ModuleEvent;
+            import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
             import org.ow2.kerneos.modules.store.event.StoreEvent;
 
             import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
@@ -134,7 +137,7 @@
             import mx.events.ItemClickEvent;
             import mx.collections.ArrayCollection;
 
-            private var _selectModule:org.ow2.kerneos.modules.store.vo.ModuleVO = null;
+            private var _selectModule:org.ow2.kerneos.modules.store.vo.ModuleVO;
 
             private var _servicesClasses:Dictionary;
 
@@ -284,6 +287,10 @@
 
                 //TODO enlever le focus
                 searchIconButton.setFocus();
+                var search_modules_event : SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES);
+                search_modules_event.filter = searchInput.text;
+                CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
+
                 var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
                 evt.state = "FindModules";
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
@@ -312,6 +319,10 @@
                 var get_module_image_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE_IMAGE);
                 get_module_image_event.id = "apache-commons-io";
                 CairngormEventDispatcher.getInstance().dispatchEvent(get_module_image_event);
+
+                var search_modules_event:SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES);
+                search_modules_event.filter = "   Apache    Commons I0 ";
+                CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
 
             }
 
@@ -399,7 +410,8 @@
             <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461" >
                 <s:NavigatorContent width="100%" height="100%" label="Popular">
                     <s:DataGroup id="dgPopularModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{modulesResultList}" itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
+                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
                                  name="dgPopularModules"
                                  visible.Default="true"
                                  visible.ModuleDetail="false">
@@ -422,31 +434,31 @@
             <!-- Detail module view-->
             <s:Group includeIn="ModuleDetail" x="0" y="0" width="100%" height="100%">
                 <s:Label x="142" y="10" width="381" height="21" fontSize="18"
-                         fontWeight="bold" text="{_selectModule.name}"/>
+                         fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.name}"/>
                 <s:Image x="10" y="10" width="128" height="128"
-                         source="{_selectModule.icon}"/>
+                         source="{ModuleModelLocator.getInstance().mainModule.icon}"/>
                 <s:Label x="146" y="39" width="381" height="21" fontSize="14"
-                         fontWeight="bold" text="{_selectModule.author}"/>
-                <s:Label x="146" y="68" width="395" height="99" text="{_selectModule.description}"/>
+                         fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.author}"/>
+                <s:Label x="146" y="68" width="395" height="99" text="{ModuleModelLocator.getInstance().mainModule.description}"/>
                 <s:Button x="40" y="146" label="Install"/>
                 <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
                          text="About this module"/>
                 <s:Label x="10" y="217" fontSize="14" text="Updated:"/>
                 <!--TODO uncomment date -->
                 <s:Label x="76" y="217" fontSize="14"
-                         text="{_selectModule.date.toDateString()}"/>
+                         text="{ModuleModelLocator.getInstance().mainModule.date.toDateString()}"/>
                 <s:Label x="11" y="245" fontSize="14" text="Version:"/>
-                <s:Label x="70" y="245" fontSize="14" text="{_selectModule.version}"
+                <s:Label x="70" y="245" fontSize="14" text="{ModuleModelLocator.getInstance().mainModule.version}"
                          verticalAlign="middle"/>
                 <s:Label x="191" y="217" fontSize="14" text="Category:"/>
                 <s:Label x="257" y="217" fontSize="14"
-                         text="{_selectModule.category}"/>
+                         text="{ModuleModelLocator.getInstance().mainModule.category}"/>
                 <s:Label x="191" y="244" fontSize="14" text="Installs:"/>
                 <s:Label x="244" y="244" fontSize="14"
-                         text="{_selectModule.installsNumber}"/>
+                         text="{ModuleModelLocator.getInstance().mainModule.installsNumber}"/>
                 <s:Label x="381" y="218" fontSize="14" text="Size:"/>
                 <s:Label x="416" y="218" fontSize="14"
-                         text="{_selectModule.size} Bytes"/>
+                         text="{ModuleModelLocator.getInstance().mainModule.size} Bytes"/>
             </s:Group>
 
             <!-- Installed Modules View-->
@@ -483,7 +495,7 @@
             <s:Group includeIn="FindModules" x="0" y="0" width="100%" height="100%">
                 <s:Label x="10" y="10" text="{modulesSearchResultList.length} results for &quot; {searchInput.text} &quot;"/>
                 <mx:HRule x="10" y="30" width="531"/>
-                <s:DataGroup x="0" y="35" width="545" height="422" dataProvider="{modulesSearchResultList}"
+                <s:DataGroup x="0" y="35" width="545" height="422" dataProvider="{ModuleModelLocator.getInstance().listeModules}"
                              itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleResearchRenderer">
                     <s:layout>
                         <s:VerticalLayout gap="5" requestedRowCount="4" rowHeight="102"

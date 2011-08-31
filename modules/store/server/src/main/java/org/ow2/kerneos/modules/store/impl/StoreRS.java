@@ -75,21 +75,52 @@ public class StoreRS implements IStoreRS {
         Client client = new Client();
 
         MultivaluedMap queryParams = new MultivaluedMapImpl();
-        queryParams.add("field", field);
-        queryParams.add("order", order);
-        queryParams.add("itemByPage", itemByPage);
-        queryParams.add("page", page);
 
-         WebResource webResource = client.resource(url + "/modules/name/" + filter);
+        if( field != null ) {
+            queryParams.add("field", field);
+        }
 
-        GenericType<Collection<ModuleImpl>> genericModules =
-                new GenericType<Collection<ModuleImpl>>() {};
+        if(order != null) {
+            queryParams.add("order", order);
+        }
+
+        if(itemByPage != null) {
+            queryParams.add("itemByPage", itemByPage);
+        }
+
+        if(page != null) {
+            queryParams.add("page", page);
+        }
+
+        String[] filterSplit = filter.split(" ");
+
+        String filterURL = null;
+
+        if (filterSplit != null && filterSplit[0]!= null) {
+            int i = 0;
+
+            while(i < filterSplit.length) {
+                if (!filterSplit[i].equals("")) {
+                    filterURL = filterSplit[i];
+                    break;
+                }
+                i++;
+            }
+        }
+
+            /*URI uri = new URI(null, null,"/modules/" + filter,null);
+            String test = uri.toASCIIString();*/
+
+            WebResource webResource = client.resource(url + "/modules/" + filterURL);
+
+            GenericType<Collection<ModuleImpl>> genericModules =
+                    new GenericType<Collection<ModuleImpl>>() {};
 
 
-        Collection modulesResult =
-                webResource.queryParams(queryParams).get(genericModules);
+            Collection modulesResult =
+                    webResource.queryParams(queryParams).get(genericModules);
 
-        return modulesResult;
+            return modulesResult;
     }
 
     @Override
@@ -98,10 +129,22 @@ public class StoreRS implements IStoreRS {
          Client client = new Client();
 
         MultivaluedMap queryParams = new MultivaluedMapImpl();
-        queryParams.add("field", field);
-        queryParams.add("order", order);
-        queryParams.add("itemByPage", itemByPage);
-        queryParams.add("page", page);
+
+        if( field != null ) {
+            queryParams.add("field", field);
+        }
+
+        if(order != null) {
+            queryParams.add("order", order);
+        }
+
+        if(itemByPage != null) {
+            queryParams.add("itemByPage", itemByPage);
+        }
+
+        if(page != null) {
+            queryParams.add("page", page);
+        }
 
          WebResource webResource = client.resource(url + "/category/"+id+"/modules");
 

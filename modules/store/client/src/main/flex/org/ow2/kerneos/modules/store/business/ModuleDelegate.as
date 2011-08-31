@@ -74,6 +74,21 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
      }
 
+    public function searchModules(filter : Object, field : Object, order : Object,
+                                  itemByPage : Object, page : Object) : void
+    {
+        var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call : Object = service.searchModules(filter,  field,  order,  itemByPage, page);
+        call.addResponder(this.responder);
+    }
+
+    public function searchModulesByCategory(id : Object, field : Object, order : Object,
+                                            itemByPage : Object, page : Object) : void
+    {
+        var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call : Object = service.searchModulesByCategory(id,  field,  order,  itemByPage, page);
+        call.addResponder(this.responder);
+    }
 
 }
 }
