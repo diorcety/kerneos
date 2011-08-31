@@ -23,21 +23,22 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.core.service;
+package org.ow2.kerneos.core.config;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
-/**
- * Set the kerneos Service.
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface KerneosService {
-    /**
-     * The id of the service.
-     */
-    String id();
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ModuleBase {
+    private String bundle;
+
+
+    public String getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(String bundle) {
+        this.bundle = bundle;
+    }
+
 }

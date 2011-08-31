@@ -34,7 +34,7 @@ import org.granite.util.Enum;
  * @author Guillaume Renault
  * @see ModuleWithWindowVO
  */
-[RemoteClass(alias="org.ow2.kerneos.core.config.generated.Authentication")]
+
 [Bindable]
 public class AuthenticationVO extends Enum implements IValueObject
 {

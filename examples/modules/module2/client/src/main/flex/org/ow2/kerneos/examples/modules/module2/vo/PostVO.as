@@ -28,7 +28,6 @@ import com.adobe.cairngorm.vo.IValueObject;
 import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 
-[RemoteClass(alias="org.ow2.kerneos.examples.modules.module2.Post")]
 [Bindable]
 public class PostVO implements IValueObject {
 

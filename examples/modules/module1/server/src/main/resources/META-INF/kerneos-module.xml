@@ -34,6 +34,8 @@
   <big-icon>icons/icon64.png</big-icon>
   <file>module1.swf</file>
   <services>
-    <service id="module1-service1"/>
+    <service id="module1-service1">
+      <class java="" flex="ddd"  />
+        </service>
   </services>
 </swf-module>

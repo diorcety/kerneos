@@ -28,7 +28,6 @@ package org.ow2.kerneos.core.vo {
  * @author Julian Rivera
  */
 
-[RemoteClass(alias="org.ow2.kerneos.core.ModuleEvent")]
 [Bindable]
 public class ModuleEventVO {
 

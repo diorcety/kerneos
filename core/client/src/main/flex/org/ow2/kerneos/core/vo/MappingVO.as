@@ -20,47 +20,26 @@
  *
  * $Id$
  */
+
 package org.ow2.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
-import mx.collections.ArrayCollection;
-
-
-/**
- * A SWF module deployed in Kerneos.
- *
- * @author Guillaume Renault
- * @author Julien Nicoulaud
- */
-
 [Bindable]
-public class SWFModuleVO extends ModuleWithWindowVO implements IValueObject {
-
-    // =========================================================================
-    // Properties
-    // =========================================================================
+public class MappingVO implements IValueObject {
+    /**
+     * The java class name.
+     */
+    public var java:String = null;
 
     /**
-     * The SWF file path.
+     * The  flex class name.
      */
-    public var file:String = null;
-
-    /**
-     * The module services.
-     */
-    [ArrayElementType('org.ow2.kerneos.core.vo.ServiceVO')]
-    public var services:ArrayCollection = null;
-
-    /**
-     * The bindings.
-     */
-    [ArrayElementType('org.ow2.kerneos.core.vo.MappingVO')]
-    public var mappings:ArrayCollection = null;
+    public var flex:String = null;
 
     /**
      * Constructor
      */
-    function SWFModuleVO() {
+    function MappingVO() {
 
     }
 }

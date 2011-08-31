@@ -25,7 +25,7 @@ import com.adobe.cairngorm.vo.IValueObject;
 
 import mx.collections.ArrayCollection;
 
-[RemoteClass(alias="org.ow2.kerneos.login.Session")]
+
 [Bindable]
 public class SessionVO implements IValueObject{
 

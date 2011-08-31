@@ -23,21 +23,27 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.core.service;
+package org.ow2.kerneos.core.config;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.ow2.kerneos.core.config.generated.Module;
 
-/**
- * Set the kerneos Service.
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface KerneosService {
-    /**
-     * The id of the service.
-     */
-    String id();
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ServiceBase {
+    private Module module;
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
+
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        this.module = (Module) parent;
+    }
 }

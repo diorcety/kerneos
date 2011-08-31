@@ -21,15 +21,29 @@
  * $Id$
  */
 package org.ow2.kerneos.core.vo {
+import flash.utils.Dictionary;
+
 import org.ow2.kerneos.profile.vo.*;
 import org.ow2.kerneos.login.vo.SessionVO;
 
 public class SecurityVOObjects {
+
+    private static var dictionary:Dictionary = new Dictionary();
+
+    dictionary["org.ow2.kerneos.profile.config.generated.ProfileBundle"] = ProfileBundleVO;
+    dictionary["org.ow2.kerneos.profile.config.generated.ProfileMethod"] = ProfileMethodVO;
+    dictionary["org.ow2.kerneos.profile.config.generated.ProfileModule"] = ProfileModuleVO;
+    dictionary["org.ow2.kerneos.profile.config.generated.ProfilePolicy"] = ProfilePolicyVO;
+    dictionary["org.ow2.kerneos.profile.config.generated.ProfileRule"] = ProfileRuleVO;
+    dictionary["org.ow2.kerneos.profile.config.generated.ProfileService"] = ProfileServiceVO;
+    dictionary["org.ow2.kerneos.profile.config.generated.Profile"] = ProfileVO;
+    dictionary["org.ow2.kerneos.login.Session"] = SessionVO;
+
     public function SecurityVOObjects() {
     }
 
-    public static function array():Array {
-        return [ProfileMethodVO, ProfileModuleVO, ProfilePolicyVO, ProfileVO, ProfileRuleVO, ProfileServiceVO, SessionVO];
+    public static function values():Dictionary {
+        return dictionary;
     }
 }
 }

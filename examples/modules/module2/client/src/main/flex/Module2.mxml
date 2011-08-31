@@ -70,20 +70,6 @@
 
             return true;
         }
-
-        /**
-         * Return a dictionary with the classes used by the services
-         * One entry in the dictionary is like
-         * dictionary[idService] = [Class1, Class2, ...]
-         */
-        public function servicesClasses():Dictionary {
-            if (_servicesClasses == null) {
-                _servicesClasses = new Dictionary();
-                _servicesClasses["module2-serviceSync"] = [PostVO];
-                _servicesClasses["module2-serviceAsync"] = [PostVO];
-            }
-            return _servicesClasses;
-        }
         ]]>
     </fx:Script>
 

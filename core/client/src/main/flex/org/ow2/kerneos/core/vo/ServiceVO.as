@@ -24,6 +24,8 @@
 package org.ow2.kerneos.core.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
+import mx.collections.ArrayCollection;
+
 
 /**
  * Service description.
@@ -32,7 +34,7 @@ import com.adobe.cairngorm.vo.IValueObject;
  * @author Julien Nicoulaud
  * @see SWFModuleVO
  */
-[RemoteClass(alias="org.ow2.kerneos.core.config.generated.Service")]
+
 [Bindable]
 public class ServiceVO implements IValueObject {
     /**
@@ -49,6 +51,11 @@ public class ServiceVO implements IValueObject {
      *  Asynchronous service.
      */
     public var asynchronous:Boolean = false;
+
+    /**
+     * The module which contains this service
+     */
+    public var module:ModuleVO = null;
 
     /**
      * Constructor

@@ -42,7 +42,6 @@
   <xs:complexType name="module">
     <xs:sequence>
       <xs:element name="id" type="xs:string" maxOccurs="1" minOccurs="1"/>
-      <xs:element name="bundle" type="xs:string" maxOccurs="1" minOccurs="0"/>
       <xs:element name="name" type="xs:string" maxOccurs="1" minOccurs="1"/>
       <xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="1"/>
       <xs:element name="small-icon" type="xs:string" maxOccurs="1" minOccurs="0"/>
@@ -104,6 +103,7 @@
           <xs:sequence>
             <xs:element name="file" type="xs:string" maxOccurs="1" minOccurs="1"/>
             <xs:element ref="k:services" maxOccurs="1" minOccurs="0"/>
+            <xs:element ref="k:mappings" maxOccurs="1" minOccurs="0"/>
           </xs:sequence>
         </xs:extension>
       </xs:complexContent>
@@ -145,7 +145,7 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="service">
+  <xs:element name="service" type="k:service">
     <xs:annotation>
       <xs:documentation>
         A service allow to declare a JAVA remote service used by the module.
@@ -153,12 +153,31 @@
         remote object in the cairngorm flex model.
       </xs:documentation>
     </xs:annotation>
+  </xs:element>
+
+  <xs:complexType name="service">
+    <xs:attribute name="id" use="required" type="xs:string"/>
+    <xs:attribute name="destination" type="xs:string"/>
+    <xs:attribute name="asynchronous" type="xs:boolean"/>
+  </xs:complexType>
+
+  <!-- Mappings -->
+
+  <xs:element name="mappings">
     <xs:complexType>
-      <xs:attribute name="id" use="required" type="xs:string"/>
-      <xs:attribute name="destination" type="xs:string"/>
-      <xs:attribute name="asynchronous" type="xs:boolean"/>
+      <xs:sequence>
+        <xs:element ref="k:mapping" maxOccurs="unbounded" minOccurs="1"/>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
+
+  <xs:element name="mapping" type="k:mapping"/>
+
+  <xs:complexType name="mapping">
+    <xs:attribute name="java" use="required" type="xs:string"/>
+    <xs:attribute name="flex" type="xs:string"/>
+  </xs:complexType>
+
 
   <!-- Module options types -->
 

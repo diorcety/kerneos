@@ -46,7 +46,7 @@
 
   <properties>
     <!-- GraniteDS -->
-    <graniteds-osgi.version>1.0.0-M1</graniteds-osgi.version>
+    <graniteds-osgi.version>1.0.0-M2-SNAPSHOT</graniteds-osgi.version>
 
     <!-- Flex -->
     <cairngorm.version>2.2.5-SNAPSHOT</cairngorm.version>

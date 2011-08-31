@@ -23,7 +23,6 @@
 package org.ow2.kerneos.profile.vo {
 import mx.collections.ArrayCollection;
 
-[RemoteClass(alias="org.ow2.kerneos.profile.config.generated.ProfileService")]
 [Bindable]
 public class ProfileServiceVO {
 

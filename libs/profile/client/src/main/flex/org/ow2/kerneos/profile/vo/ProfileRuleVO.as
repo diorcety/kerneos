@@ -22,7 +22,6 @@
  */
 package org.ow2.kerneos.profile.vo {
 
-[RemoteClass(alias="org.ow2.kerneos.profile.config.generated.ProfileRule")]
 [Bindable]
 public class ProfileRuleVO {
 

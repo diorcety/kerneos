@@ -117,19 +117,19 @@ public class KerneosLifeCycleManager {
 
         // Set the kerneosConfigService.
         serviceLocator.setServiceForId("kerneosConfigService", "kerneos-configuration", false);
-        GraniteClassRegistry.registerClasses("kerneos-configuration", ConfigVOObjects.array());
+        GraniteClassRegistry.registerClasses("kerneos-configuration", ConfigVOObjects.values());
 
         // Set the kerneosAsyncConfigService.
         serviceLocator.setServiceForId("kerneosAsyncConfigService", "kerneos-async-configuration", true);
-        GraniteClassRegistry.registerClasses("kerneos-async-configuration", ConfigVOObjects.array());
+        GraniteClassRegistry.registerClasses("kerneos-async-configuration", ConfigVOObjects.values());
 
         // Set the kerneosSecurityService.
         serviceLocator.setServiceForId("kerneosSecurityService", "kerneos-security", false);
-        GraniteClassRegistry.registerClasses("kerneos-profile", SecurityVOObjects.array());
+        GraniteClassRegistry.registerClasses("kerneos-security", SecurityVOObjects.values());
 
         // Set the kerneosAsyncSecurityService.
         serviceLocator.setServiceForId("kerneosAsyncProfileService", "kerneos-async-security", true);
-        GraniteClassRegistry.registerClasses("kerneos-async-security", SecurityVOObjects.array());
+        GraniteClassRegistry.registerClasses("kerneos-async-security", SecurityVOObjects.values());
 
         // Configure the services
         serviceLocator.getRemoteObject("kerneosConfigService").channelSet = amfChannelSet;

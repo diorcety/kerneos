@@ -65,11 +65,13 @@
         public function destroy():void {
             // Remove all the event listener for avoid memory leaks
             CairngormEventDispatcher.getInstance().removeEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
-            consumer.removeEventListener(MessageEvent.MESSAGE, postEventHandler);
+            if (consumer) {
+                consumer.removeEventListener(MessageEvent.MESSAGE, postEventHandler);
 
-            // Unsubscribe the consumer from the topic
-            consumer.unsubscribe();
-            consumer = null;
+                // Unsubscribe the consumer from the topic
+                consumer.unsubscribe();
+                consumer = null;
+            }
         }
 
         /**

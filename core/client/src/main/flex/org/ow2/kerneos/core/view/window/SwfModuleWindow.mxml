@@ -40,7 +40,6 @@
         <![CDATA[
         import com.adobe.cairngorm.business.ServiceLocator;
 
-        import mx.modules.Module;
         import mx.resources.ResourceManager;
 
         import org.granite.util.GraniteClassRegistry;
@@ -49,10 +48,9 @@
 
         import org.ow2.kerneos.core.api.KerneosModule;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.core.vo.MappingVO;
         import org.ow2.kerneos.core.vo.SWFModuleVO;
         import org.ow2.kerneos.core.vo.ServiceVO;
-
-        private static var __mod:Module; // Hack
 
         [Bindable]
         private var state:String = "idle";
@@ -126,18 +124,15 @@
          * Register classes used by each services
          */
         private function registerClasses():void {
+            // Create the bindings
+            var dictionary:Dictionary = new Dictionary();
+            for each(var binding:MappingVO in (module as SWFModuleVO).mappings) {
+                dictionary[binding.java] = moduleLoader.applicationDomain.getDefinition(binding.flex);
+            }
 
-            // Register classes used by the services if the module is a Kerneos module type
-            if (getKerneosModule()) {
-                var dic:Dictionary = getKerneosModule().servicesClasses();
-                if (dic != null) {
-                    for (var key:String in dic) {
-                        for each(var service:ServiceVO in (module as SWFModuleVO).services) {
-                            if (service.id == key)
-                                GraniteClassRegistry.registerClasses(service.destination, dic[key] as Array);
-                        }
-                    }
-                }
+            // Register classes used by the services
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                GraniteClassRegistry.registerClasses(service.destination, dictionary);
             }
         }
 
@@ -164,15 +159,9 @@
          * Unregister classes with by each services
          */
         private function unregisterClasses():void {
-
-            // Unregister classes used by the services if the module is a Kerneos module type
-            if (getKerneosModule()) {
-                var dic:Dictionary = getKerneosModule().servicesClasses();
-                if (dic != null) {
-                    for (var key:String in dic) {
-                        GraniteClassRegistry.unregisterClasses(key);
-                    }
-                }
+            // Unregister classes used by the services
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                GraniteClassRegistry.unregisterClasses(service.destination);
             }
         }
 
@@ -199,12 +188,19 @@
          * When the module has finished loading
          */
         private function loaderReady(event:Event = null):void {
-            registerServices();
-            registerClasses();
-            state = "loaded";
+            try {
+                registerServices();
+                registerClasses();
+                state = "loaded";
+            } catch(e:Error) {
+                trace(e);
+                error = "kerneos.error.swfmodule.loading-error";
+                state = "error";
+            }
         }
 
         private function loaderError(event:Event = null):void {
+            trace(event);
             error = "kerneos.error.swfmodule.loading-error";
             state = "error";
         }

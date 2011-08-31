@@ -40,11 +40,6 @@ public interface KerneosModule
     function canBeClosedWithoutPrompt():Boolean;
 
     /**
-     * Returns the mapping between service and classes used
-     */
-    function servicesClasses(): Dictionary;
-
-    /**
     * Method called before the module is unloaded. Use it to close client-server
     * connexions for example.
     */

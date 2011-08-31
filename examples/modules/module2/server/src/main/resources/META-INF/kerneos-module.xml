@@ -37,4 +37,8 @@
     <service id="module2-serviceSync"/>
     <service id="module2-serviceAsync" asynchronous="true"/>
   </services>
+  <mappings>
+    <mapping java="org.ow2.kerneos.examples.modules.module2.Post"
+             flex="org.ow2.kerneos.examples.modules.module2.vo.PostVO"/>
+  </mappings>
 </swf-module>

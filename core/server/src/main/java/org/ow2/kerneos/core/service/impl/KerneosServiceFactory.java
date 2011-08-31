@@ -46,7 +46,9 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.ow2.kerneos.core.KerneosConstants;
+import org.ow2.kerneos.core.config.generated.Mapping;
 import org.ow2.kerneos.core.config.generated.Service;
+import org.ow2.kerneos.core.config.generated.SwfModule;
 import org.ow2.kerneos.core.service.KerneosAsynchronous;
 import org.ow2.kerneos.core.service.KerneosAsynchronousService;
 import org.ow2.kerneos.core.service.KerneosFactory;
@@ -55,7 +57,6 @@ import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.kerneos.core.service.impl.granite.GraniteFactoryWrapper;
 import org.ow2.kerneos.core.service.impl.granite.GraniteSimpleWrapper;
-import org.ow2.kerneos.core.service.util.ClassAnalyzer;
 
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -83,7 +84,7 @@ public final class KerneosServiceFactory {
         private Configuration conf1;
         private Configuration conf2;
         private ServiceRegistration instance;
-        private String destination;
+        private Service service;
 
         /**
          * Constructor
@@ -92,11 +93,11 @@ public final class KerneosServiceFactory {
          * @param conf1    is an iPojo component instance.
          * @param conf2    is an iPojo component instance.
          */
-        public ServiceInstance(final String destination,
+        public ServiceInstance(final Service service,
                                final ServiceRegistration instance,
                                final Configuration conf1,
                                final Configuration conf2) {
-            this.destination = destination;
+            this.service = service;
             this.conf1 = conf1;
             this.conf2 = conf2;
             this.instance = instance;
@@ -117,8 +118,8 @@ public final class KerneosServiceFactory {
             }
         }
 
-        public String getDestination() {
-            return destination;
+        public Service getService() {
+            return service;
         }
     }
 
@@ -221,7 +222,7 @@ public final class KerneosServiceFactory {
                 throw new Exception("Can't find the service \"" + ks.id() + "\"");
             String destination = ser.getDestination();
 
-            registerClasses(destination, service);
+            registerClasses(ser, service);
 
             ServiceRegistration instance = bundleContext.registerService(
                     GraniteFactory.class.getName(),
@@ -247,7 +248,7 @@ public final class KerneosServiceFactory {
                 destinationConfiguration.update(properties);
             }
 
-            instancesMap.put(ks.id(), new ServiceInstance(destination, instance, destinationConfiguration, factoryConfiguration));
+            instancesMap.put(ks.id(), new ServiceInstance(ser, instance, destinationConfiguration, factoryConfiguration));
 
         } catch (Exception e) {
             logger.error("Can't register a Simple Service: " + e);
@@ -290,7 +291,7 @@ public final class KerneosServiceFactory {
                 return;
             }
 
-            unregisterClasses(ksi.getDestination());
+            unregisterClasses(ksi.getService());
 
             ksi.dispose();
         } catch (Exception e) {
@@ -331,7 +332,7 @@ public final class KerneosServiceFactory {
                 throw new Exception("Can't find the service \"" + ks.id() + "\"");
             String destination = ser.getDestination();
 
-            registerClasses(destination, service);
+            registerClasses(ser, service);
 
             ServiceRegistration instance = bundleContext.registerService(
                     GraniteFactory.class.getName(),
@@ -373,7 +374,7 @@ public final class KerneosServiceFactory {
                 destinationConfiguration.update(properties);
             }
 
-            instancesMap.put(ks.id(), new ServiceInstance(destination, instance, destinationConfiguration, factoryConfiguration));
+            instancesMap.put(ks.id(), new ServiceInstance(ser, instance, destinationConfiguration, factoryConfiguration));
 
         } catch (Exception e) {
             logger.error("Can't register a Factory Service: " + e);
@@ -415,7 +416,7 @@ public final class KerneosServiceFactory {
                 return;
             }
 
-            unregisterClasses(kfi.getDestination());
+            unregisterClasses(kfi.getService());
 
             kfi.dispose();
         } catch (Exception e) {
@@ -458,7 +459,7 @@ public final class KerneosServiceFactory {
                 throw new Exception("Can't find the service \"" + ks.id() + "\"");
             String destination = ser.getDestination();
 
-            registerClasses(destination, service);
+            registerClasses(ser, service);
 
             Configuration factoryConfiguration = null;
             {
@@ -505,7 +506,7 @@ public final class KerneosServiceFactory {
                 destinationConfiguration.update(properties);
             }
 
-            instancesMap.put(ks.id(), new ServiceInstance(destination, null, destinationConfiguration, factoryConfiguration));
+            instancesMap.put(ks.id(), new ServiceInstance(ser, null, destinationConfiguration, factoryConfiguration));
         } catch (Exception e) {
             logger.error("Can't register a Asynchronous Service: " + e);
         }
@@ -544,7 +545,7 @@ public final class KerneosServiceFactory {
                 return;
             }
 
-            unregisterClasses(ksi.getDestination());
+            unregisterClasses(ksi.getService());
 
             ksi.dispose();
         } catch (Exception e) {
@@ -556,29 +557,31 @@ public final class KerneosServiceFactory {
     /**
      * Register the classes associated to a service
      *
-     * @param serviceId the service id
-     * @param service   the instance of the service
+     * @param service the service
+     * @param service the instance of the service
      */
-    private void registerClasses(final String serviceId, final Object service) {
-        KerneosService ks = service.getClass().getAnnotation(KerneosService.class);
-        if (ks != null) {
-            ClassAnalyzer ca = new ClassAnalyzer();
-            if (ks.analyze()) {
-                ca.analyze(service.getClass());
+    private void registerClasses(final Service service, final Object object) throws ClassNotFoundException {
+        if (service.getModule() instanceof SwfModule) {
+            List<Mapping> mappings =   ((SwfModule)service.getModule()).getMappings();
+            Class[] classes = new Class[mappings.size()];
+            int i = 0;
+            for (Mapping mapping : mappings) {
+                classes[i] = object.getClass().getClassLoader().loadClass(mapping.getJava());
+                i++;
             }
-            for (Class cls : ks.classes()) {
-                ca.add(cls);
-            }
-            gcr.registerClasses(serviceId, ca.compile());
+
+            gcr.registerClasses(service.getDestination(), classes);
         }
     }
 
     /**
      * Unregister the classes associated to a service
      *
-     * @param serviceId the service id
+     * @param service the service
      */
-    private void unregisterClasses(final String serviceId) {
-        gcr.unregisterClasses(serviceId);
+    private void unregisterClasses(final Service service) {
+        if (service.getModule() instanceof SwfModule) {
+            gcr.unregisterClasses(service.getDestination());
+        }
     }
 }

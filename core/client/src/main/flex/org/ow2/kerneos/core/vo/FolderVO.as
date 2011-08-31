@@ -35,7 +35,7 @@ import org.ow2.kerneos.common.util.IconUtility;
  *
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.kerneos.core.config.generated.Folder")]
+
 [Bindable]
 public class FolderVO extends ModuleWithWindowVO implements IValueObject {
 

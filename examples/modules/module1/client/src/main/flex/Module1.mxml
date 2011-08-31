@@ -67,15 +67,6 @@
 
             return true;
         }
-
-        /**
-         * Return a dictionary with the classes used by the services
-         * One entry in the dictionary is like
-         * dictionary[idService] = [Class1, Class2, ...]
-         */
-        public function servicesClasses():Dictionary {
-            return null;
-        }
         ]]>
     </fx:Script>
 

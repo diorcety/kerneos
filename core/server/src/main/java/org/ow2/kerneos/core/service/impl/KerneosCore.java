@@ -76,13 +76,13 @@ public class KerneosCore implements IKerneosCore {
      */
     private static Log logger = LogFactory.getLog(KerneosConfigurationService.class);
 
-    private Map<String, ApplicationBundle> applicationMap = new HashMap<String, ApplicationBundle>();
+    private Map<String, ApplicationBundle> applications = new HashMap<String, ApplicationBundle>();
 
-    private Map<String, ModuleBundle> moduleMap = new HashMap<String, ModuleBundle>();
+    private Map<String, ModuleBundle> modules = new HashMap<String, ModuleBundle>();
 
-    private Map<String, Service> serviceMap = new HashMap<String, Service>();
+    private Map<String, Service> services = new HashMap<String, Service>();
 
-    private Map<String, ModuleService> destinationMap = new HashMap<String, ModuleService>();
+    private Map<String, ModuleService> destinations = new HashMap<String, ModuleService>();
 
 
     private Configuration granite, gravity, graniteSecurity, gravitySecurity;
@@ -151,18 +151,18 @@ public class KerneosCore implements IKerneosCore {
         graniteSecurity.delete();
 
         // Dispose applications
-        while (applicationMap.size() != 0) {
+        while (applications.size() != 0) {
             try {
-                String applicationId = applicationMap.keySet().iterator().next();
+                String applicationId = applications.keySet().iterator().next();
                 removeApplicationBundle(applicationId);
             } catch (Exception e) {
             }
         }
 
         // Dispose modules
-        while (moduleMap.size() != 0) {
+        while (modules.size() != 0) {
             try {
-                String moduleId = moduleMap.keySet().iterator().next();
+                String moduleId = modules.keySet().iterator().next();
                 removeModuleBundle(moduleId);
             } catch (Exception e) {
             }
@@ -257,7 +257,7 @@ public class KerneosCore implements IKerneosCore {
 
             applicationBundle.addConfiguration(httpInstance);
 
-            applicationMap.put(applicationBundle.getId(), applicationBundle);
+            applications.put(applicationBundle.getId(), applicationBundle);
 
         } catch (Exception e) {
             applicationBundle.dispose();
@@ -266,18 +266,17 @@ public class KerneosCore implements IKerneosCore {
     }
 
     public synchronized ApplicationBundle removeApplicationBundle(final String applicationId) throws Exception {
-        ApplicationBundle applicationBundle = null;
-        applicationBundle = applicationMap.remove(applicationId);
+        ApplicationBundle applicationBundle = applications.remove(applicationId);
         applicationBundle.dispose();
         return applicationBundle;
     }
 
     public synchronized Map<String, ApplicationBundle> getApplicationBundles() {
-        return new HashMap<String, ApplicationBundle>(applicationMap);
+        return new HashMap<String, ApplicationBundle>(applications);
     }
 
     public synchronized ApplicationBundle getApplicationBundle(Bundle bundle) {
-        for (ApplicationBundle applicationBundle : applicationMap.values()) {
+        for (ApplicationBundle applicationBundle : applications.values()) {
             if (applicationBundle.getBundle() == bundle) {
                 return applicationBundle;
             }
@@ -286,31 +285,31 @@ public class KerneosCore implements IKerneosCore {
     }
 
     public synchronized ApplicationBundle getApplicationBundle(String applicationId) {
-        return applicationMap.get(applicationId);
+        return applications.get(applicationId);
     }
 
     public synchronized void addModuleBundle(final ModuleBundle moduleBundle) throws Exception {
-        moduleMap.put(moduleBundle.getId(), moduleBundle);
+        modules.put(moduleBundle.getId(), moduleBundle);
         if (moduleBundle.getModule() instanceof SwfModule) {
             SwfModule swfModule = (SwfModule) moduleBundle.getModule();
             for (Service service : swfModule.getServices()) {
-                destinationMap.put(service.getDestination(), new ModuleService(moduleBundle, service));
+                destinations.put(service.getDestination(), new ModuleService(moduleBundle, service));
             }
             for (Service service : swfModule.getServices()) {
-                serviceMap.put(service.getId(), service);
+                services.put(service.getId(), service);
             }
         }
     }
 
     public synchronized ModuleBundle removeModuleBundle(final String moduleId) throws Exception {
-        ModuleBundle moduleBundle = moduleMap.remove(moduleId);
+        ModuleBundle moduleBundle = modules.remove(moduleId);
         if (moduleBundle.getModule() instanceof SwfModule) {
             SwfModule swfModule = (SwfModule) moduleBundle.getModule();
             for (Service service : swfModule.getServices()) {
-                destinationMap.remove(service.getDestination());
+                destinations.remove(service.getDestination());
             }
             for (Service service : swfModule.getServices()) {
-                serviceMap.remove(service.getId());
+                services.remove(service.getId());
             }
         }
 
@@ -318,11 +317,11 @@ public class KerneosCore implements IKerneosCore {
     }
 
     public synchronized Map<String, ModuleBundle> getModuleBundles() {
-        return new HashMap<String, ModuleBundle>(moduleMap);
+        return new HashMap<String, ModuleBundle>(modules);
     }
 
     public synchronized ModuleBundle getModuleBundle(Bundle bundle) {
-        for (ModuleBundle moduleBundle : moduleMap.values()) {
+        for (ModuleBundle moduleBundle : modules.values()) {
             if (moduleBundle.getBundle() == bundle) {
                 return moduleBundle;
             }
@@ -331,11 +330,11 @@ public class KerneosCore implements IKerneosCore {
     }
 
     public synchronized ModuleBundle getModuleBundle(String moduleId) {
-        return moduleMap.get(moduleId);
+        return modules.get(moduleId);
     }
 
     public synchronized Service getService(String serviceId) {
-        Service service = serviceMap.get(serviceId);
+        Service service = services.get(serviceId);
         return service;
     }
 
@@ -350,7 +349,7 @@ public class KerneosCore implements IKerneosCore {
             int sep = path.indexOf("/");
             if (sep != -1) {
                 synchronized (this) {
-                    currentModuleBundle = moduleMap.get(path.substring(0, sep));
+                    currentModuleBundle = modules.get(path.substring(0, sep));
                 }
                 path = path.substring(sep);
             }
@@ -383,7 +382,7 @@ public class KerneosCore implements IKerneosCore {
         kerneosContext.setMethod(method);
         ModuleService moduleService;
         synchronized (this) {
-            moduleService = destinationMap.get(destination);
+            moduleService = destinations.get(destination);
         }
         if (moduleService != null) {
             kerneosContext.setModuleBundle(moduleService.getModuleBundle());

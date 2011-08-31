@@ -30,7 +30,7 @@ import com.adobe.cairngorm.vo.IValueObject;
  *
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.kerneos.core.config.generated.Application")]
+
 [Bindable]
 public class ApplicationVO implements IValueObject {
     // =========================================================================

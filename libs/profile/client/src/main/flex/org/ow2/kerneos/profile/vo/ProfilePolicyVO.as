@@ -25,7 +25,6 @@ import com.adobe.cairngorm.vo.IValueObject;
 
 import org.granite.util.Enum;
 
-[RemoteClass(alias="org.ow2.kerneos.profile.config.generated.ProfilePolicy")]
 [Bindable]
 public class ProfilePolicyVO extends Enum implements IValueObject
 {

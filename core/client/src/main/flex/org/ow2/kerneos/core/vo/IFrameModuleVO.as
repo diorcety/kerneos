@@ -30,7 +30,7 @@ import com.adobe.cairngorm.vo.IValueObject;
  * @author Guillaume Renault
  * @author Julien Nicoulaud
  */
-[RemoteClass(alias="org.ow2.kerneos.core.config.generated.IframeModule")]
+
 [Bindable]
 public class IFrameModuleVO extends ModuleWithWindowVO implements IValueObject {
 

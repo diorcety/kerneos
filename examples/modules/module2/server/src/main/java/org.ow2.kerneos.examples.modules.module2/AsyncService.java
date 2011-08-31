@@ -44,7 +44,7 @@ import org.ow2.util.log.LogFactory;
 @Provides
 
 // Don't forget to add all the classes used by the service but no used directly by this class
-@KerneosService(id = "module2-serviceAsync", classes = Post.class)
+@KerneosService(id = "module2-serviceAsync")
 @KerneosAsynchronous(type = KerneosAsynchronous.TYPE.EVENTADMIN, properties = {
         @KerneosAsynchronous.Property(name = "prefix", value = "kerneos-module2/")}
 )
