@@ -37,4 +37,12 @@
     <service id="hello_service"/>
     <service id="store_service"/>
   </services>
+  <mappings>
+    <mapping java="org.ow2.kerneos.modules.store.impl.StoreImpl"
+             flex="org.ow2.kerneos.modules.store.vo.StoreVO"/>
+    <mapping java="org.ow2.kerneos.modules.store.impl.ModuleImpl"
+             flex="org.ow2.kerneos.modules.store.vo.ModuleVO"/>
+    <mapping java="org.ow2.kerneos.modules.store.impl.CategoryImpl"
+             flex="org.ow2.kerneos.modules.store.vo.CategoryVO"/>
+  </mappings>
 </swf-module>

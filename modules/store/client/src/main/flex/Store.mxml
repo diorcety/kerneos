@@ -177,34 +177,6 @@
                 return true;
             }
 
-            /**
-             * Return a dictionary with the classes used by the services
-             * One entry in the dictionary is like
-             * dictionary[idService] = [Class1, Class2, ...]
-             */
-            public function servicesClasses():Dictionary {
-                /**
-                 * Register all the classes used by the services
-                 * MyObject and MySubObject are used by the service "object_service"
-                 * "object_service" is defined in kerneos-module.xml as
-                 * <service id="object_service" destination="ObjectService"/>
-                 *
-                 * The variable _servicesClasses is defined as a class variable on the top of the class
-                 *
-                 */
-
-                if (_servicesClasses == null) {
-                    _servicesClasses = new Dictionary();
-                    _servicesClasses["hello_service"] = [StoreVO];
-                    _servicesClasses["store_service"] = [StoreVO, ModuleVO, ByteArray, CategoryVO];
-
-                }
-                return _servicesClasses;
-
-                //return null;
-            }
-
-
             protected function init():void {
                 this.id = "moduleStoreModule";
 

@@ -25,7 +25,6 @@ package org.ow2.kerneos.modules.store.vo
     import com.adobe.cairngorm.vo.IValueObject;
     import mx.collections.ArrayCollection;
 
-	[RemoteClass(alias="org.ow2.kerneos.modules.store.impl.ModuleImpl")]
     [Bindable]
     public class ModuleVO implements IValueObject
 	{

@@ -24,7 +24,6 @@ package org.ow2.kerneos.modules.store.vo
 {
     import com.adobe.cairngorm.vo.IValueObject;
 
-    [RemoteClass(alias="org.ow2.kerneos.modules.store.impl.CategoryImpl")]
     [Bindable]
     public class CategoryVO implements IValueObject
     {

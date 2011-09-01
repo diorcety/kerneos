@@ -44,7 +44,7 @@ import java.util.Collection;
 @Instantiate
 @Provides
 
-@KerneosService(id = "store_service", classes = {StoreImpl.class,ModuleImpl.class,Byte[].class, CategoryImpl.class})
+@KerneosService(id = "store_service")
 
 public class StoreService implements KerneosSimpleService, IStoreService {
     /**
