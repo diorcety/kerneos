@@ -50,8 +50,8 @@
         <!-- Instantiate the controller. A controller a module -->
         <control:Controller id="controller"/>
 
-        <s:ArrayCollection id="modulesResultList">
-            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
+       <s:ArrayCollection id="modulesResultList">
+            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" version="1.4.2" category="Monitoring"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -59,17 +59,17 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Probe Manager" author="BULL SAS" version="1.4.0" category="Admin"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
         </s:ArrayCollection>
 
         <s:ArrayCollection id="modulesSearchResultList">
-            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.2" category="Monitoring"
+            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" version="1.4.2" category="Monitoring"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -77,7 +77,7 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Probe Manager" author="BULL SAS" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.4.0" category="Admin"
+            <vo:ModuleVO name="Probe Manager" author="BULL SAS" version="1.4.0" category="Admin"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -85,7 +85,7 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -93,7 +93,7 @@
 						  5 Monitoring lets you visualize, analyze and export graphs. 
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Module Test" author="Company Name" icon="@Embed('/../assets/logo_jasmine_monitoring.png')" version="1.0" category="Others"
+            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"
                        description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
@@ -129,7 +129,7 @@
             import org.ow2.kerneos.modules.store.event.StoreEvent;
 
             import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
-            import org.ow2.kerneos.modules.store.vo.CategoryVO;
+            import org.ow2.kerneos.modules.store.vo.ModuleVO;
             import org.ow2.kerneos.modules.store.vo.StoreVO;
 
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -137,7 +137,7 @@
             import mx.events.ItemClickEvent;
             import mx.collections.ArrayCollection;
 
-            private var _selectModule:org.ow2.kerneos.modules.store.vo.ModuleVO;
+           //private var _selectModule:org.ow2.kerneos.modules.store.vo.ModuleVO;
 
             private var _servicesClasses:Dictionary;
 
@@ -180,7 +180,7 @@
             protected function init():void {
                 this.id = "moduleStoreModule";
 
-                _selectModule = new org.ow2.kerneos.modules.store.vo.ModuleVO();
+                /*_selectModule = new org.ow2.kerneos.modules.store.vo.ModuleVO();
                 _selectModule.name = "JASMINe Monitoring";
                 _selectModule.author = "BULL SAS";
                 _selectModule.description = "Monitoring lets you visualize, analyze and export graphs."
@@ -195,11 +195,10 @@
 
                 _selectModule.icon = icon;
                 _selectModule.size = 4000;
-                //TODO uncomment
                 //_selectModule.date = new Date();
                 _selectModule.version = "1.4.2";
                 _selectModule.category = "Monitoring";
-                _selectModule.installsNumber = 1000000;
+                _selectModule.installsNumber = 1000000;*/
 
                 //Change application state when click on one menu item
                 linkBar.addEventListener(ItemClickEvent.ITEM_CLICK, handleLinkBar);
@@ -209,8 +208,12 @@
                 searchInput.addEventListener(FocusEvent.FOCUS_OUT, handleSearchInputFocusOut);
 
                 ModuleModelLocator.getInstance().listeSelectedModules = new ArrayCollection();
+                ModuleModelLocator.getInstance().listeModules = new ArrayCollection();
 
                 /*this.addEventListener(SelectedModuleEvent.SELECTED_MODULE_CHANGE, onItemChanged);*/
+                var categories : ArrayCollection = new ArrayCollection(["util","util","util","util"]);
+
+                ModuleModelLocator.getInstance().categories = categories;
             }
 
             private function handleLinkBar(event:ItemClickEvent):void {
@@ -257,9 +260,9 @@
             protected function searchInput_enterHandler():void {
                 /*Alert.show("Find modules by word : " + searchInput.text);*/
 
-                //TODO enlever le focus
+                _keywords = searchInput.text;
                 searchIconButton.setFocus();
-                var search_modules_event : SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES);
+                var search_modules_event : SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE);
                 search_modules_event.filter = searchInput.text;
                 CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
 
@@ -348,6 +351,25 @@
                     imageTestBitmap.visible = true;
                 }
             }
+
+            private function searchModulesByCategory(evt:ItemClickEvent):void {
+                var category : int = evt.index;
+                var categoryName : String = getValidCategory(category);
+
+                var search_modules_event:SearchModulesEvent =
+                        new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY);
+                search_modules_event.id = categoryName;
+                CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
+            }
+
+            private function getValidCategory(index:int) : String {
+                if (index >= 0 && index < ModuleModelLocator.getInstance().categories.length) {
+                    return ModuleModelLocator.getInstance().categories[index];
+                } else {
+                    return "";
+                }
+            }
+
             ]]>
 		</fx:Script>
 
@@ -373,20 +395,23 @@
                       fontWeight="normal">
             <s:NavigatorContent width="100%" height="100%" label="Categories" fontSize="16">
                 <mx:LinkBar id="linkBar" width="100%" dataProvider="{mainViewStack}"
-                            direction="vertical" verticalGap="8" currentState=""/>
+                            direction="vertical" verticalGap="8" currentState="" itemClick="searchModulesByCategory(event)"/>
             </s:NavigatorContent>
         </mx:Accordion>
 
         <!-- Main Conteneur -->
         <s:BorderContainer x="190" y="96" width="553" height="463">
             <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461" >
-                <s:NavigatorContent width="100%" height="100%" label="Popular">
+                <s:NavigatorContent id="navUtilModules" width="100%" height="100%"
+                                    label="{ModuleModelLocator.getInstance().categories[0]}">
                     <s:DataGroup id="dgPopularModules" x="0" y="0" width="100%" height="100%"
                                  dataProvider="{ModuleModelLocator.getInstance().listeModules}"
                                  itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
                                  name="dgPopularModules"
                                  visible.Default="true"
-                                 visible.ModuleDetail="false">
+                                 visible.ModuleDetail="false"
+                                 visible.FindModules="false"
+                                 visible.InstalledModules="false">
                         <s:layout>
                             <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
                                           requestedRowCount="2" rowHeight="200"/>
@@ -395,11 +420,53 @@
                 </s:NavigatorContent>
 
 
-                <s:NavigatorContent width="100%" height="100%" label="Monitoring">
+                <s:NavigatorContent id="navMonitoringModules" width="100%" height="100%"
+                                    label="{ModuleModelLocator.getInstance().categories[1]}">
+                    <s:DataGroup id="dgMonitoringModules" x="0" y="0" width="100%" height="100%"
+                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
+                                 name="dgMonitoringModules"
+                                 visible.Default="true"
+                                 visible.ModuleDetail="false"
+                                 visible.FindModules="false"
+                                 visible.InstalledModules="false">
+                        <s:layout>
+                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
+                                          requestedRowCount="2" rowHeight="200"/>
+                        </s:layout>
+                    </s:DataGroup>
                 </s:NavigatorContent>
-                <s:NavigatorContent width="100%" height="100%" label="Admin">
+                <s:NavigatorContent id="navAdminModules" width="100%" height="100%"
+                                    label="{ModuleModelLocator.getInstance().categories[2]}">
+                    <s:DataGroup id="dgAdminModules" x="0" y="0" width="100%" height="100%"
+                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
+                                 name="dgAdminModules"
+                                 visible.Default="true"
+                                 visible.ModuleDetail="false"
+                                 visible.FindModules="false"
+                                 visible.InstalledModules="false">
+                        <s:layout>
+                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
+                                          requestedRowCount="2" rowHeight="200"/>
+                        </s:layout>
+                    </s:DataGroup>
                 </s:NavigatorContent>
-                <s:NavigatorContent width="100%" height="100%" label="Others">
+                <s:NavigatorContent id="navOthersModules" width="100%" height="100%"
+                                    label="{ModuleModelLocator.getInstance().categories[3]}">
+                    <s:DataGroup id="dgOthersModules" x="0" y="0" width="100%" height="100%"
+                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
+                                 name="dgOthersModules"
+                                 visible.Default="true"
+                                 visible.ModuleDetail="false"
+                                 visible.FindModules="false"
+                                 visible.InstalledModules="false">
+                        <s:layout>
+                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
+                                          requestedRowCount="2" rowHeight="200"/>
+                        </s:layout>
+                    </s:DataGroup>
                 </s:NavigatorContent>
             </mx:ViewStack>
 
@@ -416,7 +483,6 @@
                 <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
                          text="About this module"/>
                 <s:Label x="10" y="217" fontSize="14" text="Updated:"/>
-                <!--TODO uncomment date -->
                 <s:Label x="76" y="217" fontSize="14"
                          text="{ModuleModelLocator.getInstance().mainModule.date.toDateString()}"/>
                 <s:Label x="11" y="245" fontSize="14" text="Version:"/>
@@ -465,7 +531,7 @@
 
             <!-- Find Modules View-->
             <s:Group includeIn="FindModules" x="0" y="0" width="100%" height="100%">
-                <s:Label x="10" y="10" text="{modulesSearchResultList.length} results for &quot; {searchInput.text} &quot;"/>
+                <s:Label x="10" y="10" text="{ModuleModelLocator.getInstance().listeModules.length} results for &quot; {_keywords} &quot;"/>
                 <mx:HRule x="10" y="30" width="531"/>
                 <s:DataGroup x="0" y="35" width="545" height="422" dataProvider="{ModuleModelLocator.getInstance().listeModules}"
                              itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleResearchRenderer">

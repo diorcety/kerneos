@@ -28,7 +28,7 @@
 	</fx:Script>
 
     <s:HGroup id="module1" width="545" height="100" click="moduleIcon_clickHandler(event)" >
-        <s:Image x="0" y="0" width="100" height="100" source="{data.icon}"/>
+        <s:Image id="moduleIconImg" x="0" y="0" width="100" height="100" source="{data.icon}"/>
         <s:VGroup horizontalAlign="center" width="126" height="100">
             <s:Label x="104" y="4" width="114" height="26" fontWeight="bold" text="{data.name}"
                      textAlign="center" verticalAlign="middle"/>

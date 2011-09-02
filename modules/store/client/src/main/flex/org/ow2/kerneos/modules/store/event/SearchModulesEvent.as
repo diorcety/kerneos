@@ -28,7 +28,11 @@ public class SearchModulesEvent extends CairngormEvent {
 
     public static var SEARCH_MODULES : String = "SEARCH_MODULES";
 
+    public static var SEARCH_MODULES_WITH_IMAGE : String = "SEARCH_MODULES_WITH_IMAGE";
+
     public static var SEARCH_MODULES_BY_CATEGORY : String = "SEARCH_MODULES_BY_CATEGORY";
+
+    public static var SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY : String = "SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY";
 
     private var _id : String = null;
 

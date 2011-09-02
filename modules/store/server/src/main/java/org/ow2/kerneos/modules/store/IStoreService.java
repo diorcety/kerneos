@@ -25,19 +25,21 @@
 
 package org.ow2.kerneos.modules.store;
 
-import org.ow2.kerneos.modules.store.impl.CategoryImpl;
-import org.ow2.kerneos.modules.store.impl.ModuleImpl;
-import org.ow2.kerneos.modules.store.impl.StoreImpl;
+import org.ow2.kerneos.modules.store.impl.*;
 
 import java.util.Collection;
 
 public interface IStoreService {
     public StoreImpl getStore(String url);
     public ModuleImpl getModule(String id);
-    public byte[] getModuleImage(String id);
+    public ModuleImage getModuleImage(String id);
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
                                                 Integer itemByPage, Integer page);
+    public Collection<ModuleImpl> searchModulesWithImage(String filter, String field, String order,
+                                                Integer itemByPage, Integer page);
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
+                                                          Integer itemByPage, Integer page);
+    public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order,
                                                           Integer itemByPage, Integer page);
     public Collection<ModuleImpl> getCategories();
     public CategoryImpl getCategory(String id);

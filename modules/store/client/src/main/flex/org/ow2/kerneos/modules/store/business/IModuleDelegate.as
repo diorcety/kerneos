@@ -45,7 +45,13 @@ public interface IModuleDelegate extends IDelegateResponder
     function searchModules(filter : Object, field : Object, order : Object,
                                   itemByPage : Object, page : Object) : void;
 
+    function searchModulesWithImage(filter : Object, field : Object, order : Object,
+                                  itemByPage : Object, page : Object) : void;
+
     function searchModulesByCategory(id : Object, field : Object, order : Object,
+                                  itemByPage : Object, page : Object) : void;
+
+    function searchModulesWithImageByCategory(id : Object, field : Object, order : Object,
                                   itemByPage : Object, page : Object) : void;
 
 }

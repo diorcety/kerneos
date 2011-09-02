@@ -82,6 +82,13 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
+    public function searchModulesWithImage(filter:Object, field:Object, order:Object,
+                                           itemByPage:Object, page:Object) : void {
+        var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call : Object = service.searchModulesWithImage(filter,  field,  order,  itemByPage, page);
+        call.addResponder(this.responder);
+    }
+
     public function searchModulesByCategory(id : Object, field : Object, order : Object,
                                             itemByPage : Object, page : Object) : void
     {
@@ -90,5 +97,11 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
+    public function searchModulesWithImageByCategory(id:Object, field:Object, order:Object,
+                                                     itemByPage:Object, page:Object) : void {
+        var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call : Object = service.searchModulesWithImageByCategory(id,  field,  order,  itemByPage, page);
+        call.addResponder(this.responder);
+    }
 }
 }

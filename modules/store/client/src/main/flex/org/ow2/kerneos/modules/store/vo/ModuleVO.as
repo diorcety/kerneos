@@ -23,7 +23,16 @@
 package org.ow2.kerneos.modules.store.vo
 {
     import com.adobe.cairngorm.vo.IValueObject;
-    import mx.collections.ArrayCollection;
+
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Loader;
+import flash.display.LoaderInfo;
+import flash.events.Event;
+import flash.geom.Matrix;
+import flash.utils.ByteArray;
+
+import mx.collections.ArrayCollection;
 
     [Bindable]
     public class ModuleVO implements IValueObject
@@ -44,7 +53,7 @@ package org.ow2.kerneos.modules.store.vo
 		 * Icon, 128 x 200 dimensions 
 		 */
         [Transient]
-		private var _icon:Class;
+		private var _icon:Bitmap;
 		
 		/**
 		 * Module's version
@@ -93,6 +102,10 @@ package org.ow2.kerneos.modules.store.vo
         [Transient]
 		private var _selected:Boolean;
 
+        /**
+         * Original module image get from the server
+         */
+        private var _imgOrig:ByteArray;
 		
 		
 		public function ModuleVO()
@@ -129,12 +142,12 @@ package org.ow2.kerneos.modules.store.vo
 			_author = value;
 		}
 
-		public function get icon():Class
+		public function get icon():Bitmap
 		{
 			return _icon;
 		}
 
-		public function set icon(value:Class):void
+		public function set icon(value:Bitmap):void
 		{
 			_icon = value;
 		}
@@ -227,6 +240,48 @@ package org.ow2.kerneos.modules.store.vo
         public function set categories(categories:ArrayCollection):void
         {
             this._categories = categories;
+        }
+
+        public function get imgOrig():ByteArray
+        {
+            return this._imgOrig;
+        }
+
+        public function set imgOrig(imgOrig:ByteArray):void
+        {
+            this._imgOrig = imgOrig;
+        }
+
+        /**
+         * This function takes the Byte Array of the original icon image imgOrig and
+         * convert it in a 100 x 100 pixels Bitmap and save this Bitmap in the icon attribute
+         */
+        public function convertOriginalByteArrayImageToBitMapImage() : void {
+            var imageLoader:Loader = new Loader();
+            imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+            imageLoader.loadBytes(this._imgOrig);
+        }
+
+        private function imageLoadComplete(event:Event):void
+        {
+            var loader:Loader = (event.target as LoaderInfo).loader;
+
+            var bmp:Bitmap = Bitmap(loader.content);
+
+            var bmpResult : Bitmap = null;
+
+            if (bmp.height != 100 || bmp.width != 100) {
+                var m:Matrix = new Matrix();
+                m.scale(100 / bmp.width, 100 / bmp.height);
+                var bmpSmall:BitmapData = new BitmapData(100, 100, false);
+                bmpSmall.draw(bmp, m);
+                bmpResult = new Bitmap(bmpSmall);
+            } else {
+                bmpResult = bmp;
+            }
+
+            this.icon = bmpResult;
+
         }
 
 	}

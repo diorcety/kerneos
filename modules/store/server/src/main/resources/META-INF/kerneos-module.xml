@@ -44,5 +44,7 @@
              flex="org.ow2.kerneos.modules.store.vo.ModuleVO"/>
     <mapping java="org.ow2.kerneos.modules.store.impl.CategoryImpl"
              flex="org.ow2.kerneos.modules.store.vo.CategoryVO"/>
+    <mapping java="org.ow2.kerneos.modules.store.impl.ModuleImage"
+             flex="org.ow2.kerneos.modules.store.vo.ModuleImageVO"/>
   </mappings>
 </swf-module>

@@ -26,22 +26,12 @@ import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-
-import flash.display.Loader;
-import flash.display.LoaderInfo;
-import flash.events.Event;
-import flash.geom.Matrix;
-
-import flash.utils.ByteArray;
-
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.GetModuleEvent;
-import org.ow2.kerneos.modules.store.vo.ModuleImageVO;
+import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
+import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
 // Server Exceptions imports
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
@@ -50,13 +40,13 @@ import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.modules.store.business.*;
 import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
-import org.ow2.kerneos.common.util.IconUtility;
+import mx.collections.ArrayCollection;
 
 /**
  * The command class from the cairngorm model.
  */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class GetModuleImage implements ICommand, IResponder
+public class SearchModulesWithImage implements ICommand, IResponder
 {
     /**
      * Retrieve the delegate and use it to make the call.
@@ -75,9 +65,25 @@ public class GetModuleImage implements ICommand, IResponder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var parameters : String = (event as GetModuleEvent).id;
-        delegate.getModuleImage(parameters);
+        var filter : String = (event as SearchModulesEvent).filter;
+        var field : String = (event as SearchModulesEvent).field;
+        var order : String = (event as SearchModulesEvent).order;
 
+        var itemByPage : Object;
+        if ((event as SearchModulesEvent).itemByPage < 0) {
+          itemByPage = null;
+        } else {
+          itemByPage = (event as SearchModulesEvent).itemByPage;
+        }
+
+        var page : Object;
+        if ((event as SearchModulesEvent).page < 0) {
+          page = null;
+        } else {
+          page = (event as SearchModulesEvent).page;
+        }
+
+        delegate.searchModulesWithImage(filter, field, order, itemByPage, page);
     }
 
     /**
@@ -93,37 +99,16 @@ public class GetModuleImage implements ICommand, IResponder
 
 
         // Handle the result of the call. Usely, the model is updated.
+        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
 
+        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')]
+        var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
 
-        var moduleImage : ModuleImageVO = (data as ResultEvent).result as ModuleImageVO;
-
-        trace("The image of module with id " + moduleImage.idModule + " is found in the server");
-
-        var imageLoader:Loader = new Loader();
-        imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
-        imageLoader.loadBytes(moduleImage.imgOrig);
-    }
-
-    private function imageLoadComplete(event:Event):void
-    {
-        var loader:Loader = (event.target as LoaderInfo).loader;
-
-        var bmp:Bitmap = Bitmap(loader.content);
-
-        var bmpResult : Bitmap = null;
-
-        if (bmp.height != 100 || bmp.width != 100) {
-            var m:Matrix = new Matrix();
-            m.scale(100 / bmp.width, 100 / bmp.height);
-            var bmpSmall:BitmapData = new BitmapData(100, 100, false);
-            bmpSmall.draw(bmp, m);
-            bmpResult = new Bitmap(bmpSmall);
-        } else {
-            bmpResult = bmp;
+        for (var i : int = 0; i < result.length; i++) {
+            result.getItemAt(i).convertOriginalByteArrayImageToBitMapImage();
         }
 
-        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-        moduleModel.imageTest = bmp;
+        moduleModel.listeModules = result;
     }
 
     /**

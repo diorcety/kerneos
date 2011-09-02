@@ -114,6 +114,8 @@ public class ModuleModelLocator implements ModelLocator
 
     private var _imageTest : Bitmap = null;
 
+    [ArrayElementType('String')]
+    private var _categories : ArrayCollection = null;
 
     ////////////////////////////////////
     //                                //
@@ -181,6 +183,11 @@ public class ModuleModelLocator implements ModelLocator
      public function set imageTest (_imageTest : Bitmap) : void {
         this._imageTest = _imageTest;
     }
+
+    public function set categories (_categories : ArrayCollection) : void {
+        this._categories = _categories;
+    }
+
     ////////////////////////////////////
     //                                //
     //             Getters            //
@@ -217,6 +224,11 @@ public class ModuleModelLocator implements ModelLocator
     public function get imageTest () : Bitmap {
         return this._imageTest;
     }
+
+    public function get categories () : ArrayCollection {
+        return this._categories;
+    }
+
     ////////////////////////////////////////////
     //                                        //
     //            Delegate Getters            //

@@ -52,6 +52,7 @@ public class ModuleImpl implements ModuleVersion {
     @XmlElementWrapper(name = "categories")
     @XmlElement(name = "category")
     private Collection<CategoryImpl> categories;
+    private byte[] imgOrig;
 
     public ModuleImpl()
     {
@@ -70,6 +71,7 @@ public class ModuleImpl implements ModuleVersion {
         for (Category category : moduleVersion.getModule().getCategories()) {
             categories.add(new CategoryImpl(category));
         }
+        imgOrig = null;
     }
 
     public String getId() {
@@ -162,5 +164,13 @@ public class ModuleImpl implements ModuleVersion {
 
     public void setCategories(Collection<CategoryImpl> categories) {
         this.categories = categories;
+    }
+
+    public byte[] getImgOrig() {
+        return imgOrig;
+    }
+
+    public void setImgOrig(byte[] imgOrig) {
+        this.imgOrig = imgOrig;
     }
 }

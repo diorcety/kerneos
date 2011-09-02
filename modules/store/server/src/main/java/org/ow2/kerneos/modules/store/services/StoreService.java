@@ -31,13 +31,11 @@ import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.kerneos.modules.store.IStoreRS;
 import org.ow2.kerneos.modules.store.IStoreService;
-import org.ow2.kerneos.modules.store.impl.CategoryImpl;
-import org.ow2.kerneos.modules.store.impl.ModuleImpl;
-import org.ow2.kerneos.modules.store.impl.StoreImpl;
-import org.ow2.kerneos.modules.store.impl.StoreRS;
+import org.ow2.kerneos.modules.store.impl.*;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Component
@@ -110,11 +108,13 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      * @return Image of the module with the given id
      */
     @Override
-    public byte[] getModuleImage(String id) {
+    public ModuleImage getModuleImage(String id) {
 
-        //TODO objet icon utility cote flex
         logger.info("Send module image to client flex ");
-        return storeRS.getModuleVersionImage(id);
+        ModuleImage image = new ModuleImage();
+        image.setIdModule(id);
+        image.setImgOrig(storeRS.getModuleVersionImage(id));
+        return image;
     }
 
     /**
@@ -132,6 +132,17 @@ public class StoreService implements KerneosSimpleService, IStoreService {
         return result;
     }
 
+    @Override
+    public Collection<ModuleImpl> searchModulesWithImage(String filter, String field, String order,
+                                                         Integer itemByPage, Integer page) {
+        Collection<ModuleImpl> result = this.searchModules(filter, field, order, itemByPage, page);
+        for (ModuleImpl module : result) {
+            byte[] img = storeRS.getModuleVersionImage(module.getId());
+            module.setImgOrig(img);
+        }
+        return result;
+    }
+
     /**
      *
      * @param id
@@ -144,6 +155,16 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
                                                              Integer itemByPage, Integer page) {
         Collection result = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
+        return result;
+    }
+
+    @Override
+    public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order, Integer itemByPage, Integer page) {
+        Collection<ModuleImpl> result = this.searchModulesByCategory(id, field, order, itemByPage, page);
+        for (ModuleImpl module : result) {
+            byte[] img = storeRS.getModuleVersionImage(module.getId());
+            module.setImgOrig(img);
+        }
         return result;
     }
 
