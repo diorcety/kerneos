@@ -29,12 +29,11 @@
             xsi:schemaLocation="org.ow2.kerneos:module">
   <id>kerneos-store</id>
   <name>Kerneos Store</name>
-  <description>This is a example</description>
+  <description>Kerneos Store is the application to get new modules, install and uninstall it</description>
   <small-icon>icons/icon16.png</small-icon>
   <big-icon>icons/icon64.png</big-icon>
   <file>store.swf</file>
   <services>
-    <service id="hello_service"/>
     <service id="store_service"/>
   </services>
   <mappings>

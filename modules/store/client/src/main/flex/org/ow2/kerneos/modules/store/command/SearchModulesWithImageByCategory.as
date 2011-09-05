@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or

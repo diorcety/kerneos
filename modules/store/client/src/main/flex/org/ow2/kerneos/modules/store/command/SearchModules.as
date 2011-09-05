@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -30,7 +30,6 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.GetModuleEvent;
 import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
 import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
@@ -39,7 +38,6 @@ import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 
 import org.ow2.kerneos.modules.store.business.*;
-import org.ow2.kerneos.modules.store.event.ModuleEvent;
 import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
 import mx.collections.ArrayCollection;

@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ import com.adobe.cairngorm.control.FrontController;
 
 import org.ow2.kerneos.modules.store.command.*;
 import org.ow2.kerneos.modules.store.event.*;
-import org.ow2.kerneos.modules.store.model.*;
 
 
 /**
@@ -41,9 +40,9 @@ public class Controller extends FrontController {
     {
         initialiseCommands();
     }
-    
-    
-    
+
+
+
     /**
      * Add all the commands to the pool of commands.
      *
@@ -58,7 +57,6 @@ public class Controller extends FrontController {
     public function initialiseCommands() : void
     {
         // Add the events to the controler with the associated command
-        this.addCommand(ModuleEvent.GET_MODULE_INFO, ModuleCommand);
         this.addCommand(StoreEvent.GET_STORE, GetStoreInfo);
         this.addCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE, ChangeSelectedModuleInstall);
         this.addCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE, ChangeStoreState);
@@ -77,7 +75,6 @@ public class Controller extends FrontController {
     public function removeCommands() : void
     {
         // Remove the events to the controller with the associated command
-        this.removeCommand(ModuleEvent.GET_MODULE_INFO);
         this.removeCommand(StoreEvent.GET_STORE);
         this.removeCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
         this.removeCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE);

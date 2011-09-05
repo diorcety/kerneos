@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -24,6 +24,9 @@ package org.ow2.kerneos.modules.store.business
 {
 import org.ow2.kerneos.common.business.IDelegateResponder;
 
+/**
+ * The interface of the delegate.
+ */
 public interface IModuleDelegate extends IDelegateResponder
 {
     ////////////////////////////////////////////////////////////////////
@@ -32,9 +35,6 @@ public interface IModuleDelegate extends IDelegateResponder
     //                                                                //
     ////////////////////////////////////////////////////////////////////
 
-    // The interface of the delegate.
-    // Example :
-    function callServerSide(parameters : Object) : void;
 
     function getStore(parameters : Object) : void;
 
@@ -43,16 +43,16 @@ public interface IModuleDelegate extends IDelegateResponder
     function getModuleImage(parameters : Object) : void;
 
     function searchModules(filter : Object, field : Object, order : Object,
-                                  itemByPage : Object, page : Object) : void;
+                           itemByPage : Object, page : Object) : void;
 
     function searchModulesWithImage(filter : Object, field : Object, order : Object,
-                                  itemByPage : Object, page : Object) : void;
+                                    itemByPage : Object, page : Object) : void;
 
     function searchModulesByCategory(id : Object, field : Object, order : Object,
-                                  itemByPage : Object, page : Object) : void;
+                                     itemByPage : Object, page : Object) : void;
 
     function searchModulesWithImageByCategory(id : Object, field : Object, order : Object,
-                                  itemByPage : Object, page : Object) : void;
+                                              itemByPage : Object, page : Object) : void;
 
 }
 }

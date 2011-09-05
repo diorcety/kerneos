@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -91,8 +91,6 @@ public class ModuleModelLocator implements ModelLocator
 
 
     // Put here all the variables of the model
-    // Example :
-    private var _myDataObj : String = null;
 
     private var _myStoreInfo : org.ow2.kerneos.modules.store.vo.StoreVO = null;
 
@@ -155,10 +153,6 @@ public class ModuleModelLocator implements ModelLocator
 
 
     // Put here all the setters for the model update.
-    // Example :
-    public function set myDataObj(_myData : String) : void {
-        this._myDataObj = _myData;
-    }
 
     public function set myStoreInfo (_myStore : org.ow2.kerneos.modules.store.vo.StoreVO) : void {
         this._myStoreInfo = _myStore;
@@ -180,7 +174,7 @@ public class ModuleModelLocator implements ModelLocator
         this._mainModule = _mainModule;
     }
 
-     public function set imageTest (_imageTest : Bitmap) : void {
+    public function set imageTest (_imageTest : Bitmap) : void {
         this._imageTest = _imageTest;
     }
 
@@ -196,17 +190,13 @@ public class ModuleModelLocator implements ModelLocator
 
 
     // Put here all the getters to access the model variables
-    // Example :
-    public function get myDataObj() : String {
-        return this._myDataObj;
-    }
 
     public function get myStoreInfo () : org.ow2.kerneos.modules.store.vo.StoreVO {
         return this._myStoreInfo
     }
 
-     public function get storeState () : String {
-       return this._storeState;
+    public function get storeState () : String {
+        return this._storeState;
     }
 
     public function get listeSelectedModules () : ArrayCollection {

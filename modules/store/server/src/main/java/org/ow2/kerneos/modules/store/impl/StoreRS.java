@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -71,7 +71,7 @@ public class StoreRS implements IStoreRS {
 
     @Override
     public Collection<ModuleVersion> searchModules(String filter, String field, String order,
-                                                             Integer itemByPage, Integer page) {
+                                                   Integer itemByPage, Integer page) {
         Client client = new Client();
 
         MultivaluedMap queryParams = new MultivaluedMapImpl();
@@ -108,25 +108,25 @@ public class StoreRS implements IStoreRS {
             }
         }
 
-            /*URI uri = new URI(null, null,"/modules/" + filter,null);
-            String test = uri.toASCIIString();*/
+        /*URI uri = new URI(null, null,"/modules/" + filter,null);
+     String test = uri.toASCIIString();*/
 
-            WebResource webResource = client.resource(url + "/modules/" + filterURL);
+        WebResource webResource = client.resource(url + "/modules/" + filterURL);
 
-            GenericType<Collection<ModuleImpl>> genericModules =
-                    new GenericType<Collection<ModuleImpl>>() {};
+        GenericType<Collection<ModuleImpl>> genericModules =
+                new GenericType<Collection<ModuleImpl>>() {};
 
 
-            Collection modulesResult =
-                    webResource.queryParams(queryParams).get(genericModules);
+        Collection modulesResult =
+                webResource.queryParams(queryParams).get(genericModules);
 
-            return modulesResult;
+        return modulesResult;
     }
 
     @Override
     public Collection<ModuleVersion> searchModulesByCategory(String id, String field, String order,
-                                                                       Integer itemByPage, Integer page) {
-         Client client = new Client();
+                                                             Integer itemByPage, Integer page) {
+        Client client = new Client();
 
         MultivaluedMap queryParams = new MultivaluedMapImpl();
 
@@ -146,7 +146,7 @@ public class StoreRS implements IStoreRS {
             queryParams.add("page", page);
         }
 
-         WebResource webResource = client.resource(url + "/category/"+id+"/modules");
+        WebResource webResource = client.resource(url + "/category/"+id+"/modules");
 
         GenericType<Collection<ModuleImpl>> genericModules =
                 new GenericType<Collection<ModuleImpl>>() {};

@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -71,16 +71,16 @@ public class SearchModulesWithImage implements ICommand, IResponder
 
         var itemByPage : Object;
         if ((event as SearchModulesEvent).itemByPage < 0) {
-          itemByPage = null;
+            itemByPage = null;
         } else {
-          itemByPage = (event as SearchModulesEvent).itemByPage;
+            itemByPage = (event as SearchModulesEvent).itemByPage;
         }
 
         var page : Object;
         if ((event as SearchModulesEvent).page < 0) {
-          page = null;
+            page = null;
         } else {
-          page = (event as SearchModulesEvent).page;
+            page = (event as SearchModulesEvent).page;
         }
 
         delegate.searchModulesWithImage(filter, field, order, itemByPage, page);

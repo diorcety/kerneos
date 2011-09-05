@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -37,21 +37,6 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
 
     // Put here the method that will trigger the code to execute following a dispatched event
     // in the cairngorm architecture.
-    // Example :
-    public function callServerSide(parameters : Object) : void
-    {
-        // find the service
-        // "hello_service" is defined in kerneos-module.xml as
-        // <service id="hello_service"/>
-        var service : Object = ServiceLocator.getInstance().getRemoteObject("hello_service");
-
-        // Make the service call. The method called on service is the method name
-        // of the java class bound with the remote object, with its parameters.
-        var call : Object = service.sayHello(parameters);
-
-        // add responder to handle the callback
-        call.addResponder(this.responder);
-    }
 
     public function getStore(parameters : Object) : void
     {
@@ -67,12 +52,12 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
-     public function getModuleImage(parameters : Object) : void
-     {
+    public function getModuleImage(parameters : Object) : void
+    {
         var service : Object = ServiceLocator.getInstance().getRemoteObject("store_service");
         var call : Object = service.getModuleImage(parameters);
         call.addResponder(this.responder);
-     }
+    }
 
     public function searchModules(filter : Object, field : Object, order : Object,
                                   itemByPage : Object, page : Object) : void

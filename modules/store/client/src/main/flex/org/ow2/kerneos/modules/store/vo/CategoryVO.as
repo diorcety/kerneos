@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -22,51 +22,51 @@
  */
 package org.ow2.kerneos.modules.store.vo
 {
-    import com.adobe.cairngorm.vo.IValueObject;
+import com.adobe.cairngorm.vo.IValueObject;
 
-    [Bindable]
-    public class CategoryVO implements IValueObject
+[Bindable]
+public class CategoryVO implements IValueObject
+{
+
+    private var _id:String;
+    private var _name:String;
+    private var _description:String;
+
+
+    public function CategoryVO()
     {
-
-        private var _id:String;
-        private var _name:String;
-        private var _description:String;
-
-
-        public function CategoryVO()
-        {
-        }
-
-        public function get id():String
-        {
-            return _id;
-        }
-
-        public function set id(id:String):void
-        {
-            this._id = id;
-        }
-
-        public function get name():String
-        {
-            return _name;
-        }
-
-        public function set name(value:String):void
-        {
-            _name = value;
-        }
-
-        public function get description():String
-        {
-            return _description;
-        }
-
-        public function set description(value:String):void
-        {
-            _description = value;
-        }
-
     }
+
+    public function get id():String
+    {
+        return _id;
+    }
+
+    public function set id(id:String):void
+    {
+        this._id = id;
+    }
+
+    public function get name():String
+    {
+        return _name;
+    }
+
+    public function set name(value:String):void
+    {
+        _name = value;
+    }
+
+    public function get description():String
+    {
+        return _description;
+    }
+
+    public function set description(value:String):void
+    {
+        _description = value;
+    }
+
+}
 
 }

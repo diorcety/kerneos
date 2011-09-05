@@ -1,6 +1,6 @@
 /**
  * Kerneos
- * Copyright (C) 2009-2011 Bull S.A.S.
+ * Copyright (C) 2011 Bull S.A.S.
  * Contact: jasmine AT ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -24,32 +24,18 @@ package org.ow2.kerneos.modules.store.command
 {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
-import com.adobe.cairngorm.control.CairngormEventDispatcher;
-
-import mx.rpc.IResponder;
-import mx.rpc.events.FaultEvent;
-import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
 
-import org.ow2.kerneos.modules.store.vo.StoreVO;
-
-// Server Exceptions imports
-import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
-import org.ow2.kerneos.common.view.ServerSideException;
-
-import org.ow2.kerneos.modules.store.business.*;
-import org.ow2.kerneos.modules.store.event.ModuleEvent;
 import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
 /**
   * The command class from the cairngorm model.
   */
-[Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class ChangeStoreState implements ICommand, IResponder
+public class ChangeStoreState implements ICommand
 {
     /**
-     * Retrieve the delegate and use it to make the call.
+     * Update the model variables
      */
     public function execute(event:CairngormEvent):void
     {
@@ -64,30 +50,6 @@ public class ChangeStoreState implements ICommand, IResponder
             ModuleModelLocator.getInstance().mainModule = (event as ChangeStoreStateEvent).moduleDetail;
         }
 
-    }
-
-    /**
-     * Handle the result of the server call.
-     */
-    public function result(data:Object):void
-    {
-        ////////////////////////////////////////////////
-        //                                            //
-        //             Handle the result              //
-        //                                            //
-        ////////////////////////////////////////////////
-    }
-
-    /**
-     * Raise an alert when something is wrong.
-     */
-    public function fault(info:Object):void
-    {
-        ////////////////////////////////////////
-        //                                    //
-        //             Handle fault           //
-        //                                    //
-        ////////////////////////////////////////
     }
 
 }

@@ -28,7 +28,6 @@ package org.ow2.kerneos.modules.store.impl;
 import org.ow2.kerneosstore.api.Category;
 import org.ow2.kerneosstore.api.Module;
 import org.ow2.kerneosstore.api.ModuleVersion;
-import org.ow2.kerneosstore.web.CategoryElement;
 
 import javax.xml.bind.annotation.*;
 import java.util.Collection;

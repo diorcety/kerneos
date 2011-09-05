@@ -2,7 +2,7 @@
 <!--
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      - Kerneos
-     - Copyright (C) 2009-2011 Bull S.A.S.
+     - Copyright (C) 2011 Bull S.A.S.
      - Contact: jasmine AT ow2.org
      -
      - This library is free software; you can redistribute it and/or
@@ -50,9 +50,9 @@
         <!-- Instantiate the controller. A controller a module -->
         <control:Controller id="controller"/>
 
-       <s:ArrayCollection id="modulesResultList">
+        <s:ArrayCollection id="modulesResultList">
             <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" version="1.4.2" category="Monitoring"
-                       description="Monitoring lets you visualize, analyze and export graph.
+                         description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
 						  4 Monitoring lets you visualize, analyze and export graphs. 
@@ -70,7 +70,7 @@
 
         <s:ArrayCollection id="modulesSearchResultList">
             <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" version="1.4.2" category="Monitoring"
-                       description="Monitoring lets you visualize, analyze and export graph.
+                         description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
 						  4 Monitoring lets you visualize, analyze and export graphs. 
@@ -78,7 +78,7 @@
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
             <vo:ModuleVO name="Probe Manager" author="BULL SAS" version="1.4.0" category="Admin"
-                       description="Monitoring lets you visualize, analyze and export graph.
+                         description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
 						  4 Monitoring lets you visualize, analyze and export graphs. 
@@ -86,7 +86,7 @@
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
             <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"
-                       description="Monitoring lets you visualize, analyze and export graph.
+                         description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
 						  4 Monitoring lets you visualize, analyze and export graphs. 
@@ -94,7 +94,7 @@
 						  6 Monitoring lets you visualize, analyze and export graphs. 
 						  7 Monitoring lets you visualize, analyze and export graphs."/>
             <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"
-                       description="Monitoring lets you visualize, analyze and export graph.
+                         description="Monitoring lets you visualize, analyze and export graph.
 						  2 Monitoring lets you visualize, analyze and export graphs. 
 						  3 Monitoring lets you visualize, analyze and export graphs. 
 						  4 Monitoring lets you visualize, analyze and export graphs. 
@@ -122,30 +122,27 @@
 
             import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
             import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
-            import org.ow2.kerneos.modules.store.event.GetModuleEvent;
 
-            import org.ow2.kerneos.modules.store.event.ModuleEvent;
             import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
-            import org.ow2.kerneos.modules.store.event.StoreEvent;
 
             import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
             import org.ow2.kerneos.modules.store.vo.ModuleVO;
-            import org.ow2.kerneos.modules.store.vo.StoreVO;
 
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
             import mx.events.ItemClickEvent;
             import mx.collections.ArrayCollection;
 
-           //private var _selectModule:org.ow2.kerneos.modules.store.vo.ModuleVO;
-
-            private var _servicesClasses:Dictionary;
-
             /**
              * Keywords used to look up for modules
              */
             [Bindable]
             private var _keywords:String;
+
+            /**
+             * Default search keyword
+             */
+            private var _defaultSearchText:String = "Module's Name..";
 
             // =========================================================================
             // Implementation of KerneosModule
@@ -180,39 +177,18 @@
             protected function init():void {
                 this.id = "moduleStoreModule";
 
-                /*_selectModule = new org.ow2.kerneos.modules.store.vo.ModuleVO();
-                _selectModule.name = "JASMINe Monitoring";
-                _selectModule.author = "BULL SAS";
-                _selectModule.description = "Monitoring lets you visualize, analyze and export graphs."
-                        + "2 Monitoring lets you visualize, analyze and export graphs."
-                        + "3 Monitoring lets you visualize, analyze and export graphs."
-                        + "4 Monitoring lets you visualize, analyze and export graphs."
-                        + "5 Monitoring lets you visualize, analyze and export graphs."
-                        + "6 Monitoring lets you visualize, analyze and export graphs."
-                        + "7 Monitoring lets you visualize, analyze and export graphs.";
-
-                [Embed(source='/../assets/logo_jasmine_monitoring.png')] var icon:Class;
-
-                _selectModule.icon = icon;
-                _selectModule.size = 4000;
-                //_selectModule.date = new Date();
-                _selectModule.version = "1.4.2";
-                _selectModule.category = "Monitoring";
-                _selectModule.installsNumber = 1000000;*/
-
                 //Change application state when click on one menu item
                 linkBar.addEventListener(ItemClickEvent.ITEM_CLICK, handleLinkBar);
 
-                searchInput.text = "Module's Name..";
+
+                searchInput.text = _defaultSearchText;
                 searchInput.addEventListener(FocusEvent.FOCUS_IN, handleSearchInputFocusIn);
                 searchInput.addEventListener(FocusEvent.FOCUS_OUT, handleSearchInputFocusOut);
 
                 ModuleModelLocator.getInstance().listeSelectedModules = new ArrayCollection();
                 ModuleModelLocator.getInstance().listeModules = new ArrayCollection();
 
-                /*this.addEventListener(SelectedModuleEvent.SELECTED_MODULE_CHANGE, onItemChanged);*/
-                var categories : ArrayCollection = new ArrayCollection(["util","util","util","util"]);
-
+                var categories:ArrayCollection = new ArrayCollection(["util","util","util","util"]);
                 ModuleModelLocator.getInstance().categories = categories;
             }
 
@@ -228,7 +204,7 @@
 
             private function handleSearchInputFocusOut(event:FocusEvent):void {
                 if (searchInput.text == "") {
-                    searchInput.text = "Module's Name..";
+                    searchInput.text = this._defaultSearchText;
                 }
             }
 
@@ -258,11 +234,9 @@
             }
 
             protected function searchInput_enterHandler():void {
-                /*Alert.show("Find modules by word : " + searchInput.text);*/
-
                 _keywords = searchInput.text;
                 searchIconButton.setFocus();
-                var search_modules_event : SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE);
+                var search_modules_event:SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE);
                 search_modules_event.filter = searchInput.text;
                 CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
 
@@ -273,53 +247,9 @@
 
 
             private function handleInstalledModulesState():void {
-
                 var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
                 evt.state = "InstalledModules";
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
-
-                //Dispatch calls to server methods, Test API REST
-
-                var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.GET_MODULE_INFO);
-                CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
-
-                var store_event:StoreEvent = new StoreEvent(StoreEvent.GET_STORE);
-                store_event.url = "localhost...";
-                CairngormEventDispatcher.getInstance().dispatchEvent(store_event);
-
-                var get_module_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE);
-                get_module_event.id = "apache-commons-io";
-                CairngormEventDispatcher.getInstance().dispatchEvent(get_module_event);
-
-                var get_module_image_event:GetModuleEvent = new GetModuleEvent(GetModuleEvent.GET_MODULE_IMAGE);
-                get_module_image_event.id = "apache-commons-io";
-                CairngormEventDispatcher.getInstance().dispatchEvent(get_module_image_event);
-
-                var search_modules_event:SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES);
-                search_modules_event.filter = "   Apache    Commons I0 ";
-                CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
-
-            }
-
-            /**
-             * The message is showed when myData in the ModelLocator is modified,
-             * a pop-up with the message is displayed
-             */
-            private function set newMessage(message:String):void {
-                if (message != null) {
-                    Alert.show("Store name " + message);
-                }
-            }
-
-            /**
-             * The message is showed when myStoreInfo in the ModelLocator is modified
-             */
-            private function set newStoreInfo(storeInfo:org.ow2.kerneos.modules.store.vo.StoreVO):void {
-                if (storeInfo != null) {
-                    /* labelModuleNameTest.text = storeInfo.name;
-                     labelModuleDescriptionTest.text = storeInfo.description;
-                     labelModuleURLTest.text = storeInfo.url;*/
-                }
             }
 
             /**
@@ -331,30 +261,9 @@
                 }
             }
 
-            /**
-             * Test server call getModule
-             * @param mainModule
-             */
-            private function set mainModuleDetail(mainModule:ModuleVO):void {
-                if (mainModule != null) {
-                    Alert.show("Module Name " + mainModule.name);
-                }
-            }
-
-            /**
-             * Test server call getModule
-             * @param mainModule
-             */
-            private function set testChangeImage(image:Bitmap):void {
-                if (image != null) {
-                    imageTestBitmap.source = ModuleModelLocator.getInstance().imageTest;
-                    imageTestBitmap.visible = true;
-                }
-            }
-
             private function searchModulesByCategory(evt:ItemClickEvent):void {
-                var category : int = evt.index;
-                var categoryName : String = getValidCategory(category);
+                var category:int = evt.index;
+                var categoryName:String = getValidCategory(category);
 
                 var search_modules_event:SearchModulesEvent =
                         new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY);
@@ -362,14 +271,13 @@
                 CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
             }
 
-            private function getValidCategory(index:int) : String {
+            private function getValidCategory(index:int):String {
                 if (index >= 0 && index < ModuleModelLocator.getInstance().categories.length) {
                     return ModuleModelLocator.getInstance().categories[index];
                 } else {
                     return "";
                 }
             }
-
             ]]>
 		</fx:Script>
 
@@ -402,6 +310,7 @@
         <!-- Main Conteneur -->
         <s:BorderContainer x="190" y="96" width="553" height="463">
             <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461" >
+                <!-- First category container -->
                 <s:NavigatorContent id="navUtilModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[0]}">
                     <s:DataGroup id="dgPopularModules" x="0" y="0" width="100%" height="100%"
@@ -419,7 +328,7 @@
                     </s:DataGroup>
                 </s:NavigatorContent>
 
-
+                <!-- Second category container -->
                 <s:NavigatorContent id="navMonitoringModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[1]}">
                     <s:DataGroup id="dgMonitoringModules" x="0" y="0" width="100%" height="100%"
@@ -436,6 +345,8 @@
                         </s:layout>
                     </s:DataGroup>
                 </s:NavigatorContent>
+
+                <!-- Third category container -->
                 <s:NavigatorContent id="navAdminModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[2]}">
                     <s:DataGroup id="dgAdminModules" x="0" y="0" width="100%" height="100%"
@@ -452,6 +363,8 @@
                         </s:layout>
                     </s:DataGroup>
                 </s:NavigatorContent>
+
+                <!-- Fourth category container -->
                 <s:NavigatorContent id="navOthersModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[3]}">
                     <s:DataGroup id="dgOthersModules" x="0" y="0" width="100%" height="100%"
@@ -518,15 +431,6 @@
                 <s:Button x="169" y="329" label="Uninstall" click="Alert.show('Uninstall selected modules');"/>
                 <mx:Label x="50" y="289" text="{modulesResultList.length + ' result(s) ' +
                 ModuleModelLocator.getInstance().listeSelectedModules.length+' selected item(s)' }" />
-
-                <!--TEST APPEL STORE API REST -->
-                <!--<mx:Label id="labelModuleNameTest" x="15" y="15" text="" />
-                <mx:Label id="labelModuleDescriptionTest" x="15" y="50" text="" />
-                <mx:Label id="labelModuleURLTest" x="15" y="85" text="" />-->
-
-                <!-- Test get module image from REST -->
-                <s:BitmapImage id="imageTestBitmap" x="300" y="329" source="ModuleModelLocator.getInstance().imageTest"/>
-
             </s:Group>
 
             <!-- Find Modules View-->
@@ -545,14 +449,6 @@
         </s:BorderContainer>
     </s:Group>
 
-    <fx:Binding source="ModuleModelLocator.getInstance().myDataObj" destination="newMessage"/>
-
-    <fx:Binding source="ModuleModelLocator.getInstance().myStoreInfo" destination="newStoreInfo"/>
-
     <fx:Binding source="ModuleModelLocator.getInstance().storeState" destination="newStoreState"/>
-
-    <fx:Binding source="ModuleModelLocator.getInstance().mainModule" destination="mainModuleDetail"/>
-
-    <fx:Binding source="ModuleModelLocator.getInstance().imageTest" destination="testChangeImage"/>
 
 </mx:Module>
