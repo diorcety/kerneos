@@ -33,13 +33,22 @@ import com.sun.jersey.api.client.WebResource;
 import org.ow2.kerneosstore.api.Category;
 import org.ow2.kerneosstore.api.ModuleVersion;
 import org.ow2.kerneosstore.api.Repository;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
 public class StoreRS implements IStoreRS {
     private String url = "http://localhost:9000/store";
+
+      /**
+     * The logger
+     */
+    private static Log logger = LogFactory.getLog(StoreRS.class);
 
     public org.ow2.kerneosstore.api.Store getStore() {
         Client client = new Client();
@@ -108,19 +117,27 @@ public class StoreRS implements IStoreRS {
             }
         }
 
-        /*URI uri = new URI(null, null,"/modules/" + filter,null);
-     String test = uri.toASCIIString();*/
+        try {
+            //test if the url is good
+            URI uri = new URI(url + "/modules/" + filterURL);
 
-        WebResource webResource = client.resource(url + "/modules/" + filterURL);
+            WebResource webResource = client.resource(url + "/modules/" + filterURL);
 
-        GenericType<Collection<ModuleImpl>> genericModules =
-                new GenericType<Collection<ModuleImpl>>() {};
+            GenericType<Collection<ModuleImpl>> genericModules =
+                    new GenericType<Collection<ModuleImpl>>() {};
 
 
-        Collection modulesResult =
-                webResource.queryParams(queryParams).get(genericModules);
+            Collection modulesResult =
+                    webResource.queryParams(queryParams).get(genericModules);
 
-        return modulesResult;
+            return modulesResult;
+        }catch (URISyntaxException ex) {
+
+            logger.error(ex.getStackTrace());
+
+            //TODO create own exception with a good message
+            return null;
+        }
     }
 
     @Override
@@ -146,16 +163,25 @@ public class StoreRS implements IStoreRS {
             queryParams.add("page", page);
         }
 
-        WebResource webResource = client.resource(url + "/category/"+id+"/modules");
+        try {
+            //test if the url is good
+            URI uri = new URI(url + "/category/"+id+"/modules");
 
-        GenericType<Collection<ModuleImpl>> genericModules =
-                new GenericType<Collection<ModuleImpl>>() {};
+            WebResource webResource = client.resource(url + "/category/"+id+"/modules");
+
+            GenericType<Collection<ModuleImpl>> genericModules =
+                    new GenericType<Collection<ModuleImpl>>() {};
 
 
-        Collection modulesResult =
-                webResource.queryParams(queryParams).get(genericModules);
+            Collection modulesResult =
+                    webResource.queryParams(queryParams).get(genericModules);
 
-        return modulesResult;
+            return modulesResult;
+        }catch (URISyntaxException ex) {
+            logger.error(ex.getStackTrace());
+            //TODO create own exception with a good message
+            return null;
+        }
     }
 
     @Override

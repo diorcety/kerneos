@@ -236,8 +236,20 @@
             protected function searchInput_enterHandler():void {
                 _keywords = searchInput.text;
                 searchIconButton.setFocus();
+
+                if (_keywords != "") {
+                    var pattern:RegExp = /[\w\d:#%\/;$()~_?\\\-=.&+]+/g;
+                    var words : Array = _keywords.match(pattern);
+
+                    if (words != null && words[0] != null) {
+                        _keywords = words[0];
+                    } else {
+                        _keywords = "";
+                    }
+                }
+
                 var search_modules_event:SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE);
-                search_modules_event.filter = searchInput.text;
+                search_modules_event.filter = _keywords;
                 CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
 
                 var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
