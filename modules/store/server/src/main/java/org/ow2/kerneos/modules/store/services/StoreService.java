@@ -185,7 +185,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      * @return Confirmation message of good or wrong module install
      */
     @Override
-    public String downloadModule(String id) {
+    public String installModule(String id) {
         byte[] module = storeRS.downloadModule(id);
 
         if (module == null) {
@@ -194,5 +194,11 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
         //TODO install module in the osgi framework
         return "";
+    }
+
+    @Override
+    public Collection<ModuleImpl> getInstalledModules() {
+        //TODO
+        return null;
     }
 }

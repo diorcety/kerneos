@@ -43,5 +43,7 @@ public interface IStoreService {
                                                           Integer itemByPage, Integer page);
     public Collection<ModuleImpl> getCategories();
     public CategoryImpl getCategory(String id);
-    public String downloadModule(String id);
+    public String installModule(String id);
+    public Collection<ModuleImpl> getInstalledModules();
+
 }
