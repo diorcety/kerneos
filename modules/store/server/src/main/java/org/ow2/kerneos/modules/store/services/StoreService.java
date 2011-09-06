@@ -188,6 +188,8 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     public String installModule(String id) {
         byte[] module = storeRS.downloadModule(id);
 
+        logger.info("Install module " + id +" with size : " + module.length);
+
         if (module == null) {
             return "";
         }

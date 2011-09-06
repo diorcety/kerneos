@@ -34,11 +34,16 @@
         import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
         import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
+        import org.ow2.kerneos.modules.store.event.InstallModuleEvent;
         import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
         import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
         protected function installModuleButton_clickHandler(event:MouseEvent):void {
-            Alert.show("Install " + data.name);
+            //TODO show confirmation message and maybe a progress status bar
+            // Alert.show("Install " + data.name);
+            var evt : InstallModuleEvent = new InstallModuleEvent(InstallModuleEvent.INSTALL_MODULE);
+            evt.id = (data as ModuleVO).id;
+            CairngormEventDispatcher.getInstance().dispatchEvent(evt);
         }
 
         protected function moduleIcon_clickHandler(event:MouseEvent):void {

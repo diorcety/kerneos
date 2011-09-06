@@ -54,5 +54,7 @@ public interface IModuleDelegate extends IDelegateResponder
     function searchModulesWithImageByCategory(id : Object, field : Object, order : Object,
                                               itemByPage : Object, page : Object) : void;
 
+    function installModule(parameters : Object) : void;
+
 }
 }

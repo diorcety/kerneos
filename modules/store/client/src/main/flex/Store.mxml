@@ -122,6 +122,7 @@
 
             import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
             import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
+            import org.ow2.kerneos.modules.store.event.InstallModuleEvent;
 
             import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
 
@@ -290,6 +291,14 @@
                     return "";
                 }
             }
+
+            private function installModule():void {
+                //TODO show confirmation message and maybe a progress status bar
+                // Alert.show("Install " + data.name);
+                var evt : InstallModuleEvent = new InstallModuleEvent(InstallModuleEvent.INSTALL_MODULE);
+                evt.id = ModuleModelLocator.getInstance().mainModule.id;
+                CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+            }
             ]]>
 		</fx:Script>
 
@@ -404,7 +413,7 @@
                 <s:Label x="146" y="39" width="381" height="21" fontSize="14"
                          fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.author}"/>
                 <s:Label x="146" y="68" width="395" height="99" text="{ModuleModelLocator.getInstance().mainModule.description}"/>
-                <s:Button x="40" y="146" label="Install"/>
+                <s:Button x="40" y="146" label="Install" click="installModule()"/>
                 <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
                          text="About this module"/>
                 <s:Label x="10" y="217" fontSize="14" text="Updated:"/>

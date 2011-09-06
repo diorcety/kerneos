@@ -66,6 +66,7 @@ public class Controller extends FrontController {
         this.addCommand(SearchModulesEvent.SEARCH_MODULES_BY_CATEGORY, SearchModulesByCategory);
         this.addCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE, SearchModulesWithImage);
         this.addCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY, SearchModulesWithImageByCategory);
+        this.addCommand(InstallModuleEvent.INSTALL_MODULE, InstallModule);
     }
 
     /**
@@ -84,6 +85,7 @@ public class Controller extends FrontController {
         this.removeCommand(SearchModulesEvent.SEARCH_MODULES_BY_CATEGORY);
         this.removeCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE);
         this.removeCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY);
+        this.removeCommand(InstallModuleEvent.INSTALL_MODULE);
     }
 
 }
