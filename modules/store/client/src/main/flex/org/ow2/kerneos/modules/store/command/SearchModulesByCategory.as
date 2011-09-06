@@ -132,7 +132,7 @@ public class SearchModulesByCategory implements ICommand, IResponder
         // Tell the view and let it handle this
         var serverSideExceptionEvent : ServerSideExceptionEvent =
                 new ServerSideExceptionEvent(
-                        "serverSideException",
+                        "serverSideException"+ ModuleModelLocator.getInstance().componentID,
                         new ServerSideException("Error while Executing the action",
                                 "The operation could not be performed."
                                         + "\n" + faultEvent.fault.faultCode
