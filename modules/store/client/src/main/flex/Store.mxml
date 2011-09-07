@@ -26,6 +26,7 @@
            xmlns:s="library://ns.adobe.com/flex/spark"
            xmlns:mx="library://ns.adobe.com/flex/mx"
            xmlns:control="org.ow2.kerneos.modules.store.control.*"
+           xmlns:view="org.ow2.kerneos.modules.store.view.*"
            implements="org.ow2.kerneos.core.api.KerneosModule"
            xmlns:vo="org.ow2.kerneos.modules.store.vo.*"
            layout="absolute" width="100%" height="100%"
@@ -143,7 +144,7 @@
                 CairngormEventDispatcher.getInstance().dispatchEvent(get_stores_event);
 
 
-                var categories:ArrayCollection = new ArrayCollection(["util","util","util","util"]);
+                var categories:ArrayCollection = new ArrayCollection(["jasmine", "jasmine" , "jasmine"]);
                 ModuleModelLocator.getInstance().categories = categories;
             }
 
@@ -161,31 +162,6 @@
                 if (searchInput.text == "") {
                     searchInput.text = this._defaultSearchText;
                 }
-            }
-
-            private function handleDGInstalledModulesClick(event:ListEvent):void {
-                if (event.columnIndex != 0) {
-                    (dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.ModuleVO).selected =
-                            !(dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.ModuleVO).selected;
-
-                    var evt:ChangeSelectedModuleInstallEvent = new ChangeSelectedModuleInstallEvent(
-                            ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
-                    evt.item = dgInstalledModules.selectedItem;
-                    CairngormEventDispatcher.getInstance().dispatchEvent(evt);
-                }
-            }
-
-            private function chkbxAllSelectHandler(evt:Event):void {
-                ModuleModelLocator.getInstance().listSelectedModules.removeAll();
-
-                for each (var item:Object in ModuleModelLocator.getInstance().listInstalledModules) {
-                    item.selected = chkbxAllSelect.selected;
-                    if (item.selected) {
-                        ModuleModelLocator.getInstance().listSelectedModules.addItem(item);
-
-                    }
-                }
-                ModuleModelLocator.getInstance().listInstalledModules.refresh();
             }
 
             private function searchInput_enterHandler():void {
@@ -255,26 +231,6 @@
                 var evt:ModuleEvent = new ModuleEvent(ModuleEvent.INSTALL_MODULE);
                 evt.id = ModuleModelLocator.getInstance().mainModule.id;
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
-            }
-
-            private function uninstallModules():void {
-                if (ModuleModelLocator.getInstance().listSelectedModules.length > 0) {
-                    for each (var module:ModuleVO in ModuleModelLocator.getInstance().listSelectedModules) {
-                        var evt:ModuleEvent = new ModuleEvent(ModuleEvent.UNINSTALL_MODULE);
-                        evt.id = module.id;
-                        CairngormEventDispatcher.getInstance().dispatchEvent(evt);
-                    }
-                }
-            }
-
-            private function updateModules():void {
-                if (ModuleModelLocator.getInstance().listSelectedModules.length > 0) {
-                    for each (var module:ModuleVO in ModuleModelLocator.getInstance().listSelectedModules) {
-                        var evt:ModuleEvent = new ModuleEvent(ModuleEvent.UPDATE_MODULE);
-                        evt.id = module.id;
-                        CairngormEventDispatcher.getInstance().dispatchEvent(evt);
-                    }
-                }
             }
             ]]>
 		</fx:Script>
@@ -413,25 +369,7 @@
             </s:Group>
 
             <!-- Installed Modules View-->
-            <s:Group includeIn="InstalledModules" x="0" y="0" width="100%" height="100%">
-                <mx:CheckBox id="chkbxAllSelect" x="63" y="6" width="200"
-                             label="{(chkbxAllSelect.selected)?'Deselect All':'Select All'}"
-                             change="chkbxAllSelectHandler(event)"/>
-                <mx:DataGrid id="dgInstalledModules" x="43" y="42" height="236" dataProvider="{ModuleModelLocator.getInstance().listInstalledModules}"
-                             itemClick="handleDGInstalledModulesClick(event)">
-                    <mx:columns>
-                        <mx:DataGridColumn width="60" dataField="selected" headerText="Select" sortable="false"
-                                           itemRenderer="org.ow2.kerneos.modules.store.view.render.chkBxRender"></mx:DataGridColumn>
-                        <mx:DataGridColumn width="160" dataField="name" headerText="Name"></mx:DataGridColumn>
-                        <mx:DataGridColumn width="110" dataField="version" headerText="Version"></mx:DataGridColumn>
-                        <mx:DataGridColumn width="130" dataField="category" headerText="Category"></mx:DataGridColumn>
-                    </mx:columns>
-                </mx:DataGrid>
-                <s:Button x="43" y="329" label="Update" click="updateModules()"/>
-                <s:Button x="169" y="329" label="Uninstall" click="uninstallModules()"/>
-                <mx:Label x="50" y="289" text="{ModuleModelLocator.getInstance().listInstalledModules.length + ' result(s) ' +
-                ModuleModelLocator.getInstance().listSelectedModules.length+' selected item(s)'}"/>
-            </s:Group>
+            <view:InstalledView includeIn="InstalledModules" x="0" y="0" width="100%" height="100%"/>
 
             <!-- Find Modules View-->
             <s:Group includeIn="FindModules" x="0" y="0" width="100%" height="100%">

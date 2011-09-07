@@ -155,7 +155,7 @@
             <optimize>${flex-optimize}</optimize>
             <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
             <targetPlayer>${player.version}</targetPlayer>
-            <swfVersion>11</swfVersion>
+            <swfVersion>${swf.version}</swfVersion>
           </configuration>
           <dependencies>
             <dependency>
