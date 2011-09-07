@@ -322,7 +322,7 @@
                 <mx:HRule x="10" y="30" width="531"/>
                 <s:DataGroup x="0" y="35" width="545" height="422"
                              dataProvider="{ModuleModelLocator.getInstance().listModules}"
-                             itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleResearchRenderer">
+                             itemRenderer="org.ow2.kerneos.modules.store.view.render.ModuleResearchRenderer">
                     <s:layout>
                         <s:VerticalLayout gap="5" requestedRowCount="4" rowHeight="102"
                                           variableRowHeight="false"/>

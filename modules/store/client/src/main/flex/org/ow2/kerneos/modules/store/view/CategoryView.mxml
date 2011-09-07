@@ -41,7 +41,7 @@
 
     <s:DataGroup id="categoryDG" x="0" y="0" width="100%" height="100%"
                  dataProvider="{ModuleModelLocator.getInstance().listModules}"
-                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer">
+                 itemRenderer="org.ow2.kerneos.modules.store.view.render.ModuleIndexRenderer">
         <s:layout>
             <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
                           requestedRowCount="2" rowHeight="200"/>
