@@ -49,60 +49,6 @@
     <fx:Declarations>
         <!-- Instantiate the controller. A controller a module -->
         <control:Controller id="controller"/>
-
-        <s:ArrayCollection id="modulesResultList">
-            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" version="1.4.2" category="Monitoring"
-                         description="Monitoring lets you visualize, analyze and export graph.
-						  2 Monitoring lets you visualize, analyze and export graphs. 
-						  3 Monitoring lets you visualize, analyze and export graphs. 
-						  4 Monitoring lets you visualize, analyze and export graphs. 
-						  5 Monitoring lets you visualize, analyze and export graphs. 
-						  6 Monitoring lets you visualize, analyze and export graphs. 
-						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Probe Manager" author="BULL SAS" version="1.4.0" category="Admin"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"/>
-        </s:ArrayCollection>
-
-        <s:ArrayCollection id="modulesSearchResultList">
-            <vo:ModuleVO name="JASMINe Monitoring" author="BULL SAS" version="1.4.2" category="Monitoring"
-                         description="Monitoring lets you visualize, analyze and export graph.
-						  2 Monitoring lets you visualize, analyze and export graphs. 
-						  3 Monitoring lets you visualize, analyze and export graphs. 
-						  4 Monitoring lets you visualize, analyze and export graphs. 
-						  5 Monitoring lets you visualize, analyze and export graphs. 
-						  6 Monitoring lets you visualize, analyze and export graphs. 
-						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Probe Manager" author="BULL SAS" version="1.4.0" category="Admin"
-                         description="Monitoring lets you visualize, analyze and export graph.
-						  2 Monitoring lets you visualize, analyze and export graphs. 
-						  3 Monitoring lets you visualize, analyze and export graphs. 
-						  4 Monitoring lets you visualize, analyze and export graphs. 
-						  5 Monitoring lets you visualize, analyze and export graphs. 
-						  6 Monitoring lets you visualize, analyze and export graphs. 
-						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"
-                         description="Monitoring lets you visualize, analyze and export graph.
-						  2 Monitoring lets you visualize, analyze and export graphs. 
-						  3 Monitoring lets you visualize, analyze and export graphs. 
-						  4 Monitoring lets you visualize, analyze and export graphs. 
-						  5 Monitoring lets you visualize, analyze and export graphs. 
-						  6 Monitoring lets you visualize, analyze and export graphs. 
-						  7 Monitoring lets you visualize, analyze and export graphs."/>
-            <vo:ModuleVO name="Module Test" author="Company Name" version="1.0" category="Others"
-                         description="Monitoring lets you visualize, analyze and export graph.
-						  2 Monitoring lets you visualize, analyze and export graphs. 
-						  3 Monitoring lets you visualize, analyze and export graphs. 
-						  4 Monitoring lets you visualize, analyze and export graphs. 
-						  5 Monitoring lets you visualize, analyze and export graphs. 
-						  6 Monitoring lets you visualize, analyze and export graphs. 
-						  7 Monitoring lets you visualize, analyze and export graphs."/>
-
-        </s:ArrayCollection>
     </fx:Declarations>
 
     <mx:states>
@@ -140,7 +86,7 @@
              * Keywords used to look up for modules
              */
             [Bindable]
-            private var _keywords:String;
+            private var _keywords:String = "";
 
             /**
              * Default search keyword
@@ -217,7 +163,7 @@
                 }
             }
 
-            protected function handleDGInstalledModulesClick(event:ListEvent):void {
+            private function handleDGInstalledModulesClick(event:ListEvent):void {
                 if (event.columnIndex != 0) {
                     (dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.ModuleVO).selected =
                             !(dgInstalledModules.selectedItem as org.ow2.kerneos.modules.store.vo.ModuleVO).selected;
@@ -229,20 +175,20 @@
                 }
             }
 
-            public function chkbxAllSelectHandler(evt:Event):void {
+            private function chkbxAllSelectHandler(evt:Event):void {
                 ModuleModelLocator.getInstance().listSelectedModules.removeAll();
 
-                for each (var item:Object in modulesResultList) {
+                for each (var item:Object in ModuleModelLocator.getInstance().listInstalledModules) {
                     item.selected = chkbxAllSelect.selected;
                     if (item.selected) {
                         ModuleModelLocator.getInstance().listSelectedModules.addItem(item);
 
                     }
                 }
-                modulesResultList.refresh();
+                ModuleModelLocator.getInstance().listInstalledModules.refresh();
             }
 
-            protected function searchInput_enterHandler():void {
+            private function searchInput_enterHandler():void {
                 _keywords = searchInput.text;
                 searchIconButton.setFocus();
 
@@ -471,7 +417,7 @@
                 <mx:CheckBox id="chkbxAllSelect" x="63" y="6" width="200"
                              label="{(chkbxAllSelect.selected)?'Deselect All':'Select All'}"
                              change="chkbxAllSelectHandler(event)"/>
-                <mx:DataGrid id="dgInstalledModules" x="43" y="42" height="236" dataProvider="{modulesResultList}"
+                <mx:DataGrid id="dgInstalledModules" x="43" y="42" height="236" dataProvider="{ModuleModelLocator.getInstance().listInstalledModules}"
                              itemClick="handleDGInstalledModulesClick(event)">
                     <mx:columns>
                         <mx:DataGridColumn width="60" dataField="selected" headerText="Select" sortable="false"
@@ -483,14 +429,14 @@
                 </mx:DataGrid>
                 <s:Button x="43" y="329" label="Update" click="updateModules()"/>
                 <s:Button x="169" y="329" label="Uninstall" click="uninstallModules()"/>
-                <mx:Label x="50" y="289" text="{modulesResultList.length + ' result(s) ' +
-                ModuleModelLocator.getInstance().listSelectedModules.length+' selected item(s)' }"/>
+                <mx:Label x="50" y="289" text="{ModuleModelLocator.getInstance().listInstalledModules.length + ' result(s) ' +
+                ModuleModelLocator.getInstance().listSelectedModules.length+' selected item(s)'}"/>
             </s:Group>
 
             <!-- Find Modules View-->
             <s:Group includeIn="FindModules" x="0" y="0" width="100%" height="100%">
                 <s:Label x="10" y="10"
-                         text="{ModuleModelLocator.getInstance().listModules.length} results for &quot; {_keywords} &quot;"/>
+                         text="{ModuleModelLocator.getInstance().listModules.length} results for &quot;{_keywords}&quot;"/>
                 <mx:HRule x="10" y="30" width="531"/>
                 <s:DataGroup x="0" y="35" width="545" height="422"
                              dataProvider="{ModuleModelLocator.getInstance().listModules}"

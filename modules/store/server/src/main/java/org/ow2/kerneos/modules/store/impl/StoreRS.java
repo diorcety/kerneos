@@ -53,6 +53,8 @@ public class StoreRS implements IStoreRS {
     public org.ow2.kerneosstore.api.Store getStore() {
         Client client = new Client();
 
+        logger.debug("Call API REST " + url + "/info");
+
         WebResource webResource = client.resource(url + "/info");
         return webResource.get(StoreImpl.class);
     }
@@ -66,6 +68,8 @@ public class StoreRS implements IStoreRS {
     public byte[] getModuleVersionImage(String id) {
         Client client = new Client();
 
+        logger.debug("Call API REST " + url + "/module/" + id + "/image");
+
         WebResource webResource = client.resource(url + "/module/" + id + "/image");
         return webResource.get(byte[].class);
     }
@@ -73,6 +77,8 @@ public class StoreRS implements IStoreRS {
     @Override
     public ModuleVersion getModuleVersion(String id) {
         Client client = new Client();
+
+        logger.debug("Call API REST " + url + "/module/" + id);
 
         WebResource webResource = client.resource(url + "/module/" + id);
         return webResource.get(ModuleImpl.class);
@@ -103,7 +109,7 @@ public class StoreRS implements IStoreRS {
 
         String[] filterSplit = filter.split(" ");
 
-        String filterURL = null;
+        String filterURL = "";
 
         if (filterSplit != null && filterSplit[0]!= null) {
             int i = 0;
@@ -120,6 +126,8 @@ public class StoreRS implements IStoreRS {
         try {
             //test if the url is good
             URI uri = new URI(url + "/modules/" + filterURL);
+
+            logger.debug("Call API REST " + url + "/modules/" + filterURL);
 
             WebResource webResource = client.resource(url + "/modules/" + filterURL);
 
@@ -167,6 +175,8 @@ public class StoreRS implements IStoreRS {
             //test if the url is good
             URI uri = new URI(url + "/category/"+id+"/modules");
 
+            logger.debug("Call API REST " + url + "/category/"+id+"/modules");
+
             WebResource webResource = client.resource(url + "/category/"+id+"/modules");
 
             GenericType<Collection<ModuleImpl>> genericModules =
@@ -188,6 +198,8 @@ public class StoreRS implements IStoreRS {
     public Collection<Category> getCategories() {
         Client client = new Client();
 
+        logger.debug("Call API REST " + url + "/categories");
+
         WebResource webResource = client.resource(url + "/categories");
 
         GenericType<Collection<CategoryImpl>> genericCategories =
@@ -202,6 +214,8 @@ public class StoreRS implements IStoreRS {
     public Category getCategory(String id) {
         Client client = new Client();
 
+        logger.debug("Call API REST " + url + "/category/" + id);
+
         WebResource webResource = client.resource(url + "/category/" + id);
         return webResource.get(CategoryImpl.class);
     }
@@ -209,6 +223,8 @@ public class StoreRS implements IStoreRS {
     @Override
     public byte[] downloadModuleVersion(String id) {
         Client client = new Client();
+
+        logger.debug("Call API REST " + url + "/module/" + id + "/download");
 
         WebResource webResource = client.resource(url + "/module/" + id + "/download");
         return webResource.get(byte[].class);

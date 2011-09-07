@@ -74,7 +74,12 @@ public class GetInstalledModules implements ICommand, IResponder {
         ////////////////////////////////////////////////
 
         // Handle the result of the call. Usely, the model is updated.
-        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')] var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
+        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')] var result:ArrayCollection =
+                ArrayCollection((data as ResultEvent).result);
+
+        if (result == null) {
+            result = new ArrayCollection();
+        }
 
         var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
         moduleModel.listInstalledModules = result;
