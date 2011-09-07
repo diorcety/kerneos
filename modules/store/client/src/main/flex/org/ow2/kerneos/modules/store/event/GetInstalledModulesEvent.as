@@ -22,39 +22,23 @@
  */
 package org.ow2.kerneos.modules.store.event {
 import flash.events.Event;
+
 import com.adobe.cairngorm.control.CairngormEvent;
 
-public class StoreEvent extends CairngormEvent {
+public class GetInstalledModulesEvent extends CairngormEvent {
 
-    public static var GET_STORE : String = "GET_STORE";
+    public static var GET_INSTALLED_MODULES:String = "GET_INSTALLED_MODULES";
 
-
-    private var _url : String = "";
-
-    public function StoreEvent(type : String)
-    {
+    public function GetInstalledModulesEvent(type:String) {
         super(type);
-    }
-
-    public function set url(url:String):void
-    {
-        this._url = url;
-    }
-
-    public function get url(): String
-    {
-        return _url;
     }
 
     /**
      * Overrides the clone function of the CairngormEvent class.
      * returns a new ModuleEvent
      */
-    override public function clone() : Event
-    {
-        var ev:StoreEvent = new StoreEvent(this.type);
-
-         ev.url = this._url;
+    override public function clone():Event {
+        var ev:GetInstalledModulesEvent = new GetInstalledModulesEvent(this.type);
 
         return ev;
     }
