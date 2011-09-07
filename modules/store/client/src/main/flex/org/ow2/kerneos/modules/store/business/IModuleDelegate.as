@@ -64,5 +64,6 @@ public interface IModuleDelegate extends IDelegateResponder {
 
     function getStores():void;
 
+    function getCategories():void;
 }
 }

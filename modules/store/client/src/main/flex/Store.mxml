@@ -69,6 +69,7 @@
 
             import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
             import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
+            import org.ow2.kerneos.modules.store.event.GetCategoriesEvent;
             import org.ow2.kerneos.modules.store.event.GetInstalledModulesEvent;
             import org.ow2.kerneos.modules.store.event.GetOrDeleteStoreEvent;
             import org.ow2.kerneos.modules.store.event.ModuleEvent;
@@ -76,6 +77,8 @@
             import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
 
             import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
+            import org.ow2.kerneos.modules.store.view.CategoryView;
+            import org.ow2.kerneos.modules.store.vo.CategoryVO;
             import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -143,9 +146,8 @@
                 var get_stores_event:GetOrDeleteStoreEvent = new GetOrDeleteStoreEvent(GetOrDeleteStoreEvent.GET_STORES);
                 CairngormEventDispatcher.getInstance().dispatchEvent(get_stores_event);
 
-
-                var categories:ArrayCollection = new ArrayCollection(["jasmine", "jasmine" , "jasmine"]);
-                ModuleModelLocator.getInstance().categories = categories;
+                var get_categories_event:GetCategoriesEvent = new GetCategoriesEvent(GetCategoriesEvent.GET_CATEGORIES);
+                CairngormEventDispatcher.getInstance().dispatchEvent(get_categories_event);
             }
 
             private function handleLinkBar(event:ItemClickEvent):void {
@@ -207,19 +209,33 @@
                 }
             }
 
+            /**
+             *
+             * @param categories
+             */
+            private function set newCategory(categories:ArrayCollection) : void{
+                mainViewStack.removeAll();
+                for each (var category : CategoryVO in categories) {
+                    var categoryNavigator : CategoryView = new CategoryView();
+                    categoryNavigator.id = category.id;
+                    categoryNavigator.label = category.name;
+                    mainViewStack.addItem(categoryNavigator);
+                }
+            }
+
             private function searchModulesByCategory(evt:ItemClickEvent):void {
                 var category:int = evt.index;
-                var categoryName:String = getValidCategory(category);
+                var categoryId:String = getValidCategory(category);
 
                 var search_modules_event:SearchModulesEvent =
                         new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY);
-                search_modules_event.id = categoryName;
+                search_modules_event.id = categoryId;
                 CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
             }
 
             private function getValidCategory(index:int):String {
                 if (index >= 0 && index < ModuleModelLocator.getInstance().categories.length) {
-                    return ModuleModelLocator.getInstance().categories[index];
+                    return ModuleModelLocator.getInstance().categories[index].id;
                 } else {
                     return "";
                 }
@@ -264,79 +280,7 @@
 
         <!-- Main Conteneur -->
         <s:BorderContainer x="190" y="96" width="553" height="463">
-            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461">
-                <!-- First category container -->
-                <s:NavigatorContent id="navUtilModules" width="100%" height="100%"
-                                    label="{ModuleModelLocator.getInstance().categories[0]}">
-                    <s:DataGroup id="dgPopularModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
-                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
-                                 name="dgPopularModules"
-                                 visible.Default="true"
-                                 visible.ModuleDetail="false"
-                                 visible.FindModules="false"
-                                 visible.InstalledModules="false">
-                        <s:layout>
-                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
-                                          requestedRowCount="2" rowHeight="200"/>
-                        </s:layout>
-                    </s:DataGroup>
-                </s:NavigatorContent>
-
-                <!-- Second category container -->
-                <s:NavigatorContent id="navMonitoringModules" width="100%" height="100%"
-                                    label="{ModuleModelLocator.getInstance().categories[1]}">
-                    <s:DataGroup id="dgMonitoringModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
-                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
-                                 name="dgMonitoringModules"
-                                 visible.Default="true"
-                                 visible.ModuleDetail="false"
-                                 visible.FindModules="false"
-                                 visible.InstalledModules="false">
-                        <s:layout>
-                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
-                                          requestedRowCount="2" rowHeight="200"/>
-                        </s:layout>
-                    </s:DataGroup>
-                </s:NavigatorContent>
-
-                <!-- Third category container -->
-                <s:NavigatorContent id="navAdminModules" width="100%" height="100%"
-                                    label="{ModuleModelLocator.getInstance().categories[2]}">
-                    <s:DataGroup id="dgAdminModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
-                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
-                                 name="dgAdminModules"
-                                 visible.Default="true"
-                                 visible.ModuleDetail="false"
-                                 visible.FindModules="false"
-                                 visible.InstalledModules="false">
-                        <s:layout>
-                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
-                                          requestedRowCount="2" rowHeight="200"/>
-                        </s:layout>
-                    </s:DataGroup>
-                </s:NavigatorContent>
-
-                <!-- Fourth category container -->
-                <s:NavigatorContent id="navOthersModules" width="100%" height="100%"
-                                    label="{ModuleModelLocator.getInstance().categories[3]}">
-                    <s:DataGroup id="dgOthersModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
-                                 itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
-                                 name="dgOthersModules"
-                                 visible.Default="true"
-                                 visible.ModuleDetail="false"
-                                 visible.FindModules="false"
-                                 visible.InstalledModules="false">
-                        <s:layout>
-                            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
-                                          requestedRowCount="2" rowHeight="200"/>
-                        </s:layout>
-                    </s:DataGroup>
-                </s:NavigatorContent>
-            </mx:ViewStack>
+            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461" />
 
             <!-- Detail module view-->
             <s:Group includeIn="ModuleDetail" x="0" y="0" width="100%" height="100%">
@@ -390,5 +334,7 @@
     </s:Group>
 
     <fx:Binding source="ModuleModelLocator.getInstance().storeState" destination="newStoreState"/>
+
+    <fx:Binding source="ModuleModelLocator.getInstance().categories" destination="newCategory"/>
 
 </mx:Module>

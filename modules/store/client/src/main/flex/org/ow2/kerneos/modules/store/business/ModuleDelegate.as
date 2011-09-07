@@ -125,5 +125,11 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         var call:Object = service.getStores();
         call.addResponder(this.responder);
     }
+
+    public function getCategories():void {
+        var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
+        var call:Object = service.getCategories();
+        call.addResponder(this.responder);
+    }
 }
 }
