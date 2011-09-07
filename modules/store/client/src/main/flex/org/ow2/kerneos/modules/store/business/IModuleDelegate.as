@@ -34,11 +34,11 @@ public interface IModuleDelegate extends IDelegateResponder {
     ////////////////////////////////////////////////////////////////////
 
 
-    function getStore(parameters:Object):void;
+    function getStore(url:Object):void;
 
-    function getModule(parameters:Object):void;
+    function getModule(id:Object):void;
 
-    function getModuleImage(parameters:Object):void;
+    function getModuleImage(id:Object):void;
 
     function searchModules(filter:Object, field:Object, order:Object, itemByPage:Object, page:Object):void;
 
@@ -48,7 +48,7 @@ public interface IModuleDelegate extends IDelegateResponder {
 
     function searchModulesWithImageByCategory(id:Object, field:Object, order:Object, itemByPage:Object, page:Object):void;
 
-    function installModule(parameters:Object):void;
+    function installModule(id:Object):void;
 
     function uninstallModule(id:Object):void;
 
@@ -56,11 +56,11 @@ public interface IModuleDelegate extends IDelegateResponder {
 
     function getInstalledModules():void;
 
-    function addStore(parameters:Object):void;
+    function addStore(store:Object):void;
 
-    function updateStore(parameters:Object):void;
+    function updateStore(store:Object):void;
 
-    function deleteStore(parameters:Object):void;
+    function deleteStore(url:Object):void;
 
     function getStores():void;
 

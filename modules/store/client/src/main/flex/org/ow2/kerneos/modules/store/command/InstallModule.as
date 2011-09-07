@@ -62,10 +62,10 @@ public class InstallModule implements ICommand, IResponder {
         // - Register the responder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
-        var parameters:String = (event as ModuleEvent).id;
+        var id:String = (event as ModuleEvent).id;
         delegate.responder = this;
 
-        delegate.installModule(parameters);
+        delegate.installModule(id);
 
     }
 
