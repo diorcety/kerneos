@@ -54,6 +54,7 @@
     <flexiframe.version>1.4.3</flexiframe.version>
     <flex.version>4.5.0.20967</flex.version>
     <player.version>10.2</player.version>
+    <swf.version>11</swf.version>
 
     <!-- iPOJO -->
     <ipojo.version>1.8.0</ipojo.version>
@@ -184,6 +185,7 @@
             <optimize>${flex-optimize}</optimize>
             <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
             <targetPlayer>${player.version}</targetPlayer>
+            <swfVersion>${swf.version}</swfVersion>
           </configuration>
           <dependencies>
             <dependency>
