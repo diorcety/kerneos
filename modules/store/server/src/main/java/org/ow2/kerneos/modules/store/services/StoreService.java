@@ -217,19 +217,21 @@ public class StoreService implements KerneosSimpleService, IStoreService {
         Collection<ModuleImpl> list = new LinkedList<ModuleImpl>();
         try {
             Configuration[] cfgs = configAdmin.listConfigurations("(service.factoryPid=" + ModuleBundle.class.getName() + ")");
-            for (Configuration cfg : cfgs) {
-                String data = (String) cfg.getProperties().get(MODULE_KEY);
-                if (data != null) {
-                    try {
-                        ModuleImpl mv = decodeModule(data);
-                        list.add(mv);
-                    } catch (Exception e) {
+            if (cfgs != null) {
+                for (Configuration cfg : cfgs) {
+                    String data = (String) cfg.getProperties().get(MODULE_KEY);
+                    if (data != null) {
+                        try {
+                            ModuleImpl mv = decodeModule(data);
+                            list.add(mv);
+                        } catch (Exception e) {
+                            logger.error("Can't find Module information: " + cfg.toString());
+                        }
+                    } else {
                         logger.error("Can't find Module information: " + cfg.toString());
                     }
-                } else {
-                    logger.error("Can't find Module information: " + cfg.toString());
-                }
 
+                }
             }
         } catch (Exception e) {
             logger.error("Can't find the ModuleBundle configurations");
