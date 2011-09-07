@@ -36,14 +36,20 @@ public interface IStoreService {
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
                                                 Integer itemByPage, Integer page);
     public Collection<ModuleImpl> searchModulesWithImage(String filter, String field, String order,
-                                                Integer itemByPage, Integer page);
+                                                         Integer itemByPage, Integer page);
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
                                                           Integer itemByPage, Integer page);
     public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order,
-                                                          Integer itemByPage, Integer page);
+                                                                   Integer itemByPage, Integer page);
     public Collection<ModuleImpl> getCategories();
     public CategoryImpl getCategory(String id);
     public String installModule(String id);
     public Collection<ModuleImpl> getInstalledModules();
+    public void updateModule(ModuleImpl installedModule);
+    public void uninstallModule(String id);
+    public void addStore(StoreImpl store);
+    public void updateStore(StoreImpl store);
+    public void deleteStore(StoreImpl store);
+    public Collection<StoreImpl> getStores();
 
 }

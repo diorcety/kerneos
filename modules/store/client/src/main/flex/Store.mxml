@@ -25,8 +25,8 @@
 <mx:Module xmlns:fx="http://ns.adobe.com/mxml/2009"
            xmlns:s="library://ns.adobe.com/flex/spark"
            xmlns:mx="library://ns.adobe.com/flex/mx"
-           xmlns:control = "org.ow2.kerneos.modules.store.control.*"
-           implements = "org.ow2.kerneos.core.api.KerneosModule"
+           xmlns:control="org.ow2.kerneos.modules.store.control.*"
+           implements="org.ow2.kerneos.core.api.KerneosModule"
            xmlns:vo="org.ow2.kerneos.modules.store.vo.*"
            layout="absolute" width="100%" height="100%"
            creationComplete="init()">
@@ -105,11 +105,11 @@
         </s:ArrayCollection>
     </fx:Declarations>
 
-    <mx:states >
-        <mx:State name="Default" />
-        <mx:State name="ModuleDetail" />
-        <mx:State name="InstalledModules" />
-        <mx:State name="FindModules" />
+    <mx:states>
+        <mx:State name="Default"/>
+        <mx:State name="ModuleDetail"/>
+        <mx:State name="InstalledModules"/>
+        <mx:State name="FindModules"/>
     </mx:states>
 
     <s:Group x="0" y="0" width="100%" height="100%">
@@ -122,7 +122,9 @@
 
             import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
             import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
-            import org.ow2.kerneos.modules.store.event.InstallModuleEvent;
+            import org.ow2.kerneos.modules.store.event.GetInstalledModulesEvent;
+            import org.ow2.kerneos.modules.store.event.GetOrDeleteStoreEvent;
+            import org.ow2.kerneos.modules.store.event.ModuleEvent;
 
             import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
 
@@ -186,8 +188,14 @@
                 searchInput.addEventListener(FocusEvent.FOCUS_IN, handleSearchInputFocusIn);
                 searchInput.addEventListener(FocusEvent.FOCUS_OUT, handleSearchInputFocusOut);
 
-                ModuleModelLocator.getInstance().listeSelectedModules = new ArrayCollection();
-                ModuleModelLocator.getInstance().listeModules = new ArrayCollection();
+                ModuleModelLocator.getInstance().listSelectedModules = new ArrayCollection();
+                ModuleModelLocator.getInstance().listModules = new ArrayCollection();
+                ModuleModelLocator.getInstance().listInstalledModules = new ArrayCollection();
+
+                //init stores list
+                var get_stores_event:GetOrDeleteStoreEvent = new GetOrDeleteStoreEvent(GetOrDeleteStoreEvent.GET_STORES);
+                CairngormEventDispatcher.getInstance().dispatchEvent(get_stores_event);
+
 
                 var categories:ArrayCollection = new ArrayCollection(["util","util","util","util"]);
                 ModuleModelLocator.getInstance().categories = categories;
@@ -222,12 +230,12 @@
             }
 
             public function chkbxAllSelectHandler(evt:Event):void {
-                ModuleModelLocator.getInstance().listeSelectedModules.removeAll();
+                ModuleModelLocator.getInstance().listSelectedModules.removeAll();
 
                 for each (var item:Object in modulesResultList) {
                     item.selected = chkbxAllSelect.selected;
                     if (item.selected) {
-                        ModuleModelLocator.getInstance().listeSelectedModules.addItem(item);
+                        ModuleModelLocator.getInstance().listSelectedModules.addItem(item);
 
                     }
                 }
@@ -240,7 +248,7 @@
 
                 if (_keywords != "") {
                     var pattern:RegExp = /[\w\d:#%\/;$()~_?\\\-=.&+]+/g;
-                    var words : Array = _keywords.match(pattern);
+                    var words:Array = _keywords.match(pattern);
 
                     if (words != null && words[0] != null) {
                         _keywords = words[0];
@@ -260,6 +268,9 @@
 
 
             private function handleInstalledModulesState():void {
+                var getInstalledModulesEvent:GetInstalledModulesEvent = new GetInstalledModulesEvent(GetInstalledModulesEvent.GET_INSTALLED_MODULES);
+                CairngormEventDispatcher.getInstance().dispatchEvent(getInstalledModulesEvent);
+
                 var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
                 evt.state = "InstalledModules";
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
@@ -295,9 +306,29 @@
             private function installModule():void {
                 //TODO show confirmation message and maybe a progress status bar
                 // Alert.show("Install " + data.name);
-                var evt : InstallModuleEvent = new InstallModuleEvent(InstallModuleEvent.INSTALL_MODULE);
+                var evt:ModuleEvent = new ModuleEvent(ModuleEvent.INSTALL_MODULE);
                 evt.id = ModuleModelLocator.getInstance().mainModule.id;
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+            }
+
+            private function uninstallModules():void {
+                if (ModuleModelLocator.getInstance().listSelectedModules.length > 0) {
+                    for each (var module:ModuleVO in ModuleModelLocator.getInstance().listSelectedModules) {
+                        var evt:ModuleEvent = new ModuleEvent(ModuleEvent.UNINSTALL_MODULE);
+                        evt.id = module.id;
+                        CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+                    }
+                }
+            }
+
+            private function updateModules():void {
+                if (ModuleModelLocator.getInstance().listSelectedModules.length > 0) {
+                    for each (var module:ModuleVO in ModuleModelLocator.getInstance().listSelectedModules) {
+                        var evt:ModuleEvent = new ModuleEvent(ModuleEvent.UPDATE_MODULE);
+                        evt.id = module.id;
+                        CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+                    }
+                }
             }
             ]]>
 		</fx:Script>
@@ -309,14 +340,14 @@
         <!-- Search box and icon -->
         <!-- BUG 02/08/2011 if s:TextInput is used, problem with SoftKeyboardEvent class doesn't found -->
         <s:HGroup x="337" y="28" width="241" height="32" horizontalAlign="center" verticalAlign="top">
-            <mx:TextInput id="searchInput" paddingTop="8" fontSize="12" enter="searchInput_enterHandler()" />
+            <mx:TextInput id="searchInput" paddingTop="8" fontSize="12" enter="searchInput_enterHandler()"/>
             <mx:LinkButton id="searchIconButton" width="34" height="28"
                            click="searchInput_enterHandler()" icon="@Embed('/../assets/Crystal_Clear_app_xmag.png')"
                            paddingLeft="15" paddingRight="0"/>
         </s:HGroup>
 
         <!-- Installed Modules Button -->
-        <s:Button x="14" y="96" width="168" label="Installed" fontSize="18" click="handleInstalledModulesState()" />
+        <s:Button x="14" y="96" width="168" label="Installed" fontSize="18" click="handleInstalledModulesState()"/>
 
         <!-- Categories Menu -->
         <mx:Accordion x="14" y="133" width="168" height="306" label="Categories" fontSize="16"
@@ -324,18 +355,19 @@
                       fontWeight="normal">
             <s:NavigatorContent width="100%" height="100%" label="Categories" fontSize="16">
                 <mx:LinkBar id="linkBar" width="100%" dataProvider="{mainViewStack}"
-                            direction="vertical" verticalGap="8" currentState="" itemClick="searchModulesByCategory(event)"/>
+                            direction="vertical" verticalGap="8" currentState=""
+                            itemClick="searchModulesByCategory(event)"/>
             </s:NavigatorContent>
         </mx:Accordion>
 
         <!-- Main Conteneur -->
         <s:BorderContainer x="190" y="96" width="553" height="463">
-            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461" >
+            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461">
                 <!-- First category container -->
                 <s:NavigatorContent id="navUtilModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[0]}">
                     <s:DataGroup id="dgPopularModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
                                  itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
                                  name="dgPopularModules"
                                  visible.Default="true"
@@ -353,7 +385,7 @@
                 <s:NavigatorContent id="navMonitoringModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[1]}">
                     <s:DataGroup id="dgMonitoringModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
                                  itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
                                  name="dgMonitoringModules"
                                  visible.Default="true"
@@ -371,7 +403,7 @@
                 <s:NavigatorContent id="navAdminModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[2]}">
                     <s:DataGroup id="dgAdminModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
                                  itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
                                  name="dgAdminModules"
                                  visible.Default="true"
@@ -389,7 +421,7 @@
                 <s:NavigatorContent id="navOthersModules" width="100%" height="100%"
                                     label="{ModuleModelLocator.getInstance().categories[3]}">
                     <s:DataGroup id="dgOthersModules" x="0" y="0" width="100%" height="100%"
-                                 dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
                                  itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleIndexRenderer"
                                  name="dgOthersModules"
                                  visible.Default="true"
@@ -412,7 +444,8 @@
                          source="{ModuleModelLocator.getInstance().mainModule.icon}"/>
                 <s:Label x="146" y="39" width="381" height="21" fontSize="14"
                          fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.author}"/>
-                <s:Label x="146" y="68" width="395" height="99" text="{ModuleModelLocator.getInstance().mainModule.description}"/>
+                <s:Label x="146" y="68" width="395" height="99"
+                         text="{ModuleModelLocator.getInstance().mainModule.description}"/>
                 <s:Button x="40" y="146" label="Install" click="installModule()"/>
                 <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
                          text="About this module"/>
@@ -434,7 +467,7 @@
             </s:Group>
 
             <!-- Installed Modules View-->
-            <s:Group includeIn="InstalledModules" x="0" y="0" width="100%" height="100%" >
+            <s:Group includeIn="InstalledModules" x="0" y="0" width="100%" height="100%">
                 <mx:CheckBox id="chkbxAllSelect" x="63" y="6" width="200"
                              label="{(chkbxAllSelect.selected)?'Deselect All':'Select All'}"
                              change="chkbxAllSelectHandler(event)"/>
@@ -443,26 +476,28 @@
                     <mx:columns>
                         <mx:DataGridColumn width="60" dataField="selected" headerText="Select" sortable="false"
                                            itemRenderer="org.ow2.kerneos.modules.store.view.render.chkBxRender"></mx:DataGridColumn>
-                        <mx:DataGridColumn width="160" dataField="name" headerText="Name" ></mx:DataGridColumn>
+                        <mx:DataGridColumn width="160" dataField="name" headerText="Name"></mx:DataGridColumn>
                         <mx:DataGridColumn width="110" dataField="version" headerText="Version"></mx:DataGridColumn>
                         <mx:DataGridColumn width="130" dataField="category" headerText="Category"></mx:DataGridColumn>
                     </mx:columns>
                 </mx:DataGrid>
-                <s:Button x="43" y="329" label="Update" click="Alert.show('Update selected modules');"/>
-                <s:Button x="169" y="329" label="Uninstall" click="Alert.show('Uninstall selected modules');"/>
+                <s:Button x="43" y="329" label="Update" click="updateModules()"/>
+                <s:Button x="169" y="329" label="Uninstall" click="uninstallModules()"/>
                 <mx:Label x="50" y="289" text="{modulesResultList.length + ' result(s) ' +
-                ModuleModelLocator.getInstance().listeSelectedModules.length+' selected item(s)' }" />
+                ModuleModelLocator.getInstance().listSelectedModules.length+' selected item(s)' }"/>
             </s:Group>
 
             <!-- Find Modules View-->
             <s:Group includeIn="FindModules" x="0" y="0" width="100%" height="100%">
-                <s:Label x="10" y="10" text="{ModuleModelLocator.getInstance().listeModules.length} results for &quot; {_keywords} &quot;"/>
+                <s:Label x="10" y="10"
+                         text="{ModuleModelLocator.getInstance().listModules.length} results for &quot; {_keywords} &quot;"/>
                 <mx:HRule x="10" y="30" width="531"/>
-                <s:DataGroup x="0" y="35" width="545" height="422" dataProvider="{ModuleModelLocator.getInstance().listeModules}"
+                <s:DataGroup x="0" y="35" width="545" height="422"
+                             dataProvider="{ModuleModelLocator.getInstance().listModules}"
                              itemRenderer="org.ow2.kerneos.modules.store.view.render.moduleResearchRenderer">
                     <s:layout>
                         <s:VerticalLayout gap="5" requestedRowCount="4" rowHeight="102"
-                                          variableRowHeight="false" />
+                                          variableRowHeight="false"/>
                     </s:layout>
                 </s:DataGroup>
             </s:Group>

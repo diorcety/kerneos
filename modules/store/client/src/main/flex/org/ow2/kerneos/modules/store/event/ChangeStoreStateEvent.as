@@ -22,40 +22,36 @@
  */
 package org.ow2.kerneos.modules.store.event {
 import flash.events.Event;
+
 import com.adobe.cairngorm.control.CairngormEvent;
 
 import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
 public class ChangeStoreStateEvent extends CairngormEvent {
 
-    public static var CHANGE_MODULE_STATE : String = "CHANGE_MODULE_STATE";
-    public static var CHANGE_MODULE_STATE_DETAIL : String = "CHANGE_MODULE_STATE_DETAIL";
+    public static var CHANGE_MODULE_STATE:String = "CHANGE_MODULE_STATE";
+    public static var CHANGE_MODULE_STATE_DETAIL:String = "CHANGE_MODULE_STATE_DETAIL";
 
-    private var _state : String = "";
-    private var _moduleDetail : ModuleVO = null;
+    private var _state:String = "";
+    private var _moduleDetail:ModuleVO = null;
 
-    public function ChangeStoreStateEvent(type : String)
-    {
+    public function ChangeStoreStateEvent(type:String) {
         super(type);
     }
 
-    public function set state(state:String):void
-    {
+    public function set state(state:String):void {
         this._state = state;
     }
 
-    public function get state(): String
-    {
+    public function get state():String {
         return _state;
     }
 
-    public function set moduleDetail(moduleDetail:ModuleVO):void
-    {
+    public function set moduleDetail(moduleDetail:ModuleVO):void {
         this._moduleDetail = moduleDetail;
     }
 
-    public function get moduleDetail(): ModuleVO
-    {
+    public function get moduleDetail():ModuleVO {
         return _moduleDetail;
     }
 
@@ -63,8 +59,7 @@ public class ChangeStoreStateEvent extends CairngormEvent {
      * Overrides the clone function of the CairngormEvent class.
      * returns a new ModuleEvent
      */
-    override public function clone() : Event
-    {
+    override public function clone():Event {
         var ev:ChangeStoreStateEvent = new ChangeStoreStateEvent(this.type);
 
         ev.state = this._state;

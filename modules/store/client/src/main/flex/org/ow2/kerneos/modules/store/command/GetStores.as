@@ -29,8 +29,9 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
-import org.ow2.kerneos.modules.store.vo.ModuleVO;
+import org.ow2.kerneos.modules.store.event.GetOrDeleteStoreEvent;
+
+import org.ow2.kerneos.modules.store.vo.StoreVO;
 
 // Server Exceptions imports
 
@@ -46,7 +47,7 @@ import mx.collections.ArrayCollection;
  * The command class from the cairngorm model.
  */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class SearchModulesWithImageByCategory implements ICommand, IResponder {
+public class GetStores implements ICommand, IResponder {
     /**
      * Retrieve the delegate and use it to make the call.
      */
@@ -63,25 +64,9 @@ public class SearchModulesWithImageByCategory implements ICommand, IResponder {
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var id:String = (event as SearchModulesEvent).id;
-        var field:String = (event as SearchModulesEvent).field;
-        var order:String = (event as SearchModulesEvent).order;
 
-        var itemByPage:Object;
-        if ((event as SearchModulesEvent).itemByPage < 0) {
-            itemByPage = null;
-        } else {
-            itemByPage = (event as SearchModulesEvent).itemByPage;
-        }
+        delegate.getStores();
 
-        var page:Object;
-        if ((event as SearchModulesEvent).page < 0) {
-            page = null;
-        } else {
-            page = (event as SearchModulesEvent).page;
-        }
-
-        delegate.searchModulesWithImageByCategory(id, field, order, itemByPage, page);
     }
 
     /**
@@ -94,17 +79,13 @@ public class SearchModulesWithImageByCategory implements ICommand, IResponder {
         //                                            //
         ////////////////////////////////////////////////
 
-
         // Handle the result of the call. Usely, the model is updated.
+        // Example :
+
+        [ArrayElementType('org.ow2.kerneos.modules.store.vo.StoreVO')] var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
+
         var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-
-        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')] var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
-
-        for (var i:int = 0; i < result.length; i++) {
-            result.getItemAt(i).convertOriginalByteArrayImageToBitMapImage();
-        }
-
-        moduleModel.listModules = result;
+        moduleModel.listStores = result;
     }
 
     /**
@@ -117,7 +98,6 @@ public class SearchModulesWithImageByCategory implements ICommand, IResponder {
         //             Handle fault           //
         //                                    //
         ////////////////////////////////////////
-
 
         // The following code generates a formated panel that contains
         // the fault. However, librairies from jasmine-eos should be included

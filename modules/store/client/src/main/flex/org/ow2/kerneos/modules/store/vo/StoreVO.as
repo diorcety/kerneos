@@ -27,35 +27,35 @@ import com.adobe.cairngorm.vo.IValueObject;
 [Bindable]
 public class StoreVO implements IValueObject {
 
-    public var _name : String;
-    public var _description : String;
-    public var _url : String;
+    public var _name:String;
+    public var _description:String;
+    public var _url:String;
 
 
     public function StoreVO() {
     }
 
-    public function get name () : String {
+    public function get name():String {
         return this._name;
     }
 
-    public function set name (name : String) : void {
+    public function set name(name:String):void {
         this._name = name;
     }
 
-    public function get description () : String {
+    public function get description():String {
         return this._description;
     }
 
-    public function set description (description : String) : void {
+    public function set description(description:String):void {
         this._description = description;
     }
 
-    public function get url () : String {
+    public function get url():String {
         return this._description;
     }
 
-    public function set url (url : String) : void {
+    public function set url(url:String):void {
         this._url = url;
     }
 }

@@ -20,8 +20,7 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.command
-{
+package org.ow2.kerneos.modules.store.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 
@@ -30,30 +29,28 @@ import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
 import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
 /**
-  * The command class from the cairngorm model.
-  */
-public class ChangeSelectedModuleInstall implements ICommand
-{
+ * The command class from the cairngorm model.
+ */
+public class ChangeSelectedModuleInstall implements ICommand {
     /**
      * Retrieve the delegate and use it to make the call.
      */
-    public function execute(event:CairngormEvent):void
-    {
+    public function execute(event:CairngormEvent):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the execution           //
         //                                            //
         ////////////////////////////////////////////////
-        var item : Object = (event as ChangeSelectedModuleInstallEvent).item;
+        var item:Object = (event as ChangeSelectedModuleInstallEvent).item;
 
         //If the item isn't into the list
-        if(ModuleModelLocator.getInstance().listeSelectedModules.getItemIndex(item)==-1) {
+        if (ModuleModelLocator.getInstance().listSelectedModules.getItemIndex(item) == -1) {
             //add the item
-            ModuleModelLocator.getInstance().listeSelectedModules.addItem(item);
-        }else{
+            ModuleModelLocator.getInstance().listSelectedModules.addItem(item);
+        } else {
             //otherwise delete it
-            ModuleModelLocator.getInstance().listeSelectedModules.removeItemAt(
-                    ModuleModelLocator.getInstance().listeSelectedModules.getItemIndex(item));
+            ModuleModelLocator.getInstance().listSelectedModules.removeItemAt(
+                    ModuleModelLocator.getInstance().listSelectedModules.getItemIndex(item));
         }
     }
 

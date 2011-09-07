@@ -20,8 +20,7 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.command
-{
+package org.ow2.kerneos.modules.store.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -34,6 +33,7 @@ import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
 import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
 // Server Exceptions imports
+
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 
@@ -46,13 +46,11 @@ import mx.collections.ArrayCollection;
  * The command class from the cairngorm model.
  */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class SearchModules implements ICommand, IResponder
-{
+public class SearchModules implements ICommand, IResponder {
     /**
      * Retrieve the delegate and use it to make the call.
      */
-    public function execute(event:CairngormEvent):void
-    {
+    public function execute(event:CairngormEvent):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the execution           //
@@ -65,22 +63,22 @@ public class SearchModules implements ICommand, IResponder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var filter : String = (event as SearchModulesEvent).filter;
-        var field : String = (event as SearchModulesEvent).field;
-        var order : String = (event as SearchModulesEvent).order;
+        var filter:String = (event as SearchModulesEvent).filter;
+        var field:String = (event as SearchModulesEvent).field;
+        var order:String = (event as SearchModulesEvent).order;
 
-        var itemByPage : Object;
+        var itemByPage:Object;
         if ((event as SearchModulesEvent).itemByPage < 0) {
-          itemByPage = null;
+            itemByPage = null;
         } else {
-          itemByPage = (event as SearchModulesEvent).itemByPage;
+            itemByPage = (event as SearchModulesEvent).itemByPage;
         }
 
-        var page : Object;
+        var page:Object;
         if ((event as SearchModulesEvent).page < 0) {
-          page = null;
+            page = null;
         } else {
-          page = (event as SearchModulesEvent).page;
+            page = (event as SearchModulesEvent).page;
         }
 
         delegate.searchModules(filter, field, order, itemByPage, page);
@@ -89,8 +87,7 @@ public class SearchModules implements ICommand, IResponder
     /**
      * Handle the result of the server call.
      */
-    public function result(data:Object):void
-    {
+    public function result(data:Object):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the result              //
@@ -101,17 +98,15 @@ public class SearchModules implements ICommand, IResponder
         // Handle the result of the call. Usely, the model is updated.
         var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
 
-        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')]
-        var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
+        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')] var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
 
-        moduleModel.listeModules = result;
+        moduleModel.listModules = result;
     }
 
     /**
      * Raise an alert when something is wrong.
      */
-    public function fault(info:Object):void
-    {
+    public function fault(info:Object):void {
 
         ////////////////////////////////////////
         //                                    //
@@ -127,12 +122,12 @@ public class SearchModules implements ICommand, IResponder
         // Code :
 
         // Retrieve the fault event
-        var faultEvent : FaultEvent = FaultEvent(info);
+        var faultEvent:FaultEvent = FaultEvent(info);
 
         // Tell the view and let it handle this
-        var serverSideExceptionEvent : ServerSideExceptionEvent =
+        var serverSideExceptionEvent:ServerSideExceptionEvent =
                 new ServerSideExceptionEvent(
-                        "serverSideException"+ ModuleModelLocator.getInstance().componentID,
+                        "serverSideException" + ModuleModelLocator.getInstance().componentID,
                         new ServerSideException("Error while Executing the action",
                                 "The operation could not be performed."
                                         + "\n" + faultEvent.fault.faultCode
@@ -141,7 +136,6 @@ public class SearchModules implements ICommand, IResponder
 
         // Dispatch the event using the cairngorm event dispatcher
         CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
-
 
 
     }

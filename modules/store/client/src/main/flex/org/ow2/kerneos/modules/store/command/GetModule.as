@@ -20,8 +20,7 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.command
-{
+package org.ow2.kerneos.modules.store.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -30,10 +29,11 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.GetModuleEvent;
+import org.ow2.kerneos.modules.store.event.ModuleEvent;
 import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
 // Server Exceptions imports
+
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 
@@ -44,13 +44,11 @@ import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
  * The command class from the cairngorm model.
  */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class GetModule implements ICommand, IResponder
-{
+public class GetModule implements ICommand, IResponder {
     /**
      * Retrieve the delegate and use it to make the call.
      */
-    public function execute(event:CairngormEvent):void
-    {
+    public function execute(event:CairngormEvent):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the execution           //
@@ -63,7 +61,7 @@ public class GetModule implements ICommand, IResponder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var parameters : String = (event as GetModuleEvent).id;
+        var parameters:String = (event as ModuleEvent).id;
         delegate.getModule(parameters);
 
     }
@@ -71,8 +69,7 @@ public class GetModule implements ICommand, IResponder
     /**
      * Handle the result of the server call.
      */
-    public function result(data:Object):void
-    {
+    public function result(data:Object):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the result              //
@@ -91,8 +88,7 @@ public class GetModule implements ICommand, IResponder
     /**
      * Raise an alert when something is wrong.
      */
-    public function fault(info:Object):void
-    {
+    public function fault(info:Object):void {
 
         ////////////////////////////////////////
         //                                    //
@@ -108,10 +104,10 @@ public class GetModule implements ICommand, IResponder
         // Code :
 
         // Retrieve the fault event
-        var faultEvent : FaultEvent = FaultEvent(info);
+        var faultEvent:FaultEvent = FaultEvent(info);
 
         // Tell the view and let it handle this
-        var serverSideExceptionEvent : ServerSideExceptionEvent =
+        var serverSideExceptionEvent:ServerSideExceptionEvent =
                 new ServerSideExceptionEvent(
                         "serverSideException" + ModuleModelLocator.getInstance().componentID,
                         new ServerSideException("Error while Executing the action",
@@ -122,7 +118,6 @@ public class GetModule implements ICommand, IResponder
 
         // Dispatch the event using the cairngorm event dispatcher
         CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
-
 
 
     }

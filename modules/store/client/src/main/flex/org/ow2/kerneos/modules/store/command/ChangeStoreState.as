@@ -20,8 +20,7 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.command
-{
+package org.ow2.kerneos.modules.store.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 
@@ -30,15 +29,13 @@ import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
 import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
 /**
-  * The command class from the cairngorm model.
-  */
-public class ChangeStoreState implements ICommand
-{
+ * The command class from the cairngorm model.
+ */
+public class ChangeStoreState implements ICommand {
     /**
      * Update the model variables
      */
-    public function execute(event:CairngormEvent):void
-    {
+    public function execute(event:CairngormEvent):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the execution           //

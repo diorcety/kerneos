@@ -29,8 +29,7 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
-import org.ow2.kerneos.modules.store.vo.ModuleVO;
+import org.ow2.kerneos.modules.store.event.ModuleEvent;
 
 // Server Exceptions imports
 
@@ -40,13 +39,11 @@ import org.ow2.kerneos.common.view.ServerSideException;
 import org.ow2.kerneos.modules.store.business.*;
 import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
-import mx.collections.ArrayCollection;
-
 /**
  * The command class from the cairngorm model.
  */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class SearchModulesWithImageByCategory implements ICommand, IResponder {
+public class UpdateModule implements ICommand, IResponder {
     /**
      * Retrieve the delegate and use it to make the call.
      */
@@ -62,26 +59,11 @@ public class SearchModulesWithImageByCategory implements ICommand, IResponder {
         // - Register the responder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
+        var parameters:String = (event as ModuleEvent).id;
         delegate.responder = this;
-        var id:String = (event as SearchModulesEvent).id;
-        var field:String = (event as SearchModulesEvent).field;
-        var order:String = (event as SearchModulesEvent).order;
 
-        var itemByPage:Object;
-        if ((event as SearchModulesEvent).itemByPage < 0) {
-            itemByPage = null;
-        } else {
-            itemByPage = (event as SearchModulesEvent).itemByPage;
-        }
+        delegate.updateModule(parameters);
 
-        var page:Object;
-        if ((event as SearchModulesEvent).page < 0) {
-            page = null;
-        } else {
-            page = (event as SearchModulesEvent).page;
-        }
-
-        delegate.searchModulesWithImageByCategory(id, field, order, itemByPage, page);
     }
 
     /**
@@ -94,24 +76,14 @@ public class SearchModulesWithImageByCategory implements ICommand, IResponder {
         //                                            //
         ////////////////////////////////////////////////
 
+        // Handle the result of the call
 
-        // Handle the result of the call. Usely, the model is updated.
-        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-
-        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')] var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
-
-        for (var i:int = 0; i < result.length; i++) {
-            result.getItemAt(i).convertOriginalByteArrayImageToBitMapImage();
-        }
-
-        moduleModel.listModules = result;
     }
 
     /**
      * Raise an alert when something is wrong.
      */
     public function fault(info:Object):void {
-
         ////////////////////////////////////////
         //                                    //
         //             Handle fault           //

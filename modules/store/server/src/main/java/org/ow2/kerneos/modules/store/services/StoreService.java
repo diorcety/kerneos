@@ -127,7 +127,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      */
     @Override
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
-                                                             Integer itemByPage, Integer page) {
+                                                Integer itemByPage, Integer page) {
         Collection result = storeRS.searchModules(filter, field, order, itemByPage, page);
         return result;
     }
@@ -153,7 +153,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      */
     @Override
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
-                                                             Integer itemByPage, Integer page) {
+                                                          Integer itemByPage, Integer page) {
         Collection result = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
         return result;
     }
@@ -188,7 +188,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     public String installModule(String id) {
         byte[] module = storeRS.downloadModule(id);
 
-        logger.info("Install module " + id +" with size : " + module.length);
+        logger.info("Install module " + id + " with size : " + module.length);
 
         if (module == null) {
             return "";
@@ -200,6 +200,55 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
     @Override
     public Collection<ModuleImpl> getInstalledModules() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public void updateModule(ModuleImpl installedModule) {
+        ModuleImpl lastModule = this.getModule(installedModule.getId());
+        if (lastModule.getMajor() > installedModule.getMajor()) {
+            this.uninstallModule(installedModule.getId());
+            this.installModule(installedModule.getId());
+        } else {
+            if (lastModule.getMajor() == installedModule.getMajor()) {
+                if (lastModule.getMinor() > installedModule.getMinor()) {
+                    this.uninstallModule(installedModule.getId());
+                    this.installModule(installedModule.getId());
+                } else {
+                    if (lastModule.getMinor() == installedModule.getMinor()) {
+                        if (lastModule.getRevision() > installedModule.getRevision()) {
+                            this.uninstallModule(installedModule.getId());
+                            this.installModule(installedModule.getId());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void uninstallModule(String id) {
+        //TODO
+    }
+
+    @Override
+    public void addStore(StoreImpl store) {
+        //TODO
+    }
+
+    @Override
+    public void updateStore(StoreImpl store) {
+        //TODO
+    }
+
+    @Override
+    public void deleteStore(StoreImpl store) {
+        //TODO
+    }
+
+    @Override
+    public Collection<StoreImpl> getStores() {
         //TODO
         return null;
     }
