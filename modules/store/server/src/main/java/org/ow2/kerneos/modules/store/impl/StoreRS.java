@@ -207,7 +207,7 @@ public class StoreRS implements IStoreRS {
     }
 
     @Override
-    public byte[] downloadModule(String id) {
+    public byte[] downloadModuleVersion(String id) {
         Client client = new Client();
 
         WebResource webResource = client.resource(url + "/module/" + id + "/download");

@@ -23,10 +23,19 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.modules.store;
+package org.ow2.kerneos.modules.store.config;
 
-import org.ow2.kerneosstore.api.StoreClient;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Property;
 
-public interface IStoreRS extends StoreClient {
-    public byte[] downloadModuleVersion(String id);
+@Component
+public class ModuleBundle {
+    @Property(name = "module_id", mandatory = true)
+    String moduleId;
+
+    @Property(name = "bundle_id", mandatory = true)
+    String bundleId;
+
+    @Property(name = "module", mandatory = true)
+    String module;
 }

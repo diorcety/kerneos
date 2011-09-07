@@ -25,18 +25,34 @@
 
 package org.ow2.kerneos.modules.store.services;
 
-
 import org.apache.felix.ipojo.annotations.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.kerneos.modules.store.IStoreRS;
 import org.ow2.kerneos.modules.store.IStoreService;
+import org.ow2.kerneos.modules.store.config.ModuleBundle;
 import org.ow2.kerneos.modules.store.impl.*;
+import org.ow2.kerneos.modules.store.util.Base64;
+import org.ow2.kerneosstore.api.ModuleVersion;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import java.util.ArrayList;
+import javax.xml.bind.JAXBContext;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.LinkedList;
 
 @Component
 @Instantiate
@@ -51,6 +67,25 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     private static Log logger = LogFactory.getLog(StoreService.class);
 
     private IStoreRS storeRS;
+    private BundleContext bundleContext;
+    private String installDirectoryString = "/tmp/store/bundles/";
+    private File installDirectory;
+
+    private JAXBContext jaxbContext;
+
+    @Requires
+    private ConfigurationAdmin configAdmin;
+
+    private StoreService(BundleContext bundleContext) throws Exception {
+        this.bundleContext = bundleContext;
+
+        // Create installed module repository
+        installDirectory = new File(installDirectoryString);
+        installDirectory.mkdirs();
+
+        // JAXB context
+        jaxbContext = JAXBContext.newInstance(ModuleImpl.class);
+    }
 
     /**
      * Start
@@ -80,8 +115,9 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     *  Get a store
-     *  @param url store url, REST path
+     * Get a store
+     *
+     * @param url store url, REST path
      */
     @Override
     public StoreImpl getStore(String url) {
@@ -90,7 +126,6 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     *
      * @param id Module's id
      * @return Module with the given id
      */
@@ -103,7 +138,6 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     *
      * @param id Module's id
      * @return Image of the module with the given id
      */
@@ -118,7 +152,6 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     *
      * @param filter
      * @param order
      * @param itemByPage
@@ -127,7 +160,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      */
     @Override
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
-                                                             Integer itemByPage, Integer page) {
+                                                Integer itemByPage, Integer page) {
         Collection result = storeRS.searchModules(filter, field, order, itemByPage, page);
         return result;
     }
@@ -144,7 +177,6 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     *
      * @param id
      * @param order
      * @param itemByPage
@@ -153,7 +185,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      */
     @Override
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
-                                                             Integer itemByPage, Integer page) {
+                                                          Integer itemByPage, Integer page) {
         Collection result = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
         return result;
     }
@@ -176,31 +208,109 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
     @Override
     public CategoryImpl getCategory(String id) {
-        return (CategoryImpl)storeRS.getCategory(id);
+        return (CategoryImpl) storeRS.getCategory(id);
     }
 
     /**
-     *
      * @param id Module's id
      * @return Confirmation message of good or wrong module install
      */
     @Override
-    public String installModule(String id) {
-        byte[] module = storeRS.downloadModule(id);
+    public synchronized String installModule(String id) {
+        ModuleVersion moduleVersion = storeRS.getModuleVersion(id);
+        byte[] moduleBinary = storeRS.downloadModuleVersion(id);
 
-        logger.info("Install module " + id +" with size : " + module.length);
-
-        if (module == null) {
+        if (moduleBinary == null) {
             return "";
         }
+        File file = null;
+        Configuration gravityDestination = null;
+        try {
+            String data = encodeModule(new ModuleImpl(moduleVersion));
 
-        //TODO install module in the osgi framework
+            file = new File(installDirectory.getAbsolutePath() + "/" + id + ".jar");
+            OutputStream os = new FileOutputStream(file);
+            os.write(moduleBinary);
+
+            Bundle bundle = bundleContext.installBundle(file.toURI().toString());
+            Dictionary properties = new Hashtable();
+            properties.put("module_id", id);
+            properties.put("bundle_id", new Long(bundle.getBundleId()).toString());
+            properties.put("module", data);
+
+            gravityDestination = configAdmin.createFactoryConfiguration(ModuleBundle.class.getName(), null);
+            gravityDestination.update(properties);
+            logger.info("Module \"" + id + "\" installed");
+        } catch (Exception ex) {
+            logger.error("Can't install the module \"" + id + "\": " + ex);
+            if (file != null)
+                file.delete();
+            try {
+                if (gravityDestination != null)
+                    gravityDestination.delete();
+            } catch (Exception ex2) {
+                logger.error("Can't delete the configuration");
+            }
+        }
         return "";
     }
 
     @Override
     public Collection<ModuleImpl> getInstalledModules() {
-        //TODO
+        try {
+            Configuration[] cfgs = configAdmin.listConfigurations(ModuleBundle.class.getName());
+            Collection<ModuleImpl> list = new LinkedList<ModuleImpl>();
+            for (Configuration cfg : cfgs) {
+                String data = (String) cfg.getProperties().get("module");
+                if (data != null) {
+                    try {
+                        ModuleImpl mv = decodeModule(data);
+                        list.add(new ModuleImpl(mv));
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
         return null;
     }
+
+    @Override
+    public String uninstallModule(String id) {
+        return null;
+    }
+
+    @Override
+    public String updateModule(String id) {
+        return null;
+    }
+
+    /**
+     * Encode a ModuleImpl into a base64 string
+     *
+     * @param module the module to encode
+     * @return a string containing the serialized module
+     * @throws Exception issue during the serialization
+     */
+    private String encodeModule(ModuleImpl module) throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        jaxbContext.createMarshaller().marshal(module, os);
+        return Base64.encodeToString(os.toByteArray(), false);
+    }
+
+    /**
+     * Decode a ModuleImpl from a base64 string
+     *
+     * @param data the string to decode
+     * @return the module from the de-serialized string
+     * @throws Exception issue during the de-serialization
+     */
+    private ModuleImpl decodeModule(String data) throws Exception {
+        byte[] xml = Base64.decode(data);
+        ByteArrayInputStream is = new ByteArrayInputStream(xml);
+        return (ModuleImpl) jaxbContext.createUnmarshaller().unmarshal(is);
+    }
 }
+

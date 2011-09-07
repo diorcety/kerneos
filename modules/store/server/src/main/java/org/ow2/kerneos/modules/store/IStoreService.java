@@ -31,19 +31,33 @@ import java.util.Collection;
 
 public interface IStoreService {
     public StoreImpl getStore(String url);
+
     public ModuleImpl getModule(String id);
+
     public ModuleImage getModuleImage(String id);
+
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
                                                 Integer itemByPage, Integer page);
+
     public Collection<ModuleImpl> searchModulesWithImage(String filter, String field, String order,
-                                                Integer itemByPage, Integer page);
+                                                         Integer itemByPage, Integer page);
+
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
                                                           Integer itemByPage, Integer page);
+
     public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order,
-                                                          Integer itemByPage, Integer page);
+                                                                   Integer itemByPage, Integer page);
+
     public Collection<ModuleImpl> getCategories();
+
     public CategoryImpl getCategory(String id);
+
     public String installModule(String id);
+
+    public String uninstallModule(String id);
+
+    public String updateModule(String id);
+
     public Collection<ModuleImpl> getInstalledModules();
 
 }
