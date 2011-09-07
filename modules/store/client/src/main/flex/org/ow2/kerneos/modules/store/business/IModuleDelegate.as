@@ -20,15 +20,13 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.business
-{
+package org.ow2.kerneos.modules.store.business {
 import org.ow2.kerneos.common.business.IDelegateResponder;
 
 /**
  * The interface of the delegate.
  */
-public interface IModuleDelegate extends IDelegateResponder
-{
+public interface IModuleDelegate extends IDelegateResponder {
     ////////////////////////////////////////////////////////////////////
     //                                                                //
     //             Function that does the requested operation         //
@@ -36,25 +34,35 @@ public interface IModuleDelegate extends IDelegateResponder
     ////////////////////////////////////////////////////////////////////
 
 
-    function getStore(parameters : Object) : void;
+    function getStore(parameters:Object):void;
 
-    function getModule(parameters : Object) : void;
+    function getModule(parameters:Object):void;
 
-    function getModuleImage(parameters : Object) : void;
+    function getModuleImage(parameters:Object):void;
 
-    function searchModules(filter : Object, field : Object, order : Object,
-                           itemByPage : Object, page : Object) : void;
+    function searchModules(filter:Object, field:Object, order:Object, itemByPage:Object, page:Object):void;
 
-    function searchModulesWithImage(filter : Object, field : Object, order : Object,
-                                    itemByPage : Object, page : Object) : void;
+    function searchModulesWithImage(filter:Object, field:Object, order:Object, itemByPage:Object, page:Object):void;
 
-    function searchModulesByCategory(id : Object, field : Object, order : Object,
-                                     itemByPage : Object, page : Object) : void;
+    function searchModulesByCategory(id:Object, field:Object, order:Object, itemByPage:Object, page:Object):void;
 
-    function searchModulesWithImageByCategory(id : Object, field : Object, order : Object,
-                                              itemByPage : Object, page : Object) : void;
+    function searchModulesWithImageByCategory(id:Object, field:Object, order:Object, itemByPage:Object, page:Object):void;
 
-    function installModule(parameters : Object) : void;
+    function installModule(parameters:Object):void;
+
+    function uninstallModule(parameters:Object):void;
+
+    function updateModule(parameters:Object):void;
+
+    function getInstalledModules():void;
+
+    function addStore(parameters:Object):void;
+
+    function updateStore(parameters:Object):void;
+
+    function deleteStore(parameters:Object):void;
+
+    function getStores():void;
 
 }
 }

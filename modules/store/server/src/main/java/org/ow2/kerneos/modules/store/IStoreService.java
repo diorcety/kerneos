@@ -52,12 +52,20 @@ public interface IStoreService {
 
     public CategoryImpl getCategory(String id);
 
-    public String installModule(String id);
-
-    public String uninstallModule(String id);
-
-    public String updateModule(String id);
-
     public Collection<ModuleImpl> getInstalledModules();
+
+    public void installModule(String id);
+
+    public void updateModule(ModuleImpl installedModule);
+
+    public void uninstallModule(String id);
+
+    public void addStore(StoreImpl store);
+
+    public void updateStore(StoreImpl store);
+
+    public void deleteStore(StoreImpl store);
+
+    public Collection<StoreImpl> getStores();
 
 }

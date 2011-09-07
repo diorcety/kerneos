@@ -216,13 +216,14 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      * @return Confirmation message of good or wrong module install
      */
     @Override
-    public synchronized String installModule(String id) {
+    public void installModule(String id) {
         ModuleVersion moduleVersion = storeRS.getModuleVersion(id);
         byte[] moduleBinary = storeRS.downloadModuleVersion(id);
 
         if (moduleBinary == null) {
-            return "";
+            return;
         }
+
         File file = null;
         Configuration gravityDestination = null;
         try {
@@ -252,7 +253,6 @@ public class StoreService implements KerneosSimpleService, IStoreService {
                 logger.error("Can't delete the configuration");
             }
         }
-        return "";
     }
 
     @Override
@@ -278,12 +278,51 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     @Override
-    public String uninstallModule(String id) {
-        return null;
+    public void updateModule(ModuleImpl installedModule) {
+        ModuleImpl lastModule = this.getModule(installedModule.getId());
+        if (lastModule.getMajor() > installedModule.getMajor()) {
+            this.uninstallModule(installedModule.getId());
+            this.installModule(installedModule.getId());
+        } else {
+            if (lastModule.getMajor() == installedModule.getMajor()) {
+                if (lastModule.getMinor() > installedModule.getMinor()) {
+                    this.uninstallModule(installedModule.getId());
+                    this.installModule(installedModule.getId());
+                } else {
+                    if (lastModule.getMinor() == installedModule.getMinor()) {
+                        if (lastModule.getRevision() > installedModule.getRevision()) {
+                            this.uninstallModule(installedModule.getId());
+                            this.installModule(installedModule.getId());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
-    public String updateModule(String id) {
+    public void uninstallModule(String id) {
+        //TODO
+    }
+
+    @Override
+    public void addStore(StoreImpl store) {
+        //TODO
+    }
+
+    @Override
+    public void updateStore(StoreImpl store) {
+        //TODO
+    }
+
+    @Override
+    public void deleteStore(StoreImpl store) {
+        //TODO
+    }
+
+    @Override
+    public Collection<StoreImpl> getStores() {
+        //TODO
         return null;
     }
 
@@ -313,4 +352,3 @@ public class StoreService implements KerneosSimpleService, IStoreService {
         return (ModuleImpl) jaxbContext.createUnmarshaller().unmarshal(is);
     }
 }
-

@@ -29,8 +29,11 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
-import org.ow2.kerneos.modules.store.vo.ModuleVO;
+import org.ow2.kerneos.modules.store.event.AddOrUpdateStoreEvent;
+
+import org.ow2.kerneos.modules.store.event.GetOrDeleteStoreEvent;
+
+import org.ow2.kerneos.modules.store.vo.StoreVO;
 
 // Server Exceptions imports
 
@@ -46,7 +49,7 @@ import mx.collections.ArrayCollection;
  * The command class from the cairngorm model.
  */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class SearchModulesWithImageByCategory implements ICommand, IResponder {
+public class AddNewStore implements ICommand, IResponder {
     /**
      * Retrieve the delegate and use it to make the call.
      */
@@ -57,31 +60,20 @@ public class SearchModulesWithImageByCategory implements ICommand, IResponder {
         //                                            //
         ////////////////////////////////////////////////
 
-
+        // - Update the model
         // - Get the delegate
         // - Register the responder
         // - Make the call
+
+        var parameters:StoreVO = (event as AddOrUpdateStoreEvent).store;
+
+        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
+        moduleModel.listStores.addItem(parameters);
+
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var id:String = (event as SearchModulesEvent).id;
-        var field:String = (event as SearchModulesEvent).field;
-        var order:String = (event as SearchModulesEvent).order;
 
-        var itemByPage:Object;
-        if ((event as SearchModulesEvent).itemByPage < 0) {
-            itemByPage = null;
-        } else {
-            itemByPage = (event as SearchModulesEvent).itemByPage;
-        }
-
-        var page:Object;
-        if ((event as SearchModulesEvent).page < 0) {
-            page = null;
-        } else {
-            page = (event as SearchModulesEvent).page;
-        }
-
-        delegate.searchModulesWithImageByCategory(id, field, order, itemByPage, page);
+        delegate.addStore(parameters);
     }
 
     /**
@@ -93,25 +85,12 @@ public class SearchModulesWithImageByCategory implements ICommand, IResponder {
         //             Handle the result              //
         //                                            //
         ////////////////////////////////////////////////
-
-
-        // Handle the result of the call. Usely, the model is updated.
-        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-
-        [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')] var result:ArrayCollection = ArrayCollection((data as ResultEvent).result);
-
-        for (var i:int = 0; i < result.length; i++) {
-            result.getItemAt(i).convertOriginalByteArrayImageToBitMapImage();
-        }
-
-        moduleModel.listModules = result;
     }
 
     /**
      * Raise an alert when something is wrong.
      */
     public function fault(info:Object):void {
-
         ////////////////////////////////////////
         //                                    //
         //             Handle fault           //

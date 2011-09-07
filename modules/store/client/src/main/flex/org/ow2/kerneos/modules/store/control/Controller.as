@@ -20,11 +20,11 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.control
-{
+package org.ow2.kerneos.modules.store.control {
 import com.adobe.cairngorm.control.FrontController;
 
 import org.ow2.kerneos.modules.store.command.*;
+import org.ow2.kerneos.modules.store.command.UpdateModule;
 import org.ow2.kerneos.modules.store.event.*;
 
 
@@ -36,12 +36,9 @@ public class Controller extends FrontController {
     /**
      * Create an instance of the controller. Commands are initialized here.
      */
-    public function Controller()
-    {
+    public function Controller() {
         initialiseCommands();
     }
-
-
 
     /**
      * Add all the commands to the pool of commands.
@@ -54,38 +51,50 @@ public class Controller extends FrontController {
      * postfixed with this unique ID.
      */
 
-    public function initialiseCommands() : void
-    {
+    public function initialiseCommands():void {
         // Add the events to the controler with the associated command
-        this.addCommand(StoreEvent.GET_STORE, GetStoreInfo);
+        this.addCommand(GetOrDeleteStoreEvent.GET_STORE, GetStoreInfo);
         this.addCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE, ChangeSelectedModuleInstall);
         this.addCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE, ChangeStoreState);
-        this.addCommand(GetModuleEvent.GET_MODULE, GetModule);
-        this.addCommand(GetModuleEvent.GET_MODULE_IMAGE, GetModuleImage);
+        this.addCommand(ModuleEvent.GET_MODULE, GetModule);
+        this.addCommand(ModuleEvent.GET_MODULE_IMAGE, GetModuleImage);
         this.addCommand(SearchModulesEvent.SEARCH_MODULES, SearchModules);
         this.addCommand(SearchModulesEvent.SEARCH_MODULES_BY_CATEGORY, SearchModulesByCategory);
         this.addCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE, SearchModulesWithImage);
         this.addCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY, SearchModulesWithImageByCategory);
-        this.addCommand(InstallModuleEvent.INSTALL_MODULE, InstallModule);
+        this.addCommand(ModuleEvent.INSTALL_MODULE, InstallModule);
+        this.addCommand(GetInstalledModulesEvent.GET_INSTALLED_MODULES, GetInstalledModules);
+        this.addCommand(ModuleEvent.UNINSTALL_MODULE, UninstallModule);
+        this.addCommand(ModuleEvent.UPDATE_MODULE, UpdateModule);
+        this.addCommand(GetOrDeleteStoreEvent.DELETE_STORE, DeleteStore);
+        this.addCommand(AddOrUpdateStoreEvent.ADD_STORE, AddNewStore);
+        this.addCommand(AddOrUpdateStoreEvent.UPDATE_STORE, UpdateStore);
+        this.addCommand(GetOrDeleteStoreEvent.GET_STORES, GetStores);
     }
 
     /**
      * Remove all the commands to the pool of commands
      *
      */
-    public function removeCommands() : void
-    {
+    public function removeCommands():void {
         // Remove the events to the controller with the associated command
-        this.removeCommand(StoreEvent.GET_STORE);
+        this.removeCommand(GetOrDeleteStoreEvent.GET_STORE);
         this.removeCommand(ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
         this.removeCommand(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
-        this.removeCommand(GetModuleEvent.GET_MODULE);
-        this.removeCommand(GetModuleEvent.GET_MODULE_IMAGE);
+        this.removeCommand(ModuleEvent.GET_MODULE);
+        this.removeCommand(ModuleEvent.GET_MODULE_IMAGE);
         this.removeCommand(SearchModulesEvent.SEARCH_MODULES);
         this.removeCommand(SearchModulesEvent.SEARCH_MODULES_BY_CATEGORY);
         this.removeCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE);
         this.removeCommand(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY);
-        this.removeCommand(InstallModuleEvent.INSTALL_MODULE);
+        this.removeCommand(ModuleEvent.INSTALL_MODULE);
+        this.removeCommand(GetInstalledModulesEvent.GET_INSTALLED_MODULES);
+        this.removeCommand(ModuleEvent.UNINSTALL_MODULE);
+        this.removeCommand(ModuleEvent.UPDATE_MODULE);
+        this.removeCommand(GetOrDeleteStoreEvent.DELETE_STORE);
+        this.removeCommand(AddOrUpdateStoreEvent.ADD_STORE);
+        this.removeCommand(AddOrUpdateStoreEvent.UPDATE_STORE);
+        this.removeCommand(GetOrDeleteStoreEvent.GET_STORES);
     }
 
 }

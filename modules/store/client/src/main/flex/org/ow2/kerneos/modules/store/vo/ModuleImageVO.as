@@ -20,8 +20,7 @@
  *
  * $Id$
  */
-package org.ow2.kerneos.modules.store.vo
-{
+package org.ow2.kerneos.modules.store.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 import flash.display.Bitmap;
@@ -29,8 +28,7 @@ import flash.display.Bitmap;
 import flash.utils.ByteArray;
 
 [Bindable]
-public class ModuleImageVO implements IValueObject
-{
+public class ModuleImageVO implements IValueObject {
 
     private var _idModule:String;
     private var _imgOrig:ByteArray;
@@ -39,37 +37,30 @@ public class ModuleImageVO implements IValueObject
     private var _image:Bitmap;
 
 
-    public function ModuleImageVO()
-    {
+    public function ModuleImageVO() {
     }
 
-    public function get idModule():String
-    {
+    public function get idModule():String {
         return _idModule;
     }
 
-    public function set idModule(idModule:String):void
-    {
+    public function set idModule(idModule:String):void {
         this._idModule = idModule;
     }
 
-    public function get imgOrig():ByteArray
-    {
+    public function get imgOrig():ByteArray {
         return _imgOrig;
     }
 
-    public function set imgOrig(_imgOrig:ByteArray):void
-    {
+    public function set imgOrig(_imgOrig:ByteArray):void {
         this._imgOrig = _imgOrig;
     }
 
-    public function get image():Bitmap
-    {
+    public function get image():Bitmap {
         return _image;
     }
 
-    public function set image(_image:Bitmap):void
-    {
+    public function set image(_image:Bitmap):void {
         this._image = _image;
     }
 

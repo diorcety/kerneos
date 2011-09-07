@@ -20,8 +20,7 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.command
-{
+package org.ow2.kerneos.modules.store.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
 import com.adobe.cairngorm.control.CairngormEventDispatcher;
@@ -40,10 +39,11 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
-import org.ow2.kerneos.modules.store.event.GetModuleEvent;
+import org.ow2.kerneos.modules.store.event.ModuleEvent;
 import org.ow2.kerneos.modules.store.vo.ModuleImageVO;
 
 // Server Exceptions imports
+
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 
@@ -56,13 +56,11 @@ import org.ow2.kerneos.common.util.IconUtility;
  * The command class from the cairngorm model.
  */
 [Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
-public class GetModuleImage implements ICommand, IResponder
-{
+public class GetModuleImage implements ICommand, IResponder {
     /**
      * Retrieve the delegate and use it to make the call.
      */
-    public function execute(event:CairngormEvent):void
-    {
+    public function execute(event:CairngormEvent):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the execution           //
@@ -75,7 +73,7 @@ public class GetModuleImage implements ICommand, IResponder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var parameters : String = (event as GetModuleEvent).id;
+        var parameters:String = (event as ModuleEvent).id;
         delegate.getModuleImage(parameters);
 
     }
@@ -83,8 +81,7 @@ public class GetModuleImage implements ICommand, IResponder
     /**
      * Handle the result of the server call.
      */
-    public function result(data:Object):void
-    {
+    public function result(data:Object):void {
         ////////////////////////////////////////////////
         //                                            //
         //             Handle the result              //
@@ -95,7 +92,7 @@ public class GetModuleImage implements ICommand, IResponder
         // Handle the result of the call. Usely, the model is updated.
 
 
-        var moduleImage : ModuleImageVO = (data as ResultEvent).result as ModuleImageVO;
+        var moduleImage:ModuleImageVO = (data as ResultEvent).result as ModuleImageVO;
 
         trace("The image of module with id " + moduleImage.idModule + " is found in the server");
 
@@ -104,13 +101,12 @@ public class GetModuleImage implements ICommand, IResponder
         imageLoader.loadBytes(moduleImage.imgOrig);
     }
 
-    private function imageLoadComplete(event:Event):void
-    {
+    private function imageLoadComplete(event:Event):void {
         var loader:Loader = (event.target as LoaderInfo).loader;
 
         var bmp:Bitmap = Bitmap(loader.content);
 
-        var bmpResult : Bitmap = null;
+        var bmpResult:Bitmap = null;
 
         if (bmp.height != 100 || bmp.width != 100) {
             var m:Matrix = new Matrix();
@@ -129,8 +125,7 @@ public class GetModuleImage implements ICommand, IResponder
     /**
      * Raise an alert when something is wrong.
      */
-    public function fault(info:Object):void
-    {
+    public function fault(info:Object):void {
 
         ////////////////////////////////////////
         //                                    //
@@ -146,10 +141,10 @@ public class GetModuleImage implements ICommand, IResponder
         // Code :
 
         // Retrieve the fault event
-        var faultEvent : FaultEvent = FaultEvent(info);
+        var faultEvent:FaultEvent = FaultEvent(info);
 
         // Tell the view and let it handle this
-        var serverSideExceptionEvent : ServerSideExceptionEvent =
+        var serverSideExceptionEvent:ServerSideExceptionEvent =
                 new ServerSideExceptionEvent(
                         "serverSideException" + ModuleModelLocator.getInstance().componentID,
                         new ServerSideException("Error while Executing the action",
@@ -160,7 +155,6 @@ public class GetModuleImage implements ICommand, IResponder
 
         // Dispatch the event using the cairngorm event dispatcher
         CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
-
 
 
     }

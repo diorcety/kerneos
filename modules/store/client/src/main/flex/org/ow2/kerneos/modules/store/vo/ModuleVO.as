@@ -20,8 +20,7 @@
  *
  * $Id$
  */
-package org.ow2.kerneos.modules.store.vo
-{
+package org.ow2.kerneos.modules.store.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
 import flash.display.Bitmap;
@@ -35,8 +34,7 @@ import flash.utils.ByteArray;
 import mx.collections.ArrayCollection;
 
 [Bindable]
-public class ModuleVO implements IValueObject
-{
+public class ModuleVO implements IValueObject {
 
     private var _id:String;
     /**
@@ -108,147 +106,118 @@ public class ModuleVO implements IValueObject
     private var _imgOrig:ByteArray;
 
 
-    public function ModuleVO()
-    {
+    public function ModuleVO() {
     }
 
-    public function get id():String
-    {
+    public function get id():String {
         return _id;
     }
 
-    public function set id(id:String):void
-    {
+    public function set id(id:String):void {
         this._id = id;
     }
 
-    public function get name():String
-    {
+    public function get name():String {
         return _name;
     }
 
-    public function set name(value:String):void
-    {
+    public function set name(value:String):void {
         _name = value;
     }
 
-    public function get author():String
-    {
+    public function get author():String {
         return _author;
     }
 
-    public function set author(value:String):void
-    {
+    public function set author(value:String):void {
         _author = value;
     }
 
-    public function get icon():Bitmap
-    {
+    public function get icon():Bitmap {
         return _icon;
     }
 
-    public function set icon(value:Bitmap):void
-    {
+    public function set icon(value:Bitmap):void {
         _icon = value;
     }
 
-    public function get version():String
-    {
+    public function get version():String {
         return _version;
     }
 
-    public function set version(value:String):void
-    {
+    public function set version(value:String):void {
         _version = value;
     }
 
-    public function get description():String
-    {
+    public function get description():String {
         return _description;
     }
 
-    public function set description(value:String):void
-    {
+    public function set description(value:String):void {
         _description = value;
     }
 
-    public function get date():Date
-    {
+    public function get date():Date {
         return _date;
     }
 
-    public function set date(value:Date):void
-    {
+    public function set date(value:Date):void {
         _date = value;
     }
 
-    public function get size():int
-    {
+    public function get size():int {
         return _size;
     }
 
-    public function set size(value:int):void
-    {
+    public function set size(value:int):void {
         _size = value;
     }
 
-    public function get category():String
-    {
+    public function get category():String {
         return _category;
     }
 
-    public function set category(value:String):void
-    {
+    public function set category(value:String):void {
         _category = value;
     }
 
-    public function get installsNumber():int
-    {
+    public function get installsNumber():int {
         return _installsNumber;
     }
 
-    public function set installsNumber(value:int):void
-    {
+    public function set installsNumber(value:int):void {
         _installsNumber = value;
     }
 
-    public function get selected():Boolean
-    {
+    public function get selected():Boolean {
         return _selected;
     }
 
-    public function set selected(value:Boolean):void
-    {
+    public function set selected(value:Boolean):void {
         _selected = value;
     }
 
-    public function get url():String
-    {
+    public function get url():String {
         return _url;
     }
 
-    public function set url(url:String):void
-    {
+    public function set url(url:String):void {
         this._url = url;
     }
 
-    public function get categories():ArrayCollection
-    {
+    public function get categories():ArrayCollection {
         return this._categories;
     }
 
-    public function set categories(categories:ArrayCollection):void
-    {
+    public function set categories(categories:ArrayCollection):void {
         this._categories = categories;
     }
 
-    public function get imgOrig():ByteArray
-    {
+    public function get imgOrig():ByteArray {
         return this._imgOrig;
     }
 
-    public function set imgOrig(imgOrig:ByteArray):void
-    {
+    public function set imgOrig(imgOrig:ByteArray):void {
         this._imgOrig = imgOrig;
     }
 
@@ -256,19 +225,18 @@ public class ModuleVO implements IValueObject
      * This function takes the Byte Array of the original icon image imgOrig and
      * convert it in a 100 x 100 pixels Bitmap and save this Bitmap in the icon attribute
      */
-    public function convertOriginalByteArrayImageToBitMapImage() : void {
+    public function convertOriginalByteArrayImageToBitMapImage():void {
         var imageLoader:Loader = new Loader();
         imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
         imageLoader.loadBytes(this._imgOrig);
     }
 
-    private function imageLoadComplete(event:Event):void
-    {
+    private function imageLoadComplete(event:Event):void {
         var loader:Loader = (event.target as LoaderInfo).loader;
 
         var bmp:Bitmap = Bitmap(loader.content);
 
-        var bmpResult : Bitmap = null;
+        var bmpResult:Bitmap = null;
 
         if (bmp.height != 100 || bmp.width != 100) {
             var m:Matrix = new Matrix();

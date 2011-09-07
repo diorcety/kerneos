@@ -25,34 +25,26 @@ import flash.events.Event;
 
 import com.adobe.cairngorm.control.CairngormEvent;
 
-import org.ow2.kerneos.modules.store.vo.ModuleVO;
+import org.ow2.kerneos.modules.store.vo.StoreVO;
 
-public class ChangeStoreStateEvent extends CairngormEvent {
+public class AddOrUpdateStoreEvent extends CairngormEvent {
 
-    public static var CHANGE_MODULE_STATE:String = "CHANGE_MODULE_STATE";
-    public static var CHANGE_MODULE_STATE_DETAIL:String = "CHANGE_MODULE_STATE_DETAIL";
+    public static var ADD_STORE:String = "ADD_STORE";
 
-    private var _state:String = "";
-    private var _moduleDetail:ModuleVO = null;
+    public static var UPDATE_STORE:String = "UPDATE_STORE";
 
-    public function ChangeStoreStateEvent(type:String) {
+    private var _store:StoreVO = null;
+
+    public function AddOrUpdateStoreEvent(type:String) {
         super(type);
     }
 
-    public function set state(state:String):void {
-        this._state = state;
+    public function set store(store:StoreVO):void {
+        this._store = store;
     }
 
-    public function get state():String {
-        return _state;
-    }
-
-    public function set moduleDetail(moduleDetail:ModuleVO):void {
-        this._moduleDetail = moduleDetail;
-    }
-
-    public function get moduleDetail():ModuleVO {
-        return _moduleDetail;
+    public function get store():StoreVO {
+        return _store;
     }
 
     /**
@@ -60,10 +52,9 @@ public class ChangeStoreStateEvent extends CairngormEvent {
      * returns a new ModuleEvent
      */
     override public function clone():Event {
-        var ev:ChangeStoreStateEvent = new ChangeStoreStateEvent(this.type);
+        var ev:AddOrUpdateStoreEvent = new AddOrUpdateStoreEvent(this.type);
 
-        ev.state = this._state;
-        ev.moduleDetail = this._moduleDetail;
+        ev.store = this._store;
 
         return ev;
     }

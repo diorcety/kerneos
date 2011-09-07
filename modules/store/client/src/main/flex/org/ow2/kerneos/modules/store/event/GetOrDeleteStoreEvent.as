@@ -22,27 +22,28 @@
  */
 package org.ow2.kerneos.modules.store.event {
 import flash.events.Event;
+
 import com.adobe.cairngorm.control.CairngormEvent;
 
-public class StoreEvent extends CairngormEvent {
+public class GetOrDeleteStoreEvent extends CairngormEvent {
 
-    public static var GET_STORE : String = "GET_STORE";
+    public static var GET_STORE:String = "GET_STORE";
 
+    public static var GET_STORES:String = "GET_STORES";
 
-    private var _url : String = "";
+    public static var DELETE_STORE:String = "DELETE_STORE";
 
-    public function StoreEvent(type : String)
-    {
+    private var _url:String = "";
+
+    public function GetOrDeleteStoreEvent(type:String) {
         super(type);
     }
 
-    public function set url(url:String):void
-    {
+    public function set url(url:String):void {
         this._url = url;
     }
 
-    public function get url(): String
-    {
+    public function get url():String {
         return _url;
     }
 
@@ -50,11 +51,10 @@ public class StoreEvent extends CairngormEvent {
      * Overrides the clone function of the CairngormEvent class.
      * returns a new ModuleEvent
      */
-    override public function clone() : Event
-    {
-        var ev:StoreEvent = new StoreEvent(this.type);
+    override public function clone():Event {
+        var ev:GetOrDeleteStoreEvent = new GetOrDeleteStoreEvent(this.type);
 
-         ev.url = this._url;
+        ev.url = this._url;
 
         return ev;
     }

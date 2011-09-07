@@ -22,33 +22,33 @@
      -
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-				xmlns:s="library://ns.adobe.com/flex/spark" 
-				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="true">
-	
-	<fx:Script>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                xmlns:mx="library://ns.adobe.com/flex/mx"
+                autoDrawBackground="true">
+
+    <fx:Script>
 		<![CDATA[
         import mx.controls.Alert;
 
         import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
         import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
-        import org.ow2.kerneos.modules.store.event.InstallModuleEvent;
+        import org.ow2.kerneos.modules.store.event.ModuleEvent;
         import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
         import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
         protected function installModuleButton_clickHandler(event:MouseEvent):void {
             //TODO show confirmation message and maybe a progress status bar
             // Alert.show("Install " + data.name);
-            var evt : InstallModuleEvent = new InstallModuleEvent(InstallModuleEvent.INSTALL_MODULE);
+            var evt:ModuleEvent = new ModuleEvent(ModuleEvent.INSTALL_MODULE);
             evt.id = (data as ModuleVO).id;
             CairngormEventDispatcher.getInstance().dispatchEvent(evt);
         }
 
         protected function moduleIcon_clickHandler(event:MouseEvent):void {
             if (event.target.id != "installModuleButton") {
-                var evt : ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
                 evt.state = "ModuleDetail";
                 evt.moduleDetail = data as ModuleVO;
                 CairngormEventDispatcher.getInstance().dispatchEvent(evt);
@@ -57,14 +57,14 @@
         ]]>
 	</fx:Script>
 
-	<s:VGroup id="module1" width="128" height="200" horizontalAlign="center"
-			  verticalAlign="top" click="moduleIcon_clickHandler(event)" >
+    <s:VGroup id="module1" width="128" height="200" horizontalAlign="center"
+              verticalAlign="top" click="moduleIcon_clickHandler(event)">
         <s:Image id="moduleIconImage" x="0" y="0" width="100" height="100" source="{data.icon}"/>
-		<s:Label fontWeight="bold" paddingLeft="0" text="{data.name}"/>
-		<s:Label fontWeight="bold" paddingLeft="0" paddingRight="0" text="{data.author}"
-				 verticalAlign="top"/>
-		<s:Button id="installModuleButton" label="Install"
-				  click="installModuleButton_clickHandler(event)"/>
+        <s:Label fontWeight="bold" paddingLeft="0" text="{data.name}"/>
+        <s:Label fontWeight="bold" paddingLeft="0" paddingRight="0" text="{data.author}"
+                 verticalAlign="top"/>
+        <s:Button id="installModuleButton" label="Install"
+                  click="installModuleButton_clickHandler(event)"/>
     </s:VGroup>
-	
+
 </s:ItemRenderer>

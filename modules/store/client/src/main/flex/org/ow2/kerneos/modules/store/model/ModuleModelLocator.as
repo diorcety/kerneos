@@ -20,8 +20,7 @@
  *
  * --------------------------------------------------------------------------
  */
-package org.ow2.kerneos.modules.store.model
-{
+package org.ow2.kerneos.modules.store.model {
 
 import avmplus.metadataXml;
 
@@ -45,8 +44,7 @@ import org.ow2.kerneos.modules.store.vo.StoreVO;
  * The model locator for the Module.
  */
 [Bindable]
-public class ModuleModelLocator implements ModelLocator
-{
+public class ModuleModelLocator implements ModelLocator {
 
     ////////////////////////////////////
     //                                //
@@ -70,7 +68,7 @@ public class ModuleModelLocator implements ModelLocator
     /**
      * Unique instance of this locator.
      */
-    private static var moduleModel : ModuleModelLocator = null;
+    private static var moduleModel:ModuleModelLocator = null;
 
     ////////////////////////////////////////////
     //                                        //
@@ -80,7 +78,7 @@ public class ModuleModelLocator implements ModelLocator
 
     // Put here the delegate instances of your model.
     // Example :
-    private var myDelegate : IModuleDelegate = null;
+    private var myDelegate:IModuleDelegate = null;
 
 
     ////////////////////////////////////////////////
@@ -92,28 +90,40 @@ public class ModuleModelLocator implements ModelLocator
 
     // Put here all the variables of the model
 
-    private var _myStoreInfo : org.ow2.kerneos.modules.store.vo.StoreVO = null;
+    private var _currentStore:StoreVO = null;
 
-    private var _storeState : String = "";
+    private var _storeState:String = "";
 
-    private var _mainModule : ModuleVO = null;
+    private var _mainModule:ModuleVO = null;
 
     /**
      * List of selected modules of the installed modules list
      */
-    private var _listeSelectedModules : ArrayCollection = null;
+    private var _listSelectedModules:ArrayCollection = null;
 
     /**
      * List of modules showed in the main view, also is the list
      * of results finding modules
      */
     [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')]
-    private var _listeModules : ArrayCollection = null;
+    private var _listModules:ArrayCollection = null;
 
-    private var _imageTest : Bitmap = null;
+    private var _imageTest:Bitmap = null;
 
     [ArrayElementType('String')]
-    private var _categories : ArrayCollection = null;
+    private var _categories:ArrayCollection = null;
+
+    /**
+     * List of installed modules
+     */
+    [ArrayElementType('org.ow2.kerneos.modules.store.vo.ModuleVO')]
+    private var _listInstalledModules:ArrayCollection = null;
+
+    /**
+     * List of installed modules
+     */
+    [ArrayElementType('org.ow2.kerneos.modules.store.vo.StoreVO')]
+    private var _listStores:ArrayCollection = null;
 
     ////////////////////////////////////
     //                                //
@@ -121,12 +131,10 @@ public class ModuleModelLocator implements ModelLocator
     //                                //
     ////////////////////////////////////
 
-    public function ModuleModelLocator()
-    {
+    public function ModuleModelLocator() {
         super();
 
-        if (moduleModel != null)
-        {
+        if (moduleModel != null) {
             throw new Error("Only one ModelLocator has to be set");
         }
     }
@@ -135,14 +143,32 @@ public class ModuleModelLocator implements ModelLocator
     /**
      * Get the only created instance of the ModuleModelLocator
      */
-    public static function getInstance() : ModuleModelLocator
-    {
-        if (ModuleModelLocator.moduleModel == null)
-        {
+    public static function getInstance():ModuleModelLocator {
+        if (ModuleModelLocator.moduleModel == null) {
             ModuleModelLocator.moduleModel = new ModuleModelLocator();
         }
 
         return ModuleModelLocator.moduleModel;
+    }
+
+    /**
+     * Return the item index if the store with this url is contained in the list, otherwise it return -1
+     * @param url Store url
+     * @return item index into listStores or -1 if not funded
+     */
+    public function getListStoreItemIndex(url:String):int {
+        if (this._listStores == null || this._listStores.length == 0) {
+            return -1;
+        }
+
+        var index:int = 0;
+        for each (var store:StoreVO in this._listStores) {
+            if (store.url == url) {
+                return index;
+            }
+        }
+
+        return -1;
     }
 
     ////////////////////////////////////
@@ -154,32 +180,40 @@ public class ModuleModelLocator implements ModelLocator
 
     // Put here all the setters for the model update.
 
-    public function set myStoreInfo (_myStore : org.ow2.kerneos.modules.store.vo.StoreVO) : void {
-        this._myStoreInfo = _myStore;
+    public function set currentStore(_myStore:org.ow2.kerneos.modules.store.vo.StoreVO):void {
+        this._currentStore = _myStore;
     }
 
-    public function set storeState (_state : String) : void {
+    public function set storeState(_state:String):void {
         this._storeState = _state;
     }
 
-    public function set listeSelectedModules (_listeModules : ArrayCollection) : void {
-        this._listeSelectedModules = _listeModules;
+    public function set listSelectedModules(_listModules:ArrayCollection):void {
+        this._listSelectedModules = _listModules;
     }
 
-    public function set listeModules (_listeModules : ArrayCollection) : void {
-        this._listeModules = _listeModules;
+    public function set listModules(_listModules:ArrayCollection):void {
+        this._listModules = _listModules;
     }
 
-    public function set mainModule (_mainModule : ModuleVO) : void {
+    public function set mainModule(_mainModule:ModuleVO):void {
         this._mainModule = _mainModule;
     }
 
-    public function set imageTest (_imageTest : Bitmap) : void {
+    public function set imageTest(_imageTest:Bitmap):void {
         this._imageTest = _imageTest;
     }
 
-    public function set categories (_categories : ArrayCollection) : void {
+    public function set categories(_categories:ArrayCollection):void {
         this._categories = _categories;
+    }
+
+    public function set listInstalledModules(_listInstalledModules:ArrayCollection):void {
+        this._listInstalledModules = _listInstalledModules;
+    }
+
+    public function set listStores(_listStores:ArrayCollection):void {
+        this._listStores = _listStores;
     }
 
     ////////////////////////////////////
@@ -191,32 +225,40 @@ public class ModuleModelLocator implements ModelLocator
 
     // Put here all the getters to access the model variables
 
-    public function get myStoreInfo () : org.ow2.kerneos.modules.store.vo.StoreVO {
-        return this._myStoreInfo
+    public function get currentStore():org.ow2.kerneos.modules.store.vo.StoreVO {
+        return this._currentStore
     }
 
-    public function get storeState () : String {
+    public function get storeState():String {
         return this._storeState;
     }
 
-    public function get listeSelectedModules () : ArrayCollection {
-        return this._listeSelectedModules;
+    public function get listSelectedModules():ArrayCollection {
+        return this._listSelectedModules;
     }
 
-    public function get listeModules () : ArrayCollection {
-        return this._listeModules;
+    public function get listModules():ArrayCollection {
+        return this._listModules;
     }
 
-    public function get mainModule () : ModuleVO {
+    public function get mainModule():ModuleVO {
         return this._mainModule;
     }
 
-    public function get imageTest () : Bitmap {
+    public function get imageTest():Bitmap {
         return this._imageTest;
     }
 
-    public function get categories () : ArrayCollection {
+    public function get categories():ArrayCollection {
         return this._categories;
+    }
+
+    public function get listInstalledModules():ArrayCollection {
+        return this._listInstalledModules;
+    }
+
+    public function get listStores():ArrayCollection {
+        return this._listStores;
     }
 
     ////////////////////////////////////////////
@@ -225,17 +267,13 @@ public class ModuleModelLocator implements ModelLocator
     //                                        //
     ////////////////////////////////////////////
 
-
     // Put here the getters to access all the delegates of the created module
-    // Example :
-    public function getMyDelegate() : IModuleDelegate {
+    public function getMyDelegate():IModuleDelegate {
         if (this.myDelegate == null) {
             this.myDelegate = new ModuleDelegate();
         }
         return this.myDelegate;
     }
-
-
 
 }
 }

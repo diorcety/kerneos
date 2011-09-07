@@ -22,92 +22,80 @@
  */
 package org.ow2.kerneos.modules.store.event {
 import flash.events.Event;
+
 import com.adobe.cairngorm.control.CairngormEvent;
 
 public class SearchModulesEvent extends CairngormEvent {
 
-    public static var SEARCH_MODULES : String = "SEARCH_MODULES";
+    public static var SEARCH_MODULES:String = "SEARCH_MODULES";
 
-    public static var SEARCH_MODULES_WITH_IMAGE : String = "SEARCH_MODULES_WITH_IMAGE";
+    public static var SEARCH_MODULES_WITH_IMAGE:String = "SEARCH_MODULES_WITH_IMAGE";
 
-    public static var SEARCH_MODULES_BY_CATEGORY : String = "SEARCH_MODULES_BY_CATEGORY";
+    public static var SEARCH_MODULES_BY_CATEGORY:String = "SEARCH_MODULES_BY_CATEGORY";
 
-    public static var SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY : String = "SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY";
+    public static var SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY:String = "SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY";
 
-    private var _id : String = null;
+    private var _id:String = null;
 
-    private var _filter : String = null;
+    private var _filter:String = null;
 
-    private var _field : String = null;
+    private var _field:String = null;
 
-    private var _order : String = null;
+    private var _order:String = null;
 
-    private var _itemByPage : int = -1;
+    private var _itemByPage:int = -1;
 
-    private var _page : int = -1;
+    private var _page:int = -1;
 
-    public function SearchModulesEvent(type : String)
-    {
+    public function SearchModulesEvent(type:String) {
         super(type);
     }
 
-    public function set id(id:String):void
-    {
+    public function set id(id:String):void {
         this._id = id;
     }
 
-    public function get id(): String
-    {
+    public function get id():String {
         return _id;
     }
 
-    public function set filter(filter:String) : void
-    {
+    public function set filter(filter:String):void {
         this._filter = filter;
     }
 
-    public function get filter() : String
-    {
+    public function get filter():String {
         return this._filter;
     }
 
-    public function set field(field:String) : void
-    {
+    public function set field(field:String):void {
         this._field = field;
     }
 
-    public function get field() : String
-    {
+    public function get field():String {
         return this._field;
     }
 
-    public function set order(order:String) : void
-    {
+    public function set order(order:String):void {
         this._order = order;
     }
 
-    public function get order() : String
-    {
+    public function get order():String {
         return this._order;
     }
 
-    public function set itemByPage(itemByPage:int) : void
-    {
+    public function set itemByPage(itemByPage:int):void {
         this._itemByPage = itemByPage;
     }
 
-    public function get itemByPage() : int
-    {
+    public function get itemByPage():int {
         return this._itemByPage;
     }
 
-    public function set page(itemByPage:int) : void
-    {
+    public function set page(itemByPage:int):void {
         this._page = page;
     }
 
-    public function get page() : int
-    {
+    public function get page():int {
         return this._page;
     }
 
@@ -115,8 +103,7 @@ public class SearchModulesEvent extends CairngormEvent {
      * Overrides the clone function of the CairngormEvent class.
      * returns a new ModuleEvent
      */
-    override public function clone() : Event
-    {
+    override public function clone():Event {
         var ev:SearchModulesEvent = new SearchModulesEvent(this.type);
 
         ev.id = this.id;
