@@ -90,15 +90,15 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
-    public function uninstallModule(parameters:Object):void {
+    public function uninstallModule(id:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.uninstallModule(parameters);
+        var call:Object = service.uninstallModule(id);
         call.addResponder(this.responder);
     }
 
-    public function updateModule(parameters:Object):void {
+    public function updateModule(id:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.updateModule(parameters);
+        var call:Object = service.updateModule(id);
         call.addResponder(this.responder);
     }
 

@@ -278,26 +278,9 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     @Override
-    public void updateModule(ModuleImpl installedModule) {
-        ModuleImpl lastModule = this.getModule(installedModule.getId());
-        if (lastModule.getMajor() > installedModule.getMajor()) {
-            this.uninstallModule(installedModule.getId());
-            this.installModule(installedModule.getId());
-        } else {
-            if (lastModule.getMajor() == installedModule.getMajor()) {
-                if (lastModule.getMinor() > installedModule.getMinor()) {
-                    this.uninstallModule(installedModule.getId());
-                    this.installModule(installedModule.getId());
-                } else {
-                    if (lastModule.getMinor() == installedModule.getMinor()) {
-                        if (lastModule.getRevision() > installedModule.getRevision()) {
-                            this.uninstallModule(installedModule.getId());
-                            this.installModule(installedModule.getId());
-                        }
-                    }
-                }
-            }
-        }
+    public void updateModule(String id) {
+        //is the module with this id updated ?
+        //if it isn't then uninstall it and install the last version
     }
 
     @Override

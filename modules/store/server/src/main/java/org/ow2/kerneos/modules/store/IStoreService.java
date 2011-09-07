@@ -56,7 +56,7 @@ public interface IStoreService {
 
     public void installModule(String id);
 
-    public void updateModule(ModuleImpl installedModule);
+    public void updateModule(String id);
 
     public void uninstallModule(String id);
 

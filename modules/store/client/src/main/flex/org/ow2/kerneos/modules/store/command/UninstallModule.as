@@ -59,11 +59,10 @@ public class UninstallModule implements ICommand, IResponder {
         // - Register the responder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
-        var parameters:String = (event as ModuleEvent).id;
+        var id:String = (event as ModuleEvent).id;
         delegate.responder = this;
 
-        delegate.uninstallModule(parameters);
-
+        delegate.uninstallModule(id);
     }
 
     /**

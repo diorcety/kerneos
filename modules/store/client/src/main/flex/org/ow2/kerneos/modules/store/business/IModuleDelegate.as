@@ -50,9 +50,9 @@ public interface IModuleDelegate extends IDelegateResponder {
 
     function installModule(parameters:Object):void;
 
-    function uninstallModule(parameters:Object):void;
+    function uninstallModule(id:Object):void;
 
-    function updateModule(parameters:Object):void;
+    function updateModule(id:Object):void;
 
     function getInstalledModules():void;
 
