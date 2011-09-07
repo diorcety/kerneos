@@ -53,8 +53,7 @@ public class ModuleImpl implements ModuleVersion {
     private Collection<CategoryImpl> categories;
     private byte[] imgOrig;
 
-    public ModuleImpl()
-    {
+    public ModuleImpl() {
 
     }
 
@@ -75,6 +74,10 @@ public class ModuleImpl implements ModuleVersion {
 
     public String getId() {
         return id;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public String getName() {
@@ -103,7 +106,7 @@ public class ModuleImpl implements ModuleVersion {
 
     @Override
     public Module getModule() {
-        return (Module)this;
+        return (Module) this;
     }
 
     @Override

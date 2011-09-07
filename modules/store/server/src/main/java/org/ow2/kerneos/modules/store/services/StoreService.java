@@ -28,7 +28,6 @@ package org.ow2.kerneos.modules.store.services;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.ow2.kerneos.core.service.KerneosService;
@@ -38,7 +37,6 @@ import org.ow2.kerneos.modules.store.IStoreService;
 import org.ow2.kerneos.modules.store.config.ModuleBundle;
 import org.ow2.kerneos.modules.store.impl.*;
 import org.ow2.kerneos.modules.store.util.Base64;
-import org.ow2.kerneosstore.api.ModuleVersion;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -65,6 +63,9 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      * The logger
      */
     private static Log logger = LogFactory.getLog(StoreService.class);
+    private static String BUNDLE_ID_KEY = "bundle_id";
+    private static String MODULE_ID_KEY = "module_id";
+    private static String MODULE_KEY = "module";
 
     private IStoreRS storeRS;
     private BundleContext bundleContext;
@@ -211,81 +212,204 @@ public class StoreService implements KerneosSimpleService, IStoreService {
         return (CategoryImpl) storeRS.getCategory(id);
     }
 
+    @Override
+    public Collection<ModuleImpl> getInstalledModules() {
+        Collection<ModuleImpl> list = new LinkedList<ModuleImpl>();
+        try {
+            Configuration[] cfgs = configAdmin.listConfigurations("(service.factoryPid=" + ModuleBundle.class.getName() + ")");
+            for (Configuration cfg : cfgs) {
+                String data = (String) cfg.getProperties().get(MODULE_KEY);
+                if (data != null) {
+                    try {
+                        ModuleImpl mv = decodeModule(data);
+                        list.add(mv);
+                    } catch (Exception e) {
+                        logger.error("Can't find Module information: " + cfg.toString());
+                    }
+                } else {
+                    logger.error("Can't find Module information: " + cfg.toString());
+                }
+
+            }
+        } catch (Exception e) {
+            logger.error("Can't find the ModuleBundle configurations");
+        }
+        return list;
+    }
+
+
+    private Configuration getModuleBundleConfiguration(String id) throws StoreException {
+        Configuration[] cfgs = null;
+        try {
+            cfgs = configAdmin.listConfigurations("(service.factoryPid=" + ModuleBundle.class.getName() + ")");
+        } catch (Exception e) {
+            throw new StoreException(StoreException.INVALID_CONTEXT, "Can't find the ModuleBundle configurations");
+        }
+
+        if (cfgs != null) {
+            for (Configuration cfg : cfgs) {
+                Dictionary dict = cfg.getProperties();
+                String moduleId = (String) dict.get(MODULE_ID_KEY);
+                if (id.equals(moduleId)) {
+                    return cfg;
+                }
+            }
+        }
+        return null;
+    }
+
     /**
+     * Install a bundle using his id
+     *
      * @param id Module's id
      * @return Confirmation message of good or wrong module install
      */
     @Override
-    public void installModule(String id) {
-        ModuleVersion moduleVersion = storeRS.getModuleVersion(id);
-        byte[] moduleBinary = storeRS.downloadModuleVersion(id);
-
-        if (moduleBinary == null) {
-            return;
+    public void installModule(String id) throws StoreException {
+        if (getModuleBundleConfiguration(id) != null) {
+            throw new StoreException(StoreException.MODULE_ALREADY_INSTALLED, "The module \"" + id + "\" is already installed");
         }
 
+        ModuleImpl module = (ModuleImpl) storeRS.getModuleVersion(id);
+        if (module == null)
+            throw new StoreException(StoreException.MODULE_NOT_FOUND, "Can't find the module \"" + id + "\"on the store");
+
+        installModule(module);
+    }
+
+    private void installModule(ModuleImpl module) throws StoreException {
+        String id = module.getId();
+        byte[] moduleBinary = storeRS.downloadModuleVersion(id);
+
+        if (moduleBinary == null)
+            throw new StoreException(StoreException.MODULE_DOWNLOAD_ISSUE, "Can't download the module \"" + id + "\"");
+
         File file = null;
-        Configuration gravityDestination = null;
+        Configuration configuration = null;
         try {
-            String data = encodeModule(new ModuleImpl(moduleVersion));
+
+            String data = encodeModule(module);
 
             file = new File(installDirectory.getAbsolutePath() + "/" + id + ".jar");
             OutputStream os = new FileOutputStream(file);
             os.write(moduleBinary);
 
             Bundle bundle = bundleContext.installBundle(file.toURI().toString());
-            Dictionary properties = new Hashtable();
-            properties.put("module_id", id);
-            properties.put("bundle_id", new Long(bundle.getBundleId()).toString());
-            properties.put("module", data);
+            bundle.start();
 
-            gravityDestination = configAdmin.createFactoryConfiguration(ModuleBundle.class.getName(), null);
-            gravityDestination.update(properties);
+            // Create configuration
+            Dictionary properties = new Hashtable();
+            properties.put(MODULE_KEY, data);
+            properties.put(MODULE_ID_KEY, id);
+            properties.put(BUNDLE_ID_KEY, new Long(bundle.getBundleId()).toString());
+
+            configuration = configAdmin.createFactoryConfiguration(ModuleBundle.class.getName(), null);
+            configuration.update(properties);
             logger.info("Module \"" + id + "\" installed");
         } catch (Exception ex) {
-            logger.error("Can't install the module \"" + id + "\": " + ex);
             if (file != null)
                 file.delete();
             try {
-                if (gravityDestination != null)
-                    gravityDestination.delete();
+                if (configuration != null)
+                    configuration.delete();
             } catch (Exception ex2) {
-                logger.error("Can't delete the configuration");
             }
+            throw new StoreException(StoreException.CANT_INSTALL, "Can't install the module \"" + id + "\": " + ex);
         }
     }
 
+    /**
+     * Update a bundle using his id
+     *
+     * @param id
+     * @throws StoreException
+     */
     @Override
-    public Collection<ModuleImpl> getInstalledModules() {
-        try {
-            Configuration[] cfgs = configAdmin.listConfigurations(ModuleBundle.class.getName());
-            Collection<ModuleImpl> list = new LinkedList<ModuleImpl>();
-            for (Configuration cfg : cfgs) {
-                String data = (String) cfg.getProperties().get("module");
-                if (data != null) {
-                    try {
-                        ModuleImpl mv = decodeModule(data);
-                        list.add(new ModuleImpl(mv));
-                    } catch (Exception e) {
+    public void updateModule(String id) throws StoreException {
+        ModuleImpl remoteModule = (ModuleImpl) storeRS.getModuleVersion(id);
+        if (remoteModule == null)
+            throw new StoreException(StoreException.MODULE_NOT_FOUND, "Can't find the module \"" + id + "\" on the store");
 
+        Configuration configuration = getModuleBundleConfiguration(id);
+        if (configuration == null)
+            throw new StoreException(StoreException.INVALID_CONTEXT, "Can't find the module \"" + id + "\"");
+
+        boolean update = false;
+
+        String data = (String) configuration.getProperties().get(MODULE_KEY);
+        if (data != null) {
+            try {
+                ModuleImpl localModule = decodeModule(data);
+                if (remoteModule.getMajor() > localModule.getMajor()) {
+                    update = true;
+                } else if (remoteModule.getMajor() == localModule.getMajor()) {
+                    if (remoteModule.getMinor() > localModule.getMinor()) {
+                        update = true;
+                    } else if (remoteModule.getMinor() == localModule.getMinor()) {
+                        if (remoteModule.getRevision() > localModule.getRevision()) {
+                            update = true;
+                        }
                     }
                 }
+
+            } catch (Exception e) {
+                throw new StoreException(StoreException.MODULE_INVALID, "Can't decode module information");
             }
-        } catch (Exception e) {
-
+        } else {
+            throw new StoreException(StoreException.MODULE_INVALID, "Can't find module information");
         }
-        return null;
+
+        if (update) {
+            uninstallModule(configuration);
+            installModule(remoteModule);
+        }
     }
 
+    /**
+     * Uninstall a bundle using his id
+     *
+     * @param id
+     * @throws StoreException
+     */
     @Override
-    public void updateModule(String id) {
-        //is the module with this id updated ?
-        //if it isn't then uninstall it and install the last version
+    public void uninstallModule(String id) throws StoreException {
+        Configuration configuration = getModuleBundleConfiguration(id);
+        if (configuration == null)
+            throw new StoreException(StoreException.MODULE_NOT_INSTALLED, "Can't find the module \"" + id + "\"");
+
+        uninstallModule(configuration);
     }
 
-    @Override
-    public void uninstallModule(String id) {
-        //TODO
+    /**
+     * Uninstall a bundle using a configuration
+     *
+     * @param cfg
+     * @throws StoreException
+     */
+    private void uninstallModule(Configuration cfg) throws StoreException {
+        String moduleId = (String) cfg.getProperties().get(MODULE_ID_KEY);
+        Long bundleId = Long.parseLong((String) cfg.getProperties().get(BUNDLE_ID_KEY));
+
+        // Delete configuration
+        try {
+            cfg.delete();
+        } catch (IOException e) {
+            throw new StoreException(StoreException.CANT_UNINSTALL, "Can't delete the configuration");
+        }
+
+        Bundle bundle = bundleContext.getBundle(bundleId);
+        if (bundle == null)
+            throw new StoreException(StoreException.CANT_UNINSTALL, "Can't find the bundle");
+
+        try {
+            // Stop & Uninstall the bundle
+            bundle.stop();
+            bundle.uninstall();
+        } catch (Exception e) {
+            throw new StoreException(StoreException.CANT_UNINSTALL, "Can't uninstall the bundle: " + e);
+        }
+
+        logger.info("Module \"" + moduleId + "\" uninstalled");
     }
 
     @Override

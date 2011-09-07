@@ -29,6 +29,9 @@ import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
+import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
+import org.ow2.kerneos.modules.store.event.GetInstalledModulesEvent;
+
 import org.ow2.kerneos.modules.store.event.ModuleEvent;
 
 // Server Exceptions imports
@@ -69,14 +72,8 @@ public class UpdateModule implements ICommand, IResponder {
      * Handle the result of the server call.
      */
     public function result(data:Object):void {
-        ////////////////////////////////////////////////
-        //                                            //
-        //             Handle the result              //
-        //                                            //
-        ////////////////////////////////////////////////
-
-        // Handle the result of the call
-
+        var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(GetInstalledModulesEvent.GET_INSTALLED_MODULES);
+        CairngormEventDispatcher.getInstance().dispatchEvent(evt);
     }
 
     /**

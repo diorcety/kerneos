@@ -54,11 +54,11 @@ public interface IStoreService {
 
     public Collection<ModuleImpl> getInstalledModules();
 
-    public void installModule(String id);
+    public void installModule(String id) throws StoreException;
 
-    public void updateModule(String id);
+    public void updateModule(String id) throws StoreException;
 
-    public void uninstallModule(String id);
+    public void uninstallModule(String id) throws StoreException;
 
     public void addStore(StoreImpl store);
 
