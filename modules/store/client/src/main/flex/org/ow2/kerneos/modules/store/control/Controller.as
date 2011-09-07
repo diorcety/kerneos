@@ -70,6 +70,7 @@ public class Controller extends FrontController {
         this.addCommand(AddOrUpdateStoreEvent.ADD_STORE, AddNewStore);
         this.addCommand(AddOrUpdateStoreEvent.UPDATE_STORE, UpdateStore);
         this.addCommand(GetOrDeleteStoreEvent.GET_STORES, GetStores);
+        this.addCommand(GetCategoriesEvent.GET_CATEGORIES, GetCategories);
     }
 
     /**
@@ -95,6 +96,7 @@ public class Controller extends FrontController {
         this.removeCommand(AddOrUpdateStoreEvent.ADD_STORE);
         this.removeCommand(AddOrUpdateStoreEvent.UPDATE_STORE);
         this.removeCommand(GetOrDeleteStoreEvent.GET_STORES);
+        this.removeCommand(GetCategoriesEvent.GET_CATEGORIES);
     }
 
 }
