@@ -36,21 +36,21 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
     // Put here the method that will trigger the code to execute following a dispatched event
     // in the cairngorm architecture.
 
-    public function getStore(parameters:Object):void {
+    public function getStore(url:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.getStore(parameters);
+        var call:Object = service.getStore(url);
         call.addResponder(this.responder);
     }
 
-    public function getModule(parameters:Object):void {
+    public function getModule(id:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.getModule(parameters);
+        var call:Object = service.getModule(id);
         call.addResponder(this.responder);
     }
 
-    public function getModuleImage(parameters:Object):void {
+    public function getModuleImage(id:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.getModuleImage(parameters);
+        var call:Object = service.getModuleImage(id);
         call.addResponder(this.responder);
     }
 
@@ -78,9 +78,9 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
-    public function installModule(parameters:Object):void {
+    public function installModule(id:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.installModule(parameters);
+        var call:Object = service.installModule(id);
         call.addResponder(this.responder);
     }
 
@@ -102,21 +102,21 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
-    public function addStore(parameters:Object):void {
+    public function addStore(store:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.addStore(parameters);
+        var call:Object = service.addStore(store);
         call.addResponder(this.responder);
     }
 
-    public function updateStore(parameters:Object):void {
+    public function updateStore(store:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.updateStore(parameters);
+        var call:Object = service.updateStore(store);
         call.addResponder(this.responder);
     }
 
-    public function deleteStore(parameters:Object):void {
+    public function deleteStore(url:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.deleteStore(parameters);
+        var call:Object = service.deleteStore(url);
         call.addResponder(this.responder);
     }
 

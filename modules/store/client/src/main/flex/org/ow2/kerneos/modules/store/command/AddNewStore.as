@@ -65,15 +65,15 @@ public class AddNewStore implements ICommand, IResponder {
         // - Register the responder
         // - Make the call
 
-        var parameters:StoreVO = (event as AddOrUpdateStoreEvent).store;
+        var store:StoreVO = (event as AddOrUpdateStoreEvent).store;
 
         var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-        moduleModel.listStores.addItem(parameters);
+        moduleModel.listStores.addItem(store);
 
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
 
-        delegate.addStore(parameters);
+        delegate.addStore(store);
     }
 
     /**
@@ -85,6 +85,8 @@ public class AddNewStore implements ICommand, IResponder {
         //             Handle the result              //
         //                                            //
         ////////////////////////////////////////////////
+
+        //TODO validate the Store url before add it to the listStores
     }
 
     /**

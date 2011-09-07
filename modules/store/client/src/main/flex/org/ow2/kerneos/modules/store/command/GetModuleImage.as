@@ -73,8 +73,8 @@ public class GetModuleImage implements ICommand, IResponder {
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
-        var parameters:String = (event as ModuleEvent).id;
-        delegate.getModuleImage(parameters);
+        var id:String = (event as ModuleEvent).id;
+        delegate.getModuleImage(id);
 
     }
 
