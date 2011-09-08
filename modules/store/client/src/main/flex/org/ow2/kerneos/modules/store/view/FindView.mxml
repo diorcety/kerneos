@@ -26,7 +26,6 @@
 <!-- Tag fx is used in the Example -->
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:s="library://ns.adobe.com/flex/spark"
-         xmlns:renderer="org.ow2.kerneos.modules.store.view.render.*"
          width="100%"
          height="100%">
 
@@ -40,27 +39,21 @@
         <s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
     </s:layout>
 
-    <s:DataGrid width="100%" height="100%"
-                dataProvider="{ModuleModelLocator.getInstance().listInstalledModules}">
-        <s:columns>
-            <s:ArrayList>
-                <s:GridColumn width="160" dataField="name" headerText="Name"/>
-                <s:GridColumn width="110" dataField="version" headerText="Version"/>
-                <s:GridColumn width="130" dataField="category" headerText="Category"/>
-                <s:GridColumn width="250" headerText="Actions">
-                    <s:itemRenderer>
-                        <fx:Component>
-                            <renderer:ModuleActionsRenderer/>
-                        </fx:Component>
-                    </s:itemRenderer>
-                </s:GridColumn>
-            </s:ArrayList>
-        </s:columns>
-    </s:DataGrid>
+    <s:Label
+            text="{ModuleModelLocator.getInstance().listModules.length} results for &quot;{ModuleModelLocator.getInstance().keywords}&quot;"/>
 
-    <s:HGroup width="100%">
-        <s:Label id="status"/>
-        <s:Spacer width="100%"/>
-        <s:Button label="Update all"/>
-    </s:HGroup>
+    <s:Line width="100%">
+        <s:stroke>
+            <s:SolidColorStroke color="#000000" weight="1" caps="square"/>
+        </s:stroke>
+    </s:Line>
+
+    <s:DataGroup width="100%" height="100%"
+                 dataProvider="{ModuleModelLocator.getInstance().listModules}"
+                 itemRenderer="org.ow2.kerneos.modules.store.view.render.ModuleResearchRenderer">
+        <s:layout>
+            <s:VerticalLayout gap="5" requestedRowCount="4" rowHeight="102"
+                              variableRowHeight="false"/>
+        </s:layout>
+    </s:DataGroup>
 </s:Group>

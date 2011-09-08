@@ -87,12 +87,6 @@
             import mx.collections.ArrayCollection;
 
             /**
-             * Keywords used to look up for modules
-             */
-            [Bindable]
-            private var _keywords:String = "";
-
-            /**
              * Default search keyword
              */
             private var _defaultSearchText:String = "Module's Name..";
@@ -167,7 +161,7 @@
             }
 
             private function searchInput_enterHandler():void {
-                _keywords = searchInput.text;
+                var _keywords:String = searchInput.text;
                 searchIconButton.setFocus();
 
                 if (_keywords != "") {
@@ -183,6 +177,7 @@
 
                 var search_modules_event:SearchModulesEvent = new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE);
                 search_modules_event.filter = _keywords;
+                ModuleModelLocator.getInstance().keywords = _keywords;
                 CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
 
                 var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
@@ -213,10 +208,10 @@
              *
              * @param categories
              */
-            private function set newCategory(categories:ArrayCollection) : void{
+            private function set newCategory(categories:ArrayCollection):void {
                 mainViewStack.removeAll();
-                for each (var category : CategoryVO in categories) {
-                    var categoryNavigator : CategoryView = new CategoryView();
+                for each (var category:CategoryVO in categories) {
+                    var categoryNavigator:CategoryView = new CategoryView();
                     categoryNavigator.id = category.id;
                     categoryNavigator.label = category.name;
                     mainViewStack.addItem(categoryNavigator);
@@ -280,7 +275,7 @@
 
         <!-- Main Conteneur -->
         <s:BorderContainer x="190" y="96" width="553" height="463">
-            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461" />
+            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461"/>
 
             <!-- Detail module view-->
             <s:Group includeIn="ModuleDetail" x="0" y="0" width="100%" height="100%">
@@ -313,22 +308,10 @@
             </s:Group>
 
             <!-- Installed Modules View-->
-            <view:InstalledView includeIn="InstalledModules" x="0" y="0" width="100%" height="100%"/>
+            <view:InstalledView includeIn="InstalledModules" width="100%" height="100%"/>
 
             <!-- Find Modules View-->
-            <s:Group includeIn="FindModules" x="0" y="0" width="100%" height="100%">
-                <s:Label x="10" y="10"
-                         text="{ModuleModelLocator.getInstance().listModules.length} results for &quot;{_keywords}&quot;"/>
-                <mx:HRule x="10" y="30" width="531"/>
-                <s:DataGroup x="0" y="35" width="545" height="422"
-                             dataProvider="{ModuleModelLocator.getInstance().listModules}"
-                             itemRenderer="org.ow2.kerneos.modules.store.view.render.ModuleResearchRenderer">
-                    <s:layout>
-                        <s:VerticalLayout gap="5" requestedRowCount="4" rowHeight="102"
-                                          variableRowHeight="false"/>
-                    </s:layout>
-                </s:DataGroup>
-            </s:Group>
+            <view:FindView includeIn="FindModules" width="100%" height="100%"/>
 
         </s:BorderContainer>
     </s:Group>

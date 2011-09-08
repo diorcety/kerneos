@@ -101,6 +101,8 @@ public class ModuleModelLocator implements ModelLocator {
      */
     private var _listSelectedModules:ArrayCollection = null;
 
+    private var _keywords:String = null;
+
     /**
      * List of modules showed in the main view, also is the list
      * of results finding modules
@@ -216,7 +218,12 @@ public class ModuleModelLocator implements ModelLocator {
         this._listStores = _listStores;
     }
 
-    ////////////////////////////////////
+
+    public function set keywords(value:String):void {
+        _keywords = value;
+    }
+
+////////////////////////////////////
     //                                //
     //             Getters            //
     //                                //
@@ -261,7 +268,11 @@ public class ModuleModelLocator implements ModelLocator {
         return this._listStores;
     }
 
-    ////////////////////////////////////////////
+    public function get keywords():String {
+        return _keywords;
+    }
+
+////////////////////////////////////////////
     //                                        //
     //            Delegate Getters            //
     //                                        //
