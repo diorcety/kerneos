@@ -23,7 +23,6 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 
-<!-- Tag fx is used in the Example -->
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:s="library://ns.adobe.com/flex/spark"
          width="100%"
@@ -39,7 +38,7 @@
         <s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
     </s:layout>
 
-    <s:Label
+    <s:Label paddingTop="3" paddingBottom="3"
             text="{ModuleModelLocator.getInstance().listModules.length} results for &quot;{ModuleModelLocator.getInstance().keywords}&quot;"/>
 
     <s:Line width="100%">

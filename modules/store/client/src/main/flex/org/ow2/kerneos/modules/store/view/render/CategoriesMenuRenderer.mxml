@@ -22,32 +22,28 @@
      -
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<s:MXDataGridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
-                          xmlns:s="library://ns.adobe.com/flex/spark"
-                          xmlns:mx="library://ns.adobe.com/flex/mx"
-                          clipAndEnableScrolling="true">
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                autoDrawBackground="false">
 
     <fx:Script>
 		<![CDATA[
+        import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
         import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
-        import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
-        import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
-        protected function checkbox_clickHandler(event:MouseEvent):void {
-            data.selected = !data.selected;
+        private function searchModulesByCategory(event:MouseEvent):void {
+            var categoryId:String = data.id;
 
-            var evt:ChangeSelectedModuleInstallEvent = new ChangeSelectedModuleInstallEvent(
-                    ChangeSelectedModuleInstallEvent.SELECTED_MODULE_CHANGE);
-            evt.item = data;
-            CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+
+            var search_modules_event:SearchModulesEvent =
+                    new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY);
+            search_modules_event.id = categoryId;
+            CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
         }
         ]]>
 	</fx:Script>
 
+    <s:Button label="{data.name}" click="searchModulesByCategory(event)" fontSize="16"/>
 
-    <s:HGroup horizontalAlign="center" textAlign="center" width="100%">
-        <mx:CheckBox click="checkbox_clickHandler(event)" selected="{data.selected} "/>
-    </s:HGroup>
-
-</s:MXDataGridItemRenderer>
+</s:ItemRenderer>

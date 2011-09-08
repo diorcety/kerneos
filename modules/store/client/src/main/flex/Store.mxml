@@ -32,21 +32,6 @@
            layout="absolute" width="100%" height="100%"
            creationComplete="init()">
 
-
-    <fx:Style>
-
-        @namespace s "library://ns.adobe.com/flex/spark";
-        @namespace mx "library://ns.adobe.com/flex/mx";
-        @namespace vo "org.ow2.kerneos.modules.store.vo.*";
-
-        .accHead {
-            fontSize: 18;
-            fontWeight: normal;
-        }
-
-
-    </fx:Style>
-
     <fx:Declarations>
         <!-- Instantiate the controller. A controller a module -->
         <control:Controller id="controller"/>
@@ -59,27 +44,19 @@
         <mx:State name="FindModules"/>
     </mx:states>
 
-    <s:Group x="0" y="0" width="100%" height="100%">
+    <s:Group width="100%" height="100%">
         <fx:Script>
 			<![CDATA[
             import com.adobe.cairngorm.model.ModelLocator;
 
-            import mx.controls.Alert;
-            import mx.events.ListEvent;
-
-            import org.ow2.kerneos.modules.store.event.ChangeSelectedModuleInstallEvent;
             import org.ow2.kerneos.modules.store.event.ChangeStoreStateEvent;
             import org.ow2.kerneos.modules.store.event.GetCategoriesEvent;
             import org.ow2.kerneos.modules.store.event.GetInstalledModulesEvent;
             import org.ow2.kerneos.modules.store.event.GetOrDeleteStoreEvent;
-            import org.ow2.kerneos.modules.store.event.ModuleEvent;
 
             import org.ow2.kerneos.modules.store.event.SearchModulesEvent;
 
             import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
-            import org.ow2.kerneos.modules.store.view.CategoryView;
-            import org.ow2.kerneos.modules.store.vo.CategoryVO;
-            import org.ow2.kerneos.modules.store.vo.ModuleVO;
 
             import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
@@ -124,10 +101,6 @@
             protected function init():void {
                 this.id = "moduleStoreModule";
 
-                //Change application state when click on one menu item
-                linkBar.addEventListener(ItemClickEvent.ITEM_CLICK, handleLinkBar);
-
-
                 searchInput.text = _defaultSearchText;
                 searchInput.addEventListener(FocusEvent.FOCUS_IN, handleSearchInputFocusIn);
                 searchInput.addEventListener(FocusEvent.FOCUS_OUT, handleSearchInputFocusOut);
@@ -144,10 +117,15 @@
                 CairngormEventDispatcher.getInstance().dispatchEvent(get_categories_event);
             }
 
-            private function handleLinkBar(event:ItemClickEvent):void {
-                var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
-                evt.state = "";
-                CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+            /**
+             *  Change application state when click on one menu item
+             */
+            private function handleLinkBar(event:MouseEvent):void {
+                if (this.currentState != "" || this.currentState != "Default") {
+                    var evt:ChangeStoreStateEvent = new ChangeStoreStateEvent(ChangeStoreStateEvent.CHANGE_MODULE_STATE);
+                    evt.state = "Default";
+                    CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+                }
             }
 
             private function handleSearchInputFocusIn(event:FocusEvent):void {
@@ -204,120 +182,57 @@
                 }
             }
 
-            /**
-             *
-             * @param categories
-             */
-            private function set newCategory(categories:ArrayCollection):void {
-                mainViewStack.removeAll();
-                for each (var category:CategoryVO in categories) {
-                    var categoryNavigator:CategoryView = new CategoryView();
-                    categoryNavigator.id = category.id;
-                    categoryNavigator.label = category.name;
-                    mainViewStack.addItem(categoryNavigator);
-                }
-            }
-
-            private function searchModulesByCategory(evt:ItemClickEvent):void {
-                var category:int = evt.index;
-                var categoryId:String = getValidCategory(category);
-
-                var search_modules_event:SearchModulesEvent =
-                        new SearchModulesEvent(SearchModulesEvent.SEARCH_MODULES_WITH_IMAGE_BY_CATEGORY);
-                search_modules_event.id = categoryId;
-                CairngormEventDispatcher.getInstance().dispatchEvent(search_modules_event);
-            }
-
-            private function getValidCategory(index:int):String {
-                if (index >= 0 && index < ModuleModelLocator.getInstance().categories.length) {
-                    return ModuleModelLocator.getInstance().categories[index].id;
-                } else {
-                    return "";
-                }
-            }
-
-            private function installModule():void {
-                //TODO show confirmation message and maybe a progress status bar
-                // Alert.show("Install " + data.name);
-                var evt:ModuleEvent = new ModuleEvent(ModuleEvent.INSTALL_MODULE);
-                evt.id = ModuleModelLocator.getInstance().mainModule.id;
-                CairngormEventDispatcher.getInstance().dispatchEvent(evt);
-            }
             ]]>
 		</fx:Script>
 
-        <!-- Setup button -->
-        <s:Button id="setupButton" x="642" y="28" label="Setup" fontSize="18"
-                  icon="/../assets/engine_icon.gif"/>
+        <s:layout>
+            <s:VerticalLayout verticalAlign="middle"/>
+        </s:layout>
 
-        <!-- Search box and icon -->
-        <!-- BUG 02/08/2011 if s:TextInput is used, problem with SoftKeyboardEvent class doesn't found -->
-        <s:HGroup x="337" y="28" width="241" height="32" horizontalAlign="center" verticalAlign="top">
-            <mx:TextInput id="searchInput" paddingTop="8" fontSize="12" enter="searchInput_enterHandler()"/>
-            <mx:LinkButton id="searchIconButton" width="34" height="28"
-                           click="searchInput_enterHandler()" icon="@Embed('/../assets/Crystal_Clear_app_xmag.png')"
-                           paddingLeft="15" paddingRight="0"/>
+        <s:HGroup paddingTop="10" width="100%" height="35" horizontalAlign="center">
+            <!-- Search box and icon -->
+            <s:HGroup x="337" width="241" height="32" horizontalAlign="center" verticalAlign="top">
+                <s:TextInput id="searchInput" paddingTop="8" fontSize="12" enter="searchInput_enterHandler()"/>
+                <mx:LinkButton id="searchIconButton" width="34" height="28"
+                               click="searchInput_enterHandler()" icon="@Embed('/../assets/Crystal_Clear_app_xmag.png')"
+                               paddingLeft="15" paddingRight="0"/>
+            </s:HGroup>
+
+            <!-- Setup button -->
+            <s:Button id="setupButton" x="642" label="Setup" fontSize="18" icon="/../assets/engine_icon.gif"/>
         </s:HGroup>
 
-        <!-- Installed Modules Button -->
-        <s:Button x="14" y="96" width="168" label="Installed" fontSize="18" click="handleInstalledModulesState()"/>
+        <s:HGroup width="100%" height="97%" horizontalAlign="left">
+            <s:VGroup width="140" height="100%">
+                <!-- Installed Modules Button -->
+                <s:Button width="90%" label="Installed" fontSize="18" click="handleInstalledModulesState()"/>
 
-        <!-- Categories Menu -->
-        <mx:Accordion x="14" y="133" width="168" height="306" label="Categories" fontSize="16"
-                      headerStyleName="accHead" textAlign="center"
-                      fontWeight="normal">
-            <s:NavigatorContent width="100%" height="100%" label="Categories" fontSize="16">
-                <mx:LinkBar id="linkBar" width="100%" dataProvider="{mainViewStack}"
-                            direction="vertical" verticalGap="8" currentState=""
-                            itemClick="searchModulesByCategory(event)"/>
-            </s:NavigatorContent>
-        </mx:Accordion>
+                <!-- Categories Menu -->
+                <s:List id="categoriesListMenu" borderVisible="false" contentBackgroundAlpha="0"
+                        dataProvider="{ModuleModelLocator.getInstance().categories}"
+                        itemRenderer="org.ow2.kerneos.modules.store.view.render.CategoriesMenuRenderer"
+                        click="handleLinkBar(event)"/>
+            </s:VGroup>
 
-        <!-- Main Conteneur -->
-        <s:BorderContainer x="190" y="96" width="553" height="463">
-            <mx:ViewStack id="mainViewStack" x="0" y="0" width="551" height="461"/>
 
-            <!-- Detail module view-->
-            <s:Group includeIn="ModuleDetail" x="0" y="0" width="100%" height="100%">
-                <s:Label x="142" y="10" width="381" height="21" fontSize="18"
-                         fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.name}"/>
-                <s:Image x="10" y="10" width="128" height="128"
-                         source="{ModuleModelLocator.getInstance().mainModule.icon}"/>
-                <s:Label x="146" y="39" width="381" height="21" fontSize="14"
-                         fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.author}"/>
-                <s:Label x="146" y="68" width="395" height="99"
-                         text="{ModuleModelLocator.getInstance().mainModule.description}"/>
-                <s:Button x="40" y="146" label="Install" click="installModule()"/>
-                <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
-                         text="About this module"/>
-                <s:Label x="10" y="217" fontSize="14" text="Updated:"/>
-                <s:Label x="76" y="217" fontSize="14"
-                         text="{ModuleModelLocator.getInstance().mainModule.date.toDateString()}"/>
-                <s:Label x="11" y="245" fontSize="14" text="Version:"/>
-                <s:Label x="70" y="245" fontSize="14" text="{ModuleModelLocator.getInstance().mainModule.version}"
-                         verticalAlign="middle"/>
-                <s:Label x="191" y="217" fontSize="14" text="Category:"/>
-                <s:Label x="257" y="217" fontSize="14"
-                         text="{ModuleModelLocator.getInstance().mainModule.category}"/>
-                <s:Label x="191" y="244" fontSize="14" text="Installs:"/>
-                <s:Label x="244" y="244" fontSize="14"
-                         text="{ModuleModelLocator.getInstance().mainModule.installsNumber}"/>
-                <s:Label x="381" y="218" fontSize="14" text="Size:"/>
-                <s:Label x="416" y="218" fontSize="14"
-                         text="{ModuleModelLocator.getInstance().mainModule.size} Bytes"/>
-            </s:Group>
+            <!-- Main Conteneur -->
+            <s:BorderContainer width="80%" height="95%">
+                <!-- Main modules view -->
+                <view:ModulesMainView includeIn="Default" width="100%" height="100%"/>
 
-            <!-- Installed Modules View-->
-            <view:InstalledView includeIn="InstalledModules" width="100%" height="100%"/>
+                <!-- Detail module view-->
+                <view:DetailModuleView includeIn="ModuleDetail" width="100%" height="100%"/>
 
-            <!-- Find Modules View-->
-            <view:FindView includeIn="FindModules" width="100%" height="100%"/>
+                <!-- Installed Modules View-->
+                <view:InstalledView includeIn="InstalledModules" width="100%" height="100%"/>
 
-        </s:BorderContainer>
+                <!-- Find Modules View-->
+                <view:FindView includeIn="FindModules" width="100%" height="100%"/>
+            </s:BorderContainer>
+        </s:HGroup>
+
     </s:Group>
 
     <fx:Binding source="ModuleModelLocator.getInstance().storeState" destination="newStoreState"/>
-
-    <fx:Binding source="ModuleModelLocator.getInstance().categories" destination="newCategory"/>
 
 </mx:Module>

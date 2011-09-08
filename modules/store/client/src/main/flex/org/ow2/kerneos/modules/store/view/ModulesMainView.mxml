@@ -22,7 +22,7 @@
      -
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
                     xmlns:s="library://ns.adobe.com/flex/spark"
                     xmlns:mx="library://ns.adobe.com/flex/mx">
     <fx:Script><![CDATA[
@@ -43,10 +43,9 @@
                  dataProvider="{ModuleModelLocator.getInstance().listModules}"
                  itemRenderer="org.ow2.kerneos.modules.store.view.render.ModuleIndexRenderer">
         <s:layout>
-            <s:TileLayout columnWidth="128" orientation="rows" requestedColumnCount="4"
-                          requestedRowCount="2" rowHeight="200"/>
+            <s:TileLayout columnWidth="128" orientation="rows" rowHeight="200"/>
         </s:layout>
     </s:DataGroup>
 
     <fx:Binding source="ModuleModelLocator.getInstance().storeState" destination="newStoreState"/>
-</s:NavigatorContent>
+</s:Group>

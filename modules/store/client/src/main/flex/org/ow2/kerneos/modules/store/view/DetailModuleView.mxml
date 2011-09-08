@@ -1,0 +1,78 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - Kerneos
+     - Copyright (C) 2011 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:s="library://ns.adobe.com/flex/spark"
+         width="100%"
+         height="100%">
+
+    <fx:Script>
+    <![CDATA[
+        import org.ow2.kerneos.modules.store.event.ModuleEvent;
+        import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
+
+        import com.adobe.cairngorm.control.CairngormEventDispatcher;
+
+        private function installModule():void {
+            //TODO show confirmation message and maybe a progress status bar
+            // Alert.show("Install " + data.name);
+            var evt:ModuleEvent = new ModuleEvent(ModuleEvent.INSTALL_MODULE);
+            evt.id = ModuleModelLocator.getInstance().mainModule.id;
+            CairngormEventDispatcher.getInstance().dispatchEvent(evt);
+        }
+        ]]>
+    </fx:Script>
+
+    <!--<s:layout>
+        <s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+    </s:layout>-->
+
+    <s:Label x="142" y="10" width="381" height="21" fontSize="18"
+             fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.name}"/>
+    <s:Image x="10" y="10" width="128" height="128"
+             source="{ModuleModelLocator.getInstance().mainModule.icon}"/>
+    <s:Label x="146" y="39" width="381" height="21" fontSize="14"
+             fontWeight="bold" text="{ModuleModelLocator.getInstance().mainModule.author}"/>
+    <s:Label x="146" y="68" width="395" height="99"
+             text="{ModuleModelLocator.getInstance().mainModule.description}"/>
+    <s:Button x="40" y="146" label="Install" click="installModule()"/>
+    <s:Label x="10" y="192" fontSize="18" fontWeight="bold"
+             text="About this module"/>
+    <s:Label x="10" y="217" fontSize="14" text="Updated:"/>
+    <s:Label x="76" y="217" fontSize="14"
+             text="{ModuleModelLocator.getInstance().mainModule.date.toDateString()}"/>
+    <s:Label x="11" y="245" fontSize="14" text="Version:"/>
+    <s:Label x="70" y="245" fontSize="14" text="{ModuleModelLocator.getInstance().mainModule.version}"
+             verticalAlign="middle"/>
+    <s:Label x="191" y="217" fontSize="14" text="Category:"/>
+    <s:Label x="257" y="217" fontSize="14"
+             text="{ModuleModelLocator.getInstance().mainModule.category}"/>
+    <s:Label x="191" y="244" fontSize="14" text="Installs:"/>
+    <s:Label x="244" y="244" fontSize="14"
+             text="{ModuleModelLocator.getInstance().mainModule.installsNumber}"/>
+    <s:Label x="381" y="218" fontSize="14" text="Size:"/>
+    <s:Label x="416" y="218" fontSize="14"
+             text="{ModuleModelLocator.getInstance().mainModule.size} Bytes"/>
+</s:Group>
