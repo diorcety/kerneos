@@ -85,6 +85,9 @@
                 // Remove all the commands to the pool of commands
                 controller.removeCommands();
                 controller = null;
+
+                searchInput.removeEventListener(FocusEvent.FOCUS_IN, handleSearchInputFocusIn);
+                searchInput.removeEventListener(FocusEvent.FOCUS_OUT, handleSearchInputFocusOut);
             }
 
             public function canBeClosedWithoutPrompt():Boolean {

@@ -97,7 +97,7 @@ public class GetModuleImage implements ICommand, IResponder {
         trace("The image of module with id " + moduleImage.idModule + " is found in the server");
 
         var imageLoader:Loader = new Loader();
-        imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+        imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete, false, 0, true);
         imageLoader.loadBytes(moduleImage.imgOrig);
     }
 

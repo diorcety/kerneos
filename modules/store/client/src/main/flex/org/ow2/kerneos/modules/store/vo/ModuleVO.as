@@ -227,7 +227,7 @@ public class ModuleVO implements IValueObject {
      */
     public function convertOriginalByteArrayImageToBitMapImage():void {
         var imageLoader:Loader = new Loader();
-        imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+        imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete, false, 0, true);
         imageLoader.loadBytes(this._imgOrig);
     }
 
@@ -252,6 +252,16 @@ public class ModuleVO implements IValueObject {
 
     }
 
+    /**
+     * return a String with the categories names of the module
+     */
+    public function getCategoriesName():String {
+        var result : String = "";
+        for each (var cat : CategoryVO in _categories) {
+            result = result.concat(cat.name);
+        }
+        return result;
+    }
 }
 
 }
