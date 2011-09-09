@@ -23,20 +23,18 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-                    xmlns:s="library://ns.adobe.com/flex/spark"
-                    xmlns:mx="library://ns.adobe.com/flex/mx">
+         xmlns:s="library://ns.adobe.com/flex/spark">
     <fx:Script><![CDATA[
         import org.ow2.kerneos.modules.store.model.ModuleModelLocator;
 
         private function set newStoreState(state:String):void {
-             if (state == "Default" || state == "") {
+            if (state == "Default" || state == "") {
                 this.setVisible(true);
                 categoryDG.setVisible(true);
             } else {
                 categoryDG.setVisible(false);
             }
         }
-
         ]]></fx:Script>
 
     <s:DataGroup id="categoryDG" x="0" y="0" width="100%" height="100%"
