@@ -34,7 +34,7 @@ public interface IModuleDelegate extends IDelegateResponder {
     ////////////////////////////////////////////////////////////////////
 
 
-    function getStore(url:Object):void;
+    function getStore(id:Object):void;
 
     function getModule(id:Object):void;
 
@@ -60,7 +60,7 @@ public interface IModuleDelegate extends IDelegateResponder {
 
     function updateStore(store:Object):void;
 
-    function deleteStore(url:Object):void;
+    function deleteStore(id:Object):void;
 
     function getStores():void;
 

@@ -36,9 +36,9 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
     // Put here the method that will trigger the code to execute following a dispatched event
     // in the cairngorm architecture.
 
-    public function getStore(url:Object):void {
+    public function getStore(id:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.getStore(url);
+        var call:Object = service.getStore(id);
         call.addResponder(this.responder);
     }
 
@@ -114,9 +114,9 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
         call.addResponder(this.responder);
     }
 
-    public function deleteStore(url:Object):void {
+    public function deleteStore(id:Object):void {
         var service:Object = ServiceLocator.getInstance().getRemoteObject("store_service");
-        var call:Object = service.deleteStore(url);
+        var call:Object = service.deleteStore(id);
         call.addResponder(this.responder);
     }
 

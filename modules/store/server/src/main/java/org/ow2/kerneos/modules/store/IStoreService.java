@@ -30,7 +30,7 @@ import org.ow2.kerneos.modules.store.impl.*;
 import java.util.Collection;
 
 public interface IStoreService {
-    public StoreImpl getStore(String url);
+    public StoreImpl getStore(String id);
 
     public ModuleImpl getModule(String id);
 
@@ -60,11 +60,11 @@ public interface IStoreService {
 
     public void uninstallModule(String id) throws StoreException;
 
-    public void addStore(StoreImpl store);
+    public StoreImpl addStore(StoreImpl store) throws StoreException;
 
-    public void updateStore(StoreImpl store);
+    public void updateStore(StoreImpl store) throws StoreException;
 
-    public void deleteStore(StoreImpl store);
+    public void deleteStore(String id);
 
     public Collection<StoreImpl> getStores();
 

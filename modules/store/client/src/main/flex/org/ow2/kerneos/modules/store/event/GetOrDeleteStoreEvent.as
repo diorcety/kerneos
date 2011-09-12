@@ -33,18 +33,18 @@ public class GetOrDeleteStoreEvent extends CairngormEvent {
 
     public static var DELETE_STORE:String = "DELETE_STORE";
 
-    private var _url:String = "";
+    private var _id:String = "";
 
     public function GetOrDeleteStoreEvent(type:String) {
         super(type);
     }
 
-    public function set url(url:String):void {
-        this._url = url;
+    public function set id(id:String):void {
+        this._id = id;
     }
 
-    public function get url():String {
-        return _url;
+    public function get id():String {
+        return _id;
     }
 
     /**
@@ -54,7 +54,7 @@ public class GetOrDeleteStoreEvent extends CairngormEvent {
     override public function clone():Event {
         var ev:GetOrDeleteStoreEvent = new GetOrDeleteStoreEvent(this.type);
 
-        ev.url = this._url;
+        ev.id = this._id;
 
         return ev;
     }

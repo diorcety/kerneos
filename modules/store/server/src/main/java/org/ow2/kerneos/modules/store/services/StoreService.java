@@ -34,6 +34,7 @@ import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.kerneos.modules.store.IStoreRS;
 import org.ow2.kerneos.modules.store.IStoreService;
+import org.ow2.kerneos.modules.store.Stores;
 import org.ow2.kerneos.modules.store.config.ModuleBundle;
 import org.ow2.kerneos.modules.store.impl.*;
 import org.ow2.kerneos.modules.store.util.Base64;
@@ -47,10 +48,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.LinkedList;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 @Component
 @Instantiate
@@ -77,6 +77,8 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     @Requires
     private ConfigurationAdmin configAdmin;
 
+    private Stores stores;
+
     private StoreService(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
 
@@ -99,12 +101,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
         storeRS = new StoreRS();
 
-        IStoreRS store = new StoreRS();
-        org.ow2.kerneosstore.api.Store result = store.getStore();
+        stores = new Stores();
 
-        logger.info("Store Name : " + result.getName());
-        logger.info("Store Description : " + result.getDescription());
-        logger.info("Store Url : " + result.getUrl());
+        StoreImpl result = (StoreImpl) storeRS.getStore();
+        stores.addStore(result);
     }
 
     /**
@@ -118,10 +118,12 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     /**
      * Get a store
      *
-     * @param url store url, REST path
+     * @param id store id
      */
     @Override
-    public StoreImpl getStore(String url) {
+    public StoreImpl getStore(String id) {
+        String url = stores.getStoreById(id).getUrl();
+        //TODO url
         StoreImpl result = (StoreImpl) storeRS.getStore();
         return result;
     }
@@ -415,24 +417,51 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     @Override
-    public void addStore(StoreImpl store) {
-        //TODO
+    public StoreImpl addStore(StoreImpl store) throws StoreException {
+        try{
+            //test if the url is good
+            URI uri = new URI(store.getUrl());
+        }catch (URISyntaxException ex) {
+            throw new StoreException(StoreException.BAD_STORE_URL, "The store " + store.getName() +
+                    " doesn't have a valid URL format");
+        }
+        stores.addStore(store);
+        return store;
     }
 
     @Override
-    public void updateStore(StoreImpl store) {
-        //TODO
+    public void updateStore(StoreImpl store) throws StoreException {
+        StoreImpl originalStore = stores.getStoreById(store.getId());
+        if (originalStore != null) {
+            originalStore.setName(store.getName());
+            originalStore.setDescription(store.getDescription());
+
+            if (!originalStore.getUrl().equals(store.getUrl())) {
+                try{
+                    //test if the url is good
+                    URI uri = new URI(store.getUrl());
+                }catch (URISyntaxException ex) {
+                    throw new StoreException(StoreException.BAD_STORE_URL, "The store " + store.getName() +
+                            " doesn't have a valid URL format");
+                }
+                originalStore.setUrl(store.getUrl());
+            }
+
+            logger.debug("Store with name " + store.getName() + " has been updated");
+        }
     }
 
     @Override
-    public void deleteStore(StoreImpl store) {
-        //TODO
+    public void deleteStore(String id) {
+        boolean deleted = this.stores.deleteStore(id);
+        if (deleted) {
+            logger.debug("The store with id " + id + " has been deleted");
+        }
     }
 
     @Override
     public Collection<StoreImpl> getStores() {
-        //TODO
-        return null;
+        return this.stores.getStores();
     }
 
     /**

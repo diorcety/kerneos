@@ -37,6 +37,7 @@ public class StoreImpl implements Store {
     private String name;
     private String description;
     private String url;
+    private String id;
 
     public StoreImpl() {
 
@@ -72,4 +73,11 @@ public class StoreImpl implements Store {
         this.url = url;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

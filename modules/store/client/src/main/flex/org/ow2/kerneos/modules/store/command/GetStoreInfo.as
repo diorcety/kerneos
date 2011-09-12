@@ -61,10 +61,10 @@ public class GetStoreInfo implements ICommand, IResponder {
         // - Register the responder
         // - Make the call
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
-        var url:String = (event as GetOrDeleteStoreEvent).url;
+        var id:String = (event as GetOrDeleteStoreEvent).id;
         delegate.responder = this;
 
-        delegate.getStore(url);
+        delegate.getStore(id);
     }
 
     /**

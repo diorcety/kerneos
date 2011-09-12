@@ -37,6 +37,8 @@ public class StoreException extends Exception {
     public final static String INVALID_CONTEXT = "INVALID_CONTEXT";
     public final static String UNKNOWN = "UNKNOWN";
 
+    public final static String BAD_STORE_URL = "BAD_STORE_URL";
+
     private String type;
 
     public StoreException() {

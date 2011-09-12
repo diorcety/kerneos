@@ -68,14 +68,15 @@ public class UpdateStore implements ICommand, IResponder {
         var store:StoreVO = (event as AddOrUpdateStoreEvent).store;
 
         var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-        var index:int = moduleModel.getListStoreItemIndex(store.url);
-
-        moduleModel.listStores.setItemAt(store, index);
 
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
 
         delegate.updateStore(store);
+
+        var index:int = moduleModel.getListStoreItemIndex(store.id);
+
+        moduleModel.listStores.setItemAt(store, index);
     }
 
     /**

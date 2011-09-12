@@ -29,6 +29,7 @@ import org.ow2.kerneos.modules.store.impl.StoreImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 public class Stores {
 
@@ -44,5 +45,31 @@ public class Stores {
 
     public void setStores(Collection<StoreImpl> stores) {
         this.stores = stores;
+    }
+
+    public boolean deleteStore(String id) {
+        for (StoreImpl store : stores) {
+            if (store.getId().equals(id)) {
+                stores.remove(store);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public StoreImpl getStoreById(String id) {
+        for (StoreImpl store : stores) {
+            if (store.getId().equals(id)) {
+                return store;
+            }
+        }
+        return null;
+    }
+
+    public void addStore(StoreImpl store) {
+        if (store.getId() == null || store.getId().equals("")) {
+            store.setId(UUID.randomUUID().toString());
+        }
+        this.stores.add(store);
     }
 }

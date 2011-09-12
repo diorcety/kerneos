@@ -154,18 +154,18 @@ public class ModuleModelLocator implements ModelLocator {
     }
 
     /**
-     * Return the item index if the store with this url is contained in the list, otherwise it return -1
-     * @param url Store url
+     * Return the item index if the store with this id is contained in the list, otherwise it return -1
+     * @param id Store id
      * @return item index into listStores or -1 if not funded
      */
-    public function getListStoreItemIndex(url:String):int {
+    public function getListStoreItemIndex(id:String):int {
         if (this._listStores == null || this._listStores.length == 0) {
             return -1;
         }
 
         var index:int = 0;
         for each (var store:StoreVO in this._listStores) {
-            if (store.url == url) {
+            if (store.id == id) {
                 return index;
             }
         }
@@ -223,7 +223,7 @@ public class ModuleModelLocator implements ModelLocator {
         _keywords = value;
     }
 
-////////////////////////////////////
+    ////////////////////////////////////
     //                                //
     //             Getters            //
     //                                //
@@ -272,7 +272,7 @@ public class ModuleModelLocator implements ModelLocator {
         return _keywords;
     }
 
-////////////////////////////////////////////
+    ////////////////////////////////////////////
     //                                        //
     //            Delegate Getters            //
     //                                        //

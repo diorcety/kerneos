@@ -27,9 +27,10 @@ import com.adobe.cairngorm.vo.IValueObject;
 [Bindable]
 public class StoreVO implements IValueObject {
 
-    public var _name:String;
-    public var _description:String;
-    public var _url:String;
+    private var _name:String;
+    private var _description:String;
+    private var _url:String;
+    private var _id:String;
 
 
     public function StoreVO() {
@@ -52,11 +53,19 @@ public class StoreVO implements IValueObject {
     }
 
     public function get url():String {
-        return this._description;
+        return this._url;
     }
 
     public function set url(url:String):void {
         this._url = url;
+    }
+
+    public function get id():String {
+        return this._id;
+    }
+
+    public function set id(id:String):void {
+        this._id = id;
     }
 }
 }

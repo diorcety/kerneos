@@ -63,9 +63,10 @@ public class DeleteStore implements ICommand, IResponder {
         // - Register the responder
         // - Make the call
         var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-        var url:String = (event as GetOrDeleteStoreEvent).url;
 
-        var index:int = moduleModel.getListStoreItemIndex(url);
+        var id:String = (event as GetOrDeleteStoreEvent).id;
+
+        var index:int = moduleModel.getListStoreItemIndex(id);
 
         moduleModel.listStores.removeItemAt(index);
 
@@ -73,7 +74,7 @@ public class DeleteStore implements ICommand, IResponder {
 
         delegate.responder = this;
 
-        delegate.deleteStore(url);
+        delegate.deleteStore(id);
     }
 
     /**

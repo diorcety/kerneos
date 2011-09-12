@@ -67,9 +67,6 @@ public class AddNewStore implements ICommand, IResponder {
 
         var store:StoreVO = (event as AddOrUpdateStoreEvent).store;
 
-        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
-        moduleModel.listStores.addItem(store);
-
         var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
         delegate.responder = this;
 
@@ -86,7 +83,10 @@ public class AddNewStore implements ICommand, IResponder {
         //                                            //
         ////////////////////////////////////////////////
 
-        //TODO validate the Store url before add it to the listStores
+        var store:StoreVO = (data as ResultEvent).result as StoreVO;
+
+        var moduleModel:ModuleModelLocator = ModuleModelLocator.getInstance();
+        moduleModel.listStores.addItem(store);
     }
 
     /**
