@@ -1,0 +1,714 @@
+/**
+ * Kerneos
+ * Copyright (C) 2009 Bull S.A.S.
+ * Contact: jasmine@ow2.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * --------------------------------------------------------------------------
+ * $Id$
+ * --------------------------------------------------------------------------
+ */
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace kerneos "org.ow2.kerneos.core.view.*";
+@namespace kerneosNotification "org.ow2.kerneos.core.view.notification.*";
+@namespace kerneosWindow "org.ow2.kerneos.core.view.window.*";
+@namespace kerneosLogin "org.ow2.kerneos.login.*";
+@namespace kerneosLoginView "org.ow2.kerneos.login.view.*";
+@namespace kerneosProfile "org.ow2.kerneos.profile.*";
+@namespace kerneosProfileView "org.ow2.kerneos.profile.view.*";
+@namespace common "org.ow2.kerneos.common.view.*";
+
+/*******************************************************************************
+* Default
+******************************************************************************/
+/*
+@font-face {
+src: url("fonts/verdana.ttf");
+fontFamily: Verdana;
+fontWeight: normal;
+embedAsCff: true;
+}
+
+@font-face {
+src: url("fonts/verdanai.ttf");
+fontFamily: Verdana;
+fontWeight: normal;
+fontStyle: italic;
+embedAsCff: true;
+}
+
+@font-face {
+src: url("fonts/verdanab.ttf");
+fontFamily: Verdana;
+fontWeight: bold;
+embedAsCff: true;
+}
+
+@font-face {
+src: url("fonts/verdanaz.ttf");
+fontFamily: Verdana;
+fontWeight: bold;
+fontStyle: italic;
+embedAsCff: true;
+}
+*/
+
+global {
+    font-family: Verdana;
+    font-size: 12px;
+}
+
+/*******************************************************************************
+* Application
+******************************************************************************/
+
+mx|Application {
+    background-gradient-colors: #FFCCCC, #663333;
+    backgroundColor: #FFFFFF;
+    color: #000000;
+    theme-color: #777777;
+}
+
+/*******************************************************************************
+* Base components
+******************************************************************************/
+
+mx|ToolTip {
+    backgroundAlpha: 0.9;
+    cornerRadius: 2;
+    backgroundColor: #454545;
+    color: #FFFFFF;
+}
+
+mx|Alert {
+    titleStyleName: "alertTitle";
+    messageStyleName: "alertMessage";
+    buttonStyleName: "alertButton";
+    headerHeight: 22;
+    borderThickness: 1;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    color: #EFEFEF;
+    backgroundColor: #555555;
+    cornerRadius: 3;
+    borderStyle: solid;
+    headerColors: #777777, #454545;
+    footerColors: #454545, #EFEFEF;
+    borderColor: #454545;
+}
+
+.alertTitle {
+    fontSize: 12px;
+    fontWeight: bold;
+    textAlign: left;
+    color: #EFEFEF;
+}
+
+.alertMessage {
+    letterSpacing: 0;
+    fontSize: 10;
+    fontWeight: normal;
+}
+
+.alertButton {
+    themeColor: #444444;
+    letterSpacing: 0;
+    fontSize: 10;
+    borderColor: #454545;
+    cornerRadius: 3;
+    fontWeight: bold;
+    color: #EFEFEF;
+    textRollOverColor: #232323;
+    highlightAlphas: 0.3, 0;
+    fillAlphas: 0.2, 0.1, 0.3, 0.3;
+}
+
+/*******************************************************************************
+* Flags
+******************************************************************************/
+
+.flags {
+    fr-FR: Embed(source = "images/flags/fr_FR.png");
+    en-US: Embed(source = "images/flags/en_US.png");
+}
+
+/*******************************************************************************
+* Kerneos Desktop
+******************************************************************************/
+
+kerneos|DesktopView #downButton {
+    icon: Embed(source = "images/icons/down.png");
+}
+
+kerneos|DesktopView #cascadeButton {
+    icon: Embed(source = "images/icons/cascade.png");
+}
+
+kerneos|DesktopView #tileButton {
+    icon: Embed(source = "images/icons/tile.png");
+}
+
+kerneos|DesktopView #eventsButton {
+    icon: Embed(source = "images/icons/events_list16.png");
+}
+
+kerneos|DesktopView #exitButton {
+    icon: Embed(source = "images/icons/exit.png");
+}
+
+kerneos|ListModuleRenderer #moduleName {
+    color: #111111;
+    font-size: 14px;
+    padding-top: 4px;
+}
+
+kerneos|ListModuleRenderer {
+    border-color: #555555;
+    border-thickness: 2px;
+    corner-radius: 3px;
+}
+
+kerneos|ApplicationTitle #applicationProjectTitle {
+    font-size: 48px;
+    color: #44DDDD;
+}
+
+kerneos|ApplicationTitle #applicationNameTitle {
+    font-size: 48px;
+    font-style: italic;
+    color: #BBBBBB;
+}
+
+kerneos|LoadingView #progressBar {
+    labelPlacement: top;
+    color: #EFEFEF;
+    barColor: #FFFFFF;
+    fontFamily: Verdana;
+    fontStyle: normal;
+    fontWeight: bold;
+    fontSize: 12;
+    trackHeight: 20;
+}
+
+kerneos|LanguageSelector {
+    cornerRadius: 2;
+    color: #EFEFEF;
+    highlightAlphas: 0.10, 0.10;
+    fillAlphas: 0.10, 0.20;
+    fillColors: #000000, #000000, #ffffff, #eeeeee;
+    borderColor: #666666;
+    selectionColor: #555555;
+    alternatingItemColors: #454545, #454545;
+}
+
+/*******************************************************************************
+* Modules
+******************************************************************************/
+
+kerneos|ModulesPanel {
+    titleStyleName: modulesWindowTitle;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    borderColor: #666666;
+    borderAlpha: 1;
+    borderThicknessRight: 4;
+    borderThicknessLeft: 4;
+    borderThicknessTop: 2;
+    borderThicknessBottom: 3;
+    rounded-bottom-corners: true;
+    cornerRadius: 3;
+    backgroundColor: #CCCCCC;
+    backgroundImage: Embed(source = "images/splash.png");
+    icon: Embed(source = "images/icons/modules16.png");
+    paddingBottom: 5px;
+    paddingLeft: 3px;
+    paddingTop: 2px;
+    paddingRight: 3px;
+}
+
+kerneos|ModulesPanel #loadText {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+kerneos|ModulesPanel #unloadText {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.modulesWindowTitle {
+    font-weight: bold;
+    font-size: 13px;
+    color: #FEFEFE;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #FF0000;
+}
+
+/*******************************************************************************
+* Login
+******************************************************************************/
+
+kerneosLogin|LoginPanel {
+    titleStyleName: loginWindowTitle;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    borderColor: #666666;
+    borderAlpha: 1;
+    borderThicknessRight: 4;
+    borderThicknessLeft: 4;
+    borderThicknessTop: 2;
+    borderThicknessBottom: 3;
+    rounded-bottom-corners: true;
+    cornerRadius: 3;
+    backgroundColor: #CCCCCC;
+    backgroundImage: Embed(source = "images/splash.png");
+    icon: Embed(source = "images/icons/key16.png");
+    backgroundSize: "100%";
+    paddingBottom: 5px;
+    paddingLeft: 3px;
+    paddingTop: 2px;
+    paddingRight: 3px;
+}
+
+kerneosLoginView|LogInView {
+    paddingLeft: 480px;
+    paddingTop: 170px;
+    paddingRight: 10px;
+    paddingBottom: 10px;
+}
+
+kerneosLoginView|LogInView #text {
+    color: #FFFFFF;
+}
+
+kerneosLoginView|AuthView {
+    paddingLeft: 10px;
+    paddingTop: 10px;
+    paddingRight: 10px;
+    paddingBottom: 10px;
+}
+
+kerneosLoginView|AuthView #text {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+kerneosLoginView|LogOutView {
+    paddingLeft: 10px;
+    paddingTop: 10px;
+    paddingRight: 10px;
+    paddingBottom: 10px;
+}
+
+kerneosLoginView|LogOutView #text {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.loginWindowTitle {
+    font-weight: bold;
+    font-size: 13px;
+    color: #FEFEFE;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #FF0000;
+}
+
+/*******************************************************************************
+* Profile
+******************************************************************************/
+
+kerneosProfile|ProfilePanel {
+    titleStyleName: profileWindowTitle;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    borderColor: #666666;
+    borderAlpha: 1;
+    borderThicknessRight: 4;
+    borderThicknessLeft: 4;
+    borderThicknessTop: 2;
+    borderThicknessBottom: 3;
+    rounded-bottom-corners: true;
+    cornerRadius: 3;
+    backgroundColor: #CCCCCC;
+    backgroundImage: Embed(source = "images/splash.png");
+    icon: Embed(source = "images/icons/profile16.png");
+    paddingBottom: 5px;
+    paddingLeft: 3px;
+    paddingTop: 2px;
+    paddingRight: 3px;
+}
+
+kerneosProfileView|ProfileView #text {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.profileWindowTitle {
+    font-weight: bold;
+    font-size: 13px;
+    color: #FEFEFE;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #FF0000;
+}
+
+/*******************************************************************************
+* Windows
+******************************************************************************/
+kerneosWindow|IFrameLoadIndicator {
+
+}
+
+kerneosWindow|MinimizedModuleWindow {
+    cornerRadius: 3;
+}
+
+kerneosWindow|ModuleSnapshotTooltip {
+    backgroundAlpha: 0.8;
+    borderAlpha: 1.0;
+    backgroundColor: #454545;
+    borderColor: #404040;
+    borderStyle: solid;
+    border-thickness: 2px;
+    color: #EFEFEF;
+    cornerRadius: 2px;
+}
+
+kerneosWindow|IFrameLoadIndicator #progressBar {
+    trackHeight: 20;
+    color: #EFEFEF;
+    borderColor: #EFEFEF;
+    barColor: #666666;
+    trackColors: #444444, #444444;
+}
+
+kerneosWindow|SwfModuleWindow {
+    backgroundColor: #666666;
+}
+
+kerneosWindow|SwfModuleWindow:loaded {
+    backgroundColor: #CCCCCC;
+}
+
+kerneosWindow|SwfModuleWindow #progressBar {
+    barColor: #444444;
+    color: #EFEFEF;
+    borderColor: #FFFFFF;
+    trackHeight: 20;
+}
+
+kerneosWindow|SwfModuleWindow #errorLabel {
+    color: #EFEFEF;
+}
+
+kerneosWindow|KerneosWindow {
+    titleStyleName: moduleWindowTitle;
+    dropShadowEnabled: true;
+    dropShadowColor: #000000;
+    borderColor: #666666;
+    borderAlpha: 1;
+    borderThicknessRight: 4;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
+    borderThicknessLeft: 4;
+    borderThicknessTop: 2;
+    borderThicknessBottom: 3;
+    rounded-bottom-corners: true;
+    header-height: 24px;
+    cornerRadius: 3;
+    backgroundColor: #CCCCCC;
+    paddingBottom: 5px;
+    paddingLeft: 3px;
+    paddingTop: 2px;
+    paddingRight: 3px;
+    minimize-btn-style-name: moduleWindowMinimizeButton;
+    maximize-btn-style-name: moduleWindowMaximizeButton;
+    close-btn-style-name: moduleWindowCloseButton;
+    restore-btn-style-name: moduleWindowRestoreButton;
+    style-name-no-focus: noFocusModuleWindow;
+    style-name-focus: focusModuleWindow;
+    vertical-align: middle;
+    horizontal-align: center;
+}
+
+.focusModuleWindow {
+    background-alpha: 1;
+    border-alpha: 1;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
+}
+
+.noFocusModuleWindow {
+    background-alpha: 0.90;
+    border-alpha: 0.70;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
+}
+
+kerneosWindow|IFrameModuleWindow {
+    backgroundColor: #666666;
+    style-name-no-focus: noFocusIFrameModuleWindow;
+}
+
+.noFocusIFrameModuleWindow {
+    background-alpha: 0.70;
+    backgroundColor: #666666;
+    border-alpha: 0.70;
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
+}
+
+kerneosWindow|FolderWindow {
+    backgroundImage: ClassReference("org.ow2.kerneos.common.view.GradientBackground");
+    backgroundSize: "100%";
+    fillColors: #666666, #EEEEEE;
+    fillAlphas: 1.0, 0.2;
+    style-name-no-focus: noFocusFolderWindow;
+}
+
+.noFocusFolderWindow {
+    background-alpha: 0.70;
+    border-alpha: 0.70;
+}
+
+.folderWindowDescriptionBox {
+    background-color: #121212;
+    background-alpha: 0.6;
+    border-style: solid;
+    border-color: #222222;
+    corner-radius: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+}
+
+.folderWindowDescriptionLabel {
+    color: #EFEFEF;
+}
+
+.folderWindowModulesList {
+    background-alpha: 0.0;
+    border-style: none;
+    use-roll-over: false;
+}
+
+.moduleWindowTitle {
+    font-weight: bold;
+    font-size: 13px;
+    color: #FEFEFE;
+    drop-shadow-enabled: true;
+    drop-shadow-color: #FF0000;
+    title-style-name-no-focus: moduleWindowTitleNoFocus;
+}
+
+.moduleWindowTitleNoFocus {
+    font-weight: bold;
+}
+
+.moduleWindowMinimizeButton {
+    upSkin: Embed(source = "images/icons/minimize_up.png");
+    overSkin: Embed(source = "images/icons/minimize_over.png");
+    downSkin: Embed(source = "images/icons/minimize_up.png");
+}
+
+.moduleWindowMaximizeButton {
+    upSkin: Embed(source = "images/icons/maximize_up.png");
+    overSkin: Embed(source = "images/icons/maximize_over.png");
+    downSkin: Embed(source = "images/icons/maximize_up.png");
+}
+
+.moduleWindowCloseButton {
+    upSkin: Embed(source = "images/icons/close_up.png");
+    overSkin: Embed(source = "images/icons/close_over.png");
+    downSkin: Embed(source = "images/icons/close_up.png");
+}
+
+.moduleWindowRestoreButton {
+    upSkin: Embed(source = "images/icons/restore_up.png");
+    overSkin: Embed(source = "images/icons/restore_over.png");
+    downSkin: Embed(source = "images/icons/restore_up.png");
+}
+
+.iFrameWindowPreviousPageButton {
+    upSkin: Embed(source = "images/icons/arrow_left_up.png");
+    overSkin: Embed(source = "images/icons/arrow_left_over.png");
+    downSkin: Embed(source = "images/icons/arrow_left_up.png");
+}
+
+.iFrameWindowNextPageButton {
+    upSkin: Embed(source = "images/icons/arrow_right_up.png");
+    overSkin: Embed(source = "images/icons/arrow_right_over.png");
+    downSkin: Embed(source = "images/icons/arrow_right_up.png");
+}
+
+.iFrameWindowNavigateExternallyButton {
+    upSkin: Embed(source = "images/icons/arrow_up_right_up.png");
+    overSkin: Embed(source = "images/icons/arrow_up_right_over.png");
+    downSkin: Embed(source = "images/icons/arrow_up_right_up.png");
+}
+
+.iFrameWindowSeparator {
+}
+
+/*******************************************************************************
+* TaskBar
+******************************************************************************/
+
+.taskBar {
+    vertical-align: middle;
+    border-style: outset;
+    fill-colors: #777777, #000000;
+}
+
+.taskBarSmallButton {
+    cornerRadius: 1;
+    paddingLeft: 0;
+    paddingRight: 0;
+    highlightAlphas: 0.10, 0.10;
+    fillAlphas: 0.10, 0.20;
+    fillColors: #000000, #000000, #ffffff, #eeeeee;
+    borderColor: #666666;
+}
+
+.taskBarScrollLeftButton {
+    upSkin: Embed(source = "images/icons/taskbar_left_up.png");
+    overSkin: Embed(source = "images/icons/taskbar_left_over.png");
+    downSkin: Embed(source = "images/icons/taskbar_left_up.png");
+}
+
+.taskBarScrollRightButton {
+    upSkin: Embed(source = "images/icons/taskbar_right_up.png");
+    overSkin: Embed(source = "images/icons/taskbar_right_over.png");
+    downSkin: Embed(source = "images/icons/taskbar_right_up.png");
+}
+
+/*******************************************************************************
+ * Notifications
+ ******************************************************************************/
+
+kerneosNotification|NotificationPopUp {
+    background-image: Embed("images/notification_background.png");
+    background-size: "100%";
+    padding-bottom: 5px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 7px;
+}
+
+kerneosNotification|NotificationPopUp #closeButton {
+    upSkin: Embed(source = "images/icons/notification_close.png");
+    overSkin: Embed(source = "images/icons/notification_close_over.png");
+    downSkin: Embed(source = "images/icons/notification_close.png");
+}
+
+/*******************************************************************************
+* Notification
+******************************************************************************/
+
+kerneosNotification|NotificationsLog {
+
+}
+
+kerneosNotification|NotificationsLog #clearButton {
+    icon: Embed(source = "images/icons/clear16.png");
+}
+
+kerneosNotification|NotificationsLog #copyButton {
+    icon: Embed(source = "images/icons/copy16.png");
+}
+
+kerneosNotification|NotificationsLogWindow {
+    icon: Embed(source = "images/icons/events_list16.png");
+}
+
+/*******************************************************************************
+* Server Side Exception
+******************************************************************************/
+
+common|ServerSideExceptionWindow {
+    icon: Embed(source = "images/icons/exception.png");
+    borderAlpha: 1.0;
+    backgroundAlpha: 1.0;
+    borderColor: #CCCCCC;
+    backgroundColor: #CCCCCC;
+}
+
+common|ServerSideExceptionWindow #closeButton {
+    icon: Embed(source = "images/icons/close16.png");
+}
+
+common|ServerSideExceptionWindow #detailsButton {
+    icon: Embed(source = "images/icons/details16.png");
+}
+
+common|ServerSideExceptionWindow #detailedView {
+    icon: Embed(source = "images/icons/copy16.png");
+}
+
+/*******************************************************************************
+* Help Window
+******************************************************************************/
+
+common|HelpWindow {
+    icon: Embed(source = "images/icons/help16.png");
+    paddingBottom: 0px;
+    paddingLeft: 0px;
+    paddingRight: 0px;
+    paddingTop: 0px;
+    borderAlpha: 1.0;
+    borderColor: #EEEEEE;
+    backgroundAlpha: 1.0;
+    backgroundColor: #EEEEEE;
+}
+
+common|HelpWindow #menuContainer {
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    backgroundColor: #EEEEEE;
+    backgroundImage: ClassReference("org.ow2.kerneos.common.view.GradientBackground");
+    backgroundSize: "100%";
+    angle: 0;
+    fillColors: #DEDEDE, #EEEEEE;
+    fillAlphas: 1.0, 1.0;
+}
+
+common|HelpWindow #menuButtonBar {
+    textSelectedColor: #2b333c;
+}
+
+common|HelpWindow #pagesContainer {
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+}

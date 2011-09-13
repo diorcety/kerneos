@@ -26,7 +26,7 @@
 -->
 <mx:HBox xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:mx="library://ns.adobe.com/flex/mx"
-         xmlns:commonControls = "org.ow2.kerneos.common.controls.*">
+         xmlns:commonControls="org.ow2.kerneos.common.controls.*">
 
     <fx:Metadata>
         <![CDATA[
@@ -40,17 +40,13 @@
 
     <fx:Script>
         <![CDATA[
-            import mx.resources.ResourceManager;
-            import org.ow2.kerneos.common.managers.LanguagesManager;
+        import mx.resources.ResourceManager;
+
+        import org.ow2.kerneos.common.managers.LanguagesManager;
         ]]>
     </fx:Script>
 
-    <commonControls:KerneosProgressBar id = "iFrameProgressBar"
-                                       indeterminate = "true"
-                                       label = "{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.iframe.loading-bar.label')}"
-                                       trackHeight = "20"
-                                       color = "#EFEFEF"
-                                       borderColor = "#EFEFEF"
-                                       barColor = "#666666"
-                                       trackColors = "{[0x444444,0x444444]}" />
+    <commonControls:KerneosProgressBar id="progressBar"
+                                       indeterminate="true"
+                                       label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.iframe.loading-bar.label')}"/>
 </mx:HBox>

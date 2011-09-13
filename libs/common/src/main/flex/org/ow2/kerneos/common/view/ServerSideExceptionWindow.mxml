@@ -26,19 +26,16 @@
 -->
 <mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:mx="library://ns.adobe.com/flex/mx"
+                xmlns:s="library://ns.adobe.com/flex/spark"
                 width="450"
                 height="150"
-                showCloseButton="{popup}"
-                close="close();"
-                titleIcon="@Embed(source='/../assets/exception.png')"
-                title="{exception.name}"
-                borderAlpha="1.0"
-                backgroundAlpha="1.0"
-                borderColor="#CCCCCC"
                 width.detailedView="700"
                 height.detailedView="450"
-                backgroundColor="#CCCCCC"
-                currentState="{state}">
+                showCloseButton="{popup}"
+                close="close();"
+                title="{exception.name}"
+                currentState="{state}"
+                initialize="init()">
 
     <fx:Metadata>
         <![CDATA[
@@ -47,6 +44,7 @@
          *
          * @author Julien Nicoulaud
          */
+        [Style (name ="icon", type="Class", inherit="no")]
         ]]>
     </fx:Metadata>
 
@@ -56,10 +54,8 @@
 
     <fx:Script>
         <![CDATA[
+        import mx.core.FlexGlobals;
         import mx.managers.PopUpManager;
-        import mx.controls.Text;
-
-        import flash.events.Event;
 
         // =====================================================================================
         // Variables
@@ -77,29 +73,18 @@
         [Bindable]
         private var state:String = "simpleView";
 
-        // Assets
+        <!-- Get icon style property at init-->
+        private function init():void {
+            this.titleIcon = getStyle("icon");
+        }
 
-        /**
-         * Close icon (16 pixels)
-         */
-        [Embed(source='/../assets/close16.png')]
-        [Bindable]
-        public var closeIcon16:Class;
-
-        /**
-         * Copy icon (16 pixels)
-         */
-        [Embed(source='/../assets/copy16.png')]
-        [Bindable]
-        public var copyIcon16:Class;
-
-        /**
-         * Details icon (16 pixels)
-         */
-        [Embed(source='/../assets/details16.png')]
-        [Bindable]
-        public var detailsIcon16:Class;
-
+        <!-- Add icon style property -->
+        override public function styleChanged(styleProp:String):void {
+            super.styleChanged(styleProp);
+            if (styleProp == "icon") {
+                this.titleIcon = getStyle("icon");
+            }
+        }
 
         // =====================================================================================
         // Public methods
@@ -157,25 +142,23 @@
                      height="100%"
                      editable="false"/>
     </mx:VBox>
+
     <mx:ControlBar id="theControlBar"
                    width="100%"
                    horizontalAlign="center">
-        <mx:Button id="CloseButton"
-                   label="Close"
-                   click="close();"
-                   icon="{closeIcon16}"
-                   visible="{popup}"
-                   includeInLayout="{popup}"/>
-        <mx:Button id="detailsButton"
-                   label="Show details"
-                   visible="{exception.hasStackTrace()}"
-                   includeInLayout="{exception.hasStackTrace()}"
-                   click="toggleDetails()"
-                   icon="{detailsIcon16}"/>
-        <mx:Button includeIn="detailedView"
-                   label="Copy to clipboard"
-                   click="copyToClipboard();"
-                   icon="{copyIcon16}"/>
+        <s:Button id="closeButton"
+                  label="Close"
+                  click="close();"
+                  visible="{popup}"
+                  includeInLayout="{popup}"/>
+        <s:Button id="detailsButton"
+                  label="Show details"
+                  visible="{exception.hasStackTrace()}"
+                  includeInLayout="{exception.hasStackTrace()}"
+                  click="toggleDetails()"/>
+        <s:Button includeIn="detailedView"
+                  label="Copy to clipboard"
+                  click="copyToClipboard();"/>
     </mx:ControlBar>
 
     <mx:states>

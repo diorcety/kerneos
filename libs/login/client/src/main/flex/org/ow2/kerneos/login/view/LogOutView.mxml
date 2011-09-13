@@ -25,9 +25,9 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:s="library://ns.adobe.com/flex/spark"
          xmlns:mx="library://ns.adobe.com/flex/mx"
-         horizontalAlign="center"
-         verticalAlign="middle">
+         horizontalAlign="center" verticalAlign="middle">
 
     <fx:Script>
         <![CDATA[
@@ -37,8 +37,15 @@
         ]]>
     </fx:Script>
 
-    <mx:Text width="100%"
-             textAlign="center"
-             text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.logout.label')}"
-             selectable="false"/>
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- GUI Components                                                                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <s:Label
+            id="text"
+            verticalAlign="middle"
+            height="100%"
+            width="100%"
+            textAlign="center"
+            text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.logout.label')}"/>
+
 </mx:VBox>

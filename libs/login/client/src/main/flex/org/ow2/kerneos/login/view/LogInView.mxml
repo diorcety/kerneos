@@ -25,10 +25,10 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
-          xmlns:mx="library://ns.adobe.com/flex/mx"
-          xmlns:flexlibControls="flexlib.controls.*"
-          horizontalAlign="center"
-          verticalAlign="middle">
+         xmlns:s="library://ns.adobe.com/flex/spark"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:flexlibControls="flexlib.controls.*"
+         horizontalAlign="center" verticalAlign="middle">
 
     <fx:Script>
         <![CDATA[
@@ -51,12 +51,18 @@
         ]]>
     </fx:Script>
 
-    <!--
-    <mx:Text width="100%"
-             textAlign="center"
-             text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.login.label')}"
-             selectable="false"/>
-    -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- GUI Components                                                                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <s:Label
+            id="text"
+            height="100%"
+            width="100%"
+            verticalAlign="bottom"
+            textAlign="center"
+            text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.login.label')}"/>
+
     <flexlibControls:PromptingTextInput
             prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
             id="username"
@@ -70,7 +76,7 @@
             toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password.tooltip')}"
             displayAsPassword="true"/>
 
-    <mx:Button
+    <s:Button
             id="validate"
             label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.validate')}"
             click="login();"/>

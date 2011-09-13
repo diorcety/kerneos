@@ -24,13 +24,18 @@
      - $Id$
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+           xmlns:s="library://ns.adobe.com/flex/spark"
            xmlns:mx="library://ns.adobe.com/flex/mx"
-           xmlns:view="org.ow2.kerneos.core.view.*">
+           xmlns:view="org.ow2.kerneos.core.view.*"
+           horizontalAlign="center" verticalAlign="middle">
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- GUI Components                                                                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <view:ModulesPanel id="modulesPanel"
                        horizontalCenter="0"
                        verticalCenter="0"
                        width="300"
                        height="300"/>
-</mx:Canvas>
+</mx:VBox>

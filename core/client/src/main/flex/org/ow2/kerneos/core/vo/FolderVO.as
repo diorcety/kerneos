@@ -43,23 +43,6 @@ public class FolderVO extends ModuleWithWindowVO implements IValueObject {
     // Properties
     // =========================================================================
 
-    // Assets
-
-    /**
-     * Default folder small icon (16x16).
-     */
-    [Transient]
-    [Embed(source="/../assets/folder16.png")]
-    public static const defaultFolderSmallIcon:Class;
-
-    /**
-     * Default folder big icon (64x64).
-     */
-    [Transient]
-    [Embed(source="/../assets/folder64.png")]
-    public static const defaultFolderBigIcon:Class;
-
-
     // Fields
 
     /**
@@ -85,7 +68,10 @@ public class FolderVO extends ModuleWithWindowVO implements IValueObject {
     override public function getSmallIcon(target:UIComponent = null):Object {
         // If no icon specified, return the default one
         if (smallIcon == null) {
-            return defaultFolderSmallIcon;
+            if (target == null)
+                return IconUtility.getObject("images/folder16.png", 16, 16);
+            else
+                return IconUtility.getClass(target, "images/folder16.png", 16, 16);
         }
         else {
             return super.getSmallIcon(target);
@@ -98,7 +84,10 @@ public class FolderVO extends ModuleWithWindowVO implements IValueObject {
     override public function getBigIcon(target:UIComponent = null):Object {
         // If no icon specified, return the default one
         if (bigIcon == null) {
-            return defaultFolderBigIcon;
+            if (target == null)
+                return IconUtility.getObject("images/folder64.png", 64, 64);
+            else
+                return IconUtility.getClass(target, "images/folder64.png", 64, 64);
         }
         else {
             return super.getBigIcon(target);

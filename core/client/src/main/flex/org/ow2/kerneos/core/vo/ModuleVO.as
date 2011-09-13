@@ -42,23 +42,6 @@ public class ModuleVO implements IValueObject {
     // Properties
     // =========================================================================
 
-    // Assets
-
-    /**
-     * Default module small icon (16x16).
-     */
-    [Transient]
-    [Embed(source="/../assets/module16.png")]
-    public static var defaultSmallIcon:Class;
-
-    /**
-     * Default module big icon (64x64).
-     */
-    [Transient]
-    [Embed(source="/../assets/module64.png")]
-    public static var defaultBigIcon:Class;
-
-
     // Fields
 
     /**
@@ -118,7 +101,10 @@ public class ModuleVO implements IValueObject {
     public function getSmallIcon(target:UIComponent = null):Object {
         // If no icon specified, return the default one
         if (smallIcon == null) {
-            return defaultSmallIcon;
+            if (target == null)
+                return IconUtility.getObject("images/module16.png", 16, 16);
+            else
+                return IconUtility.getClass(target, "images/module16.png", 16, 16);
         }
 
         // Else load the given URL
@@ -136,7 +122,10 @@ public class ModuleVO implements IValueObject {
     public function getBigIcon(target:UIComponent = null):Object {
         // If no icon specified, return the default one
         if (bigIcon == null) {
-            return defaultBigIcon;
+            if (target == null)
+                return IconUtility.getObject("images/module64.png", 64, 64);
+            else
+                return IconUtility.getClass(target, "images/module64.png", 64, 64);
         }
 
         // Else load the given URL

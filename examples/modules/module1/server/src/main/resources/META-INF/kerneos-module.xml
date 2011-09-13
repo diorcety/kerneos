@@ -28,7 +28,7 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="org.ow2.kerneos:module">
   <id>Kerneos-module1</id>
-  <name>Module 1</name>
+  <name>Kerneos Module 1</name>
   <description>An example using profile abilities</description>
   <small-icon>icons/icon16.png</small-icon>
   <big-icon>icons/icon64.png</big-icon>
