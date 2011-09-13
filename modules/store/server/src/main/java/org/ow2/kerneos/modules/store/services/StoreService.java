@@ -38,6 +38,7 @@ import org.ow2.kerneos.modules.store.Stores;
 import org.ow2.kerneos.modules.store.config.ModuleBundle;
 import org.ow2.kerneos.modules.store.impl.*;
 import org.ow2.kerneos.modules.store.util.Base64;
+import org.ow2.kerneosstore.api.ModuleVersion;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -123,7 +124,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     @Override
     public StoreImpl getStore(String id) {
         String url = stores.getStoreById(id).getUrl();
-        //TODO url
+        storeRS.setUrl(url);
         StoreImpl result = (StoreImpl) storeRS.getStore();
         return result;
     }
@@ -134,10 +135,16 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      */
     @Override
     public ModuleImpl getModule(String id) {
-        ModuleImpl result = (ModuleImpl) storeRS.getModuleVersion(id);
-        logger.info("Module id parameter " + id);
-        logger.info("Modules name " + result.getName());
-        return result;
+        for (StoreImpl store : stores.getStores()) {
+            logger.debug("Find Module with id " + id + " in url " + store.getUrl());
+            storeRS.setUrl(store.getUrl());
+            ModuleImpl result = (ModuleImpl) storeRS.getModuleVersion(id);
+            if (result != null) {
+                return result;
+            }
+        }
+        logger.info("Couldn't find the module in the stores");
+        return null;
     }
 
     /**
@@ -146,72 +153,173 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      */
     @Override
     public ModuleImage getModuleImage(String id) {
-
-        logger.info("Send module image to client flex ");
-        ModuleImage image = new ModuleImage();
-        image.setIdModule(id);
-        image.setImgOrig(storeRS.getModuleVersionImage(id));
-        return image;
+        for (StoreImpl store : stores.getStores()) {
+            logger.debug("Find Module with id " + id + " in url " + store.getUrl());
+            storeRS.setUrl(store.getUrl());
+            ModuleImage image = new ModuleImage();
+            image.setIdModule(id);
+            image.setImgOrig(storeRS.getModuleVersionImage(id));
+            if (image != null) {
+                logger.debug("Send module image to client flex");
+                return image;
+            }
+        }
+        logger.debug("Couldn't find the image for this module");
+        return null;
     }
 
     /**
-     * @param filter
-     * @param order
-     * @param itemByPage
-     * @param page
-     * @return
+     * @param filter module's name
+     * @param order "desc" for descending or "asc" for ascendant
+     * @param itemByPage items number by page
+     * @param page page number
+     * @return Modules result collection
      */
     @Override
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
                                                 Integer itemByPage, Integer page) {
-        Collection result = storeRS.searchModules(filter, field, order, itemByPage, page);
-        return result;
-    }
-
-    @Override
-    public Collection<ModuleImpl> searchModulesWithImage(String filter, String field, String order,
-                                                         Integer itemByPage, Integer page) {
-        Collection<ModuleImpl> result = this.searchModules(filter, field, order, itemByPage, page);
-        for (ModuleImpl module : result) {
-            byte[] img = storeRS.getModuleVersionImage(module.getId());
-            module.setImgOrig(img);
+        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
+        //For each store
+        for (StoreImpl store : stores.getStores()) {
+            storeRS.setUrl(store.getUrl());
+            Collection modules = storeRS.searchModules(filter, field, order, itemByPage, page);
+            // For each result module
+            for (Object mod : modules) {
+                //If global collection doesn't contains this module then add it
+                if (!results.contains(mod)) {
+                    results.add((ModuleImpl)mod);
+                }
+            }
         }
-        return result;
+
+        //TODO items by page
+
+        return results;
     }
 
     /**
-     * @param id
-     * @param order
-     * @param itemByPage
-     * @param page
-     * @return
+     * @param filter module's name
+     * @param order "desc" for descending or "asc" for ascendant
+     * @param itemByPage items number by page
+     * @param page page number
+     * @return Modules result collection
+     */
+    @Override
+    public Collection<ModuleImpl> searchModulesWithImage(String filter, String field, String order,
+                                                         Integer itemByPage, Integer page) {
+        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
+        //For each store
+        for (StoreImpl store : stores.getStores()) {
+            storeRS.setUrl(store.getUrl());
+            Collection modules = storeRS.searchModules(filter, field, order, itemByPage, page);
+            // For each result module
+            for (Object mod : modules) {
+                //If global collection doesn't contains this module then add it
+                if (!results.contains(mod)) {
+                    //Find the module icon (image)
+                    byte[] img = storeRS.getModuleVersionImage(((ModuleImpl)mod).getId());
+                    if (img != null) {
+                        ((ModuleImpl)mod).setImgOrig(img);
+                    }
+                    results.add((ModuleImpl)mod);
+                }
+            }
+        }
+
+        return results;
+    }
+
+    /**
+     * @param id Category id
+     * @param order desc" for descending or "asc" for ascendant
+     ** @param itemByPage items number by page
+     * @param page page number
+     * @return Modules result collection
      */
     @Override
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
                                                           Integer itemByPage, Integer page) {
-        Collection result = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
-        return result;
+        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
+        //For each store
+        for (StoreImpl store : stores.getStores()) {
+            storeRS.setUrl(store.getUrl());
+            Collection modules = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
+            // For each result module
+            for (Object mod : modules) {
+                //If global collection doesn't contains this module then add it
+                if (!results.contains(mod)) {
+                    results.add((ModuleImpl)mod);
+                }
+            }
+        }
+
+        //TODO items by page
+
+        return results;
     }
 
+    /**
+     * @param id Category id
+     * @param order desc" for descending or "asc" for ascendant
+     ** @param itemByPage items number by page
+     * @param page page number
+     * @return Modules result collection
+     */
     @Override
     public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order, Integer itemByPage, Integer page) {
-        Collection<ModuleImpl> result = this.searchModulesByCategory(id, field, order, itemByPage, page);
-        for (ModuleImpl module : result) {
-            byte[] img = storeRS.getModuleVersionImage(module.getId());
-            module.setImgOrig(img);
+        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
+        //For each store
+        for (StoreImpl store : stores.getStores()) {
+            storeRS.setUrl(store.getUrl());
+            Collection modules = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
+            // For each result module
+            for (Object mod : modules) {
+                //If global collection doesn't contains this module then add it
+                if (!results.contains(mod)) {
+                    //Find the module icon (image)
+                    byte[] img = storeRS.getModuleVersionImage(((ModuleImpl)mod).getId());
+                    if (img != null) {
+                        ((ModuleImpl)mod).setImgOrig(img);
+                    }
+                    results.add((ModuleImpl)mod);
+                }
+            }
         }
-        return result;
+
+        return results;
     }
 
     @Override
-    public Collection<ModuleImpl> getCategories() {
-        Collection result = storeRS.getCategories();
-        return result;
+    public Collection<CategoryImpl> getCategories() {
+        Collection <CategoryImpl> results = new ArrayList<CategoryImpl>();
+
+        //For each store
+        for (StoreImpl store : stores.getStores()) {
+            storeRS.setUrl(store.getUrl());
+            Collection categories = storeRS.getCategories();
+            for (Object cat : categories) {
+                if (!results.contains(cat)) {
+                    results.add((CategoryImpl)cat);
+                }
+            }
+        }
+
+        return results;
     }
 
     @Override
     public CategoryImpl getCategory(String id) {
-        return (CategoryImpl) storeRS.getCategory(id);
+        //For each store
+        for (StoreImpl store : stores.getStores()) {
+            logger.debug("Find Category with id " + id + " in url " + store.getUrl());
+            storeRS.setUrl(store.getUrl());
+            CategoryImpl cat = (CategoryImpl)storeRS.getCategory(id);
+            if (cat != null) {
+                return cat;
+            }
+        }
+        logger.info("Couldn't find the category in the stores");
+        return null;
     }
 
     @Override
@@ -274,7 +382,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
             throw new StoreException(StoreException.MODULE_ALREADY_INSTALLED, "The module \"" + id + "\" is already installed");
         }
 
-        ModuleImpl module = (ModuleImpl) storeRS.getModuleVersion(id);
+        ModuleImpl module = this.getModule(id);
         if (module == null)
             throw new StoreException(StoreException.MODULE_NOT_FOUND, "Can't find the module \"" + id + "\"on the store");
 
@@ -330,7 +438,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      */
     @Override
     public void updateModule(String id) throws StoreException {
-        ModuleImpl remoteModule = (ModuleImpl) storeRS.getModuleVersion(id);
+        ModuleImpl remoteModule = this.getModule(id);
         if (remoteModule == null)
             throw new StoreException(StoreException.MODULE_NOT_FOUND, "Can't find the module \"" + id + "\" on the store");
 

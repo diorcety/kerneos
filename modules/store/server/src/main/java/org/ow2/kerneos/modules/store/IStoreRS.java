@@ -29,4 +29,8 @@ import org.ow2.kerneosstore.api.StoreClient;
 
 public interface IStoreRS extends StoreClient {
     public byte[] downloadModuleVersion(String id);
+
+    public String getUrl();
+
+    public void setUrl(String url);
 }

@@ -50,6 +50,7 @@ public class StoreRS implements IStoreRS {
      */
     private static Log logger = LogFactory.getLog(StoreRS.class);
 
+    @Override
     public org.ow2.kerneosstore.api.Store getStore() {
         Client client = new Client();
 
@@ -228,5 +229,15 @@ public class StoreRS implements IStoreRS {
 
         WebResource webResource = client.resource(url + "/module/" + id + "/download");
         return webResource.get(byte[].class);
+    }
+
+    @Override
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

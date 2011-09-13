@@ -48,7 +48,7 @@ public interface IStoreService {
     public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order,
                                                                    Integer itemByPage, Integer page);
 
-    public Collection<ModuleImpl> getCategories();
+    public Collection<CategoryImpl> getCategories();
 
     public CategoryImpl getCategory(String id);
 
