@@ -253,6 +253,13 @@
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos.examples</groupId>
+                  <artifactId>modules-module3-server</artifactId>
+                  <version>${project.version}</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
