@@ -24,9 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<iframe-module xmlns="org.ow2.kerneos:module"
+<iframe-module xmlns="http://jasmine.ow2.org/xsds/kerneos-module-2.1.xsd"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="org.ow2.kerneos:module">
+               xsi:schemaLocation="http://jasmine.ow2.org/xsds/kerneos-module-2.1.xsd">
   <id>kerneos-module3</id>
   <name>Kerneos Module 3</name>
   <description>A Iframe module</description>

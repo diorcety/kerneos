@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<profile xmlns="org.ow2.kerneos:profile"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<profile xmlns="http://jasmine.ow2.org/xsds/kerneos-profile-2.1.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://jasmine.ow2.org/xsds/kerneos-profile-2.1.xsd">
 
   <defaultRules>
     <rule role="jonas" policy="allow"/>

@@ -24,9 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<profile xmlns="org.ow2.kerneos:profile"
+<profile xmlns="http://jasmine.ow2.org/xsds/kerneos-profile-2.1.xsd"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="org.ow2.kerneos:profile">
+         xsi:schemaLocation="http://jasmine.ow2.org/xsds/kerneos-profile-2.1.xsd">
 
   <defaultRules>
     <rule role="jonas" policy="deny"/>

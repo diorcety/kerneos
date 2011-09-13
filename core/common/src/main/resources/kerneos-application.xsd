@@ -26,9 +26,8 @@
 -->
 <xs:schema
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    elementFormDefault="qualified"
-    targetNamespace="org.ow2.kerneos:application"
-    xmlns:k="org.ow2.kerneos:application">
+    targetNamespace="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd"
+    xmlns:k="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd">
 
 
   <!--##################################################################################
