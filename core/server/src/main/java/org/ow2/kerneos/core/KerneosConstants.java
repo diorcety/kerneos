@@ -55,6 +55,7 @@ public final class KerneosConstants {
      */
     public static final String KERNEOS_APPLICATION_FILE = "META-INF/kerneos-application.xml";
     public static final String KERNEOS_MODULE_FILE = "META-INF/kerneos-module.xml";
+    public static final String[] KERNEOS_INDEX_FILES = {"/index.html", "/index.htm"};
 
 
     /*
