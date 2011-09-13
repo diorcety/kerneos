@@ -48,6 +48,11 @@
             password.text = "";
             CairngormEventDispatcher.getInstance().dispatchEvent(event);
         }
+
+        private function formKeyDownHandler(event:KeyboardEvent):void {
+            if (event.charCode == 13)
+                login();
+        }
         ]]>
     </fx:Script>
 
@@ -64,17 +69,18 @@
             text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.login.label')}"/>
 
     <flexlibControls:PromptingTextInput
-            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
             id="username"
+            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
             width="100%"
             toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username.tooltip')}"/>
 
     <flexlibControls:PromptingTextInput
-            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password')}"
             id="password"
+            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password')}"
             width="100%"
             toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password.tooltip')}"
-            displayAsPassword="true"/>
+            displayAsPassword="true"
+            keyDown="formKeyDownHandler(event)"/>
 
     <s:Button
             id="validate"
