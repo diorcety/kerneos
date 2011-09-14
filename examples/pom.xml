@@ -56,6 +56,7 @@
   </properties>
 
   <modules>
+    <module>themes</module>
     <module>applications</module>
     <module>modules</module>
     <module>examples</module>

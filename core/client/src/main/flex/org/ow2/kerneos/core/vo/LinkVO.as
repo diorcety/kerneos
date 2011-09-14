@@ -41,15 +41,6 @@ public class LinkVO extends ModuleVO implements IValueObject {
     // Properties
     // =========================================================================
 
-    // Assets
-
-    /**
-     * Default link big icon (64x64).
-     */
-    [Transient]
-    [Embed(source="/../assets/link64.png")]
-    public static var defaultLinkBigIcon:Class;
-
     // Fields
 
     /**
@@ -75,7 +66,10 @@ public class LinkVO extends ModuleVO implements IValueObject {
     override public function getBigIcon(target:UIComponent = null):Object {
         // If no icon specified, return the default one
         if (bigIcon == null) {
-            return defaultLinkBigIcon;
+            if (target == null)
+                return IconUtility.getObject("images/link64.png", 64, 64);
+            else
+                return IconUtility.getClass(target, "images/link64.png", 64, 64);
         }
         else {
             return super.getBigIcon(target);

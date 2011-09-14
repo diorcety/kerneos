@@ -1,0 +1,63 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - JASMINe
+     - Copyright (C) 2011 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<view:KerneosWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+                    xmlns:mx="library://ns.adobe.com/flex/mx"
+                    xmlns:notification="org.ow2.kerneos.core.view.notification.*"
+                    xmlns:view="org.ow2.kerneos.core.view.window.*"
+                    title="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.notification.title')}"
+                    initialize="init()">
+
+    <fx:Metadata>
+    <![CDATA[
+        [Style (name ="icon", type="Class", inherit="no")]
+        ]]>
+    </fx:Metadata>
+
+    <fx:Script>
+    <![CDATA[
+        import mx.resources.ResourceManager;
+
+        import org.ow2.kerneos.common.managers.LanguagesManager;
+
+        <!-- Get icon style property at init-->
+        private function init():void {
+            this.minimizeBtn.visible = false;
+            this.titleIcon = getStyle("icon");
+        }
+
+        <!-- Add icon style property -->
+        override public function styleChanged(styleProp:String):void {
+            super.styleChanged(styleProp);
+            if (styleProp == "icon") {
+                this.titleIcon = getStyle("icon");
+            }
+        }
+        ]]>
+    </fx:Script>
+
+    <notification:NotificationsLog width="100%" height="100%"/>
+</view:KerneosWindow>

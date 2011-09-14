@@ -48,6 +48,7 @@
 
     <fx:Script>
         <![CDATA[
+        import mx.core.FlexGlobals;
         import mx.resources.ResourceManager;
 
         import org.ow2.kerneos.common.managers.LanguagesManager;
@@ -148,16 +149,8 @@
 
     <commonControls:KerneosProgressBar id="progressBar"
                                        indeterminate="true"
-                                       labelPlacement="top"
-                                       trackHeight="20"
                                        width="300"
                                        height="40"
-                                       color="#EFEFEF"
-                                       barColor="#FFFFFF"
-                                       fontFamily="Verdana"
-                                       fontStyle="normal"
-                                       fontWeight="bold"
-                                       fontSize="12"
                                        filters="{[progressBarShadow]}"/>
 
 </mx:Box>

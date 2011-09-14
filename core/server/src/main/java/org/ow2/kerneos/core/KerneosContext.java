@@ -31,6 +31,9 @@ import org.ow2.kerneos.core.manager.KerneosProfile;
 import org.ow2.kerneos.core.manager.KerneosRoles;
 import org.ow2.kerneos.login.Session;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * The Object used the context for kerneos.
  */
@@ -60,6 +63,8 @@ public class KerneosContext {
     private Session session;
 
     // Request
+    private HttpServletRequest request;
+    private HttpServletResponse response;
     private ApplicationBundle applicationBundle;
     private ModuleBundle moduleBundle;
     private Service service;
@@ -72,6 +77,22 @@ public class KerneosContext {
     private KerneosRoles kerneosRoles;
 
     private KerneosContext() {
+    }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public HttpServletResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(HttpServletResponse response) {
+        this.response = response;
     }
 
     public ApplicationBundle getApplicationBundle() {

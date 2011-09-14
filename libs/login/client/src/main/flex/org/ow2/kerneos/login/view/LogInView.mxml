@@ -25,10 +25,10 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
-          xmlns:mx="library://ns.adobe.com/flex/mx"
-          xmlns:flexlibControls="flexlib.controls.*"
-          horizontalAlign="center"
-          verticalAlign="middle">
+         xmlns:s="library://ns.adobe.com/flex/spark"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:flexlibControls="flexlib.controls.*"
+         horizontalAlign="center" verticalAlign="middle">
 
     <fx:Script>
         <![CDATA[
@@ -48,29 +48,41 @@
             password.text = "";
             CairngormEventDispatcher.getInstance().dispatchEvent(event);
         }
+
+        private function formKeyDownHandler(event:KeyboardEvent):void {
+            if (event.charCode == 13)
+                login();
+        }
         ]]>
     </fx:Script>
 
-    <!--
-    <mx:Text width="100%"
-             textAlign="center"
-             text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.login.label')}"
-             selectable="false"/>
-    -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- GUI Components                                                                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <s:Label
+            id="text"
+            height="100%"
+            width="100%"
+            verticalAlign="bottom"
+            textAlign="center"
+            text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.login.label')}"/>
+
     <flexlibControls:PromptingTextInput
-            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
             id="username"
+            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username')}"
             width="100%"
             toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.username.tooltip')}"/>
 
     <flexlibControls:PromptingTextInput
-            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password')}"
             id="password"
+            prompt="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password')}"
             width="100%"
             toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.password.tooltip')}"
-            displayAsPassword="true"/>
+            displayAsPassword="true"
+            keyDown="formKeyDownHandler(event)"/>
 
-    <mx:Button
+    <s:Button
             id="validate"
             label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.login.validate')}"
             click="login();"/>

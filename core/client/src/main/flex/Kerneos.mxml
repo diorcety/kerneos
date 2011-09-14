@@ -29,13 +29,27 @@
                 paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"
                 pageTitle="Kerneos"
                 preloader="org.ow2.kerneos.core.view.preloader.KerneosPreloader"
-                scriptTimeLimit="60"
+                creationPolicy="none"
+                preinitialize="loadStyleSheet()"
                 applicationComplete="applicationCompleteHandler()"
+                scriptTimeLimit="60"
                 frameRate="60">
 
     <fx:Script>
         <![CDATA[
+        import mx.events.FlexEvent;
+        import mx.events.StyleEvent;
+
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+
+        private function loadStyleSheet(event:FlexEvent = null):void {
+            var eventDispatcher:IEventDispatcher = StyleManager.loadStyleDeclarations("styles.swf");
+            eventDispatcher.addEventListener(StyleEvent.COMPLETE, onStyleSheetComplete);
+        }
+
+        private function onStyleSheetComplete(event:StyleEvent):void {
+            createComponentsFromDescriptors();
+        }
 
         /**
          * On application creation complete.
@@ -60,9 +74,6 @@
         <!-- The controller -->
         <control:Controller id="controller"/>
     </fx:Declarations>
-
-    <!-- The style sheet -->
-    <fx:Style source="../assets/styles.css"/>
 
     <!-- The main view that contains the complete app -->
     <view:KerneosMainView id="mainView"/>

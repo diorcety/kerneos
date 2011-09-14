@@ -25,23 +25,15 @@
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
 <mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
-                xmlns:mx = "library://ns.adobe.com/flex/mx"
-                width = "700"
-                height = "450"
-                showCloseButton = "true"
-                close = "close();"
-                titleIcon = "@Embed(source='/../assets/help16.png')"
-                creationComplete = "initializeComponent()"
-                verticalScrollPolicy = "off"
-                horizontalScrollPolicy = "off"
-                paddingBottom = "0"
-                paddingLeft = "0"
-                paddingRight = "0"
-                paddingTop = "0"
-                borderAlpha = "1.0"
-                borderColor = "#EEEEEE"
-                backgroundAlpha = "1.0"
-                backgroundColor = "#EEEEEE">
+                xmlns:mx="library://ns.adobe.com/flex/mx"
+                width="700"
+                height="450"
+                showCloseButton="true"
+                verticalScrollPolicy="off"
+                horizontalScrollPolicy="off"
+                close="close();"
+                creationComplete="initializeComponent()"
+                initialize="init()">
 
     <fx:Metadata>
         <![CDATA[
@@ -77,6 +69,7 @@
          *
          * @author Julien Nicoulaud
          */
+        [Style (name ="icon", type="Class", inherit="no")]
         ]]>
     </fx:Metadata>
 
@@ -86,137 +79,107 @@
 
     <fx:Script>
         <![CDATA[
-            import mx.managers.PopUpManager;
-            import mx.controls.Text;
-            import flash.events.Event;
+        import mx.managers.PopUpManager;
+        import mx.controls.Text;
 
-            // =====================================================================================
-            // Variables
-            // =====================================================================================
+        import flash.events.Event;
 
-            /**
-             * The array where external children are stored before creation is complete
-             */
-            private var _pagesChildrenHolder : Array;
+        import org.ow2.kerneos.common.util.IconUtility;
+
+        // =====================================================================================
+        // Variables
+        // =====================================================================================
+
+        /**
+         * The array where external children are stored before creation is complete
+         */
+        private var _pagesChildrenHolder:Array;
 
 
+        // =====================================================================================
+        // Constructors & initialization
+        // =====================================================================================
 
-            // =====================================================================================
-            // Constructors & initialization
-            // =====================================================================================
+        <!-- Get icon style property at init-->
+        private function init():void {
+            this.titleIcon = getStyle("icon");
+        }
 
-            /**
-             * Initialize the component
-             */
-            private function initializeComponent(event : Event = null) : void
-            {
-                // Add pages components
-                addExternalChildren();
-
-                // Set the first page as the selected one
-                menuButtonBar.selectedIndex = 0;
+        <!-- Add icon style property -->
+        override public function styleChanged(styleProp:String):void {
+            super.styleChanged(styleProp);
+            if (styleProp == "icon") {
+                this.titleIcon = getStyle("icon");
             }
+        }
+
+        /**
+         * Initialize the component
+         */
+        private function initializeComponent(event:Event = null):void {
+            // Add pages components
+            addExternalChildren();
+
+            // Set the first page as the selected one
+            menuButtonBar.selectedIndex = 0;
+        }
 
 
+        /**
+         * Add content children to their container
+         */
+        private function addExternalChildren(event:Event = null):void {
+            if (this._pagesChildrenHolder) {
+                this.pagesContainer.removeAllChildren();
 
-            /**
-             * Add content children to their container
-             */
-            private function addExternalChildren(event : Event = null) : void
-            {
-                if (this._pagesChildrenHolder)
-                {
-                    this.pagesContainer.removeAllChildren();
-
-                    for (var i : int = 0; i < this._pagesChildrenHolder.length; i++)
-                    {
-                        pagesContainer.addChild(this._pagesChildrenHolder[i]);
-                    }
+                for (var i:int = 0; i < this._pagesChildrenHolder.length; i++) {
+                    pagesContainer.addChild(this._pagesChildrenHolder[i]);
                 }
             }
+        }
 
 
+        // =====================================================================================
+        // Public methods
+        // =====================================================================================
 
-            // =====================================================================================
-            // Public methods
-            // =====================================================================================
-
-            /**
-             * Close the window
-             */
-            public function close(e : Event = null) : void
-            {
-                PopUpManager.removePopUp(this);
-            }
+        /**
+         * Close the window
+         */
+        public function close(e:Event = null):void {
+            PopUpManager.removePopUp(this);
+        }
 
 
-
-            /**
-             * Set the pages
-             */
-            public function set pages(value : Array) : void
-            {
-                _pagesChildrenHolder = value;
-            }
+        /**
+         * Set the pages
+         */
+        public function set pages(value:Array):void {
+            _pagesChildrenHolder = value;
+        }
         ]]>
     </fx:Script>
-
-
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-    <!-- Style                                                                                   -->
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-    <fx:Style>
-
-        .menuContainer {
-            padding-bottom: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-top: 5px;
-            backgroundImage: ClassReference("org.ow2.kerneos.common.view.GradientBackground");
-            backgroundSize: "100%";
-            angle: 0;
-            fillColors: #DEDEDE, #EEEEEE;
-            fillAlphas: 1.0,1.0;
-        }
-
-        .menuButtonBar {
-            textSelectedColor: #2b333c;
-        }
-
-        .pagesContainer {
-            padding-bottom: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-top: 5px;
-        }
-
-    </fx:Style>
-
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- GUI Components                                                                          -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <mx:HBox width = "100%"
-             height = "100%"
-             horizontalGap = "0">
+    <mx:HBox width="100%"
+             height="100%"
+             horizontalGap="0">
 
         <!-- The menu -->
-        <mx:VBox height = "100%"
-                 styleName = "menuContainer"
-                 backgroundColor = "#EEEEEE">
-            <mx:LinkBar id = "menuButtonBar"
-                        dataProvider = "{pagesContainer}"
-                        direction = "vertical"
-                        styleName = "menuButtonBar" />
+        <mx:VBox id="menuContainer"
+                 height="100%">
+            <mx:LinkBar id="menuButtonBar"
+                        dataProvider="{pagesContainer}"
+                        direction="vertical"/>
         </mx:VBox>
 
         <!-- The content -->
-        <mx:ViewStack id = "pagesContainer"
-                      width = "100%"
-                      height = "100%"
-                      styleName = "pagesContainer" />
+        <mx:ViewStack id="pagesContainer"
+                      width="100%"
+                      height="100%"/>
     </mx:HBox>
 
 </mx:TitleWindow>

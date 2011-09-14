@@ -135,6 +135,14 @@
                   <overWrite>true</overWrite>
                   <destFileName>kerneos.swf</destFileName>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>kerneos-core-theme</artifactId>
+                  <version>${project.version}</version>
+                  <type>swf</type>
+                  <overWrite>true</overWrite>
+                  <destFileName>styles.swf</destFileName>
+                </artifactItem>
               </artifactItems>
               <outputDirectory>${project.build.directory}/kerneos</outputDirectory>
             </configuration>

@@ -34,6 +34,11 @@
         [ResourceBundle("module1Resources")]
     </fx:Metadata>
 
+    <fx:Style>
+        global {
+            font-size: 16px;
+        }
+    </fx:Style>
     <fx:Script>
         <![CDATA[
         // =========================================================================

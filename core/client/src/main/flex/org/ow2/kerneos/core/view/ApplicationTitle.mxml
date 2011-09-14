@@ -104,13 +104,11 @@
 
     <mx:Text id = "applicationProjectTitle"
              text = "{KerneosModelLocator.getInstance().application.applicationProject}"
-             styleName = "consoleMark1"
              filters = "{[applicationTitleShadow]}"
              selectable = "false" />
 
     <mx:Text id = "applicationNameTitle"
              text = "{KerneosModelLocator.getInstance().application.applicationName}"
-             styleName = "consoleMark2"
              filters = "{[applicationTitleShadow]}"
              selectable = "false" />
 

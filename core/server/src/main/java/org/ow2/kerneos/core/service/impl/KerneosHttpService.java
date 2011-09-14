@@ -59,7 +59,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -184,18 +186,50 @@ public class KerneosHttpService implements HttpContext {
         ModuleBundle moduleBundle = KerneosContext.getCurrentContext().getModuleBundle();
         ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
 
-        if (path != null) {
-            if (moduleBundle != null) {
-                return moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
-            } else {
-                if (path.startsWith(KerneosConstants.KERNEOS_SWF_URL)) {
-                    return this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + KerneosConstants.KERNEOS_SWF_URL);
-                } else if (applicationBundle != null) {
-                    return applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+        URL url = null;
+        URLConnection connection = null;
+        try {
+            if (path != null) {
+                if (moduleBundle != null) {
+                    // Module files
+                    url = moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+                    connection = url.openConnection();
+                } else {
+                    if (applicationBundle != null) {
+                        // Application files
+                        if (path.equals("/")) {
+                            // Find index file in indexes
+                            for (String index : KerneosConstants.KERNEOS_INDEX_FILES) {
+                                url = applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + index);
+                                try {
+                                    connection = url.openConnection();
+                                    break;
+                                } catch (Exception e) {
+                                    url = null;
+                                }
+                            }
+                        } else {
+                            // Get bundle's version before Kerneos
+                            url = applicationBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+                            try {
+                                connection = url.openConnection();
+                            } catch (Exception e) {
+                                url = this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + path);
+                                connection = url.openConnection();
+                            }
+                        }
+                    }
                 }
             }
+        } catch (IOException e) {
+            return null;
         }
-        return null;
+
+        // Return the size
+        if (connection != null)
+            KerneosContext.getCurrentContext().getResponse().setHeader("Content-Length", Integer.toString(connection.getContentLength()));
+
+        return url;
     }
 
     /**
@@ -220,7 +254,7 @@ public class KerneosHttpService implements HttpContext {
         kerneosContext.setProfileManager(kerneosProfile);
         kerneosContext.setRolesManager(kerneosRoles);
 
-        kerneosCore.updateContext(request);
+        kerneosCore.updateContext(request, response);
 
         switch (kerneosSecurityService.authorize()) {
             case NO_ERROR:

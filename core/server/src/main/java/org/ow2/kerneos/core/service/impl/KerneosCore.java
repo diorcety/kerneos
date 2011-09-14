@@ -54,6 +54,7 @@ import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -338,8 +339,11 @@ public class KerneosCore implements IKerneosCore {
         return service;
     }
 
-    public void updateContext(HttpServletRequest request) {
+    public void updateContext(HttpServletRequest request, HttpServletResponse response) {
         KerneosContext kerneosContext = KerneosContext.getCurrentContext();
+
+        kerneosContext.setRequest(request);
+        kerneosContext.setResponse(response);
 
         // Get the module and the associated path
         String path = request.getRequestURI().substring(kerneosContext.getApplicationBundle().getApplication().getApplicationUrl().length());

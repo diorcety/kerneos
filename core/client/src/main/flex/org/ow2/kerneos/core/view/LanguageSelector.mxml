@@ -1,0 +1,109 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - Kerneos
+     - Copyright (C) 2011 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+
+<s:DropDownList xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                dataProvider="{locales}"
+                labelField="label"
+                skinClass="org.ow2.kerneos.common.skins.IconDropDownListSkin"
+                change="languageSelectorChangeHandler(event)"
+                toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.languageSelector.tooltip')}"
+                creationComplete="creationCompleteHandler()">
+
+
+    <fx:Script>
+    <![CDATA[
+        import mx.collections.ArrayList;
+        import mx.core.FlexGlobals;
+        import mx.resources.ResourceManager;
+
+        import org.ow2.kerneos.common.managers.LanguagesManager;
+        import org.ow2.kerneos.core.managers.SharedObjectManager;
+        import org.ow2.kerneos.core.model.KerneosModelLocator;
+
+        /**
+         * The actual available and supported languages.
+         */
+        [Bindable]
+        private var locales:ArrayList = new ArrayList([
+            {locale: "fr_FR", label: "Français", icon:
+                    (StyleManager.getStyleDeclaration(".flags") != null) ?
+                            StyleManager.getStyleDeclaration(".flags").getStyle("frFR") :
+                            null},
+            {locale: "en_US", label: "English",  icon:
+                    (StyleManager.getStyleDeclaration(".flags") != null) ?
+                            StyleManager.getStyleDeclaration(".flags").getStyle("enUS") :
+                            null}
+        ]);
+
+        /**
+         * Resolve the active language and setup the language selection component.
+         */
+        private function creationCompleteHandler(event:Event = null):void {
+            // Retrieve the user saved setting.
+            var userActiveLanguage:String = SharedObjectManager.getActiveLanguage();
+
+            // If the user has a memorized setting, restore it.
+            if (userActiveLanguage != null) {
+                resourceManager.localeChain = [userActiveLanguage];
+            }
+
+            // Else apply the default setting specified in kerneos-config.
+            else {
+                resourceManager.localeChain = [KerneosModelLocator.getInstance().application.defaultLanguage];
+            }
+
+            // Setup the language selection component.
+            setupLanguageSelector();
+        }
+
+
+        /**
+         * Initialize the locale selector.
+         */
+        private function setupLanguageSelector(event:Event = null):void {
+            for (var i:int = 0; i < locales.length; i++) {
+                if (locales.getItemAt(i).locale == resourceManager.localeChain[0]) {
+                    selectedIndex = i;
+                    return;
+                }
+            }
+        }
+
+        /**
+         * When the locale selection has been changed.
+         */
+        private function languageSelectorChangeHandler(event:Event):void {
+            // Change the active language to the selected one..
+            resourceManager.localeChain = [selectedItem.locale];
+
+            // Store the user's choice.
+            SharedObjectManager.setActiveLanguage(selectedItem.locale);
+        }
+        ]]>
+    </fx:Script>
+</s:DropDownList>

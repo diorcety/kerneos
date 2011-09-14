@@ -24,9 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<application xmlns="org.ow2.kerneos:application"
+<application xmlns="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="org.ow2.kerneos:application">
+             xsi:schemaLocation="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd">
 
   <!-- Kerneos settings -->
 

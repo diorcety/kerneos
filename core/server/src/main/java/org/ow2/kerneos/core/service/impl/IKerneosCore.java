@@ -31,6 +31,7 @@ import org.ow2.kerneos.core.ModuleBundle;
 import org.ow2.kerneos.core.config.generated.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public interface IKerneosCore {
@@ -57,7 +58,7 @@ public interface IKerneosCore {
 
     public Map<String, ApplicationBundle> getApplicationBundles();
 
-    void updateContext(HttpServletRequest request);
+    void updateContext(HttpServletRequest request, HttpServletResponse response);
 
     void updateContext(String destination, String method);
 }

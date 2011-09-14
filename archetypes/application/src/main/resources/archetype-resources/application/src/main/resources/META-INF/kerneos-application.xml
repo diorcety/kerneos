@@ -24,71 +24,71 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<application xmlns="org.ow2.kerneos:application"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="org.ow2.kerneos:application">
+<application xmlns="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd">
 
-    <!-- Kerneos settings -->
+  <!-- Kerneos settings -->
 
-    <!-- The two parts of the mark displayed on the top right corner -->
-    <application-project>Application</application-project>
-    <application-name>Desktop</application-name>
+  <!-- The two parts of the mark displayed on the top right corner -->
+  <application-project>Application</application-project>
+  <application-name>Desktop</application-name>
 
-    <!-- Base URL used -->
-    <application-url>/application</application-url>
+  <!-- Base URL used -->
+  <application-url>/application</application-url>
 
-    <!-- The path to the console logo (64x64 image) -->
-    <application-logo>icons/icon.png</application-logo>
+  <!-- The path to the console logo (64x64 image) -->
+  <application-logo>icons/icon.png</application-logo>
 
-    <!-- Show the "Minimize all" button in the taskbar ? -->
-    <show-minimize-all-button>true</show-minimize-all-button>
+  <!-- Show the "Minimize all" button in the taskbar ? -->
+  <show-minimize-all-button>true</show-minimize-all-button>
 
-    <!-- Show the "Cascade windows" button in the taskbar ? -->
-    <show-cascade-button>true</show-cascade-button>
+  <!-- Show the "Cascade windows" button in the taskbar ? -->
+  <show-cascade-button>true</show-cascade-button>
 
-    <!-- Show the "Tile windows" button in the taskbar ? -->
-    <show-tile-button>true</show-tile-button>
+  <!-- Show the "Tile windows" button in the taskbar ? -->
+  <show-tile-button>true</show-tile-button>
 
-    <!-- Show popups on modules notifications ? -->
-    <show-notification-popups>true</show-notification-popups>
+  <!-- Show popups on modules notifications ? -->
+  <show-notification-popups>true</show-notification-popups>
 
-    <!-- Show notifications popups, even on windows that have the focus ? -->
-    <show-popups-from-active-window>true</show-popups-from-active-window>
+  <!-- Show notifications popups, even on windows that have the focus ? -->
+  <show-popups-from-active-window>true</show-popups-from-active-window>
 
-    <!-- Enable modules notifications logging ? -->
-    <enable-notifications-log>true</enable-notifications-log>
+  <!-- Enable modules notifications logging ? -->
+  <enable-notifications-log>true</enable-notifications-log>
 
-    <!-- Show a "confirm close" dialog ? -->
-    <show-confirm-close-dialog>true</show-confirm-close-dialog>
+  <!-- Show a "confirm close" dialog ? -->
+  <show-confirm-close-dialog>true</show-confirm-close-dialog>
 
-    <!-- Default language of Kerneos. values : fr_FR or en_US -->
-    <default-language>en_US</default-language>
+  <!-- Default language of Kerneos. values : fr_FR or en_US -->
+  <default-language>en_US</default-language>
 
-    <!-- Authentication method-->
-    <authentication>none</authentication>
+  <!-- Authentication method-->
+  <authentication>none</authentication>
 
-    <!-- Set the managers -->
-    <managers>
-        <!-- Login Manager -->
-        <!--
-        <login id="org.ow2.kerneos...login">
-            <property id="prop1" value="value1"/>
-        </login>
-        -->
+  <!-- Set the managers -->
+  <managers>
+    <!-- Login Manager -->
+    <!--
+    <login id="org.ow2.kerneos...login">
+        <property id="prop1" value="value1"/>
+    </login>
+    -->
 
-        <!-- Roles Manager -->
-        <!--
-        <profile id="org.ow2.kerneos...roles">
-            <property id="prop1" value="value1"/>
-        </profile>
-        -->
+    <!-- Roles Manager -->
+    <!--
+    <profile id="org.ow2.kerneos...roles">
+        <property id="prop1" value="value1"/>
+    </profile>
+    -->
 
-        <!-- Profile Manager -->
-        <!--
-        <profile id="org.ow2.kerneos...profile">
-            <property id="prop1" value="value1"/>
-        </profile>
-        -->
+    <!-- Profile Manager -->
+    <!--
+    <profile id="org.ow2.kerneos...profile">
+        <property id="prop1" value="value1"/>
+    </profile>
+    -->
   </managers>
 
 </application>

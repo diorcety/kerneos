@@ -36,7 +36,7 @@ public class KerneosProfileDeployable extends AbsDeployable<KerneosProfileDeploy
     /**
      * Namespace for kerneos profile.
      */
-    public static final String NAMESPACE = "org.ow2.kerneos:profile";
+    public static final String NAMESPACE = "http://jasmine.ow2.org/xsds/kerneos-profile-2.1.xsd";
 
     /**
      * Transported JAXB metadata.

@@ -26,6 +26,7 @@
 -->
 <mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
          xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:s="library://ns.adobe.com/flex/spark"
          xmlns:view="org.ow2.kerneos.core.view.*"
          xmlns:commonView="org.ow2.kerneos.common.view.*"
          xmlns:flexlibContainers="flexlib.containers.*"
@@ -48,8 +49,10 @@
         <![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.collections.ArrayCollection;
+        import mx.collections.ArrayList;
         import mx.collections.Sort;
         import mx.collections.SortField;
+        import mx.core.FlexGlobals;
         import mx.events.CollectionEvent;
         import mx.resources.ResourceManager;
         import mx.controls.Alert;
@@ -70,6 +73,7 @@
         import org.ow2.kerneos.core.model.KerneosModelLocator;
         import org.ow2.kerneos.core.model.ModulesState;
         import org.ow2.kerneos.core.view.notification.NotificationPopUp;
+        import org.ow2.kerneos.core.view.notification.NotificationsLogWindow;
         import org.ow2.kerneos.core.view.window.SwfModuleWindow;
         import org.ow2.kerneos.core.view.window.KerneosWindow;
         import org.ow2.kerneos.core.view.window.ModuleWindow;
@@ -87,57 +91,6 @@
         // Variables
         // =========================================================================
 
-        // Assets
-
-        /**
-         * Minimize all windows icon.
-         */
-        [Embed(source="/../assets/down.png")]
-        [Bindable]
-        private var downIcon:Class;
-
-        /**
-         * Cascade windows icon.
-         */
-        [Embed(source="/../assets/cascade.png")]
-        [Bindable]
-        private var cascadeIcon:Class;
-
-        /**
-         * Tile windows icon.
-         */
-        [Embed(source="/../assets/tile.png")]
-        [Bindable]
-        private var tileIcon:Class;
-
-        /**
-         * Events icon.
-         */
-        [Embed(source="/../assets/events_list16.png")]
-        [Bindable]
-        private var eventsIcon:Class;
-
-        /**
-         * Log out icon.
-         */
-        [Embed(source="/../assets/exit.png")]
-        [Bindable]
-        private var logoutIcon:Class;
-
-        /**
-         * Icon for the en_US locale.
-         */
-        [Embed(source="/../assets/en_US.png")]
-        [Bindable]
-        public var en_USIcon:Class;
-
-        /**
-         * Icon for the fr_FR locale.
-         */
-        [Embed(source="/../assets/fr_FR.png")]
-        [Bindable]
-        public var fr_FRIcon:Class;
-
         // Variables
 
         /**
@@ -151,15 +104,6 @@
          * @see closeWindow()
          */
         private var queuedEvent:MDIManagerEvent;
-
-        /**
-         * The actual available and supported languages.
-         */
-        [Bindable]
-        private var locales:Array = [
-            {locale: "fr_FR", label: "Français", icon: fr_FRIcon},
-            {locale: "en_US", label: "English", icon: en_USIcon}
-        ];
 
         /**
          * The notifications log window
@@ -186,7 +130,6 @@
             KerneosModelLocator.getInstance().modules.addEventListener(CollectionEvent.COLLECTION_CHANGE, modulesUpdated);
             BindingUtils.bindSetter(profileUpdated, ProfileModelLocator.getInstance(), "profile");
             BindingUtils.bindSetter(loginUpdated, LoginModelLocator.getInstance(), "session");
-
         }
 
         /**
@@ -195,9 +138,6 @@
         private function creationCompleteHandler():void {
             // Set windows events listeners.
             windowContainer.windowManager.addEventListener(MDIManagerEvent.WINDOW_CLOSE, closeWindow, false, 0, true);
-
-            // Setup the active language and the language selector component.
-            setupActiveLanguage();
         }
 
         // =========================================================================
@@ -315,15 +255,8 @@
          */
         private function showNotificationsLog(e:Event = null):void {
             if (notificationsLogWindow == null) {
-                notificationsLogWindow = new KerneosWindow();
-                notificationsLogWindow.title = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, 'kerneos.desktop.windows.notification.title');
-                notificationsLogWindow.titleIcon = eventsIcon;
-                var notificationsLog:NotificationsLog = new NotificationsLog();
-                notificationsLogWindow.addChild(new NotificationsLog());
-                notificationsLog.percentHeight = 100;
-                notificationsLog.percentWidth = 100;
+                notificationsLogWindow = new NotificationsLogWindow();
                 notificationsLogWindow.addEventListener(MDIWindowEvent.CLOSE, notificationsLogWindowCloseHandler, false, 0, true);
-                notificationsLogWindow.minimizeBtn.visible = false;
                 windowContainer.windowManager.add(notificationsLogWindow);
             }
             else {
@@ -337,68 +270,6 @@
          */
         private function notificationsLogWindowCloseHandler(e:Event):void {
             notificationsLogWindow = null;
-        }
-
-
-        // =========================================================================
-        // Localization
-        // =========================================================================
-
-        /**
-         * Resolve the active language and setup the language selection component.
-         */
-        private function setupActiveLanguage(event:Event = null):void {
-            // Retrieve the user saved setting.
-            var userActiveLanguage:String = SharedObjectManager.getActiveLanguage();
-
-            // If the user has a memorized setting, restore it.
-            if (userActiveLanguage != null) {
-                resourceManager.localeChain = [userActiveLanguage];
-            }
-
-            // Else apply the default setting specified in kerneos-config.
-            else {
-                resourceManager.localeChain = [this.model.application.defaultLanguage];
-            }
-
-            // Setup the language selection component.
-            setupLanguageSelector();
-        }
-
-
-        /**
-         * Initialize the locale selector.
-         */
-        private function setupLanguageSelector(event:Event = null):void {
-            for (var i:int = 0; i < locales.length; i++) {
-                if (locales[i].locale == resourceManager.localeChain[0]) {
-                    languageSelector.selectedIndex = i;
-                    return;
-                }
-            }
-        }
-
-
-        /**
-         * When the locale selection has been changed.
-         */
-        private function languageSelectorChangeHandler(event:Event):void {
-            // Change the active language to the selected one..
-            resourceManager.localeChain = [languageSelector.selectedItem.locale];
-
-            // Store the user's choice.
-            SharedObjectManager.setActiveLanguage(languageSelector.selectedItem.locale);
-        }
-
-
-        /**
-         * Return the selected locale icon.
-         */
-        private function getLocaleIcon(item:Object):Class {
-            if (item.icon) {
-                return item.icon;
-            }
-            return null;
         }
 
         /**
@@ -564,14 +435,14 @@
              paddingLeft="5"
              paddingRight="5"
              styleName="taskBar">
-        <mx:Button width="22"
-                   height="22"
-                   icon="{downIcon}"
-                   click="{minimizeAllWindows()}"
-                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.minimizeButton.tooltip')}"
-                   styleName="taskBarSmallButton"
-                   visible="{model.application.showMinimizeAllButton}"
-                   includeInLayout="{model.application.showMinimizeAllButton}"/>
+        <s:Button id="downButton"
+                  width="22"
+                  height="22"
+                  click="{minimizeAllWindows()}"
+                  toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.minimizeButton.tooltip')}"
+                  styleName="taskBarSmallButton"
+                  visible="{model.application.showMinimizeAllButton}"
+                  includeInLayout="{model.application.showMinimizeAllButton}"/>
         <mx:VRule height="70%"
                   alpha="0.25"
                   visible="{model.application.showMinimizeAllButton}"
@@ -596,44 +467,38 @@
         </flexlibContainers:ButtonScrollingCanvas>
         <mx:VRule height="70%"
                   alpha="0.25"/>
-        <commonView:IconComboBox id="languageSelector"
-                                 dataProvider="{locales}"
-                                 labelField="label"
-                                 iconFunction="getLocaleIcon"
-                                 change="languageSelectorChangeHandler(event)"
-                                 styleName="localeComboBox"
-                                 toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.languageSelector.tooltip')}"/>
+        <view:LanguageSelector id="languageSelector"/>
         <mx:VRule height="70%"
                   alpha="0.25"/>
-        <mx:Button width="22"
-                   height="22"
-                   icon="{cascadeIcon}"
-                   click="windowContainer.windowManager.cascade()"
-                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.cascadeButton.tooltip')}"
-                   styleName="taskBarSmallButton"
-                   visible="{model.application.showCascadeButton}"
-                   includeInLayout="{model.application.showCascadeButton}"/>
-        <mx:Button width="22"
-                   height="22"
-                   icon="{tileIcon}"
-                   click="windowContainer.windowManager.tile(true,3)"
-                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.tileButton.tooltip')}"
-                   styleName="taskBarSmallButton"
-                   visible="{model.application.showTileButton}"
-                   includeInLayout="{model.application.showTileButton}"/>
-        <mx:Button width="22"
-                   height="22"
-                   icon="{eventsIcon}"
-                   click="{showNotificationsLog()}"
-                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.notificationsLogButton.tooltip')}"
-                   styleName="taskBarSmallButton"
-                   visible="{model.application.enableNotificationsLog}"
-                   includeInLayout="{model.application.enableNotificationsLog}"/>
-        <mx:Button width="22"
-                   height="22"
-                   icon="{logoutIcon}"
-                   click="{KerneosLifeCycleManager.logout()}"
-                   toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.logoutButton.tooltip')}"
-                   styleName="taskBarSmallButton"/>
+        <s:Button id="cascadeButton"
+                  width="22"
+                  height="22"
+                  click="windowContainer.windowManager.cascade()"
+                  toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.cascadeButton.tooltip')}"
+                  styleName="taskBarSmallButton"
+                  visible="{model.application.showCascadeButton}"
+                  includeInLayout="{model.application.showCascadeButton}"/>
+        <s:Button id="tileButton"
+                  width="22"
+                  height="22"
+                  click="windowContainer.windowManager.tile(true,3)"
+                  toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.tileButton.tooltip')}"
+                  styleName="taskBarSmallButton"
+                  visible="{model.application.showTileButton}"
+                  includeInLayout="{model.application.showTileButton}"/>
+        <s:Button id="eventsButton"
+                  width="22"
+                  height="22"
+                  click="{showNotificationsLog()}"
+                  toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.notificationsLogButton.tooltip')}"
+                  styleName="taskBarSmallButton"
+                  visible="{model.application.enableNotificationsLog}"
+                  includeInLayout="{model.application.enableNotificationsLog}"/>
+        <s:Button id="exitButton"
+                  width="22"
+                  height="22"
+                  click="{KerneosLifeCycleManager.logout()}"
+                  toolTip="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.desktop.logoutButton.tooltip')}"
+                  styleName="taskBarSmallButton"/>
     </mx:HBox>
 </mx:VBox>

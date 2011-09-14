@@ -28,7 +28,6 @@
                    xmlns:mx="library://ns.adobe.com/flex/mx"
                    xmlns:view="org.ow2.kerneos.core.view.window.*"
                    xmlns:controls="org.ow2.kerneos.common.controls.*"
-                   backgroundColor="{state == 'loaded'? 0xCCCCCC: 0x666666}"
                    currentState="{state}">
 
     <fx:Metadata>
@@ -235,10 +234,6 @@
                                  itemCreationPolicy="immediate"
                                  itemDestructionPolicy="never"
                                  mode="manual"
-                                 trackHeight="20"
-                                 barColor="0x444444"
-                                 color="0xEFEFEF"
-                                 borderColor="0xFFFFFF"
                                  conversion="1024"
                                  label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-bar.label') + ' %3%% (%1/%2 kb)'}"/>
 
@@ -253,7 +248,6 @@
                      progress="progressBar.setProgress(event.bytesLoaded, event.bytesTotal)"/>
 
     <mx:Label id="errorLabel"
-              color="0xEFEFEF"
               includeIn="error"
               itemCreationPolicy="immediate"
               itemDestructionPolicy="never"
