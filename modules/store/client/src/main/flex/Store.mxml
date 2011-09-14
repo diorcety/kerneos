@@ -30,17 +30,6 @@
           width="100%" height="100%"
           creationComplete="init()">
 
-
-    <fx:Style>
-
-        .accHead {
-            fontSize: 18;
-            fontWeight: normal;
-        }
-
-
-    </fx:Style>
-
     <fx:Declarations>
         <!-- Instantiate the controller. A controller a module -->
         <control:Controller id="controller"/>

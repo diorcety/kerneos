@@ -178,23 +178,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     @Override
     public Collection<ModuleImpl> searchModules(String filter, String field, String order,
                                                 Integer itemByPage, Integer page) {
-        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
-        //For each store
-        for (StoreImpl store : stores.getStores()) {
-            storeRS.setUrl(store.getUrl());
-            Collection modules = storeRS.searchModules(filter, field, order, itemByPage, page);
-            // For each result module
-            for (Object mod : modules) {
-                //If global collection doesn't contains this module then add it
-                if (!results.contains(mod)) {
-                    results.add((ModuleImpl)mod);
-                }
-            }
-        }
-
-        //TODO items by page
-
-        return results;
+        return this.searchModulesPrivate(filter, field, order, itemByPage, page, false, null);
     }
 
     /**
@@ -207,25 +191,8 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     @Override
     public Collection<ModuleImpl> searchModulesWithImage(String filter, String field, String order,
                                                          Integer itemByPage, Integer page) {
-        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
-        //For each store
-        for (StoreImpl store : stores.getStores()) {
-            storeRS.setUrl(store.getUrl());
-            Collection modules = storeRS.searchModules(filter, field, order, itemByPage, page);
-            // For each result module
-            for (Object mod : modules) {
-                //If global collection doesn't contains this module then add it
-                if (!results.contains(mod)) {
-                    //Find the module icon (image)
-                    byte[] img = storeRS.getModuleVersionImage(((ModuleImpl)mod).getId());
-                    if (img != null) {
-                        ((ModuleImpl)mod).setImgOrig(img);
-                    }
-                    results.add((ModuleImpl)mod);
-                }
-            }
-        }
-
+        Collection<ModuleImpl> results = this.searchModulesPrivate(filter, field, order, itemByPage, page, false, null);
+        this.addImagesToModules(results);
         return results;
     }
 
@@ -239,23 +206,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     @Override
     public Collection<ModuleImpl> searchModulesByCategory(String id, String field, String order,
                                                           Integer itemByPage, Integer page) {
-        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
-        //For each store
-        for (StoreImpl store : stores.getStores()) {
-            storeRS.setUrl(store.getUrl());
-            Collection modules = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
-            // For each result module
-            for (Object mod : modules) {
-                //If global collection doesn't contains this module then add it
-                if (!results.contains(mod)) {
-                    results.add((ModuleImpl)mod);
-                }
-            }
-        }
-
-        //TODO items by page
-
-        return results;
+        return this.searchModulesPrivate(null, field, order, itemByPage, page, true, id);
     }
 
     /**
@@ -266,26 +217,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
      * @return Modules result collection
      */
     @Override
-    public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order, Integer itemByPage, Integer page) {
-        Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
-        //For each store
-        for (StoreImpl store : stores.getStores()) {
-            storeRS.setUrl(store.getUrl());
-            Collection modules = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
-            // For each result module
-            for (Object mod : modules) {
-                //If global collection doesn't contains this module then add it
-                if (!results.contains(mod)) {
-                    //Find the module icon (image)
-                    byte[] img = storeRS.getModuleVersionImage(((ModuleImpl)mod).getId());
-                    if (img != null) {
-                        ((ModuleImpl)mod).setImgOrig(img);
-                    }
-                    results.add((ModuleImpl)mod);
-                }
-            }
-        }
-
+    public Collection<ModuleImpl> searchModulesWithImageByCategory(String id, String field, String order,
+                                                                   Integer itemByPage, Integer page) {
+        Collection<ModuleImpl> results = this.searchModulesPrivate(null, field, order, itemByPage, page, true, id);
+        this.addImagesToModules(results);
         return results;
     }
 
@@ -596,5 +531,97 @@ public class StoreService implements KerneosSimpleService, IStoreService {
         byte[] xml = Base64.decode(data);
         ByteArrayInputStream is = new ByteArrayInputStream(xml);
         return (ModuleImpl) jaxbContext.createUnmarshaller().unmarshal(is);
+    }
+
+    /**
+     * Set the image (icon) of each module if the image exists otherwise the image set will be a null object
+     * @param modules Modules collection
+     */
+    private void addImagesToModules(Collection<ModuleImpl> modules) {
+        for (ModuleImpl mod : modules) {
+            byte[] img = storeRS.getModuleVersionImage(mod.getId());
+            if (img != null) {
+                mod.setImgOrig(img);
+            }
+        }
+    }
+
+    private Collection<ModuleImpl> searchModulesPrivate(String filter, String field, String order,
+                                                        Integer itemByPage, Integer page, Boolean byCategory, String id) {
+        if (itemByPage == null) {
+            Collection<ModuleImpl> results = new ArrayList<ModuleImpl>();
+            //For each store
+            for (StoreImpl store : stores.getStores()) {
+                storeRS.setUrl(store.getUrl());
+                Collection modules = null;
+                //If we search by Category
+                if (byCategory) {
+                    modules = storeRS.searchModulesByCategory(id, field, order, itemByPage, page);
+                } else {
+                    //If we search by keyword
+                    modules = storeRS.searchModules(filter, field, order, itemByPage, page);
+                }
+                // For each result module
+                for (Object mod : modules) {
+                    //If global collection doesn't contains this module then add it
+                    if (!results.contains(mod)) {
+                        results.add((ModuleImpl)mod);
+                    }
+                }
+            }
+            return results;
+        } else {
+            ArrayList<String> resultsIds = new ArrayList<String>();
+
+            //TODO add cache system
+            //Attention get all modules ids is not the best way to do the pagination but it is a solution
+            //For each store
+            for (StoreImpl store : stores.getStores()) {
+                storeRS.setUrl(store.getUrl());
+                ModuleIdsWrapperImpl idsWrapper = null;
+                //If we search by Category
+                if (byCategory) {
+                    idsWrapper = (ModuleIdsWrapperImpl) storeRS.searchModulesByCategoryGetIds(id);
+                } else {
+                    //If we search by keyword
+                    idsWrapper = (ModuleIdsWrapperImpl) storeRS.searchModulesGetIds(filter);
+                }
+                if (idsWrapper != null) {
+                    // For each result module id
+                    for (String modId : idsWrapper.getIds()) {
+                        //If global collection doesn't contains this module id then add it
+                        if (!resultsIds.contains(modId)) {
+                            resultsIds.add(modId);
+                        }
+                    }
+                }
+            }
+
+            //Get page number
+            Integer pageParam = page;
+            if (pageParam==null) pageParam = 0;
+
+            //Set the start index of the resultsIds List
+            Integer startIndex = pageParam * itemByPage;
+            if (startIndex >= resultsIds.size()) {
+                return new ArrayList<ModuleImpl>();
+            }
+
+            //Set the end index of the resultsIds List
+            Integer endIndex = startIndex + itemByPage;
+            if (endIndex > resultsIds.size()) {
+                endIndex = resultsIds.size();
+            }
+
+            Collection<ModuleImpl> modulesResult = new ArrayList<ModuleImpl>();
+
+            //Get the modules in the list from the start index to the end index
+            while (startIndex < endIndex) {
+                modulesResult.add(this.getModule(resultsIds.get(startIndex)));
+                startIndex++;
+            }
+
+            return modulesResult;
+        }
     }
 }

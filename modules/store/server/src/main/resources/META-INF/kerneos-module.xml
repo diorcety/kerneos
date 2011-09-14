@@ -24,9 +24,9 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<swf-module xmlns="org.ow2.kerneos:module"
+<swf-module xmlns="http://jasmine.ow2.org/xsds/kerneos-module-2.1.xsd"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="org.ow2.kerneos:module">
+            xsi:schemaLocation="http://jasmine.ow2.org/xsds/kerneos-module-2.1.xsd">
   <id>kerneos-store</id>
   <name>Kerneos Store</name>
   <description>Kerneos Store is the application to get new modules, install and uninstall it</description>

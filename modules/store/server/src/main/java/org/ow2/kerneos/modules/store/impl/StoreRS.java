@@ -31,6 +31,7 @@ import org.ow2.kerneos.modules.store.IStoreRS;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import org.ow2.kerneosstore.api.Category;
+import org.ow2.kerneosstore.api.ModuleIdsWrapper;
 import org.ow2.kerneosstore.api.ModuleVersion;
 import org.ow2.kerneosstore.api.Repository;
 import org.ow2.util.log.Log;
@@ -126,11 +127,12 @@ public class StoreRS implements IStoreRS {
 
         try {
             //test if the url is good
-            URI uri = new URI(url + "/modules/" + filterURL);
+            String resourceURL = url + "/modules/" + filterURL;
+            URI uri = new URI(resourceURL);
 
-            logger.debug("Call API REST " + url + "/modules/" + filterURL);
+            logger.debug("Call API REST " + resourceURL);
 
-            WebResource webResource = client.resource(url + "/modules/" + filterURL);
+            WebResource webResource = client.resource(resourceURL);
 
             GenericType<Collection<ModuleImpl>> genericModules =
                     new GenericType<Collection<ModuleImpl>>() {};
@@ -146,6 +148,47 @@ public class StoreRS implements IStoreRS {
 
             //TODO create own exception with a good message
             return null;
+        }
+    }
+
+    @Override
+    public ModuleIdsWrapper searchModulesGetIds(String filter) {
+        Client client = new Client();
+        try {
+            //test if the url is good
+            String resourceUrl = url + "/modules/" + filter +"/ids";
+            URI uri = new URI(resourceUrl);
+
+            logger.debug("Call API REST " + resourceUrl);
+
+            WebResource webResource = client.resource(resourceUrl);
+
+            return webResource.get(ModuleIdsWrapperImpl.class);
+
+        } catch (URISyntaxException ex) {
+            logger.error(ex.getStackTrace());
+            //TODO create own exception with a good message
+            return null;
+        }
+    }
+
+    @Override
+    public String searchModulesResultsNumber(String filter) {
+        Client client = new Client();
+
+        try {
+          //test if the url is good
+            URI uri = new URI(url + "/modules/" + filter + "/number");
+
+            logger.debug("Call API REST " + url + "/modules/" + filter + "/number");
+
+            WebResource webResource = client.resource(url + "/modules/" + filter + "number");
+
+            return webResource.get(String.class);
+        }catch (URISyntaxException ex) {
+            logger.error(ex.getStackTrace());
+            //TODO create own exception with a good message
+            return "0";
         }
     }
 
@@ -192,6 +235,48 @@ public class StoreRS implements IStoreRS {
             logger.error(ex.getStackTrace());
             //TODO create own exception with a good message
             return null;
+        }
+    }
+
+    @Override
+    public ModuleIdsWrapper searchModulesByCategoryGetIds(String id) {
+        Client client = new Client();
+        try {
+            //test if the url is good
+            String resourceUrl = url + "/category/" + id + "/modules/ids";
+            URI uri = new URI(resourceUrl);
+
+            logger.debug("Call API REST " + resourceUrl);
+
+            WebResource webResource = client.resource(resourceUrl);
+
+            return webResource.get(ModuleIdsWrapperImpl.class);
+
+        } catch (URISyntaxException ex) {
+            logger.error(ex.getStackTrace());
+            //TODO create own exception with a good message
+            return null;
+        }
+    }
+
+    @Override
+    public String searchModulesByCategoryResultsNumber(String id) {
+        Client client = new Client();
+
+        try {
+          //test if the url is good
+            String resourceUrl = url + "/category/" + id + "/modules/number";
+            URI uri = new URI(resourceUrl);
+
+            logger.debug("Call API REST " + resourceUrl);
+
+            WebResource webResource = client.resource(resourceUrl);
+
+            return webResource.get(String.class);
+        }catch (URISyntaxException ex) {
+            logger.error(ex.getStackTrace());
+            //TODO create own exception with a good message
+            return "0";
         }
     }
 

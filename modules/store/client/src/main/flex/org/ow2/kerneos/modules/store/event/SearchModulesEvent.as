@@ -91,7 +91,7 @@ public class SearchModulesEvent extends CairngormEvent {
         return this._itemByPage;
     }
 
-    public function set page(itemByPage:int):void {
+    public function set page(page:int):void {
         this._page = page;
     }
 
