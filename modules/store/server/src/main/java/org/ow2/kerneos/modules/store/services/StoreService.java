@@ -169,10 +169,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     * @param filter module's name
-     * @param order "desc" for descending or "asc" for ascendant
+     * @param filter     module's name
+     * @param order      "desc" for descending or "asc" for ascendant
      * @param itemByPage items number by page
-     * @param page page number
+     * @param page       page number
      * @return Modules result collection
      */
     @Override
@@ -182,10 +182,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     * @param filter module's name
-     * @param order "desc" for descending or "asc" for ascendant
+     * @param filter     module's name
+     * @param order      "desc" for descending or "asc" for ascendant
      * @param itemByPage items number by page
-     * @param page page number
+     * @param page       page number
      * @return Modules result collection
      */
     @Override
@@ -197,10 +197,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     * @param id Category id
+     * @param id    Category id
      * @param order desc" for descending or "asc" for ascendant
-     ** @param itemByPage items number by page
-     * @param page page number
+     *              * @param itemByPage items number by page
+     * @param page  page number
      * @return Modules result collection
      */
     @Override
@@ -210,10 +210,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
     }
 
     /**
-     * @param id Category id
+     * @param id    Category id
      * @param order desc" for descending or "asc" for ascendant
-     ** @param itemByPage items number by page
-     * @param page page number
+     *              * @param itemByPage items number by page
+     * @param page  page number
      * @return Modules result collection
      */
     @Override
@@ -226,7 +226,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
     @Override
     public Collection<CategoryImpl> getCategories() {
-        Collection <CategoryImpl> results = new ArrayList<CategoryImpl>();
+        Collection<CategoryImpl> results = new ArrayList<CategoryImpl>();
 
         //For each store
         for (StoreImpl store : stores.getStores()) {
@@ -234,7 +234,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
             Collection categories = storeRS.getCategories();
             for (Object cat : categories) {
                 if (!results.contains(cat)) {
-                    results.add((CategoryImpl)cat);
+                    results.add((CategoryImpl) cat);
                 }
             }
         }
@@ -248,7 +248,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
         for (StoreImpl store : stores.getStores()) {
             logger.debug("Find Category with id " + id + " in url " + store.getUrl());
             storeRS.setUrl(store.getUrl());
-            CategoryImpl cat = (CategoryImpl)storeRS.getCategory(id);
+            CategoryImpl cat = (CategoryImpl) storeRS.getCategory(id);
             if (cat != null) {
                 return cat;
             }
@@ -461,10 +461,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
     @Override
     public StoreImpl addStore(StoreImpl store) throws StoreException {
-        try{
+        try {
             //test if the url is good
             URI uri = new URI(store.getUrl());
-        }catch (URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             throw new StoreException(StoreException.BAD_STORE_URL, "The store " + store.getName() +
                     " doesn't have a valid URL format");
         }
@@ -480,10 +480,10 @@ public class StoreService implements KerneosSimpleService, IStoreService {
             originalStore.setDescription(store.getDescription());
 
             if (!originalStore.getUrl().equals(store.getUrl())) {
-                try{
+                try {
                     //test if the url is good
                     URI uri = new URI(store.getUrl());
-                }catch (URISyntaxException ex) {
+                } catch (URISyntaxException ex) {
                     throw new StoreException(StoreException.BAD_STORE_URL, "The store " + store.getName() +
                             " doesn't have a valid URL format");
                 }
@@ -535,6 +535,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
     /**
      * Set the image (icon) of each module if the image exists otherwise the image set will be a null object
+     *
      * @param modules Modules collection
      */
     private void addImagesToModules(Collection<ModuleImpl> modules) {
@@ -565,7 +566,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
                 for (Object mod : modules) {
                     //If global collection doesn't contains this module then add it
                     if (!results.contains(mod)) {
-                        results.add((ModuleImpl)mod);
+                        results.add((ModuleImpl) mod);
                     }
                 }
             }
@@ -599,7 +600,7 @@ public class StoreService implements KerneosSimpleService, IStoreService {
 
             //Get page number
             Integer pageParam = page;
-            if (pageParam==null) pageParam = 0;
+            if (pageParam == null) pageParam = 0;
 
             //Set the start index of the resultsIds List
             Integer startIndex = pageParam * itemByPage;

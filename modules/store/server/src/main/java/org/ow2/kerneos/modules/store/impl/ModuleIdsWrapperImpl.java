@@ -36,7 +36,7 @@ import java.util.Collection;
 
 @XmlRootElement(name = "moduleids")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ModuleIdsWrapperImpl implements ModuleIdsWrapper{
+public class ModuleIdsWrapperImpl implements ModuleIdsWrapper {
 
     @XmlElementWrapper(name = "idsCollection")
     @XmlElement

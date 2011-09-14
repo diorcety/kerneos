@@ -46,7 +46,7 @@ import java.util.Map;
 public class StoreRS implements IStoreRS {
     private String url = "http://localhost:9000/store";
 
-      /**
+    /**
      * The logger
      */
     private static Log logger = LogFactory.getLog(StoreRS.class);
@@ -93,19 +93,19 @@ public class StoreRS implements IStoreRS {
 
         MultivaluedMap queryParams = new MultivaluedMapImpl();
 
-        if( field != null ) {
+        if (field != null) {
             queryParams.add("field", field);
         }
 
-        if(order != null) {
+        if (order != null) {
             queryParams.add("order", order);
         }
 
-        if(itemByPage != null) {
+        if (itemByPage != null) {
             queryParams.add("itemByPage", itemByPage);
         }
 
-        if(page != null) {
+        if (page != null) {
             queryParams.add("page", page);
         }
 
@@ -113,10 +113,10 @@ public class StoreRS implements IStoreRS {
 
         String filterURL = "";
 
-        if (filterSplit != null && filterSplit[0]!= null) {
+        if (filterSplit != null && filterSplit[0] != null) {
             int i = 0;
 
-            while(i < filterSplit.length) {
+            while (i < filterSplit.length) {
                 if (!filterSplit[i].equals("")) {
                     filterURL = filterSplit[i];
                     break;
@@ -135,14 +135,15 @@ public class StoreRS implements IStoreRS {
             WebResource webResource = client.resource(resourceURL);
 
             GenericType<Collection<ModuleImpl>> genericModules =
-                    new GenericType<Collection<ModuleImpl>>() {};
+                    new GenericType<Collection<ModuleImpl>>() {
+                    };
 
 
             Collection modulesResult =
                     webResource.queryParams(queryParams).get(genericModules);
 
             return modulesResult;
-        }catch (URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
 
             logger.error(ex.getStackTrace());
 
@@ -156,7 +157,7 @@ public class StoreRS implements IStoreRS {
         Client client = new Client();
         try {
             //test if the url is good
-            String resourceUrl = url + "/modules/" + filter +"/ids";
+            String resourceUrl = url + "/modules/" + filter + "/ids";
             URI uri = new URI(resourceUrl);
 
             logger.debug("Call API REST " + resourceUrl);
@@ -177,7 +178,7 @@ public class StoreRS implements IStoreRS {
         Client client = new Client();
 
         try {
-          //test if the url is good
+            //test if the url is good
             URI uri = new URI(url + "/modules/" + filter + "/number");
 
             logger.debug("Call API REST " + url + "/modules/" + filter + "/number");
@@ -185,7 +186,7 @@ public class StoreRS implements IStoreRS {
             WebResource webResource = client.resource(url + "/modules/" + filter + "number");
 
             return webResource.get(String.class);
-        }catch (URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             logger.error(ex.getStackTrace());
             //TODO create own exception with a good message
             return "0";
@@ -199,39 +200,40 @@ public class StoreRS implements IStoreRS {
 
         MultivaluedMap queryParams = new MultivaluedMapImpl();
 
-        if( field != null ) {
+        if (field != null) {
             queryParams.add("field", field);
         }
 
-        if(order != null) {
+        if (order != null) {
             queryParams.add("order", order);
         }
 
-        if(itemByPage != null) {
+        if (itemByPage != null) {
             queryParams.add("itemByPage", itemByPage);
         }
 
-        if(page != null) {
+        if (page != null) {
             queryParams.add("page", page);
         }
 
         try {
             //test if the url is good
-            URI uri = new URI(url + "/category/"+id+"/modules");
+            URI uri = new URI(url + "/category/" + id + "/modules");
 
-            logger.debug("Call API REST " + url + "/category/"+id+"/modules");
+            logger.debug("Call API REST " + url + "/category/" + id + "/modules");
 
-            WebResource webResource = client.resource(url + "/category/"+id+"/modules");
+            WebResource webResource = client.resource(url + "/category/" + id + "/modules");
 
             GenericType<Collection<ModuleImpl>> genericModules =
-                    new GenericType<Collection<ModuleImpl>>() {};
+                    new GenericType<Collection<ModuleImpl>>() {
+                    };
 
 
             Collection modulesResult =
                     webResource.queryParams(queryParams).get(genericModules);
 
             return modulesResult;
-        }catch (URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             logger.error(ex.getStackTrace());
             //TODO create own exception with a good message
             return null;
@@ -264,7 +266,7 @@ public class StoreRS implements IStoreRS {
         Client client = new Client();
 
         try {
-          //test if the url is good
+            //test if the url is good
             String resourceUrl = url + "/category/" + id + "/modules/number";
             URI uri = new URI(resourceUrl);
 
@@ -273,7 +275,7 @@ public class StoreRS implements IStoreRS {
             WebResource webResource = client.resource(resourceUrl);
 
             return webResource.get(String.class);
-        }catch (URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             logger.error(ex.getStackTrace());
             //TODO create own exception with a good message
             return "0";
@@ -289,7 +291,8 @@ public class StoreRS implements IStoreRS {
         WebResource webResource = client.resource(url + "/categories");
 
         GenericType<Collection<CategoryImpl>> genericCategories =
-                new GenericType<Collection<CategoryImpl>>() {};
+                new GenericType<Collection<CategoryImpl>>() {
+                };
 
         Collection categoriesResult = webResource.get(genericCategories);
 
