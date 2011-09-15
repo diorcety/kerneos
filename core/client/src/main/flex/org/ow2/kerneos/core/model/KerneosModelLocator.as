@@ -28,7 +28,7 @@ import mx.collections.ArrayCollection;
 
 import org.ow2.kerneos.core.business.*;
 import org.ow2.kerneos.core.model.ModulesState;
-import org.ow2.kerneos.core.vo.ApplicationVO;
+import org.ow2.kerneos.common.vo.ApplicationVO;
 
 
 /**
@@ -59,7 +59,7 @@ public class KerneosModelLocator implements ModelLocator {
      * The Module configurations.
      */
     [Bindable]
-    [ArrayElementType('org.ow2.kerneos.core.vo.ModuleVO')]
+    [ArrayElementType('org.ow2.kerneos.common.vo.ModuleVO')]
     public var modules:ArrayCollection = new ArrayCollection();
 
     /**
@@ -78,7 +78,7 @@ public class KerneosModelLocator implements ModelLocator {
      * The stored notifications.
      */
     [Bindable]
-    [ArrayElementType('org.ow2.kerneos.core.vo.KerneosNotification')]
+    [ArrayElementType('org.ow2.kerneos.common.vo.KerneosNotification')]
     public var notifications:ArrayCollection = new ArrayCollection();
 
 

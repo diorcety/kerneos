@@ -117,7 +117,7 @@
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-common</artifactId>
+      <artifactId>kerneos-common-client</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
       <scope>internal</scope>
@@ -145,7 +145,7 @@
         </exclusion>
         <exclusion>
           <groupId>org.ow2.kerneos</groupId>
-          <artifactId>kerneos-common</artifactId>
+          <artifactId>kerneos-common-client</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.google.code.flexlib</groupId>
@@ -178,7 +178,7 @@
         </exclusion>
         <exclusion>
           <groupId>org.ow2.kerneos</groupId>
-          <artifactId>kerneos-common</artifactId>
+          <artifactId>kerneos-common-client</artifactId>
         </exclusion>
         <exclusion>
           <groupId>com.adobe.flex.framework</groupId>
@@ -188,11 +188,27 @@
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-api</artifactId>
+      <artifactId>kerneos-api-client</artifactId>
       <version>${project.version}</version>
       <type>swc</type>
       <scope>internal</scope>
       <exclusions>
+        <exclusion>
+          <groupId>org.ow2.kerneos</groupId>
+          <artifactId>cairngorm-kerneos</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.ow2.kerneos</groupId>
+          <artifactId>kerneos-common-client</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.ow2.kerneos</groupId>
+          <artifactId>kerneos-profile-client</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.ow2.kerneos</groupId>
+          <artifactId>kerneos-login-client</artifactId>
+        </exclusion>
         <exclusion>
           <groupId>com.adobe.flex.framework</groupId>
           <artifactId>flex-framework</artifactId>

@@ -34,7 +34,7 @@ import flash.net.navigateToURL;
 import mx.collections.ArrayCollection;
 
 import org.ow2.kerneos.common.util.KerneosLogger;
-import org.ow2.kerneos.core.vo.IFrameModuleVO;
+import org.ow2.kerneos.common.vo.IFrameModuleVO;
 
 
 /**

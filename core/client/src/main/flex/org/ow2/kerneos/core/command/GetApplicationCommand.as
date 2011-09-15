@@ -40,7 +40,7 @@ import org.ow2.kerneos.common.managers.LanguagesManager;
 import org.ow2.kerneos.core.business.IGetApplicationConfigDelegate;
 import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
-import org.ow2.kerneos.core.vo.ApplicationVO;
+import org.ow2.kerneos.common.vo.ApplicationVO;
 
 /**
  * Load the Kerneos configuration

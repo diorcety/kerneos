@@ -43,9 +43,8 @@
 
   <modules>
     <module>client</module>
-    <module>theme</module>
-    <module>common</module>
     <module>server</module>
+    <module>theme</module>
   </modules>
 
 </project>

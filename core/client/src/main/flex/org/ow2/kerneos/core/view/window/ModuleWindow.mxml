@@ -41,9 +41,9 @@
         import flexlib.mdi.containers.MDICanvas;
 
         import org.ow2.kerneos.core.managers.SharedObjectManager;
-        import org.ow2.kerneos.core.vo.ModuleVO;
+        import org.ow2.kerneos.common.vo.ModuleVO;
 
-        import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
+        import org.ow2.kerneos.common.vo.ModuleWithWindowVO;
 
         // =========================================================================
         // Variables
@@ -76,9 +76,6 @@
         // Public functions
         // =========================================================================
 
-        public function usingModule(module:ModuleVO):Boolean {
-            return this.module.id == module.id && this.module.bundle == module.bundle && this.module.window == this;
-        }
 
         // =========================================================================
         // Window operations

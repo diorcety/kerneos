@@ -23,7 +23,18 @@
 package org.ow2.kerneos.core.vo {
 import flash.utils.Dictionary;
 
-import org.ow2.kerneos.core.vo.*;
+import org.ow2.kerneos.common.vo.ApplicationVO;
+import org.ow2.kerneos.common.vo.AuthenticationVO;
+import org.ow2.kerneos.common.vo.FolderVO;
+import org.ow2.kerneos.common.vo.IFrameModuleVO;
+import org.ow2.kerneos.common.vo.LinkVO;
+import org.ow2.kerneos.common.vo.MappingVO;
+import org.ow2.kerneos.common.vo.ModuleEventVO;
+import org.ow2.kerneos.common.vo.ModuleVO;
+import org.ow2.kerneos.common.vo.ModuleWithWindowVO;
+import org.ow2.kerneos.common.vo.PromptBeforeCloseVO;
+import org.ow2.kerneos.common.vo.SWFModuleVO;
+import org.ow2.kerneos.common.vo.ServiceVO;
 
 public class ConfigVOObjects {
 

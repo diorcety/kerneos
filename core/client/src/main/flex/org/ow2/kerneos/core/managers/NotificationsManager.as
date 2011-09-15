@@ -31,7 +31,7 @@ import org.ow2.kerneos.core.model.KerneosModelLocator;
 import org.ow2.kerneos.core.view.DesktopView;
 import org.ow2.kerneos.core.view.notification.NotificationPopUp;
 import org.ow2.kerneos.core.view.window.ModuleWindow;
-import org.ow2.kerneos.core.vo.KerneosNotification;
+import org.ow2.kerneos.common.vo.KerneosNotification;
 
 
 /**

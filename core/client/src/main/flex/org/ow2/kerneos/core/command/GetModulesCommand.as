@@ -40,7 +40,7 @@ import org.ow2.kerneos.core.business.IGetModulesDelegate;
 import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
 import org.ow2.kerneos.core.model.KerneosModelLocator;
 import org.ow2.kerneos.core.model.ModulesState;
-import org.ow2.kerneos.core.vo.ModuleVO;
+import org.ow2.kerneos.common.vo.ModuleVO;
 
 /**
  * Get the module list

@@ -77,10 +77,9 @@
         import org.ow2.kerneos.core.view.window.SwfModuleWindow;
         import org.ow2.kerneos.core.view.window.KerneosWindow;
         import org.ow2.kerneos.core.view.window.ModuleWindow;
-        import org.ow2.kerneos.core.view.notification.NotificationsLog;
-        import org.ow2.kerneos.core.vo.KerneosNotification;
-        import org.ow2.kerneos.core.vo.ModuleVO;
-        import org.ow2.kerneos.core.vo.PromptBeforeCloseVO;
+        import org.ow2.kerneos.common.vo.KerneosNotification;
+        import org.ow2.kerneos.common.vo.ModuleVO;
+        import org.ow2.kerneos.common.vo.PromptBeforeCloseVO;
         import org.ow2.kerneos.login.model.LoginModelLocator;
         import org.ow2.kerneos.login.vo.SessionVO;
         import org.ow2.kerneos.profile.manager.ProfileManager;
@@ -178,7 +177,7 @@
                     // Resolve wether the user should be prompted before closing the window
                     var prompt:Boolean = true;
 
-                    if (window.usingModule(window.module)) {
+                    if (ModulesLifeCycleManager.getModuleWindow(window.module) == window) {
                         prompt = false;
                     }
                     else if (window.module.promptBeforeClose.equals(PromptBeforeCloseVO.NEVER)) {

@@ -37,71 +37,66 @@
     
     <fx:Script>
     <![CDATA[
+        import org.ow2.kerneos.common.vo.KerneosNotification;
 
-    import org.ow2.kerneos.core.vo.KerneosNotification;
+        // =========================================================================
+        // Properties
+        // =========================================================================
 
-    // =========================================================================
-    // Properties
-    // =========================================================================
-    
-    /**
-    * The kerneos notification object
-    */
-    [Bindable]
-    private var _notif : KerneosNotification = null;
+        /**
+         * The kerneos notification object
+         */
+        [Bindable]
+        private var _notif:KerneosNotification = null;
 
-    /**
-    * The displayed label
-    */
-    [Bindable]
-    private var _displayedLabel : String = null;
-    
-    
-    // =========================================================================
-    // Data object handling
-    // =========================================================================
-    
-    /**
-    * Get the item renderer data object
-    */
-    [Bindable("dataChange")]
-    override public function get data():Object
-    {
-        return _notif;
-    }
-    
-    /**
-    * Set the item renderer data object
-    */
-    override public function set data(value:Object):void
-    {
-        _notif = value as KerneosNotification;
-        
-        // Format the displayed time stamp
-        var now : Date = new Date();
-        
-        //// If today, don't display the date
-        if (_notif.date.getDate() == now.getDate() &&
-            _notif.date.getMonth() == now.getMonth() &&
-            _notif.date.getFullYear() == now.getFullYear())
-        {
-            _displayedLabel = "";
-        } else {
-            _displayedLabel = _notif.date.getDate() + "/" +
-                              (_notif.date.getMonth()+1) + "/" +
-                              _notif.date.getFullYear + ", ";
+        /**
+         * The displayed label
+         */
+        [Bindable]
+        private var _displayedLabel:String = null;
+
+
+        // =========================================================================
+        // Data object handling
+        // =========================================================================
+
+        /**
+         * Get the item renderer data object
+         */
+        [Bindable("dataChange")]
+        override public function get data():Object {
+            return _notif;
         }
-        
-        //// Add the hour
-        _displayedLabel += _notif.date.getHours() + ":" +
-                           _notif.date.getMinutes() + ":" +
-                           _notif.date.getSeconds();
-        
-        invalidateProperties();
-        dispatchEvent(new Event("dataChange"));
-    }
-    
-    ]]>
+
+        /**
+         * Set the item renderer data object
+         */
+        override public function set data(value:Object):void {
+            _notif = value as KerneosNotification;
+
+            // Format the displayed time stamp
+            var now:Date = new Date();
+
+            //// If today, don't display the date
+            if (_notif.date.getDate() == now.getDate() &&
+                    _notif.date.getMonth() == now.getMonth() &&
+                    _notif.date.getFullYear() == now.getFullYear()) {
+                _displayedLabel = "";
+            } else {
+                _displayedLabel = _notif.date.getDate() + "/" +
+                        (_notif.date.getMonth() + 1) + "/" +
+                        _notif.date.getFullYear + ", ";
+            }
+
+            //// Add the hour
+            _displayedLabel += _notif.date.getHours() + ":" +
+                    _notif.date.getMinutes() + ":" +
+                    _notif.date.getSeconds();
+
+            invalidateProperties();
+            dispatchEvent(new Event("dataChange"));
+        }
+        ]]>
     </fx:Script>
     
     <!-- The date -->

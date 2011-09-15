@@ -30,15 +30,17 @@ POSSIBILITY OF SUCH DAMAGE.
 @ignore
 */
 package com.adobe.cairngorm.control
-{   
+{
    import com.adobe.cairngorm.CairngormError;
    import com.adobe.cairngorm.CairngormMessageCodes;
    import com.adobe.cairngorm.commands.ICommand;
-   
-   import flash.utils.Dictionary;
+
+import flash.events.IEventDispatcher;
+
+import flash.utils.Dictionary;
    import flash.utils.describeType;
    import flash.utils.getQualifiedClassName;
-   
+
    /**
     * A base class for an application specific front controller,
     * that is able to dispatch control following particular user gestures to appropriate
@@ -66,10 +68,10 @@ package com.adobe.cairngorm.control
     * meaning that when the command is garbage collected, the reference in
     * the controller is also garbage collected.
     * </p>
-    * 
+    *
     * <p>
-    * The Front Controller is a base-class that  listen for events 
-    * dispatched by CairngormEventDispatcher.  In a 
+    * The Front Controller is a base-class that  listen for events
+    * dispatched by CairngormEventDispatcher.  In a
     * Cairngorm application, the developer should create a class that
     * extends the FrontController, and in the constructor of their
     * application specific controller, they should make numerous calls to
@@ -90,14 +92,14 @@ package com.adobe.cairngorm.control
     *    var event : LoginEvent = new LoginEvent( username.text, password.text );
     *    CairngormEventDispatcher.getInstance.dispatchEvent( event );
     * }
-    * 
+    *
     * public function doLogout() : void
     * {
     *    var event : LogoutEvent = new LogoutEvent();
     *    CairngormEventDispatcher.getInstance.dispatchEvent( event );
     * }
     * </pre>
-    * 
+    *
     * <p>
     * We would create LoginController as follows:
     * </p>
@@ -109,13 +111,13 @@ package com.adobe.cairngorm.control
     *    {
     *       initialiseCommands();
     *    }
-    * 
+    *
     *    public function initialiseCommands() : void
     *    {
     *       addCommand( LoginEvent.EVENT_LOGIN, LoginCommand );
     *       addCommand( LogoutEvent.EVENT_LOGOUT, LogoutCommand );
     *    }
-    *   
+    *
     * }
     * </pre>
     *
@@ -131,7 +133,7 @@ package com.adobe.cairngorm.control
     * registering the event against a command in the application Front Controller,
     * and then creating the concrete command class.
     * </p>
-    * 
+    *
     * <p>
     * The concrete implementation of the FrontController, LoginController,
     * should be created once and once only (as we only want a single controller
@@ -146,7 +148,7 @@ package com.adobe.cairngorm.control
     *   &lt;control:LoginController id="controller" /&gt;
     *
     *  ...
-    * 
+    *
     * </pre>
     *
     * @see com.adobe.cairngorm.commands.ICommand
@@ -155,15 +157,19 @@ package com.adobe.cairngorm.control
    {
      /**
       * Dictionary of event name to command class mappings
-      */ 
+      */
       protected var commands : Dictionary = new Dictionary();
+      protected var dispatcher : CairngormEventDispatcher = null;
 
       /**
        * Constructor
        */
-      function FrontController()
+      function FrontController(dispatcher: CairngormEventDispatcher = null)
       {
-
+          if(dispatcher == null)
+             this.dispatcher = CairngormEventDispatcher.getInstance();
+          else
+             this.dispatcher = dispatcher;
       }
 
      /**
@@ -179,56 +185,57 @@ package com.adobe.cairngorm.control
       *
       * @param commandRef An ICommand Class reference upon which execute()
       * can be called when the Front Controller hears an event broadcast with
-      * commandName. Typically, this argument is passed as "LoginCommand" 
+      * commandName. Typically, this argument is passed as "LoginCommand"
       * or similar.
-      * 
+      *
       * @param useWeakReference A Boolean indicating whether the controller
       * should added as a weak reference to the CairngormEventDispatcher,
-      * meaning it will eligibile for garbage collection if it is unloaded from 
+      * meaning it will eligibile for garbage collection if it is unloaded from
       * the main application. Defaults to true.
-      */     
+      */
       public function addCommand( commandName : String, commandRef : Class, useWeakReference : Boolean = true ) : void
       {
-         if ( commandName == null ) 
+         if ( commandName == null )
             throw new CairngormError( CairngormMessageCodes.COMMAND_NAME_NULL );
-            
-         if ( commandRef == null ) 
+
+         if ( commandRef == null )
             throw new CairngormError( CairngormMessageCodes.COMMAND_REF_NULL );
 
          if( commands[ commandName ] != null )
             throw new CairngormError( CairngormMessageCodes.COMMAND_ALREADY_REGISTERED, commandName );
-         
+
          if ( implementsICommand( commandRef ) == false )
              throw new CairngormError( CairngormMessageCodes.COMMAND_SHOULD_IMPLEMENT_ICOMMAND, commandRef );
-         
+
          commands[ commandName ] = commandRef;
-         CairngormEventDispatcher.getInstance().addEventListener( commandName, executeCommand, false, 0, useWeakReference );
+
+         dispatcher.addEventListener( commandName, executeCommand, false, 0, useWeakReference );
       }
-      
+
      /**
-      * Deregisters an ICommand class with the given event name from the Front Controller 
+      * Deregisters an ICommand class with the given event name from the Front Controller
       *
       * @param commandName The name of the event that will be broadcast by the
       * when a particular user gesture occurs, eg "login"
       *
-      */     
+      */
       public function removeCommand( commandName : String ) : void
       {
          if ( commandName  === null )
-            throw new CairngormError( CairngormMessageCodes.COMMAND_NAME_NULL, commandName);  
+            throw new CairngormError( CairngormMessageCodes.COMMAND_NAME_NULL, commandName);
 
          if ( commands[ commandName ] === undefined )
-            throw new CairngormError( CairngormMessageCodes.COMMAND_NOT_REGISTERED, commandName);  
-         
-         CairngormEventDispatcher.getInstance().removeEventListener( commandName, executeCommand );
-         
+            throw new CairngormError( CairngormMessageCodes.COMMAND_NOT_REGISTERED, commandName);
+
+         dispatcher.removeEventListener( commandName, executeCommand );
+
          commands[ commandName ] = undefined;
-         delete commands[ commandName ]; 
+         delete commands[ commandName ];
       }
- 
+
       /**
       * Executes the command
-      */  
+      */
       protected function executeCommand( event : CairngormEvent ) : void
       {
          var commandToInitialise : Class = getCommand( event.type );
@@ -236,20 +243,20 @@ package com.adobe.cairngorm.control
 
          commandToExecute.execute( event );
       }
-      
+
      /**
-      * Returns the command class registered with the command name. 
+      * Returns the command class registered with the command name.
       */
       protected function getCommand( commandName : String ) : Class
       {
          var command : Class = commands[ commandName ];
-         
+
          if ( command == null )
             throw new CairngormError( CairngormMessageCodes.COMMAND_NOT_FOUND, commandName );
-            
+
          return command;
-      }      
-      
+      }
+
       /**
        * Returns true or false to indicate whether the commandRef implements
        * the ICommand interface
@@ -257,8 +264,8 @@ package com.adobe.cairngorm.control
       private function implementsICommand( commandRef : Class ) : Boolean
       {
          var classDescription : XML = describeType( commandRef ) as XML;
-         
+
          return classDescription.factory.implementsInterface.( @type == getQualifiedClassName( ICommand ) ).length() != 0;
       }
-   }   
+   }
 }

@@ -88,13 +88,8 @@ public class ServiceLocator implements IServiceLocator {
         return instance;
     }
 
-    // Constructor should be private but current AS3.0 does not allow it
+    // Constructor
     public function ServiceLocator() {
-        if (_instance) {
-            throw new CairngormError(CairngormMessageCodes.SINGLETON_EXCEPTION, "ServiceLocator");
-        }
-
-        _instance = this;
     }
 
     /**

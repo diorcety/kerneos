@@ -17,13 +17,21 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.ow2.kerneos.examples</groupId>
+      <artifactId>modules-module2-client</artifactId>
+      <version>${project.version}</version>
+      <type>swf</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-core-server</artifactId>
+      <artifactId>kerneos-api-server</artifactId>
     </dependency>
 
     <dependency>
@@ -37,9 +45,9 @@
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.annotations</artifactId>
     </dependency>
-      <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>org.osgi.compendium</artifactId>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
     </dependency>
   </dependencies>
 

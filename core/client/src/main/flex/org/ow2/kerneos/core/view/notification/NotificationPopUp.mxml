@@ -40,9 +40,11 @@
     <![CDATA[
         import mx.core.Container;
 
-        import org.ow2.kerneos.core.vo.KerneosNotification;
+        import org.ow2.kerneos.common.vo.KerneosNotification;
+
+        import org.ow2.kerneos.common.vo.KerneosNotification;
         import org.ow2.kerneos.core.view.window.ModuleWindow;
-        import org.ow2.kerneos.core.vo.ModuleVO;
+        import org.ow2.kerneos.common.vo.ModuleVO;
 
 
         // =========================================================================

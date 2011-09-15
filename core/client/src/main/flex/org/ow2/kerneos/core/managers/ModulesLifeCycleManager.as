@@ -57,13 +57,13 @@ import org.ow2.kerneos.core.view.window.IFrameModuleWindow;
 import org.ow2.kerneos.core.view.window.MinimizedModuleWindow;
 import org.ow2.kerneos.core.view.window.ModuleWindow;
 import org.ow2.kerneos.core.view.window.SwfModuleWindow;
-import org.ow2.kerneos.core.vo.FolderVO;
-import org.ow2.kerneos.core.vo.IFrameModuleVO;
-import org.ow2.kerneos.core.vo.LinkVO;
-import org.ow2.kerneos.core.vo.ModuleEventVO;
-import org.ow2.kerneos.core.vo.ModuleVO;
-import org.ow2.kerneos.core.vo.ModuleWithWindowVO;
-import org.ow2.kerneos.core.vo.SWFModuleVO;
+import org.ow2.kerneos.common.vo.FolderVO;
+import org.ow2.kerneos.common.vo.IFrameModuleVO;
+import org.ow2.kerneos.common.vo.LinkVO;
+import org.ow2.kerneos.common.vo.ModuleEventVO;
+import org.ow2.kerneos.common.vo.ModuleVO;
+import org.ow2.kerneos.common.vo.ModuleWithWindowVO;
+import org.ow2.kerneos.common.vo.SWFModuleVO;
 
 
 /**
@@ -91,7 +91,7 @@ public class ModulesLifeCycleManager {
     private static var desktop:DesktopView = null;
 
     /**
-     * The IFrame  objects
+     * The IFrame objects
      */
     private static var frames:Dictionary = new Dictionary();
 
@@ -100,6 +100,11 @@ public class ModulesLifeCycleManager {
      */
     private static var consumer:Consumer = null;
 
+
+    /**
+     *  The module/window association
+     */
+    private static var modules:Dictionary = new Dictionary();
 
     // =========================================================================
     // Public static methods
@@ -141,6 +146,13 @@ public class ModulesLifeCycleManager {
                 return module;
         }
         return null;
+    }
+
+    /**
+     * Get the window associated with the module.
+     */
+    public static function getModuleWindow(module:ModuleVO):ModuleWindow {
+        return modules[module];
     }
 
     /**
@@ -249,7 +261,7 @@ public class ModulesLifeCycleManager {
             }
 
             // Set the window associated with the module
-            (module as ModuleWithWindowVO).window = window;
+            modules[module] = window;
 
             // Create the button in the taskbar
             var minimizedModuleWindow:MinimizedModuleWindow = new MinimizedModuleWindow();
@@ -279,13 +291,8 @@ public class ModulesLifeCycleManager {
         checkDesktopNotNull();
 
         // Unload module and close it window
-        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-
-        for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow && (window as ModuleWindow).usingModule(module)) {
-                closeModuleByWindow(window as ModuleWindow);
-            }
-        }
+        var currentWindow:ModuleWindow = modules[module];
+        closeModuleByWindow(currentWindow);
     }
 
     /**
@@ -318,13 +325,9 @@ public class ModulesLifeCycleManager {
         checkDesktopNotNull();
 
         // Unload module and close it window
-        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-
-        for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow && (window as ModuleWindow).usingModule(module)) {
-                stopModuleByWindow(window as ModuleWindow, cause);
-            }
-        }
+        var currentWindow:ModuleWindow = modules[module];
+        if (currentWindow != null)
+            stopModuleByWindow(currentWindow, cause);
     }
 
     /**
@@ -332,7 +335,7 @@ public class ModulesLifeCycleManager {
      */
     public static function stopModuleByWindow(window:ModuleWindow, cause:String = null):void {
         // Check if the window is current window of the module
-        if (window.module.window == window) {
+        if (modules[window.module] == window) {
             if (window is SwfModuleWindow) {
                 // Remove Notification listener
                 window.removeEventListener(KerneosNotificationEvent.KERNEOS_NOTIFICATION,
@@ -347,7 +350,7 @@ public class ModulesLifeCycleManager {
             }
 
             // Clear window associated with the module
-            window.module.window = null;
+            delete modules[window.module];
             window.module.loaded = false;
 
             // Force garbage collection
@@ -363,14 +366,8 @@ public class ModulesLifeCycleManager {
         checkDesktopNotNull();
 
         // look for the window are give it the focus
-        var allWindows:Array = (desktop.windowContainer.windowManager.windowList as Array).concat();
-
-        for each (var window:MDIWindow in allWindows) {
-            if (window is ModuleWindow && (window as ModuleWindow).usingModule(module)) {
-                (window as ModuleWindow).bringToFront();
-                return;
-            }
-        }
+        var currentWindow:ModuleWindow = modules[module];
+        currentWindow.bringToFront();
     }
 
     /**

@@ -37,45 +37,41 @@
     
     <fx:Script>
     <![CDATA[
+        import org.ow2.kerneos.common.vo.ModuleVO;
+        import org.ow2.kerneos.common.vo.KerneosNotification;
 
-    import org.ow2.kerneos.core.vo.ModuleVO;
-    import org.ow2.kerneos.core.vo.KerneosNotification;
+        // =========================================================================
+        // Properties
+        // =========================================================================
 
-    // =========================================================================
-    // Properties
-    // =========================================================================
+        /**
+         * The kerneos notification object
+         */
+        [Bindable]
+        private var _notif:KerneosNotification = null;
 
-    /**
-    * The kerneos notification object
-    */    
-    [Bindable]
-    private var _notif : KerneosNotification = null;
-    
-    
-    // =========================================================================
-    // Data object handling
-    // =========================================================================
-    
-    /**
-    * Get the item renderer data object
-    */
-    [Bindable("dataChange")]
-    override public function get data():Object
-    {
-        return _notif;
-    }
-    
-    /**
-    * Set the item renderer data object
-    */
-    override public function set data(value:Object):void
-    {
-        _notif = value as KerneosNotification;
-        invalidateProperties();
-        dispatchEvent(new Event("dataChange"));
-    }
-    
-    ]]>
+
+        // =========================================================================
+        // Data object handling
+        // =========================================================================
+
+        /**
+         * Get the item renderer data object
+         */
+        [Bindable("dataChange")]
+        override public function get data():Object {
+            return _notif;
+        }
+
+        /**
+         * Set the item renderer data object
+         */
+        override public function set data(value:Object):void {
+            _notif = value as KerneosNotification;
+            invalidateProperties();
+            dispatchEvent(new Event("dataChange"));
+        }
+        ]]>
     </fx:Script>
     
     <!-- The module thumbnail -->

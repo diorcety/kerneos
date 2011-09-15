@@ -31,7 +31,7 @@ import mx.core.ClassFactory;
 import mx.states.SetStyle;
 
 import org.ow2.kerneos.core.view.ListModuleRenderer;
-import org.ow2.kerneos.core.vo.FolderVO;
+import org.ow2.kerneos.common.vo.FolderVO;
 
 
 /**

@@ -127,11 +127,16 @@ package com.adobe.cairngorm.commands
        * without further user-gesture.</p>
        * 
        */ 
-      public function executeNextCommand() : void
+      public function executeNextCommand(dispatcher: CairngormEventDispatcher = null) : void
       {
          var isSequenceCommand : Boolean = ( nextEvent != null );
          if( isSequenceCommand )
-            CairngormEventDispatcher.getInstance().dispatchEvent( nextEvent );
+         {
+             if(dispatcher == null)
+                CairngormEventDispatcher.getInstance().dispatchEvent( nextEvent );
+             else
+                dispatcher.dispatchEvent( nextEvent );
+         }
       }
    }
 }

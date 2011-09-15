@@ -231,6 +231,11 @@
       </dependency>
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-api-server</artifactId>
+        <version>${kerneos.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
         <artifactId>kerneos-profile-fileinstall</artifactId>
         <version>${kerneos.version}</version>
       </dependency>

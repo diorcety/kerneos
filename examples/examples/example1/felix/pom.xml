@@ -217,6 +217,12 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-api-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-profile-fileinstall</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>

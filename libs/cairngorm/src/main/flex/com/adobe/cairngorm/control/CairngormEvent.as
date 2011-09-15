@@ -72,9 +72,12 @@ package com.adobe.cairngorm.control
       /**
        * Dispatch this event via the Cairngorm event dispatcher.
        */
-      public function dispatch() : Boolean
+      public function dispatch(dispatcher: CairngormEventDispatcher = null) : Boolean
       {
-         return CairngormEventDispatcher.getInstance().dispatchEvent( this );
+          if(dispatcher == null)
+             return CairngormEventDispatcher.getInstance().dispatchEvent( this );
+          else
+             return dispatcher.dispatchEvent( this );
       }
       
       /**

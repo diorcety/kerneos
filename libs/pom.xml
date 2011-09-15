@@ -42,11 +42,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>api</module>
-    <module>common</module>
     <module>cairngorm</module>
-    <module>login</module>
-    <module>profile</module>
   </modules>
 
 </project>

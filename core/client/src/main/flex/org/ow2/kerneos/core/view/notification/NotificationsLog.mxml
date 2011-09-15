@@ -51,7 +51,7 @@
         import mx.controls.Alert;
         import mx.resources.ResourceManager;
 
-        import org.ow2.kerneos.core.vo.KerneosNotification;
+        import org.ow2.kerneos.common.vo.KerneosNotification;
         import org.ow2.kerneos.core.model.KerneosModelLocator;
         import org.ow2.kerneos.common.managers.LanguagesManager;
 
