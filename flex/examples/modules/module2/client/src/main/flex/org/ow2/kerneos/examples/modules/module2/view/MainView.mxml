@@ -50,10 +50,10 @@
          * On view creation complete handler
          */
         private function creationCompleteHandler(even:Event = null):void {
-            CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+            Module2.getInstance().getDispatcher().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION, ServerSideExceptionEvent.show);
 
             // Create a asynchronous consumer and subscribe to the topic
-            consumer = ServiceLocator.getInstance().getConsumer("module2-serviceAsync");
+            consumer = Module2.getInstance().getServices().getConsumer("module2-serviceAsync");
             consumer.topic = "chat";
             consumer.subscribe();
             consumer.addEventListener(MessageEvent.MESSAGE, postEventHandler);
@@ -64,7 +64,7 @@
          */
         public function destroy():void {
             // Remove all the event listener for avoid memory leaks
-            CairngormEventDispatcher.getInstance().removeEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+            Module2.getInstance().getDispatcher().removeEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION, ServerSideExceptionEvent.show);
             if (consumer) {
                 consumer.removeEventListener(MessageEvent.MESSAGE, postEventHandler);
 
@@ -90,7 +90,7 @@
          */
         private function post():void {
             var postEvent:PostEvent = new PostEvent(pseudo.text, message.text);
-            CairngormEventDispatcher.getInstance().dispatchEvent(postEvent);
+            Module2.getInstance().getDispatcher().dispatchEvent(postEvent);
         }
         ]]>
     </fx:Script>

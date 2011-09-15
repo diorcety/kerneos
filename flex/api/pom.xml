@@ -49,6 +49,31 @@
       <type>pom</type>
     </dependency>
 
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>cairngorm-kerneos</artifactId>
+      <version>2.1.0-SNAPSHOT</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-profile-client</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-login-client</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-common-client</artifactId>
+      <version>${project.version}</version>
+      <type>swc</type>
+    </dependency>
+
     <!-- Theme -->
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>

@@ -42,24 +42,6 @@ public class ModuleModelLocator implements ModelLocator {
     //                                //
     ////////////////////////////////////
 
-    /**
-     * The unique ID of this component
-     *
-     * @internal
-     *   Used to prevent a Cairngorm issue: when a command event is dispatched,
-     * every controller that registered this event type receives it, even if
-     * located in another module. To prevent this from happening and triggering
-     * multiple severe unexpected concurrence bugs, each event dispatched is
-     * postfixed with this unique ID.
-     */
-    public var componentID:String = UIDUtil.createUID();
-
-
-    /**
-     * Unique instance of this locator.
-     */
-    private static var moduleModel:ModuleModelLocator = null;
-
     ////////////////////////////////////////////
     //                                        //
     //             Variables Delegate         //
@@ -84,22 +66,6 @@ public class ModuleModelLocator implements ModelLocator {
 
     public function ModuleModelLocator() {
         super();
-
-        if (moduleModel != null) {
-            throw new Error("Only one ModelLocator has to be set");
-        }
-    }
-
-
-    /**
-     * Get the only created instance of the ModuleModelLocator
-     */
-    public static function getInstance():ModuleModelLocator {
-        if (ModuleModelLocator.moduleModel == null) {
-            ModuleModelLocator.moduleModel = new ModuleModelLocator();
-        }
-
-        return ModuleModelLocator.moduleModel;
     }
 
     ////////////////////////////////////

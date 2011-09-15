@@ -47,7 +47,7 @@
          * On view creation complete handler
          */
         private function creationCompleteHandler(even:Event = null):void {
-            CairngormEventDispatcher.getInstance().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+            Module1.getInstance().getDispatcher().addEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION, ServerSideExceptionEvent.show);
         }
 
         /**
@@ -55,17 +55,17 @@
          */
         public function destroy():void {
             // Remove all the event listener for avoid memory leaks
-            CairngormEventDispatcher.getInstance().removeEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID, ServerSideExceptionEvent.show);
+            Module1.getInstance().getDispatcher().removeEventListener(ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION, ServerSideExceptionEvent.show);
         }
 
         private function sendNormal():void {
             var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.NORMAL);
-            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+            Module1.getInstance().getDispatcher().dispatchEvent(event_module);
         }
 
         private function sendAdmin():void {
             var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.ADMIN);
-            CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+            Module1.getInstance().getDispatcher().dispatchEvent(event_module);
         }
         ]]>
     </fx:Script>
@@ -81,7 +81,7 @@
         <mx:Button label="{resourceManager.getString('module1Resources', 'normal.label')}" click="sendNormal()"/>
 
         <mx:Button label="{resourceManager.getString('module1Resources', 'admin.label')}" click="sendAdmin()"
-                   enabled="{ProfileManager.haveServiceAccess(ProfileModelLocator.getInstance().profile, LoginModelLocator.getInstance().session.roles, 'kerneos-module1', 'module1-service1', 'admin')}"/>
+                   enabled="{Module1.getInstance().haveAccess('module1-service1', 'admin')}"/>
 
         <mx:Button label="{resourceManager.getString('module1Resources', 'adminforce.label')}" click="sendAdmin()"/>
     </mx:Form>

@@ -36,7 +36,7 @@ public class PostDelegate extends AbsDelegateResponder implements IPostDelegate 
 
     public function post(post: PostVO):void {
         // find the service
-        var service:Object = ServiceLocator.getInstance().getRemoteObject("module2-serviceSync");
+        var service:Object = Module2.getInstance().getServices().getRemoteObject("module2-serviceSync");
 
         // Make the service call. The method called on service is the method name
         // of the java class bound with the remote object, with its parameters.
