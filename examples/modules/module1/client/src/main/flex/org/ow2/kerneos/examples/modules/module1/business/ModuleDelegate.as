@@ -34,7 +34,7 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
 
     public function normal():void {
         // find the service
-        var service:Object = ServiceLocator.getInstance().getRemoteObject("module1-service1");
+        var service:Object = Module1.getInstance().getServices().getRemoteObject("module1-service1");
 
         // Make the service call. The method called on service is the method name
         // of the java class bound with the remote object, with its parameters.
@@ -46,7 +46,7 @@ public class ModuleDelegate extends AbsDelegateResponder implements IModuleDeleg
 
     public function admin():void {
         // find the service
-        var service:Object = ServiceLocator.getInstance().getRemoteObject("module1-service1");
+        var service:Object = Module1.getInstance().getServices().getRemoteObject("module1-service1");
 
         // Make the service call. The method called on service is the method name
         // of the java class bound with the remote object, with its parameters.

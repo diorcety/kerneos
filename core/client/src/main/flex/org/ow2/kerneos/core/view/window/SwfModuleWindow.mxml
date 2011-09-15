@@ -92,7 +92,7 @@
             // If the module implements the interface KerneosModule,
             // trigger the closeModule() method
             if (getKerneosModule()) {
-                getKerneosModule().closeModule();
+                getKerneosModule().mx_internal::closeModule();
             }
 
             // Remove services & registred classes
@@ -141,6 +141,9 @@
          */
         private function registerServices():void {
             var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+            if (getKerneosModule()) {
+                serviceLocator = getKerneosModule().getServices();
+            }
 
             // Register services
             for each(var service:ServiceVO in (module as SWFModuleVO).services) {
@@ -170,6 +173,9 @@
          */
         private function unregisterServices():void {
             var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+            if (getKerneosModule()) {
+                serviceLocator = getKerneosModule().getServices();
+            }
 
             for each(var service:ServiceVO in (module as SWFModuleVO).services) {
                 if (service.asynchronous) {
@@ -191,6 +197,10 @@
             try {
                 registerServices();
                 registerClasses();
+                if (getKerneosModule()) {
+                    getKerneosModule().mx_internal::setConfiguration(module);
+                    getKerneosModule().mx_internal::openModule();
+                }
                 state = "loaded";
             } catch(e:Error) {
                 trace(e);

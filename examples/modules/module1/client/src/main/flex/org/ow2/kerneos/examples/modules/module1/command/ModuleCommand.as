@@ -42,7 +42,6 @@ import org.ow2.kerneos.examples.modules.module1.model.ModuleModelLocator;
 /**
  * The command class from the cairngorm model.
  */
-[Event(name="serverSideException", type="org.ow2.kerneos.common.event.ServerSideExceptionEvent")]
 public class ModuleCommand implements ICommand, IResponder {
     /**
      * Retrieve the delegate and use it to make the call.
@@ -54,7 +53,7 @@ public class ModuleCommand implements ICommand, IResponder {
         //                                            //
         ////////////////////////////////////////////////
 
-        var delegate:IModuleDelegate = ModuleModelLocator.getInstance().getMyDelegate();
+        var delegate:IModuleDelegate = Module1.getInstance().getModel().getMyDelegate();
         delegate.responder = this;
         if (event.type == ModuleEvent.NORMAL) {
             delegate.normal();
@@ -81,14 +80,14 @@ public class ModuleCommand implements ICommand, IResponder {
         //             Handle fault           //
         //                                    //
         ////////////////////////////////////////
-        if (!ErrorManager.handleError(event, ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID)) {
+        if (!ErrorManager.handleError(event, ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION, Module1.getInstance().getDispatcher())) {
             // Retrieve the fault event
             var faultEvent:FaultEvent = FaultEvent(event);
 
             // Tell the view and let it handle this
             var serverSideExceptionEvent:ServerSideExceptionEvent =
                     new ServerSideExceptionEvent(
-                            ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION + ModuleModelLocator.getInstance().componentID,
+                            ServerSideExceptionEvent.SERVER_SIDE_EXCEPTION,
                             new ServerSideException("Error while Executing the action",
                                     "The operation could not be performed."
                                             + "\n" + faultEvent.fault.faultCode
@@ -96,7 +95,7 @@ public class ModuleCommand implements ICommand, IResponder {
                                     faultEvent.fault.getStackTrace()));
 
             // Dispatch the event using the cairngorm event dispatcher
-            CairngormEventDispatcher.getInstance().dispatchEvent(serverSideExceptionEvent);
+            Module1.getInstance().getDispatcher().dispatchEvent(serverSideExceptionEvent);
         }
     }
 
