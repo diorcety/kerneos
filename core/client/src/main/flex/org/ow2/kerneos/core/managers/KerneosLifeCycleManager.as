@@ -162,6 +162,7 @@ public class KerneosLifeCycleManager {
      */
     public static function setApplication(application:ApplicationVO):void {
         KerneosModelLocator.getInstance().application = application;
+        ResourcesManager.loadLocale();
     }
 
 

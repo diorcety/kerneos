@@ -145,6 +145,8 @@ mx|Alert {
 .flags {
     fr-FR: Embed(source = "images/flags/fr_FR.png");
     en-US: Embed(source = "images/flags/en_US.png");
+    it-IT: Embed(source = "images/flags/it_IT.png");
+    de-DE: Embed(source = "images/flags/de_DE.png");
 }
 
 /*******************************************************************************

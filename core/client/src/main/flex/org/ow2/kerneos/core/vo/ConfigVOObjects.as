@@ -27,6 +27,7 @@ import org.ow2.kerneos.common.vo.ApplicationVO;
 import org.ow2.kerneos.common.vo.AuthenticationVO;
 import org.ow2.kerneos.common.vo.FolderVO;
 import org.ow2.kerneos.common.vo.IFrameModuleVO;
+import org.ow2.kerneos.common.vo.LanguageVO;
 import org.ow2.kerneos.common.vo.LinkVO;
 import org.ow2.kerneos.common.vo.MappingVO;
 import org.ow2.kerneos.common.vo.ModuleEventVO;
@@ -41,6 +42,7 @@ public class ConfigVOObjects {
     private static var dictionary:Dictionary = new Dictionary();
 
     dictionary["org.ow2.kerneos.core.config.generated.Application"] = ApplicationVO;
+    dictionary["org.ow2.kerneos.core.config.generated.Language"] = LanguageVO;
     dictionary["org.ow2.kerneos.core.config.generated.Authentication"] = AuthenticationVO;
     dictionary["org.ow2.kerneos.core.config.generated.Folder"] = FolderVO;
     dictionary["org.ow2.kerneos.core.config.generated.IframeModule"] = IFrameModuleVO;

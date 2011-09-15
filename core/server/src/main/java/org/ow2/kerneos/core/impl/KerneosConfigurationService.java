@@ -255,9 +255,9 @@ public final class KerneosConfigurationService implements GraniteDestination {
      */
     private void transformApplication(Application application, String name) {
         // Correctly format URL
-        if(!application.getApplicationUrl().startsWith("/"))
+        if (!application.getApplicationUrl().startsWith("/"))
             application.setApplicationUrl("/" + application.getApplicationUrl());
-        if(application.getApplicationUrl().endsWith("/"))
+        if (application.getApplicationUrl().endsWith("/"))
             application.setApplicationUrl(application.getApplicationUrl().substring(0, application.getApplicationUrl().length() - 1));
     }
 
@@ -444,7 +444,8 @@ public final class KerneosConfigurationService implements GraniteDestination {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
                 // Deserialize the application file
-                return (Application) unmarshaller.unmarshal(resource);
+                JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
+                return (Application) element.getValue();
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;

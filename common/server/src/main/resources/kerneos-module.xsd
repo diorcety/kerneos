@@ -175,7 +175,7 @@
 
   <xs:complexType name="mapping">
     <xs:attribute name="java" use="required" type="xs:string"/>
-    <xs:attribute name="flex" type="xs:string"/>
+    <xs:attribute name="flex" use="required" type="xs:string"/>
   </xs:complexType>
 
 

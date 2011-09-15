@@ -105,10 +105,6 @@
 
                 // Update the displayed label
                 progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
-                        'kerneos.startup.setup-modules-icon-cache');
-
-                // Update the displayed label
-                progressBar.label = ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
                         'kerneos.startup.ready');
 
                 KerneosModelLocator.getInstance().state = KerneosState.APPLICATION_LOADED;

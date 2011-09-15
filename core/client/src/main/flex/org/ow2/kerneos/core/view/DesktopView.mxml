@@ -49,10 +49,8 @@
         <![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.collections.ArrayCollection;
-        import mx.collections.ArrayList;
         import mx.collections.Sort;
         import mx.collections.SortField;
-        import mx.core.FlexGlobals;
         import mx.events.CollectionEvent;
         import mx.resources.ResourceManager;
         import mx.controls.Alert;
@@ -64,12 +62,10 @@
 
         import org.ow2.kerneos.common.util.IconUtility;
         import org.ow2.kerneos.common.managers.LanguagesManager;
-
         import org.ow2.kerneos.core.api.KerneosModule;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
         import org.ow2.kerneos.core.managers.NotificationsManager;
         import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
-        import org.ow2.kerneos.core.managers.SharedObjectManager;
         import org.ow2.kerneos.core.model.KerneosModelLocator;
         import org.ow2.kerneos.core.model.ModulesState;
         import org.ow2.kerneos.core.view.notification.NotificationPopUp;

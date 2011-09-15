@@ -29,6 +29,7 @@ import org.ow2.kerneos.core.ModuleEvent;
 import org.ow2.kerneos.core.config.generated.Application;
 import org.ow2.kerneos.core.config.generated.Authentication;
 import org.ow2.kerneos.core.config.generated.IframeModule;
+import org.ow2.kerneos.core.config.generated.Language;
 import org.ow2.kerneos.core.config.generated.Mapping;
 import org.ow2.kerneos.core.config.generated.Module;
 import org.ow2.kerneos.core.config.generated.PromptBeforeClose;
@@ -46,6 +47,7 @@ public class ConfigObjects {
     private final static Class[] list = new Class[]{
             Service.class,
             Application.class,
+            Language.class,
             Mapping.class,
             Module.class,
             ModuleEvent.class,

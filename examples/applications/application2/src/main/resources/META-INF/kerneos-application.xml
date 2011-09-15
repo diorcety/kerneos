@@ -62,7 +62,11 @@
   <show-confirm-close-dialog>true</show-confirm-close-dialog>
 
   <!-- Default language of Kerneos. values : fr_FR or en_US -->
-  <default-language>en_US</default-language>
+  <default-locale>en_US</default-locale>
+
+  <languages>
+    <language name="English" locale="en_US"/>
+  </languages>
 
   <!-- Authentication method-->
   <authentication>flex</authentication>

@@ -25,6 +25,8 @@ package org.ow2.kerneos.common.vo {
 
 import com.adobe.cairngorm.vo.IValueObject;
 
+import mx.collections.ArrayCollection;
+
 
 /**
  * A data object that describes a configuration for Kerneos.
@@ -98,7 +100,14 @@ public class ApplicationVO implements IValueObject {
     /**
      * Set the default language used in Kerneos when loading.
      */
-    public var defaultLanguage:String = "en_US";
+    public var defaultLocale:String;
+
+
+    /**
+     * Set defined languages
+     */
+    [ArrayElementType('org.ow2.kerneos.common.vo.LanguageVO')]
+    public var languages:ArrayCollection = null;
 
     /**
      * Set the default language used in Kerneos when loading.
