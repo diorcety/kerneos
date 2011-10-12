@@ -50,12 +50,12 @@ import org.ow2.kerneos.core.KerneosConstants;
 import org.ow2.kerneos.core.config.generated.Mapping;
 import org.ow2.kerneos.core.config.generated.Service;
 import org.ow2.kerneos.core.config.generated.SwfModule;
-import org.ow2.kerneos.core.service.KerneosAsynchronous;
-import org.ow2.kerneos.core.service.KerneosAsynchronousService;
-import org.ow2.kerneos.core.service.KerneosFactory;
-import org.ow2.kerneos.core.service.KerneosFactoryService;
-import org.ow2.kerneos.core.service.KerneosService;
-import org.ow2.kerneos.core.service.KerneosSimpleService;
+import org.ow2.kerneos.core.service.api.KerneosAsynchronous;
+import org.ow2.kerneos.core.service.api.KerneosAsynchronousService;
+import org.ow2.kerneos.core.service.api.KerneosFactory;
+import org.ow2.kerneos.core.service.api.KerneosFactoryService;
+import org.ow2.kerneos.core.service.api.KerneosService;
+import org.ow2.kerneos.core.service.api.KerneosSimpleService;
 import org.ow2.kerneos.core.impl.granite.GraniteFactoryWrapper;
 import org.ow2.kerneos.core.impl.granite.GraniteSimpleWrapper;
 
