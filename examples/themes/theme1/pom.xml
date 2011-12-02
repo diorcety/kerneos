@@ -45,7 +45,7 @@
     <!-- Kerneos Flex -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-core-client</artifactId>
+      <artifactId>kerneos-flex-client</artifactId>
       <version>2.1.0-SNAPSHOT</version>
       <type>xml</type>
       <classifier>link-report</classifier>

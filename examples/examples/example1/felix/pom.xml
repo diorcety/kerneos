@@ -211,16 +211,46 @@
                 <!-- Kerneos -->
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-core-server</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-api-server</artifactId>
+                  <artifactId>kerneos-core-api</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-core-common</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <dependency>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-login-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </dependency>
+                <dependency>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-profile-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </dependency>
+                <dependency>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-roles-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </dependency>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-profile-fileinstall</artifactId>

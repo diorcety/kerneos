@@ -29,9 +29,9 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -40,21 +40,23 @@ import org.ow2.util.log.LogFactory;
 @Component
 @Instantiate
 @Provides
-
-@KerneosService(id = "module1-service1")
 public class Service implements KerneosSimpleService {
 
     /**
      * The logger
      */
-    private static Log logger = LogFactory.getLog(Service.class);
+    private static Log LOGGER = LogFactory.getLog(Service.class);
+
+
+    @ServiceProperty(name = KerneosSimpleService.ID, value = "module1-service1")
+    private String id;
 
     /**
      * Start
      */
     @Validate
     private void start() {
-        logger.info("Start Module1 - Service1");
+        LOGGER.info("Start Module1 - Service1");
     }
 
     /**
@@ -62,7 +64,7 @@ public class Service implements KerneosSimpleService {
      */
     @Invalidate
     private void stop() {
-        logger.info("Stop Module1 - Service1");
+        LOGGER.info("Stop Module1 - Service1");
     }
 
     public String normal() {

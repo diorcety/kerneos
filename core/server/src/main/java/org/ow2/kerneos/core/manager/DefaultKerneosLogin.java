@@ -31,8 +31,8 @@ import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
-import org.ow2.kerneos.core.KerneosContext;
-import org.ow2.kerneos.login.Session;
+import org.ow2.kerneos.login.KerneosLogin;
+import org.ow2.kerneos.login.KerneosSession;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -45,13 +45,13 @@ public class DefaultKerneosLogin implements KerneosLogin {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(DefaultKerneosLogin.class);
+    private static Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
-    @Property(name = "ID", mandatory = true)
-    @ServiceProperty(name = "ID")
+    @Property(name = KerneosLogin.ID, mandatory = true)
+    @ServiceProperty(name = KerneosLogin.ID)
     private String ID;
 
     /**
@@ -59,7 +59,7 @@ public class DefaultKerneosLogin implements KerneosLogin {
      */
     @Validate
     private void start() throws IOException {
-        logger.debug("Start DefaultKerneosLogin(" + ID + ")");
+        LOGGER.debug("Start DefaultKerneosLogin(" + ID + ")");
     }
 
     /**
@@ -67,7 +67,7 @@ public class DefaultKerneosLogin implements KerneosLogin {
      */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop DefaultKerneosLogin(" + ID + ")");
+        LOGGER.debug("Stop DefaultKerneosLogin(" + ID + ")");
     }
 
 
@@ -76,16 +76,16 @@ public class DefaultKerneosLogin implements KerneosLogin {
             LinkedList roles = new LinkedList<String>();
             roles.add(user);
 
-            KerneosContext.getCurrentContext().getSession().setUsername(user);
-            KerneosContext.getCurrentContext().getSession().setRoles(roles);
+            KerneosSession.getCurrent().setUsername(user);
+            KerneosSession.getCurrent().setRoles(roles);
         }
     }
 
     public void logout() {
-        KerneosContext.getCurrentContext().getSession().reset();
+        KerneosSession.getCurrent().reset();
     }
 
-    public Session newSession() {
-        return new Session();
+    public KerneosSession newSession() {
+        return new KerneosSession();
     }
 }

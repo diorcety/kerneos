@@ -30,12 +30,12 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
-import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 
 import org.ow2.util.log.Log;
@@ -51,12 +51,11 @@ import java.util.Hashtable;
 @Component
 @Instantiate
 @Provides
-@KerneosService(id = "module2-serviceSync")
 public class SyncService implements KerneosSimpleService {
     /**
      * The logger
      */
-    private static Log logger = LogFactory.getLog(SyncService.class);
+    private static Log LOGGER = LogFactory.getLog(SyncService.class);
 
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
@@ -66,12 +65,17 @@ public class SyncService implements KerneosSimpleService {
     @Requires
     private EventAdmin eventAdmin;
 
+
+    @ServiceProperty(name = KerneosSimpleService.ID, value = "module2-serviceSync")
+    private String id;
+
+
     /**
      * Start
      */
     @Validate
     private void start() {
-        logger.info("Start Module2 - ServiceSync");
+        LOGGER.info("Start Module2 - ServiceSync");
     }
 
     /**
@@ -79,7 +83,7 @@ public class SyncService implements KerneosSimpleService {
      */
     @Invalidate
     private void stop() {
-        logger.info("Stop Module2 - ServiceSync");
+        LOGGER.info("Stop Module2 - ServiceSync");
     }
 
     /**

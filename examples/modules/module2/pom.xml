@@ -41,55 +41,8 @@
 
   <name>Kerneos Examples :: Modules :: Module 2</name>
 
-  <properties>
-    <osgi.compendium.version>4.2.0</osgi.compendium.version>
-  </properties>
-
   <modules>
     <module>client</module>
     <module>server</module>
   </modules>
-
-  <dependencyManagement>
-    <dependencies>
-      <!-- Kerneos -->
-      <dependency>
-        <groupId>org.ow2.kerneos</groupId>
-        <artifactId>kerneos-core-client</artifactId>
-        <version>${kerneos.version}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.kerneos</groupId>
-        <artifactId>kerneos-api-server</artifactId>
-        <version>${kerneos.version}</version>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-        <version>${ipojo.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>org.osgi.compendium</artifactId>
-        <version>${osgi.compendium.version}</version>
-      </dependency>
-
-      <!-- Flex -->
-      <dependency>
-        <groupId>com.adobe.flex.framework</groupId>
-        <artifactId>flex-framework</artifactId>
-        <version>${flex.version}</version>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 </project>

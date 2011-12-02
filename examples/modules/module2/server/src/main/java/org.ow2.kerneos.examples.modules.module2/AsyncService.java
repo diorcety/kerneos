@@ -29,12 +29,10 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.ow2.kerneos.core.service.KerneosAsynchronous;
 import org.ow2.kerneos.core.service.KerneosAsynchronousService;
-import org.ow2.kerneos.core.service.KerneosService;
-
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -42,24 +40,27 @@ import org.ow2.util.log.LogFactory;
 @Component
 @Instantiate
 @Provides
-
-// Don't forget to add all the classes used by the service but no used directly by this class
-@KerneosService(id = "module2-serviceAsync")
-@KerneosAsynchronous(type = KerneosAsynchronous.TYPE.EVENTADMIN, properties = {
-        @KerneosAsynchronous.Property(name = "prefix", value = "kerneos-module2/")}
-)
 public class AsyncService implements KerneosAsynchronousService {
     /**
      * The logger
      */
-    private static Log logger = LogFactory.getLog(AsyncService.class);
+    private static Log LOGGER = LogFactory.getLog(AsyncService.class);
+
+    @ServiceProperty(name = KerneosAsynchronousService.ID, value = "module2-serviceAsync")
+    private String id;
+
+    @ServiceProperty(name = KerneosAsynchronousService.TYPE, value = Type.EVENTADMIN)
+    private String type;
+
+    @ServiceProperty(name = "prefix", value = "kerneos-module2/")
+    private String prefix;
 
     /**
      * Start
      */
     @Validate
     private void start() {
-        logger.info("Start Module2 - ServiceSync");
+        LOGGER.info("Start Module2 - ServiceSync");
     }
 
     /**
@@ -67,6 +68,6 @@ public class AsyncService implements KerneosAsynchronousService {
      */
     @Invalidate
     private void stop() {
-        logger.info("Stop Module2 - ServiceSync");
+        LOGGER.info("Stop Module2 - ServiceSync");
     }
 }

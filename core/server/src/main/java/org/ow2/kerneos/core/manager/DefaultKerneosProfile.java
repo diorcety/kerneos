@@ -31,6 +31,7 @@ import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
+import org.ow2.kerneos.profile.KerneosProfile;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.kerneos.profile.config.generated.ProfilePolicy;
 import org.ow2.util.log.Log;
@@ -44,13 +45,13 @@ public class DefaultKerneosProfile implements KerneosProfile {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(DefaultKerneosLogin.class);
+    private static Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
-    @Property(name = "ID", mandatory = true)
-    @ServiceProperty(name = "ID")
+    @Property(name = KerneosProfile.ID, mandatory = true)
+    @ServiceProperty(name = KerneosProfile.ID)
     private String ID;
 
     /**
@@ -58,7 +59,7 @@ public class DefaultKerneosProfile implements KerneosProfile {
      */
     @Validate
     private void start() throws IOException {
-        logger.debug("Start DefaultKerneosProfile(" + ID + ")");
+        LOGGER.debug("Start DefaultKerneosProfile(" + ID + ")");
     }
 
     /**
@@ -66,7 +67,7 @@ public class DefaultKerneosProfile implements KerneosProfile {
      */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop DefaultKerneosProfile(" + ID + ")");
+        LOGGER.debug("Stop DefaultKerneosProfile(" + ID + ")");
     }
 
     public Profile getProfile() {

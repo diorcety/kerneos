@@ -34,13 +34,11 @@ import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.granite.gravity.osgi.adapters.ea.EAConstants;
-
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
-import org.ow2.kerneos.core.KerneosConstants;
-import org.ow2.kerneos.core.manager.KerneosProfile;
+import org.ow2.kerneos.common.KerneosConstants;
+import org.ow2.kerneos.profile.KerneosProfile;
 import org.ow2.kerneos.profile.config.generated.ObjectFactory;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.util.log.Log;
@@ -62,13 +60,13 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(ProfileFileInstall.class);
+    private static final Log LOGGER = LogFactory.getLog(ProfileFileInstall.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
-    @Property(name = "ID", mandatory = true)
-    @ServiceProperty(name = "ID")
+    @Property(name = KerneosProfile.ID, mandatory = true)
+    @ServiceProperty(name = KerneosProfile.ID)
     private String ID;
 
     /**
@@ -108,7 +106,7 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
      */
     @Validate
     private void start() throws IOException {
-        logger.debug("Start ProfileFileInstall(" + ID + ")");
+        LOGGER.debug("Start ProfileFileInstall(" + ID + ")");
     }
 
     /**
@@ -116,7 +114,7 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
      */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop ProfileFileInstall(" + ID + ")");
+        LOGGER.debug("Stop ProfileFileInstall(" + ID + ")");
     }
 
 
@@ -126,13 +124,13 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
 
             // Send message
             Dictionary<String, Object> properties = new Hashtable<String, Object>();
-            properties.put(EAConstants.DATA, profile);
-            Event event = new Event(KerneosConstants.KERNEOS_PROFILE_TOPIC + "/" + ID, properties);
+            properties.put(KerneosConstants.KERNEOS_TOPIC_DATA, profile);
+            Event event = new Event(KerneosConstants.KERNEOS_APPLICATION_TOPIC + "/" + ID + KerneosConstants.KERNEOS_PROFILE_SUFFIX, properties);
             eventAdmin.sendEvent(event);
 
-            logger.info("New Kerneos Profile(" + ID + "): " + file.getPath());
+            LOGGER.info("New Kerneos Profile(" + ID + "): " + file.getPath());
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + file.getPath());
+            LOGGER.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + file.getPath());
         }
     }
 
@@ -142,22 +140,22 @@ public class ProfileFileInstall implements ArtifactInstaller, KerneosProfile {
 
             // Send message
             Dictionary<String, Object> properties = new Hashtable<String, Object>();
-            properties.put(EAConstants.DATA, profile);
-            Event event = new Event(KerneosConstants.KERNEOS_PROFILE_TOPIC + "/" + ID, properties);
+            properties.put(KerneosConstants.KERNEOS_TOPIC_DATA, profile);
+            Event event = new Event(KerneosConstants.KERNEOS_APPLICATION_TOPIC + "/" + ID + KerneosConstants.KERNEOS_PROFILE_SUFFIX, properties);
             eventAdmin.sendEvent(event);
 
-            logger.info("Update Kerneos Profile(" + ID + "): " + file.getPath());
+            LOGGER.info("Update Kerneos Profile(" + ID + "): " + file.getPath());
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + file.getPath());
+            LOGGER.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + file.getPath());
         }
     }
 
     public synchronized void uninstall(File file) throws Exception {
         try {
             profile = null;
-            logger.info("Delete Kerneos Profile(" + ID + "): " + file.getPath());
+            LOGGER.info("Delete Kerneos Profile(" + ID + "): " + file.getPath());
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + file.getPath());
+            LOGGER.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + file.getPath());
         }
     }
 

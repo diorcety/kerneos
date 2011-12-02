@@ -32,9 +32,8 @@ import org.apache.felix.ipojo.annotations.Provides;
 
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
-import org.ow2.kerneos.core.KerneosContext;
-import org.ow2.kerneos.core.manager.KerneosLogin;
-import org.ow2.kerneos.login.Session;
+import org.ow2.kerneos.login.KerneosLogin;
+import org.ow2.kerneos.login.KerneosSession;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -51,10 +50,10 @@ public class LoginService implements KerneosLogin {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(LoginService.class);
+    private static Log LOGGER = LogFactory.getLog(LoginService.class);
 
-    @Property(name = "ID", mandatory = true)
-    @ServiceProperty(name = "ID")
+    @Property(name = KerneosLogin.ID, mandatory = true)
+    @ServiceProperty(name = KerneosLogin.ID)
     private String ID;
 
     @Property(name = "module", mandatory = true)
@@ -67,12 +66,12 @@ public class LoginService implements KerneosLogin {
 
     @Validate
     private void start() throws IOException {
-        logger.debug("Start LoginService(" + ID + ")");
+        LOGGER.debug("Start LoginService(" + ID + ")");
     }
 
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop LoginService(" + ID + ")");
+        LOGGER.debug("Stop LoginService(" + ID + ")");
     }
 
     public void login(final String application, final String user, final String password) {
@@ -89,17 +88,17 @@ public class LoginService implements KerneosLogin {
                 roles.add(principal.getName());
             }
 
-            KerneosContext.getCurrentContext().getSession().setUsername(user);
-            KerneosContext.getCurrentContext().getSession().setRoles(roles);
+            KerneosSession.getCurrent().setUsername(user);
+            KerneosSession.getCurrent().setRoles(roles);
         } catch (Exception e) {
         }
     }
 
     public void logout() {
-        KerneosContext.getCurrentContext().getSession().reset();
+        KerneosSession.getCurrent().reset();
     }
 
-    public Session newSession() {
-        return new Session();
+    public KerneosSession newSession() {
+        return new KerneosSession();
     }
 }

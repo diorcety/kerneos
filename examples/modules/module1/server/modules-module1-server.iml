@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Osmorc" name="OSGi">
+      <configuration osmorcControlsManifest="true" manifestLocation="" jarfileLocation="modules-module1-server-1.0.0-SNAPSHOT.jar" outputPathType="CompilerOutputPath" useBndFile="false" bndFileLocation="" useBundlorFile="false" bundlorFileLocation="" bundleActivator="" bundleSymbolicName="org.ow2.kerneos.examples.modules-module1-server" bundleVersion="1.0.0.SNAPSHOT" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="false">
+        <additionalProperties>
+          <property key="Bundle-Description" value="The OW2 Consortium is an open source community committed to making available to everyone thebest and most reliable middleware technology. OW2 mission is to develop open source codemiddleware and to foster a vibrant community and business ecosystem." />
+          <property key="Bundle-Vendor" value="OW2 Consortium" />
+          <property key="Bundle-DocURL" value="http://www.ow2.org" />
+          <property key="Kerneos-Module" value="kerneos-module1" />
+          <property key="Include-Resource" value="src/main/resources,KERNEOS=src/main/kerneos,KERNEOS=/home/blackhorn/Bureau/kerneos/examples/modules/module1/server/target/resources" />
+          <property key="Bundle-Name" value="Kerneos Examples :: Modules :: Module 1 :: Server" />
+        </additionalProperties>
+        <additionalJARContents />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/test-annotations" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/target/resources" />
+      <excludeFolder url="file://$MODULE_DIR$/target/surefire" />
+      <excludeFolder url="file://$MODULE_DIR$/target/surefire-reports" />
+      <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
+    <orderEntry type="module" module-name="kerneos-core-api" scope="PROVIDED" />
+    <orderEntry type="module" module-name="kerneos-login-api" scope="PROVIDED" />
+    <orderEntry type="module" module-name="kerneos-profile-api" scope="PROVIDED" />
+    <orderEntry type="module" module-name="kerneos-roles-api" scope="PROVIDED" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.util:util-log:1.0.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.util:util-i18n:1.0.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging-api:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.felix:org.apache.felix.ipojo.annotations:1.8.0" level="project" />
+  </component>
+</module>
+

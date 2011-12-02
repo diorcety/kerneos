@@ -127,13 +127,12 @@
   </pluginRepositories>
 
   <modules>
-    <module>api</module>
     <module>archetypes</module>
     <module>core</module>
-    <module>common</module>
-    <module>libs</module>
+    <module>flex</module>
     <module>login</module>
     <module>profile</module>
+    <module>roles</module>
     <module>examples</module>
     <module>documentation</module>
   </modules>

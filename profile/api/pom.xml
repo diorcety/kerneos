@@ -39,10 +39,18 @@
   <artifactId>kerneos-profile-api</artifactId>
   <name>Kerneos :: Profile :: API</name>
 
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+          </instructions>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
         <artifactId>maven-jaxb2-plugin</artifactId>

@@ -41,13 +41,6 @@
 
   <name>Kerneos Examples :: Modules</name>
 
-  <properties>
-    <flexmojos.version>4.0-beta-7</flexmojos.version>
-    <flex.version>4.5.0.20967</flex.version>
-    <ipojo.version>1.8.0</ipojo.version>
-    <junit.version>3.8.1</junit.version>
-  </properties>
-
   <repositories>
     <repository>
       <id>flexmojos-repository</id>
@@ -106,7 +99,6 @@
     <module>module2</module>
     <module>module3</module>
   </modules>
-
 
   <build>
     <pluginManagement>

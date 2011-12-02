@@ -60,7 +60,6 @@
     <org.apache.felix.ipojo.handler.eventadmin.version>1.6.0</org.apache.felix.ipojo.handler.eventadmin.version>
     <org.apache.felix.ipojo.handler.extender.version>1.4.0</org.apache.felix.ipojo.handler.extender.version>
     <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
-    <org.osgi.compendium.version>1.4.0</org.osgi.compendium.version>
     <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
     <com.springsource.javax.transaction.version>1.1.0</com.springsource.javax.transaction.version>
     <com.springsource.javax.jms.version>1.1.0</com.springsource.javax.jms.version>
@@ -231,7 +230,32 @@
       </dependency>
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
-        <artifactId>kerneos-api-server</artifactId>
+        <artifactId>kerneos-core-api</artifactId>
+        <version>${kerneos.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-core-common</artifactId>
+        <version>${kerneos.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-flex-server</artifactId>
+        <version>${kerneos.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-login-api</artifactId>
+        <version>${kerneos.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-profile-api</artifactId>
+        <version>${kerneos.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-roles-api</artifactId>
         <version>${kerneos.version}</version>
       </dependency>
       <dependency>
