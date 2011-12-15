@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Kerneos
+  - Copyright (C) 2011 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.ow2.kerneos</groupId>
+    <artifactId>kerneos-flex-examples-examples-example1</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>kerneos-flex-examples-examples-example1-war</artifactId>
+  <name>Kerneos :: Flex :: Examples :: Examples :: Example 1 :: War</name>
+
+  <packaging>war</packaging>
+
+  <repositories>
+    <repository>
+      <id>ops4j.repository</id>
+      <url>http://repository.ops4j.org/maven2</url>
+    </repository>
+    <repository>
+      <id>repo objectweb</id>
+      <url>http://maven.objectweb.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>repo objectweb snapshots</id>
+      <url>http://maven.objectweb.org/maven2-snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.framework</artifactId>
+      <version>3.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.http.proxy</artifactId>
+      <version>2.2.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <!-- War bridging & HTTP -->
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.http.bridge</artifactId>
+                  <version>2.2.0</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.webconsole</artifactId>
+                  <version>3.1.8</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.shell</artifactId>
+                  <version>1.4.2</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.arch</artifactId>
+                  <version>1.6.0</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- Log -->
+                <artifactItem>
+                  <groupId>org.ops4j.pax.confman</groupId>
+                  <artifactId>pax-confman-propsloader</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ops4j.pax.logging</groupId>
+                  <artifactId>pax-logging-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ops4j.pax.logging</groupId>
+                  <artifactId>pax-logging-service</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.bundles</groupId>
+                  <artifactId>ow2-util-i18n</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.bundles</groupId>
+                  <artifactId>ow2-util-log</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- OSGi -->
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.osgi.compendium</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.configadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.fileinstall</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- iPOJO -->
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- GraniteDS -->
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-core</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-gravity-ea</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-gravity</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- Kerneos -->
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-core-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-profile-fileinstall</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- Applications -->
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>applications-application1</artifactId>
+                  <version>${project.version}</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>applications-application2</artifactId>
+                  <version>${project.version}</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- Modules -->
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>modules-module1-server</artifactId>
+                  <version>${project.version}</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>modules-module2-server</artifactId>
+                  <version>${project.version}</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>
+                ${project.build.directory}/bundles
+              </directory>
+              <targetPath>WEB-INF/bundles</targetPath>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

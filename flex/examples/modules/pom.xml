@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2011 Bull S.A.S.
+  - Copyright (C) 2008-2011 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -31,34 +31,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos</artifactId>
+    <artifactId>kerneos-flex-examples</artifactId>
     <version>2.1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>kerneos-flex</artifactId>
-  <name>Kerneos :: Flex</name>
-
+  <artifactId>kerneos-flex-examples-modules</artifactId>
   <packaging>pom</packaging>
 
-  <properties>
-    <!-- GraniteDS -->
-    <graniteds-osgi.version>1.0.0-M2-SNAPSHOT</graniteds-osgi.version>
-
-    <!-- Flex -->
-    <cairngorm.version>2.2.5-SNAPSHOT</cairngorm.version>
-    <flexlib.version>2.6-M2</flexlib.version>
-    <flexiframe.version>1.4.3</flexiframe.version>
-    <flex.version>4.5.0.20967</flex.version>
-    <player.version>10.2</player.version>
-    <swf.version>11</swf.version>
-
-    <!-- Plugins -->
-    <flexmojos.version>4.0-beta-7</flexmojos.version>
-
-    <!-- Settings -->
-    <asdoc.aggregate>true</asdoc.aggregate>
-  </properties>
+  <name>Kerneos :: Flex :: Examples :: Modules</name>
 
   <repositories>
     <repository>
@@ -71,12 +52,7 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <repository>
-      <id>flex-iframe</id>
-      <url>http://flex-iframe.googlecode.com/svn/maven2</url>
-    </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>flexmojos-repository-plugin</id>
@@ -96,6 +72,8 @@
     <profile>
       <id>dev</id>
       <properties>
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+        <maven.test.skip>false</maven.test.skip>
         <flex-debug>true</flex-debug>
         <flex-optimize>false</flex-optimize>
         <flex-verbose-stacktraces>true</flex-verbose-stacktraces>
@@ -105,6 +83,9 @@
     <!-- Production profile -->
     <profile>
       <id>production</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <properties>
         <flex-debug>false</flex-debug>
         <flex-optimize>true</flex-optimize>
@@ -112,6 +93,12 @@
       </properties>
     </profile>
   </profiles>
+
+  <modules>
+    <module>module1</module>
+    <module>module2</module>
+    <module>module3</module>
+  </modules>
 
   <build>
     <pluginManagement>
@@ -128,7 +115,6 @@
             <optimize>${flex-optimize}</optimize>
             <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
             <targetPlayer>${player.version}</targetPlayer>
-            <swfVersion>${swf.version}</swfVersion>
           </configuration>
           <dependencies>
             <dependency>
@@ -142,17 +128,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <modules>
-    <module>api</module>
-    <module>client</module>
-    <module>common</module>
-    <module>examples</module>
-    <module>libs</module>
-    <module>login</module>
-    <module>profile</module>
-    <module>server</module>
-    <module>theme</module>
-  </modules>
-
 </project>
