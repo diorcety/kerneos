@@ -46,19 +46,30 @@
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.ow2.bundles</groupId>
       <artifactId>ow2-util-log</artifactId>
     </dependency>
 
+    <!-- OSGi -->
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+    </dependency>
+
     <!-- iPOJO -->
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+      <artifactId>org.apache.felix.ipojo</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
     </dependency>
 
     <!-- Kerneos Server -->
@@ -128,12 +139,6 @@
       <version>${graniteds-osgi.version}</version>
       <scope>provided</scope>
     </dependency>
-
-    <!-- Test -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
   </dependencies>
 
   <build>
@@ -192,19 +197,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-ipojo-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>ipojo-bundle</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.8.1</version>
       </plugin>
     </plugins>
   </build>

@@ -131,12 +131,6 @@
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundle</outputDirectory>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.felix</groupId>
-                  <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundle</outputDirectory>
-                </artifactItem>
 
                 <!-- GraniteDS -->
                 <artifactItem>

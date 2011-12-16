@@ -29,8 +29,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.ow2.util</groupId>
-      <artifactId>util-log</artifactId>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-log</artifactId>
       <version>1.0.10</version>
       <scope>provided</scope>
     </dependency>

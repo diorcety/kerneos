@@ -32,7 +32,6 @@ public class ApplicationImpl implements KerneosApplication {
     private Application configuration;
 
     @Property(name = BUNDLE)
-    @ServiceProperty(name = KerneosApplication.BUNDLE)
     private long bundle;
 
     @Requires(id = LOGIN)

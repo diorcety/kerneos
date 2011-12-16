@@ -65,7 +65,7 @@ import java.util.Hashtable;
 @Component
 @Provides
 public class FlexHttpService implements HttpContext {
-
+    public final static String APPLICATION = "APPLICATION";
     /**
      * The logger.
      */
@@ -88,13 +88,14 @@ public class FlexHttpService implements HttpContext {
     @Requires
     private KerneosSecurityService kerneosSecurityService;
 
-    @Requires(id = "application")
+    @Requires(id = APPLICATION)
     private KerneosApplication application;
 
     @Requires
     private ICore core;
 
     private Configuration gavityChannel, graniteChannel;
+    private String applicationURL;
 
     /**
      * Called when all the component dependencies are met.
@@ -106,7 +107,7 @@ public class FlexHttpService implements HttpContext {
         id = application.getId();
 
         // Register Granite/Gravity channels
-        String applicationURL = application.getConfiguration().getApplicationUrl();
+        applicationURL = application.getConfiguration().getApplicationUrl();
         {
             Dictionary properties = new Hashtable();
             properties.put("id", FlexConstants.GRAVITY_CHANNEL + application.getId());
@@ -126,9 +127,9 @@ public class FlexHttpService implements HttpContext {
             graniteChannel.update(properties);
         }
 
+        LOGGER.info("Create Map \"" + application + "\" -> \"" + applicationURL + "\"");
         // Register Kerneos Application resources
         httpService.registerResources(applicationURL, "", this);
-        LOGGER.info("Create Map \"" + application + "\" -> \"" + applicationURL + "\"");
     }
 
     /**
@@ -138,15 +139,13 @@ public class FlexHttpService implements HttpContext {
     private void stop() throws IOException {
         LOGGER.debug("Stop Flex Application: " + application);
 
-        String applicationURL = application.getConfiguration().getApplicationUrl();
-
         // Unregister Granite/Gravity channels
         gavityChannel.delete();
         graniteChannel.delete();
 
         // Unregister Kerneos Application resources
         httpService.unregister(applicationURL);
-        LOGGER.info("Destroy Map \"" + application.getId() + "\" -> \"" + applicationURL + "\"");
+        LOGGER.info("Destroy Map \"" + id + "\" -> \"" + applicationURL + "\"");
     }
 
     /**

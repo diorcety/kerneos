@@ -34,6 +34,7 @@ import org.ow2.kerneos.common.config.generated.Mapping;
 import org.ow2.kerneos.common.config.generated.Module;
 import org.ow2.kerneos.common.config.generated.PromptBeforeClose;
 import org.ow2.kerneos.common.config.generated.Service;
+import org.ow2.kerneos.common.config.generated.ServiceType;
 import org.ow2.kerneos.common.config.generated.SwfModule;
 
 /**
@@ -45,6 +46,7 @@ public class ConfigObjects {
     }
 
     private final static Class[] list = new Class[]{
+            ServiceType.class,
             Service.class,
             Application.class,
             Language.class,

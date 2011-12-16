@@ -31,9 +31,11 @@ import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
+
 import org.ow2.kerneos.profile.KerneosProfile;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.kerneos.profile.config.generated.ProfilePolicy;
+
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 

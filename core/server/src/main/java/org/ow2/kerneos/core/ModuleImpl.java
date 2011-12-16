@@ -26,7 +26,6 @@ public class ModuleImpl implements KerneosModule {
     private Module configuration;
 
     @Property(name = BUNDLE)
-    @ServiceProperty(name = KerneosModule.BUNDLE)
     private long bundle;
 
     private BundleContext bundleContext;

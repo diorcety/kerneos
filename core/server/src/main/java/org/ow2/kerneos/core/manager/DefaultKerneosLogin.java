@@ -31,6 +31,7 @@ import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
+
 import org.ow2.kerneos.login.KerneosLogin;
 import org.ow2.kerneos.login.KerneosSession;
 import org.ow2.util.log.Log;

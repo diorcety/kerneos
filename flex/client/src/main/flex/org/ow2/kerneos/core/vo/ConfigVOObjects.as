@@ -35,6 +35,7 @@ import org.ow2.kerneos.common.vo.ModuleVO;
 import org.ow2.kerneos.common.vo.ModuleWithWindowVO;
 import org.ow2.kerneos.common.vo.PromptBeforeCloseVO;
 import org.ow2.kerneos.common.vo.SWFModuleVO;
+import org.ow2.kerneos.common.vo.ServiceTypeVO;
 import org.ow2.kerneos.common.vo.ServiceVO;
 
 public class ConfigVOObjects {
@@ -42,10 +43,10 @@ public class ConfigVOObjects {
     private static var dictionary:Dictionary = new Dictionary();
 
     dictionary["org.ow2.kerneos.common.config.generated.Application"] = ApplicationVO;
-    dictionary["org.ow2.kerneos.common.config.generated.Language"] = LanguageVO;
     dictionary["org.ow2.kerneos.common.config.generated.Authentication"] = AuthenticationVO;
     dictionary["org.ow2.kerneos.common.config.generated.Folder"] = FolderVO;
     dictionary["org.ow2.kerneos.common.config.generated.IframeModule"] = IFrameModuleVO;
+    dictionary["org.ow2.kerneos.common.config.generated.Language"] = LanguageVO;
     dictionary["org.ow2.kerneos.common.config.generated.Link"] = LinkVO;
     dictionary["org.ow2.kerneos.common.config.generated.Mapping"] = MappingVO;
     dictionary["org.ow2.kerneos.common.config.ModuleEvent"] = ModuleEventVO;
@@ -53,6 +54,7 @@ public class ConfigVOObjects {
     dictionary["org.ow2.kerneos.common.config.generated.ModuleWithWindow"] = ModuleWithWindowVO;
     dictionary["org.ow2.kerneos.common.config.generated.PromptBeforeClose"] = PromptBeforeCloseVO;
     dictionary["org.ow2.kerneos.common.config.generated.Service"] = ServiceVO;
+    dictionary["org.ow2.kerneos.common.config.generated.ServiceType"] = ServiceTypeVO;
     dictionary["org.ow2.kerneos.common.config.generated.SwfModule"] = SWFModuleVO;
 
     public function ConfigVOObjects() {

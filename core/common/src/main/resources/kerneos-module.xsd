@@ -158,8 +158,16 @@
   <xs:complexType name="service">
     <xs:attribute name="id" use="required" type="xs:string"/>
     <xs:attribute name="destination" type="xs:string"/>
-    <xs:attribute name="asynchronous" type="xs:boolean"/>
+    <xs:attribute name="type" type="k:service-type" default="simple"/>
   </xs:complexType>
+
+  <xs:simpleType name="service-type">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="simple"/>
+      <xs:enumeration value="factory"/>
+      <xs:enumeration value="asynchronous"/>
+    </xs:restriction>
+  </xs:simpleType>
 
   <!-- Mappings -->
 

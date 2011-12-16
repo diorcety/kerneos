@@ -31,11 +31,11 @@ import org.ow2.kerneos.common.config.generated.Module;
 
 public interface ICore {
 
-    public void addApplication(String applicationId, Application configuration, Bundle bundle) throws Exception;
+    public void addApplication(Bundle bundle) throws Exception;
 
-    public void removeApplication(String applicationId, Bundle bundle) throws Exception;
+    public void removeApplication(Bundle bundle) throws Exception;
 
-    public void addModule(String moduleId, Module configuration, Bundle bundle) throws Exception;
+    public void addModule(Bundle bundle) throws Exception;
 
-    public void removeModule(String moduleId, Bundle bundle) throws Exception;
+    public void removeModule(Bundle bundle) throws Exception;
 }

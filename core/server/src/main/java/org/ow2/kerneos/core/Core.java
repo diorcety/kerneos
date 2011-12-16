@@ -39,12 +39,7 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.ow2.kerneos.common.KerneosConstants;
-import org.ow2.kerneos.common.config.generated.Application;
-import org.ow2.kerneos.common.config.generated.Folder;
-import org.ow2.kerneos.common.config.generated.ManagerProperty;
-import org.ow2.kerneos.common.config.generated.Module;
-import org.ow2.kerneos.common.config.generated.Service;
-import org.ow2.kerneos.common.config.generated.SwfModule;
+import org.ow2.kerneos.common.config.generated.*;
 import org.ow2.kerneos.core.manager.DefaultKerneosLogin;
 import org.ow2.kerneos.core.manager.DefaultKerneosProfile;
 import org.ow2.kerneos.core.manager.DefaultKerneosRoles;
@@ -54,7 +49,13 @@ import org.ow2.kerneos.roles.KerneosRoles;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -74,11 +75,9 @@ public class Core implements ICore {
      */
     private static Log LOGGER = LogFactory.getLog(Core.class);
 
-    private Map<String, Instance> applicationInstances = new HashMap<String, Instance>();
-    private Map<String, Dictionary> applicationConfigurations = new HashMap<String, Dictionary>();
+    private Map<Bundle, Instance> applicationInstances = new HashMap<Bundle, Instance>();
 
-    private Map<String, Instance> moduleInstances = new HashMap<String, Instance>();
-    private Map<String, Dictionary> moduleConfigurations = new HashMap<String, Dictionary>();
+    private Map<Bundle, Instance> moduleInstances = new HashMap<Bundle, Instance>();
 
     @Requires(filter = "(factory.name=org.ow2.kerneos.core.ApplicationImpl)")
     private Factory applicationFactory;
@@ -90,9 +89,18 @@ public class Core implements ICore {
     private ConfigurationAdmin configurationAdmin;
 
     private BundleContext bundleContext;
+    /**
+     * The JAXB context for rules packages serialization/deserialization. Must
+     * be declared with all the potentially involved classes.
+     */
+    private JAXBContext jaxbContext;
 
-    private Core(BundleContext bundleContext) {
+
+    private Core(BundleContext bundleContext) throws JAXBException {
         this.bundleContext = bundleContext;
+        jaxbContext = JAXBContext.newInstance(
+                ObjectFactory.class.getPackage().getName(),
+                ObjectFactory.class.getClassLoader());
     }
 
     /**
@@ -111,22 +119,20 @@ public class Core implements ICore {
         LOGGER.debug("Stop Kerneos Core");
 
         // Dispose applications
-        while (applicationConfigurations.size() != 0) {
+        while (applicationInstances.size() != 0) {
             try {
-                String applicationId = applicationConfigurations.keySet().iterator().next();
-                Dictionary configuration = applicationConfigurations.get(applicationId);
-                removeApplication(applicationId, bundleContext.getBundle((Long) configuration.get(ModuleImpl.BUNDLE)));
+                Bundle bundle = applicationInstances.keySet().iterator().next();
+                removeApplication(bundle);
             } catch (Exception e) {
 
             }
         }
 
         // Dispose modules
-        while (moduleConfigurations.size() != 0) {
+        while (applicationInstances.size() != 0) {
             try {
-                String moduleId = moduleConfigurations.keySet().iterator().next();
-                Dictionary configuration = moduleConfigurations.get(moduleId);
-                removeModule(moduleId, bundleContext.getBundle((Long) configuration.get(ModuleImpl.BUNDLE)));
+                Bundle bundle = applicationInstances.keySet().iterator().next();
+                removeModule(bundle);
             } catch (Exception e) {
 
             }
@@ -134,19 +140,21 @@ public class Core implements ICore {
     }
 
     @Override
-    public synchronized void addApplication(String applicationId, Application applicationConfiguration, Bundle bundle)
+    public synchronized void addApplication(Bundle bundle)
             throws Exception {
-        LOGGER.debug("New Application \"" + applicationId + "\": " + applicationConfiguration);
 
+        String applicationId = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_APPLICATION_MANIFEST);
         if (applicationInstances.containsKey(applicationId)) {
             throw new Exception("The Application \"" + applicationId + "\" already exists");
         }
 
-        // Transform application information
-        transformApplication(applicationConfiguration, applicationId);
-
         Instance instance = new Instance();
         try {
+            // Get the url used for resources of the bundle
+            Application applicationConfiguration = loadKerneosApplicationConfig(bundle);
+
+            // Transform application information
+            transformApplication(applicationConfiguration, applicationId);
 
             Dictionary componentDictionary = new Hashtable();
             componentDictionary.put("requires.filters", new String[]{
@@ -238,10 +246,10 @@ public class Core implements ICore {
             // Remove managers (security issue)
             applicationConfiguration.setManagers(null);
 
-            applicationInstances.put(applicationId, instance);
-            applicationConfigurations.put(applicationId, componentDictionary);
+            applicationInstances.put(bundle, instance);
             instance.start();
-            LOGGER.debug("Application \"" + applicationId + "\" added");
+
+            LOGGER.debug("New Application \"" + applicationId + "\": " + applicationConfiguration);
         } catch (Exception e) {
             try {
                 instance.dispose();
@@ -267,20 +275,16 @@ public class Core implements ICore {
     }
 
     @Override
-    public synchronized void removeApplication(String applicationId, Bundle bundle)
+    public synchronized void removeApplication(Bundle bundle)
             throws Exception {
-        LOGGER.debug("Remove Application \"" + applicationId + "\"");
+        String applicationId = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_APPLICATION_MANIFEST);
         try {
-            if (applicationConfigurations.containsKey(applicationId)) {
-                Dictionary dictionary = applicationConfigurations.get(applicationId);
-                // Check bundle used for registering
-                if ((Long) dictionary.get(ModuleImpl.BUNDLE) == bundle.getBundleId()) {
-                    applicationConfigurations.remove(applicationId);
-                    Instance applicationBundle = applicationInstances.remove(applicationId);
-                    applicationBundle.dispose();
+            if (applicationInstances.containsKey(bundle)) {
 
-                    LOGGER.debug("Application \"" + applicationId + "\" removed");
-                }
+                Instance applicationBundle = applicationInstances.remove(bundle);
+                applicationBundle.dispose();
+
+                LOGGER.debug("Application \"" + applicationId + "\" removed");
             }
         } catch (IOException e) {
             throw new Exception("Can't remove Application \"" + applicationId + "\"", e);
@@ -289,19 +293,22 @@ public class Core implements ICore {
 
 
     @Override
-    public synchronized void addModule(String moduleId, Module moduleConfiguration, Bundle bundle)
+    public synchronized void addModule(Bundle bundle)
             throws Exception {
-        LOGGER.debug("New Module \"" + moduleId + "\": " + moduleConfiguration);
+
+        String moduleId = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
 
         if (applicationInstances.containsKey(moduleId)) {
             throw new Exception("The Module \"" + moduleId + "\" already exists");
         }
 
-        // Transform module information
-        transformModule(moduleConfiguration, moduleId);
-
         Instance instance = new Instance();
         try {
+            Module moduleConfiguration = loadKerneosModuleConfig(bundle);
+
+            // Transform module information
+            transformModule(moduleConfiguration, moduleId);
+
             Dictionary componentDictionary = new Hashtable();
             componentDictionary.put(ModuleImpl.ID, moduleId);
             componentDictionary.put(ModuleImpl.CONFIGURATION, moduleConfiguration);
@@ -309,10 +316,9 @@ public class Core implements ICore {
 
             instance.setComponentInstance(moduleFactory.createComponentInstance(componentDictionary));
 
-            moduleInstances.put(moduleId, instance);
-            moduleConfigurations.put(moduleId, componentDictionary);
+            moduleInstances.put(bundle, instance);
             instance.start();
-            LOGGER.debug("Module \"" + moduleId + "\" added");
+            LOGGER.debug("New Module \"" + moduleId + "\": " + moduleConfiguration);
         } catch (Exception e) {
             try {
                 instance.dispose();
@@ -353,23 +359,89 @@ public class Core implements ICore {
     }
 
     @Override
-    public synchronized void removeModule(final String moduleId, Bundle bundle)
+    public synchronized void removeModule(Bundle bundle)
             throws Exception {
-        LOGGER.debug("Remove Module \"" + moduleId + "\"");
+        String moduleId = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
         try {
-            if (moduleConfigurations.containsKey(moduleId)) {
-                Dictionary dictionary = moduleConfigurations.get(moduleId);
-                // Check bundle used for registering
-                if ((Long) dictionary.get(ModuleImpl.BUNDLE) == bundle.getBundleId()) {
-                    moduleConfigurations.remove(moduleId);
-                    Instance applicationBundle = moduleInstances.remove(moduleId);
-                    applicationBundle.dispose();
+            if (moduleInstances.containsKey(bundle)) {
+                Instance applicationBundle = moduleInstances.remove(bundle);
+                applicationBundle.dispose();
 
-                    LOGGER.debug("Module \"" + moduleId + "\" removed");
-                }
+                LOGGER.debug("Module \"" + moduleId + "\" removed");
             }
         } catch (IOException e) {
             throw new Exception("Can't remove Module \"" + moduleId + "\"", e);
+        }
+    }
+
+    /**
+     * Load the module information.
+     *
+     * @param bundle the bundle corresponding to the module.
+     * @return the information corresponding to the module.
+     * @throws Exception the kerneos module application file is not found are is invalid.
+     */
+    private Module loadKerneosModuleConfig(final Bundle bundle) throws Exception {
+
+        // Retrieve the Kerneos module file
+        URL url = bundle.getResource(KerneosConstants.KERNEOS_MODULE_FILE);
+        if (url != null) {
+            // Load the file
+            LOGGER.info("Loading file : {0} from {1}", url.getFile(), bundle.getSymbolicName());
+            InputStream resource = url.openStream();
+
+            // Unmarshall it
+            try {
+                // Create an unmarshaller
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+                // Deserialize the configuration file
+                JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
+                return (Module) element.getValue();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            } finally {
+                resource.close();
+            }
+        } else {
+            throw new Exception("No Module configuration file available at " + KerneosConstants.KERNEOS_MODULE_FILE);
+        }
+    }
+
+    /**
+     * Load the Kerneos config file and build the application object.
+     *
+     * @param bundle the bundle corresponding to the module.
+     * @throws Exception the Kerneos application application file is not found are is invalid.
+     */
+    private Application loadKerneosApplicationConfig(final Bundle bundle) throws Exception {
+
+        // Retrieve the Kerneos application file
+        URL url = bundle.getResource(KerneosConstants.KERNEOS_APPLICATION_FILE);
+
+        if (url != null) {
+
+            // Load the file
+            LOGGER.info("Loading file : {0} from {1}", url.getFile(), bundle.getSymbolicName());
+            InputStream resource = url.openStream();
+
+            // Unmarshall it
+            try {
+                // Create an unmarshaller
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+                // Deserialize the application file
+                JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
+                return (Application) element.getValue();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            } finally {
+                resource.close();
+            }
+        } else {
+            throw new Exception("No Application file available at " + KerneosConstants.KERNEOS_APPLICATION_FILE);
         }
     }
 }

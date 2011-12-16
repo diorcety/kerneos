@@ -35,7 +35,7 @@
   <file>module2.swf</file>
   <services>
     <service id="module2-serviceSync"/>
-    <service id="module2-serviceAsync" asynchronous="true"/>
+    <service id="module2-serviceAsync" type="asynchronous"/>
   </services>
   <mappings>
     <mapping java="org.ow2.kerneos.examples.modules.module2.Post"

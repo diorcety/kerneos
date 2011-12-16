@@ -19,6 +19,7 @@ import org.ow2.kerneos.common.config.generated.Service;
 import org.ow2.kerneos.common.config.generated.SwfModule;
 import org.ow2.kerneos.common.service.KerneosApplication;
 import org.ow2.kerneos.common.service.KerneosModule;
+import org.ow2.kerneos.flex.wrapper.SecurityWrapper;
 import org.ow2.kerneos.login.KerneosSession;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -47,7 +48,7 @@ public class Core implements ICore {
      */
     private static Log LOGGER = LogFactory.getLog(Core.class);
 
-    private Configuration granite, gravity, graniteSecurity;
+    private Configuration granite, gravity;
 
     private Map<String, KerneosApplication> applications = new HashMap<String, KerneosApplication>();
     private Map<String, ComponentInstance> applicationHttpServices = new HashMap<String, ComponentInstance>();
@@ -79,12 +80,6 @@ public class Core implements ICore {
         // Granite Configurations
         {
             Dictionary properties = new Hashtable();
-            properties.put("service", FlexConstants.GRANITE_SERVICE);
-            graniteSecurity = configurationAdmin.createFactoryConfiguration(org.ow2.kerneos.flex.granite.GraniteSecurityWrapper.class.getName(), null);
-            graniteSecurity.update(properties);
-        }
-        {
-            Dictionary properties = new Hashtable();
             properties.put("id", FlexConstants.GRANITE_SERVICE);
             granite = configurationAdmin.createFactoryConfiguration(org.granite.config.flex.Service.class.getName(), null);
             granite.update(properties);
@@ -101,18 +96,17 @@ public class Core implements ICore {
         // Dispose configurations
         gravity.delete();
         granite.delete();
-        graniteSecurity.delete();
     }
 
 
     @Bind(aggregate = true, optional = true)
     synchronized void bindKerneosApplication(KerneosApplication application) {
         applications.put(application.getId(), application);
-
         try {
+            LOGGER.debug("Create FlexHttpService for " + application.getId());
             Dictionary properties = new Hashtable();
             Dictionary filters = new Hashtable();
-            filters.put("application", "(" + KerneosApplication.ID + "=" + application.getId() + ")");
+            filters.put(FlexHttpService.APPLICATION, "(" + KerneosApplication.ID + "=" + application.getId() + ")");
             properties.put("requires.filters", filters);
             ComponentInstance instance = flexHttpServiceFactory.createComponentInstance(properties);
             applicationHttpServices.put(application.getId(), instance);
@@ -125,9 +119,10 @@ public class Core implements ICore {
     @Unbind
     synchronized void unbindKerneosApplication(KerneosApplication application) {
         applications.remove(application.getId());
-        if (applicationHttpServices.containsKey(application.getId())) {
-            ComponentInstance instance = applicationHttpServices.get(application.getId());
+        ComponentInstance instance = applicationHttpServices.remove(application.getId());
+        if (instance != null) {
             instance.dispose();
+            LOGGER.debug("Destroy FlexHttpService for " + application.getId());
         }
     }
 

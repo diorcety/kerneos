@@ -49,8 +49,6 @@
     <ipojo.version>1.8.0</ipojo.version>
     <ipojo.annotations.version>1.8.0</ipojo.annotations.version>
     <ipojo.eventadmin.version>1.8.0</ipojo.eventadmin.version>
-    <ipojo.api.version>1.6.0</ipojo.api.version>
-    <ipojo.extender.version>1.4.0</ipojo.extender.version>
 
     <!-- Plugins -->
     <maven.bundle.version>2.3.4</maven.bundle.version>
@@ -71,7 +69,7 @@
     <!-- Dependencies -->
     <junit.version>4.8</junit.version>
     <javax.servlet.version>2.5</javax.servlet.version>
-    <org.ow2.util.log.version>1.0.10</org.ow2.util.log.version>
+    <org.ow2.util.log.version>1.0.31</org.ow2.util.log.version>
     <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
     <org.osgi.core.version>4.2.0</org.osgi.core.version>
   </properties>
@@ -151,14 +149,14 @@
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
-        <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-        <version>${ipojo.annotations.version}</version>
+        <artifactId>org.apache.felix.ipojo</artifactId>
+        <version>${ipojo.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
-        <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
-        <version>${ipojo.extender.version}</version>
+        <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+        <version>${ipojo.annotations.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -228,6 +226,13 @@
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-ipojo-plugin</artifactId>
           <version>${maven.ipojo.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>ipojo-bundle</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>

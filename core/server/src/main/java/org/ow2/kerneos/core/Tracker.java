@@ -30,27 +30,16 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
-import org.apache.felix.ipojo.handler.extender.BundleTracker;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import org.osgi.util.tracker.BundleTracker;
 import org.ow2.kerneos.common.KerneosConstants;
-import org.ow2.kerneos.common.config.generated.Application;
-import org.ow2.kerneos.common.config.generated.Folder;
-import org.ow2.kerneos.common.config.generated.Module;
-import org.ow2.kerneos.common.config.generated.ObjectFactory;
-import org.ow2.kerneos.common.config.generated.Service;
-import org.ow2.kerneos.common.config.generated.SwfModule;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 /**
  * This is the component which handles the arrival/departure of the Kerneos' modules.
@@ -62,12 +51,6 @@ public final class Tracker {
      * The logger.
      */
     private static Log LOGGER = LogFactory.getLog(Tracker.class);
-
-    /**
-     * The JAXB context for rules packages serialization/deserialization. Must
-     * be declared with all the potentially involved classes.
-     */
-    private JAXBContext jaxbContext;
 
     @Requires
     private ICore kerneosCore;
@@ -86,7 +69,7 @@ public final class Tracker {
          * @param bundleContext the current bundle context.
          */
         KerneosBundleTracker(final BundleContext bundleContext) {
-            super(bundleContext);
+            super(bundleContext, Bundle.ACTIVE, null);
         }
 
         /**
@@ -95,7 +78,7 @@ public final class Tracker {
          * @param bundle is the new bundle.
          */
         @Override
-        protected void addedBundle(final Bundle bundle) {
+        public Object addingBundle(final Bundle bundle, org.osgi.framework.BundleEvent event) {
             String moduleHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
             String applicationHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_APPLICATION_MANIFEST);
 
@@ -113,6 +96,7 @@ public final class Tracker {
                     LOGGER.error(e);
                 }
             }
+            return bundle;
         }
 
         /**
@@ -121,7 +105,7 @@ public final class Tracker {
          * @param bundle is the bundle which is gone.
          */
         @Override
-        protected void removedBundle(final Bundle bundle) {
+        public void removedBundle(final Bundle bundle, org.osgi.framework.BundleEvent event, Object object) {
             String moduleHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
             String applicationHeader = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_APPLICATION_MANIFEST);
 
@@ -148,12 +132,9 @@ public final class Tracker {
      * @param bundleContext is the current bundle context.
      * @throws Exception can't load the JAXBContext.
      */
-    private Tracker(final BundleContext bundleContext) throws Exception {
+    private Tracker(final BundleContext bundleContext) {
         this.bundleContext = bundleContext;
         bundleTracker = new KerneosBundleTracker(bundleContext);
-        jaxbContext = JAXBContext.newInstance(
-                ObjectFactory.class.getPackage().getName(),
-                ObjectFactory.class.getClassLoader());
     }
 
     /**
@@ -185,16 +166,12 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onApplicationArrival(final Bundle bundle, final String name) {
-        LOGGER.debug("Kerneos Application Arrival: " + name);
+        LOGGER.debug("Kerneos Application Arrival: " + bundle.getSymbolicName());
 
         try {
-            // Get the url used for resources of the bundle
-            Application application = loadKerneosApplicationConfig(bundle);
-
-            kerneosCore.addApplication(name, application, bundle);
+            kerneosCore.addApplication(bundle);
         } catch (Exception e) {
-            LOGGER.error("Can't create the application \"" + name + "\": " + e);
-            return;
+            LOGGER.error("Can't create the application \"" + bundle.getSymbolicName() + "\": " + e);
         }
     }
 
@@ -205,11 +182,11 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onApplicationDeparture(final Bundle bundle, final String name) {
-        LOGGER.debug("Application Module Departure: " + name);
+        LOGGER.debug("Application Module Departure: " + bundle.getSymbolicName());
         try {
-            kerneosCore.removeApplication(name, bundle);
+            kerneosCore.removeApplication(bundle);
         } catch (Exception e) {
-            LOGGER.error("Can't remove Application \"" + name + "\"", e);
+            LOGGER.error("Can't remove Application \"" + bundle.getSymbolicName() + "\"", e);
         }
     }
 
@@ -221,12 +198,11 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onModuleArrival(final Bundle bundle, final String name) {
-        LOGGER.debug("Kerneos Module Arrival: " + name);
+        LOGGER.debug("Kerneos Module Arrival: " + bundle.getSymbolicName());
         try {
-            Module module = loadKerneosModuleConfig(bundle);
-            kerneosCore.addModule(name, module, bundle);
+            kerneosCore.addModule(bundle);
         } catch (Exception e) {
-            LOGGER.error("Issue(s) during Module \"" + name + "\" loading", e);
+            LOGGER.error("Issue(s) during Module \"" + bundle.getSymbolicName() + "\" loading", e);
         }
     }
 
@@ -237,83 +213,11 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onModuleDeparture(final Bundle bundle, final String name) {
-        LOGGER.debug("Kerneos Module Departure: " + name);
+        LOGGER.debug("Kerneos Module Departure: " + bundle.getSymbolicName());
         try {
-            kerneosCore.removeModule(name, bundle);
+            kerneosCore.removeModule(bundle);
         } catch (Exception e) {
-            LOGGER.error("Can't remove Module \"" + name + "\"", e);
-        }
-    }
-
-
-    /**
-     * Load the module information.
-     *
-     * @param bundle the bundle corresponding to the module.
-     * @return the information corresponding to the module.
-     * @throws Exception the kerneos module application file is not found are is invalid.
-     */
-    private Module loadKerneosModuleConfig(final Bundle bundle) throws Exception {
-
-        // Retrieve the Kerneos module file
-        URL url = bundle.getResource(KerneosConstants.KERNEOS_MODULE_FILE);
-        if (url != null) {
-            // Load the file
-            LOGGER.info("Loading file : {0} from {1}", url.getFile(), bundle.getSymbolicName());
-            InputStream resource = url.openStream();
-
-            // Unmarshall it
-            try {
-                // Create an unmarshaller
-                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-                // Deserialize the configuration file
-                JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
-                return (Module) element.getValue();
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw e;
-            } finally {
-                resource.close();
-            }
-        } else {
-            throw new Exception("No Module configuration file available at " + KerneosConstants.KERNEOS_MODULE_FILE);
-        }
-    }
-
-    /**
-     * Load the Kerneos config file and build the application object.
-     *
-     * @param bundle the bundle corresponding to the module.
-     * @throws Exception the Kerneos application application file is not found are is invalid.
-     */
-    private Application loadKerneosApplicationConfig(final Bundle bundle) throws Exception {
-
-        // Retrieve the Kerneos application file
-        URL url = bundle.getResource(KerneosConstants.KERNEOS_APPLICATION_FILE);
-
-        if (url != null) {
-
-            // Load the file
-            LOGGER.info("Loading file : {0} from {1}", url.getFile(), bundle.getSymbolicName());
-            InputStream resource = url.openStream();
-
-            // Unmarshall it
-            try {
-                // Create an unmarshaller
-                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-                // Deserialize the application file
-                JAXBElement element = (JAXBElement) unmarshaller.unmarshal(resource);
-                return (Application) element.getValue();
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw e;
-            } finally {
-                resource.close();
-            }
-        } else {
-            throw new Exception("No Application file available at " + KerneosConstants.KERNEOS_APPLICATION_FILE);
+            LOGGER.error("Can't remove Module \"" + bundle.getSymbolicName() + "\"", e);
         }
     }
 }

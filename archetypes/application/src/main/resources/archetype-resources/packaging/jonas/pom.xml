@@ -56,11 +56,6 @@
                   <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
                   <type>jar</type>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.felix</groupId>
-                  <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
-                  <type>jar</type>
-                </artifactItem>
 
                 <!-- GraniteDS OSGi -->
                 <artifactItem>

@@ -1,10 +1,6 @@
-package org.ow2.kerneos.flex.configuration;
+package org.ow2.kerneos.flex.wrapper;
 
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Invalidate;
-import org.apache.felix.ipojo.annotations.Property;
-import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.Validate;
+import org.apache.felix.ipojo.annotations.*;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.gravity.osgi.adapters.jms.JMSConstants;
@@ -12,7 +8,6 @@ import org.granite.gravity.osgi.adapters.jms.JMSConstants;
 import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.GraniteConstants;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -20,7 +15,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.ow2.kerneos.common.config.generated.Mapping;
 import org.ow2.kerneos.common.config.generated.Service;
 import org.ow2.kerneos.common.config.generated.SwfModule;
-import org.ow2.kerneos.common.service.KerneosModule;
 import org.ow2.kerneos.core.service.KerneosAsynchronousService;
 import org.ow2.kerneos.flex.FlexConstants;
 
@@ -32,11 +26,17 @@ import java.util.Hashtable;
 import java.util.List;
 
 @Component
-public class AsynchronousInstance {
-    private static Log LOGGER = LogFactory.getLog(AsynchronousInstance.class);
+public class AsynchronousServiceWrapper {
+    public final static String SERVICE = "SERVICE";
+    public final static String CONFIGURATION = "CONFIGURATION";
 
-    @Requires(id = "kerneosModule")
-    private KerneosModule kerneosModule;
+    private static Log LOGGER = LogFactory.getLog(AsynchronousServiceWrapper.class);
+
+    @Property(name = CONFIGURATION)
+    private Service serviceConfiguration;
+
+    private KerneosAsynchronousService service;
+    private ServiceReference serviceReference;
 
     @Requires
     private ConfigurationAdmin configurationAdmin;
@@ -44,55 +44,36 @@ public class AsynchronousInstance {
     @Requires
     private GraniteClassRegistry gcr;
 
-    @Property(name = "serviceReference")
-    private ServiceReference serviceReference;
-
-    private Service service;
     private Configuration destinationConfiguration;
     private Configuration factoryConfiguration;
 
-    private BundleContext bundleContext;
-
-    AsynchronousInstance(BundleContext bundleContext) {
-        this.bundleContext = bundleContext;
+    @Bind(id = SERVICE)
+    private void bindService(KerneosAsynchronousService service, ServiceReference serviceReference) {
+        this.service = service;
+        this.serviceReference = serviceReference;
     }
 
-    private Service getService(String id) {
-        if (kerneosModule.getConfiguration() instanceof SwfModule) {
-            SwfModule configuration = (SwfModule) kerneosModule.getConfiguration();
-            for (Service service : configuration.getServices()) {
-                if (service.getId().equals(id)) {
-                    return service;
-                }
-            }
-        } else {
-            LOGGER.error("This module is not a SwfModule");
-        }
-
-        return null;
+    @Unbind
+    private void unbindService(KerneosAsynchronousService service, ServiceReference serviceReference) {
+        this.service = null;
+        this.serviceReference = null;
     }
 
     @Validate
     private void start() {
         try {
-            KerneosAsynchronousService kerneosService = (KerneosAsynchronousService) bundleContext.getService(serviceReference);
-            String id = (String) serviceReference.getProperty(KerneosAsynchronousService.ID);
+            LOGGER.debug("Start KerneosAsynchronousService Wrapper: " + serviceConfiguration.getId());
+
             String at = (String) serviceReference.getProperty(KerneosAsynchronousService.TYPE);
 
-            if (id == null || at == null) {
-                LOGGER.error("Invalid Kerneos Asynchronous Service: " + kerneosService);
+            if (at == null) {
+                LOGGER.error("Invalid KerneosAsynchronousService: " + serviceConfiguration.getId());
                 return;
             }
 
-            LOGGER.debug("New Kerneos Asynchronous Service: " + id);
+            String destination = serviceConfiguration.getDestination();
 
-            service = getService(id);
-            if (service == null)
-                throw new Exception("Can't find the service \"" + id + "\"");
-            String destination = service.getDestination();
-
-            registerClasses(service, kerneosService);
-
+            registerClasses(serviceConfiguration, service);
             {
                 Dictionary properties = new Hashtable();
                 for (String key : serviceReference.getPropertyKeys()) {
@@ -127,27 +108,22 @@ public class AsynchronousInstance {
             }
 
         } catch (Exception e) {
-            LOGGER.error("Can't register a Asynchronous Service: " + e);
+            LOGGER.error("Can't start KerneosAsynchronousService Wrapper: " + e);
         }
     }
 
     @Invalidate
     private void stop() {
         try {
-            KerneosAsynchronousService kerneosService = (KerneosAsynchronousService) bundleContext.getService(serviceReference);
-            String id = (String) serviceReference.getProperty(KerneosAsynchronousService.ID);
-            if (id == null) {
-                LOGGER.warn("Invalid Kerneos Asynchronous Service: " + kerneosService);
-            }
-            LOGGER.debug("Remove Kerneos Asynchronous Service: " + id);
+            LOGGER.debug("Stop KerneosAsynchronousService Wrapper: " + serviceConfiguration.getId());
 
-            unregisterClasses(service);
+            unregisterClasses(serviceConfiguration);
 
             destinationConfiguration.delete();
             factoryConfiguration.delete();
 
         } catch (Exception e) {
-            LOGGER.error("Can't unregister a Asynchronous Service: " + e);
+            LOGGER.error("Can't stop KerneosAsynchronousService: " + e);
         }
     }
 

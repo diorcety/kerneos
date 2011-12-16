@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.flex.granite;
+package org.ow2.kerneos.flex.wrapper;
 
 import flex.messaging.messages.Message;
 import flex.messaging.messages.RemotingMessage;
@@ -46,11 +46,11 @@ import org.ow2.util.log.LogFactory;
 @Component
 @Provides
 @Instantiate
-public class GraniteSecurityWrapper implements GraniteSecurity {
+public class SecurityWrapper implements GraniteSecurity {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(GraniteSecurityWrapper.class);
+    private static Log logger = LogFactory.getLog(SecurityWrapper.class);
 
     @Requires
     KerneosSecurityService kerneosSecurityService;
@@ -68,7 +68,7 @@ public class GraniteSecurityWrapper implements GraniteSecurity {
         logger.debug("Stop GraniteSecurityWrapper: " + getService());
     }
 
-    private GraniteSecurityWrapper() {
+    private SecurityWrapper() {
 
     }
 

@@ -87,6 +87,8 @@
     <dependency>
       <groupId>org.ow2.bundles</groupId>
       <artifactId>ow2-util-log</artifactId>
+      <version>${org.ow2.util.log.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ow2.bundles</groupId>
@@ -119,10 +121,6 @@
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
