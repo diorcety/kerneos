@@ -41,32 +41,26 @@
 
   <packaging>pom</packaging>
 
-  <repositories>
-    <repository>
-      <id>ops4j.repository</id>
-      <url>http://repository.ops4j.org/maven2</url>
-    </repository>
-    <repository>
-      <id>repo objectweb</id>
-      <url>http://maven.objectweb.org/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>repo objectweb snapshots</id>
-      <url>http://maven.objectweb.org/maven2-snapshot</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+  <properties>
+    <org.apache.felix.http.jetty.version>2.2.0</org.apache.felix.http.jetty.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.main.distribution</artifactId>
+      <version>${org.apache.felix.version}</version>
+      <classifier>project</classifier>
+      <type>zip</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.http.jetty</artifactId>
+      <version>${org.apache.felix.http.jetty.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -135,7 +129,7 @@
 
                 <!-- OSGi -->
                 <artifactItem>
-                  <groupId>org.apache.felix</groupId>
+                  <groupId>org.osgi</groupId>
                   <artifactId>org.osgi.compendium</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
@@ -232,24 +226,24 @@
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
-                <dependency>
+                <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-login-api</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
-                </dependency>
-                <dependency>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-profile-api</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
-                </dependency>
-                <dependency>
+                </artifactItem>
+                <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-roles-api</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
-                </dependency>
+                </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-profile-fileinstall</artifactId>
@@ -260,14 +254,14 @@
                 <!-- Applications -->
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>applications-application1</artifactId>
+                  <artifactId>kerneos-flex-examples-applications-application1</artifactId>
                   <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>applications-application2</artifactId>
+                  <artifactId>kerneos-flex-examples-applications-application2</artifactId>
                   <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
@@ -276,21 +270,21 @@
                 <!-- Modules -->
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>modules-module1-server</artifactId>
+                  <artifactId>kerneos-flex-examples-modules-module1-server</artifactId>
                   <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>modules-module2-server</artifactId>
+                  <artifactId>kerneos-flex-examples-modules-module2-server</artifactId>
                   <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>modules-module3-server</artifactId>
+                  <artifactId>kerneos-flex-examples-modules-module3-server</artifactId>
                   <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>

@@ -44,28 +44,22 @@
   <dependencies>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>modules-module2-client</artifactId>
+      <artifactId>kerneos-flex-examples-modules-module2-client</artifactId>
       <version>${project.version}</version>
       <type>swf</type>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-core-api</artifactId>
       <version>${project.version}</version>
-      <type>swf</type>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.ow2.util</groupId>
-      <artifactId>util-log</artifactId>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-log</artifactId>
     </dependency>
 
     <dependency>
@@ -95,7 +89,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>modules-module2-client</artifactId>
+                  <artifactId>kerneos-flex-examples-modules-module2-client</artifactId>
                   <version>${project.version}</version>
                   <type>swf</type>
                   <overWrite>true</overWrite>
