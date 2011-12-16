@@ -31,7 +31,7 @@ import org.ow2.kerneos.profile.config.generated.Profile;
  * Interface for providing a profile service to Kerneos.
  */
 public interface KerneosProfile {
-    public static final String ID = "ID";
+    final String ID = "ID";
 
     /**
      * Get the profile of the application.

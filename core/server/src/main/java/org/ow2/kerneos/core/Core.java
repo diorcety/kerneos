@@ -34,6 +34,7 @@ import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.Validate;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
@@ -73,19 +74,26 @@ public class Core implements ICore {
      */
     private static Log LOGGER = LogFactory.getLog(Core.class);
 
-    private Map<String, Instance> applications = new HashMap<String, Instance>();
+    private Map<String, Instance> applicationInstances = new HashMap<String, Instance>();
+    private Map<String, Dictionary> applicationConfigurations = new HashMap<String, Dictionary>();
 
-    private Map<String, Instance> modules = new HashMap<String, Instance>();
-
+    private Map<String, Instance> moduleInstances = new HashMap<String, Instance>();
+    private Map<String, Dictionary> moduleConfigurations = new HashMap<String, Dictionary>();
 
     @Requires(filter = "(factory.name=org.ow2.kerneos.core.ApplicationImpl)")
-    Factory applicationFactory;
+    private Factory applicationFactory;
 
     @Requires(filter = "(factory.name=org.ow2.kerneos.core.ModuleImpl)")
-    Factory moduleFactory;
+    private Factory moduleFactory;
 
-    @Requires(policy = "static")
-    ConfigurationAdmin configurationAdmin;
+    @Requires
+    private ConfigurationAdmin configurationAdmin;
+
+    private BundleContext bundleContext;
+
+    private Core(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
+    }
 
     /**
      * Called when all the component dependencies are met.
@@ -103,20 +111,24 @@ public class Core implements ICore {
         LOGGER.debug("Stop Kerneos Core");
 
         // Dispose applications
-        while (applications.size() != 0) {
+        while (applicationConfigurations.size() != 0) {
             try {
-                String applicationId = applications.keySet().iterator().next();
-                removeApplication(applicationId);
+                String applicationId = applicationConfigurations.keySet().iterator().next();
+                Dictionary configuration = applicationConfigurations.get(applicationId);
+                removeApplication(applicationId, bundleContext.getBundle((Long) configuration.get(ModuleImpl.BUNDLE)));
             } catch (Exception e) {
+
             }
         }
 
         // Dispose modules
-        while (modules.size() != 0) {
+        while (moduleConfigurations.size() != 0) {
             try {
-                String moduleId = modules.keySet().iterator().next();
-                removeModule(moduleId);
+                String moduleId = moduleConfigurations.keySet().iterator().next();
+                Dictionary configuration = moduleConfigurations.get(moduleId);
+                removeModule(moduleId, bundleContext.getBundle((Long) configuration.get(ModuleImpl.BUNDLE)));
             } catch (Exception e) {
+
             }
         }
     }
@@ -124,8 +136,11 @@ public class Core implements ICore {
     @Override
     public synchronized void addApplication(String applicationId, Application applicationConfiguration, Bundle bundle)
             throws Exception {
-
         LOGGER.debug("New Application \"" + applicationId + "\": " + applicationConfiguration);
+
+        if (applicationInstances.containsKey(applicationId)) {
+            throw new Exception("The Application \"" + applicationId + "\" already exists");
+        }
 
         // Transform application information
         transformApplication(applicationConfiguration, applicationId);
@@ -135,13 +150,13 @@ public class Core implements ICore {
 
             Dictionary componentDictionary = new Hashtable();
             componentDictionary.put("requires.filters", new String[]{
-                    "login", "(ID=" + applicationId + ")",
-                    "profile", "(ID=" + applicationId + ")",
-                    "roles", "(ID=" + applicationId + ")",
+                    ApplicationImpl.LOGIN, "(" + KerneosLogin.ID + "=" + applicationId + ")",
+                    ApplicationImpl.PROFILE, "(" + KerneosProfile.ID + "=" + applicationId + ")",
+                    ApplicationImpl.ROLES, "(" + KerneosRoles.ID + "=" + applicationId + ")",
             });
-            componentDictionary.put("ID", applicationId);
-            componentDictionary.put("configuration", applicationConfiguration);
-            componentDictionary.put("bundle", bundle.getBundleId());
+            componentDictionary.put(ApplicationImpl.ID, applicationId);
+            componentDictionary.put(ApplicationImpl.CONFIGURATION, applicationConfiguration);
+            componentDictionary.put(ApplicationImpl.BUNDLE, bundle.getBundleId());
 
             instance.setComponentInstance(applicationFactory.createComponentInstance(componentDictionary));
 
@@ -223,11 +238,17 @@ public class Core implements ICore {
             // Remove managers (security issue)
             applicationConfiguration.setManagers(null);
 
-            applications.put(applicationId, instance);
+            applicationInstances.put(applicationId, instance);
+            applicationConfigurations.put(applicationId, componentDictionary);
             instance.start();
+            LOGGER.debug("Application \"" + applicationId + "\" added");
         } catch (Exception e) {
-            instance.dispose();
-            throw e;
+            try {
+                instance.dispose();
+            } catch (IOException e2) {
+
+            }
+            throw new Exception("Can't add Application \"" + applicationId + "\"", e);
         }
     }
 
@@ -246,10 +267,24 @@ public class Core implements ICore {
     }
 
     @Override
-    public synchronized void removeApplication(String applicationId) throws Exception {
+    public synchronized void removeApplication(String applicationId, Bundle bundle)
+            throws Exception {
         LOGGER.debug("Remove Application \"" + applicationId + "\"");
-        Instance applicationBundle = applications.remove(applicationId);
-        applicationBundle.dispose();
+        try {
+            if (applicationConfigurations.containsKey(applicationId)) {
+                Dictionary dictionary = applicationConfigurations.get(applicationId);
+                // Check bundle used for registering
+                if ((Long) dictionary.get(ModuleImpl.BUNDLE) == bundle.getBundleId()) {
+                    applicationConfigurations.remove(applicationId);
+                    Instance applicationBundle = applicationInstances.remove(applicationId);
+                    applicationBundle.dispose();
+
+                    LOGGER.debug("Application \"" + applicationId + "\" removed");
+                }
+            }
+        } catch (IOException e) {
+            throw new Exception("Can't remove Application \"" + applicationId + "\"", e);
+        }
     }
 
 
@@ -258,23 +293,33 @@ public class Core implements ICore {
             throws Exception {
         LOGGER.debug("New Module \"" + moduleId + "\": " + moduleConfiguration);
 
+        if (applicationInstances.containsKey(moduleId)) {
+            throw new Exception("The Module \"" + moduleId + "\" already exists");
+        }
+
         // Transform module information
         transformModule(moduleConfiguration, moduleId);
 
         Instance instance = new Instance();
         try {
             Dictionary componentDictionary = new Hashtable();
-            componentDictionary.put("ID", moduleId);
-            componentDictionary.put("configuration", moduleConfiguration);
-            componentDictionary.put("bundle", bundle.getBundleId());
+            componentDictionary.put(ModuleImpl.ID, moduleId);
+            componentDictionary.put(ModuleImpl.CONFIGURATION, moduleConfiguration);
+            componentDictionary.put(ModuleImpl.BUNDLE, bundle.getBundleId());
 
             instance.setComponentInstance(moduleFactory.createComponentInstance(componentDictionary));
 
-            modules.put(moduleId, instance);
+            moduleInstances.put(moduleId, instance);
+            moduleConfigurations.put(moduleId, componentDictionary);
             instance.start();
+            LOGGER.debug("Module \"" + moduleId + "\" added");
         } catch (Exception e) {
-            instance.dispose();
-            throw e;
+            try {
+                instance.dispose();
+            } catch (IOException e2) {
+
+            }
+            throw new Exception("Can't add Module \"" + moduleId + "\"", e);
         }
     }
 
@@ -308,9 +353,23 @@ public class Core implements ICore {
     }
 
     @Override
-    public synchronized void removeModule(final String moduleId) throws Exception {
+    public synchronized void removeModule(final String moduleId, Bundle bundle)
+            throws Exception {
         LOGGER.debug("Remove Module \"" + moduleId + "\"");
-        Instance applicationBundle = modules.remove(moduleId);
-        applicationBundle.dispose();
+        try {
+            if (moduleConfigurations.containsKey(moduleId)) {
+                Dictionary dictionary = moduleConfigurations.get(moduleId);
+                // Check bundle used for registering
+                if ((Long) dictionary.get(ModuleImpl.BUNDLE) == bundle.getBundleId()) {
+                    moduleConfigurations.remove(moduleId);
+                    Instance applicationBundle = moduleInstances.remove(moduleId);
+                    applicationBundle.dispose();
+
+                    LOGGER.debug("Module \"" + moduleId + "\" removed");
+                }
+            }
+        } catch (IOException e) {
+            throw new Exception("Can't remove Module \"" + moduleId + "\"", e);
+        }
     }
 }

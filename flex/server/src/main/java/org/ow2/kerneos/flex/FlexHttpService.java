@@ -25,9 +25,15 @@
 
 package org.ow2.kerneos.flex;
 
-import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.osgi.GraniteConstants;
+
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.http.HttpContext;

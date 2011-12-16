@@ -1,6 +1,12 @@
 package org.ow2.kerneos.flex;
 
-import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
+import org.apache.felix.ipojo.annotations.Validate;
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -11,7 +17,6 @@ import org.osgi.service.event.EventHandler;
 import org.ow2.kerneos.common.KerneosConstants;
 import org.ow2.kerneos.common.config.ApplicationEvent;
 import org.ow2.kerneos.common.config.ModuleEvent;
-import org.ow2.kerneos.common.config.generated.Application;
 import org.ow2.kerneos.common.service.KerneosApplication;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.util.log.Log;

@@ -14,15 +14,18 @@ import org.ow2.kerneos.common.service.KerneosModule;
 @Component
 @Provides
 public class ModuleImpl implements KerneosModule {
+    public final static String ID = "ID";
+    public final static String BUNDLE = "BUNDLE";
+    public final static String CONFIGURATION = "CONFIGURATION";
 
-    @Property(name = "ID")
+    @Property(name = ID)
     @ServiceProperty(name = KerneosModule.ID)
     private String id;
 
-    @Property(name = "configuration")
+    @Property(name = CONFIGURATION)
     private Module configuration;
 
-    @Property(name = "bundle")
+    @Property(name = BUNDLE)
     @ServiceProperty(name = KerneosModule.BUNDLE)
     private long bundle;
 

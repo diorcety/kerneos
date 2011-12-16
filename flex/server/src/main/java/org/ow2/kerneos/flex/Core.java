@@ -1,6 +1,7 @@
 package org.ow2.kerneos.flex;
 
-import org.apache.felix.ipojo.*;
+import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;

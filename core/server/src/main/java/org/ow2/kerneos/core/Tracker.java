@@ -177,6 +177,7 @@ public final class Tracker {
         // Stop the tracking of bundles
         bundleTracker.close();
     }
+
     /**
      * Call when a new Kerneos Module is arrived.
      *
@@ -184,7 +185,7 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onApplicationArrival(final Bundle bundle, final String name) {
-        LOGGER.debug("Add Kerneos Application: " + name);
+        LOGGER.debug("Kerneos Application Arrival: " + name);
 
         try {
             // Get the url used for resources of the bundle
@@ -204,13 +205,12 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onApplicationDeparture(final Bundle bundle, final String name) {
-        LOGGER.debug("Remove Application Module: " + name);
+        LOGGER.debug("Application Module Departure: " + name);
         try {
-            kerneosCore.removeApplication(name);
+            kerneosCore.removeApplication(name, bundle);
         } catch (Exception e) {
-            LOGGER.error("Can't remove the application \"" + name + "\": " + e);
+            LOGGER.error("Can't remove Application \"" + name + "\"", e);
         }
-
     }
 
 
@@ -221,16 +221,12 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onModuleArrival(final Bundle bundle, final String name) {
-        LOGGER.debug("Add Kerneos Module: " + name);
-
+        LOGGER.debug("Kerneos Module Arrival: " + name);
         try {
-            // Get the url used for resources of the bundle
             Module module = loadKerneosModuleConfig(bundle);
-
             kerneosCore.addModule(name, module, bundle);
         } catch (Exception e) {
-            LOGGER.error("Can't create the module \"" + name + "\": " + e);
-            return;
+            LOGGER.error("Issue(s) during Module \"" + name + "\" loading", e);
         }
     }
 
@@ -241,13 +237,11 @@ public final class Tracker {
      * @param name   The name of the module.
      */
     private void onModuleDeparture(final Bundle bundle, final String name) {
-        LOGGER.debug("Remove Kerneos Module: " + name);
+        LOGGER.debug("Kerneos Module Departure: " + name);
         try {
-            kerneosCore.removeModule(name);
-
-
+            kerneosCore.removeModule(name, bundle);
         } catch (Exception e) {
-            LOGGER.error("Can't remove the module \"" + name + "\": " + e);
+            LOGGER.error("Can't remove Module \"" + name + "\"", e);
         }
     }
 
@@ -283,7 +277,7 @@ public final class Tracker {
                 resource.close();
             }
         } else {
-            throw new Exception("No application file available at " + KerneosConstants.KERNEOS_MODULE_FILE);
+            throw new Exception("No Module configuration file available at " + KerneosConstants.KERNEOS_MODULE_FILE);
         }
     }
 
@@ -319,7 +313,7 @@ public final class Tracker {
                 resource.close();
             }
         } else {
-            throw new Exception("No application file available at " + KerneosConstants.KERNEOS_APPLICATION_FILE);
+            throw new Exception("No Application file available at " + KerneosConstants.KERNEOS_APPLICATION_FILE);
         }
     }
 }

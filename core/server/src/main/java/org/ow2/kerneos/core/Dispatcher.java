@@ -1,8 +1,14 @@
 package org.ow2.kerneos.core;
 
-import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
+
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+
 import org.ow2.kerneos.common.KerneosConstants;
 import org.ow2.kerneos.common.config.ApplicationEvent;
 import org.ow2.kerneos.common.config.ModuleEvent;

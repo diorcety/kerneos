@@ -33,9 +33,9 @@ public interface ICore {
 
     public void addApplication(String applicationId, Application configuration, Bundle bundle) throws Exception;
 
-    public void removeApplication(final String applicationId) throws Exception;
+    public void removeApplication(String applicationId, Bundle bundle) throws Exception;
 
     public void addModule(String moduleId, Module configuration, Bundle bundle) throws Exception;
 
-    public void removeModule(final String moduleId) throws Exception;
+    public void removeModule(String moduleId, Bundle bundle) throws Exception;
 }

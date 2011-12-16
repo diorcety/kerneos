@@ -29,7 +29,7 @@ package org.ow2.kerneos.login;
  * Interface for providing a authentication service to Kerneos.
  */
 public interface KerneosLogin {
-    public static final String ID = "ID";
+    final String ID = "ID";
 
     /**
      * Login.

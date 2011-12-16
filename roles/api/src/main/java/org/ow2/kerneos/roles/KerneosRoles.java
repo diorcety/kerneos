@@ -31,7 +31,7 @@ import java.util.Collection;
  * Interface for providing a roles resolution service to Kerneos.
  */
 public interface KerneosRoles {
-    public static final String ID = "ID";
+    final String ID = "ID";
     /**
      * Resolves the physical roles to logical roles.
      *

@@ -1,12 +1,14 @@
 package org.ow2.kerneos.flex;
 
-import org.ow2.kerneos.common.KerneosConstants;
-
 public class FlexConstants {
 
+    private FlexConstants() {
+
+    }
+
     /*
-     * Suffix used for the factory of an service
-     */
+    * Suffix used for the factory of an service
+    */
     public static final String FACTORY_SUFFIX = "_FaCtOry";
 
     /*
