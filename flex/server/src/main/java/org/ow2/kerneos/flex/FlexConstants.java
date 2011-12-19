@@ -1,7 +1,11 @@
 package org.ow2.kerneos.flex;
 
-public class FlexConstants {
+public final class FlexConstants {
 
+    /**
+     * Constructor.
+     * Avoid class instantiation.
+     */
     private FlexConstants() {
 
     }

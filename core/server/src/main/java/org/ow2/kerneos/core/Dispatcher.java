@@ -25,6 +25,14 @@ public class Dispatcher {
     @Requires
     private EventAdmin eventAdmin;
 
+    /**
+     * Constructor.
+     * Avoid direct component instantiation
+     */
+    private Dispatcher() {
+
+    }
+
     @Bind(aggregate = true, optional = true)
     private void bindKerneosApplication(KerneosApplication application) {
         // Post an event

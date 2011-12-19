@@ -26,7 +26,6 @@
 package org.ow2.kerneos.common.config;
 
 import org.ow2.kerneos.common.config.generated.Application;
-import org.ow2.kerneos.common.config.generated.Module;
 
 import java.io.Serializable;
 

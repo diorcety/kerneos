@@ -19,7 +19,6 @@ import org.ow2.kerneos.common.config.generated.Service;
 import org.ow2.kerneos.common.config.generated.SwfModule;
 import org.ow2.kerneos.common.service.KerneosApplication;
 import org.ow2.kerneos.common.service.KerneosModule;
-import org.ow2.kerneos.flex.wrapper.SecurityWrapper;
 import org.ow2.kerneos.login.KerneosSession;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -46,7 +45,7 @@ public class Core implements ICore {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(Core.class);
+    private static final Log LOGGER = LogFactory.getLog(Core.class);
 
     private Configuration granite, gravity;
 
@@ -61,7 +60,17 @@ public class Core implements ICore {
     private Factory flexHttpServiceFactory;
 
     /**
+     * Constructor.
+     * Avoid direct component instantiation.
+     */
+    private Core() {
+
+    }
+
+    /**
      * Called when all the component dependencies are met.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Validate
     private synchronized void start() throws Exception {
@@ -73,7 +82,8 @@ public class Core implements ICore {
             properties.put("id", FlexConstants.GRAVITY_SERVICE);
             properties.put("messageTypes", "flex.messaging.messages.AsyncMessage");
             properties.put("defaultAdapter", EAConstants.ADAPTER_ID);
-            gravity = configurationAdmin.createFactoryConfiguration(org.granite.config.flex.Service.class.getName(), null);
+            gravity = configurationAdmin.createFactoryConfiguration(org.granite.config.flex.Service.class.getName(),
+                    null);
             gravity.update(properties);
         }
 
@@ -81,13 +91,16 @@ public class Core implements ICore {
         {
             Dictionary properties = new Hashtable();
             properties.put("id", FlexConstants.GRANITE_SERVICE);
-            granite = configurationAdmin.createFactoryConfiguration(org.granite.config.flex.Service.class.getName(), null);
+            granite = configurationAdmin.createFactoryConfiguration(org.granite.config.flex.Service.class.getName(),
+                    null);
             granite.update(properties);
         }
     }
 
     /**
      * Called when all the component dependencies aren't met anymore.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Invalidate
     private synchronized void stop() throws IOException {
@@ -99,6 +112,12 @@ public class Core implements ICore {
     }
 
 
+    /**
+     * Optional Kerneos Application binding.
+     * Create a new FlexHttpService for each Kerneos Application.
+     *
+     * @param application the new Kerneos Application
+     */
     @Bind(aggregate = true, optional = true)
     synchronized void bindKerneosApplication(KerneosApplication application) {
         applications.put(application.getId(), application);
@@ -116,6 +135,12 @@ public class Core implements ICore {
         }
     }
 
+    /**
+     * Optional Kerneos Application binding.
+     * Remove the FlexHttpService associated with the Kerneos Application.
+     *
+     * @param application the old Kerneos Application
+     */
     @Unbind
     synchronized void unbindKerneosApplication(KerneosApplication application) {
         applications.remove(application.getId());
@@ -126,17 +151,32 @@ public class Core implements ICore {
         }
     }
 
+    /**
+     * Optional Kerneos Module binding.
+     *
+     * @param module the new Kerneos Module
+     */
     @Bind(aggregate = true, optional = true)
     synchronized void bindKerneosModule(KerneosModule module) {
         modules.put(module.getId(), module);
     }
 
+    /**
+     * Optional Kerneos Module binding.
+     *
+     * @param module the old Kerneos Module
+     */
     @Unbind
     synchronized void unbindKerneosModule(KerneosModule module) {
         modules.remove(module.getId());
     }
 
-
+    /**
+     * Update the current flex context.
+     *
+     * @param request  the HTTP request associated with the context
+     * @param response the HTTP response associated with the context
+     */
     public void updateContext(HttpServletRequest request, HttpServletResponse response) {
         FlexContext flexContext = FlexContext.getCurrent();
 
@@ -144,7 +184,8 @@ public class Core implements ICore {
         flexContext.setResponse(response);
 
         // Get the module and the associated path
-        String path = request.getRequestURI().substring(flexContext.getApplication().getConfiguration().getApplicationUrl().length());
+        String path = request.getRequestURI().substring(
+                flexContext.getApplication().getConfiguration().getApplicationUrl().length());
         KerneosModule currentModule = null;
         if (path != null && path.startsWith(KerneosConstants.KERNEOS_MODULE_URL)) {
             path = path.substring(KerneosConstants.KERNEOS_MODULE_URL.length());
@@ -178,6 +219,12 @@ public class Core implements ICore {
         KerneosSession.setCurrent(session);
     }
 
+    /**
+     * Update the current flex context.
+     *
+     * @param destination the new destination associated with the context
+     * @param method      the new method associated with the context
+     */
     public void updateContext(String destination, String method) {
         FlexContext flexContext = FlexContext.getCurrent();
         flexContext.setPath(null);

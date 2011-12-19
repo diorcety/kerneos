@@ -1,6 +1,5 @@
 package org.ow2.kerneos.flex;
 
-import org.ow2.kerneos.common.config.generated.Service;
 import org.ow2.kerneos.common.service.KerneosApplication;
 import org.ow2.kerneos.common.service.KerneosModule;
 
@@ -41,6 +40,10 @@ public class FlexContext {
     private String method;
 
     private String path;
+
+    private FlexContext() {
+
+    }
 
     public HttpServletRequest getRequest() {
         return request;

@@ -46,19 +46,20 @@ public interface KerneosSecurityService {
      * @param password The password used for login.
      * @return True if the login is successful.
      */
-    public boolean logIn(KerneosApplication application, String username, String password);
+    boolean logIn(KerneosApplication application, String username, String password);
 
     /**
      * Check the authorisation associated to the request.
      *
      * @return The status associated to the authorisation.
      */
-    public SecurityError isAuthorized(KerneosApplication application, KerneosModule module, String service, String method);
+    SecurityError isAuthorized(KerneosApplication application, KerneosModule module, String service,
+                                      String method);
 
     /**
      * Logout of Kerneos.
      *
      * @return True if the logout is successful.
      */
-    public boolean logOut(KerneosApplication application);
+    boolean logOut(KerneosApplication application);
 }

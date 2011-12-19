@@ -47,31 +47,42 @@ public class DefaultKerneosProfile implements KerneosProfile {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
+    private static final Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
     @Property(name = KerneosProfile.ID, mandatory = true)
     @ServiceProperty(name = KerneosProfile.ID)
-    private String ID;
+    private String id;
+
+    /**
+     * Constructor.
+     * Avoid direct component instantiation
+     */
+    private DefaultKerneosProfile() {
+
+    }
 
     /**
      * Called when all the component dependencies are met.
+     * @throws IOException an issue occurs during the validation
      */
     @Validate
     private void start() throws IOException {
-        LOGGER.debug("Start DefaultKerneosProfile(" + ID + ")");
+        LOGGER.debug("Start DefaultKerneosProfile(" + id + ")");
     }
 
     /**
      * Called when all the component dependencies aren't met anymore.
+     * @throws IOException an issue occurs during the validation
      */
     @Invalidate
     private void stop() throws IOException {
-        LOGGER.debug("Stop DefaultKerneosProfile(" + ID + ")");
+        LOGGER.debug("Stop DefaultKerneosProfile(" + id + ")");
     }
 
+    @Override
     public Profile getProfile() {
         Profile profile = new Profile();
         profile.setDefaultPolicy(ProfilePolicy.ALLOW);

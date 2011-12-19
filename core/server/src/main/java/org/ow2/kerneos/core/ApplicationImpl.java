@@ -17,12 +17,12 @@ import org.ow2.kerneos.roles.KerneosRoles;
 @Component
 @Provides
 public class ApplicationImpl implements KerneosApplication {
-    public final static String ID = "ID";
-    public final static String BUNDLE = "BUNDLE";
-    public final static String CONFIGURATION = "CONFIGURATION";
-    public final static String LOGIN = "LOGIN";
-    public final static String ROLES = "ROLES";
-    public final static String PROFILE = "PROFILE";
+    public static final String ID = "ID";
+    public static final String BUNDLE = "BUNDLE";
+    public static final String CONFIGURATION = "CONFIGURATION";
+    public static final String LOGIN = "LOGIN";
+    public static final String ROLES = "ROLES";
+    public static final String PROFILE = "PROFILE";
 
     @Property(name = ID)
     @ServiceProperty(name = KerneosApplication.ID)
@@ -45,7 +45,12 @@ public class ApplicationImpl implements KerneosApplication {
 
     private BundleContext bundleContext;
 
-    ApplicationImpl(BundleContext bundleContext) {
+    /**
+     * Constructor
+     *
+     * @param bundleContext Context of current bundle
+     */
+    private ApplicationImpl(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
 
@@ -78,5 +83,4 @@ public class ApplicationImpl implements KerneosApplication {
     public String getId() {
         return id;
     }
-
 }

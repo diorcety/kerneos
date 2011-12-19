@@ -1,11 +1,18 @@
 package org.ow2.kerneos.flex.wrapper;
 
-import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Property;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
+import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.GraniteConstants;
-
 import org.granite.osgi.service.GraniteFactory;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -15,7 +22,6 @@ import org.ow2.kerneos.common.config.generated.Service;
 import org.ow2.kerneos.common.config.generated.SwfModule;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.kerneos.flex.FlexConstants;
-
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -26,10 +32,10 @@ import java.util.List;
 @Component
 @Provides
 public class SimpleServiceWrapper implements GraniteFactory {
-    public final static String SERVICE = "SERVICE";
-    public final static String CONFIGURATION = "CONFIGURATION";
+    public static final String SERVICE = "SERVICE";
+    public static final String CONFIGURATION = "CONFIGURATION";
 
-    private final static Log LOGGER = LogFactory.getLog(SimpleServiceWrapper.class);
+    private static final Log LOGGER = LogFactory.getLog(SimpleServiceWrapper.class);
 
     @Property(name = CONFIGURATION)
     private Service serviceConfiguration;
@@ -45,6 +51,10 @@ public class SimpleServiceWrapper implements GraniteFactory {
 
     private Configuration destinationConfiguration;
     private Configuration factoryConfiguration;
+
+    private SimpleServiceWrapper() {
+
+    }
 
     @Bind(id = SERVICE)
     private void bindService(KerneosSimpleService service, ServiceReference serviceReference) {
@@ -78,7 +88,8 @@ public class SimpleServiceWrapper implements GraniteFactory {
                 properties.put("service", FlexConstants.GRANITE_SERVICE);
                 properties.put("factory", destination + FlexConstants.FACTORY_SUFFIX);
                 properties.put("scope", "application");
-                destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION,
+                        null);
                 destinationConfiguration.update(properties);
             }
 
@@ -106,7 +117,7 @@ public class SimpleServiceWrapper implements GraniteFactory {
      * Register the classes associated to a service
      *
      * @param service the service
-     * @param service the instance of the service
+     * @param object  the instance of the service
      */
     private void registerClasses(final Service service, final Object object) throws ClassNotFoundException {
         if (service.getModule() instanceof SwfModule) {

@@ -46,11 +46,11 @@ import java.io.IOException;
  */
 @Component
 @Instantiate
-public final class Tracker {
+public class Tracker {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(Tracker.class);
+    private static final Log LOGGER = LogFactory.getLog(Tracker.class);
 
     @Requires
     private ICore kerneosCore;

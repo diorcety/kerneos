@@ -65,13 +65,17 @@ import java.util.Hashtable;
 @Component
 @Provides
 public class FlexHttpService implements HttpContext {
-    public final static String APPLICATION = "APPLICATION";
+    public static final String APPLICATION = "APPLICATION";
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(FlexHttpService.class);
+    private static final Log LOGGER = LogFactory.getLog(FlexHttpService.class);
 
     private static final String KERNEOS_SESSION_KEY = "KERNEOS-SESSION-";
+
+    private static final String AUTORIZATION_HEADER = "Authorization";
+    private static final String AUTORIZATION_TYPE = "BASIC ";
+    private static final String AUTORIZATION_CHARSET = "ISO-8859-1";
 
     @ServiceProperty(name = "ID")
     private String id;
@@ -96,6 +100,10 @@ public class FlexHttpService implements HttpContext {
 
     private Configuration gavityChannel, graniteChannel;
     private String applicationURL;
+
+    private FlexHttpService() {
+
+    }
 
     /**
      * Called when all the component dependencies are met.
@@ -197,7 +205,8 @@ public class FlexHttpService implements HttpContext {
                             try {
                                 connection = url.openConnection();
                             } catch (Exception e) {
-                                url = this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH + path);
+                                url = this.getClass().getClassLoader().getResource(KerneosConstants.KERNEOS_PATH +
+                                        path);
                                 connection = url.openConnection();
                             }
                         }
@@ -209,8 +218,10 @@ public class FlexHttpService implements HttpContext {
         }
 
         // Return the size
-        if (connection != null)
-            FlexContext.getCurrent().getResponse().setHeader("Content-Length", Integer.toString(connection.getContentLength()));
+        if (connection != null) {
+            FlexContext.getCurrent().getResponse().setHeader("Content-Length",
+                    Integer.toString(connection.getContentLength()));
+        }
 
         return url;
     }
@@ -234,28 +245,31 @@ public class FlexHttpService implements HttpContext {
         flexContext.setApplication(application);
         core.updateContext(request, response);
 
-        switch (kerneosSecurityService.isAuthorized(application, flexContext.getModule(), flexContext.getService(), flexContext.getMethod())) {
+        KerneosSecurityService.SecurityError error = kerneosSecurityService.isAuthorized(application,
+                flexContext.getModule(), flexContext.getService(), flexContext.getMethod());
+        switch (error) {
             case NO_ERROR:
                 return true;
 
             default:
                 if (application.getConfiguration().getAuthentication() == Authentication.WWW) {
                     // Show WWW Authentication box of the web browser
-                    String authHeader = request.getHeader("Authorization");
+                    String authHeader = request.getHeader(AUTORIZATION_HEADER);
                     if (authHeader != null) {
                         // Check AUTH type
-                        if (authHeader.toUpperCase().startsWith("BASIC ")) {
+                        if (authHeader.toUpperCase().startsWith(AUTORIZATION_TYPE)) {
 
                             // Get Login/Password
-                            String userpassword = authHeader.substring(6);
-                            userpassword = new String(Base64.decode(userpassword), "ISO-8859-1");
+                            String userpassword = authHeader.substring(AUTORIZATION_TYPE.length());
+                            userpassword = new String(Base64.decode(userpassword), AUTORIZATION_CHARSET);
                             String[] data = userpassword.split("\\:");
                             String user = (data.length >= 1) ? data[0] : null;
                             String password = (data.length >= 2) ? data[1] : null;
 
                             // Auth
-                            if (kerneosSecurityService.logIn(application, user, password))
+                            if (kerneosSecurityService.logIn(application, user, password)) {
                                 return true;
+                            }
                         }
                     }
 

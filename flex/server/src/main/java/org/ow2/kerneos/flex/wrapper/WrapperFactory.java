@@ -56,7 +56,7 @@ import java.util.Map;
 @Instantiate
 public final class WrapperFactory {
 
-    private static Log LOGGER = LogFactory.getLog(WrapperFactory.class);
+    private static final Log LOGGER = LogFactory.getLog(WrapperFactory.class);
 
     private Map<String, ComponentInstance> instanceMap = new Hashtable<String, ComponentInstance>();
 
@@ -68,6 +68,10 @@ public final class WrapperFactory {
 
     @Requires(filter = "(factory.name=org.ow2.kerneos.flex.wrapper.SimpleServiceWrapper)")
     private Factory simpleFactory;
+
+    private WrapperFactory() {
+
+    }
 
     /**
      * Called when all the component dependencies are met.
@@ -109,7 +113,8 @@ public final class WrapperFactory {
                         case SIMPLE: {
                             Dictionary properties = new Hashtable();
                             Dictionary filters = new Hashtable();
-                            filters.put(SimpleServiceWrapper.SERVICE, "(" + KerneosSimpleService.ID + "=" + service.getId() + ")");
+                            filters.put(SimpleServiceWrapper.SERVICE, "(" + KerneosSimpleService.ID + "="
+                                    + service.getId() + ")");
                             properties.put("requires.filters", filters);
                             properties.put(SimpleServiceWrapper.CONFIGURATION, service);
 
@@ -119,7 +124,8 @@ public final class WrapperFactory {
                         case FACTORY: {
                             Dictionary properties = new Hashtable();
                             Dictionary filters = new Hashtable();
-                            filters.put(FactoryServiceWrapper.SERVICE, "(" + KerneosFactoryService.ID + "=" + service.getId() + ")");
+                            filters.put(FactoryServiceWrapper.SERVICE, "(" + KerneosFactoryService.ID + "="
+                                    + service.getId() + ")");
                             properties.put("requires.filters", filters);
                             properties.put(FactoryServiceWrapper.CONFIGURATION, service);
 
@@ -130,13 +136,15 @@ public final class WrapperFactory {
                         case ASYNCHRONOUS: {
                             Dictionary properties = new Hashtable();
                             Dictionary filters = new Hashtable();
-                            filters.put(AsynchronousServiceWrapper.SERVICE, "(" + KerneosAsynchronousService.ID + "=" + service.getId() + ")");
+                            filters.put(AsynchronousServiceWrapper.SERVICE, "(" + KerneosAsynchronousService.ID
+                                    + "=" + service.getId() + ")");
                             properties.put("requires.filters", filters);
                             properties.put(AsynchronousServiceWrapper.CONFIGURATION, service);
 
                             instanceMap.put(service.getId(), asynchronousFactory.createComponentInstance(properties));
                         }
                         break;
+                        default:
                     }
                     LOGGER.debug("Wrapper created for service: " + service.getId());
                 } catch (Exception ie) {

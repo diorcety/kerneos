@@ -60,7 +60,7 @@ public class SecurityService implements GraniteDestination {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(SecurityService.class);
+    private static final Log LOGGER = LogFactory.getLog(SecurityService.class);
 
     @Requires
     private ConfigurationAdmin configurationAdmin;
@@ -76,6 +76,10 @@ public class SecurityService implements GraniteDestination {
 
     private Configuration graniteDestination, gravityDestination, eaConfig;
 
+    private SecurityService() {
+
+    }
+
     /**
      * Called when all the component dependencies are met.
      */
@@ -83,8 +87,8 @@ public class SecurityService implements GraniteDestination {
     private void start() throws IOException {
         LOGGER.debug("Start FlexSecurityService");
 
-        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_SECURITY, SecurityObjects.list());
-        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_ASYNC_SECURITY, SecurityObjects.list());
+        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_SECURITY, SecurityObjects.classes());
+        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_ASYNC_SECURITY, SecurityObjects.classes());
 
         // Register the synchronous service used with SecurityService
         {

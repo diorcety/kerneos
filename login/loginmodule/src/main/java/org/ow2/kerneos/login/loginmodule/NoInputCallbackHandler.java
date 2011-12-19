@@ -37,6 +37,7 @@ import java.security.cert.Certificate;
 /**
  * The username and password are given by the constructor No JNDI, datasource or
  * file checks.
+ *
  * @author Florent Benoit (initial developer)
  * @author Alexandre Thaveau (add the use of certificates)
  * @author Marc-Antoine Bourgeot (add the use of certificates)
@@ -60,15 +61,17 @@ public class NoInputCallbackHandler implements CallbackHandler {
 
     /**
      * No default Constructor : must use the one with username and password.
+     *
      * @throws Exception if someone try to use it
      */
     public NoInputCallbackHandler() throws Exception {
-        throw new Exception(
-                "This class could only be used with the constructor NoInputCallbackHandler(String username, String password)");
+        throw new Exception("This class could only be used with the constructor "
+                + "NoInputCallbackHandler(String username, String password)");
     }
 
     /**
      * Constructor.
+     *
      * @param username username to store for the authentication
      * @param password password to store for the authentication
      */
@@ -79,9 +82,10 @@ public class NoInputCallbackHandler implements CallbackHandler {
 
     /**
      * Constructor.
+     *
      * @param username username to store for the authentication
      * @param password password to store for the authentication
-     * @param cert the certificate for the authentication
+     * @param cert     the certificate for the authentication
      */
     public NoInputCallbackHandler(final String username,
                                   final String password,
@@ -92,13 +96,15 @@ public class NoInputCallbackHandler implements CallbackHandler {
 
     /**
      * Invoke an array of Callbacks.
+     *
      * @param callbacks an array of <code>Callback</code> objects which
-     *        contain the information requested by an underlying security
-     *        service to be retrieved or displayed.
+     *                  contain the information requested by an underlying security
+     *                  service to be retrieved or displayed.
      * @throws java.io.IOException if an input or output error occurs. <p>
-     * @throws javax.security.auth.callback.UnsupportedCallbackException if the implementation of this method
-     *         does not support one or more of the Callbacks specified in the
-     *         <code>callbacks</code> parameter.
+     * @throws javax.security.auth.callback.UnsupportedCallbackException
+     *                             if the implementation of this method
+     *                             does not support one or more of the Callbacks specified in the
+     *                             <code>callbacks</code> parameter.
      */
     public void handle(final Callback[] callbacks) throws IOException, UnsupportedCallbackException {
 

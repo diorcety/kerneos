@@ -29,7 +29,7 @@ package org.ow2.kerneos.login;
  * Interface for providing a authentication service to Kerneos.
  */
 public interface KerneosLogin {
-    final String ID = "ID";
+    String ID = "ID";
 
     /**
      * Login.
@@ -38,19 +38,19 @@ public interface KerneosLogin {
      * @param username    The username.
      * @param password    The password.
      */
-    public void login(final String application, final String username, final String password);
+    void login(final String application, final String username, final String password);
 
     /**
      * Logout.
      *
      * @return
      */
-    public void logout();
+    void logout();
 
     /**
      * Called when a new session is needed.
      *
      * @return The new session
      */
-    public KerneosSession newSession();
+    KerneosSession newSession();
 }

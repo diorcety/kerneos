@@ -46,32 +46,44 @@ public class DefaultKerneosLogin implements KerneosLogin {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
+    private static final Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
     @Property(name = KerneosLogin.ID, mandatory = true)
     @ServiceProperty(name = KerneosLogin.ID)
-    private String ID;
+    private String id;
+
+    /**
+     * Constructor.
+     * Avoid direct component instantiation
+     */
+    private DefaultKerneosLogin() {
+
+    }
 
     /**
      * Called when all the component dependencies are met.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Validate
     private void start() throws IOException {
-        LOGGER.debug("Start DefaultKerneosLogin(" + ID + ")");
+        LOGGER.debug("Start DefaultKerneosLogin(" + id + ")");
     }
 
     /**
      * Called when all the component dependencies aren't met anymore.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Invalidate
     private void stop() throws IOException {
-        LOGGER.debug("Stop DefaultKerneosLogin(" + ID + ")");
+        LOGGER.debug("Stop DefaultKerneosLogin(" + id + ")");
     }
 
-
+    @Override
     public void login(String application, String user, String password) {
         if (user.equals(password)) {
             LinkedList roles = new LinkedList<String>();
@@ -82,10 +94,12 @@ public class DefaultKerneosLogin implements KerneosLogin {
         }
     }
 
+    @Override
     public void logout() {
         KerneosSession.getCurrent().reset();
     }
 
+    @Override
     public KerneosSession newSession() {
         return new KerneosSession();
     }

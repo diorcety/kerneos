@@ -37,12 +37,12 @@ import org.ow2.kerneos.profile.config.generated.ProfileService;
 /**
  * Classes used with security service.
  */
-public class SecurityObjects {
+public final class SecurityObjects {
     private SecurityObjects() {
 
     }
 
-    private final static Class[] list = new Class[]{
+    private static final Class[] CLASSES = new Class[]{
             Profile.class,
             ProfileBundle.class,
             ProfileMethod.class,
@@ -52,7 +52,7 @@ public class SecurityObjects {
             ProfileService.class,
             KerneosSession.class};
 
-    public static Class[] list() {
-        return list;
+    public static Class[] classes() {
+        return CLASSES;
     }
 }

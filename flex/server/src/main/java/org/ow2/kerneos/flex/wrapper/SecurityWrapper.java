@@ -28,7 +28,12 @@ package org.ow2.kerneos.flex.wrapper;
 import flex.messaging.messages.Message;
 import flex.messaging.messages.RemotingMessage;
 
-import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.config.flex.Destination;
 import org.granite.context.GraniteManager;
@@ -46,17 +51,17 @@ import org.ow2.util.log.LogFactory;
 @Component
 @Provides
 @Instantiate
-public class SecurityWrapper implements GraniteSecurity {
+public final class SecurityWrapper implements GraniteSecurity {
     /**
      * The logger.
      */
     private static Log logger = LogFactory.getLog(SecurityWrapper.class);
 
     @Requires
-    KerneosSecurityService kerneosSecurityService;
+    private KerneosSecurityService kerneosSecurityService;
 
     @Requires
-    ICore flexCore;
+    private ICore flexCore;
 
     @Validate
     private void start() {
@@ -81,8 +86,9 @@ public class SecurityWrapper implements GraniteSecurity {
 
             FlexContext flexContext = FlexContext.getCurrent();
             boolean logged = kerneosSecurityService.logIn(flexContext.getApplication(), user, password);
-            if (!logged)
+            if (!logged) {
                 throw SecurityServiceException.newInvalidCredentialsException();
+            }
         }
     }
 
@@ -94,7 +100,10 @@ public class SecurityWrapper implements GraniteSecurity {
             flexCore.updateContext(destination.getId(), method);
 
             FlexContext flexContext = FlexContext.getCurrent();
-            switch (kerneosSecurityService.isAuthorized(flexContext.getApplication(), flexContext.getModule(), flexContext.getService(), flexContext.getMethod())) {
+            KerneosSecurityService.SecurityError error = kerneosSecurityService.isAuthorized(
+                    flexContext.getApplication(), flexContext.getModule(), flexContext.getService(), 
+                    flexContext.getMethod());
+            switch (error) {
                 case SESSION_EXPIRED:
                     throw SecurityServiceException.newSessionExpiredException();
                 case ACCESS_DENIED:
@@ -108,9 +117,10 @@ public class SecurityWrapper implements GraniteSecurity {
         if (GraniteManager.getCurrentInstance() instanceof HttpGraniteContext) {
 
             FlexContext flexContext = FlexContext.getCurrent();
-            boolean logged_out = kerneosSecurityService.logOut(flexContext.getApplication());
-            if (!logged_out)
+            boolean loggedOut = kerneosSecurityService.logOut(flexContext.getApplication());
+            if (!loggedOut) {
                 throw SecurityServiceException.newNotLoggedInException();
+            }
         }
     }
 }

@@ -39,7 +39,13 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.ow2.kerneos.common.KerneosConstants;
-import org.ow2.kerneos.common.config.generated.*;
+import org.ow2.kerneos.common.config.generated.Application;
+import org.ow2.kerneos.common.config.generated.Folder;
+import org.ow2.kerneos.common.config.generated.ManagerProperty;
+import org.ow2.kerneos.common.config.generated.Module;
+import org.ow2.kerneos.common.config.generated.ObjectFactory;
+import org.ow2.kerneos.common.config.generated.Service;
+import org.ow2.kerneos.common.config.generated.SwfModule;
 import org.ow2.kerneos.core.manager.DefaultKerneosLogin;
 import org.ow2.kerneos.core.manager.DefaultKerneosProfile;
 import org.ow2.kerneos.core.manager.DefaultKerneosRoles;
@@ -73,7 +79,7 @@ public class Core implements ICore {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(Core.class);
+    private static final Log LOGGER = LogFactory.getLog(Core.class);
 
     private Map<Bundle, Instance> applicationInstances = new HashMap<Bundle, Instance>();
 
@@ -96,6 +102,12 @@ public class Core implements ICore {
     private JAXBContext jaxbContext;
 
 
+    /**
+     * Constructor
+     *
+     * @param bundleContext the context of current bundle
+     * @throws JAXBException an issue occurs during JAXB initialization
+     */
     private Core(BundleContext bundleContext) throws JAXBException {
         this.bundleContext = bundleContext;
         jaxbContext = JAXBContext.newInstance(
@@ -105,6 +117,8 @@ public class Core implements ICore {
 
     /**
      * Called when all the component dependencies are met.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Validate
     private synchronized void start() throws IOException {
@@ -113,6 +127,8 @@ public class Core implements ICore {
 
     /**
      * Called when all the component dependencies aren't met anymore.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Invalidate
     private synchronized void stop() throws IOException {
@@ -120,21 +136,21 @@ public class Core implements ICore {
 
         // Dispose applications
         while (applicationInstances.size() != 0) {
+            Bundle bundle = applicationInstances.keySet().iterator().next();
             try {
-                Bundle bundle = applicationInstances.keySet().iterator().next();
                 removeApplication(bundle);
             } catch (Exception e) {
-
+                LOGGER.warn("Can't remove Application of bundle " + bundle.getSymbolicName(), e);
             }
         }
 
         // Dispose modules
         while (applicationInstances.size() != 0) {
+            Bundle bundle = applicationInstances.keySet().iterator().next();
             try {
-                Bundle bundle = applicationInstances.keySet().iterator().next();
                 removeModule(bundle);
             } catch (Exception e) {
-
+                LOGGER.warn("Can't remove Module of bundle " + bundle.getSymbolicName(), e);
             }
         }
     }
@@ -254,7 +270,7 @@ public class Core implements ICore {
             try {
                 instance.dispose();
             } catch (IOException e2) {
-
+                LOGGER.warn("Can't dispose Application nstance", e2);
             }
             throw new Exception("Can't add Application \"" + applicationId + "\"", e);
         }
@@ -268,10 +284,13 @@ public class Core implements ICore {
      */
     private void transformApplication(Application application, String name) {
         // Correctly format URL
-        if (!application.getApplicationUrl().startsWith("/"))
+        if (!application.getApplicationUrl().startsWith("/")) {
             application.setApplicationUrl("/" + application.getApplicationUrl());
-        if (application.getApplicationUrl().endsWith("/"))
-            application.setApplicationUrl(application.getApplicationUrl().substring(0, application.getApplicationUrl().length() - 1));
+        }
+        if (application.getApplicationUrl().endsWith("/")) {
+            application.setApplicationUrl(
+                    application.getApplicationUrl().substring(0, application.getApplicationUrl().length() - 1));
+        }
     }
 
     @Override
@@ -323,7 +342,7 @@ public class Core implements ICore {
             try {
                 instance.dispose();
             } catch (IOException e2) {
-
+                LOGGER.warn("Can't dispose Module instance", e2);
             }
             throw new Exception("Can't add Module \"" + moduleId + "\"", e);
         }
@@ -413,7 +432,8 @@ public class Core implements ICore {
      * Load the Kerneos config file and build the application object.
      *
      * @param bundle the bundle corresponding to the module.
-     * @throws Exception the Kerneos application application file is not found are is invalid.
+     * @return the Application configuration of the bundle
+     * @throws Exception the Kerneos Application file is not found are is invalid.
      */
     private Application loadKerneosApplicationConfig(final Bundle bundle) throws Exception {
 

@@ -31,11 +31,11 @@ import java.util.Collection;
  * Interface for providing a roles resolution service to Kerneos.
  */
 public interface KerneosRoles {
-    final String ID = "ID";
+    String ID = "ID";
     /**
      * Resolves the physical roles to logical roles.
      *
      * @param roles The physical roles.
      */
-    public Collection<String> resolve(final Collection<String> roles);
+    Collection<String> resolve(final Collection<String> roles);
 }

@@ -34,20 +34,28 @@ public class Dispatcher {
     /**
      * The logger.
      */
-    private final static Log LOGGER = LogFactory.getLog(Dispatcher.class);
+    private static final Log LOGGER = LogFactory.getLog(Dispatcher.class);
 
     @Requires(policy = "static")
     private EventAdmin eventAdmin;
 
-    private Map<KerneosApplication, ProfileEventHandler> profileEventHandlerMap = new HashMap<KerneosApplication, ProfileEventHandler>();
+    private Map<KerneosApplication, ProfileEventHandler> profileEventHandlerMap =
+            new HashMap<KerneosApplication, ProfileEventHandler>();
     private ApplicationEventHandler applicationEventHandler;
     private ModuleEventHandler moduleEventHandler;
     private BundleContext bundleContext;
 
-    Dispatcher(BundleContext bundleContext) {
+    /**
+     * Constructor.
+     * Avoid direct component instantiation
+     */
+    private Dispatcher(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
 
+    /**
+     * Called when all the component dependencies are met.
+     */
     @Validate
     private synchronized void start() {
         LOGGER.debug("Start");
@@ -55,6 +63,9 @@ public class Dispatcher {
         moduleEventHandler = new ModuleEventHandler(bundleContext);
     }
 
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
     @Invalidate
     private synchronized void stop() {
         LOGGER.debug("Stop");
@@ -90,7 +101,8 @@ public class Dispatcher {
         }
 
         public void handleEvent(Event event) {
-            ApplicationEvent applicationEvent = (ApplicationEvent) event.getProperty(KerneosConstants.KERNEOS_TOPIC_DATA);
+            ApplicationEvent applicationEvent = (ApplicationEvent)
+                    event.getProperty(KerneosConstants.KERNEOS_TOPIC_DATA);
         }
 
         public void dispose() {
@@ -112,7 +124,8 @@ public class Dispatcher {
             // Post an event
             Dictionary<String, Object> properties = new Hashtable<String, Object>();
             properties.put(EAConstants.DATA, moduleEvent);
-            Event newEvent = new Event(KerneosConstants.KERNEOS_MODULES_TOPIC + FlexConstants.KERNEOS_FLEX_TOPIC_SUFFIX, properties);
+            Event newEvent = new Event(KerneosConstants.KERNEOS_MODULES_TOPIC + FlexConstants.KERNEOS_FLEX_TOPIC_SUFFIX,
+                    properties);
 
             eventAdmin.sendEvent(newEvent);
         }
@@ -129,9 +142,8 @@ public class Dispatcher {
         ProfileEventHandler(BundleContext bundleContext, String applicationId) {
             this.applicationId = applicationId;
             Dictionary props = new Hashtable();
-            props.put(EventConstants.EVENT_TOPIC, new String[]{KerneosConstants.KERNEOS_APPLICATION_TOPIC + "/" +
-                    applicationId +
-                    KerneosConstants.KERNEOS_PROFILE_SUFFIX});
+            props.put(EventConstants.EVENT_TOPIC, new String[]{KerneosConstants.KERNEOS_APPLICATION_TOPIC + "/"
+                    + applicationId + KerneosConstants.KERNEOS_PROFILE_SUFFIX});
             registration = bundleContext.registerService(EventHandler.class.getName(), this, props);
         }
 
@@ -141,10 +153,9 @@ public class Dispatcher {
             // Post an event
             Dictionary<String, Object> properties = new Hashtable<String, Object>();
             properties.put(EAConstants.DATA, profile);
-            Event newEvent = new Event(KerneosConstants.KERNEOS_APPLICATION_TOPIC + "/" +
-                    applicationId +
-                    KerneosConstants.KERNEOS_PROFILE_SUFFIX +
-                    FlexConstants.KERNEOS_FLEX_TOPIC_SUFFIX, properties);
+            Event newEvent = new Event(KerneosConstants.KERNEOS_APPLICATION_TOPIC + "/"
+                    + applicationId + KerneosConstants.KERNEOS_PROFILE_SUFFIX + FlexConstants.KERNEOS_FLEX_TOPIC_SUFFIX,
+                    properties);
 
             eventAdmin.sendEvent(newEvent);
         }

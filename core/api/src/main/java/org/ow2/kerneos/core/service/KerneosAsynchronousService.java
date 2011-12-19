@@ -29,17 +29,20 @@ package org.ow2.kerneos.core.service;
  * Interface corresponding to a declaration of asynchronous service.
  */
 public interface KerneosAsynchronousService {
-    public final static String ID = "kerneos-service-id";
-    public final static String TYPE = "kerneos-asynchronous-type";
+    String ID = "kerneos-service-id";
+    String TYPE = "kerneos-asynchronous-type";
 
 
     /**
      * Different types of asynchronous service.
      */
 
-    public final static class Type {
-        public final static String EVENTADMIN = "event-admin";
-        public final static String JMS = "java-message-service";
-    }
+    class Type {
+        private Type() {
 
+        }
+
+        public static final String EVENTADMIN = "event-admin";
+        public static final String JMS = "java-message-service";
+    }
 }

@@ -29,5 +29,5 @@ package org.ow2.kerneos.core.service;
  * Interface corresponding to a simple OSGi service.
  */
 public interface KerneosSimpleService {
-    public final static String ID = "kerneos-service-id";
+    String ID = "kerneos-service-id";
 }

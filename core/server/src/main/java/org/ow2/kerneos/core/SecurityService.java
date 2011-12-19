@@ -59,7 +59,11 @@ public class SecurityService implements KerneosSecurityService {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(SecurityService.class);
+    private static final Log LOGGER = LogFactory.getLog(SecurityService.class);
+
+    private SecurityService() {
+
+    }
 
     /**
      * Called when all the component dependencies are met.
@@ -105,7 +109,8 @@ public class SecurityService implements KerneosSecurityService {
      *
      * @return The status associated to the authorisation.
      */
-    public SecurityError isAuthorized(KerneosApplication application, KerneosModule module, String service, String method) {
+    public SecurityError isAuthorized(KerneosApplication application, KerneosModule module, String service,
+                                      String method) {
         KerneosSession session = KerneosSession.getCurrent();
         switch (application.getConfiguration().getAuthentication()) {
             case NONE:
@@ -113,8 +118,9 @@ public class SecurityService implements KerneosSecurityService {
 
             case FLEX:
                 if (!session.isLogged()) {
-                    if (module == null)
+                    if (module == null) {
                         return SecurityError.NO_ERROR;
+                    }
                 }
 
             default:
@@ -128,8 +134,9 @@ public class SecurityService implements KerneosSecurityService {
         Profile profile = application.getProfileManager().getProfile();
 
         if (module != null) {
-            if (profile == null)
+            if (profile == null) {
                 return SecurityError.ACCESS_DENIED;
+            }
 
             ProfilePolicy policy = getPolicy(profile.getDefaultRules(), roles, profile.getDefaultPolicy());
 
@@ -168,8 +175,9 @@ public class SecurityService implements KerneosSecurityService {
      */
     private ProfileBundle getBundle(List<ProfileBundle> bundles, String id) {
         for (ProfileBundle bundle : bundles) {
-            if (bundle.getId().equals(id))
+            if (bundle.getId().equals(id)) {
                 return bundle;
+            }
         }
         return null;
     }
@@ -183,8 +191,9 @@ public class SecurityService implements KerneosSecurityService {
      */
     private ProfileService getService(List<ProfileService> services, String id) {
         for (ProfileService service : services) {
-            if (service.getId().equals(id))
+            if (service.getId().equals(id)) {
                 return service;
+            }
         }
         return null;
     }
@@ -198,8 +207,9 @@ public class SecurityService implements KerneosSecurityService {
      */
     private ProfileMethod getMethod(List<ProfileMethod> methods, String id) {
         for (ProfileMethod method : methods) {
-            if (method.getId().equals(id))
+            if (method.getId().equals(id)) {
                 return method;
+            }
         }
         return null;
     }
@@ -216,9 +226,11 @@ public class SecurityService implements KerneosSecurityService {
         ProfilePolicy policy = null;
         if (roles != null) {
             for (ProfileRule rule : rules) {
-                if (roles.contains(rule.getRole()))
-                    if (policy == null || rule.getPolicy() == ProfilePolicy.ALLOW)
+                if (roles.contains(rule.getRole())) {
+                    if (policy == null || rule.getPolicy() == ProfilePolicy.ALLOW) {
                         policy = rule.getPolicy();
+                    }
+                }
             }
         }
         return (policy != null) ? policy : defaultPolicy;

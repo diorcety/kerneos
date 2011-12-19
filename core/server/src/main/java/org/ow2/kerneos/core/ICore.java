@@ -26,16 +26,14 @@
 package org.ow2.kerneos.core;
 
 import org.osgi.framework.Bundle;
-import org.ow2.kerneos.common.config.generated.Application;
-import org.ow2.kerneos.common.config.generated.Module;
 
 public interface ICore {
 
-    public void addApplication(Bundle bundle) throws Exception;
+    void addApplication(Bundle bundle) throws Exception;
 
-    public void removeApplication(Bundle bundle) throws Exception;
+    void removeApplication(Bundle bundle) throws Exception;
 
-    public void addModule(Bundle bundle) throws Exception;
+    void addModule(Bundle bundle) throws Exception;
 
-    public void removeModule(Bundle bundle) throws Exception;
+    void removeModule(Bundle bundle) throws Exception;
 }

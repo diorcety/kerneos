@@ -45,7 +45,7 @@ public class Service implements KerneosSimpleService {
     /**
      * The logger
      */
-    private static Log LOGGER = LogFactory.getLog(Service.class);
+    private static final Log LOGGER = LogFactory.getLog(Service.class);
 
 
     @ServiceProperty(name = KerneosSimpleService.ID, value = "module1-service1")

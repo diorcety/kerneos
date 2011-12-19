@@ -10,13 +10,13 @@ import java.util.Collection;
 
 public interface ICore {
 
-    public KerneosModule getModule(String moduleId);
+    KerneosModule getModule(String moduleId);
 
-    public Collection<KerneosModule> getModules();
+    Collection<KerneosModule> getModules();
 
-    public KerneosApplication getApplication(String applicationId);
+    KerneosApplication getApplication(String applicationId);
 
-    public Collection<KerneosApplication> getApplications();
+    Collection<KerneosApplication> getApplications();
 
     void updateContext(HttpServletRequest request, HttpServletResponse response);
 

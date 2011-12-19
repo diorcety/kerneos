@@ -64,7 +64,7 @@ public final class ConfigurationService implements GraniteDestination {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(ConfigurationService.class);
+    private static final Log LOGGER = LogFactory.getLog(ConfigurationService.class);
 
     @Requires
     private EventAdmin eventAdmin;
@@ -81,17 +81,27 @@ public final class ConfigurationService implements GraniteDestination {
     private Configuration eaConfig, graniteDestination, gravityDestination;
 
     /**
+     * Constructor.
+     * Avoid direct component instantiation.
+     */
+    private ConfigurationService() {
+
+    }
+
+    /**
      * Called when all the component dependencies are met.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Validate
     private void start() throws IOException {
         LOGGER.debug("Start Flex Tracker");
 
         // Register the classes used with "kerneosConfig" service
-        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_CONFIGURATION, ConfigObjects.list());
+        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_CONFIGURATION, ConfigObjects.classes());
 
         // Register the classes used with event admin
-        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, ConfigObjects.list());
+        gcr.registerClasses(FlexConstants.KERNEOS_SERVICE_ASYNC_CONFIGURATION, ConfigObjects.classes());
 
         // Register the asynchronous service used with Tracker
         {
@@ -123,6 +133,8 @@ public final class ConfigurationService implements GraniteDestination {
 
     /**
      * Called when all the component dependencies aren't met anymore.
+     *
+     * @throws IOException an issue occurs during the invalidation
      */
     @Invalidate
     private void stop() throws IOException {

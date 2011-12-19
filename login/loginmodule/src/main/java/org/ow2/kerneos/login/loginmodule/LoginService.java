@@ -50,14 +50,14 @@ public class LoginService implements KerneosLogin {
     /**
      * The logger.
      */
-    private static Log LOGGER = LogFactory.getLog(LoginService.class);
+    private static final Log LOGGER = LogFactory.getLog(LoginService.class);
 
     @Property(name = KerneosLogin.ID, mandatory = true)
     @ServiceProperty(name = KerneosLogin.ID)
-    private String ID;
+    private String id;
 
     @Property(name = "module", mandatory = true)
-    private String MODULE;
+    private String module;
 
     /**
      * CallbackHandler.
@@ -66,19 +66,19 @@ public class LoginService implements KerneosLogin {
 
     @Validate
     private void start() throws IOException {
-        LOGGER.debug("Start LoginService(" + ID + ")");
+        LOGGER.debug("Start LoginService(" + id + ")");
     }
 
     @Invalidate
     private void stop() throws IOException {
-        LOGGER.debug("Stop LoginService(" + ID + ")");
+        LOGGER.debug("Stop LoginService(" + id + ")");
     }
 
     public void login(final String application, final String user, final String password) {
         this.handler = new NoInputCallbackHandler(user, password);
         try {
             // Obtain a LoginContext
-            LoginContext lc = new LoginContext(MODULE, this.handler);
+            LoginContext lc = new LoginContext(module, this.handler);
 
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             lc.login();
@@ -91,6 +91,7 @@ public class LoginService implements KerneosLogin {
             KerneosSession.getCurrent().setUsername(user);
             KerneosSession.getCurrent().setRoles(roles);
         } catch (Exception e) {
+            LOGGER.warn("Unexpected error during login", e);
         }
     }
 

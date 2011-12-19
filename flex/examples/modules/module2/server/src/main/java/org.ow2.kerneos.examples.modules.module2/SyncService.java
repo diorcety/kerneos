@@ -55,9 +55,9 @@ public class SyncService implements KerneosSimpleService {
     /**
      * The logger
      */
-    private static Log LOGGER = LogFactory.getLog(SyncService.class);
+    private static final Log LOGGER = LogFactory.getLog(SyncService.class);
 
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     /**
      * Event Admin.
@@ -93,7 +93,7 @@ public class SyncService implements KerneosSimpleService {
      */
     public void post(Post post) {
         // Timestamp the post
-        post.setDate(dateFormat.format(new Date()));
+        post.setDate(DATE_FORMAT.format(new Date()));
 
         // Send message using EventAdmin
         Dictionary<String, Object> properties = new Hashtable<String, Object>();

@@ -14,9 +14,9 @@ import org.ow2.kerneos.common.service.KerneosModule;
 @Component
 @Provides
 public class ModuleImpl implements KerneosModule {
-    public final static String ID = "ID";
-    public final static String BUNDLE = "BUNDLE";
-    public final static String CONFIGURATION = "CONFIGURATION";
+    public static final String ID = "ID";
+    public static final String BUNDLE = "BUNDLE";
+    public static final String CONFIGURATION = "CONFIGURATION";
 
     @Property(name = ID)
     @ServiceProperty(name = KerneosModule.ID)
@@ -30,7 +30,7 @@ public class ModuleImpl implements KerneosModule {
 
     private BundleContext bundleContext;
 
-    ModuleImpl(BundleContext bundleContext) {
+    private ModuleImpl(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
 

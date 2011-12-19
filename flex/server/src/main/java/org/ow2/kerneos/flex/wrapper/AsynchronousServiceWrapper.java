@@ -1,10 +1,15 @@
 package org.ow2.kerneos.flex.wrapper;
 
-import org.apache.felix.ipojo.annotations.*;
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Invalidate;
+import org.apache.felix.ipojo.annotations.Property;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
+import org.apache.felix.ipojo.annotations.Validate;
 
 import org.granite.gravity.osgi.adapters.ea.EAConstants;
 import org.granite.gravity.osgi.adapters.jms.JMSConstants;
-
 import org.granite.osgi.GraniteClassRegistry;
 import org.granite.osgi.GraniteConstants;
 
@@ -27,10 +32,10 @@ import java.util.List;
 
 @Component
 public class AsynchronousServiceWrapper {
-    public final static String SERVICE = "SERVICE";
-    public final static String CONFIGURATION = "CONFIGURATION";
+    public static final String SERVICE = "SERVICE";
+    public static final String CONFIGURATION = "CONFIGURATION";
 
-    private static Log LOGGER = LogFactory.getLog(AsynchronousServiceWrapper.class);
+    private static final Log LOGGER = LogFactory.getLog(AsynchronousServiceWrapper.class);
 
     @Property(name = CONFIGURATION)
     private Service serviceConfiguration;
@@ -47,18 +52,40 @@ public class AsynchronousServiceWrapper {
     private Configuration destinationConfiguration;
     private Configuration factoryConfiguration;
 
+    /**
+     * Constructor
+     */
+    private AsynchronousServiceWrapper() {
+
+    }
+
+    /**
+     * Called when targeted service is present.
+     *
+     * @param service          the targeted service
+     * @param serviceReference the service reference
+     */
     @Bind(id = SERVICE)
     private void bindService(KerneosAsynchronousService service, ServiceReference serviceReference) {
         this.service = service;
         this.serviceReference = serviceReference;
     }
 
+    /**
+     * Called when targeted service isn't present anymore.
+     *
+     * @param service          the targeted service
+     * @param serviceReference the service reference
+     */
     @Unbind
     private void unbindService(KerneosAsynchronousService service, ServiceReference serviceReference) {
         this.service = null;
         this.serviceReference = null;
     }
 
+    /**
+     * Called when all the component dependencies are met.
+     */
     @Validate
     private void start() {
         try {
@@ -82,11 +109,13 @@ public class AsynchronousServiceWrapper {
 
                 if (at.equals(KerneosAsynchronousService.Type.JMS)) {
                     properties.put("destination", destination);
-                    factoryConfiguration = configurationAdmin.createFactoryConfiguration(JMSConstants.CONFIGURATION_ID, null);
+                    factoryConfiguration = configurationAdmin.createFactoryConfiguration(JMSConstants.CONFIGURATION_ID,
+                            null);
                     factoryConfiguration.update(properties);
                 } else if (at.equals(KerneosAsynchronousService.Type.EVENTADMIN)) {
                     properties.put("destination", destination);
-                    factoryConfiguration = configurationAdmin.createFactoryConfiguration(EAConstants.CONFIGURATION_ID, null);
+                    factoryConfiguration = configurationAdmin.createFactoryConfiguration(EAConstants.CONFIGURATION_ID,
+                            null);
                     factoryConfiguration.update(properties);
                 }
             }
@@ -103,7 +132,8 @@ public class AsynchronousServiceWrapper {
                 properties.put("id", destination);
                 properties.put("service", FlexConstants.GRAVITY_SERVICE);
                 properties.put("aobjectdapter", adapter);
-                destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION, null);
+                destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION,
+                        null);
                 destinationConfiguration.update(properties);
             }
 
@@ -112,6 +142,9 @@ public class AsynchronousServiceWrapper {
         }
     }
 
+    /**
+     * Called when all the component dependencies aren't met anymore.
+     */
     @Invalidate
     private void stop() {
         try {
@@ -132,7 +165,7 @@ public class AsynchronousServiceWrapper {
      * Register the classes associated to a service
      *
      * @param service the service
-     * @param service the instance of the service
+     * @param object  the instance of the service
      */
     private void registerClasses(final Service service, final Object object) throws ClassNotFoundException {
         if (service.getModule() instanceof SwfModule) {

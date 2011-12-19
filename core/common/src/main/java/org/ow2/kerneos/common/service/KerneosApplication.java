@@ -7,7 +7,7 @@ import org.ow2.kerneos.profile.KerneosProfile;
 import org.ow2.kerneos.roles.KerneosRoles;
 
 public interface KerneosApplication {
-    public static final String ID = "ID";
+    String ID = "ID";
 
     KerneosLogin getLoginManager();
 

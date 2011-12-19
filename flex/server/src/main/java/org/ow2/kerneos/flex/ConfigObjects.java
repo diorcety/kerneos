@@ -40,12 +40,9 @@ import org.ow2.kerneos.common.config.generated.SwfModule;
 /**
  * Classes used with configuration service.
  */
-public class ConfigObjects {
-    private ConfigObjects() {
+public final class ConfigObjects {
 
-    }
-
-    private final static Class[] list = new Class[]{
+    private static final Class[] CLASSES = new Class[]{
             ServiceType.class,
             Service.class,
             Application.class,
@@ -58,7 +55,20 @@ public class ConfigObjects {
             PromptBeforeClose.class,
             Authentication.class};
 
-    public static Class[] list() {
-        return list;
+    /**
+     * Constructor.
+     * Avoid Class instantiation.
+     */
+    private ConfigObjects() {
+
+    }
+
+    /**
+     * Return classes used with configuration service.
+     *
+     * @return an array containing the classes used with configuration service
+     */
+    public static Class[] classes() {
+        return CLASSES;
     }
 }

@@ -32,8 +32,8 @@ package org.ow2.kerneos.core.service;
  * @param <T> is the class returned by the factory.
  */
 public interface KerneosFactoryService<T> {
-    public final static String ID = "kerneos-service-id";
-    public final static String SCOPE = "kerneos-factory-scope";
+    String ID = "kerneos-service-id";
+    String SCOPE = "kerneos-factory-scope";
 
     /**
      * Create a new instance of the service.
@@ -46,19 +46,23 @@ public interface KerneosFactoryService<T> {
     /**
      * Differents scope of a kerneos factory.
      */
-    public final static class Scope {
+    class Scope {
+        private Scope() {
+
+        }
+
         /**
          * Create an instance by request.
          */
-        public final static String REQUEST = "request";
+        public static final String REQUEST = "request";
         /**
          * Create an instance http session.
          */
-        public final static String SESSION = "session";
+        public static final String SESSION = "session";
 
         /**
          * Create on instance.
          */
-        public final static String APPLICATION = "application";
+        public static final String APPLICATION = "application";
     }
 }

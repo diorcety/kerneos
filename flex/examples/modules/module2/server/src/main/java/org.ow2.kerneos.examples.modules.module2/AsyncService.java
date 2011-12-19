@@ -44,7 +44,7 @@ public class AsyncService implements KerneosAsynchronousService {
     /**
      * The logger
      */
-    private static Log LOGGER = LogFactory.getLog(AsyncService.class);
+    private static final Log LOGGER = LogFactory.getLog(AsyncService.class);
 
     @ServiceProperty(name = KerneosAsynchronousService.ID, value = "module2-serviceAsync")
     private String id;

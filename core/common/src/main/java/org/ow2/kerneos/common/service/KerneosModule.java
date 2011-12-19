@@ -4,7 +4,7 @@ import org.osgi.framework.Bundle;
 import org.ow2.kerneos.common.config.generated.Module;
 
 public interface KerneosModule {
-    public static final String ID = "ID";
+    String ID = "ID";
 
     Module getConfiguration();
 
