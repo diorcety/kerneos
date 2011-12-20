@@ -184,8 +184,10 @@ public class Core implements ICore {
         flexContext.setResponse(response);
 
         // Get the module and the associated path
-        String path = request.getRequestURI().substring(
-                flexContext.getApplication().getConfiguration().getApplicationUrl().length());
+        String path = request.getRequestURI();
+        int index = path.indexOf(flexContext.getApplication().getConfiguration().getApplicationUrl());
+        path = path.substring(index);
+
         KerneosModule currentModule = null;
         if (path != null && path.startsWith(KerneosConstants.KERNEOS_MODULE_URL)) {
             path = path.substring(KerneosConstants.KERNEOS_MODULE_URL.length());

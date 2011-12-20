@@ -50,7 +50,7 @@ public class SecurityTest extends TestCase {
     public void testDefaultPolicy() throws Exception {
         TestApplication application = new TestApplication("test");
         KerneosProfile profile = new TestProfileManager("rules1.xml");
-        SecurityService securityService = new SecurityService();
+        SecurityService securityService = SecurityService.class.getDeclaredConstructor().newInstance();
 
         assertNotNull("Invalid Profile", profile.getProfile());
 
@@ -94,7 +94,7 @@ public class SecurityTest extends TestCase {
     public void testMultipleRule() throws Exception {
         TestApplication application = new TestApplication("test");
         KerneosProfile profile = new TestProfileManager("rules2.xml");
-        SecurityService securityService = new SecurityService();
+        SecurityService securityService = SecurityService.class.getDeclaredConstructor().newInstance();
 
         assertNotNull("Invalid Profile", profile.getProfile());
 
@@ -130,7 +130,7 @@ public class SecurityTest extends TestCase {
     public void testOverrideRule() throws Exception {
         TestApplication application = new TestApplication("test");
         KerneosProfile profile = new TestProfileManager("rules3.xml");
-        SecurityService securityService = new SecurityService();
+        SecurityService securityService = SecurityService.class.getDeclaredConstructor().newInstance();
 
         assertNotNull("Invalid Profile", profile.getProfile());
 

@@ -95,7 +95,6 @@
   </repositories>
 
   <modules>
-    <module>archetypes</module>
     <module>core</module>
     <module>flex</module>
     <module>login</module>

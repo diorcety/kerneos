@@ -1,87 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - Kerneos
-  - Copyright (C) 2011 Bull S.A.S.
-  - Contact: jasmine@ow2.org
-  -
-  - This library is free software; you can redistribute it and/or
-  - modify it under the terms of the GNU Lesser General Public
-  - License as published by the Free Software Foundation; either
-  - version 2.1 of the License, or any later version.
-  -
-  - This library is distributed in the hope that it will be useful,
-  - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  - Lesser General Public License for more details.
-  -
-  - You should have received a copy of the GNU Lesser General Public
-  - License along with this library; if not, write to the Free Software
-  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
-  - USA
-  -
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - $Id$
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos-flex-examples-examples-example1</artifactId>
-    <version>2.1.0-SNAPSHOT</version>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}-packaging</artifactId>
+    <version>${version}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>kerneos-flex-examples-examples-example1-war</artifactId>
-  <name>Kerneos :: Flex :: Examples :: Examples :: Example 1 :: War</name>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+
+  <name>${groupId} :: ${rootArtifactId} :: Packaging :: War</name>
 
   <packaging>war</packaging>
-
-  <properties>
-    <org.apache.felix.http.bridge.version>2.2.0</org.apache.felix.http.bridge.version>
-    <org.apache.felix.webconsole.version>3.1.8</org.apache.felix.webconsole.version>
-    <org.apache.felix.shell.version>1.4.2</org.apache.felix.shell.version>
-    <org.apache.felix.http.proxy.version>2.2.0</org.apache.felix.http.proxy.version>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.framework</artifactId>
-      <version>${org.apache.felix.version}</version>
-      <scope>compile</scope>
+      <version>3.2.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.http.proxy</artifactId>
-      <version>${org.apache.felix.http.proxy.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.http.bridge</artifactId>
-      <version>${org.apache.felix.http.bridge.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.webconsole</artifactId>
-      <version>${org.apache.felix.webconsole.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.shell</artifactId>
-      <version>${org.apache.felix.shell.version}</version>
-      <scope>provided</scope>
+      <version>2.2.0</version>
     </dependency>
   </dependencies>
 
@@ -90,6 +42,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency.version}</version>
         <executions>
           <execution>
             <id>copy</id>
@@ -118,6 +71,13 @@
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.shell</artifactId>
                   <version>1.4.2</version>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.arch</artifactId>
+                  <version>1.6.0</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
@@ -156,7 +116,7 @@
 
                 <!-- OSGi -->
                 <artifactItem>
-                  <groupId>org.osgi</groupId>
+                  <groupId>org.apache.felix</groupId>
                   <artifactId>org.osgi.compendium</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
@@ -237,19 +197,19 @@
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-login-api</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-profile-api</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-roles-api</artifactId>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
@@ -266,42 +226,14 @@
 
                 <!-- Applications -->
                 <artifactItem>
-                  <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-flex-examples-applications-application1</artifactId>
-                  <version>${project.version}</version>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-flex-examples-applications-application2</artifactId>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${rootArtifactId}-application</artifactId>
                   <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
 
                 <!-- Modules -->
-                <artifactItem>
-                  <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-flex-examples-modules-module1-server</artifactId>
-                  <version>${project.version}</version>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-flex-examples-modules-module2-server</artifactId>
-                  <version>${project.version}</version>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-flex-examples-modules-module3-server</artifactId>
-                  <version>${project.version}</version>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
-                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
@@ -310,6 +242,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
+        <version>${maven-war.version}</version>
         <configuration>
           <webResources>
             <resource>

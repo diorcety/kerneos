@@ -131,22 +131,22 @@
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-core</artifactId>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity-ea</artifactId>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity-jms</artifactId>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.graniteds-osgi</groupId>
       <artifactId>granite-gravity</artifactId>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
 
     <!--Kerneos Core Dependency-->

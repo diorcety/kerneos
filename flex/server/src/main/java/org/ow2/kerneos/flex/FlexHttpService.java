@@ -213,7 +213,7 @@ public class FlexHttpService implements HttpContext {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
 
