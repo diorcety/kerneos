@@ -61,7 +61,7 @@ public class SecurityService implements KerneosSecurityService {
      */
     private static final Log LOGGER = LogFactory.getLog(SecurityService.class);
 
-    private SecurityService() {
+    SecurityService() {
 
     }
 

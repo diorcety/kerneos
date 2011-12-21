@@ -43,6 +43,7 @@
 
   <properties>
     <org.apache.felix.http.jetty.version>2.2.0</org.apache.felix.http.jetty.version>
+    <org.apache.felix.fileinstall.version>3.1.10</org.apache.felix.fileinstall.version>
   </properties>
 
   <dependencies>
@@ -59,6 +60,18 @@
       <artifactId>org.apache.felix.http.jetty</artifactId>
       <version>${org.apache.felix.http.jetty.version}</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.fileinstall</artifactId>
+      <version>${org.apache.felix.fileinstall.version}</version>
+      <scope>provided</scope>
+    </dependency>
+        <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-profile-fileinstall</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -171,6 +184,12 @@
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.arch.gogo</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>

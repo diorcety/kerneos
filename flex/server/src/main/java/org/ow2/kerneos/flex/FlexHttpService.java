@@ -238,6 +238,7 @@ public class FlexHttpService implements HttpContext {
     public boolean handleSecurity(final HttpServletRequest request,
                                   final HttpServletResponse response) throws IOException {
         // Disable Cache
+
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 

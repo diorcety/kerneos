@@ -46,6 +46,7 @@
     <org.apache.felix.webconsole.version>3.1.8</org.apache.felix.webconsole.version>
     <org.apache.felix.shell.version>1.4.2</org.apache.felix.shell.version>
     <org.apache.felix.http.proxy.version>2.2.0</org.apache.felix.http.proxy.version>
+    <org.apache.felix.ipojo.webconsole.version>1.6.0</org.apache.felix.ipojo.webconsole.version>
   </properties>
 
   <dependencies>
@@ -79,8 +80,20 @@
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
+      <version>${org.apache.felix.ipojo.webconsole.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.shell</artifactId>
       <version>${org.apache.felix.shell.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-profile-file</artifactId>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -173,12 +186,6 @@
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.felix</groupId>
-                  <artifactId>org.apache.felix.fileinstall</artifactId>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
-                </artifactItem>
 
                 <!-- iPOJO -->
                 <artifactItem>
@@ -190,6 +197,18 @@
                 <artifactItem>
                   <groupId>org.apache.felix</groupId>
                   <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.arch.gogo</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
@@ -259,7 +278,7 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-profile-fileinstall</artifactId>
+                  <artifactId>kerneos-profile-file</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>
                 </artifactItem>
@@ -274,7 +293,7 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
-                  <artifactId>kerneos-flex-examples-applications-application2</artifactId>
+                  <artifactId>kerneos-flex-examples-applications-application3</artifactId>
                   <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundles</outputDirectory>

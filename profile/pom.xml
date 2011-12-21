@@ -45,6 +45,7 @@
     <module>api</module>
     <module>fileinstall</module>
     <module>jonas</module>
+    <module>file</module>
   </modules>
 
 </project>
