@@ -27,20 +27,46 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>${groupId}</groupId>
     <artifactId>${rootArtifactId}</artifactId>
     <version>${version}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
 
-  <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
+  <artifactId>${rootArtifactId}-packaging</artifactId>
+
+  <name>${groupId} :: ${rootArtifactId} :: Packaging</name>
 
   <packaging>pom</packaging>
 
-  <name>${groupId} :: ${rootArtifactId} :: Packaging</name>
+  <properties>
+    <org.apache.felix.configadmin.version>1.2.8</org.apache.felix.configadmin.version>
+    <org.apache.felix.eventadmin.version>1.2.8</org.apache.felix.eventadmin.version>
+    <org.apache.felix.version>3.2.2</org.apache.felix.version>
+
+    <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
+    <ow2-util.version>1.0.31</ow2-util.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-i18n</artifactId>
+      <version>${ow2-util-i18n.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--Application Dependency-->
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>${rootArtifactId}-application</artifactId>
+      <version>${version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
   <modules>
     <module>felix</module>

@@ -41,22 +41,6 @@
 
   <packaging>pom</packaging>
 
-  <properties>
-    <maven.war.version>2.1.1</maven.war.version>
-  </properties>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-war-plugin</artifactId>
-          <version>${maven.war.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-
   <modules>
     <module>example1</module>
   </modules>

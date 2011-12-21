@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="history/history.css"/>
     <!--  END Browser History required section -->
 
-    <title>Kerneos Examples - Application 1</title>
+    <title>${kerneos-application-project} - ${kerneos-application-name}</title>
     <link type="image/x-icon" href="icons/favicon.ico" rel="icon"/>
     <link type="image/x-icon" href="icons/favicon.ico" rel="shortcut icon"/>
     <script src="AC_OETags.js" language="javascript"></script>
@@ -81,7 +81,7 @@
         // if we've detected an acceptable version
         // embed the Flash Content SWF when all tests are passed
         AC_FL_RunContent(
-                "src", "kerneos?application=examples-application1",
+                "src", "kerneos?application=${kerneos-application-id}",
                 "width", "100%",
                 "height", "100%",
                 "align", "middle",
@@ -105,11 +105,11 @@
     <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
             id="kerneos" width="100%" height="100%"
             codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-        <param name="movie" value="kerneos.swf?application=examples-application1"/>
+        <param name="movie" value="kerneos.swf?application=${kerneos-application-id}"/>
         <param name="quality" value="high"/>
         <param name="bgcolor" value="#ebf6ff"/>
         <param name="allowScriptAccess" value="sameDomain"/>
-        <embed src="kerneos.swf?application=examples-application1" quality="high" bgcolor="#ebf6ff"
+        <embed src="kerneos.swf?application=${kerneos-application-id}" quality="high" bgcolor="#ebf6ff"
                width="100%" height="100%" name="kerneos" align="middle"
                play="true"
                loop="false"

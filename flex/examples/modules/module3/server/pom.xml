@@ -42,6 +42,17 @@
   <packaging>bundle</packaging>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -49,10 +60,6 @@
         <configuration>
           <instructions>
             <Kerneos-Module>kerneos-module3</Kerneos-Module>
-            <Include-Resource>
-              src/main/resources,
-              KERNEOS=src/main/kerneos,
-            </Include-Resource>
           </instructions>
         </configuration>
       </plugin>

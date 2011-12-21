@@ -74,6 +74,23 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -96,7 +113,7 @@
                   <destFileName>module2.swf</destFileName>
                 </artifactItem>
               </artifactItems>
-              <outputDirectory>${project.build.directory}/resources</outputDirectory>
+              <outputDirectory>${project.build.directory}/kerneos</outputDirectory>
             </configuration>
           </execution>
         </executions>
@@ -108,11 +125,6 @@
         <configuration>
           <instructions>
             <Kerneos-Module>kerneos-module2</Kerneos-Module>
-            <Include-Resource>
-              src/main/resources,
-              KERNEOS=src/main/kerneos,
-              KERNEOS=${project.build.directory}/resources
-            </Include-Resource>
           </instructions>
         </configuration>
       </plugin>

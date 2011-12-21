@@ -1,11 +1,13 @@
-
-package archetype - resources.client.src.main.flex.control
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+package ${package}.control
 {
 import com.adobe.cairngorm.control.FrontController;
 
-import command.*;
-import event.*;
-import model.*;
+import ${package}.command.*;
+import ${package}.event.*;
+import ${package}.model.*;
 
 
 /**

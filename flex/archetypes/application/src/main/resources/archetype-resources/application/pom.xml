@@ -2,20 +2,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>${groupId}</groupId>
     <artifactId>${rootArtifactId}</artifactId>
     <version>${version}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
 
-  <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
-
+  <artifactId>${rootArtifactId}-application</artifactId>
   <name>${groupId} :: ${rootArtifactId} :: Application</name>
 
   <packaging>bundle</packaging>
+
+  <properties>
+    <kerneos-application-id>${groupId}-${rootArtifactId}</kerneos-application-id>
+    <kerneos-application-project>${groupId}</kerneos-application-project>
+    <kerneos-application-name>${rootArtifactId}</kerneos-application-name>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -26,6 +31,33 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.html</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -34,26 +66,9 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <!-- this application name has to be the same in the index.html : application=kerneos-application -->
-            <Kerneos-Application>kerneos-application</Kerneos-Application>
-            <Include-Resource>
-              src/main/resources,
-              KERNEOS=src/main/kerneos
-            </Include-Resource>
+            <Kerneos-Application>${kerneos-application-id}</Kerneos-Application>
           </instructions>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-ipojo-plugin</artifactId>
-        <version>${ipojo.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>ipojo-bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

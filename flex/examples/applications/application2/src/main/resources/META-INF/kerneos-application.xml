@@ -31,8 +31,8 @@
   <!-- Kerneos settings -->
 
   <!-- The two parts of the mark displayed on the top right corner -->
-  <application-project>Kerneos Examples</application-project>
-  <application-name>Application 2</application-name>
+  <application-project>${kerneos-application-project}</application-project>
+  <application-name>${kerneos-application-name}</application-name>
 
   <!-- Base URL used -->
   <application-url>/app2</application-url>

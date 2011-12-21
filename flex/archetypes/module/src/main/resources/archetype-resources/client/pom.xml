@@ -23,7 +23,7 @@
     <!-- Flex -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-core-client</artifactId>
+      <artifactId>kerneos-flex-client</artifactId>
       <version>${kerneos.version}</version>
       <type>xml</type>
       <classifier>link-report</classifier>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>halo</artifactId>
-      <version>${flex-version}</version>
+      <version>${flex.version}</version>
       <classifier>theme</classifier>
       <type>swc</type>
       <scope>theme</scope>
@@ -47,7 +47,7 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>${flexmojos-version}</version>
+        <version>${flexmojos.version}</version>
         <extensions>true</extensions>
         <configuration>
           <localesCompiled>
@@ -55,7 +55,7 @@
             <locale>fr_FR</locale>
           </localesCompiled>
           <localesSourcePath>src/main/locales/{locale}</localesSourcePath>
-          <sourceFile>MyModule.mxml</sourceFile>
+          <sourceFile>${package}/MyModule.mxml</sourceFile>
         </configuration>
       </plugin>
     </plugins>

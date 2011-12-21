@@ -5,21 +5,36 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>${groupId}</groupId>
-    <artifactId>${rootArtifactId}-packaging</artifactId>
-    <version>${version}</version>
+    <groupId>org.ow2.kerneos</groupId>
+    <artifactId>kerneos-flex-examples-examples-example1</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>${rootArtifactId}-packaging-jonas</artifactId>
+  <artifactId>kerneos-flex-examples-examples-example1-jonas</artifactId>
 
-  <name>${groupId} :: ${rootArtifactId} :: Packaging :: Jonas</name>
+  <name>Kerneos :: Flex :: Examples :: Examples :: Example 1 :: Jonas</name>
 
   <packaging>pom</packaging>
 
   <properties>
     <maven.ow2-util.version>1.0.33</maven.ow2-util.version>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-login-loginmodule</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-profile-jonas</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -33,7 +48,7 @@
           <deploymentPlans>
             <!-- Definition of Deployment plan for ApplicationTest -->
             <deploymentPlan>
-              <name>${rootArtifactId}-deployment-plan</name>
+              <name>kerneos-flex-examples-examples-example1-jonas-deployment-plan</name>
 
               <artifactItems>
                 <!-- OSGi -->
@@ -88,62 +103,63 @@
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-core-api</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-login-api</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-roles-api</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-profile-api</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-core-server</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-core-common</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-flex-server</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-login-loginmodule</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-profile-jonas</artifactId>
-                  <version>${kerneos.version}</version>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
 
                 <!-- Application -->
                 <artifactItem>
-                  <groupId>${groupId}</groupId>
-                  <artifactId>${rootArtifactId}-application</artifactId>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-examples-applications-application1</artifactId>
+                  <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>
 
@@ -152,7 +168,7 @@
           </deploymentPlans>
 
           <profile>
-            <include>${rootArtifactId}-deployment-plan</include>
+            <include>kerneos-flex-examples-examples-example1-jonas-deployment-plan</include>
           </profile>
         </configuration>
 
@@ -185,8 +201,8 @@
 
       <!-- copy url internal xml files to deploy folder -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.5</version>
         <executions>
           <execution>
             <id>copy-resources</id>
@@ -209,10 +225,11 @@
 
       <!-- Build zip file -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptors>
-            <descriptor>src/main/assembly.xml</descriptor>
+            <descriptor>src/main/resources/assembly.xml</descriptor>
           </descriptors>
 
         </configuration>

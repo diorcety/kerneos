@@ -1,4 +1,7 @@
-package archetype - resources.client.src.main.flex.command
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+package ${package}.command
 {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
@@ -12,9 +15,9 @@ import mx.rpc.events.ResultEvent;
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.view.ServerSideException;
 */
-import business.*;
-import event.ModuleEvent;
-import model.ModuleModelLocator;
+import ${package}.business.*;
+import ${package}.event.ModuleEvent;
+import ${package}.model.ModuleModelLocator;
 
 /**
   * The command class from the cairngorm model.

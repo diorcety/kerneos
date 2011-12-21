@@ -23,10 +23,7 @@
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -49,45 +46,17 @@
   </repositories>
 
   <properties>
-    <pax-confman-propsloader.version>0.2.2</pax-confman-propsloader.version>
-    <pax-logging-api.version>1.6.0</pax-logging-api.version>
-    <pax-logging-service.version>1.6.0</pax-logging-service.version>
     <org.apache.felix.configadmin.version>1.2.8</org.apache.felix.configadmin.version>
     <org.apache.felix.eventadmin.version>1.2.8</org.apache.felix.eventadmin.version>
     <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
     <org.apache.felix.version>3.2.2</org.apache.felix.version>
-    <org.apache.felix.ipojo.arch.gogo.version>1.0.1</org.apache.felix.ipojo.arch.gogo.version>
   </properties>
-
-  <modules>
-    <module>felix</module>
-    <module>war</module>
-  </modules>
 
   <dependencies>
     <!-- Logging -->
     <dependency>
-      <groupId>org.ops4j.pax.confman</groupId>
-      <artifactId>pax-confman-propsloader</artifactId>
-      <version>${pax-confman-propsloader.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-api</artifactId>
-      <version>${pax-logging-api.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-service</artifactId>
-      <version>${pax-logging-service.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.ow2.bundles</groupId>
       <artifactId>ow2-util-log</artifactId>
-      <version>${org.ow2.util.log.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -108,12 +77,6 @@
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.eventadmin</artifactId>
       <version>${org.apache.felix.eventadmin.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.arch.gogo</artifactId>
-      <version>${org.apache.felix.ipojo.arch.gogo.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -206,6 +169,12 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-flex-examples-applications-application3</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- Modules -->
     <dependency>
@@ -228,4 +197,9 @@
     </dependency>
   </dependencies>
 
+  <modules>
+    <module>felix</module>
+    <module>jonas</module>
+    <module>war</module>
+  </modules>
 </project>

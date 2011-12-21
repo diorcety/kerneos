@@ -8,9 +8,9 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
 
-import org.ow2.kerneos.core.service.KerneosService;
 import org.ow2.kerneos.core.service.KerneosSimpleService;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
@@ -27,13 +27,15 @@ import org.ow2.util.log.LogFactory;
  * "HelloService" destination.
  * It is the same destination defined in kerneos-module.xml
  */
-@KerneosService(id = "hello_service")
 public class Service implements KerneosSimpleService{
 
      /**
      * The logger
      */
     private static Log logger = LogFactory.getLog(Service.class);
+
+    @ServiceProperty(name = KerneosSimpleService.ID, value = "hello_service")
+    private String id;
 
     /**
      * Start

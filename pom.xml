@@ -46,21 +46,21 @@
 
   <properties>
     <!-- iPOJO -->
-    <ipojo.version>1.8.0</ipojo.version>
-    <ipojo.annotations.version>1.8.0</ipojo.annotations.version>
-    <ipojo.eventadmin.version>1.8.0</ipojo.eventadmin.version>
+    <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
+    <org.apache.felix.ipojo.annotations.version>1.8.0</org.apache.felix.ipojo.annotations.version>
+    <org.apache.felix.ipojo.handler.eventadmin.version>1.8.0</org.apache.felix.ipojo.handler.eventadmin.version>
 
     <!-- Plugins -->
-    <maven.bundle.version>2.3.4</maven.bundle.version>
-    <maven.ipojo.version>1.8.0</maven.ipojo.version>
-    <maven.deploy.version>2.6</maven.deploy.version>
-    <maven.resources.version>2.5</maven.resources.version>
-    <maven.compiler>2.3.2</maven.compiler>
-    <maven.dependency.version>2.3</maven.dependency.version>
-    <maven.assembly.version>2.2.2</maven.assembly.version>
+    <maven-bundle.version>2.3.4</maven-bundle.version>
+    <maven-ipojo.version>1.8.0</maven-ipojo.version>
+    <maven-deploy.version>2.6</maven-deploy.version>
+    <maven-resources.version>2.5</maven-resources.version>
+    <maven-compiler>2.3.2</maven-compiler>
+    <maven-dependency.version>2.3</maven-dependency.version>
+    <maven-assembly.version>2.2.2</maven-assembly.version>
 
     <!-- Extensions -->
-    <wagon.ssh.version>1.0</wagon.ssh.version>
+    <wagon-ssh.version>1.0</wagon-ssh.version>
 
     <!-- Settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,7 +69,7 @@
     <!-- Dependencies -->
     <junit.version>4.8</junit.version>
     <javax.servlet.version>2.5</javax.servlet.version>
-    <org.ow2.util.log.version>1.0.31</org.ow2.util.log.version>
+    <ow2-util-log.version>1.0.31</ow2-util-log.version>
     <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
     <org.osgi.core.version>4.2.0</org.osgi.core.version>
   </properties>
@@ -137,7 +137,7 @@
       <dependency>
         <groupId>org.ow2.bundles</groupId>
         <artifactId>ow2-util-log</artifactId>
-        <version>${org.ow2.util.log.version}</version>
+        <version>${ow2-util-log.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -149,25 +149,19 @@
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.ipojo</artifactId>
-        <version>${ipojo.version}</version>
+        <version>${org.apache.felix.ipojo.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-        <version>${ipojo.annotations.version}</version>
+        <version>${org.apache.felix.ipojo.annotations.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
-        <version>${ipojo.eventadmin.version}</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>org.apache.felix.ipojo</artifactId>
-        <version>${ipojo.version}</version>
+        <version>${org.apache.felix.ipojo.handler.eventadmin.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -189,7 +183,7 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh</artifactId>
-        <version>${wagon.ssh.version}</version>
+        <version>${wagon-ssh.version}</version>
       </extension>
     </extensions>
 
@@ -198,33 +192,33 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>${maven.deploy.version}</version>
+          <version>${maven-deploy.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>${maven.resources.version}</version>
+          <version>${maven-resources.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>${maven.dependency.version}</version>
+          <version>${maven-dependency.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>${maven.assembly.version}</version>
+          <version>${maven-assembly.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
-          <version>${maven.bundle.version}</version>
+          <version>${maven-bundle.version}</version>
           <extensions>true</extensions>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-ipojo-plugin</artifactId>
-          <version>${maven.ipojo.version}</version>
+          <version>${maven-ipojo.version}</version>
           <executions>
             <execution>
               <goals>
@@ -238,8 +232,9 @@
 
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler}</version>
+        <version>${maven-compiler}</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>

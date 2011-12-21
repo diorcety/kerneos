@@ -1,10 +1,12 @@
-
-package archetype - resources.client.src.main.flex.model
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+package ${package}.model
 {
 
-import business.IModuleDelegate;
+import ${package}.business.IModuleDelegate;
 
-import business.ModuleDelegate;
+import ${package}.business.ModuleDelegate;
 
 import com.adobe.cairngorm.model.ModelLocator;
 

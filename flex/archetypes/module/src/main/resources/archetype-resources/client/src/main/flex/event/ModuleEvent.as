@@ -1,5 +1,7 @@
-
-package archetype - resources.client.src.main.flex.event
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+package ${package}.event
 {
 import com.adobe.cairngorm.control.CairngormEvent;
 import flash.events.Event;

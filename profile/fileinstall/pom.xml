@@ -95,7 +95,7 @@
         <configuration>
           <instructions>
             <Private-Package>
-              org.ow2.kerneos.profile.fileinstall
+              org.ow2.kerneos.profile.file
             </Private-Package>
           </instructions>
         </configuration>

@@ -64,7 +64,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>${maven.resources.version}</version>
+        <version>${maven-resources.version}</version>
         <configuration>
           <escapeString>\</escapeString>
         </configuration>

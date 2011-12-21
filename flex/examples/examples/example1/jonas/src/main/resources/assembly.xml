@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2008-2011 Bull S.A.S.
+  - Copyright (C) 2011 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -24,25 +23,31 @@
   - $Id$
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<assembly
+    xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.ow2.kerneos</groupId>
-    <artifactId>kerneos-flex</artifactId>
-    <version>2.1.0-SNAPSHOT</version>
-  </parent>
+  <id>jonas</id>
 
-  <artifactId>kerneos-flex-archetypes</artifactId>
-  <packaging>pom</packaging>
+  <formats>
+    <format>zip</format>
+  </formats>
 
-  <name>Kerneos :: Flex :: Archetypes</name>
+  <includeBaseDirectory>true</includeBaseDirectory>
 
-  <modules>
-    <module>application</module>
-    <module>module</module>
-  </modules>
-
-</project>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/load</directory>
+      <outputDirectory>load</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/deploy</directory>
+      <outputDirectory>deploy</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/repositories</directory>
+      <outputDirectory>repositories</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>

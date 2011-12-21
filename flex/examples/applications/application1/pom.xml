@@ -41,6 +41,12 @@
 
   <packaging>bundle</packaging>
 
+  <properties>
+    <kerneos-application-id>examples-application1</kerneos-application-id>
+    <kerneos-application-project>Kerneos Examples</kerneos-application-project>
+    <kerneos-application-name>Application 1</kerneos-application-name>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
@@ -51,6 +57,33 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.html</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -58,17 +91,9 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Kerneos-Application>examples-application1</Kerneos-Application>
-            <Include-Resource>
-              src/main/resources,
-              KERNEOS=src/main/kerneos
-            </Include-Resource>
+            <Kerneos-Application>${kerneos-application-id}</Kerneos-Application>
           </instructions>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-ipojo-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

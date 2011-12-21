@@ -2,6 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>${groupId}</groupId>
     <artifactId>${rootArtifactId}-packaging</artifactId>
@@ -9,14 +11,67 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
+  <artifactId>${rootArtifactId}-packaging-felix</artifactId>
 
   <name>${groupId} :: ${rootArtifactId} :: Packaging :: Felix</name>
 
   <packaging>pom</packaging>
+
+  <properties>
+    <org.apache.felix.fileinstall.version>3.1.10</org.apache.felix.fileinstall.version>
+    <org.apache.felix.http.jetty.version>2.2.0</org.apache.felix.http.jetty.version>
+
+    <pax-confman-propsloader.version>0.2.2</pax-confman-propsloader.version>
+    <pax-logging-api.version>1.6.0</pax-logging-api.version>
+    <pax-logging-service.version>1.6.0</pax-logging-service.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ops4j.pax.confman</groupId>
+      <artifactId>pax-confman-propsloader</artifactId>
+      <version>${pax-confman-propsloader.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-api</artifactId>
+      <version>${pax-logging-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-service</artifactId>
+      <version>${pax-logging-service.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.main.distribution</artifactId>
+      <version>${org.apache.felix.version}</version>
+      <classifier>project</classifier>
+      <type>zip</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.http.jetty</artifactId>
+      <version>${org.apache.felix.http.jetty.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.fileinstall</artifactId>
+      <version>${org.apache.felix.fileinstall.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-profile-fileinstall</artifactId>
+      <version>${kerneos.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -86,7 +141,7 @@
 
                 <!-- OSGi -->
                 <artifactItem>
-                  <groupId>org.apache.felix</groupId>
+                  <groupId>org.osgi</groupId>
                   <artifactId>org.osgi.compendium</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/bundle</outputDirectory>
@@ -216,7 +271,7 @@
 
                 <!-- Application -->
                 <artifactItem>
-                  <groupId>${project.groupId}</groupId>
+                  <groupId>${groupId}</groupId>
                   <artifactId>${rootArtifactId}-application</artifactId>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>

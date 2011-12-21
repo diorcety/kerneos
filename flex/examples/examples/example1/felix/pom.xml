@@ -44,9 +44,35 @@
   <properties>
     <org.apache.felix.http.jetty.version>2.2.0</org.apache.felix.http.jetty.version>
     <org.apache.felix.fileinstall.version>3.1.10</org.apache.felix.fileinstall.version>
+    <org.apache.felix.ipojo.arch.gogo.version>1.0.1</org.apache.felix.ipojo.arch.gogo.version>
+
+    <pax-confman-propsloader.version>0.2.2</pax-confman-propsloader.version>
+    <pax-logging-api.version>1.6.0</pax-logging-api.version>
+    <pax-logging-service.version>1.6.0</pax-logging-service.version>
   </properties>
 
   <dependencies>
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.ops4j.pax.confman</groupId>
+      <artifactId>pax-confman-propsloader</artifactId>
+      <version>${pax-confman-propsloader.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-api</artifactId>
+      <version>${pax-logging-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-service</artifactId>
+      <version>${pax-logging-service.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Felix -->
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.main.distribution</artifactId>
@@ -59,7 +85,7 @@
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.http.jetty</artifactId>
       <version>${org.apache.felix.http.jetty.version}</version>
-      <scope>runtime</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
@@ -67,10 +93,16 @@
       <version>${org.apache.felix.fileinstall.version}</version>
       <scope>provided</scope>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-profile-fileinstall</artifactId>
       <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.arch.gogo</artifactId>
+      <version>${org.apache.felix.ipojo.arch.gogo.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -268,14 +300,12 @@
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-flex-examples-applications-application1</artifactId>
-                  <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-flex-examples-applications-application2</artifactId>
-                  <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
@@ -284,21 +314,18 @@
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-flex-examples-modules-module1-server</artifactId>
-                  <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-flex-examples-modules-module2-server</artifactId>
-                  <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.kerneos</groupId>
                   <artifactId>kerneos-flex-examples-modules-module3-server</artifactId>
-                  <version>${project.version}</version>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/load</outputDirectory>
                 </artifactItem>
