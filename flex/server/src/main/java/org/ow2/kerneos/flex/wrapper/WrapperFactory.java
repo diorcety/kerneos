@@ -79,6 +79,10 @@ public final class WrapperFactory {
     @Validate
     private synchronized void start() {
         LOGGER.debug("Start WrapperFactory");
+
+        for (ComponentInstance cfg : instanceMap.values()) {
+            cfg.start();
+        }
     }
 
     /**
@@ -89,9 +93,8 @@ public final class WrapperFactory {
         LOGGER.debug("Stop WrapperFactory");
 
         for (ComponentInstance cfg : instanceMap.values()) {
-            cfg.dispose();
+            cfg.stop();
         }
-        instanceMap.clear();
     }
 
     /**
@@ -165,7 +168,7 @@ public final class WrapperFactory {
         if (module.getConfiguration() instanceof SwfModule) {
             SwfModule configuration = (SwfModule) module.getConfiguration();
             for (Service service : configuration.getServices()) {
-                ComponentInstance instance = instanceMap.get(service.getId());
+                ComponentInstance instance = instanceMap.remove(service.getId());
                 if (instance != null) {
                     instance.dispose();
                     LOGGER.debug("Wrapper destroyed for service: " + service.getId());

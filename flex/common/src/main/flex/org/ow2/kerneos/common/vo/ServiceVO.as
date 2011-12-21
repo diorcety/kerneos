@@ -47,9 +47,9 @@ public class ServiceVO implements IValueObject {
     public var destination:String = null;
 
     /**
-     *  Asynchronous service.
+     *  Service type.
      */
-    public var asynchronous:Boolean = false;
+    public var type:ServiceTypeVO = ServiceTypeVO.SIMPLE;
 
     /**
      * The module which contains this service

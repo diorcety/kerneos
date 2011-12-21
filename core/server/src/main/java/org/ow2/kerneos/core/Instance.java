@@ -69,4 +69,13 @@ public class Instance {
         }
         configurations.clear();
     }
+
+    /**
+     * Stop instance
+     *
+     * @throws IOException
+     */
+    public synchronized void stop() {
+        componentInstance.stop();
+    }
 }

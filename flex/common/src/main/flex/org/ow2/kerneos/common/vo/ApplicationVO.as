@@ -114,6 +114,10 @@ public class ApplicationVO implements IValueObject {
      */
     public var authentication:AuthenticationVO;
 
+    /**
+     * Stub
+     */
+    public var managers:Object;
 
     /**
      * Constructor

@@ -27,11 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The core of Flex Kerneos.
@@ -95,6 +91,11 @@ public class Core implements ICore {
                     null);
             granite.update(properties);
         }
+
+        // Start instances
+        for (ComponentInstance instance : applicationHttpServices.values()) {
+            instance.start();
+        }
     }
 
     /**
@@ -105,6 +106,11 @@ public class Core implements ICore {
     @Invalidate
     private synchronized void stop() throws IOException {
         LOGGER.debug("Stop FlexCore");
+
+        // Stop instances
+        for (ComponentInstance instance : applicationHttpServices.values()) {
+            instance.stop();
+        }
 
         // Dispose configurations
         gravity.delete();
@@ -119,7 +125,7 @@ public class Core implements ICore {
      * @param application the new Kerneos Application
      */
     @Bind(aggregate = true, optional = true)
-    synchronized void bindKerneosApplication(KerneosApplication application) {
+    private synchronized void bindKerneosApplication(KerneosApplication application) {
         applications.put(application.getId(), application);
         try {
             LOGGER.debug("Create FlexHttpService for " + application.getId());
@@ -142,14 +148,20 @@ public class Core implements ICore {
      * @param application the old Kerneos Application
      */
     @Unbind
-    synchronized void unbindKerneosApplication(KerneosApplication application) {
-        applications.remove(application.getId());
-        ComponentInstance instance = applicationHttpServices.remove(application.getId());
+    private void unbindKerneosApplication(KerneosApplication application) {
+        removeKerneosApplication(application.getId());
+    }
+
+
+    private synchronized void removeKerneosApplication(String applicationId) {
+        applications.remove(applicationId);
+        ComponentInstance instance = applicationHttpServices.remove(applicationId);
         if (instance != null) {
             instance.dispose();
-            LOGGER.debug("Destroy FlexHttpService for " + application.getId());
+            LOGGER.debug("Destroy FlexHttpService for " + applicationId);
         }
     }
+
 
     /**
      * Optional Kerneos Module binding.
@@ -157,7 +169,7 @@ public class Core implements ICore {
      * @param module the new Kerneos Module
      */
     @Bind(aggregate = true, optional = true)
-    synchronized void bindKerneosModule(KerneosModule module) {
+    private synchronized void bindKerneosModule(KerneosModule module) {
         modules.put(module.getId(), module);
     }
 
@@ -167,8 +179,12 @@ public class Core implements ICore {
      * @param module the old Kerneos Module
      */
     @Unbind
-    synchronized void unbindKerneosModule(KerneosModule module) {
-        modules.remove(module.getId());
+    private synchronized void unbindKerneosModule(KerneosModule module) {
+        removeKerneosModule(module.getId());
+    }
+
+    private synchronized void removeKerneosModule(String applicationId) {
+        modules.remove(applicationId);
     }
 
     /**
@@ -177,6 +193,7 @@ public class Core implements ICore {
      * @param request  the HTTP request associated with the context
      * @param response the HTTP response associated with the context
      */
+    @Override
     public void updateContext(HttpServletRequest request, HttpServletResponse response) {
         FlexContext flexContext = FlexContext.getCurrent();
 
@@ -229,6 +246,7 @@ public class Core implements ICore {
      * @param destination the new destination associated with the context
      * @param method      the new method associated with the context
      */
+    @Override
     public void updateContext(String destination, String method) {
         FlexContext flexContext = FlexContext.getCurrent();
         flexContext.setPath(null);

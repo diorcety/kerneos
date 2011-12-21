@@ -44,6 +44,7 @@
         import org.granite.util.GraniteClassRegistry;
 
         import org.ow2.kerneos.common.managers.LanguagesManager;
+        import org.ow2.kerneos.common.vo.ServiceTypeVO;
         import org.ow2.kerneos.core.api.KerneosModule;
         import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
         import org.ow2.kerneos.common.vo.MappingVO;
@@ -144,8 +145,9 @@
 
             // Register services
             for each(var service:ServiceVO in (module as SWFModuleVO).services) {
-                serviceLocator.setServiceForId(service.id, service.destination, service.asynchronous);
-                if (service.asynchronous) {
+                var async:Boolean = service.type.equals(ServiceTypeVO.ASYNCHRONOUS);
+                serviceLocator.setServiceForId(service.id, service.destination, async);
+                if (async) {
                     serviceLocator.getConsumer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
                     serviceLocator.getProducer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
                 }
@@ -172,7 +174,8 @@
             var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
 
             for each(var service:ServiceVO in (module as SWFModuleVO).services) {
-                if (service.asynchronous) {
+                var async:Boolean = service.type.equals(ServiceTypeVO.ASYNCHRONOUS);
+                if (async) {
                     serviceLocator.getConsumer(service.id).disconnect();
                     serviceLocator.getProducer(service.id).disconnect();
                 }
@@ -180,7 +183,7 @@
                     serviceLocator.getRemoteObject(service.id).disconnect();
                 }
 
-                serviceLocator.removeServiceForId(service.id, service.asynchronous);
+                serviceLocator.removeServiceForId(service.id, async);
             }
         }
 

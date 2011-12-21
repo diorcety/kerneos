@@ -25,6 +25,7 @@
 
 package org.ow2.kerneos.core;
 
+import org.apache.felix.ipojo.ComponentInstance;
 import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
@@ -81,9 +82,9 @@ public class Core implements ICore {
      */
     private static final Log LOGGER = LogFactory.getLog(Core.class);
 
-    private Map<Bundle, Instance> applicationInstances = new HashMap<Bundle, Instance>();
+    private Map<String, Instance> applicationInstances = new HashMap<String, Instance>();
 
-    private Map<Bundle, Instance> moduleInstances = new HashMap<Bundle, Instance>();
+    private Map<String, Instance> moduleInstances = new HashMap<String, Instance>();
 
     @Requires(filter = "(factory.name=org.ow2.kerneos.core.ApplicationImpl)")
     private Factory applicationFactory;
@@ -123,6 +124,16 @@ public class Core implements ICore {
     @Validate
     private synchronized void start() throws IOException {
         LOGGER.debug("Start Kerneos Core");
+
+        // Start application instance
+        for (Instance instance : applicationInstances.values()) {
+            instance.start();
+        }
+
+        // Start module instance
+        for (Instance instance : moduleInstances.values()) {
+            instance.start();
+        }
     }
 
     /**
@@ -134,24 +145,14 @@ public class Core implements ICore {
     private synchronized void stop() throws IOException {
         LOGGER.debug("Stop Kerneos Core");
 
-        // Dispose applications
-        while (applicationInstances.size() != 0) {
-            Bundle bundle = applicationInstances.keySet().iterator().next();
-            try {
-                removeApplication(bundle);
-            } catch (Exception e) {
-                LOGGER.warn("Can't remove Application of bundle " + bundle.getSymbolicName(), e);
-            }
+        // Stop application instance
+        for (Instance instance : applicationInstances.values()) {
+            instance.stop();
         }
 
-        // Dispose modules
-        while (applicationInstances.size() != 0) {
-            Bundle bundle = applicationInstances.keySet().iterator().next();
-            try {
-                removeModule(bundle);
-            } catch (Exception e) {
-                LOGGER.warn("Can't remove Module of bundle " + bundle.getSymbolicName(), e);
-            }
+        // Stop module instance
+        for (Instance instance : moduleInstances.values()) {
+            instance.stop();
         }
     }
 
@@ -262,7 +263,7 @@ public class Core implements ICore {
             // Remove managers (security issue)
             applicationConfiguration.setManagers(null);
 
-            applicationInstances.put(bundle, instance);
+            applicationInstances.put(applicationId, instance);
             instance.start();
 
             LOGGER.debug("New Application \"" + applicationId + "\": " + applicationConfiguration);
@@ -298,9 +299,9 @@ public class Core implements ICore {
             throws Exception {
         String applicationId = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_APPLICATION_MANIFEST);
         try {
-            if (applicationInstances.containsKey(bundle)) {
+            if (applicationInstances.containsKey(applicationId)) {
 
-                Instance applicationBundle = applicationInstances.remove(bundle);
+                Instance applicationBundle = applicationInstances.remove(applicationId);
                 applicationBundle.dispose();
 
                 LOGGER.debug("Application \"" + applicationId + "\" removed");
@@ -335,7 +336,7 @@ public class Core implements ICore {
 
             instance.setComponentInstance(moduleFactory.createComponentInstance(componentDictionary));
 
-            moduleInstances.put(bundle, instance);
+            moduleInstances.put(moduleId, instance);
             instance.start();
             LOGGER.debug("New Module \"" + moduleId + "\": " + moduleConfiguration);
         } catch (Exception e) {
@@ -382,8 +383,8 @@ public class Core implements ICore {
             throws Exception {
         String moduleId = (String) bundle.getHeaders().get(KerneosConstants.KERNEOS_MODULE_MANIFEST);
         try {
-            if (moduleInstances.containsKey(bundle)) {
-                Instance applicationBundle = moduleInstances.remove(bundle);
+            if (moduleInstances.containsKey(moduleId)) {
+                Instance applicationBundle = moduleInstances.remove(moduleId);
                 applicationBundle.dispose();
 
                 LOGGER.debug("Module \"" + moduleId + "\" removed");

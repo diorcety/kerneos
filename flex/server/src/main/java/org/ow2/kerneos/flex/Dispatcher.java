@@ -22,10 +22,7 @@ import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
@@ -36,11 +33,10 @@ public class Dispatcher {
      */
     private static final Log LOGGER = LogFactory.getLog(Dispatcher.class);
 
-    @Requires(policy = "static")
+    @Requires
     private EventAdmin eventAdmin;
 
-    private Map<KerneosApplication, ProfileEventHandler> profileEventHandlerMap =
-            new HashMap<KerneosApplication, ProfileEventHandler>();
+    private Map<String, ProfileEventHandler> profileEventHandlerMap = new HashMap<String, ProfileEventHandler>();
     private ApplicationEventHandler applicationEventHandler;
     private ModuleEventHandler moduleEventHandler;
     private BundleContext bundleContext;
@@ -71,24 +67,22 @@ public class Dispatcher {
         LOGGER.debug("Stop");
         applicationEventHandler.dispose();
         moduleEventHandler.dispose();
-
-        while (profileEventHandlerMap.size() != 0) {
-            KerneosApplication application = profileEventHandlerMap.keySet().iterator().next();
-            ProfileEventHandler profileEventHandler = profileEventHandlerMap.remove(application);
-            profileEventHandler.dispose();
-        }
-
-        this.bundleContext = null;
     }
 
     @Bind(aggregate = true, optional = true)
     private synchronized void bindKerneosApplication(KerneosApplication application) {
-        profileEventHandlerMap.put(application, new ProfileEventHandler(bundleContext, application.getId()));
+        profileEventHandlerMap.put(application.getId(), new ProfileEventHandler(bundleContext, application.getId()));
     }
 
     @Unbind
     private synchronized void unbindKerneosApplication(KerneosApplication application) {
-        profileEventHandlerMap.remove(application);
+        removeKerneosApplication(application.getId());
+    }
+
+
+    private synchronized void removeKerneosApplication(String applicationId) {
+        ProfileEventHandler profileEventHandler = profileEventHandlerMap.remove(applicationId);
+        profileEventHandler.dispose();
     }
 
     class ApplicationEventHandler implements EventHandler {
