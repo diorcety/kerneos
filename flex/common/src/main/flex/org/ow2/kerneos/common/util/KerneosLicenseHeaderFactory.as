@@ -26,12 +26,12 @@ package org.ow2.kerneos.common.util
 {
 
 /**
-* A static class to easily get JASMINe project license headers, for different
+* A static class to easily get Kerneos project license headers, for different
 * target languages.
 * 
 * @author Julien Nicoulaud
 */
-public class JASMINeLicenseHeaderFactory
+public class KerneosLicenseHeaderFactory
 {
     
     // =========================================================================
@@ -39,10 +39,10 @@ public class JASMINeLicenseHeaderFactory
     // =========================================================================
     
     /**
-     * The default LGPL header for the project JASMINe
+     * The default LGPL header for the project Kerneos
      */
-    private static var JASMINE_LGPL_HEADER : String =
-        "JASMINe\n" +
+    private static var KERNEOS_LGPL_HEADER : String =
+        "Kerneos\n" +
         "Copyright (C) [[[YEAR]]] Bull S.A.S.\n" +
         "Contact: jasmine AT ow2.org\n" +
         "\n" +
@@ -67,17 +67,17 @@ public class JASMINeLicenseHeaderFactory
     // =========================================================================
 
     /**
-    * Get the LGPL License header for the project JASMINe, without any
+    * Get the LGPL License header for the project Kerneos, without any
     * formatting
     */
     public static function getHeader():String
     {
         var date:Date = new Date();
-        return String(JASMINE_LGPL_HEADER).replace("[[[YEAR]]]",String(date.getFullYear()));
+        return String(KERNEOS_LGPL_HEADER).replace("[[[YEAR]]]",String(date.getFullYear()));
     }
     
     /**
-    * Get the LGPL License header for the project JASMINe,
+    * Get the LGPL License header for the project Kerneos,
     * in Java-style comment
     */
     public static function getJavaHeader():String
@@ -92,7 +92,7 @@ public class JASMINeLicenseHeaderFactory
     }
     
     /**
-    * Get the LGPL License header for the project JASMINe,
+    * Get the LGPL License header for the project Kerneos,
     * in XML-style comment
     */
     public static function getXMLHeader():String
@@ -107,7 +107,7 @@ public class JASMINeLicenseHeaderFactory
     }
     
     /**
-    * Get the LGPL License header for the project JASMINe,
+    * Get the LGPL License header for the project Kerneos,
     * in DRL-style comment (Drools)
     */
     public static function getDRLHeader():String

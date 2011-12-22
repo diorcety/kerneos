@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- - JASMINe
+ - Kerneos
  - Copyright (C) 2010-2011 Bull S.A.S.
  - Contact: jasmine@ow2.org
  -
@@ -65,7 +65,7 @@
   <xsl:variable name="Version">
    <xsl:choose>
     <xsl:when test="//releaseinfo">
-     <xsl:text>JASMINe </xsl:text>
+     <xsl:text>Kerneos </xsl:text>
      <xsl:value-of select="//releaseinfo"/>
     </xsl:when>
     <xsl:otherwise>

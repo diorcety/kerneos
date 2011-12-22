@@ -43,9 +43,9 @@ public class ApplicationVO implements IValueObject {
     // Settings
 
     /**
-     * The name of the project (totally random example: "JASMINe").
+     * The name of the project (totally random example: "Kerneos").
      */
-    public var applicationProject:String = "JASMINe";
+    public var applicationProject:String = "Kerneos";
 
     /**
      * The name of the application.
