@@ -48,10 +48,10 @@ public class KerneosNotification {
     /**
      * Message allowed levels.
      */
-    public static var DEBUG:String = "Debug";
-    public static var WARNING:String = "Warning";
-    public static var INFO:String = "Info";
-    public static var ERROR:String = "Error";
+    public static var DEBUG:String = "debug";
+    public static var WARNING:String = "warning";
+    public static var INFO:String = "info";
+    public static var ERROR:String = "error";
 
     /**
      * The level of the message.

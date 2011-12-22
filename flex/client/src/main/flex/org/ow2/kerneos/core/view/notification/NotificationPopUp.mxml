@@ -38,11 +38,13 @@
 
     <fx:Script>
     <![CDATA[
+        import flashx.textLayout.conversion.TextConverter;
+        import flashx.textLayout.elements.TextFlow;
+
         import mx.core.Container;
+        import mx.resources.ResourceManager;
 
-        import org.ow2.kerneos.common.vo.KerneosNotification;
-
-        import org.ow2.kerneos.common.vo.KerneosNotification;
+        import org.ow2.kerneos.common.managers.LanguagesManager;
         import org.ow2.kerneos.core.view.window.ModuleWindow;
         import org.ow2.kerneos.common.vo.ModuleVO;
 
@@ -174,6 +176,12 @@
             }
 
         }
+
+        private function getFormattedText(level:String, message:String):String {
+            return ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,
+                    'kerneos.notifications.popup.body.' + level,
+                    [message]);
+        }
         ]]>
     </fx:Script>
 
@@ -190,20 +198,27 @@
     </fx:Declarations>
 
     <!-- UI -->
-    <mx:HBox width="100%"
+    <mx:HBox id="title"
+             width="100%"
+             height="16"
              verticalAlign="top">
         <mx:Image id="moduleIcon"
                   width="16"
                   height="16"
                   source="{(window != null)?window.module.getSmallIcon(moduleIcon): module.getSmallIcon(moduleIcon)}"/>
-        <mx:Text text="{(window != null)?window.module.name: module.name}"
+        <s:Label text="{(window != null)?window.module.name: module.name}"
                  fontWeight="bold"
-                 selectable="false"
+                 lineBreak="explicit"
+                 lineHeight="16"
+                 width="100%"
+                 height="16"
+                 textAlign="left"
+                 verticalAlign="middle"
+                 maxDisplayedLines="1"
                  useHandCursor="true"
                  mouseChildren="false"
                  buttonMode="true"
-                 click="{window.bringToFront()}"/>
-        <mx:Spacer width="100%"/>
+                 click="{if(window != null) window.bringToFront()}"/>
         <mx:Button id="closeButton"
                    click="close()"
                    width="16"
@@ -215,14 +230,15 @@
             verticalAlign="middle"
             horizontalAlign="center"
             horizontalScrollPolicy="off">
-        <mx:Text htmlText="{(level != KerneosNotification.INFO)?level+': ':''}{message}"
-                 width="100%"
-                 textAlign="center"
-                 selectable="false"
-                 useHandCursor="true"
-                 mouseChildren="false"
-                 buttonMode="true"
-                 click="{(window != null)?window.bringToFront():''}"/>
+        <mx:Text
+                htmlText="{getFormattedText(level, message)}"
+                width="100%"
+                textAlign="center"
+                selectable="false"
+                useHandCursor="true"
+                mouseChildren="false"
+                buttonMode="true"
+                click="{if(window != null) window.bringToFront()}"/>
     </mx:Box>
 
 </mx:VBox>
