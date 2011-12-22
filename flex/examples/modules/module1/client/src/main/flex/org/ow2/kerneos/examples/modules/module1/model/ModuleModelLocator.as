@@ -28,8 +28,6 @@ import org.ow2.kerneos.examples.modules.module1.business.ModuleDelegate;
 
 import com.adobe.cairngorm.model.ModelLocator;
 
-import mx.utils.UIDUtil;
-
 /**
  * The model locator for the Module.
  */

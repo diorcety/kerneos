@@ -33,15 +33,10 @@
 
     <fx:Script>
       <![CDATA[
-        import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
         import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
         import org.ow2.kerneos.examples.modules.module1.event.ModuleEvent;
-        import org.ow2.kerneos.examples.modules.module1.model.ModuleModelLocator;
-
         import org.ow2.kerneos.login.model.LoginModelLocator;
-        import org.ow2.kerneos.profile.manager.ProfileManager;
-        import org.ow2.kerneos.profile.model.ProfileModelLocator;
 
         /**
          * On view creation complete handler

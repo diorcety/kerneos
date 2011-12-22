@@ -58,6 +58,6 @@ public class Service implements KerneosSimpleService{
      * @return a welcome message
      */
     public String sayHello(final String name) {
-        return "Hello " + name;
+        return "Hello <b>" + name + "<b/>";
     }
 }

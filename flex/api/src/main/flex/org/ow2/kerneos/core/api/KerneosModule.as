@@ -57,7 +57,7 @@ public class KerneosModule extends Module {
         __serviceLocator = new ServiceLocator();
     }
 
-    public function configuration():ModuleVO {
+    public function getConfiguration():ModuleVO {
         return __configuration;
     }
 

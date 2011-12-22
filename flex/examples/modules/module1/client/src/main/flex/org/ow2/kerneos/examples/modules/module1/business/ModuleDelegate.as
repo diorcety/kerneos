@@ -21,7 +21,6 @@
  * --------------------------------------------------------------------------
  */
 package org.ow2.kerneos.examples.modules.module1.business {
-import com.adobe.cairngorm.business.ServiceLocator;
 
 import org.ow2.kerneos.common.business.AbsDelegateResponder;
 

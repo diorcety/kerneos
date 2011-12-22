@@ -4,6 +4,7 @@
 package ${package}.control
 {
 import com.adobe.cairngorm.control.FrontController;
+import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import ${package}.command.*;
 import ${package}.event.*;
@@ -18,9 +19,8 @@ public class Controller extends FrontController {
     /**
      * Create an instance of the controller. Commands are initialized here.
      */
-    public function Controller()
-    {
-        initialiseCommands();
+    public function Controller(dispatcher: CairngormEventDispatcher) {
+        super(dispatcher);
     }
     
     
@@ -38,14 +38,9 @@ public class Controller extends FrontController {
     
     public function initialiseCommands() : void
     {
-        /*
-        // Retrieve the component model
-        var moduleModel : ModuleModelLocator = ModuleModelLocator.getInstance();
-
-        // Add the events to the controler with the associated command
+        // Add the events to the controller with the associated command
         // Example :
         this.addCommand(ModuleEvent.MY_ACTION, ModuleCommand);
-        */
     }
 
     /**
@@ -54,13 +49,9 @@ public class Controller extends FrontController {
      */
     public function removeCommands() : void
     {
-
-        /*
-            // Remove the events to the controller with the associated command
-            // Example :
-
-                this.removeCommand(ModuleEvent.MY_ACTION);
-        */
+        // Remote the events from the controller
+        // Example :
+        this.removeCommand(ModuleEvent.MY_ACTION);
     }
 
 }

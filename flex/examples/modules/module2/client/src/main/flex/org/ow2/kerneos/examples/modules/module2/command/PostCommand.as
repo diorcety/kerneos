@@ -23,13 +23,9 @@
 package org.ow2.kerneos.examples.modules.module2.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
-import com.adobe.cairngorm.control.CairngormEventDispatcher;
-
-import mx.controls.Alert;
 
 import mx.rpc.IResponder;
 import mx.rpc.events.FaultEvent;
-import mx.rpc.events.ResultEvent;
 
 import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
 import org.ow2.kerneos.common.managers.ErrorManager;
@@ -37,7 +33,6 @@ import org.ow2.kerneos.common.view.ServerSideException;
 
 import org.ow2.kerneos.examples.modules.module2.business.*;
 import org.ow2.kerneos.examples.modules.module2.event.PostEvent;
-import org.ow2.kerneos.examples.modules.module2.model.ModuleModelLocator;
 import org.ow2.kerneos.examples.modules.module2.vo.PostVO;
 
 /**

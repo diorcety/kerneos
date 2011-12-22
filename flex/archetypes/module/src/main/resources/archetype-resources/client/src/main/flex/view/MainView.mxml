@@ -9,24 +9,24 @@
          horizontalAlign = "center">
 
   <!--Example:-->
-  <!--
   <fx:Script>
       <![CDATA[
-    import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
-    import event.ModuleEvent;
-
-    import model.ModuleModelLocator;
+    import ${package}.event.ModuleEvent;
 
     import mx.controls.Alert;
+
+    import ${package}.MyModule;
 
     /**
     * The message is showed when myData in the ModelLocator is modified,
     * a pop-up with the message is displayed
     */
     private function set newMessage(message:String):void {
-      if (message != null)
-        Alert.show(message);
+      if (message != null) {
+        var a: Alert = Alert.show(message);
+        a.mx_internal::alertForm.mx_internal::textField.htmlText = message;
+      }
     }
 
     /**
@@ -35,18 +35,18 @@
     */
     private function send():void {
       var event_module:ModuleEvent = new ModuleEvent(ModuleEvent.MY_ACTION);
+      MyModule.getInstance().getModel().myDataObj = null;
       event_module.setMessage(nameInput.text);
-      CairngormEventDispatcher.getInstance().dispatchEvent(event_module);
+      MyModule.getInstance().getDispatcher().dispatchEvent(event_module);
+
     }
     ]]>
     </fx:Script>
-    -->
 
   <mx:Label text = "Hello world"
             fontSize = "50" />
 
   <!--Example:-->
-  <!--
   <mx:Form>
     <mx:FormItem label="Name :">
       <mx:TextInput id="nameInput"/>
@@ -54,7 +54,6 @@
     <mx:Button id="sendButton" label="Send" click="send();"/>
   </mx:Form>
 
-  <fx:Binding source="ModuleModelLocator.getInstance().myDataObj" destination="newMessage"/>
-  -->
+  <fx:Binding source="MyModule.getInstance().getModel().myDataObj" destination="newMessage"/>
 
 </mx:VBox>

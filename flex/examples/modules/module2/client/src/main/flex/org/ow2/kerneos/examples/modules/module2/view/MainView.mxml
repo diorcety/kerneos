@@ -33,15 +33,12 @@
     <fx:Script>
       <![CDATA[
         import com.adobe.cairngorm.Consumer;
-        import com.adobe.cairngorm.business.ServiceLocator;
-        import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
         import mx.messaging.events.MessageEvent;
         import mx.messaging.messages.AsyncMessage;
 
         import org.ow2.kerneos.common.event.ServerSideExceptionEvent;
         import org.ow2.kerneos.examples.modules.module2.event.PostEvent;
-        import org.ow2.kerneos.examples.modules.module2.model.ModuleModelLocator;
         import org.ow2.kerneos.examples.modules.module2.vo.PostVO;
 
         private var consumer:Consumer = null;

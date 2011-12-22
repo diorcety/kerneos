@@ -25,9 +25,6 @@
 package org.ow2.kerneos.examples.modules.module2.vo {
 import com.adobe.cairngorm.vo.IValueObject;
 
-import mx.collections.ArrayCollection;
-import mx.controls.Alert;
-
 [Bindable]
 public class PostVO implements IValueObject {
 

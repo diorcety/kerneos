@@ -27,7 +27,6 @@ import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import org.ow2.kerneos.examples.modules.module1.command.*;
 import org.ow2.kerneos.examples.modules.module1.event.*;
-import org.ow2.kerneos.examples.modules.module1.model.*;
 
 
 /**

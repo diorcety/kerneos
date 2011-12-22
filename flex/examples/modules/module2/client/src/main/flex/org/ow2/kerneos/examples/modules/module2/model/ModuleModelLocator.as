@@ -23,12 +23,10 @@
 package org.ow2.kerneos.examples.modules.module2.model {
 
 import org.ow2.kerneos.examples.modules.module2.business.IPostDelegate;
-
 import org.ow2.kerneos.examples.modules.module2.business.PostDelegate;
 
 import com.adobe.cairngorm.model.ModelLocator;
 
-import mx.utils.UIDUtil;
 
 /**
  * The model locator for the Module.

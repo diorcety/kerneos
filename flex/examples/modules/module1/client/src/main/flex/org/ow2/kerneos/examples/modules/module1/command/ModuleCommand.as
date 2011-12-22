@@ -23,7 +23,6 @@
 package org.ow2.kerneos.examples.modules.module1.command {
 import com.adobe.cairngorm.commands.ICommand;
 import com.adobe.cairngorm.control.CairngormEvent;
-import com.adobe.cairngorm.control.CairngormEventDispatcher;
 
 import mx.controls.Alert;
 
@@ -37,7 +36,6 @@ import org.ow2.kerneos.common.view.ServerSideException;
 
 import org.ow2.kerneos.examples.modules.module1.business.*;
 import org.ow2.kerneos.examples.modules.module1.event.ModuleEvent;
-import org.ow2.kerneos.examples.modules.module1.model.ModuleModelLocator;
 
 /**
  * The command class from the cairngorm model.

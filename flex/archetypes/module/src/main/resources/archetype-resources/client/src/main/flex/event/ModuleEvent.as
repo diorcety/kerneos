@@ -20,11 +20,9 @@ public class ModuleEvent extends CairngormEvent
     ////////////////////////////////////
     public static var MY_ACTION : String = "My action to be done";
 
-    /*
-     // Example :
-     // Message send in the event
-     private var message: String = "";
-     */
+    // Example :
+    // Message send in the event
+    private var message: String = "";
 
     /**
      * Creates a new ModuleEvent.
@@ -34,7 +32,6 @@ public class ModuleEvent extends CairngormEvent
         super(type);
     }
 
-    /*
      // Event message setting and getting
      // Example :
      public function setMessage(message:String):void 
@@ -46,7 +43,6 @@ public class ModuleEvent extends CairngormEvent
      {
          return message;
      }
-     */
 
     /**
      * Overrides the clone function of the CairngormEvent class.
@@ -55,11 +51,11 @@ public class ModuleEvent extends CairngormEvent
     override public function clone() : Event
     {
         var ev:ModuleEvent = new ModuleEvent(this.type);
-        /*
-         // Example:
-         // Add the event message
-         ev.setMessage(this.message);
-         */
+
+        // Example:
+        // Add the event message
+        ev.setMessage(this.message);
+
         return ev;
     }
 
