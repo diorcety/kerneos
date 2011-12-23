@@ -54,16 +54,6 @@
       <type>xml</type>
       <classifier>link-report</classifier>
     </dependency>
-
-    <!-- Theme -->
-    <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>halo</artifactId>
-      <version>${flex.version}</version>
-      <classifier>theme</classifier>
-      <type>swc</type>
-      <scope>theme</scope>
-    </dependency>
   </dependencies>
 
   <build>
