@@ -32,5 +32,5 @@
   <description>A Iframe module</description>
   <small-icon>icons/icon16.png</small-icon>
   <big-icon>icons/icon64.png</big-icon>
-  <url>http://www.google.com</url>
+  <url>modules/kerneos-module3/index.html</url>
 </iframe-module>
