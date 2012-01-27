@@ -176,6 +176,7 @@ public class KerneosHttpService implements HttpContext {
      * @return the URL type which permits to acced to the resource.
      */
     public URL getResource(String name) {
+        logger.debug(name);
         String path = KerneosContext.getCurrentContext().getPath();
         ModuleBundle moduleBundle = KerneosContext.getCurrentContext().getModuleBundle();
         ApplicationBundle applicationBundle = KerneosContext.getCurrentContext().getApplicationBundle();
@@ -187,6 +188,10 @@ public class KerneosHttpService implements HttpContext {
                 if (moduleBundle != null) {
                     // Module files
                     url = moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
+                    if (url == null) {
+                        logger.error("Cannot get url : " + KerneosConstants.KERNEOS_PATH + path);
+                        return null;
+                    }
                     connection = url.openConnection();
                 } else {
                     if (applicationBundle != null) {
@@ -199,6 +204,7 @@ public class KerneosHttpService implements HttpContext {
                                     connection = url.openConnection();
                                     break;
                                 } catch (Exception e) {
+                                    logger.warn("Got exception on openConnection: " + e);
                                     url = null;
                                 }
                             }
@@ -215,7 +221,8 @@ public class KerneosHttpService implements HttpContext {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            logger.warn("Got exception: " + e);
             return null;
         }
 
@@ -223,6 +230,9 @@ public class KerneosHttpService implements HttpContext {
         if (connection != null)
             KerneosContext.getCurrentContext().getResponse().setHeader("Content-Length", Integer.toString(connection.getContentLength()));
 
+        if (url == null) {
+            logger.warn("returning null url");
+        }
         return url;
     }
 
