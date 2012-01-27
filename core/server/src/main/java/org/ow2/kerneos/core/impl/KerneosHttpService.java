@@ -231,7 +231,7 @@ public class KerneosHttpService implements HttpContext {
             KerneosContext.getCurrentContext().getResponse().setHeader("Content-Length", Integer.toString(connection.getContentLength()));
 
         if (url == null) {
-            logger.warn("returning null url");
+            logger.debug("returning null url for " + name);
         }
         return url;
     }
