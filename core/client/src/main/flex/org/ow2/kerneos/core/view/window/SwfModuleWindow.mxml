@@ -39,6 +39,8 @@
         <![CDATA[
         import com.adobe.cairngorm.business.ServiceLocator;
 
+        import mx.controls.Alert;
+
         import mx.resources.ResourceManager;
 
         import org.granite.util.GraniteClassRegistry;
@@ -105,7 +107,7 @@
             moduleLoader.unloadModule();
             moduleLoader.child = null;
 
-            error = (cause == null) ? "kerneos.error.swfmodule.unloaded" : cause;
+            error = (cause == null) ? locale("kerneos.error.swfmodule.unloaded") : locale(cause);
             state = "error";
         }
 
@@ -127,7 +129,12 @@
             // Create the bindings
             var dictionary:Dictionary = new Dictionary();
             for each(var binding:MappingVO in (module as SWFModuleVO).mappings) {
-                dictionary[binding.java] = moduleLoader.applicationDomain.getDefinition(binding.flex);
+                try {
+                    dictionary[binding.java] = moduleLoader.applicationDomain.getDefinition(binding.flex);
+                } catch(e:Error) {
+                    error = locale("kerneos.error.swfmodule.binding") + binding.flex;
+                    throw e;
+                }
             }
 
             // Register classes used by the services
@@ -190,19 +197,32 @@
         private function loaderReady(event:Event = null):void {
             try {
                 registerServices();
-                registerClasses();
-                state = "loaded";
             } catch(e:Error) {
-                trace(e);
-                error = "kerneos.error.swfmodule.loading-error";
+                if (error == null) {
+                    error = locale("kerneos.error.swfmodule.registerservice-error");
+                }
                 state = "error";
+                return;
             }
+            try {
+                registerClasses();
+            } catch(e:Error) {
+                if (error == null) {
+                    error = locale("kerneos.error.swfmodule.registerclasses-error");
+                }
+                state = "error";
+                return;
+            }
+            state = "loaded";
         }
 
         private function loaderError(event:Event = null):void {
-            trace(event);
-            error = "kerneos.error.swfmodule.loading-error";
+            error = locale("kerneos.error.swfmodule.loading-error");
             state = "error";
+        }
+
+        private function locale(ident:String):String {
+            return ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, ident);
         }
         ]]>
     </fx:Script>
@@ -236,7 +256,7 @@
                                  itemDestructionPolicy="never"
                                  mode="manual"
                                  conversion="1024"
-                                 label="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,'kerneos.windows.swf.loading-bar.label') + ' %3%% (%1/%2 kb)'}"/>
+                                 label="{locale('kerneos.windows.swf.loading-bar.label') + ' %3%% (%1/%2 kb)'}"/>
 
     <mx:ModuleLoader id="moduleLoader"
                      includeIn="loaded"
@@ -252,6 +272,6 @@
               includeIn="error"
               itemCreationPolicy="immediate"
               itemDestructionPolicy="never"
-              text="{ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE,error)}"/>
+              text="{this.error}"/>
 
 </view:ModuleWindow>

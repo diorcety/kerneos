@@ -2,7 +2,7 @@
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   - Kerneos
-  - Copyright (C) 2008-2011 Bull S.A.S.
+  - Copyright (C) 2008-2012 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -
   - This library is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
   <parent>
     <groupId>org.ow2</groupId>
     <artifactId>ow2</artifactId>
-    <version>1.1</version>
+    <version>1.3</version>
   </parent>
 
   <groupId>org.ow2.kerneos</groupId>
@@ -43,6 +43,13 @@
   <packaging>pom</packaging>
 
   <url>http://wiki.jasmine.objectweb.org/xwiki/bin/view/Main/WebHome</url>
+  <developers />
+  <licenses>
+    <license>
+      <name>GNU LESSER GENERAL PUBLIC LICENSE Version 2.1</name>
+      <url>http://www.gnu.org/copyleft/lesser.html</url>
+    </license>
+  </licenses>
 
   <properties>
     <!-- GraniteDS -->
@@ -109,6 +116,28 @@
     <repository>
       <id>flex-iframe</id>
       <url>http://flex-iframe.googlecode.com/svn/maven2</url>
+    </repository>
+    <repository>
+        <id>ow2.old</id>
+        <name>OW2 repository</name>
+        <url>http://maven.ow2.org/maven2</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+    <repository>
+        <id>ow2-anpashot.old</id>
+        <name>OW2 repository</name>
+        <url>http://maven.ow2.org/maven2-snapshot</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </repository>
   </repositories>
 

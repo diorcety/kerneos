@@ -27,7 +27,7 @@ package org.ow2.kerneos.core.impl.granite;
 
 import org.granite.osgi.service.GraniteFactory;
 
-import org.ow2.kerneos.core.service.KerneosSimpleService;
+import org.ow2.kerneos.core.service.api.KerneosSimpleService;
 
 
 /**

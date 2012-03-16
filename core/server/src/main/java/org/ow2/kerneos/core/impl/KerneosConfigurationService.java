@@ -399,7 +399,7 @@ public final class KerneosConfigurationService implements GraniteDestination {
         URL url = bundle.getResource(KerneosConstants.KERNEOS_MODULE_FILE);
         if (url != null) {
             // Load the file
-            logger.info("Loading file : {0} from {1}", url.getFile(), bundle.getBundleId());
+            logger.debug("Loading file : {0} from {1}", url.getFile(), bundle.getBundleId());
             InputStream resource = url.openStream();
 
             // Unmarshall it

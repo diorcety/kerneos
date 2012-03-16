@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.core.service;
+package org.ow2.kerneos.core.service.api;
 
 /**
  * Interface corresponding to a simple OSGi service.
