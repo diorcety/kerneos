@@ -67,7 +67,7 @@ import java.util.Hashtable;
 public class FlexHttpService implements HttpContext {
     public static final String APPLICATION = "APPLICATION";
     /**
-     * The logger.
+     * The LOGGER.
      */
     private static final Log LOGGER = LogFactory.getLog(FlexHttpService.class);
 
@@ -173,7 +173,7 @@ public class FlexHttpService implements HttpContext {
      * @return the URL type which permits to acced to the resource.
      */
     public URL getResource(String name) {
-        logger.debug(name);
+        LOGGER.debug(name);
         String path = FlexContext.getCurrent().getPath();
         KerneosModule moduleBundle = FlexContext.getCurrent().getModule();
         KerneosApplication applicationBundle = FlexContext.getCurrent().getApplication();
@@ -186,7 +186,7 @@ public class FlexHttpService implements HttpContext {
                     // Module files
                     url = moduleBundle.getBundle().getResource(KerneosConstants.KERNEOS_PATH + path);
                     if (url == null) {
-                        logger.error("Cannot get url : " + KerneosConstants.KERNEOS_PATH + path);
+                        LOGGER.error("Cannot get url : " + KerneosConstants.KERNEOS_PATH + path);
                         return null;
                     }
                     connection = url.openConnection();
@@ -201,7 +201,7 @@ public class FlexHttpService implements HttpContext {
                                     connection = url.openConnection();
                                     break;
                                 } catch (Exception e) {
-                                    logger.warn("Got exception on openConnection: " + e);
+                                    LOGGER.warn("Got exception on openConnection: " + e);
                                     url = null;
                                 }
                             }
@@ -220,10 +220,7 @@ public class FlexHttpService implements HttpContext {
                 }
             }
         } catch (Exception e) {
-<<<<<<< HEAD
-            logger.warn("Got exception: " + e);
-=======
->>>>>>> new
+            LOGGER.warn("Got exception: " + e);
             return null;
         }
 
@@ -234,7 +231,7 @@ public class FlexHttpService implements HttpContext {
         }
 
         if (url == null) {
-            logger.debug("returning null url for " + name);
+            LOGGER.debug("returning null url for " + name);
         }
         return url;
     }
