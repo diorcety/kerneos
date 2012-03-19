@@ -112,7 +112,7 @@
       </dependency>
       <dependency>
         <groupId>org.ow2.kerneos</groupId>
-        <artifactId>kerneos-api-server</artifactId>
+        <artifactId>kerneos-core-server</artifactId>
         <version>\${kerneos.version}</version>
         <scope>provided</scope>
       </dependency>

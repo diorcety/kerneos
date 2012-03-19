@@ -23,7 +23,7 @@
  * --------------------------------------------------------------------------
  */
 
-package org.ow2.kerneos.core.service.api;
+package org.ow2.kerneos.core.service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,52 +31,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Set the kerneos Factory Service.
+ * Set the kerneos Service.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface KerneosFactory {
+public @interface KerneosService {
     /**
-     * Differents scope of a kerneos factory.
+     * The id of the service.
      */
-    enum SCOPE {
-        /**
-         * Create an instance by request.
-         */
-        REQUEST("request"),
-        /**
-         * Create an instance http session.
-         */
-        SESSION("session"),
-        /**
-         * Create on instance.
-         */
-        APPLICATION("application");
-
-        private final String value;
-
-        /**
-         * Constructor.
-         *
-         * @param value the string corresponding.
-         */
-        SCOPE(final String value) {
-            this.value = value;
-        }
-
-        /**
-         * Convert the type to String.
-         *
-         * @return the string corresponding.
-         */
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
-
-    /**
-     * The scope used with this factory.
-     */
-    SCOPE scope();
+    String id();
 }
