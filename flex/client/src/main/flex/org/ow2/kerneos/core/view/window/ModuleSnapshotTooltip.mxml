@@ -1,0 +1,132 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - Kerneos
+     - Copyright (C) 2009 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<mx:Box xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
+        xmlns:commonView = "org.ow2.kerneos.common.view.*"
+        implements = "mx.core.IToolTip"
+        width = "{snapshotWidth+20}"
+        height = "{snapshotHeight+20}"
+        horizontalAlign = "center"
+        verticalAlign = "middle"
+        showEffect = "{fadeIn}">
+
+    <fx:Metadata>
+        <![CDATA[
+        /**
+         * A custom ToolTip meant to display the snapshot of a window.
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
+    </fx:Metadata>
+
+    <fx:Script>
+        <![CDATA[
+            // =========================================================================
+            // Variables
+            // =========================================================================
+
+            /**
+             * The bytes of the snapshot image displayed.
+             */
+            [Bindable]
+            public var bitmapData : ByteArray;
+
+            /**
+             * The width of the snapshot image.
+             */
+            [Bindable]
+            public var snapshotWidth : Number = 180;
+
+            /**
+             * The height of the snapshot image.
+             */
+            [Bindable]
+            public var snapshotHeight : Number = 180;
+
+            /**
+             * The tooltip text.
+             */
+            [Bindable]
+            private var _text : String;
+
+
+
+            // =========================================================================
+            // Implementation of IToolTip
+            // =========================================================================
+
+            /**
+             * The tooltip text (not displayed).
+             */
+            public function get text() : String
+            {
+                return text;
+            }
+
+
+
+            /**
+             * Set the tooltip text.
+             */
+            public function set text(value : String) : void
+            {
+                _text = value;
+            }
+        ]]>
+    </fx:Script>
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Graphical effects & filters                                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <fx:Declarations>
+        <mx:GlowFilter id="snapshotGlowFilter"
+                       color="#000000"
+                       blurX="15"
+                       blurY="15"
+                       alpha="0.4"
+                       quality="5"/>
+
+        <mx:Fade id="fadeIn"
+                 duration="200"
+                 alphaFrom="0.0"
+                 alphaTo="1.0"/>
+    </fx:Declarations>
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- UI children                                                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <commonView:SmoothImage source = "{bitmapData}"
+                            width = "{snapshotWidth}"
+                            height = "{snapshotHeight}"
+                            filters = "{[snapshotGlowFilter]}" />
+
+</mx:Box>

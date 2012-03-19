@@ -1,0 +1,291 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - Kerneos
+     - Copyright (C) 2011 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<view:ModuleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+                   xmlns:mx="library://ns.adobe.com/flex/mx"
+                   xmlns:view="org.ow2.kerneos.core.view.window.*"
+                   xmlns:controls="org.ow2.kerneos.common.controls.*"
+                   currentState="{state}">
+
+    <fx:Metadata>
+        <![CDATA[
+        ]]>
+    </fx:Metadata>
+
+    <fx:Script>
+        <![CDATA[
+        import com.adobe.cairngorm.business.ServiceLocator;
+
+        import mx.controls.Alert;
+
+        import mx.resources.ResourceManager;
+
+        import org.granite.util.GraniteClassRegistry;
+
+        import org.ow2.kerneos.common.managers.LanguagesManager;
+        import org.ow2.kerneos.common.vo.ServiceTypeVO;
+        import org.ow2.kerneos.core.api.KerneosModule;
+        import org.ow2.kerneos.core.managers.KerneosLifeCycleManager;
+        import org.ow2.kerneos.common.vo.MappingVO;
+        import org.ow2.kerneos.common.vo.SWFModuleVO;
+        import org.ow2.kerneos.common.vo.ServiceVO;
+
+
+        [Bindable]
+        private var state:String = "idle";
+
+        [Bindable]
+        private var error:String;
+
+        // =========================================================================
+        // Public methods
+        // =========================================================================
+
+        /**
+         * Get the KerneosModule object associated with this SwfModule
+         * @return null if there is not KerneosModule
+         */
+        public function getKerneosModule():KerneosModule {
+            if (moduleLoader.child is KerneosModule) {
+                return moduleLoader.child as KerneosModule;
+            }
+            return null;
+        }
+
+
+        /**
+         * Load the module
+         */
+        public function load():void {
+            state = "loading";
+
+            // Load the module with the ModuleLoader
+            moduleLoader.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
+            moduleLoader.loadModule((module as SWFModuleVO).file);
+        }
+
+
+        /**
+         * Unload the module
+         */
+        public function unload(cause:String = null):void {
+            // If the module implements the interface KerneosModule,
+            // trigger the closeModule() method
+            if (getKerneosModule()) {
+                getKerneosModule().mx_internal::closeModule();
+            }
+
+            // Remove services & registred classes
+            if (moduleLoader.child != null) {
+                unregisterServices();
+                unregisterClasses();
+            }
+
+            // Unload the module with the ModuleLoader
+            moduleLoader.unloadModule();
+            moduleLoader.child = null;
+
+            error = (cause == null) ? locale("kerneos.error.swfmodule.unloaded") : locale(cause);
+            state = "error";
+        }
+
+        /**
+         * Return true if the module is loaded
+         */
+        public function isLoaded():Boolean {
+            return  state == "loaded";
+        }
+
+
+        // =========================================================================
+        // Private methods
+        // =========================================================================
+        /**
+         * Register classes used by each services
+         */
+        private function registerClasses():void {
+            // Create the bindings
+            var dictionary:Dictionary = new Dictionary();
+            for each(var binding:MappingVO in (module as SWFModuleVO).mappings) {
+                try {
+                    dictionary[binding.java] = moduleLoader.applicationDomain.getDefinition(binding.flex);
+                } catch(e:Error) {
+                    error = locale("kerneos.error.swfmodule.binding") + binding.flex;
+                    throw e;
+                }
+            }
+
+            // Register classes used by the services
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                GraniteClassRegistry.registerClasses(service.destination, dictionary);
+            }
+        }
+
+        /**
+         *Register services
+         */
+        private function registerServices():void {
+            var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+            if (getKerneosModule()) {
+                serviceLocator = getKerneosModule().getServices();
+            }
+
+            // Register services
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                var async:Boolean = service.type.equals(ServiceTypeVO.ASYNCHRONOUS);
+                serviceLocator.setServiceForId(service.id, service.destination, async);
+                if (async) {
+                    serviceLocator.getConsumer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
+                    serviceLocator.getProducer(service.id).channelSet = KerneosLifeCycleManager.amfGravityChannelSet;
+                }
+                else {
+                    serviceLocator.getRemoteObject(service.id).channelSet = KerneosLifeCycleManager.amfChannelSet;
+                }
+            }
+        }
+
+        /**
+         * Unregister classes with by each services
+         */
+        private function unregisterClasses():void {
+            // Unregister classes used by the services
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                GraniteClassRegistry.unregisterClasses(service.destination);
+            }
+        }
+
+        /**
+         * Unregister services
+         */
+        private function unregisterServices():void {
+            var serviceLocator:ServiceLocator = ServiceLocator.getInstance();
+            if (getKerneosModule()) {
+                serviceLocator = getKerneosModule().getServices();
+            }
+
+            for each(var service:ServiceVO in (module as SWFModuleVO).services) {
+                var async:Boolean = service.type.equals(ServiceTypeVO.ASYNCHRONOUS);
+                if (async) {
+                    serviceLocator.getConsumer(service.id).disconnect();
+                    serviceLocator.getProducer(service.id).disconnect();
+                }
+                else {
+                    serviceLocator.getRemoteObject(service.id).disconnect();
+                }
+
+                serviceLocator.removeServiceForId(service.id, async);
+            }
+        }
+
+        /**
+         * When the module has finished loading
+         */
+        private function loaderReady(event:Event = null):void {
+            try {
+                registerServices();
+            } catch(e:Error) {
+                if (error == null) {
+                    error = locale("kerneos.error.swfmodule.registerservice-error");
+                }
+                state = "error";
+                return;
+            }
+            try {
+                registerClasses();
+                if (getKerneosModule()) {
+                    getKerneosModule().mx_internal::setConfiguration(module);
+                    getKerneosModule().mx_internal::openModule();
+                }
+                state = "loaded";
+            } catch(e:Error) {
+                if (error == null) {
+                    error = locale("kerneos.error.swfmodule.registerclasses-error");
+                }
+                state = "error";
+                return;
+            }
+            state = "loaded";
+        }
+
+        private function loaderError(event:Event = null):void {
+            error = locale("kerneos.error.swfmodule.loading-error");
+            state = "error";
+        }
+
+        private function locale(ident:String):String {
+            return ResourceManager.getInstance().getString(LanguagesManager.LOCALE_RESOURCE_BUNDLE, ident);
+        }
+        ]]>
+    </fx:Script>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- States                                                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <view:states>
+        <!-- Initial state-->
+        <mx:State name="idle"/>
+
+        <!-- When the module is loading -->
+        <mx:State name="loading"/>
+
+        <!-- When the module is loaded -->
+        <mx:State name="loaded"/>
+
+        <!-- When an fatal issue occurs -->
+        <mx:State name="error"/>
+
+    </view:states>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Components                                                              -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <controls:KerneosProgressBar id="progressBar"
+                                 includeIn="loading"
+                                 itemCreationPolicy="immediate"
+                                 itemDestructionPolicy="never"
+                                 mode="manual"
+                                 conversion="1024"
+                                 label="{locale('kerneos.windows.swf.loading-bar.label') + ' %3%% (%1/%2 kb)'}"/>
+
+    <mx:ModuleLoader id="moduleLoader"
+                     includeIn="loaded"
+                     itemCreationPolicy="immediate"
+                     itemDestructionPolicy="never"
+                     ready="loaderReady(event)"
+                     error="loaderError(event)"
+                     width="100%"
+                     height="100%"
+                     progress="progressBar.setProgress(event.bytesLoaded, event.bytesTotal)"/>
+
+    <mx:Label id="errorLabel"
+              includeIn="error"
+              itemCreationPolicy="immediate"
+              itemDestructionPolicy="never"
+              text="{this.error}"/>
+
+</view:ModuleWindow>

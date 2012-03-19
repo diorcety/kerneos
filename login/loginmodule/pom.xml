@@ -45,21 +45,27 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.util</groupId>
-      <artifactId>util-log</artifactId>
-      <version>1.0.10</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-log</artifactId>
+    </dependency>
+
+    <!-- OSGi -->
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+    </dependency>
+
+    <!-- iPOJO -->
+    <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-      <version>${ipojo.annotations.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -94,13 +100,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-ipojo-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>ipojo-bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

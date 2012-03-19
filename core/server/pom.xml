@@ -45,89 +45,61 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.ow2.util</groupId>
-      <artifactId>util-log</artifactId>
-      <version>1.0.10</version>
-      <scope>provided</scope>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-log</artifactId>
+    </dependency>
+
+    <!-- OSGi -->
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
     </dependency>
 
     <!-- iPOJO -->
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-      <version>${ipojo.annotations.version}</version>
-      <scope>provided</scope>
+      <artifactId>org.apache.felix.ipojo</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.handler.extender</artifactId>
-      <version>${ipojo.extender.version}</version>
-      <scope>provided</scope>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
     </dependency>
 
     <!-- Kerneos Server -->
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-api-server</artifactId>
+      <artifactId>kerneos-core-api</artifactId>
       <version>2.1.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-common-server</artifactId>
+      <artifactId>kerneos-core-common</artifactId>
       <version>2.1.0-SNAPSHOT</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-login-api</artifactId>
       <version>2.1.0-SNAPSHOT</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
       <artifactId>kerneos-profile-api</artifactId>
       <version>2.1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- Kerneos Client -->
-    <dependency>
-      <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-core-client</artifactId>
-      <version>2.1.0-SNAPSHOT</version>
-      <type>swf</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ow2.kerneos</groupId>
-      <artifactId>kerneos-core-theme</artifactId>
+      <artifactId>kerneos-roles-api</artifactId>
       <version>2.1.0-SNAPSHOT</version>
-      <type>swf</type>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- GraniteDS -->
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-core</artifactId>
-      <version>${graniteds-osgi.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-gravity-ea</artifactId>
-      <version>${graniteds-osgi.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.graniteds-osgi</groupId>
-      <artifactId>granite-gravity-jms</artifactId>
-      <version>${graniteds-osgi.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -135,67 +107,19 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>kerneos-core-client</artifactId>
-                  <version>${project.version}</version>
-                  <type>swf</type>
-                  <overWrite>true</overWrite>
-                  <destFileName>kerneos.swf</destFileName>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>kerneos-core-theme</artifactId>
-                  <version>${project.version}</version>
-                  <type>swf</type>
-                  <overWrite>true</overWrite>
-                  <destFileName>styles.swf</destFileName>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.build.directory}/kerneos</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Include-Resource>
-              {maven-resources}, {maven-dependencies},
-              KERNEOS=${project.build.directory}/kerneos
-            </Include-Resource>
-            <Export-Package>
-              org.ow2.kerneos.core;version=${project.version},
-              org.ow2.kerneos.core.config.*;version=${project.version},
-              org.ow2.kerneos.core.manager;version=${project.version},
-              org.ow2.kerneos.core.service;version=${project.version},
-              org.ow2.kerneos.core.util;version=${project.version},
-              org.ow2.kerneos.login;version=${project.version},
-              org.ow2.kerneos.profile.*;version=${project.version},
-            </Export-Package>
             <Private-Package>
-              org.ow2.kerneos.core.impl.*
+              org.ow2.kerneos.core,
+              org.ow2.kerneos.core.*
             </Private-Package>
           </instructions>
         </configuration>
@@ -204,13 +128,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-ipojo-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>ipojo-bundle</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>

@@ -1,0 +1,185 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!--
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - Kerneos
+     - Copyright (C) 2008 Bull S.A.S.
+     - Contact: jasmine AT ow2.org
+     -
+     - This library is free software; you can redistribute it and/or
+     - modify it under the terms of the GNU Lesser General Public
+     - License as published by the Free Software Foundation; either
+     - version 2.1 of the License, or any later version.
+     -
+     - This library is distributed in the hope that it will be useful,
+     - but WITHOUT ANY WARRANTY; without even the implied warranty of
+     - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     - Lesser General Public License for more details.
+     -
+     - You should have received a copy of the GNU Lesser General Public
+     - License along with this library; if not, write to the Free Software
+     - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+     - USA
+     -
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     - $Id$
+     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<mx:VBox xmlns:fx="http://ns.adobe.com/mxml/2009"
+         xmlns:mx="library://ns.adobe.com/flex/mx"
+         xmlns:s="library://ns.adobe.com/flex/spark"
+         xmlns:commonView="org.ow2.kerneos.common.view.*"
+         implements="mx.controls.listClasses.IListItemRenderer"
+         horizontalAlign="center"
+         verticalAlign="middle"
+         width="140"
+         height="100"
+         verticalGap="0"
+         toolTip="{module.description}"
+         buttonMode="true"
+         useHandCursor="true"
+         mouseChildren="false"
+         verticalScrollPolicy="off"
+         horizontalScrollPolicy="off"
+         click="startModule(event)"
+         creationComplete="initRenderer()">
+
+    <fx:Metadata>
+        <![CDATA[
+        /**
+         * Renders a module as a list icon.
+         *
+         * @author Julien Nicoulaud
+         */
+        ]]>
+    </fx:Metadata>
+
+    <fx:Script>
+        <![CDATA[
+        import org.ow2.kerneos.core.managers.ModulesLifeCycleManager;
+        import org.ow2.kerneos.common.vo.ModuleVO;
+
+        // =========================================================================
+        // Variables
+        // =========================================================================
+
+        // The item renderer stored data
+
+        /**
+         * The data displayed by the renderer
+         */
+        [Bindable]
+        private var module:ModuleVO;
+
+
+        // =========================================================================
+        // Initialization
+        // =========================================================================
+
+        /**
+         * Init the component
+         */
+        public function initRenderer(event:Event = null):void {
+            // Listen to mouse events
+            addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+            addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+        }
+
+
+        // =========================================================================
+        // Events handlers
+        // =========================================================================
+
+        /**
+         * On mouse over
+         */
+        public function mouseOverHandler(event:Event = null):void {
+            this.setStyle('borderStyle', 'solid');
+        }
+
+
+        /**
+         * On mouse out
+         */
+        public function mouseOutHandler(event:Event = null):void {
+            if (!module.loaded) {
+                this.setStyle('borderStyle', 'none');
+            }
+        }
+
+
+        // =========================================================================
+        // Data object handling
+        // =========================================================================
+
+        /**
+         * Get the item renderer data object
+         */
+        [Bindable("dataChange")]
+        override public function get data():Object {
+            return module;
+        }
+
+
+        /**
+         * Set the item renderer data object
+         */
+        override public function set data(value:Object):void {
+            module = value as ModuleVO;
+
+            if (module.loaded) {
+                this.setStyle('borderStyle', 'solid');
+            }
+            else {
+                this.setStyle('borderStyle', 'none');
+            }
+
+            invalidateProperties();
+            moduleThumb.invalidateProperties();
+            dispatchEvent(new Event("dataChange"));
+        }
+
+
+        // =========================================================================
+        // Private methods
+        // =========================================================================
+
+        /**
+         * Start the module
+         */
+        private function startModule(e:Event):void {
+            if (!module.loaded) {
+                ModulesLifeCycleManager.openModule(module);
+            }
+            else {
+                ModulesLifeCycleManager.bringToFront(module);
+            }
+        }
+        ]]>
+    </fx:Script>
+
+    <fx:Declarations>
+        <!-- The shadow -->
+        <mx:GlowFilter id="nameShadow"
+                       blurX="10"
+                       blurY="4"
+                       quality="15"
+                       alpha="0.9"
+                       strength="4"
+                       color="#FFFFFF"/>
+    </fx:Declarations>
+
+    <!-- The module thumbnail -->
+    <commonView:SmoothImage id="moduleThumb"
+                            source="{module.getBigIcon()}"
+                            width="64"
+                            height="64"/>
+
+    <!-- The module name -->
+    <s:Label id="moduleName"
+             width="130"
+             height="36"
+             maxDisplayedLines="2"
+             filters="{[nameShadow]}"
+             text="{module.name}"/>
+
+</mx:VBox>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Kerneos
+  - Copyright (C) 2009 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd"
+    xmlns:k="http://jasmine.ow2.org/xsds/kerneos-application-2.1.xsd">
+
+
+  <!--##################################################################################
+  # kerneos-config
+  ###################################################################################-->
+
+  <xs:element name="application" type="k:application"/>
+
+  <xs:complexType name="application">
+    <xs:sequence>
+      <xs:element ref="k:application-project" maxOccurs="1" minOccurs="1"/>
+      <xs:element ref="k:application-name" maxOccurs="1" minOccurs="1"/>
+      <xs:element ref="k:application-url" maxOccurs="1" minOccurs="1"/>
+      <xs:element ref="k:application-logo" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:show-minimize-all-button" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:show-cascade-button" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:show-tile-button" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:show-notification-popups" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:show-popups-from-active-window" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:enable-notifications-log" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:show-confirm-close-dialog" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:default-locale" maxOccurs="1" minOccurs="1"/>
+      <xs:element ref="k:languages" maxOccurs="1" minOccurs="1"/>
+      <xs:element ref="k:authentication" maxOccurs="1" minOccurs="0"/>
+      <xs:element ref="k:managers" maxOccurs="1" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <!--##################################################################################
+  # Options
+  ###################################################################################-->
+
+  <xs:element name="application-project" type="xs:string"/>
+  <xs:element name="application-name" type="xs:string"/>
+  <xs:element name="application-url" type="xs:string"/>
+  <xs:element name="application-logo" type="xs:string"/>
+  <xs:element name="show-minimize-all-button" type="xs:boolean" default="true"/>
+  <xs:element name="show-cascade-button" type="xs:boolean" default="true"/>
+  <xs:element name="show-tile-button" type="xs:boolean" default="true"/>
+  <xs:element name="show-notification-popups" type="xs:boolean" default="true"/>
+  <xs:element name="show-popups-from-active-window" type="xs:boolean" default="false"/>
+  <xs:element name="enable-notifications-log" type="xs:boolean" default="true"/>
+  <xs:element name="show-confirm-close-dialog" type="xs:boolean" default="true"/>
+  <xs:element name="default-locale" type="xs:string"/>
+
+  <!--##################################################################################
+  # Languages
+  ###################################################################################-->
+
+  <xs:element name="languages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="k:language" maxOccurs="unbounded" minOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="language" type="k:language"/>
+
+  <xs:complexType name="language">
+    <xs:attribute name="name" use="required" type="xs:string"/>
+    <xs:attribute name="locale" use="required" type="xs:string"/>
+  </xs:complexType>
+
+  <!--##################################################################################
+  # Authentication
+  ###################################################################################-->
+
+  <xs:element name="authentication" type="k:authentication" default="flex"/>
+
+  <xs:simpleType name="authentication">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="flex"/>
+      <xs:enumeration value="www"/>
+      <xs:enumeration value="inherit"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--##################################################################################
+  # Managers
+  ###################################################################################-->
+
+  <xs:element name="managers" type="k:managers"/>
+
+  <xs:complexType name="managers">
+    <xs:sequence>
+      <xs:element name="login" type="k:manager" maxOccurs="1" minOccurs="0"/>
+      <xs:element name="roles" type="k:manager" maxOccurs="1" minOccurs="0"/>
+      <xs:element name="profile" type="k:manager" maxOccurs="1" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="manager">
+    <xs:sequence>
+      <xs:element name="property" type="k:manager-property" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" use="required" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="manager-property">
+    <xs:attribute name="id" use="required" type="xs:string"/>
+    <xs:attribute name="value" use="required" type="xs:string"/>
+  </xs:complexType>
+</xs:schema>

@@ -34,11 +34,12 @@ import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Unbind;
 import org.apache.felix.ipojo.annotations.Validate;
-import org.granite.gravity.osgi.adapters.ea.EAConstants;
+
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-import org.ow2.kerneos.core.KerneosConstants;
-import org.ow2.kerneos.core.manager.KerneosProfile;
+
+import org.ow2.kerneos.common.KerneosConstants;
+import org.ow2.kerneos.profile.KerneosProfile;
 import org.ow2.kerneos.profile.config.generated.ObjectFactory;
 import org.ow2.kerneos.profile.config.generated.Profile;
 import org.ow2.util.ee.deploy.api.deployable.IDeployable;
@@ -52,6 +53,7 @@ import org.ow2.util.log.LogFactory;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,20 +67,20 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
     /**
      * Logger.
      */
-    private static final Log logger = LogFactory.getLog(ProfileJonas.class);
+    private static final Log LOGGER = LogFactory.getLog(ProfileJonas.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
-    @Property(name = "ID", mandatory = true)
-    @ServiceProperty(name = "ID")
-    private String ID;
+    @Property(name = KerneosProfile.ID, mandatory = true)
+    @ServiceProperty(name = KerneosProfile.ID)
+    private String id;
 
     /**
      * Property to set the file supported by this deployer.
      */
     @Property(name = "file", mandatory = true)
-    private String FILE;
+    private String file;
 
     /**
      * Event Admin.
@@ -115,7 +117,7 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
      */
     @Validate
     private void start() throws IOException {
-        logger.debug("Start ProfileJonas(" + ID + ")");
+        LOGGER.debug("Start ProfileJonas(" + id + ")");
         if (deployerManager != null) {
             deployerManager.register(this);
         }
@@ -127,7 +129,7 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
      */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop ProfileJonas(" + ID + ")");
+        LOGGER.debug("Stop ProfileJonas(" + id + ")");
         started = false;
         if (deployerManager != null) {
             deployerManager.unregister(this);
@@ -172,16 +174,18 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
 
             // Send message
             Dictionary<String, Object> properties = new Hashtable<String, Object>();
-            properties.put(EAConstants.DATA, profile);
-            Event event = new Event(KerneosConstants.KERNEOS_PROFILE_TOPIC + "/" + ID, properties);
+            properties.put(KerneosConstants.KERNEOS_TOPIC_DATA, profile);
+            Event event = new Event(KerneosConstants.KERNEOS_APPLICATION_TOPIC + "/" + id
+                    + KerneosConstants.KERNEOS_PROFILE_SUFFIX, properties);
             eventAdmin.sendEvent(event);
 
-            if (!update)
-                logger.info("New Kerneos Profile(" + ID + "): " + deployable.getShortName());
-            else
-                logger.info("Update Kerneos Profile(" + ID + "): " + deployable.getShortName());
+            if (!update) {
+                LOGGER.info("New Kerneos Profile(" + id + "): " + deployable.getShortName());
+            } else {
+                LOGGER.info("Update Kerneos Profile(" + id + "): " + deployable.getShortName());
+            }
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + deployable.getShortName());
+            LOGGER.error(ex, "Invalid Kerneos Profile file(" + id + "): " + deployable.getShortName());
         }
     }
 
@@ -193,10 +197,10 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
             if (!new File(deployable.getArchive().getURL().getFile()).exists()) {
                 profile = null;
 
-                logger.info("Delete Kerneos Profile(" + ID + "): " + deployable.getShortName());
+                LOGGER.info("Delete Kerneos Profile(" + id + "): " + deployable.getShortName());
             }
         } catch (Exception ex) {
-            logger.error(ex, "Invalid Kerneos Profile file(" + ID + "): " + deployable.getShortName());
+            LOGGER.error(ex, "Invalid Kerneos Profile file(" + id + "): " + deployable.getShortName());
         }
     }
 
@@ -211,7 +215,8 @@ public class ProfileJonas implements IDeployer, KerneosProfile {
      * @return true if the file is supported otherwise false.
      */
     public boolean supports(IDeployable<?> deployable) {
-        return KerneosProfileDeployable.class.isAssignableFrom(deployable.getClass()) && deployable.getShortName().equals(FILE);
+        return KerneosProfileDeployable.class.isAssignableFrom(deployable.getClass())
+                && deployable.getShortName().equals(file);
     }
 
     /**

@@ -31,8 +31,9 @@ import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
-import org.ow2.kerneos.core.KerneosContext;
-import org.ow2.kerneos.login.Session;
+
+import org.ow2.kerneos.login.KerneosLogin;
+import org.ow2.kerneos.login.KerneosSession;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -45,47 +46,61 @@ public class DefaultKerneosLogin implements KerneosLogin {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(DefaultKerneosLogin.class);
+    private static final Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
-    @Property(name = "ID", mandatory = true)
-    @ServiceProperty(name = "ID")
-    private String ID;
+    @Property(name = KerneosLogin.ID, mandatory = true)
+    @ServiceProperty(name = KerneosLogin.ID)
+    private String id;
+
+    /**
+     * Constructor.
+     * Avoid direct component instantiation
+     */
+    private DefaultKerneosLogin() {
+
+    }
 
     /**
      * Called when all the component dependencies are met.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Validate
     private void start() throws IOException {
-        logger.debug("Start DefaultKerneosLogin(" + ID + ")");
+        LOGGER.debug("Start DefaultKerneosLogin(" + id + ")");
     }
 
     /**
      * Called when all the component dependencies aren't met anymore.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop DefaultKerneosLogin(" + ID + ")");
+        LOGGER.debug("Stop DefaultKerneosLogin(" + id + ")");
     }
 
-
+    @Override
     public void login(String application, String user, String password) {
         if (user.equals(password)) {
             LinkedList roles = new LinkedList<String>();
             roles.add(user);
 
-            KerneosContext.getCurrentContext().getSession().setUsername(user);
-            KerneosContext.getCurrentContext().getSession().setRoles(roles);
+            KerneosSession.getCurrent().setUsername(user);
+            KerneosSession.getCurrent().setRoles(roles);
         }
     }
 
+    @Override
     public void logout() {
-        KerneosContext.getCurrentContext().getSession().reset();
+        KerneosSession.getCurrent().reset();
     }
 
-    public Session newSession() {
-        return new Session();
+    @Override
+    public KerneosSession newSession() {
+        return new KerneosSession();
     }
 }

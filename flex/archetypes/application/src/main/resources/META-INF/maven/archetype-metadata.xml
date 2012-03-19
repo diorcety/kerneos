@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Kerneos
+  - Copyright (C) 2008-2011 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd">
+  <modules>
+    <module id="${rootArtifactId}-application" dir="application" name="${rootArtifactId}-application">
+      <fileSets>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.xml</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/kerneos</directory>
+          <includes>
+            <include>**/*.html</include>
+            <include>**/*.png</include>
+            <include>**/*.js</include>
+            <include>**/*.css</include>
+            <include>**/*.ico</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-packaging" dir="packaging" name="${rootArtifactId}-packaging">
+      <modules>
+        <module id="${rootArtifactId}-packaging-felix" dir="felix" name="${rootArtifactId}-packaging-felix">
+          <fileSets>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main</directory>
+              <includes>
+                <include>**/*.xml</include>
+              </includes>
+            </fileSet>
+            <fileSet encoding="UTF-8">
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>**/*.properties</include>
+                <include>**/*.bat</include>
+                <include>**/*.sh</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-packaging-jonas" dir="jonas" name="${rootArtifactId}-packaging-jonas">
+          <fileSets>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main</directory>
+              <includes>
+                <include>**/*.xml</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-packaging-war" dir="war" name="${rootArtifactId}-packaging-war">
+          <fileSets>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/java</directory>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main/webapp</directory>
+              <includes>
+                <include>**/*.xml</include>
+                <include>**/*.properties</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+      </modules>
+    </module>
+  </modules>
+</archetype-descriptor>

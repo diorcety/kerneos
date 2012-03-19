@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>\${groupId}</groupId>
+  <artifactId>\${artifactId}</artifactId>
+  <version>\${version}</version>
+
+  <packaging>pom</packaging>
+
+  <name>\${groupId} :: \${artifactId}</name>
+
+  <modules>
+    <module>application</module>
+    <module>packaging</module>
+  </modules>
+
+  <properties>
+    <!-- Dependencies versions -->
+    <graniteds-osgi.version>${graniteds-osgi.version}</graniteds-osgi.version>
+
+    <org.apache.felix.configadmin.version>1.2.8</org.apache.felix.configadmin.version>
+    <org.apache.felix.eventadmin.version>1.2.8</org.apache.felix.eventadmin.version>
+    <org.apache.felix.ipojo.handler.eventadmin.version>${org.apache.felix.ipojo.handler.eventadmin.version}
+    </org.apache.felix.ipojo.handler.eventadmin.version>
+    <org.apache.felix.ipojo.version>${org.apache.felix.ipojo.version}</org.apache.felix.ipojo.version>
+
+    <org.osgi.compendium.version>${org.osgi.compendium.version}</org.osgi.compendium.version>
+    <org.osgi.core.version>${org.osgi.core.version}</org.osgi.core.version>
+
+    <kerneos.version>${project.version}</kerneos.version>
+    <ipojo.version>${org.apache.felix.ipojo.version}</ipojo.version>
+
+    <maven-assembly-plugin.version>${maven-assembly.version}</maven-assembly-plugin.version>
+    <maven-bundle.version>${maven-bundle.version}</maven-bundle.version>
+    <maven-dependency.version>${maven-dependency.version}</maven-dependency.version>
+    <ow2-util-log.version>1.0.31</ow2-util-log.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>ops4j.repository</id>
+      <url>http://repository.ops4j.org/maven2</url>
+    </repository>
+    <repository>
+      <id>repo objectweb</id>
+      <url>http://maven.objectweb.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>repo objectweb snapshots</id>
+      <url>http://maven.objectweb.org/maven2-snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Log -->
+      <dependency>
+        <groupId>org.ow2.bundles</groupId>
+        <artifactId>ow2-util-log</artifactId>
+        <version>${ow2-util-log.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <!--Felix Packaging Dependencies-->
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.configadmin</artifactId>
+        <version>\${org.apache.felix.configadmin.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.eventadmin</artifactId>
+        <version>\${org.apache.felix.eventadmin.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+        <version>\${org.apache.felix.ipojo.handler.eventadmin.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo</artifactId>
+        <version>\${org.apache.felix.ipojo.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.core</artifactId>
+        <version>\${org.osgi.core.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.compendium</artifactId>
+        <version>\${org.osgi.compendium.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-core</artifactId>
+        <version>\${graniteds-osgi.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-gravity-ea</artifactId>
+        <version>\${graniteds-osgi.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-gravity-jms</artifactId>
+        <version>\${graniteds-osgi.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.graniteds-osgi</groupId>
+        <artifactId>granite-gravity</artifactId>
+        <version>\${graniteds-osgi.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <!--Kerneos 2 Dependencies-->
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-core-api</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-login-api</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-roles-api</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-profile-api</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-core-server</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-core-common</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-flex-server</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.kerneos</groupId>
+        <artifactId>kerneos-login-loginmodule</artifactId>
+        <version>\${kerneos.version}</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>\${maven-assembly-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

@@ -31,6 +31,8 @@ import org.apache.felix.ipojo.annotations.Property;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.ServiceProperty;
 import org.apache.felix.ipojo.annotations.Validate;
+
+import org.ow2.kerneos.roles.KerneosRoles;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -43,31 +45,44 @@ public class DefaultKerneosRoles implements KerneosRoles {
     /**
      * The logger.
      */
-    private static Log logger = LogFactory.getLog(DefaultKerneosLogin.class);
+    private static final Log LOGGER = LogFactory.getLog(DefaultKerneosLogin.class);
 
     /**
      * Mandatory service property used by Kerneos core.
      */
-    @Property(name = "ID", mandatory = true)
-    @ServiceProperty(name = "ID")
-    private String ID;
+    @Property(name = KerneosRoles.ID, mandatory = true)
+    @ServiceProperty(name = KerneosRoles.ID)
+    private String id;
+
+    /**
+     * Constructor.
+     * Avoid direct component instantiation
+     */
+    private DefaultKerneosRoles() {
+
+    }
 
     /**
      * Called when all the component dependencies are met.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Validate
     private void start() throws IOException {
-        logger.debug("Start DefaultKerneosRoles(" + ID + ")");
+        LOGGER.debug("Start DefaultKerneosRoles(" + id + ")");
     }
 
     /**
      * Called when all the component dependencies aren't met anymore.
+     *
+     * @throws IOException an issue occurs during the validation
      */
     @Invalidate
     private void stop() throws IOException {
-        logger.debug("Stop DefaultKerneosRoles(" + ID + ")");
+        LOGGER.debug("Stop DefaultKerneosRoles(" + id + ")");
     }
 
+    @Override
     public Collection<String> resolve(Collection<String> roles) {
         return roles;
     }

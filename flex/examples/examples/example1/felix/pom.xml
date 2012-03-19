@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Kerneos
+  - Copyright (C) 2011 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.ow2.kerneos</groupId>
+    <artifactId>kerneos-flex-examples-examples-example1</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>kerneos-flex-examples-examples-example1-felix</artifactId>
+  <name>Kerneos :: Flex :: Examples :: Examples :: Example 1 :: Felix</name>
+
+  <packaging>pom</packaging>
+
+  <properties>
+    <org.apache.felix.http.jetty.version>2.2.0</org.apache.felix.http.jetty.version>
+    <org.apache.felix.fileinstall.version>3.1.10</org.apache.felix.fileinstall.version>
+    <org.apache.felix.ipojo.arch.gogo.version>1.0.1</org.apache.felix.ipojo.arch.gogo.version>
+
+    <pax-confman-propsloader.version>0.2.2</pax-confman-propsloader.version>
+    <pax-logging-api.version>1.6.0</pax-logging-api.version>
+    <pax-logging-service.version>1.6.0</pax-logging-service.version>
+  </properties>
+
+  <dependencies>
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.ops4j.pax.confman</groupId>
+      <artifactId>pax-confman-propsloader</artifactId>
+      <version>${pax-confman-propsloader.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-api</artifactId>
+      <version>${pax-logging-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-service</artifactId>
+      <version>${pax-logging-service.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Felix -->
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.main.distribution</artifactId>
+      <version>${org.apache.felix.version}</version>
+      <classifier>project</classifier>
+      <type>zip</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.http.jetty</artifactId>
+      <version>${org.apache.felix.http.jetty.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.fileinstall</artifactId>
+      <version>${org.apache.felix.fileinstall.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-profile-fileinstall</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.arch.gogo</artifactId>
+      <version>${org.apache.felix.ipojo.arch.gogo.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.main.distribution</artifactId>
+                  <classifier>project</classifier>
+                  <type>zip</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/felix</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <!-- Log -->
+                <artifactItem>
+                  <groupId>org.ops4j.pax.confman</groupId>
+                  <artifactId>pax-confman-propsloader</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles/log</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ops4j.pax.logging</groupId>
+                  <artifactId>pax-logging-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles/log</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ops4j.pax.logging</groupId>
+                  <artifactId>pax-logging-service</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles/log</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.bundles</groupId>
+                  <artifactId>ow2-util-i18n</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.bundles</groupId>
+                  <artifactId>ow2-util-log</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- OSGi -->
+                <artifactItem>
+                  <groupId>org.osgi</groupId>
+                  <artifactId>org.osgi.compendium</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.configadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.fileinstall</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- HTTP -->
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.http.jetty</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- iPOJO -->
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.ipojo.arch.gogo</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- GraniteDS -->
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-core</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-gravity-ea</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.graniteds-osgi</groupId>
+                  <artifactId>granite-gravity</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/bundles</outputDirectory>
+                </artifactItem>
+
+                <!-- Kerneos -->
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-core-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-core-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-core-common</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-login-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-profile-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-roles-api</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-profile-fileinstall</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+
+                <!-- Applications -->
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-examples-applications-application1</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-examples-applications-application2</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+
+                <!-- Modules -->
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-examples-modules-module1-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-examples-modules-module2-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-examples-modules-module3-server</artifactId>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/load</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly.xml</descriptor>
+          </descriptors>
+          <finalName>kerneos-example1</finalName>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assemble</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

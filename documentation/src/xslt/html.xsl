@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  - JASMINe
+  - Kerneos
   - Copyright (C) 2010 Bull S.A.S.
   - Contact: jasmine@ow2.org
   -

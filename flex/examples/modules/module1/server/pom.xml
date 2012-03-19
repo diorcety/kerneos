@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.ow2.kerneos</groupId>
+    <artifactId>kerneos-flex-examples-modules-module1</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>kerneos-flex-examples-modules-module1-server</artifactId>
+  <name>Kerneos :: Flex :: Examples :: Modules :: Module 1 :: Server</name>
+
+  <packaging>bundle</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-flex-examples-modules-module1-client</artifactId>
+      <version>${project.version}</version>
+      <type>swf</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-core-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-log</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.ow2.kerneos</groupId>
+                  <artifactId>kerneos-flex-examples-modules-module1-client</artifactId>
+                  <version>${project.version}</version>
+                  <type>swf</type>
+                  <overWrite>true</overWrite>
+                  <destFileName>module1.swf</destFileName>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/kerneos</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Kerneos-Module>kerneos-module1</Kerneos-Module>
+          </instructions>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-ipojo-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

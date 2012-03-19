@@ -42,9 +42,9 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>client</module>
+    <module>api</module>
+    <module>common</module>
     <module>server</module>
-    <module>theme</module>
   </modules>
 
 </project>

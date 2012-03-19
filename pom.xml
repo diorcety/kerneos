@@ -52,37 +52,33 @@
   </licenses>
 
   <properties>
-    <!-- GraniteDS -->
-    <graniteds-osgi.version>1.0.0-M2-SNAPSHOT</graniteds-osgi.version>
-
-    <!-- Flex -->
-    <cairngorm.version>2.2.5-SNAPSHOT</cairngorm.version>
-    <flexlib.version>2.6-M2</flexlib.version>
-    <flexiframe.version>1.4.3</flexiframe.version>
-    <flex.version>4.5.0.20967</flex.version>
-    <player.version>10.2</player.version>
-    <swf.version>11</swf.version>
-
     <!-- iPOJO -->
-    <ipojo.version>1.8.0</ipojo.version>
-    <ipojo.annotations.version>1.8.0</ipojo.annotations.version>
-    <ipojo.eventadmin.version>1.8.0</ipojo.eventadmin.version>
-    <ipojo.api.version>1.6.0</ipojo.api.version>
-    <ipojo.extender.version>1.4.0</ipojo.extender.version>
+    <org.apache.felix.ipojo.version>1.8.0</org.apache.felix.ipojo.version>
+    <org.apache.felix.ipojo.annotations.version>1.8.0</org.apache.felix.ipojo.annotations.version>
+    <org.apache.felix.ipojo.handler.eventadmin.version>1.8.0</org.apache.felix.ipojo.handler.eventadmin.version>
 
     <!-- Plugins -->
-    <flexmojos.version>4.0-beta-7</flexmojos.version>
-    <maven.bundle.version>2.3.4</maven.bundle.version>
-    <maven.ipojo.version>1.8.0</maven.ipojo.version>
-    <maven.deploy.version>2.6</maven.deploy.version>
-    <maven.resources.version>2.5</maven.resources.version>
-    <maven.compiler>2.3.2</maven.compiler>
-    <maven.dependency.version>2.3</maven.dependency.version>
+    <maven-bundle.version>2.3.4</maven-bundle.version>
+    <maven-ipojo.version>1.8.0</maven-ipojo.version>
+    <maven-deploy.version>2.6</maven-deploy.version>
+    <maven-resources.version>2.5</maven-resources.version>
+    <maven-compiler>2.3.2</maven-compiler>
+    <maven-dependency.version>2.3</maven-dependency.version>
+    <maven-assembly.version>2.2.2</maven-assembly.version>
+
+    <!-- Extensions -->
+    <wagon-ssh.version>1.0</wagon-ssh.version>
 
     <!-- Settings -->
-    <asdoc.aggregate>true</asdoc.aggregate>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Dependencies -->
+    <junit.version>4.8</junit.version>
+    <javax.servlet.version>2.5</javax.servlet.version>
+    <ow2-util-log.version>1.0.31</ow2-util-log.version>
+    <org.osgi.compendium.version>4.2.0</org.osgi.compendium.version>
+    <org.osgi.core.version>4.2.0</org.osgi.core.version>
   </properties>
 
   <scm>
@@ -94,16 +90,6 @@
 
   <repositories>
     <repository>
-      <id>flexmojos-repository</id>
-      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
       <id>java-net</id>
       <url>http://download.java.net/maven/2/</url>
       <releases>
@@ -113,57 +99,14 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <repository>
-      <id>flex-iframe</id>
-      <url>http://flex-iframe.googlecode.com/svn/maven2</url>
-    </repository>
-    <repository>
-        <id>ow2.old</id>
-        <name>OW2 repository</name>
-        <url>http://maven.ow2.org/maven2</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </repository>
-    <repository>
-        <id>ow2-anpashot.old</id>
-        <name>OW2 repository</name>
-        <url>http://maven.ow2.org/maven2-snapshot</url>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
   </repositories>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>flexmojos-repository-plugin</id>
-      <name>FlexMojos repository on Sonatype.org</name>
-      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
-
   <modules>
-    <module>api</module>
-    <module>archetypes</module>
     <module>core</module>
-    <module>common</module>
-    <module>libs</module>
+    <module>flex</module>
     <module>login</module>
     <module>profile</module>
-    <module>examples</module>
+    <module>roles</module>
     <module>documentation</module>
   </modules>
 
@@ -174,9 +117,6 @@
       <properties>
         <maven.test.failure.ignore>true</maven.test.failure.ignore>
         <maven.test.skip>false</maven.test.skip>
-        <flex-debug>true</flex-debug>
-        <flex-optimize>false</flex-optimize>
-        <flex-verbose-stacktraces>true</flex-verbose-stacktraces>
       </properties>
     </profile>
 
@@ -187,75 +127,121 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <flex-debug>false</flex-debug>
-        <flex-optimize>true</flex-optimize>
-        <flex-verbose-stacktraces>false</flex-verbose-stacktraces>
+        <maven.test.failure.ignore>false</maven.test.failure.ignore>
+        <maven.test.skip>false</maven.test.skip>
       </properties>
     </profile>
   </profiles>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>${javax.servlet.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.bundles</groupId>
+        <artifactId>ow2-util-log</artifactId>
+        <version>${ow2-util-log.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo</artifactId>
+        <version>${org.apache.felix.ipojo.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+        <version>${org.apache.felix.ipojo.annotations.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.ipojo.handler.eventadmin</artifactId>
+        <version>${org.apache.felix.ipojo.handler.eventadmin.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.compendium</artifactId>
+        <version>${org.osgi.compendium.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.core</artifactId>
+        <version>${org.osgi.core.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
 
   <build>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh</artifactId>
-        <version>1.0</version>
+        <version>${wagon-ssh.version}</version>
       </extension>
     </extensions>
 
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.sonatype.flexmojos</groupId>
-          <artifactId>flexmojos-maven-plugin</artifactId>
-          <version>${flexmojos.version}</version>
-          <extensions>true</extensions>
-          <configuration>
-            <ignoreVersionIssues>true</ignoreVersionIssues>
-            <storepass/>
-            <debug>${flex-debug}</debug>
-            <optimize>${flex-optimize}</optimize>
-            <verboseStacktraces>${flex-verbose-stacktraces}</verboseStacktraces>
-            <targetPlayer>${player.version}</targetPlayer>
-            <swfVersion>${swf.version}</swfVersion>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>com.adobe.flex</groupId>
-              <artifactId>compiler</artifactId>
-              <version>${flex.version}</version>
-              <type>pom</type>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>${maven.deploy.version}</version>
+          <version>${maven-deploy.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>${maven.resources.version}</version>
+          <version>${maven-resources.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${maven-dependency.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven-assembly.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
-          <version>${maven.bundle.version}</version>
+          <version>${maven-bundle.version}</version>
           <extensions>true</extensions>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-ipojo-plugin</artifactId>
-          <version>${maven.ipojo.version}</version>
+          <version>${maven-ipojo.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>ipojo-bundle</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
 
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler}</version>
+        <version>${maven-compiler}</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>

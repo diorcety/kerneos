@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
+    <version>${version}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>${rootArtifactId}-application</artifactId>
+  <name>${groupId} :: ${rootArtifactId} :: Application</name>
+
+  <packaging>bundle</packaging>
+
+  <properties>
+    <kerneos-application-id>${groupId}-${rootArtifactId}</kerneos-application-id>
+    <kerneos-application-project>${groupId}</kerneos-application-project>
+    <kerneos-application-name>${rootArtifactId}</kerneos-application-name>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ow2.kerneos</groupId>
+      <artifactId>kerneos-core-server</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.xml</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.html</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/kerneos</directory>
+        <targetPath>KERNEOS</targetPath>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.html</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${maven-bundle.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Kerneos-Application>${kerneos-application-id}</Kerneos-Application>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

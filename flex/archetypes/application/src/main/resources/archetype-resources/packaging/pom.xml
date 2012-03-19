@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - Kerneos
+  - Copyright (C) 2011 Bull S.A.S.
+  - Contact: jasmine@ow2.org
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Lesser General Public
+  - License as published by the Free Software Foundation; either
+  - version 2.1 of the License, or any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Lesser General Public License for more details.
+  -
+  - You should have received a copy of the GNU Lesser General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+  - USA
+  -
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  - $Id$
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
+    <version>${version}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>${rootArtifactId}-packaging</artifactId>
+
+  <name>${groupId} :: ${rootArtifactId} :: Packaging</name>
+
+  <packaging>pom</packaging>
+
+  <properties>
+    <org.apache.felix.configadmin.version>1.2.8</org.apache.felix.configadmin.version>
+    <org.apache.felix.eventadmin.version>1.2.8</org.apache.felix.eventadmin.version>
+    <org.apache.felix.version>3.2.2</org.apache.felix.version>
+
+    <ow2-util-i18n.version>1.0.23</ow2-util-i18n.version>
+    <ow2-util.version>1.0.31</ow2-util.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ow2.bundles</groupId>
+      <artifactId>ow2-util-i18n</artifactId>
+      <version>${ow2-util-i18n.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--Application Dependency-->
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>${rootArtifactId}-application</artifactId>
+      <version>${version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>felix</module>
+    <module>jonas</module>
+    <module>war</module>
+  </modules>
+
+</project>
