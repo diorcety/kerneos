@@ -131,7 +131,7 @@ public class AsynchronousServiceWrapper {
                 Dictionary properties = new Hashtable();
                 properties.put("id", destination);
                 properties.put("service", FlexConstants.GRAVITY_SERVICE);
-                properties.put("aobjectdapter", adapter);
+                properties.put("adapter", adapter);
                 destinationConfiguration = configurationAdmin.createFactoryConfiguration(GraniteConstants.DESTINATION,
                         null);
                 destinationConfiguration.update(properties);
